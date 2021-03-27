@@ -5,10 +5,8 @@
 
 class Scene01 : public SceneTEMPLATE {
 public:
-    Scene01() = default;
+    Scene01(unsigned int width, unsigned int height) : SceneTEMPLATE(width, height) {}
 public:
-
-    ~Scene01() override;
 
     void init() override;
 
@@ -16,13 +14,9 @@ public:
 
     void update() override;
 
-    void render() override;
+    void render(float delta_time) override;
 
     void terminate() override;
-
-    std::vector<std::unique_ptr<BasicPhysicalObjects>> objects;
-
-    Eigen::Matrix4f view, projection;
 };
 
 #endif //ASSIGNMENTFRAMEWORK_SCENE01_H
