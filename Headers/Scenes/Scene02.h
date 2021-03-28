@@ -3,6 +3,8 @@
 
 #include "SceneTEMPLATE.h"
 
+#include "Fireworks.h"
+
 class Scene02 : public SceneTEMPLATE {
 public:
     Scene02(unsigned int width, unsigned int height, bool is_2D = false) : SceneTEMPLATE(width, height, is_2D) {}

@@ -3,6 +3,8 @@
 
 #include "SceneTEMPLATE.h"
 
+#include "Fireworks.h"
+
 class Scene03 : public SceneTEMPLATE {
 public:
     void init() override;

@@ -21,6 +21,7 @@ public:
     float height;
 };
 
+
 class Ball : public Sphere, public BasicPhysicalObjects {
 public:
     explicit Ball(float radius);

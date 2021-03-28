@@ -5,7 +5,7 @@
 
 class Scene01 : public SceneTEMPLATE {
 public:
-    Scene01(unsigned int width, unsigned int height) : SceneTEMPLATE(width, height) {}
+    Scene01(unsigned int width, unsigned int height, bool is_2D = false) : SceneTEMPLATE(width, height, is_2D) {}
 public:
 
     void init() override;
