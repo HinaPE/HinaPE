@@ -15,6 +15,8 @@ public:
 
     void set_vp(const Eigen::Matrix4f &view, Eigen::Matrix4f projection) override;
 
+    Eigen::Matrix4f get_model() override;
+
 public:
 
     float width;
@@ -31,6 +33,8 @@ public:
     void draw() override;
 
     void set_vp(const Eigen::Matrix4f &view, Eigen::Matrix4f projection) override;
+
+    Eigen::Matrix4f get_model() override;
 
 public:
 
