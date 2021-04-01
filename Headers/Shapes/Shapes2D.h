@@ -17,7 +17,7 @@ public:
 
     void as_triangle();
 
-    int segments = 100;
+    int segments = 10;
 };
 
 class Rectangle : public BasicShape {
