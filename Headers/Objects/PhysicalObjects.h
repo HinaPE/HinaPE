@@ -37,7 +37,7 @@ public:
 
     virtual Eigen::Matrix4f get_model() = 0;
 
-    virtual std::shared_ptr<AABB> &get_aabb() {};
+    virtual std::shared_ptr<AABB> &get_aabb() = 0;
 };
 
 
