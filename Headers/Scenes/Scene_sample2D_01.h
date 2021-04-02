@@ -5,9 +5,11 @@
 
 #include "Fireworks.h"
 
-class Scene02 : public SceneTEMPLATE {
+class Scene_sample2D_01 : public SceneTEMPLATE {
 public:
-    Scene02(unsigned int width, unsigned int height, bool is_2D = false) : SceneTEMPLATE(width, height, is_2D) {}
+    Scene_sample2D_01(unsigned int width, unsigned int height, bool is_2D = false) : SceneTEMPLATE(width, height,
+                                                                                                   is_2D) {}
+
 public:
 
     void init() override;

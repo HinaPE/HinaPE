@@ -9,12 +9,8 @@
 
 class EulerSolver {
 public:
-    static void ForwardEuler(std::unique_ptr<BasicPhysicalObjects> &obj, std::vector<std::unique_ptr<BasicPhysicalObjects>> &world_objs, float delta_time);
-
-    static void SemiBackwardEuler(std::unique_ptr<BasicPhysicalObjects> &obj, std::vector<std::unique_ptr<BasicPhysicalObjects>> &world_objs, float delta_time);
-
-    static void BackwardEuler(std::unique_ptr<BasicPhysicalObjects> &obj, std::vector<std::unique_ptr<BasicPhysicalObjects>> &world_objs, float delta_time);
-
+    static void ForwardEuler(std::unique_ptr<BasicPhysicalObjects> &obj,
+                             std::vector<std::unique_ptr<BasicPhysicalObjects>> &world_objs, float delta_time);
 };
 
 #endif //ASSIGNMENTFRAMEWORK_EULERSOLVER_H

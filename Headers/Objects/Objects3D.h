@@ -17,6 +17,8 @@ public:
 
     Eigen::Matrix4f get_model() override;
 
+    std::shared_ptr<AABB> &get_aabb() override;
+
 public:
 
     float width;
@@ -33,6 +35,8 @@ public:
     void draw() override;
 
     void set_vp(const Eigen::Matrix4f &view, Eigen::Matrix4f projection) override;
+
+    std::shared_ptr<AABB> &get_aabb() override;
 
     Eigen::Matrix4f get_model() override;
 
