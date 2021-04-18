@@ -5,9 +5,9 @@
 
 #include "PhysicalObjects.h"
 
-class Ground : public Plane, public BasicPhysicalObjects {
+class Box : public Cube, public BasicPhysicalObjects {
 public:
-    Ground(float width, float height);
+    Box(float width, float height, float depth);
 
     void update() override;
 
@@ -23,8 +23,8 @@ public:
 
     float width;
     float height;
+    float depth;
 };
-
 
 class Ball : public Sphere, public BasicPhysicalObjects {
 public:
