@@ -14,3 +14,26 @@ else ()
         message(FATAL_ERROR "CMake required version to build HinaGeom is ${REQUIRED_CMAKE_VERSION}")
     endif ()
 endif ()
+
+option(HINA_TEST "WHETHER ENABLE TEST FOR HINAPE" ON)
+
+project(HinaGeom VERSION 2.0.0)
+
+option(LIBIGL_OPENGL "Use OpenGL" ON)
+option(LIBIGL_GLFW "Use GLFW" ON)
+option(LIBIGL_IMGUI "Use ImGui" ON)
+include(cmake/libigl.cmake)
+
+if (HINA_TEST)
+    include(cmake/googletest.cmake)
+endif ()
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+file(GLOB HinaGeomSrc
+        simple_shapes/*.h simple_shapes/*.cpp
+        triangle_meshes/*.h triangle_meshes/*.cpp
+        )
+add_subdirectory(pmp)
+add_library(HinaGeom ${HinaGeomSrc})
+target_include_directories(HinaGeom PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(HinaGeom PRIVATE pmp)

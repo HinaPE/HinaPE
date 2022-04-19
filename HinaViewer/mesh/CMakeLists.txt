@@ -1,5 +1,0 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-add_subdirectory(pmp)
-if (HINA_TEST)
-    add_subdirectory(unit_test)
-endif ()
