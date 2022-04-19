@@ -1,0 +1,16 @@
+# Detects whether this is a top-level project
+get_directory_property(HINASIM_PARENT_DIR PARENT_DIRECTORY)
+if (NOT HINASIM_PARENT_DIR)
+    set(HINASIM_TOPLEVEL_PROJECT ON)
+else ()
+    set(HINASIM_TOPLEVEL_PROJECT OFF)
+endif ()
+
+set(REQUIRED_CMAKE_VERSION "3.16.0")
+if (HINASIM_TOPLEVEL_PROJECT)
+    cmake_minimum_required(VERSION ${REQUIRED_CMAKE_VERSION})
+else ()
+    if (${CMAKE_VERSION} VERSION_LESS ${REQUIRED_CMAKE_VERSION})
+        message(FATAL_ERROR "CMake required version to build HinaSim is ${REQUIRED_CMAKE_VERSION}")
+    endif ()
+endif ()

@@ -1,0 +1,16 @@
+# Detects whether this is a top-level project
+get_directory_property(HINAGEOM_PARENT_DIR PARENT_DIRECTORY)
+if (NOT HINAGEOM_PARENT_DIR)
+    set(HINAGEOM_TOPLEVEL_PROJECT ON)
+else ()
+    set(HINAGEOM_TOPLEVEL_PROJECT OFF)
+endif ()
+
+set(REQUIRED_CMAKE_VERSION "3.16.0")
+if (HINAGEOM_TOPLEVEL_PROJECT)
+    cmake_minimum_required(VERSION ${REQUIRED_CMAKE_VERSION})
+else ()
+    if (${CMAKE_VERSION} VERSION_LESS ${REQUIRED_CMAKE_VERSION})
+        message(FATAL_ERROR "CMake required version to build HinaGeom is ${REQUIRED_CMAKE_VERSION}")
+    endif ()
+endif ()
