@@ -4,13 +4,14 @@
 #include "triangle_meshes/vertex_info.h"
 #include "triangle_meshes/indexed_triangle_mesh.h"
 
-#include <tuple>
-
 namespace HinaPE::HinaGeom
 {
-    class Sphere
+    class Sphere : protected VertexInfo, protected IndexedTriangleMesh
     {
-        static std::tuple<VertexInfo *, IndexedTriangleMesh *> build_Sphere(Real radius);
+    public:
+        static Sphere *build_Sphere(Real radius);
+    protected:
+        Sphere(Vertex3Matrix V, TriFaceMatrix F);
     };
 }
 

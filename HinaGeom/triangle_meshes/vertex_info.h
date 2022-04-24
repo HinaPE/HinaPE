@@ -2,20 +2,26 @@
 #define HINAPE_VERTEX_INFO_H
 
 #include "../../Common/common.h"
+#include "../../Common/validationable.h"
 
 namespace HinaPE::HinaGeom
 {
-    class VertexInfo
+    class VertexInfo : public Validationable
     {
-
-
     public:
         virtual ~VertexInfo() = default;
+        void build();
     protected:
-        explicit VertexInfo() = default;
+        explicit VertexInfo(Vertex3Matrix vertices);
+    protected:
+        Vertex3Matrix V_;
+        NormalMatrix N_;
+        std::vector<std::vector<unsigned int>> VE_; // Vertex-edges - size = [#vertices x ?], row = [edge1_index, edge2_index, ... ...]
+        std::vector<std::vector<unsigned int>> VF_; // Vertex-faces - size = [#faces x ?], row = [face1_index, face2_index, ... ...]
+        bool is_closed_; // is a closed_mesh?
 
-    protected:
-        Vertex3Matrix vertices_;
+    private:
+        void _validation_check() final;
     };
 }
 
