@@ -41,7 +41,4 @@ target_link_libraries(
         igl::opengl
         igl::glfw
         igl::imgui
-        igl_copyleft_core
-        igl_copyleft_cgal
-        pmp
 )

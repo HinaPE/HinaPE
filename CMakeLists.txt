@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 project(HinaPE)
 
+if (MSVC)
+    include(E:/Git_Repos/vcpkg/scripts/buildsystems/vcpkg.cmake)
+endif ()
+find_package(OpenMesh REQUIRED)
+
 set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../Graphics-Dependencies/install) # !Important: Determine External Install Dir
 set(CMAKE_CXX_STANDARD 17)
 if (MSVC)

@@ -33,10 +33,9 @@ file(GLOB HinaGeomSrc
         simple_shapes/*.h simple_shapes/*.cpp
         triangle_meshes/*.h triangle_meshes/*.cpp
         )
-add_subdirectory(pmp)
 add_library(HinaGeom ${HinaGeomSrc})
-target_include_directories(HinaGeom PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(HinaGeom PRIVATE pmp)
+target_include_directories(HinaGeom PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${OPENMESH_INCLUDE_DIRS})
+target_link_libraries(HinaGeom PUBLIC ${OPENMESH_LIBRARIES})
 
 if (HINA_TEST)
     add_executable(shape_test unit_test/shape_test.cpp)

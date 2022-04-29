@@ -13,7 +13,6 @@
 #define REAL_MAX DBL_MAX
 #define REAL_MIN DBL_MIN
 using Real=double;
-#define PMP_SCALAR_TYPE_64
 #else
 #define REAL_MAX FLT_MAX
 #define REAL_MIN FLT_MIN

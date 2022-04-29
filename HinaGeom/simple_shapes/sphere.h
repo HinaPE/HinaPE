@@ -4,6 +4,9 @@
 #include "triangle_meshes/vertex_info.h"
 #include "triangle_meshes/indexed_triangle_mesh.h"
 
+#define _USE_MATH_DEFINES
+#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+
 namespace HinaPE::HinaGeom
 {
     class Sphere : protected VertexInfo, protected IndexedTriangleMesh
