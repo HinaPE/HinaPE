@@ -32,8 +32,7 @@ struct Color {
     RGBv(outline, 242, 153, 41);
     RGBv(hover, 102, 102, 204);
     RGBv(baseplane, 71, 71, 71);
-//    RGBv(background, 58, 58, 58);
-    RGBv(background, 155, 155, 155);
+    RGBv(background, 58, 58, 58);
     RGBv(red, 163, 66, 81);
     RGBv(green, 124, 172, 40);
     RGBv(blue, 64, 127, 193);
