@@ -195,7 +195,7 @@ void Scene_Object::render(const Mat4& view, bool solid, bool depth_only, bool po
 
     switch(opt.shape_type) {
     case PT::Shape_Type::sphere: {
-        opts.wireframe = false;
+        opts.wireframe = false; // Hina: wireframe for sphere is not yet supported
         opts.modelview = opts.modelview * Mat4::scale(Vec3{opt.shape.get<PT::Sphere>().radius});
         Renderer::get().sphere(opts);
     } break;
