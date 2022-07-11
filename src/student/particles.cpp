@@ -8,6 +8,9 @@ bool Scene_Particles::Particle::update(const PT::Object &scene, float dt, float 
     // TODO(Animation): Task 4
 
     // Compute the trajectory of this particle for the next dt seconds.
+    pos += velocity * dt;
+    velocity += acceleration * dt;
+    age -= dt;
 
     // (1) Build a ray representing the particle's path if it travelled at constant velocity.
 
