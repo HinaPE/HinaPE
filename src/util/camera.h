@@ -3,7 +3,8 @@
 
 #include "../lib/mathlib.h"
 
-class Camera {
+class Camera
+{
 public:
     Camera(Vec2 dim);
 
@@ -56,7 +57,7 @@ public:
     float get_fov() const;
     float get_h_fov() const;
     float get_near() const;
-    
+
     // swap orbit behavior for vertical mouse motion
     bool orbit_flip_vertical = false;
 

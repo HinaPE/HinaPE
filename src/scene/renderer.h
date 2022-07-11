@@ -7,28 +7,31 @@
 #include "../platform/gl.h"
 #include "scene.h"
 
-namespace Gui {
+namespace Gui
+{
 class Model;
 }
 
 // Singleton
-class Renderer {
+class Renderer
+{
 public:
     static void setup(Vec2 dim);
     static void shutdown();
-    static Renderer& get();
+    static Renderer &get();
 
     void begin();
     void complete();
     void reset_depth();
 
-    void proj(const Mat4& proj);
+    void proj(const Mat4 &proj);
     void update_dim(Vec2 dim);
-    void settings_gui(bool* open);
+    void settings_gui(bool *open);
     void set_samples(int samples);
     unsigned int read_id(Vec2 pos);
 
-    struct MeshOpt {
+    struct MeshOpt
+    {
         unsigned int id;
         Mat4 modelview;
         Vec3 color, sel_color, hov_color;
@@ -40,10 +43,13 @@ public:
         bool per_vert_id = false;
     };
 
-    struct HalfedgeOpt {
-        HalfedgeOpt(Gui::Model& e) : editor(e) {
+    struct HalfedgeOpt
+    {
+        HalfedgeOpt(Gui::Model &e) : editor(e)
+        {
         }
-        Gui::Model& editor;
+
+        Gui::Model &editor;
         Mat4 modelview;
         Vec3 f_color = Vec3{1.0f};
         Vec3 v_color = Vec3{1.0f};
@@ -55,30 +61,30 @@ public:
 
     // NOTE(max): updates & uses the indices in mesh for selection/traversal
     void halfedge_editor(HalfedgeOpt opt);
-    void mesh(GL::Mesh& mesh, MeshOpt opt);
-    void lines(const GL::Lines& lines, const Mat4& view, const Mat4& model = Mat4::I,
+    void mesh(GL::Mesh &mesh, MeshOpt opt);
+    void lines(const GL::Lines &lines, const Mat4 &view, const Mat4 &model = Mat4::I,
                float alpha = 1.0f);
-    void instances(Renderer::MeshOpt opt, GL::Instances& inst);
+    void instances(Renderer::MeshOpt opt, GL::Instances &inst);
 
-    void outline(const Mat4& view, Scene_Item& obj);
+    void outline(const Mat4 &view, Scene_Item &obj);
     void begin_outline();
-    void end_outline(const Mat4& view, BBox box);
+    void end_outline(const Mat4 &view, BBox box);
 
-    void skydome(const Mat4& rotation, Vec3 color, float cosine);
-    void skydome(const Mat4& rotation, Vec3 color, float cosine, const GL::Tex2D& tex);
+    void skydome(const Mat4 &rotation, Vec3 color, float cosine);
+    void skydome(const Mat4 &rotation, Vec3 color, float cosine, const GL::Tex2D &tex);
 
     void sphere(MeshOpt opt);
     void capsule(MeshOpt opt, float height, float rad);
-    void capsule(MeshOpt opt, const Mat4& mdl, float height, float rad, BBox& box);
+    void capsule(MeshOpt opt, const Mat4 &mdl, float height, float rad, BBox &box);
 
     GLuint saved() const;
-    void saved(std::vector<unsigned char>& data) const;
-    void save(Scene& scene, const Camera& cam, int w, int h, int samples);
+    void saved(std::vector<unsigned char> &data) const;
+    void save(Scene &scene, const Camera &cam, int w, int h, int samples);
 
 private:
     Renderer(Vec2 dim);
     ~Renderer();
-    static inline Renderer* data = nullptr;
+    static inline Renderer *data = nullptr;
 
     GL::Framebuffer framebuffer, id_resolve, save_buffer, save_output;
     GL::Shader mesh_shader, line_shader, inst_shader, dome_shader;
@@ -86,7 +92,7 @@ private:
 
     int samples;
     Vec2 window_dim;
-    GLubyte* id_buffer;
+    GLubyte *id_buffer;
 
     Mat4 _proj;
 };

@@ -5,7 +5,8 @@
 
 #include <string>
 
-namespace Util {
+namespace Util
+{
 
 GL::Mesh cube_mesh(float radius);
 GL::Mesh square_mesh(float radius);
@@ -23,20 +24,23 @@ GL::Mesh scale_mesh();
 
 GL::Lines spotlight_mesh(Vec3 color, float inner, float outer);
 
-namespace Gen {
+namespace Gen
+{
 
-struct Data {
+struct Data
+{
     std::vector<GL::Mesh::Vert> verts;
     std::vector<GL::Mesh::Index> elems;
 };
-struct LData {
+struct LData
+{
     std::vector<GL::Lines::Vert> verts;
 };
 
-GL::Mesh merge(Data&& l, Data&& r);
-LData merge(LData&& l, LData&& r);
+GL::Mesh merge(Data &&l, Data &&r);
+LData merge(LData &&l, LData &&r);
 LData circle(Vec3 color, float r, int sides);
-GL::Mesh dedup(Data&& d);
+GL::Mesh dedup(Data &&d);
 
 // https://wiki.unity3d.com/index.php/ProceduralPrimitives
 Data cube(float r);

@@ -4,21 +4,28 @@
 #include "../geometry/spline.h"
 #include "../lib/spectrum.h"
 
-enum class Material_Type : int { lambertian, mirror, refract, glass, diffuse_light, count };
-extern const char* Material_Type_Names[(int)Material_Type::count];
+enum class Material_Type : int
+{
+    lambertian, mirror, refract, glass, diffuse_light, count
+};
+extern const char *Material_Type_Names[(int) Material_Type::count];
 
-class Material {
+class Material
+{
 public:
     Material() = default;
-    Material(Material_Type type) {
+
+    Material(Material_Type type)
+    {
         opt.type = type;
     }
-    Material(const Material& src) = delete;
-    Material(Material&& src) = default;
+
+    Material(const Material &src) = delete;
+    Material(Material &&src) = default;
     ~Material() = default;
 
-    void operator=(const Material& src) = delete;
-    Material& operator=(Material&& src) = default;
+    void operator=(const Material &src) = delete;
+    Material &operator=(Material &&src) = default;
 
     // TODO: decide how to handle texture resources. should probably use a texture repository
     // and also integrate that into the envmaps
@@ -27,7 +34,8 @@ public:
     Spectrum emissive() const;
     Vec3 layout_color() const;
 
-    struct Options {
+    struct Options
+    {
         Material_Type type = Material_Type::lambertian;
         Spectrum albedo = Spectrum(1.0f);
         Spectrum reflectance = Spectrum(1.0f);
@@ -37,8 +45,9 @@ public:
         float ior = 1.2f;
     };
 
-    struct Anim_Material {
-        void at(float t, Options& o) const;
+    struct Anim_Material
+    {
+        void at(float t, Options &o) const;
         void set(float t, Options o);
         Splines<Spectrum, Spectrum, Spectrum, Spectrum, float, float> splines;
     };
@@ -47,6 +56,6 @@ public:
     Anim_Material anim;
 };
 
-bool operator!=(const Material::Options& l, const Material::Options& r);
+bool operator!=(const Material::Options &l, const Material::Options &r);
 
 #endif

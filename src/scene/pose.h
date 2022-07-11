@@ -5,7 +5,8 @@
 #include "../lib/mathlib.h"
 #include <set>
 
-struct Pose {
+struct Pose
+{
     Vec3 pos;
     Vec3 euler;
     Vec3 scale = Vec3{1.0f};
@@ -23,10 +24,11 @@ struct Pose {
     static Pose id();
 };
 
-bool operator==(const Pose& l, const Pose& r);
-bool operator!=(const Pose& l, const Pose& r);
+bool operator==(const Pose &l, const Pose &r);
+bool operator!=(const Pose &l, const Pose &r);
 
-struct Anim_Pose {
+struct Anim_Pose
+{
     Pose at(float t) const;
     void set(float t, Pose p);
     Splines<Vec3, Quat, Vec3> splines;

@@ -3,9 +3,11 @@
 
 #include <limits>
 
-namespace PT {
+namespace PT
+{
 
-Vec3 Env_Map::sample() const {
+Vec3 Env_Map::sample() const
+{
 
     // TODO (PathTracer): Task 7
 
@@ -15,7 +17,8 @@ Vec3 Env_Map::sample() const {
     return uniform_sampler.sample();
 }
 
-float Env_Map::pdf(Vec3 dir) const {
+float Env_Map::pdf(Vec3 dir) const
+{
 
     // TODO (PathTracer): Task 7
 
@@ -25,7 +28,8 @@ float Env_Map::pdf(Vec3 dir) const {
     return 0.0f;
 }
 
-Spectrum Env_Map::evaluate(Vec3 dir) const {
+Spectrum Env_Map::evaluate(Vec3 dir) const
+{
 
     // TODO (PathTracer): Task 7
 
@@ -36,28 +40,34 @@ Spectrum Env_Map::evaluate(Vec3 dir) const {
     return Spectrum{};
 }
 
-Vec3 Env_Hemisphere::sample() const {
+Vec3 Env_Hemisphere::sample() const
+{
     return sampler.sample();
 }
 
-float Env_Hemisphere::pdf(Vec3 dir) const {
+float Env_Hemisphere::pdf(Vec3 dir) const
+{
     return 1.0f / (2.0f * PI_F);
 }
 
-Spectrum Env_Hemisphere::evaluate(Vec3 dir) const {
-    if(dir.y > 0.0f) return radiance;
+Spectrum Env_Hemisphere::evaluate(Vec3 dir) const
+{
+    if (dir.y > 0.0f) return radiance;
     return {};
 }
 
-Vec3 Env_Sphere::sample() const {
+Vec3 Env_Sphere::sample() const
+{
     return sampler.sample();
 }
 
-float Env_Sphere::pdf(Vec3 dir) const {
+float Env_Sphere::pdf(Vec3 dir) const
+{
     return 1.0f / (4.0f * PI_F);
 }
 
-Spectrum Env_Sphere::evaluate(Vec3) const {
+Spectrum Env_Sphere::evaluate(Vec3) const
+{
     return radiance;
 }
 

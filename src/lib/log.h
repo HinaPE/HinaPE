@@ -8,16 +8,18 @@
 
 inline std::mutex printf_lock;
 
-inline void log(std::string fmt, ...) {
+inline void log(std::string fmt, ...)
+{
     std::lock_guard<std::mutex> lock(printf_lock);
     va_list args;
-    va_start(args, fmt);
+            va_start(args, fmt);
     vprintf(fmt.c_str(), args);
-    va_end(args);
+            va_end(args);
     fflush(stdout);
 }
 
-inline std::string last_file(std::string path) {
+inline std::string last_file(std::string path)
+{
     size_t p = path.find_last_of("\\/") + 1;
     return path.substr(p, path.size() - p);
 }

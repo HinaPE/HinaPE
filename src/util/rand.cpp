@@ -6,30 +6,35 @@
 #include <random>
 #include <thread>
 
-namespace RNG {
+namespace RNG
+{
 
 static thread_local std::mt19937 rng;
 
-float unit() {
+float unit()
+{
     std::uniform_real_distribution<float> d(0.0f, 1.0f);
     return d(rng);
 }
 
-int integer(int min, int max) {
+int integer(int min, int max)
+{
     std::uniform_int_distribution<int> d(min, max - 1);
     return d(rng);
 }
 
-bool coin_flip(float p) {
+bool coin_flip(float p)
+{
     return unit() < p;
 }
 
-void seed() {
+void seed()
+{
     std::random_device r;
     std::random_device::result_type seed =
-        r() ^
-        (std::random_device::result_type)std::hash<std::thread::id>()(std::this_thread::get_id()) ^
-        (std::random_device::result_type)std::hash<time_t>()(std::time(nullptr));
+            r() ^
+            (std::random_device::result_type) std::hash<std::thread::id>()(std::this_thread::get_id()) ^
+            (std::random_device::result_type) std::hash<time_t>()(std::time(nullptr));
     rng.seed(seed);
 }
 

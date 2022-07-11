@@ -41,7 +41,8 @@
         }
 */
 
-struct Debug_Data {
+struct Debug_Data
+{
     // Setting it here makes it default to false.
     bool normal_colors = true;
 };

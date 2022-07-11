@@ -2,9 +2,11 @@
 #include "../rays/samplers.h"
 #include "../util/rand.h"
 
-namespace Samplers {
+namespace Samplers
+{
 
-Vec2 Rect::sample() const {
+Vec2 Rect::sample() const
+{
 
     // TODO (PathTracer): Task 1
 
@@ -14,7 +16,8 @@ Vec2 Rect::sample() const {
     return Vec2{};
 }
 
-Vec3 Sphere::Uniform::sample() const {
+Vec3 Sphere::Uniform::sample() const
+{
 
     // TODO (PathTracer): Task 7
 
@@ -24,7 +27,8 @@ Vec3 Sphere::Uniform::sample() const {
     return Vec3{};
 }
 
-Sphere::Image::Image(const HDR_Image& image) {
+Sphere::Image::Image(const HDR_Image &image)
+{
 
     // TODO (PathTracer): Task 7
 
@@ -36,7 +40,8 @@ Sphere::Image::Image(const HDR_Image& image) {
     h = _h;
 }
 
-Vec3 Sphere::Image::sample() const {
+Vec3 Sphere::Image::sample() const
+{
 
     // TODO (PathTracer): Task 7
 
@@ -46,7 +51,8 @@ Vec3 Sphere::Image::sample() const {
     return Vec3{};
 }
 
-float Sphere::Image::pdf(Vec3 dir) const {
+float Sphere::Image::pdf(Vec3 dir) const
+{
 
     // TODO (PathTracer): Task 7
 
@@ -55,11 +61,13 @@ float Sphere::Image::pdf(Vec3 dir) const {
     return 0.0f;
 }
 
-Vec3 Point::sample() const {
+Vec3 Point::sample() const
+{
     return point;
 }
 
-Vec3 Triangle::sample() const {
+Vec3 Triangle::sample() const
+{
     float u = std::sqrt(RNG::unit());
     float v = RNG::unit();
     float a = u * (1.0f - v);
@@ -67,7 +75,8 @@ Vec3 Triangle::sample() const {
     return a * v0 + b * v1 + (1.0f - a - b) * v2;
 }
 
-Vec3 Hemisphere::Uniform::sample() const {
+Vec3 Hemisphere::Uniform::sample() const
+{
 
     float Xi1 = RNG::unit();
     float Xi2 = RNG::unit();
@@ -82,7 +91,8 @@ Vec3 Hemisphere::Uniform::sample() const {
     return Vec3(xs, ys, zs);
 }
 
-Vec3 Hemisphere::Cosine::sample() const {
+Vec3 Hemisphere::Cosine::sample() const
+{
 
     float phi = RNG::unit() * 2.0f * PI_F;
     float cos_t = std::sqrt(RNG::unit());

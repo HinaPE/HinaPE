@@ -2,16 +2,19 @@
 #include "../rays/bsdf.h"
 #include "../util/rand.h"
 
-namespace PT {
+namespace PT
+{
 
-static Vec3 reflect(Vec3 dir) {
+static Vec3 reflect(Vec3 dir)
+{
 
     // TODO (PathTracer): Task 5
     // Return reflection of dir about the surface normal (0,1,0).
     return Vec3{};
 }
 
-static Vec3 refract(Vec3 out_dir, float index_of_refraction, bool& was_internal) {
+static Vec3 refract(Vec3 out_dir, float index_of_refraction, bool &was_internal)
+{
 
     // TODO (PathTracer): Task 5
     // Use Snell's Law to refract out_dir through the surface.
@@ -29,7 +32,8 @@ static Vec3 refract(Vec3 out_dir, float index_of_refraction, bool& was_internal)
     return Vec3{};
 }
 
-Scatter BSDF_Lambertian::scatter(Vec3 out_dir) const {
+Scatter BSDF_Lambertian::scatter(Vec3 out_dir) const
+{
 
     // TODO (PathTracer): Task 4
 
@@ -42,7 +46,8 @@ Scatter BSDF_Lambertian::scatter(Vec3 out_dir) const {
     return ret;
 }
 
-Spectrum BSDF_Lambertian::evaluate(Vec3 out_dir, Vec3 in_dir) const {
+Spectrum BSDF_Lambertian::evaluate(Vec3 out_dir, Vec3 in_dir) const
+{
 
     // TODO (PathTracer): Task 4
 
@@ -52,7 +57,8 @@ Spectrum BSDF_Lambertian::evaluate(Vec3 out_dir, Vec3 in_dir) const {
     return Spectrum{};
 }
 
-float BSDF_Lambertian::pdf(Vec3 out_dir, Vec3 in_dir) const {
+float BSDF_Lambertian::pdf(Vec3 out_dir, Vec3 in_dir) const
+{
 
     // TODO (PathTracer): Task 4
 
@@ -60,7 +66,8 @@ float BSDF_Lambertian::pdf(Vec3 out_dir, Vec3 in_dir) const {
     return 0.0f;
 }
 
-Scatter BSDF_Mirror::scatter(Vec3 out_dir) const {
+Scatter BSDF_Mirror::scatter(Vec3 out_dir) const
+{
 
     // TODO (PathTracer): Task 5
 
@@ -70,7 +77,8 @@ Scatter BSDF_Mirror::scatter(Vec3 out_dir) const {
     return ret;
 }
 
-Scatter BSDF_Glass::scatter(Vec3 out_dir) const {
+Scatter BSDF_Glass::scatter(Vec3 out_dir) const
+{
 
     // TODO (PathTracer): Task 5
 
@@ -87,7 +95,8 @@ Scatter BSDF_Glass::scatter(Vec3 out_dir) const {
     return ret;
 }
 
-Scatter BSDF_Refract::scatter(Vec3 out_dir) const {
+Scatter BSDF_Refract::scatter(Vec3 out_dir) const
+{
 
     // OPTIONAL (PathTracer): Task 5
 
@@ -99,7 +108,8 @@ Scatter BSDF_Refract::scatter(Vec3 out_dir) const {
     return ret;
 }
 
-Spectrum BSDF_Diffuse::emissive() const {
+Spectrum BSDF_Diffuse::emissive() const
+{
     return radiance;
 }
 

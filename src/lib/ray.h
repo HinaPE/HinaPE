@@ -8,27 +8,31 @@
 #include "../lib/mathlib.h"
 #include "../lib/spectrum.h"
 
-struct Ray {
+struct Ray
+{
 
     Ray() = default;
 
     /// Create Ray from point and direction
     explicit Ray(Vec3 point, Vec3 dir,
                  Vec2 dist_bounds = Vec2{0.0f, std::numeric_limits<float>::max()}, size_t depth = 0)
-        : point(point), dir(dir.unit()), dist_bounds(dist_bounds), depth(depth) {
+            : point(point), dir(dir.unit()), dist_bounds(dist_bounds), depth(depth)
+    {
     }
 
-    Ray(const Ray&) = default;
-    Ray& operator=(const Ray&) = default;
+    Ray(const Ray &) = default;
+    Ray &operator=(const Ray &) = default;
     ~Ray() = default;
 
     /// Get point on Ray at time t
-    Vec3 at(float t) const {
+    Vec3 at(float t) const
+    {
         return point + t * dir;
     }
 
     /// Move ray into the space defined by this tranform matrix
-    void transform(const Mat4& trans) {
+    void transform(const Mat4 &trans)
+    {
         point = trans * point;
         dir = trans.rotate(dir);
         float d = dir.norm();
@@ -50,7 +54,8 @@ struct Ray {
     mutable Vec2 dist_bounds = Vec2(0.0f, std::numeric_limits<float>::infinity());
 };
 
-inline std::ostream& operator<<(std::ostream& out, Ray r) {
+inline std::ostream &operator<<(std::ostream &out, Ray r)
+{
     out << "Ray{" << r.point << "," << r.dir << "}";
     return out;
 }

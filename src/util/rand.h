@@ -3,7 +3,8 @@
 
 #include "../lib/mathlib.h"
 
-namespace RNG {
+namespace RNG
+{
 
 // Generate random float in the range [0,1)
 float unit();

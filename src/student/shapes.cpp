@@ -2,11 +2,13 @@
 #include "../rays/shapes.h"
 #include "debug.h"
 
-namespace PT {
+namespace PT
+{
 
-const char* Shape_Type_Names[(int)Shape_Type::count] = {"None", "Sphere"};
+const char *Shape_Type_Names[(int) Shape_Type::count] = {"None", "Sphere"};
 
-BBox Sphere::bbox() const {
+BBox Sphere::bbox() const
+{
 
     BBox box;
     box.enclose(Vec3(-radius));
@@ -14,7 +16,8 @@ BBox Sphere::bbox() const {
     return box;
 }
 
-Trace Sphere::hit(const Ray& ray) const {
+Trace Sphere::hit(const Ray &ray) const
+{
 
     // TODO (PathTracer): Task 2
     // Intersect this ray with a sphere of radius Sphere::radius centered at the origin.

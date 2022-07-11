@@ -3,7 +3,8 @@
 #include "../rays/samplers.h"
 #include "debug.h"
 
-Ray Camera::generate_ray(Vec2 screen_coord) const {
+Ray Camera::generate_ray(Vec2 screen_coord) const
+{
 
     // TODO (PathTracer): Task 1
     // compute the position of the input sensor sample coordinate on the

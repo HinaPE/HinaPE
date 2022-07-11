@@ -36,14 +36,16 @@ Debug_Data debug_data;
     Some useful functions are documented below, and you can refer to
     deps/imgui/imgui.h for many more.
 */
-void student_debug_ui() {
+void student_debug_ui()
+{
     using namespace ImGui;
 
     // Debug option example
     Checkbox("Pathtracer: use normal colors", &debug_data.normal_colors);
 
     // ImGui examples
-    if(Button("Press Me")) {
+    if (Button("Press Me"))
+    {
         info("Debug button pressed!");
     }
 

@@ -10,11 +10,14 @@
 #include "light.h"
 #include "samplers.h"
 
-namespace PT {
+namespace PT
+{
 
-struct Env_Hemisphere {
+struct Env_Hemisphere
+{
 
-    Env_Hemisphere(Spectrum r) : radiance(r) {
+    Env_Hemisphere(Spectrum r) : radiance(r)
+    {
     }
 
     Vec3 sample() const;
@@ -25,9 +28,11 @@ struct Env_Hemisphere {
     Samplers::Hemisphere::Uniform sampler;
 };
 
-struct Env_Sphere {
+struct Env_Sphere
+{
 
-    Env_Sphere(Spectrum r) : radiance(r) {
+    Env_Sphere(Spectrum r) : radiance(r)
+    {
     }
 
     Vec3 sample() const;
@@ -38,9 +43,11 @@ struct Env_Sphere {
     Samplers::Sphere::Uniform sampler;
 };
 
-struct Env_Map {
+struct Env_Map
+{
 
-    Env_Map(HDR_Image&& img) : image(std::move(img)), image_sampler(image) {
+    Env_Map(HDR_Image &&img) : image(std::move(img)), image_sampler(image)
+    {
     }
 
     Vec3 sample() const;
@@ -52,33 +59,46 @@ struct Env_Map {
     Samplers::Sphere::Image image_sampler;
 };
 
-class Env_Light {
+class Env_Light
+{
 public:
-    Env_Light(Env_Hemisphere&& l) : underlying(std::move(l)) {
-    }
-    Env_Light(Env_Sphere&& l) : underlying(std::move(l)) {
-    }
-    Env_Light(Env_Map&& l) : underlying(std::move(l)) {
+    Env_Light(Env_Hemisphere &&l) : underlying(std::move(l))
+    {
     }
 
-    Env_Light(const Env_Light& src) = delete;
-    Env_Light& operator=(const Env_Light& src) = delete;
-    Env_Light& operator=(Env_Light&& src) = default;
-    Env_Light(Env_Light&& src) = default;
-
-    Vec3 sample() const {
-        return std::visit([](const auto& h) { return h.sample(); }, underlying);
+    Env_Light(Env_Sphere &&l) : underlying(std::move(l))
+    {
     }
 
-    float pdf(Vec3 dir) const {
-        return std::visit([dir](const auto& h) { return h.pdf(dir); }, underlying);
+    Env_Light(Env_Map &&l) : underlying(std::move(l))
+    {
     }
 
-    Spectrum evaluate(Vec3 dir) const {
-        return std::visit([&dir](const auto& h) { return h.evaluate(dir); }, underlying);
+    Env_Light(const Env_Light &src) = delete;
+    Env_Light &operator=(const Env_Light &src) = delete;
+    Env_Light &operator=(Env_Light &&src) = default;
+    Env_Light(Env_Light &&src) = default;
+
+    Vec3 sample() const
+    {
+        return std::visit([](const auto &h)
+                          { return h.sample(); }, underlying);
     }
 
-    bool is_discrete() const {
+    float pdf(Vec3 dir) const
+    {
+        return std::visit([dir](const auto &h)
+                          { return h.pdf(dir); }, underlying);
+    }
+
+    Spectrum evaluate(Vec3 dir) const
+    {
+        return std::visit([&dir](const auto &h)
+                          { return h.evaluate(dir); }, underlying);
+    }
+
+    bool is_discrete() const
+    {
         return false;
     }
 

@@ -8,31 +8,36 @@
 #include "widgets.h"
 #include <SDL2/SDL.h>
 
-namespace Gui {
+namespace Gui
+{
 
 enum class Mode;
 class Manager;
 
-enum class Solid_Type : int { sphere, cube, cylinder, torus, custom, count };
-extern const char* Solid_Type_Names[(int)Solid_Type::count];
+enum class Solid_Type : int
+{
+    sphere, cube, cylinder, torus, custom, count
+};
+extern const char *Solid_Type_Names[(int) Solid_Type::count];
 
-class Simulate {
+class Simulate
+{
 public:
     Simulate();
     ~Simulate();
-    bool keydown(Widgets& widgets, Undo& undo, SDL_Keysym key);
+    bool keydown(Widgets &widgets, Undo &undo, SDL_Keysym key);
 
-    void update(Scene& scene, Undo& undo);
+    void update(Scene &scene, Undo &undo);
     void update_time();
 
-    void step(Scene& scene, float dt);
+    void step(Scene &scene, float dt);
 
-    void clear_particles(Scene& scene);
-    void update_bvh(Scene& scene, Undo& undo);
-    void build_scene(Scene& scene);
+    void clear_particles(Scene &scene);
+    void update_bvh(Scene &scene, Undo &undo);
+    void build_scene(Scene &scene);
 
-    void render(Scene_Maybe obj_opt, Widgets& widgets, Camera& cam);
-    Mode UIsidebar(Manager& manager, Scene& scene, Undo& undo, Widgets& widgets, Scene_Maybe obj);
+    void render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam);
+    Mode UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj);
 
 private:
     PT::Object scene_obj;

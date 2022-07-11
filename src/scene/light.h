@@ -11,23 +11,27 @@
 #include "object.h"
 #include "pose.h"
 
-enum class Light_Type : int { directional, sphere, hemisphere, point, spot, count };
-extern const char* Light_Type_Names[(int)Light_Type::count];
+enum class Light_Type : int
+{
+    directional, sphere, hemisphere, point, spot, count
+};
+extern const char *Light_Type_Names[(int) Light_Type::count];
 
-class Scene_Light {
+class Scene_Light
+{
 public:
     Scene_Light(Light_Type type, Scene_ID id, Pose p, std::string n = {});
-    Scene_Light(const Scene_Light& src) = delete;
-    Scene_Light(Scene_Light&& src);
+    Scene_Light(const Scene_Light &src) = delete;
+    Scene_Light(Scene_Light &&src);
     ~Scene_Light() = default;
 
-    void operator=(const Scene_Light& src) = delete;
-    Scene_Light& operator=(Scene_Light&& src) = default;
+    void operator=(const Scene_Light &src) = delete;
+    Scene_Light &operator=(Scene_Light &&src) = default;
 
     Scene_ID id() const;
     BBox bbox() const;
 
-    void render(const Mat4& view, bool depth_only = false, bool posed = true);
+    void render(const Mat4 &view, bool depth_only = false, bool posed = true);
     void dirty();
 
     Spectrum radiance() const;
@@ -37,11 +41,12 @@ public:
     std::string emissive_loaded() const;
     HDR_Image emissive_copy() const;
 
-    const GL::Tex2D& emissive_texture() const;
+    const GL::Tex2D &emissive_texture() const;
     void emissive_clear();
     bool is_env() const;
 
-    struct Options {
+    struct Options
+    {
         Light_Type type = Light_Type::point;
         char name[MAX_NAME_LEN] = {};
         Spectrum spectrum = Spectrum(1.0f);
@@ -50,13 +55,15 @@ public:
         Vec2 angle_bounds = Vec2(30.0f, 35.0f);
     };
 
-    struct Anim_Light {
-        void at(float t, Options& o) const;
+    struct Anim_Light
+    {
+        void at(float t, Options &o) const;
         void set(float t, Options o);
         Splines<Spectrum, float, Vec2> splines;
     };
 
-    void step(const PT::Object& scene, float dt) {
+    void step(const PT::Object &scene, float dt)
+    {
     }
 
     Options opt;
@@ -74,6 +81,6 @@ private:
     HDR_Image _emissive;
 };
 
-bool operator!=(const Scene_Light::Options& l, const Scene_Light::Options& r);
+bool operator!=(const Scene_Light::Options &l, const Scene_Light::Options &r);
 
 #endif

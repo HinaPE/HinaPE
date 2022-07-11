@@ -21,7 +21,8 @@ __declspec(dllexport) bool AmdPowerXpressRequestHighPerformance = true;
 #include <sys/ioctl.h>
 #endif
 
-int Platform::console_width() {
+int Platform::console_width()
+{
     int cols = 0;
 #ifdef _WIN32
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -35,28 +36,33 @@ int Platform::console_width() {
     return cols;
 }
 
-void Platform::remove_console() {
+void Platform::remove_console()
+{
 #ifdef _WIN32
     FreeConsole();
 #endif
 }
 
-Platform::Platform() {
+Platform::Platform()
+{
     platform_init();
 }
 
-Platform::~Platform() {
+Platform::~Platform()
+{
     platform_shutdown();
 }
 
-void Platform::platform_init() {
+void Platform::platform_init()
+{
 
 #ifdef _WIN32
-    if(SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE) != S_OK)
+    if (SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE) != S_OK)
         warn("Failed to set process DPI aware.");
 #endif
 
-    if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
         die("Failed to initialize SDL: %s", SDL_GetError());
     }
 
@@ -67,35 +73,39 @@ void Platform::platform_init() {
     Vec2 wsize = Vec2(1280, 720);
 
     window = SDL_CreateWindow("Scotty3D", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              (int)wsize.x, (int)wsize.y,
+                              (int) wsize.x, (int) wsize.y,
                               SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-    if(!window) {
+    if (!window)
+    {
         die("Failed to create window: %s", SDL_GetError());
     }
 
-    auto context = [&](int major, int minor) {
-        if(gl_context) return;
+    auto context = [&](int major, int minor)
+    {
+        if (gl_context) return;
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, major);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor);
         gl_context = SDL_GL_CreateContext(window);
     };
 
 #ifndef __APPLE__ // >:|
-    context(4,5);
-    if(!gl_context) info("Failed to create OpenGL 4.5 context, trying 4.1 (%s)", SDL_GetError());
-#endif 
-    context(4,1);
-    if(!gl_context) warn("Failed to create OpenGL 4.1 context, trying 3.3 (%s)", SDL_GetError());
-    context(3,3);
-    if(!gl_context) die("Failed to create OpenGL 3.3 context, shutting down (%s)", SDL_GetError());
+    context(4, 5);
+    if (!gl_context) info("Failed to create OpenGL 4.5 context, trying 4.1 (%s)", SDL_GetError());
+#endif
+    context(4, 1);
+    if (!gl_context) warn("Failed to create OpenGL 4.1 context, trying 3.3 (%s)", SDL_GetError());
+    context(3, 3);
+    if (!gl_context) die("Failed to create OpenGL 3.3 context, shutting down (%s)", SDL_GetError());
 
     SDL_GL_MakeCurrent(window, gl_context);
-    if(SDL_GL_SetSwapInterval(-1)) {
+    if (SDL_GL_SetSwapInterval(-1))
+    {
         info("Could not enable vsync with late swap; using normal vsync.");
         SDL_GL_SetSwapInterval(1);
     }
 
-    if(!gladLoadGL()) {
+    if (!gladLoadGL())
+    {
         die("Failed to load OpenGL functions.");
     }
 
@@ -107,18 +117,21 @@ void Platform::platform_init() {
     ImGui_ImplOpenGL3_Init();
 }
 
-void Platform::set_dpi() {
+void Platform::set_dpi()
+{
 
     float dpi;
     int index = SDL_GetWindowDisplayIndex(window);
-    if(index < 0) {
+    if (index < 0)
+    {
         return;
     }
-    if(SDL_GetDisplayDPI(index, nullptr, &dpi, nullptr)) {
+    if (SDL_GetDisplayDPI(index, nullptr, &dpi, nullptr))
+    {
         return;
     }
     float scale = window_draw().x / window_size().x;
-    if(prev_dpi == dpi && prev_scale == scale) return;
+    if (prev_dpi == dpi && prev_scale == scale) return;
 
     ImGuiStyle style;
     ImGui::StyleColorsDark(&style);
@@ -130,7 +143,7 @@ void Platform::set_dpi() {
 #endif
     ImGui::GetStyle() = style;
 
-    ImGuiIO& IO = ImGui::GetIO();
+    ImGuiIO &IO = ImGui::GetIO();
     ImFontConfig config;
     config.FontDataOwnedByAtlas = false;
     IO.IniFilename = nullptr;
@@ -148,11 +161,13 @@ void Platform::set_dpi() {
     prev_scale = scale;
 }
 
-bool Platform::is_down(SDL_Scancode key) {
+bool Platform::is_down(SDL_Scancode key)
+{
     return keybuf[key];
 }
 
-void Platform::platform_shutdown() {
+void Platform::platform_shutdown()
+{
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
@@ -166,7 +181,8 @@ void Platform::platform_shutdown() {
     SDL_Quit();
 }
 
-void Platform::complete_frame() {
+void Platform::complete_frame()
+{
 
     GL::Framebuffer::bind_screen();
     ImGui::Render();
@@ -174,14 +190,16 @@ void Platform::complete_frame() {
     SDL_GL_SwapWindow(window);
 }
 
-void Platform::begin_frame() {
+void Platform::begin_frame()
+{
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(window);
     ImGui::NewFrame();
 }
 
-void Platform::strcpy(char* dst, const char* src, size_t limit) {
+void Platform::strcpy(char *dst, const char *src, size_t limit)
+{
 #ifdef _WIN32
     strncpy_s(dst, limit, src, limit - 1);
 #else
@@ -190,21 +208,27 @@ void Platform::strcpy(char* dst, const char* src, size_t limit) {
 #endif
 }
 
-void Platform::loop(App& app) {
+void Platform::loop(App &app)
+{
 
     bool running = true;
-    while(running) {
+    while (running)
+    {
 
         set_dpi();
         SDL_Event e;
-        while(SDL_PollEvent(&e)) {
+        while (SDL_PollEvent(&e))
+        {
 
             ImGui_ImplSDL2_ProcessEvent(&e);
 
-            switch(e.type) {
-            case SDL_QUIT: {
-                if(app.quit()) running = false;
-            } break;
+            switch (e.type)
+            {
+                case SDL_QUIT:
+                {
+                    if (app.quit()) running = false;
+                }
+                    break;
             }
 
             app.event(e);
@@ -216,46 +240,55 @@ void Platform::loop(App& app) {
     }
 }
 
-Vec2 Platform::scale(Vec2 pt) {
+Vec2 Platform::scale(Vec2 pt)
+{
     return pt * window_draw() / window_size();
 }
 
-Vec2 Platform::window_size() {
+Vec2 Platform::window_size()
+{
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
-    return Vec2((float)w, (float)h);
+    return Vec2((float) w, (float) h);
 }
 
-Vec2 Platform::window_draw() {
+Vec2 Platform::window_draw()
+{
     int w, h;
     SDL_GL_GetDrawableSize(window, &w, &h);
-    return Vec2((float)w, (float)h);
+    return Vec2((float) w, (float) h);
 }
 
-void Platform::grab_mouse() {
+void Platform::grab_mouse()
+{
     SDL_SetWindowGrab(window, SDL_TRUE);
 }
 
-void Platform::ungrab_mouse() {
+void Platform::ungrab_mouse()
+{
     SDL_SetWindowGrab(window, SDL_FALSE);
 }
 
-Vec2 Platform::get_mouse() {
+Vec2 Platform::get_mouse()
+{
     int x, y;
     SDL_GetMouseState(&x, &y);
     return Vec2(x, y);
 }
 
-void Platform::capture_mouse() {
+void Platform::capture_mouse()
+{
     SDL_CaptureMouse(SDL_TRUE);
     SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
-void Platform::release_mouse() {
+void Platform::release_mouse()
+{
     SDL_CaptureMouse(SDL_FALSE);
     SDL_SetRelativeMouseMode(SDL_FALSE);
 }
 
-void Platform::set_mouse(Vec2 pos) {
-    SDL_WarpMouseInWindow(window, (int)pos.x, (int)pos.y);
+void Platform::set_mouse(Vec2 pos)
+{
+    SDL_WarpMouseInWindow(window, (int) pos.x, (int) pos.y);
 }

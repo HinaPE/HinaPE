@@ -1,7 +1,8 @@
 
 #include "../scene/skeleton.h"
 
-Mat4 Joint::joint_to_bind() const {
+Mat4 Joint::joint_to_bind() const
+{
 
     // TODO(Animation): Task 2
 
@@ -15,7 +16,8 @@ Mat4 Joint::joint_to_bind() const {
     return Mat4::I;
 }
 
-Mat4 Joint::joint_to_posed() const {
+Mat4 Joint::joint_to_posed() const
+{
 
     // TODO(Animation): Task 2
 
@@ -30,7 +32,8 @@ Mat4 Joint::joint_to_posed() const {
     return Mat4::I;
 }
 
-Vec3 Skeleton::end_of(Joint* j) {
+Vec3 Skeleton::end_of(Joint *j)
+{
 
     // TODO(Animation): Task 2
 
@@ -39,7 +42,8 @@ Vec3 Skeleton::end_of(Joint* j) {
     return Vec3{};
 }
 
-Vec3 Skeleton::posed_end_of(Joint* j) {
+Vec3 Skeleton::posed_end_of(Joint *j)
+{
 
     // TODO(Animation): Task 2
 
@@ -48,7 +52,8 @@ Vec3 Skeleton::posed_end_of(Joint* j) {
     return Vec3{};
 }
 
-Mat4 Skeleton::joint_to_bind(const Joint* j) const {
+Mat4 Skeleton::joint_to_bind(const Joint *j) const
+{
 
     // TODO(Animation): Task 2
 
@@ -57,7 +62,8 @@ Mat4 Skeleton::joint_to_bind(const Joint* j) const {
     return Mat4::I;
 }
 
-Mat4 Skeleton::joint_to_posed(const Joint* j) const {
+Mat4 Skeleton::joint_to_posed(const Joint *j) const
+{
 
     // TODO(Animation): Task 2
 
@@ -66,7 +72,8 @@ Mat4 Skeleton::joint_to_posed(const Joint* j) const {
     return Mat4::I;
 }
 
-void Joint::compute_gradient(Vec3 target, Vec3 current) {
+void Joint::compute_gradient(Vec3 target, Vec3 current)
+{
 
     // TODO(Animation): Task 2
 
@@ -78,14 +85,16 @@ void Joint::compute_gradient(Vec3 target, Vec3 current) {
     // Current is the end position of the IK'd joint in skeleton space.
 }
 
-void Skeleton::step_ik(std::vector<IK_Handle*> active_handles) {
+void Skeleton::step_ik(std::vector<IK_Handle *> active_handles)
+{
 
     // TODO(Animation): Task 2
 
     // Do several iterations of Jacobian Transpose gradient descent for IK
 }
 
-Vec3 closest_on_line_segment(Vec3 start, Vec3 end, Vec3 point) {
+Vec3 closest_on_line_segment(Vec3 start, Vec3 end, Vec3 point)
+{
 
     // TODO(Animation): Task 3
 
@@ -93,7 +102,8 @@ Vec3 closest_on_line_segment(Vec3 start, Vec3 end, Vec3 point) {
     return Vec3{};
 }
 
-void Skeleton::find_joints(const GL::Mesh& mesh, std::vector<std::vector<Joint*>>& map) {
+void Skeleton::find_joints(const GL::Mesh &mesh, std::vector<std::vector<Joint *>> &map)
+{
 
     // TODO(Animation): Task 3
 
@@ -101,19 +111,21 @@ void Skeleton::find_joints(const GL::Mesh& mesh, std::vector<std::vector<Joint*>
     // A joint should effect a vertex if it is within Joint::radius distance of the
     // bone's line segment in bind position.
 
-    const std::vector<GL::Mesh::Vert>& verts = mesh.verts();
+    const std::vector<GL::Mesh::Vert> &verts = mesh.verts();
     map.resize(verts.size());
 
     // For each i in [0, verts.size()), map[i] should contain the list of joints that
     // effect vertex i. Note that i is NOT Vert::id! i is the index in verts.
 
-    for_joints([&](Joint* j) {
-        // What vertices does joint j effect?
-    });
+    for_joints([&](Joint *j)
+               {
+                   // What vertices does joint j effect?
+               });
 }
 
-void Skeleton::skin(const GL::Mesh& input, GL::Mesh& output,
-                    const std::vector<std::vector<Joint*>>& map) {
+void Skeleton::skin(const GL::Mesh &input, GL::Mesh &output,
+                    const std::vector<std::vector<Joint *>> &map)
+{
 
     // TODO(Animation): Task 3
 
@@ -126,7 +138,8 @@ void Skeleton::skin(const GL::Mesh& input, GL::Mesh& output,
 
     std::vector<GL::Mesh::Vert> verts = input.verts();
 
-    for(size_t i = 0; i < verts.size(); i++) {
+    for (size_t i = 0; i < verts.size(); i++)
+    {
 
         // Skin vertex i. Note that its position is given in object bind space.
     }

@@ -13,26 +13,28 @@
 
 struct Launch_Settings;
 
-namespace Gui {
+namespace Gui
+{
 
 enum class Mode;
 class Manager;
 
-class Render {
+class Render
+{
 public:
-    Render(Scene& scene, Vec2 dim);
+    Render(Scene &scene, Vec2 dim);
 
-    std::string headless_render(Animate& animate, Scene& scene, const Launch_Settings& set);
+    std::string headless_render(Animate &animate, Scene &scene, const Launch_Settings &set);
     std::pair<float, float> completion_time() const;
 
-    bool keydown(Widgets& widgets, SDL_Keysym key);
-    Mode UIsidebar(Manager& manager, Undo& undo, Scene& scene, Scene_Maybe selected,
-                   Camera& user_cam);
-    void render(Scene_Maybe obj, Widgets& widgets, Camera& user_cam);
+    bool keydown(Widgets &widgets, SDL_Keysym key);
+    Mode UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe selected,
+                   Camera &user_cam);
+    void render(Scene_Maybe obj, Widgets &widgets, Camera &user_cam);
 
     void update_dim(Vec2 dim);
     void load_cam(Vec3 pos, Vec3 front, float ar, float fov, float ap, float dist);
-    const Camera& get_cam() const;
+    const Camera &get_cam() const;
 
 private:
     GL::Lines bvh_viz, bvh_active;

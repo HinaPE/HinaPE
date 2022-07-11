@@ -2,7 +2,8 @@
 #include "../scene/particles.h"
 #include "../rays/pathtracer.h"
 
-bool Scene_Particles::Particle::update(const PT::Object& scene, float dt, float radius) {
+bool Scene_Particles::Particle::update(const PT::Object &scene, float dt, float radius)
+{
 
     // TODO(Animation): Task 4
 

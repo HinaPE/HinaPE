@@ -14,7 +14,8 @@
 
 class Platform;
 
-struct Launch_Settings {
+struct Launch_Settings
+{
 
     std::string scene_file;
     std::string env_map_file;
@@ -32,9 +33,10 @@ struct Launch_Settings {
     bool no_bvh = false;
 };
 
-class App {
+class App
+{
 public:
-    App(Launch_Settings set, Platform* plt = nullptr);
+    App(Launch_Settings set, Platform *plt = nullptr);
     ~App();
 
     void render();
@@ -46,7 +48,10 @@ private:
     Vec3 screen_to_world(Vec2 mouse);
 
     // Camera data
-    enum class Camera_Control { none, orbit, move };
+    enum class Camera_Control
+    {
+        none, orbit, move
+    };
     Vec2 window_dim, mouse_press;
     bool selection_changed = false;
     Camera_Control cam_mode = Camera_Control::none;
@@ -54,7 +59,7 @@ private:
     Mat4 view, proj, iviewproj;
 
     // Systems
-    Platform* plt = nullptr;
+    Platform *plt = nullptr;
     Scene scene;
     Gui::Manager gui;
     Undo undo;

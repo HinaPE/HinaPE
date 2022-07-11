@@ -2,7 +2,8 @@
 #include "../lib/mathlib.h"
 #include "debug.h"
 
-bool BBox::hit(const Ray& ray, Vec2& times) const {
+bool BBox::hit(const Ray &ray, Vec2 &times) const
+{
 
     // TODO (PathTracer): Task 3
     // Implement ray - bounding box intersection test
