@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_MANAGER_H
+#define HINAPE_MANAGER_H
 
 #include <SDL2/SDL.h>
 #include <imgui/imgui.h>
@@ -124,3 +124,4 @@ private:
 };
 
 }; // namespace Gui
+#endif

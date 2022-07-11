@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_LOG_H
+#define HINAPE_LOG_H
 
 #include <cstdarg>
 #include <cstdio>
@@ -54,3 +54,5 @@ inline std::string last_file(std::string path) {
 #undef assert
 #define assert(expr)                                                                               \
     (void)((!!(expr)) || (fail_assert(#expr, last_file(__FILE__).c_str(), __LINE__), 0))
+
+#endif

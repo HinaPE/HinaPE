@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_LINE_H
+#define HINAPE_LINE_H
 
 #include <algorithm>
 #include <cmath>
@@ -51,3 +51,5 @@ inline std::ostream& operator<<(std::ostream& out, Line l) {
     out << "Line{" << l.point << "," << l.dir << "}";
     return out;
 }
+
+#endif

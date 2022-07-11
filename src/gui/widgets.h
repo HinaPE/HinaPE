@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_WIDGETS_H
+#define HINAPE_WIDGETS_H
 
 #include "../lib/mathlib.h"
 #include "../rays/pathtracer.h"
@@ -170,3 +170,5 @@ private:
 };
 
 } // namespace Gui
+
+#endif

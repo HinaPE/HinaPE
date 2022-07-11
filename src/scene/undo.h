@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_UNDO_H
+#define HINAPE_UNDO_H
 
 #include <memory>
 #include <stack>
@@ -159,3 +159,5 @@ private:
     std::stack<std::unique_ptr<Action_Base>> redos;
     size_t total_actions = 0;
 };
+
+#endif

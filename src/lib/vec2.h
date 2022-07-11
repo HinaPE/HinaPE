@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_VEC2_H
+#define HINAPE_VEC2_H
 
 #include <algorithm>
 #include <cmath>
@@ -197,3 +197,5 @@ inline std::ostream& operator<<(std::ostream& out, Vec2 v) {
     out << "{" << v.x << "," << v.y << "}";
     return out;
 }
+
+#endif

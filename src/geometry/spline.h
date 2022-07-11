@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_SPLINE_H
+#define HINAPE_SPLINE_H
 
 #include "../lib/mathlib.h"
 #include <map>
@@ -142,3 +142,5 @@ private:
 #include "../student/spline.inl"
 #endif
 #include "spline.inl"
+
+#endif

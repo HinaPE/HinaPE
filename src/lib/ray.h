@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_RAY_H
+#define HINAPE_RAY_H
 
 #include <cmath>
 #include <limits>
@@ -54,3 +54,5 @@ inline std::ostream& operator<<(std::ostream& out, Ray r) {
     out << "Ray{" << r.point << "," << r.dir << "}";
     return out;
 }
+
+#endif

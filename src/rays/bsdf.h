@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_BSDF_H
+#define HINAPE_BSDF_H
 
 #include <variant>
 
@@ -150,3 +150,5 @@ private:
 };
 
 } // namespace PT
+
+#endif

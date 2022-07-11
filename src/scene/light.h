@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_SCENE_LIGHT_H
+#define HINAPE_SCENE_LIGHT_H
 
 #include <string>
 
@@ -75,3 +75,5 @@ private:
 };
 
 bool operator!=(const Scene_Light::Options& l, const Scene_Light::Options& r);
+
+#endif

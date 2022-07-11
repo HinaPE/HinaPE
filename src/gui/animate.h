@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_ANIMATE_H
+#define HINAPE_ANIMATE_H
 
 #include "widgets.h"
 #include <SDL2/SDL.h>
@@ -93,3 +93,5 @@ private:
 };
 
 } // namespace Gui
+
+#endif

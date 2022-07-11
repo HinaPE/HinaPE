@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_SHAPES_H
+#define HINAPE_SHAPES_H
 
 #include "../geometry/util.h"
 #include "../lib/mathlib.h"
@@ -71,3 +71,5 @@ private:
 };
 
 } // namespace PT
+
+#endif

@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_SAMPLERS_H
+#define HINAPE_SAMPLERS_H
 
 #include "../lib/mathlib.h"
 #include "../util/hdr_image.h"
@@ -63,3 +63,5 @@ struct Image {
 
 } // namespace Sphere
 } // namespace Samplers
+
+#endif

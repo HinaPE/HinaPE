@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_DEBUG_H
+#define HINAPE_DEBUG_H
 
 /* Debugging Tips:
 
@@ -51,3 +51,5 @@ struct Debug_Data {
 extern Debug_Data debug_data;
 
 void student_debug_ui();
+
+#endif

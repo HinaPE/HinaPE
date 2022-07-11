@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_OBJECT_H
+#define HINAPE_OBJECT_H
 
 #include "../lib/mathlib.h"
 #include "../scene/object.h"
@@ -119,3 +119,5 @@ private:
 };
 
 } // namespace PT
+
+#endif

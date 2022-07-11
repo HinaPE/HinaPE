@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_PLANE_H
+#define HINAPE_PLANE_H
 
 #include <algorithm>
 #include <cmath>
@@ -43,3 +43,5 @@ inline std::ostream& operator<<(std::ostream& out, Plane v) {
     out << "Plane" << v.p;
     return out;
 }
+
+#endif

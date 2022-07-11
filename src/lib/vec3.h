@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_VEC3_H
+#define HINAPE_VEC3_H
 
 #include <algorithm>
 #include <cmath>
@@ -229,3 +229,5 @@ inline bool operator<(Vec3 l, Vec3 r) {
     }
     return l.x < r.x;
 }
+
+#endif

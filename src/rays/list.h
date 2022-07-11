@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_LIST_H
+#define HINAPE_LIST_H
 
 #include "../lib/mathlib.h"
 #include "../util/rand.h"
@@ -66,3 +66,5 @@ private:
 };
 
 } // namespace PT
+
+#endif

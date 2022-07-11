@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_QUAT_H
+#define HINAPE_QUAT_H
 
 #include <algorithm>
 #include <cmath>
@@ -187,3 +187,5 @@ inline Quat slerp(const Quat& q0, const Quat& q1, float t) {
     float a = std::acos(std::abs(hcos));
     return (std::sin((1.0f - t) * a) * shortest + std::sin(t * a) * q1) * (1.0f / std::sin(a));
 }
+
+#endif

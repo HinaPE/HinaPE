@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_CAMERA_H
+#define HINAPE_CAMERA_H
 
 #include "../lib/mathlib.h"
 
@@ -80,3 +80,5 @@ private:
     /// Cached view matrices
     Mat4 view, iview;
 };
+
+#endif

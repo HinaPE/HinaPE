@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_PLATFORM_H
+#define HINAPE_PLATFORM_H
 
 #include <SDL2/SDL.h>
 
@@ -43,3 +43,5 @@ private:
     SDL_GLContext gl_context = nullptr;
     const Uint8* keybuf = nullptr;
 };
+
+#endif

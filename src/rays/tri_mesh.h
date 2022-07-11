@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_TRI_MESH_H
+#define HINAPE_TRI_MESH_H
 
 #include "../lib/mathlib.h"
 #include "../platform/gl.h"
@@ -65,3 +65,5 @@ private:
 };
 
 } // namespace PT
+
+#endif

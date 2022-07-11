@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_THREAD_POOL_H
+#define HINAPE_THREAD_POOL_H
 
 #include <condition_variable>
 #include <functional>
@@ -48,3 +48,5 @@ private:
     std::vector<std::thread> workers;
     std::queue<std::function<void()>> tasks;
 };
+
+#endif

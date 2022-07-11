@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_LAYOUT_H
+#define HINAPE_LAYOUT_H
 
 #include <SDL2/SDL.h>
 
@@ -34,3 +34,4 @@ private:
 };
 
 } // namespace Gui
+#endif

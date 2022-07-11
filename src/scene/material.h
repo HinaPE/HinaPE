@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_MATERIAL_H
+#define HINAPE_MATERIAL_H
 
 #include "../geometry/spline.h"
 #include "../lib/spectrum.h"
@@ -48,3 +48,5 @@ public:
 };
 
 bool operator!=(const Material::Options& l, const Material::Options& r);
+
+#endif

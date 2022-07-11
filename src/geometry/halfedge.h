@@ -124,8 +124,8 @@
     (Notice that this loop will never terminate for an interior vertex!)
     More documentation can be found in the inline comments below.
 */
-
-#pragma once
+#ifndef HINAPE_HALFEDGE_H
+#define HINAPE_HALFEDGE_H
 
 #include <list>
 #include <optional>
@@ -811,3 +811,5 @@ template<> struct hash<Halfedge_Mesh::HalfedgeCRef> {
     }
 };
 } // namespace std
+
+#endif

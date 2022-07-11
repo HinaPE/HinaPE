@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_RAND_H
+#define HINAPE_RAND_H
 
 #include "../lib/mathlib.h"
 
@@ -17,3 +17,5 @@ bool coin_flip(float p = 0.5f);
 // Seed the current thread's PRNG
 void seed();
 } // namespace RNG
+
+#endif

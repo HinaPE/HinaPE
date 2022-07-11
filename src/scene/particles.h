@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_PARTICLES_H
+#define HINAPE_PARTICLES_H
 
 #include <vector>
 
@@ -89,3 +89,5 @@ private:
 };
 
 bool operator!=(const Scene_Particles::Options& l, const Scene_Particles::Options& r);
+
+#endif

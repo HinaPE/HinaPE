@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_SCENE_H
+#define HINAPE_SCENE_H
 
 #include <functional>
 #include <map>
@@ -136,3 +136,5 @@ private:
     std::map<Scene_ID, Scene_Item> erased;
     Scene_ID next_id, first_id;
 };
+
+#endif

@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_SCENE_OBJECT_H
+#define HINAPE_SCENE_OBJECT_H
 
 #include "../geometry/halfedge.h"
 #include "../platform/gl.h"
@@ -89,3 +89,5 @@ private:
 };
 
 bool operator!=(const Scene_Object::Options& l, const Scene_Object::Options& r);
+
+#endif

@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_UTIL_H
+#define HINAPE_UTIL_H
 
 #include "../platform/gl.h"
 
@@ -48,3 +48,5 @@ Data torus(float iradius, float oradius, int segments, int sides);
 
 } // namespace Gen
 } // namespace Util
+
+#endif

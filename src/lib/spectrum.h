@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_SPECTRUM_H
+#define HINAPE_SPECTRUM_H
 
 #include "vec3.h"
 #include <cmath>
@@ -141,3 +141,5 @@ inline std::ostream& operator<<(std::ostream& out, Spectrum v) {
     out << "Spectrum{" << v.r << "," << v.g << "," << v.b << "}";
     return out;
 }
+
+#endif

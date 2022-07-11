@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_BBOX_H
+#define HINAPE_BBOX_H
 
 #include <algorithm>
 #include <cfloat>
@@ -129,3 +129,5 @@ inline std::ostream& operator<<(std::ostream& out, BBox b) {
     out << "BBox{" << b.min << "," << b.max << "}";
     return out;
 }
+
+#endif

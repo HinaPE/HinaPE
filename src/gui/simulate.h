@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_SIMULATE_H
+#define HINAPE_SIMULATE_H
 
 #include "../rays/pathtracer.h"
 #include "../scene/particles.h"
@@ -45,3 +45,5 @@ private:
 };
 
 } // namespace Gui
+
+#endif

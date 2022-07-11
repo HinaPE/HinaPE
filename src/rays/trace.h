@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_TRACE_H
+#define HINAPE_TRACE_H
 
 #include "../lib/mathlib.h"
 
@@ -31,3 +31,5 @@ struct Trace {
 };
 
 } // namespace PT
+
+#endif

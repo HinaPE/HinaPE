@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_VEC4_H
+#define HINAPE_VEC4_H
 
 #include <algorithm>
 #include <cmath>
@@ -228,3 +228,5 @@ inline std::ostream& operator<<(std::ostream& out, Vec4 v) {
     out << "{" << v.x << "," << v.y << "," << v.z << "," << v.w << "}";
     return out;
 }
+
+#endif

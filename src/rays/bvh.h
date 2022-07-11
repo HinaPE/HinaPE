@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_BVH_H
+#define HINAPE_BVH_H
 
 #include "../lib/mathlib.h"
 #include "../platform/gl.h"
@@ -52,4 +52,6 @@ private:
 #include "../reference/bvh.inl"
 #else
 #include "../student/bvh.inl"
+#endif
+
 #endif

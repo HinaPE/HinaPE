@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_APP_H
+#define HINAPE_APP_H
 
 #include <SDL2/SDL.h>
 #include <map>
@@ -61,3 +61,5 @@ private:
 
     bool gui_capture = false;
 };
+
+#endif

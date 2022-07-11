@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_PATHTRACER_H
+#define HINAPE_PATHTRACER_H
 
 #include <atomic>
 #include <mutex>
@@ -87,3 +87,5 @@ private:
 };
 
 } // namespace PT
+
+#endif

@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_MAT4_H
+#define HINAPE_MAT4_H
 
 #include <algorithm>
 #include <cmath>
@@ -465,3 +465,5 @@ inline std::ostream& operator<<(std::ostream& out, Mat4 m) {
     out << "{" << m[0] << "," << m[1] << "," << m[2] << "," << m[3] << "}";
     return out;
 }
+
+#endif

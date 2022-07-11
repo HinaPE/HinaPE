@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_ENV_LIGHT_H
+#define HINAPE_ENV_LIGHT_H
 
 #include <variant>
 
@@ -87,3 +87,5 @@ private:
 };
 
 } // namespace PT
+
+#endif

@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_MODEL_H
+#define HINAPE_MODEL_H
 
 #include "widgets.h"
 
@@ -98,3 +98,5 @@ private:
 };
 
 } // namespace Gui
+
+#endif

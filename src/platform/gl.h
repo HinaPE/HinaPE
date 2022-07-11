@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_GL_H
+#define HINAPE_GL_H
 
 #include <string>
 #include <unordered_map>
@@ -288,3 +288,5 @@ extern const std::string dome_v, dome_f;
 
 } // namespace Shaders
 } // namespace GL
+
+#endif

@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_RENDER_H
+#define HINAPE_RENDER_H
 
 #include <SDL2/SDL.h>
 #include <mutex>
@@ -48,3 +48,5 @@ private:
 };
 
 } // namespace Gui
+
+#endif

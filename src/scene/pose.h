@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_POSE_H
+#define HINAPE_POSE_H
 
 #include "../geometry/spline.h"
 #include "../lib/mathlib.h"
@@ -31,3 +31,5 @@ struct Anim_Pose {
     void set(float t, Pose p);
     Splines<Vec3, Quat, Vec3> splines;
 };
+
+#endif

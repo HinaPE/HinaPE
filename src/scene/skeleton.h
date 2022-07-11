@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_SKELETON_H
+#define HINAPE_SKELETON_H
 
 #include <functional>
 #include <set>
@@ -171,3 +171,5 @@ private:
     std::unordered_set<IK_Handle*> handles, erased_handles;
     friend class Scene;
 };
+
+#endif

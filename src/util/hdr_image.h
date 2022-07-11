@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_HDR_IMAGE_H
+#define HINAPE_HDR_IMAGE_H
 
 #include <vector>
 
@@ -45,3 +45,5 @@ private:
     mutable float exposure = 1.0f;
     mutable bool dirty = true;
 };
+
+#endif

@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_RIG_H
+#define HINAPE_RIG_H
 
 #include "../rays/tri_mesh.h"
 #include "widgets.h"
@@ -44,3 +44,5 @@ private:
 };
 
 } // namespace Gui
+
+#endif

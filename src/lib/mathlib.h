@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_MATH_LIB_H
+#define HINAPE_MATH_LIB_H
 
 #include <algorithm>
 #include <cmath>
@@ -53,3 +53,4 @@ inline float smoothstep(float e0, float e1, float x) {
 #include "mat4.h"
 #include "quat.h"
 #include "ray.h"
+#endif

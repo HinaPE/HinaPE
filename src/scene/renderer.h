@@ -1,5 +1,5 @@
-
-#pragma once
+#ifndef HINAPE_RENDERER_H
+#define HINAPE_RENDERER_H
 
 #include <variant>
 
@@ -90,3 +90,5 @@ private:
 
     Mat4 _proj;
 };
+
+#endif
