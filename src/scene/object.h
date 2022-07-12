@@ -4,6 +4,7 @@
 #include "../geometry/halfedge.h"
 #include "../platform/gl.h"
 #include "../rays/shapes.h"
+#include "../physics/rigidbody.h"
 
 #include "material.h"
 #include "pose.h"
@@ -62,6 +63,7 @@ public:
 
     void step(const PT::Object &scene, float dt)
     {
+HinaPE::RigidBody<HinaPE::DYNAMIC> a;
     }
 
     struct Options
