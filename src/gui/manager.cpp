@@ -1252,8 +1252,8 @@ void Manager::create_baseplane()
             baseplane.add(Vec3{i, 0, -R}, Vec3{i, 0, R}, Color::blue);
             continue;
         }
-//        baseplane.add(Vec3{i, 0, -R}, Vec3{i, 0, R}, Color::baseplane);
-//        baseplane.add(Vec3{-R, 0, i}, Vec3{R, 0, i}, Color::baseplane);
+        baseplane.add(Vec3{i, 0, -R}, Vec3{i, 0, R}, Color::baseplane);
+        baseplane.add(Vec3{-R, 0, i}, Vec3{R, 0, i}, Color::baseplane);
     }
 }
 
