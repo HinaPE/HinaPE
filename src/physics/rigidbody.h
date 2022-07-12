@@ -59,10 +59,22 @@ public:
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
     [[nodiscard]] HINA_FORCE_INLINE float get_mass();
 
+public:
+    RigidBody();
+    ~RigidBody();
+
 private:
     struct Impl;
     std::unique_ptr<Impl> impl;
 };
+
+template<RigidBodyType Type>
+RigidBody<Type>::RigidBody() : impl(std::make_unique<Impl>())
+{}
+
+template<RigidBodyType Type>
+RigidBody<Type>::~RigidBody()
+= default;
 
 }
 
