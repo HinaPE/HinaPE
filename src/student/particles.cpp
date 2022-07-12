@@ -23,5 +23,5 @@ bool Scene_Particles::Particle::update(const PT::Object &scene, float dt, float 
 
     // (5) Decrease the particle's age and return whether it should die.
 
-    return false;
+    return age > 0;
 }
