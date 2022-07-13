@@ -53,6 +53,7 @@ void Simulate::update(Scene &scene, Undo &undo)
     last_update = time;
 
     step(scene, dt);
+    update_physics(scene, dt);
 }
 
 void Simulate::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
@@ -250,6 +251,22 @@ Mode Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &wi
     }
 
     return mode;
+}
+
+void Simulate::update_physics(Scene &scene, float dt)
+{
+    scene.for_items([](Scene_Item &item)
+                    {
+                        if (item.is<Scene_Object>())
+                        {
+                            auto &o = item.get<Scene_Object>();
+                            if (o.opt.rigidbody == HinaPE::DYNAMIC)
+                            {
+                                o.pose.pos += Vec3(0.0f, 0.01f, 0.0f);
+                            }
+                            o.set_pose_dirty();
+                        }
+                    });
 }
 
 } // namespace Gui

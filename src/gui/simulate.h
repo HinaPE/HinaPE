@@ -36,6 +36,9 @@ public:
     void render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam);
     Mode UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj);
 
+    // Physics
+    void update_physics(Scene &scene, float dt);
+
 private:
     PT::Object scene_obj;
     bool use_bvh = true;
