@@ -129,19 +129,19 @@ Scene_ID Scene::reserve_id()
     return next_id++;
 }
 
-Scene_ID Scene::add(Pose pose, Halfedge_Mesh &&mesh, std::string n, Scene_ID id)
+Scene_ID Scene::add(Pose pose, Halfedge_Mesh &&mesh, std::string n, Scene_ID id, bool is_rigidbody)
 {
     if (!id) id = next_id++;
     assert(objs.find(id) == objs.end());
-    objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n)));
+    objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n, is_rigidbody)));
     return id;
 }
 
-Scene_ID Scene::add(Pose pose, GL::Mesh &&mesh, std::string n, Scene_ID id)
+Scene_ID Scene::add(Pose pose, GL::Mesh &&mesh, std::string n, Scene_ID id, bool is_rigidbody)
 {
     if (!id) id = next_id++;
     assert(objs.find(id) == objs.end());
-    objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n)));
+    objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n, is_rigidbody)));
     return id;
 }
 

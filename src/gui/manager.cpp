@@ -506,6 +506,12 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
             material_edit_gui(undo, obj.id(), obj.material);
             ImGui::Unindent();
         }
+        if (obj.is_rigidbody() && ImGui::CollapsingHeader("Rigid Body"))
+        {
+            ImGui::Indent();
+            ImGui::Checkbox("IsRigidBody", &obj.opt.rigidbody);
+            ImGui::Unindent();
+        }
 
     } else if (item.is<Scene_Light>())
     {
@@ -938,12 +944,12 @@ void Manager::UInew_obj(Undo &undo)
 
     unsigned int idx = 0;
 
-    auto add_mesh = [&, this](std::string n, GL::Mesh &&mesh, bool flip = false)
+    auto add_mesh = [&, this](std::string n, GL::Mesh &&mesh, bool flip = false, bool is_rigidbody = false)
     {
         Halfedge_Mesh hm;
         hm.from_mesh(mesh);
         if (flip) hm.flip();
-        undo.add_obj(std::move(hm), n);
+        undo.add_obj(std::move(hm), n, is_rigidbody);
         new_obj_window = false;
     };
 
@@ -956,10 +962,12 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float R = 1.0f;
+        static bool is_rigid = true;
         ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
+        ImGui::Checkbox("Rigid Body", &is_rigid);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Cube", Util::cube_mesh(R / 2.0f), true);
+            add_mesh("Cube", Util::cube_mesh(R / 2.0f), true, is_rigid);
         }
         ImGui::PopID();
     }
@@ -970,10 +978,12 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float R = 1.0f;
+        static bool is_rigid = true;
         ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
+        ImGui::Checkbox("Rigid Body", &is_rigid);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Square", Util::square_mesh(R / 2.0f));
+            add_mesh("Square", Util::square_mesh(R / 2.0f), false, is_rigid);
         }
         ImGui::PopID();
     }
@@ -985,12 +995,14 @@ void Manager::UInew_obj(Undo &undo)
         ImGui::PushID(idx++);
         static float R = 0.5f, H = 2.0f;
         static int S = 12;
+        static bool is_rigid = true;
         ImGui::SliderFloat("Radius", &R, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Height", &H, 0.01f, 10.0f, "%.2f");
         ImGui::SliderInt("Sides", &S, 3, 100);
+        ImGui::Checkbox("Rigid Body", &is_rigid);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Cylinder", Util::cyl_mesh(R, H, S));
+            add_mesh("Cylinder", Util::cyl_mesh(R, H, S), false, is_rigid);
         }
         ImGui::PopID();
     }
@@ -1002,13 +1014,15 @@ void Manager::UInew_obj(Undo &undo)
         ImGui::PushID(idx++);
         static float IR = 0.8f, OR = 1.0f;
         static int SEG = 32, S = 16;
+        static bool is_rigid = true;
         ImGui::SliderFloat("Inner Radius", &IR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Outer Radius", &OR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderInt("Segments", &SEG, 3, 100);
         ImGui::SliderInt("Sides", &S, 3, 100);
+        ImGui::Checkbox("Rigid Body", &is_rigid);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Torus", Util::torus_mesh(IR, OR, SEG, S));
+            add_mesh("Torus", Util::torus_mesh(IR, OR, SEG, S), false, is_rigid);
         }
         ImGui::PopID();
     }
@@ -1020,13 +1034,15 @@ void Manager::UInew_obj(Undo &undo)
         ImGui::PushID(idx++);
         static float BR = 1.0f, TR = 0.1f, H = 1.0f;
         static int S = 12;
+        static bool is_rigid = true;
         ImGui::SliderFloat("Bottom Radius", &BR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Top Radius", &TR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Height", &H, 0.01f, 10.0f, "%.2f");
         ImGui::SliderInt("Sides", &S, 3, 100);
+        ImGui::Checkbox("Rigid Body", &is_rigid);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Cone", Util::cone_mesh(BR, TR, H, S));
+            add_mesh("Cone", Util::cone_mesh(BR, TR, H, S), false, is_rigid);
         }
         ImGui::PopID();
     }
@@ -1037,10 +1053,12 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float R = 1.0f;
+        static bool is_rigid = true;
         ImGui::SliderFloat("Radius", &R, 0.01f, 10.0f, "%.2f");
+        ImGui::Checkbox("Rigid Body", &is_rigid);
         if (ImGui::Button("Add"))
         {
-            Scene_Object &obj = undo.add_obj(GL::Mesh(), "Sphere");
+            Scene_Object &obj = undo.add_obj(GL::Mesh(), "Sphere", is_rigid);
             obj.opt.shape_type = PT::Shape_Type::sphere;
             obj.opt.shape = PT::Shape(PT::Sphere(R));
             obj.set_mesh_dirty();

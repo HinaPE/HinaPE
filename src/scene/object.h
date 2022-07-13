@@ -24,8 +24,8 @@ class Scene_Object
 {
 public:
     Scene_Object() = default;
-    Scene_Object(Scene_ID id, Pose pose, GL::Mesh &&mesh, std::string n = {});
-    Scene_Object(Scene_ID id, Pose pose, Halfedge_Mesh &&mesh, std::string n = {});
+    Scene_Object(Scene_ID id, Pose pose, GL::Mesh &&mesh, std::string n = {}, bool is_rigidbody = false);
+    Scene_Object(Scene_ID id, Pose pose, Halfedge_Mesh &&mesh, std::string n = {}, bool is_rigidbody = false);
     Scene_Object(const Scene_Object &src) = delete;
     Scene_Object(Scene_Object &&src) = default;
     ~Scene_Object() = default;
@@ -54,12 +54,14 @@ public:
     BBox bbox();
     bool is_editable() const;
     bool is_shape() const;
+    bool is_rigidbody() const;
     void try_make_editable(PT::Shape_Type prev = PT::Shape_Type::none);
     void flip_normals();
 
     void set_mesh_dirty();
     void set_skel_dirty();
     void set_pose_dirty();
+    void switch_rigidbody();
 
     void step(const PT::Object &scene, float dt)
     {
@@ -74,6 +76,7 @@ public:
         bool render = true;
         PT::Shape_Type shape_type = PT::Shape_Type::none;
         PT::Shape shape;
+        bool rigidbody = false;
     };
 
     Options opt;

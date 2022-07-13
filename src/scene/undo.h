@@ -117,8 +117,8 @@ public:
                });
     }
 
-    Scene_Object &add_obj(GL::Mesh &&mesh, std::string name);
-    Scene_Object &add_obj(Halfedge_Mesh &&mesh, std::string name);
+    Scene_Object &add_obj(GL::Mesh &&mesh, std::string name, bool is_rigidbody = false);
+    Scene_Object &add_obj(Halfedge_Mesh &&mesh, std::string name, bool is_rigidbody = false);
 
     void del_obj(Scene_ID id);
     void update_pose(Scene_ID id, Pose old);

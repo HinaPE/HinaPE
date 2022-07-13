@@ -112,8 +112,8 @@ public:
         return obj.id();
     }
 
-    Scene_ID add(Pose pose, GL::Mesh &&mesh, std::string n = {}, Scene_ID id = 0);
-    Scene_ID add(Pose pose, Halfedge_Mesh &&mesh, std::string n = {}, Scene_ID id = 0);
+    Scene_ID add(Pose pose, GL::Mesh &&mesh, std::string n = {}, Scene_ID id = 0, bool is_rigidbody = false);
+    Scene_ID add(Pose pose, Halfedge_Mesh &&mesh, std::string n = {}, Scene_ID id = 0, bool is_rigidbody = false);
     Scene_ID reserve_id();
     Scene_ID used_ids();
 

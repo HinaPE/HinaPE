@@ -5,7 +5,7 @@
 #include "../geometry/util.h"
 #include "../gui/render.h"
 
-Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n)
+Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n, bool is_rigidbody)
         : pose(p), _id(id), armature(id), _mesh(std::move(m))
 {
 
@@ -19,9 +19,11 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n)
     {
         snprintf(opt.name, MAX_NAME_LEN, "Object %d", id);
     }
+
+    opt.rigidbody = is_rigidbody;
 }
 
-Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n)
+Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n, bool is_rigidbody)
         : pose(p), _id(id), armature(id), halfedge(std::move(m)), _mesh()
 {
 
@@ -36,6 +38,8 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n
     }
 
     sync_anim_mesh();
+
+    opt.rigidbody = is_rigidbody;
 }
 
 const GL::Mesh &Scene_Object::posed_mesh()
@@ -75,6 +79,11 @@ void Scene_Object::try_make_editable(PT::Shape_Type prev)
 bool Scene_Object::is_shape() const
 {
     return opt.shape_type != PT::Shape_Type::none;
+}
+
+bool Scene_Object::is_rigidbody() const
+{
+    return opt.rigidbody;
 }
 
 void Scene_Object::set_time(float time)
@@ -189,6 +198,11 @@ void Scene_Object::set_mesh_dirty()
     mesh_dirty = true;
     skel_dirty = true;
     pose_dirty = true;
+}
+
+void Scene_Object::switch_rigidbody()
+{
+    opt.rigidbody = !opt.rigidbody;
 }
 
 BBox Scene_Object::bbox()
