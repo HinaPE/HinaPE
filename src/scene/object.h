@@ -63,7 +63,7 @@ public:
 
     void step(const PT::Object &scene, float dt)
     {
-        auto rb = std::make_unique<HinaPE::RigidBody<HinaPE::DYNAMIC>>();
+        auto rb = std::make_unique<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>();
     }
 
     struct Options

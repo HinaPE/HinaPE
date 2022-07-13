@@ -8,6 +8,11 @@
 #include "log.h"
 #include "vec4.h"
 
+#define EPS_F 0.00001f
+#define PI_F 3.14159265358979323846264338327950288f
+#define Radians(v) ((v) * (PI_F / 180.0f))
+#define Degrees(v) ((v) * (180.0f / PI_F))
+
 struct Mat4
 {
 
