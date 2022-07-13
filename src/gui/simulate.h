@@ -14,10 +14,7 @@ namespace Gui
 enum class Mode;
 class Manager;
 
-enum class Solid_Type : int
-{
-    sphere, cube, cylinder, torus, custom, count
-};
+enum class Solid_Type : int { sphere, cube, cylinder, torus, custom, count };
 extern const char *Solid_Type_Names[(int) Solid_Type::count];
 
 class Simulate
