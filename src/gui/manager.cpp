@@ -509,11 +509,20 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
         if (ImGui::CollapsingHeader("Rigid Body"))
         {
             ImGui::Indent();
-            ImGui::Checkbox("IsRigidBody", &obj.opt.rigidbody);
-            if (obj.is_rigidbody())
+            static bool is_rigidbody = obj.is_rigidbody();
+            ImGui::Checkbox("IsRigidBody", &is_rigidbody);
+            if (is_rigidbody)
             {
                 ImGui::Text("Hello Rigid Body~");
-            }
+                static int rt = obj.opt.rigidbody;
+                ImGui::RadioButton("Dynamic", &rt, 0);
+                ImGui::SameLine();
+                ImGui::RadioButton("Static", &rt, 1);
+                ImGui::SameLine();
+                ImGui::RadioButton("Kinematic", &rt, 2);
+                obj.opt.rigidbody = static_cast<HinaPE::RigidBodyType>(rt);
+            } else
+                obj.opt.rigidbody = HinaPE::RigidBodyType::NOT_RIGIDBODY;
             ImGui::Unindent();
         }
 

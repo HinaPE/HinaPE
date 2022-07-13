@@ -7,7 +7,7 @@ struct RigidBodyBase<Type>::Impl
 {
     // Transform
     Vec3 p; // position
-//    Quat o; // orientation
+    Quat o; // orientation
     Vec3 s; // scale
 
     // Physics properties
@@ -23,7 +23,30 @@ struct RigidBodyBase<Type>::Impl
 
     Impl() = default;
     ~Impl() = default;
+    Impl(const Impl &src) = delete;
+    Impl &operator=(const Impl &src) = delete;
+    Impl(Impl &&src) noexcept = default;
+    Impl &operator=(Impl &&src) noexcept = default;
+
+
 };
+
+template<RigidBodyType FromType, RigidBodyType ResType>
+void copy_impl(typename RigidBodyBase<FromType>::Impl *from, typename RigidBodyBase<ResType>::Impl *res)
+{
+    res->p = from->p;
+    res->o = from->o;
+    res->s = from->s;
+    res->m = from->m;
+    res->im = from->im;
+    res->v = from->v;
+    res->w = from->w;
+    res->ld = from->ld;
+    res->ad = from->ad;
+    res->f = from->f;
+    res->t = from->t;
+    res->a = from->a;
+}
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>

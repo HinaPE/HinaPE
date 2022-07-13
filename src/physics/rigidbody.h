@@ -13,12 +13,20 @@
 
 namespace HinaPE
 {
-enum RigidBodyType
+enum RigidBodyType : int
 {
-    DYNAMIC = 1 << 0,
-    STATIC = 1 << 1,
-    KINEMATIC = 1 << 2,
+    DYNAMIC = 0,
+    STATIC = 1,
+    KINEMATIC = 2,
+
+    NOT_RIGIDBODY = -1
 };
+
+//template<RigidBodyType Type>
+//class RigidBodyBase;
+//
+//template<RigidBodyType FromType, RigidBodyType ResType>
+//RigidBodyBase<ResType> &&switch_rigidbody_type(const RigidBodyBase<FromType> &from);
 
 template<RigidBodyType Type>
 class RigidBodyBase
@@ -63,11 +71,29 @@ public:
 public:
     RigidBodyBase();
     ~RigidBodyBase();
+    RigidBodyBase &operator=(const RigidBodyBase &src) = delete;
+    RigidBodyBase(const RigidBodyBase &src) = delete;
+    RigidBodyBase(RigidBodyBase &&src) noexcept;
+    RigidBodyBase &operator=(RigidBodyBase &&src) noexcept;
+
+public:
+    template<RigidBodyType FromType, RigidBodyType ResType>
+    friend RigidBodyBase<ResType> switch_rigidbody_type(const RigidBodyBase<FromType> &from);
+    template<RigidBodyType FromType, RigidBodyType ResType>
+    friend void copy_impl(typename RigidBodyBase<FromType>::Impl *from, typename RigidBodyBase<ResType>::Impl *res);
 
 private:
     struct Impl;
     std::unique_ptr<Impl> impl;
 };
+
+template<RigidBodyType FromType, RigidBodyType ResType>
+RigidBodyBase<ResType> switch_rigidbody_type(const RigidBodyBase<FromType> &from)
+{
+    RigidBodyBase<ResType> res;
+    copy_impl<FromType, ResType>(from.impl.get(), res.impl.get());
+    return std::move(res); // you may use return res auto, compiler would help auto optimize it;
+}
 
 template<RigidBodyType Type>
 RigidBodyBase<Type>::RigidBodyBase() : impl(std::make_unique<Impl>())
@@ -76,6 +102,17 @@ RigidBodyBase<Type>::RigidBodyBase() : impl(std::make_unique<Impl>())
 template<RigidBodyType Type>
 RigidBodyBase<Type>::~RigidBodyBase()
 = default;
+
+template<RigidBodyType Type>
+RigidBodyBase<Type>::RigidBodyBase(RigidBodyBase &&src) noexcept
+{ impl = std::move(src.impl); }
+
+template<RigidBodyType Type>
+RigidBodyBase<Type> &RigidBodyBase<Type>::operator=(RigidBodyBase &&src) noexcept
+{
+    impl = std::move(src.impl);
+    return *this;
+}
 
 }
 

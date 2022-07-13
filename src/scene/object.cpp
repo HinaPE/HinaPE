@@ -6,7 +6,7 @@
 #include "../gui/render.h"
 
 Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n, bool is_rigidbody)
-        : pose(p), _id(id), armature(id), _mesh(std::move(m))
+        : pose(p), _id(id), armature(id), _mesh(std::move(m)), rigidbody_opt(is_rigidbody ? std::optional<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>() : std::nullopt)
 {
 
     set_skel_dirty();
@@ -20,11 +20,12 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n, boo
         snprintf(opt.name, MAX_NAME_LEN, "Object %d", id);
     }
 
-    opt.rigidbody = is_rigidbody;
+    opt.rigidbody = is_rigidbody ? HinaPE::STATIC : HinaPE::NOT_RIGIDBODY;
+    opt.old_rigidbody = opt.rigidbody;
 }
 
 Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n, bool is_rigidbody)
-        : pose(p), _id(id), armature(id), halfedge(std::move(m)), _mesh()
+        : pose(p), _id(id), armature(id), halfedge(std::move(m)), _mesh(), rigidbody_opt(is_rigidbody ? std::optional<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>() : std::nullopt)
 {
 
     set_mesh_dirty();
@@ -39,7 +40,8 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n
 
     sync_anim_mesh();
 
-    opt.rigidbody = is_rigidbody;
+    opt.rigidbody = is_rigidbody ? HinaPE::STATIC : HinaPE::NOT_RIGIDBODY;
+    opt.old_rigidbody = opt.rigidbody;
 }
 
 const GL::Mesh &Scene_Object::posed_mesh()
@@ -83,7 +85,7 @@ bool Scene_Object::is_shape() const
 
 bool Scene_Object::is_rigidbody() const
 {
-    return opt.rigidbody;
+    return opt.rigidbody >= 0;
 }
 
 void Scene_Object::set_time(float time)
@@ -198,11 +200,6 @@ void Scene_Object::set_mesh_dirty()
     mesh_dirty = true;
     skel_dirty = true;
     pose_dirty = true;
-}
-
-void Scene_Object::switch_rigidbody()
-{
-    opt.rigidbody = !opt.rigidbody;
 }
 
 BBox Scene_Object::bbox()
