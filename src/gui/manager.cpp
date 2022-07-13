@@ -506,10 +506,14 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
             material_edit_gui(undo, obj.id(), obj.material);
             ImGui::Unindent();
         }
-        if (obj.is_rigidbody() && ImGui::CollapsingHeader("Rigid Body"))
+        if (ImGui::CollapsingHeader("Rigid Body"))
         {
             ImGui::Indent();
             ImGui::Checkbox("IsRigidBody", &obj.opt.rigidbody);
+            if (obj.is_rigidbody())
+            {
+                ImGui::Text("Hello Rigid Body~");
+            }
             ImGui::Unindent();
         }
 
