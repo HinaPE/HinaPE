@@ -22,12 +22,6 @@ enum RigidBodyType : int
     NOT_RIGIDBODY = -1
 };
 
-//template<RigidBodyType Type>
-//class RigidBodyBase;
-//
-//template<RigidBodyType FromType, RigidBodyType ResType>
-//RigidBodyBase<ResType> &&switch_rigidbody_type(const RigidBodyBase<FromType> &from);
-
 template<RigidBodyType Type>
 class RigidBodyBase
 {
