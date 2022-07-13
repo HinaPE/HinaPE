@@ -57,6 +57,7 @@ public:
     bool is_rigidbody() const;
     void try_make_editable(PT::Shape_Type prev = PT::Shape_Type::none);
     void flip_normals();
+    void check_switch_rigidbody_type();
 
     void set_mesh_dirty();
     void set_skel_dirty();
@@ -64,65 +65,7 @@ public:
 
     void step(const PT::Object &scene, float dt)
     {
-        if (rigidbody_opt.has_value())
-        {
-            if (opt.rigidbody != opt.old_rigidbody)
-            {
-                std::visit(
-                        overloaded{[&](HinaPE::RigidBodyBase<HinaPE::DYNAMIC> &dyn)
-                                   {
-                                       switch (opt.rigidbody)
-                                       {
-                                           case HinaPE::NOT_RIGIDBODY:
-                                               rigidbody_opt = std::nullopt;
-                                               break;
-                                           case HinaPE::STATIC:
-                                               rigidbody_opt = HinaPE::switch_rigidbody_type<HinaPE::DYNAMIC, HinaPE::STATIC>(std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(rigidbody_opt.value()));
-                                               break;
-                                           case HinaPE::KINEMATIC:
-                                               rigidbody_opt = HinaPE::switch_rigidbody_type<HinaPE::DYNAMIC, HinaPE::KINEMATIC>(std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(rigidbody_opt.value()));
-                                               break;
-                                           default:
-                                               throw std::runtime_error("invalid rigidbody type");
-                                       }
-                                   },
-                                   [&](HinaPE::RigidBodyBase<HinaPE::STATIC> &sta)
-                                   {
-                                       switch (opt.rigidbody)
-                                       {
-                                           case HinaPE::NOT_RIGIDBODY:
-                                               rigidbody_opt = std::nullopt;
-                                               break;
-                                           case HinaPE::DYNAMIC:
-                                               rigidbody_opt = HinaPE::switch_rigidbody_type<HinaPE::STATIC, HinaPE::DYNAMIC>(std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(rigidbody_opt.value()));
-                                               break;
-                                           case HinaPE::KINEMATIC:
-                                               rigidbody_opt = HinaPE::switch_rigidbody_type<HinaPE::STATIC, HinaPE::KINEMATIC>(std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(rigidbody_opt.value()));
-                                               break;
-                                           default:
-                                               throw std::runtime_error("invalid rigidbody type");
-                                       }
-                                   },
-                                   [&](HinaPE::RigidBodyBase<HinaPE::KINEMATIC> &kin)
-                                   {
-                                       switch (opt.rigidbody)
-                                       {
-                                           case HinaPE::NOT_RIGIDBODY:
-                                               rigidbody_opt = std::nullopt;
-                                               break;
-                                           case HinaPE::DYNAMIC:
-                                               rigidbody_opt = HinaPE::switch_rigidbody_type<HinaPE::KINEMATIC, HinaPE::DYNAMIC>(std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(rigidbody_opt.value()));
-                                               break;
-                                           case HinaPE::STATIC:
-                                               rigidbody_opt = HinaPE::switch_rigidbody_type<HinaPE::KINEMATIC, HinaPE::STATIC>(std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(rigidbody_opt.value()));
-                                               break;
-                                           default:
-                                               throw std::runtime_error("invalid rigidbody type");
-                                       }
-                                   }},
-                        rigidbody_opt.value());
-            }
-        }
+        check_switch_rigidbody_type();
     }
 
     struct Options
