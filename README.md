@@ -1,1 +1,1 @@
-HinaPE 1.0.0 is on updating recently ~ please wait for a coffee time
+HinaPE 1.0.0 is on active update recently and will release very soon ~
