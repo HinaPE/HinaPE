@@ -1122,6 +1122,7 @@ void Manager::render_ui(Scene &scene, Undo &undo, Camera &cam)
     UIstudent();
     UIsettings();
     UIsavefirst(scene, undo);
+    UIbig_sim_button(scene, undo);
     set_error(animate.pump_output(scene));
 }
 
@@ -1288,11 +1289,31 @@ float Manager::UImenu(Scene &scene, Undo &undo)
 
         ImGui::Text("FPS: %.0f", ImGui::GetIO().Framerate);
 
+
         menu_height = ImGui::GetWindowSize().y;
         ImGui::EndMainMenuBar();
     }
 
     return menu_height;
+}
+
+void Manager::UIbig_sim_button(Scene &scene, Undo &undo)
+{
+    ImGui::SetNextWindowPos(Vec2{ImGui::GetIO().DisplaySize.x * 0.8f, ImGui::GetIO().DisplaySize.y * 0.2f});
+    ImGui::Begin("Sim", nullptr,
+                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
+                 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+
+    static std::string Sim = "Simulate";
+    static std::string Stop = "Stop";
+
+//    static const ImVec4 pressColor { 0.5f, 0, 0, 1.0f };
+//    ImGui::PushStyleColor(ImGuiCol_Button, pressColor);
+    if (ImGui::Button(simulate.running ? Stop.c_str() : Sim.c_str(), ImVec2(70, 30)))
+        simulate.running = !simulate.running;
+//    ImGui::PopStyleColor(1);
+
+    ImGui::End();
 }
 
 void Manager::create_baseplane()
@@ -1510,7 +1531,7 @@ void Manager::render_3d(Scene &scene, Undo &undo, Camera &camera)
     if (mode != Mode::model && mode != Mode::rig)
     {
 
-        if (mode != Mode::animate && !animate.playing_or_rendering())
+        if (mode != Mode::animate && !animate.playing_or_rendering() && simulate.running)
             simulate.update(scene, undo);
         else
             simulate.update_time();

@@ -30,6 +30,7 @@ enum RigidBodyType : int
 
     NOT_RIGIDBODY = -1
 };
+
 }
 
 #endif //HINAPE_COMMON_H

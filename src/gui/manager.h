@@ -93,6 +93,7 @@ private:
     void UInew_light(Scene &scene, Undo &undo);
     float UImenu(Scene &scene, Undo &undo);
     void UIsidebar(Scene &scene, Undo &undo, float menu_height, Camera &cam);
+    void UIbig_sim_button(Scene &scene, Undo &undo);
     void load_image(Scene_Light &image);
     void frame(Scene &scene, Camera &cam);
 

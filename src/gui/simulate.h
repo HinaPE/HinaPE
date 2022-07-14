@@ -36,6 +36,8 @@ public:
     void render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam);
     Mode UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj);
 
+    bool running = false;
+
 private:
     PT::Object scene_obj;
     bool use_bvh = true;
