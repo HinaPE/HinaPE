@@ -2,6 +2,8 @@
 #define HINAPE_CLOTH_H
 
 #include "../common.h"
+
+#include <memory>
 #include <type_traits>
 
 namespace HinaPE
