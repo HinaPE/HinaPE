@@ -148,6 +148,18 @@ void RigidBodyBase<Type>::get_pose(Vec3 &pos, Vec3 &euler, Vec3 &scale) const
 template<RigidBodyType Type>
 void RigidBodyBase<Type>::test()
 {
-    impl->p += Vec3(0.0f, 0.01f, 0.0f);
+    Vec3 &v = impl->v;
+    Vec3 &x = impl->p;
+
+    static float dt = 0.02f;
+    static Vec3 a = Vec3(0.f, -9.8f, 0.f);
+    x += v * dt;
+    v += a * dt;
+
+    if (x.y < -5.f)
+    {
+        v.y = -v.y;
+        x.y = -5.f;
+    }
 }
 }

@@ -2,7 +2,7 @@
 
 #include <utility>
 
-void HinaPE::PhysicsSystem::tick(float dt)
+void HinaPE::PhysicsSystem::_tick_(float dt)
 {
     std::visit([&](auto &k)
                {
@@ -27,7 +27,7 @@ void HinaPE::PhysicsSystem::_register_(unsigned int ID, std::shared_ptr<PhysicsO
     physics_objects[ID] = std::move(ptr);
 }
 
-const std::map<unsigned int, std::shared_ptr<HinaPE::PhysicsObject>> &HinaPE::PhysicsSystem::objects() const
+void HinaPE::PhysicsSystem::_kernel_()
 {
-    return physics_objects;
+
 }

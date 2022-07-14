@@ -8,7 +8,7 @@ class PhysicsSystem;
 class PBDKernel
 {
 public:
-    static void simulate(PhysicsSystem& sys, float dt);
+    static void simulate(PhysicsSystem &sys, float dt);
 };
 
 }
