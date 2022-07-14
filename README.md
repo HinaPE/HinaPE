@@ -1,6 +1,8 @@
 # HinaPE
 
-[![Cmake Build](https://github.com/Xayah-Hina/HinaPE/actions/workflows/cmake.yml/badge.svg)](https://github.com/Xayah-Hina/HinaPE/actions/workflows/cmake.yml)
+[![Cmake Build](https://github.com/Xayah-Hina/HinaPE/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/Xayah-Hina/HinaPE/actions/workflows/ubuntu.yml)
+[![Cmake Build](https://github.com/Xayah-Hina/HinaPE/actions/workflows/macos.yml/badge.svg)](https://github.com/Xayah-Hina/HinaPE/actions/workflows/macos.yml)
+[![Cmake Build](https://github.com/Xayah-Hina/HinaPE/actions/workflows/windows.yml/badge.svg)](https://github.com/Xayah-Hina/HinaPE/actions/workflows/windows.yml)
 
 ## Instruction
 
