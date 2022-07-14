@@ -19,6 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        submodules: recursive
     
     - name: Install SDL2
       run: sudo apt-get install libsdl2-dev
