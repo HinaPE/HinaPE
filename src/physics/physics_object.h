@@ -54,10 +54,10 @@ inline PhysicsObject::PhysicsObject(PhysicsObjectType type)
     switch (type)
     {
         case Rigidbody:
-            physics_object_opt = RigidBodyBase<HinaPE::STATIC>();
+            physics_object_opt = RigidBodyBase<HinaPE::DYNAMIC>();
             break;
         case Deformable:
-            physics_object_opt = RigidBodyBase<HinaPE::DYNAMIC>(); // TODO
+            physics_object_opt = RigidBodyBase<HinaPE::STATIC>(); // TODO
             break;
         case Fluid:
             physics_object_opt = RigidBodyBase<HinaPE::KINEMATIC>(); // TODO

@@ -23,7 +23,7 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n, int
     opt.physics_object_type = static_cast<HinaPE::PhysicsObjectType>(physics_object_type);
     if (opt.physics_object_type == HinaPE::Rigidbody)
     {
-        opt.rigidbody = HinaPE::STATIC;
+        opt.rigidbody = HinaPE::DYNAMIC;
         opt.old_rigidbody = opt.rigidbody;
     }
     physics_object = std::make_shared<HinaPE::PhysicsObject>(opt.physics_object_type);
@@ -50,7 +50,7 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n
     opt.physics_object_type = static_cast<HinaPE::PhysicsObjectType>(physics_object_type);
     if (opt.physics_object_type == HinaPE::Rigidbody)
     {
-        opt.rigidbody = HinaPE::STATIC;
+        opt.rigidbody = HinaPE::DYNAMIC; // default to dynamic
         opt.old_rigidbody = opt.rigidbody;
     }
     physics_object = std::make_shared<HinaPE::PhysicsObject>(opt.physics_object_type);
