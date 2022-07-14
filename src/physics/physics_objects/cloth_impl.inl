@@ -1,5 +1,7 @@
 #include "cloth.h"
 
+#include <vector>
+
 namespace HinaPE
 {
 

@@ -55,21 +55,15 @@ public:
 
     template<typename T>
     bool is() const
-    {
-        return std::holds_alternative<T>(data);
-    }
+    { return std::holds_alternative<T>(data); }
 
     template<typename T>
     T &get()
-    {
-        return std::get<T>(data);
-    }
+    { return std::get<T>(data); }
 
     template<typename T>
     const T &get() const
-    {
-        return std::get<T>(data);
-    }
+    { return std::get<T>(data); }
 
 private:
     std::variant<Scene_Object, Scene_Light, Scene_Particles> data;
