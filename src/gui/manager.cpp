@@ -137,6 +137,9 @@ bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
             }
         }
             break;
+        case SDLK_SPACE:
+            simulate.running = !simulate.running;
+            break;
     }
 
     switch (mode)
