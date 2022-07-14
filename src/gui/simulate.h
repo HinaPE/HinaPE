@@ -4,6 +4,7 @@
 #include "../rays/pathtracer.h"
 #include "../scene/particles.h"
 #include "../util/thread_pool.h"
+#include "../physics/physics_system.h"
 
 #include "widgets.h"
 #include <SDL2/SDL.h>
@@ -47,6 +48,9 @@ private:
     Pose old_pose;
     size_t cur_actions = 0;
     Uint64 last_update;
+
+    // Physics
+    HinaPE::PhysicsSystem physics;
 };
 
 } // namespace Gui

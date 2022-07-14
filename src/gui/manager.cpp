@@ -957,12 +957,12 @@ void Manager::UInew_obj(Undo &undo)
 
     unsigned int idx = 0;
 
-    auto add_mesh = [&, this](std::string n, GL::Mesh &&mesh, bool flip = false, bool is_rigidbody = false)
+    auto add_mesh = [&, this](std::string n, GL::Mesh &&mesh, bool flip = false, int physics_object_type = -1)
     {
         Halfedge_Mesh hm;
         hm.from_mesh(mesh);
         if (flip) hm.flip();
-        undo.add_obj(std::move(hm), n, is_rigidbody);
+        undo.add_obj(std::move(hm), n, physics_object_type);
         new_obj_window = false;
     };
 
@@ -975,12 +975,16 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float R = 1.0f;
-        static bool is_rigid = true;
+        static int physics_object_type = 0;
         ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
-        ImGui::Checkbox("Rigid Body", &is_rigid);
+        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
+        ImGui::SameLine();
+        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
+        ImGui::SameLine();
+        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Cube", Util::cube_mesh(R / 2.0f), true, is_rigid);
+            add_mesh("Cube", Util::cube_mesh(R / 2.0f), true, physics_object_type);
         }
         ImGui::PopID();
     }
@@ -991,12 +995,16 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float R = 1.0f;
-        static bool is_rigid = true;
+        static int physics_object_type = 0;
         ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
-        ImGui::Checkbox("Rigid Body", &is_rigid);
+        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
+        ImGui::SameLine();
+        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
+        ImGui::SameLine();
+        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Square", Util::square_mesh(R / 2.0f), false, is_rigid);
+            add_mesh("Square", Util::square_mesh(R / 2.0f), false, physics_object_type);
         }
         ImGui::PopID();
     }
@@ -1008,14 +1016,18 @@ void Manager::UInew_obj(Undo &undo)
         ImGui::PushID(idx++);
         static float R = 0.5f, H = 2.0f;
         static int S = 12;
-        static bool is_rigid = true;
+        static int physics_object_type = 0;
         ImGui::SliderFloat("Radius", &R, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Height", &H, 0.01f, 10.0f, "%.2f");
         ImGui::SliderInt("Sides", &S, 3, 100);
-        ImGui::Checkbox("Rigid Body", &is_rigid);
+        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
+        ImGui::SameLine();
+        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
+        ImGui::SameLine();
+        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Cylinder", Util::cyl_mesh(R, H, S), false, is_rigid);
+            add_mesh("Cylinder", Util::cyl_mesh(R, H, S), false, physics_object_type);
         }
         ImGui::PopID();
     }
@@ -1027,15 +1039,19 @@ void Manager::UInew_obj(Undo &undo)
         ImGui::PushID(idx++);
         static float IR = 0.8f, OR = 1.0f;
         static int SEG = 32, S = 16;
-        static bool is_rigid = true;
+        static int physics_object_type = 0;
         ImGui::SliderFloat("Inner Radius", &IR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Outer Radius", &OR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderInt("Segments", &SEG, 3, 100);
         ImGui::SliderInt("Sides", &S, 3, 100);
-        ImGui::Checkbox("Rigid Body", &is_rigid);
+        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
+        ImGui::SameLine();
+        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
+        ImGui::SameLine();
+        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Torus", Util::torus_mesh(IR, OR, SEG, S), false, is_rigid);
+            add_mesh("Torus", Util::torus_mesh(IR, OR, SEG, S), false, physics_object_type);
         }
         ImGui::PopID();
     }
@@ -1047,15 +1063,19 @@ void Manager::UInew_obj(Undo &undo)
         ImGui::PushID(idx++);
         static float BR = 1.0f, TR = 0.1f, H = 1.0f;
         static int S = 12;
-        static bool is_rigid = true;
+        static int physics_object_type = 0;
         ImGui::SliderFloat("Bottom Radius", &BR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Top Radius", &TR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Height", &H, 0.01f, 10.0f, "%.2f");
         ImGui::SliderInt("Sides", &S, 3, 100);
-        ImGui::Checkbox("Rigid Body", &is_rigid);
+        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
+        ImGui::SameLine();
+        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
+        ImGui::SameLine();
+        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Cone", Util::cone_mesh(BR, TR, H, S), false, is_rigid);
+            add_mesh("Cone", Util::cone_mesh(BR, TR, H, S), false, physics_object_type);
         }
         ImGui::PopID();
     }
@@ -1066,12 +1086,16 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float R = 1.0f;
-        static bool is_rigid = true;
+        static int physics_object_type = 0;
         ImGui::SliderFloat("Radius", &R, 0.01f, 10.0f, "%.2f");
-        ImGui::Checkbox("Rigid Body", &is_rigid);
+        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
+        ImGui::SameLine();
+        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
+        ImGui::SameLine();
+        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            Scene_Object &obj = undo.add_obj(GL::Mesh(), "Sphere", is_rigid);
+            Scene_Object &obj = undo.add_obj(GL::Mesh(), "Sphere", physics_object_type);
             obj.opt.shape_type = PT::Shape_Type::sphere;
             obj.opt.shape = PT::Shape(PT::Sphere(R));
             obj.set_mesh_dirty();

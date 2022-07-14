@@ -4,7 +4,7 @@
 #include "../geometry/halfedge.h"
 #include "../platform/gl.h"
 #include "../rays/shapes.h"
-#include "../physics/rigidbody.h"
+#include "../physics/physics_system.h"
 
 #include "material.h"
 #include "pose.h"
@@ -24,8 +24,8 @@ class Scene_Object
 {
 public:
     Scene_Object() = default;
-    Scene_Object(Scene_ID id, Pose pose, GL::Mesh &&mesh, std::string n = {}, bool is_rigidbody = false);
-    Scene_Object(Scene_ID id, Pose pose, Halfedge_Mesh &&mesh, std::string n = {}, bool is_rigidbody = false);
+    Scene_Object(Scene_ID id, Pose pose, GL::Mesh &&mesh, std::string n = {}, int physics_object_type = -1);
+    Scene_Object(Scene_ID id, Pose pose, Halfedge_Mesh &&mesh, std::string n = {}, int physics_object_type = -1);
     Scene_Object(const Scene_Object &src) = delete;
     Scene_Object(Scene_Object &&src) = default;
     ~Scene_Object() = default;
@@ -58,6 +58,7 @@ public:
     void try_make_editable(PT::Shape_Type prev = PT::Shape_Type::none);
     void flip_normals();
     void check_switch_rigidbody_type();
+    void apply_physics_result();
 
     void set_mesh_dirty();
     void set_skel_dirty();
@@ -66,6 +67,7 @@ public:
     void step(const PT::Object &scene, float dt)
     {
         check_switch_rigidbody_type();
+        apply_physics_result();
     }
 
     struct Options
@@ -76,6 +78,8 @@ public:
         bool render = true;
         PT::Shape_Type shape_type = PT::Shape_Type::none;
         PT::Shape shape;
+
+        HinaPE::PhysicsObjectType physics_object_type = HinaPE::NOT_PHYSICS_OBJECT;
         HinaPE::RigidBodyType rigidbody = HinaPE::NOT_RIGIDBODY;
         HinaPE::RigidBodyType old_rigidbody = HinaPE::NOT_RIGIDBODY;
     };
@@ -85,11 +89,7 @@ public:
     Anim_Pose anim;
     Skeleton armature;
     Material material;
-    std::optional<
-            std::variant<
-                    HinaPE::RigidBodyBase<HinaPE::DYNAMIC>,
-                    HinaPE::RigidBodyBase<HinaPE::STATIC>,
-                    HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>> rigidbody_opt;
+    std::shared_ptr<HinaPE::PhysicsObject> physics_object;
 
     mutable bool rig_dirty = false;
 

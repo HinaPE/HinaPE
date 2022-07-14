@@ -5,23 +5,10 @@
 #include "lib/quat.h"
 #include <type_traits>
 
-#if defined(WIN32) || defined(_WIN32) || defined(WIN64)
-#define HINA_FORCE_INLINE __forceinline
-#else
-#define HINA_FORCE_INLINE __attribute__((always_inline))
-#endif
+#include "common.h"
 
 namespace HinaPE
 {
-enum RigidBodyType : int
-{
-    DYNAMIC = 0,
-    STATIC = 1,
-    KINEMATIC = 2,
-
-    NOT_RIGIDBODY = -1
-};
-
 template<RigidBodyType Type>
 class RigidBodyBase
 {
@@ -65,8 +52,8 @@ public:
 public:
     RigidBodyBase();
     ~RigidBodyBase();
-    RigidBodyBase &operator=(const RigidBodyBase &src) = delete;
     RigidBodyBase(const RigidBodyBase &src) = delete;
+    RigidBodyBase &operator=(const RigidBodyBase &src) = delete;
     RigidBodyBase(RigidBodyBase &&src) noexcept;
     RigidBodyBase &operator=(RigidBodyBase &&src) noexcept;
 

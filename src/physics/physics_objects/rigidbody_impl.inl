@@ -27,8 +27,6 @@ struct RigidBodyBase<Type>::Impl
     Impl &operator=(const Impl &src) = delete;
     Impl(Impl &&src) noexcept = default;
     Impl &operator=(Impl &&src) noexcept = default;
-
-
 };
 
 template<RigidBodyType FromType, RigidBodyType ResType>
@@ -50,7 +48,7 @@ void copy_impl(typename RigidBodyBase<FromType>::Impl *from, typename RigidBodyB
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-RigidBodyBase<T> *RigidBodyBase<Type>::add_force(const Vec3 &f)
+HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::add_force(const Vec3 &f)
 {
     impl.f += f;
     return this;
@@ -58,7 +56,7 @@ RigidBodyBase<T> *RigidBodyBase<Type>::add_force(const Vec3 &f)
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-RigidBodyBase<T> *RigidBodyBase<Type>::add_acceleration(const Vec3 &a)
+HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::add_acceleration(const Vec3 &a)
 {
     impl.a = a;
     return this;
@@ -66,7 +64,7 @@ RigidBodyBase<T> *RigidBodyBase<Type>::add_acceleration(const Vec3 &a)
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_velocity(const Vec3 &v)
+HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_velocity(const Vec3 &v)
 {
     impl.v = v;
     return this;
@@ -74,7 +72,7 @@ RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_velocity(const Vec3 &v)
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_velocity(const Vec3 &w)
+HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_velocity(const Vec3 &w)
 {
     impl.w = w;
     return this;
@@ -82,7 +80,7 @@ RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_velocity(const Vec3 &w)
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_damping(float d)
+HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_damping(float d)
 {
     impl.d = d;
     return this;
@@ -90,7 +88,7 @@ RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_damping(float d)
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_damping(float d)
+HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_damping(float d)
 {
     impl.ad = d;
     return this;
@@ -98,7 +96,7 @@ RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_damping(float d)
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-RigidBodyBase<T> *RigidBodyBase<Type>::set_mass(float m)
+HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_mass(float m)
 {
     impl.m = m;
     return this;
@@ -106,35 +104,35 @@ RigidBodyBase<T> *RigidBodyBase<Type>::set_mass(float m)
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-Vec3 RigidBodyBase<Type>::get_linear_velocity() const
+HINA_FORCE_INLINE Vec3 RigidBodyBase<Type>::get_linear_velocity() const
 {
     return impl.v;
 }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-Vec3 RigidBodyBase<Type>::get_angular_velocity() const
+HINA_FORCE_INLINE Vec3 RigidBodyBase<Type>::get_angular_velocity() const
 {
     return impl.w;
 }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-float RigidBodyBase<Type>::get_linear_damping() const
+HINA_FORCE_INLINE float RigidBodyBase<Type>::get_linear_damping() const
 {
     return impl.ld;
 }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-float RigidBodyBase<Type>::get_angular_damping() const
+HINA_FORCE_INLINE float RigidBodyBase<Type>::get_angular_damping() const
 {
     return impl->ad;
 }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-float RigidBodyBase<Type>::get_mass()
+HINA_FORCE_INLINE float RigidBodyBase<Type>::get_mass()
 {
     return impl->m;
 }
