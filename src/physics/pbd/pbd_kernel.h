@@ -1,11 +1,17 @@
 #ifndef HINAPE_PBD_KERNEL_H
 #define HINAPE_PBD_KERNEL_H
 
+namespace HinaPE
+{
+class PhysicsSystem;
+
 class PBDKernel
 {
 public:
-    void simulate(float dt);
+    static void simulate(PhysicsSystem& sys, float dt);
 };
+
+}
 
 
 #endif //HINAPE_PBD_KERNEL_H

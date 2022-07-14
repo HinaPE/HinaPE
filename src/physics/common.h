@@ -1,6 +1,9 @@
 #ifndef HINAPE_COMMON_H
 #define HINAPE_COMMON_H
 
+#include "lib/vec3.h"
+#include "lib/quat.h"
+
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64)
 #define HINA_FORCE_INLINE __forceinline
 #else

@@ -1,8 +1,8 @@
 #ifndef HINAPE_PHYSICS_OBJECT_H
 #define HINAPE_PHYSICS_OBJECT_H
 
-#include "cloth.h"
-#include "rigidbody.h"
+#include "physics_objects/cloth.h"
+#include "physics_objects/rigidbody.h"
 
 #include <map>
 #include <variant>
@@ -14,7 +14,25 @@ class PhysicsObject
 {
 public:
     void switch_rigidbody_type(RigidBodyType to);
-    bool is_physics_object() const;
+    [[nodiscard]] bool is_physics_object() const;
+    [[nodiscard]] bool is_rigidbody_dyn() const;
+    [[nodiscard]] const RigidBodyBase<HinaPE::DYNAMIC> &get_rigidbody_dyn() const;
+    [[nodiscard]] const RigidBodyBase<HinaPE::STATIC> &get_rigidbody_st() const;
+    [[nodiscard]] const RigidBodyBase<HinaPE::KINEMATIC> &get_rigidbody_kin() const;
+    [[nodiscard]] RigidBodyBase<HinaPE::DYNAMIC> &get_rigidbody_dyn();
+    [[nodiscard]] RigidBodyBase<HinaPE::STATIC> &get_rigidbody_st();
+    [[nodiscard]] RigidBodyBase<HinaPE::KINEMATIC> &get_rigidbody_kin();
+
+    void doing()
+    {
+        if (physics_object_opt.has_value())
+        {
+            if (physics_object_opt.value().index() == 0)
+            {
+                get_rigidbody_dyn().test();
+            }
+        }
+    }
 
 public:
     explicit PhysicsObject(PhysicsObjectType type);

@@ -1,11 +1,9 @@
 #ifndef HINAPE_RIGIDBODY_H
 #define HINAPE_RIGIDBODY_H
 
-#include "lib/vec3.h"
-#include "lib/quat.h"
-#include <type_traits>
+#include "../common.h"
 
-#include "common.h"
+#include <type_traits>
 
 namespace HinaPE
 {
@@ -48,6 +46,10 @@ public:
 
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
     [[nodiscard]] HINA_FORCE_INLINE float get_mass();
+
+    HINA_FORCE_INLINE void get_pose(Vec3 &pos, Vec3 &euler, Vec3 &scale) const;
+
+    void test();
 
 public:
     RigidBodyBase();

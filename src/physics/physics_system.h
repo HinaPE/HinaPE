@@ -3,15 +3,20 @@
 
 #include "pbd/pbd_kernel.h"
 #include "xpbd/xpbd_kernel.h"
-#include "physics_objects/physics_object.h"
+#include "physics_object.h"
 
 namespace HinaPE
 {
-
-class PhysicsSystem
+class PhysicsSystem // Singleton Pattern
 {
 public:
+    static PhysicsSystem &instance();
+    static void destroy();
+
+public:
     void tick(float dt);
+    void _register_(unsigned int ID, std::shared_ptr<PhysicsObject> ptr);
+    [[nodiscard]] const std::map<unsigned int, std::shared_ptr<PhysicsObject>>&objects() const;
 
 public:
     PhysicsSystem() = default;
@@ -23,10 +28,9 @@ public:
 
 private:
     std::variant<PBDKernel, XPBDKernel> kernel;
-    std::map<int, PhysicsObject> physics_objects;
-    std::map<int, PhysicsObject> erased_physics_objects;
+    std::map<unsigned int, std::shared_ptr<PhysicsObject>> physics_objects;
+    std::map<unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects;
 };
-
 }
 
 

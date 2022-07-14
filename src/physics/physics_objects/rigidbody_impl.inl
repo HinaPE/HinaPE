@@ -136,4 +136,18 @@ HINA_FORCE_INLINE float RigidBodyBase<Type>::get_mass()
 {
     return impl->m;
 }
+
+template<RigidBodyType Type>
+void RigidBodyBase<Type>::get_pose(Vec3 &pos, Vec3 &euler, Vec3 &scale) const
+{
+    pos = impl->p;
+    euler = impl->o.to_euler();
+    scale = impl->s;
+}
+
+template<RigidBodyType Type>
+void RigidBodyBase<Type>::test()
+{
+    impl->p += Vec3(0.0f, 0.01f, 0.0f);
+}
 }

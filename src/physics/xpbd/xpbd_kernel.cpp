@@ -1,6 +1,7 @@
 #include "xpbd_kernel.h"
+#include "../physics_system.h"
 
-void XPBDKernel::simulate(float dt)
+void HinaPE::XPBDKernel::simulate(HinaPE::PhysicsSystem &sys, float dt)
 {
 
 }

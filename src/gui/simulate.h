@@ -4,7 +4,6 @@
 #include "../rays/pathtracer.h"
 #include "../scene/particles.h"
 #include "../util/thread_pool.h"
-#include "../physics/physics_system.h"
 
 #include "widgets.h"
 #include <SDL2/SDL.h>
@@ -37,9 +36,6 @@ public:
     void render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam);
     Mode UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj);
 
-    // Physics
-    void update_physics(Scene &scene, float dt);
-
 private:
     PT::Object scene_obj;
     bool use_bvh = true;
@@ -48,9 +44,6 @@ private:
     Pose old_pose;
     size_t cur_actions = 0;
     Uint64 last_update;
-
-    // Physics
-    HinaPE::PhysicsSystem physics;
 };
 
 } // namespace Gui

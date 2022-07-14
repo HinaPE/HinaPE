@@ -27,6 +27,8 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n, int
         opt.old_rigidbody = opt.rigidbody;
     }
     physics_object = std::make_shared<HinaPE::PhysicsObject>(opt.physics_object_type);
+
+    HinaPE::PhysicsSystem::instance()._register_(_id, physics_object);
 }
 
 Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n, int physics_object_type)
@@ -52,6 +54,8 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n
         opt.old_rigidbody = opt.rigidbody;
     }
     physics_object = std::make_shared<HinaPE::PhysicsObject>(opt.physics_object_type);
+
+    HinaPE::PhysicsSystem::instance()._register_(_id, physics_object);
 }
 
 const GL::Mesh &Scene_Object::posed_mesh()
@@ -287,6 +291,11 @@ void Scene_Object::check_switch_rigidbody_type()
 
 void Scene_Object::apply_physics_result()
 {
+    if (physics_object->is_rigidbody_dyn())
+    {
+        Vec3 t;
+        physics_object->get_rigidbody_dyn().get_pose(pose.pos, t, t);
+    }
 }
 
 bool operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r)

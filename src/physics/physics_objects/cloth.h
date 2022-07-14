@@ -1,7 +1,7 @@
 #ifndef HINAPE_CLOTH_H
 #define HINAPE_CLOTH_H
 
-#include "lib/vec3.h"
+#include "../common.h"
 #include <type_traits>
 
 namespace HinaPE

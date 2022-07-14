@@ -79,3 +79,38 @@ bool HinaPE::PhysicsObject::is_physics_object() const
 {
     return physics_object_opt != std::nullopt;
 }
+
+bool HinaPE::PhysicsObject::is_rigidbody_dyn() const
+{
+    return physics_object_opt.has_value() && physics_object_opt->index() == 0;
+}
+
+const HinaPE::RigidBodyBase<HinaPE::DYNAMIC> &HinaPE::PhysicsObject::get_rigidbody_dyn() const
+{
+    return std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(physics_object_opt.value());
+}
+
+const HinaPE::RigidBodyBase<HinaPE::STATIC> &HinaPE::PhysicsObject::get_rigidbody_st() const
+{
+    return std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(physics_object_opt.value());
+}
+
+const HinaPE::RigidBodyBase<HinaPE::KINEMATIC> &HinaPE::PhysicsObject::get_rigidbody_kin() const
+{
+    return std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(physics_object_opt.value());
+}
+
+HinaPE::RigidBodyBase<HinaPE::DYNAMIC> &HinaPE::PhysicsObject::get_rigidbody_dyn()
+{
+    return std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(physics_object_opt.value());
+}
+
+HinaPE::RigidBodyBase<HinaPE::STATIC> &HinaPE::PhysicsObject::get_rigidbody_st()
+{
+    return std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(physics_object_opt.value());
+}
+
+HinaPE::RigidBodyBase<HinaPE::KINEMATIC> &HinaPE::PhysicsObject::get_rigidbody_kin()
+{
+    return std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(physics_object_opt.value());
+}

@@ -1,9 +1,7 @@
 #ifndef HINAPE_TIME_INTEGRATION_H
 #define HINAPE_TIME_INTEGRATION_H
 
-#include "lib/vec3.h"
-#include "lib/quat.h"
-#include "lib/mat3.h"
+#include "../common.h"
 
 class TimeIntegration
 {
