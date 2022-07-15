@@ -3,6 +3,7 @@
 
 #include "kernels/pbd/pbd_kernel.h"
 #include "kernels/xpbd/xpbd_kernel.h"
+#include "time_integration/time_integration.h"
 #include "physics_object.h"
 
 namespace HinaPE

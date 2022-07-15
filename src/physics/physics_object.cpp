@@ -75,42 +75,88 @@ void HinaPE::PhysicsObject::switch_rigidbody_type(HinaPE::RigidBodyType to)
                 physics_object_opt.value());
 }
 
-bool HinaPE::PhysicsObject::is_physics_object() const
+HinaPE::PhysicsObjectType HinaPE::PhysicsObject::get_type() const
 {
-    return physics_object_opt != std::nullopt;
+    if (physics_object_opt.has_value())
+        return NOT_PHYSICS_OBJECT;
+    switch (physics_object_opt.value().index())
+    {
+        case 0:
+        case 1:
+        case 2:
+            return Rigidbody;
+        default:
+            throw std::runtime_error("invalid rigidbody type");
+    }
 }
 
-bool HinaPE::PhysicsObject::is_rigidbody_dyn() const
+Vec3 HinaPE::PhysicsObject::get_position() const
 {
-    return physics_object_opt.has_value() && physics_object_opt->index() == 0;
+    return std::visit([&](auto &o) -> Vec3
+                      {
+                          return o.get_position();
+                      }, physics_object_opt.value());
 }
 
-const HinaPE::RigidBodyBase<HinaPE::DYNAMIC> &HinaPE::PhysicsObject::get_rigidbody_dyn() const
+Vec3 HinaPE::PhysicsObject::get_rotation() const
 {
-    return std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(physics_object_opt.value());
+    return std::visit([&](auto &o) -> Vec3
+                      {
+                          return o.get_rotation();
+                      }, physics_object_opt.value());
 }
 
-const HinaPE::RigidBodyBase<HinaPE::STATIC> &HinaPE::PhysicsObject::get_rigidbody_st() const
+Vec3 HinaPE::PhysicsObject::get_velocity() const
 {
-    return std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(physics_object_opt.value());
+    return std::visit(overloaded{
+                              [&](const RigidBodyBase<DYNAMIC> &rb) -> Vec3
+                              { return rb.get_linear_velocity(); },
+                              [&](const RigidBodyBase<STATIC> &rb) -> Vec3
+                              { throw std::runtime_error("DO NOT GET VELOCITY FOR STATIC RIGIDBODY"); },
+                              [&](const RigidBodyBase<KINEMATIC> &rb) -> Vec3
+                              { throw std::runtime_error("DO NOT GET VELOCITY FOR KINEMATIC RIGIDBODY"); }
+                      },
+                      physics_object_opt.value());
 }
 
-const HinaPE::RigidBodyBase<HinaPE::KINEMATIC> &HinaPE::PhysicsObject::get_rigidbody_kin() const
+Vec3 HinaPE::PhysicsObject::get_force() const
 {
-    return std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(physics_object_opt.value());
+    return std::visit(overloaded{
+                              [&](const RigidBodyBase<DYNAMIC> &rb) -> Vec3
+                              { return rb.get_force(); },
+                              [&](const RigidBodyBase<STATIC> &rb) -> Vec3
+                              { throw std::runtime_error("DO NOT GET FORCE FOR STATIC RIGIDBODY"); },
+                              [&](const RigidBodyBase<KINEMATIC> &rb) -> Vec3
+                              { throw std::runtime_error("DO NOT GET FORCE FOR KINEMATIC RIGIDBODY"); }
+                      },
+                      physics_object_opt.value());
 }
 
-HinaPE::RigidBodyBase<HinaPE::DYNAMIC> &HinaPE::PhysicsObject::get_rigidbody_dyn()
+float HinaPE::PhysicsObject::get_mass() const
 {
-    return std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(physics_object_opt.value());
+    return std::visit(overloaded{
+                              [&](const RigidBodyBase<DYNAMIC> &rb) -> float
+                              { return rb.get_mass(); },
+                              [&](const RigidBodyBase<STATIC> &rb) -> float
+                              { throw std::runtime_error("DO NOT GET MASS FOR STATIC RIGIDBODY"); },
+                              [&](const RigidBodyBase<KINEMATIC> &rb) -> float
+                              { return rb.get_mass(); }
+                      },
+                      physics_object_opt.value());
 }
 
-HinaPE::RigidBodyBase<HinaPE::STATIC> &HinaPE::PhysicsObject::get_rigidbody_st()
+void HinaPE::PhysicsObject::set_position(const Vec3 &p) const
 {
-    return std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(physics_object_opt.value());
+    std::visit([&](auto &o)
+               {
+                   o.set_position(p);
+               }, physics_object_opt.value());
 }
 
-HinaPE::RigidBodyBase<HinaPE::KINEMATIC> &HinaPE::PhysicsObject::get_rigidbody_kin()
+void HinaPE::PhysicsObject::set_rotation(const Vec3 &r) const
 {
-    return std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(physics_object_opt.value());
+    std::visit([&](auto &o)
+               {
+                   o.set_rotation(r);
+               }, physics_object_opt.value());
 }

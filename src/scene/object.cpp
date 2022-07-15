@@ -291,11 +291,6 @@ void Scene_Object::check_switch_rigidbody_type()
 
 void Scene_Object::apply_physics_result()
 {
-    if (physics_object->is_rigidbody_dyn())
-    {
-        Vec3 t;
-        physics_object->get_rigidbody_dyn().get_pose(pose.pos, t, t);
-    }
 }
 
 bool operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r)

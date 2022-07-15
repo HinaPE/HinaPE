@@ -30,9 +30,6 @@ public:
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
     HINA_FORCE_INLINE RigidBodyBase<T> *set_angular_damping(float d);
 
-    template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
-    HINA_FORCE_INLINE RigidBodyBase<T> *set_mass(float m);
-
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
     [[nodiscard]] HINA_FORCE_INLINE Vec3 get_linear_velocity() const;
 
@@ -45,12 +42,17 @@ public:
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
     [[nodiscard]] HINA_FORCE_INLINE float get_angular_damping() const;
 
+    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_position() const;
+    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_rotation() const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
-    [[nodiscard]] HINA_FORCE_INLINE float get_mass();
+    [[nodiscard]] HINA_FORCE_INLINE float get_mass() const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_force() const;
 
-    HINA_FORCE_INLINE void get_pose(Vec3 &pos, Vec3 &euler, Vec3 &scale) const;
-
-    void test();
+    HINA_FORCE_INLINE void set_position(const Vec3 &) const;
+    HINA_FORCE_INLINE void set_rotation(const Vec3 &) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
+    HINA_FORCE_INLINE RigidBodyBase<T> *set_mass(float m);
 
 public:
     RigidBodyBase();
@@ -76,7 +78,7 @@ RigidBodyBase<ResType> switch_rigidbody_type(const RigidBodyBase<FromType> &from
 {
     RigidBodyBase<ResType> res;
     copy_impl<FromType, ResType>(from.impl.get(), res.impl.get());
-    return std::move(res); // you may use return res auto, compiler would help auto optimize it;
+    return std::move(res); // you may use "return res" also, compiler would help auto optimize it;
 }
 
 template<RigidBodyType Type>

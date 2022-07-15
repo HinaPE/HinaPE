@@ -7,7 +7,7 @@ struct RigidBodyBase<Type>::Impl
 {
     // Transform
     Vec3 p; // position
-    Quat o; // orientation
+    Quat q; // orientation
     Vec3 s; // scale
 
     // Physics properties
@@ -33,7 +33,7 @@ template<RigidBodyType FromType, RigidBodyType ResType>
 void copy_impl(typename RigidBodyBase<FromType>::Impl *from, typename RigidBodyBase<ResType>::Impl *res)
 {
     res->p = from->p;
-    res->o = from->o;
+    res->q = from->q;
     res->s = from->s;
     res->m = from->m;
     res->im = from->im;
@@ -50,7 +50,7 @@ template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::add_force(const Vec3 &f)
 {
-    impl.f += f;
+    impl->f += f;
     return this;
 }
 
@@ -58,7 +58,7 @@ template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::add_acceleration(const Vec3 &a)
 {
-    impl.a = a;
+    impl->a = a;
     return this;
 }
 
@@ -66,7 +66,7 @@ template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_velocity(const Vec3 &v)
 {
-    impl.v = v;
+    impl->v = v;
     return this;
 }
 
@@ -74,7 +74,7 @@ template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_velocity(const Vec3 &w)
 {
-    impl.w = w;
+    impl->w = w;
     return this;
 }
 
@@ -82,7 +82,7 @@ template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_damping(float d)
 {
-    impl.d = d;
+    impl->d = d;
     return this;
 }
 
@@ -90,7 +90,7 @@ template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_damping(float d)
 {
-    impl.ad = d;
+    impl->ad = d;
     return this;
 }
 
@@ -98,7 +98,7 @@ template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_mass(float m)
 {
-    impl.m = m;
+    impl->m = m;
     return this;
 }
 
@@ -106,21 +106,21 @@ template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE Vec3 RigidBodyBase<Type>::get_linear_velocity() const
 {
-    return impl.v;
+    return impl->v;
 }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE Vec3 RigidBodyBase<Type>::get_angular_velocity() const
 {
-    return impl.w;
+    return impl->w;
 }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE float RigidBodyBase<Type>::get_linear_damping() const
 {
-    return impl.ld;
+    return impl->ld;
 }
 
 template<RigidBodyType Type>
@@ -132,34 +132,39 @@ HINA_FORCE_INLINE float RigidBodyBase<Type>::get_angular_damping() const
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE float RigidBodyBase<Type>::get_mass()
+HINA_FORCE_INLINE float RigidBodyBase<Type>::get_mass() const
 {
     return impl->m;
 }
 
 template<RigidBodyType Type>
-void RigidBodyBase<Type>::get_pose(Vec3 &pos, Vec3 &euler, Vec3 &scale) const
+template<RigidBodyType T, typename>
+Vec3 RigidBodyBase<Type>::get_force() const
 {
-    pos = impl->p;
-    euler = impl->o.to_euler();
-    scale = impl->s;
+    return impl->f;
 }
 
 template<RigidBodyType Type>
-void RigidBodyBase<Type>::test()
+Vec3 RigidBodyBase<Type>::get_position() const
 {
-    Vec3 &v = impl->v;
-    Vec3 &x = impl->p;
+    return impl->p;
+}
 
-    static float dt = 0.02f;
-    static Vec3 a = Vec3(0.f, -9.8f, 0.f);
-    x += v * dt;
-    v += a * dt;
+template<RigidBodyType Type>
+Vec3 RigidBodyBase<Type>::get_rotation() const
+{
+    return impl->q.to_euler();
+}
 
-    if (x.y < -5.f)
-    {
-        v.y = -v.y;
-        x.y = -5.f;
-    }
+template<RigidBodyType Type>
+void RigidBodyBase<Type>::set_position(const Vec3 &_p) const
+{
+    impl->p = _p;
+}
+
+template<RigidBodyType Type>
+void RigidBodyBase<Type>::set_rotation(const Vec3 &r) const
+{
+
 }
 }

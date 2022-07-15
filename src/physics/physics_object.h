@@ -13,26 +13,22 @@ namespace HinaPE
 class PhysicsObject
 {
 public:
-    void switch_rigidbody_type(RigidBodyType to);
-    [[nodiscard]] bool is_physics_object() const;
-    [[nodiscard]] bool is_rigidbody_dyn() const;
-    [[nodiscard]] const RigidBodyBase<HinaPE::DYNAMIC> &get_rigidbody_dyn() const;
-    [[nodiscard]] const RigidBodyBase<HinaPE::STATIC> &get_rigidbody_st() const;
-    [[nodiscard]] const RigidBodyBase<HinaPE::KINEMATIC> &get_rigidbody_kin() const;
-    [[nodiscard]] RigidBodyBase<HinaPE::DYNAMIC> &get_rigidbody_dyn();
-    [[nodiscard]] RigidBodyBase<HinaPE::STATIC> &get_rigidbody_st();
-    [[nodiscard]] RigidBodyBase<HinaPE::KINEMATIC> &get_rigidbody_kin();
+    // common methods
+    template<class T>
+    [[nodiscard]] const T &get_object() const;
+    [[nodiscard]] PhysicsObjectType get_type() const;
 
-    void doing()
-    {
-        if (physics_object_opt.has_value())
-        {
-            if (physics_object_opt.value().index() == 0)
-            {
-                get_rigidbody_dyn().test();
-            }
-        }
-    }
+    // universal methods
+    [[nodiscard]] Vec3 get_position() const;
+    [[nodiscard]] Vec3 get_rotation() const;
+    [[nodiscard]] Vec3 get_velocity() const;
+    [[nodiscard]] Vec3 get_force() const;
+    [[nodiscard]] float get_mass() const;
+    void set_position(const Vec3&) const;
+    void set_rotation(const Vec3&) const;
+
+    // rigidbody methods
+    void switch_rigidbody_type(RigidBodyType to);
 
 public:
     explicit PhysicsObject(PhysicsObjectType type);
@@ -57,15 +53,21 @@ inline PhysicsObject::PhysicsObject(PhysicsObjectType type)
             physics_object_opt = RigidBodyBase<HinaPE::DYNAMIC>();
             break;
         case Deformable:
-            physics_object_opt = RigidBodyBase<HinaPE::STATIC>(); // TODO
+            throw std::runtime_error("DEFORMABLE NOT IMPLEMENTED");
             break;
         case Fluid:
-            physics_object_opt = RigidBodyBase<HinaPE::KINEMATIC>(); // TODO
+            throw std::runtime_error("FLUID NOT IMPLEMENTED");
             break;
         case NOT_PHYSICS_OBJECT:
             physics_object_opt = std::nullopt;
             break;
     }
+}
+
+template<class T>
+const T &HinaPE::PhysicsObject::get_object() const
+{
+    return std::get<T>(physics_object_opt.value());
 }
 
 }
