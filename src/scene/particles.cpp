@@ -1,7 +1,6 @@
 
 #include "../geometry/util.h"
 #include "../rays/pathtracer.h"
-#include "../util/rand.h"
 
 #include "particles.h"
 #include "renderer.h"

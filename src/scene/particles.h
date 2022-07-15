@@ -5,6 +5,7 @@
 
 #include "../lib/mathlib.h"
 #include "../platform/gl.h"
+#include "../util/rand.h"
 
 #include "object.h"
 #include "pose.h"
@@ -25,6 +26,7 @@ public:
         Vec3 pos;
         Vec3 velocity;
         float age;
+        Spectrum color = Spectrum(RNG::unit(), RNG::unit(), RNG::unit());
 
         static const inline Vec3 acceleration = Vec3{0.0f, -9.8f, 0.0f};
 
