@@ -34,6 +34,7 @@ set(Hina_SOURCES
         src/app.cpp
         src/app.h
         src/main.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/icon.rc
         )
 
 
@@ -127,9 +128,9 @@ include_directories(${ASSIMP_INCLUDE_DIRS})
 
 if(WIN32)
     target_include_directories(HinaPE PRIVATE "deps/win")
-    if(MSVC)
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \"${CMAKE_CURRENT_SOURCE_DIR}/src/platform/icon.res\" /IGNORE:4098 /IGNORE:4099")
-    endif()
+#    if(MSVC)
+#        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \"${CMAKE_CURRENT_SOURCE_DIR}/src/platform/icon.res\" /IGNORE:4098 /IGNORE:4099")
+#    endif()
     add_definitions(-DWIN32_LEAN_AND_MEAN)
     target_link_libraries(HinaPE PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/deps/win/SDL2/SDL2main.lib")
     target_link_libraries(HinaPE PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/deps/win/SDL2/SDL2.lib")
