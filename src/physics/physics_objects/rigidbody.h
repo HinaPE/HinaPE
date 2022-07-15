@@ -12,35 +12,6 @@ template<RigidBodyType Type>
 class RigidBodyBase
 {
 public:
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE RigidBodyBase<T> *add_force(const Vec3 &f);
-
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE RigidBodyBase<T> *add_acceleration(const Vec3 &a);
-
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE RigidBodyBase<T> *set_linear_velocity(const Vec3 &v);
-
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE RigidBodyBase<T> *set_angular_velocity(const Vec3 &w);
-
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE RigidBodyBase<T> *set_linear_damping(float d);
-
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE RigidBodyBase<T> *set_angular_damping(float d);
-
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_linear_velocity() const;
-
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_angular_velocity() const;
-
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] HINA_FORCE_INLINE float get_linear_damping() const;
-
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] HINA_FORCE_INLINE float get_angular_damping() const;
 
     [[nodiscard]] HINA_FORCE_INLINE Vec3 get_position() const;
     [[nodiscard]] HINA_FORCE_INLINE Vec3 get_rotation() const;
@@ -48,11 +19,31 @@ public:
     [[nodiscard]] HINA_FORCE_INLINE float get_mass() const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
     [[nodiscard]] HINA_FORCE_INLINE Vec3 get_force() const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_linear_velocity() const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_angular_velocity() const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    [[nodiscard]] HINA_FORCE_INLINE float get_linear_damping() const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    [[nodiscard]] HINA_FORCE_INLINE float get_angular_damping() const;
 
     HINA_FORCE_INLINE void set_position(const Vec3 &) const;
     HINA_FORCE_INLINE void set_rotation(const Vec3 &) const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
-    HINA_FORCE_INLINE RigidBodyBase<T> *set_mass(float m);
+    HINA_FORCE_INLINE void set_mass(float m) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    HINA_FORCE_INLINE void set_linear_velocity(const Vec3 &v) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    HINA_FORCE_INLINE void add_force(const Vec3 &f) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    HINA_FORCE_INLINE void add_acceleration(const Vec3 &a) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    HINA_FORCE_INLINE void set_angular_velocity(const Vec3 &w) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    HINA_FORCE_INLINE void set_linear_damping(float d) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    HINA_FORCE_INLINE void set_angular_damping(float d) const;
 
 public:
     RigidBodyBase();
@@ -99,7 +90,6 @@ RigidBodyBase<Type> &RigidBodyBase<Type>::operator=(RigidBodyBase &&src) noexcep
     impl = std::move(src.impl);
     return *this;
 }
-
 }
 
 #include "rigidbody_impl.inl"

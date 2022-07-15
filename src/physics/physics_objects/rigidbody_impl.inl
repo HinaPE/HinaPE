@@ -11,12 +11,12 @@ struct RigidBodyBase<Type>::Impl
     Vec3 s; // scale
 
     // Physics properties
-    float m; // mass
-    float im; // inverse mass
+    float m = 1.f; // mass
+    float im = 1.f; // inverse mass
     Vec3 v; // linear velocity
     Vec3 w; // angular velocity
-    float ld; // linear damping
-    float ad; // angular damping
+    float ld = 0.f; // linear damping
+    float ad = 0.f; // angular damping
     Vec3 f; // force
     Vec3 t; // torque
     Vec3 a; // acceleration
@@ -48,123 +48,82 @@ void copy_impl(typename RigidBodyBase<FromType>::Impl *from, typename RigidBodyB
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::add_force(const Vec3 &f)
-{
-    impl->f += f;
-    return this;
-}
+HINA_FORCE_INLINE void RigidBodyBase<Type>::add_force(const Vec3 &f) const
+{ impl->f += f; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::add_acceleration(const Vec3 &a)
-{
-    impl->a = a;
-    return this;
-}
+HINA_FORCE_INLINE void RigidBodyBase<Type>::add_acceleration(const Vec3 &a) const
+{ impl->a = a; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_velocity(const Vec3 &v)
-{
-    impl->v = v;
-    return this;
-}
+HINA_FORCE_INLINE void RigidBodyBase<Type>::set_linear_velocity(const Vec3 &v) const
+{ impl->v = v; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_velocity(const Vec3 &w)
-{
-    impl->w = w;
-    return this;
-}
+HINA_FORCE_INLINE void RigidBodyBase<Type>::set_angular_velocity(const Vec3 &w) const
+{ impl->w = w; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_linear_damping(float d)
-{
-    impl->d = d;
-    return this;
-}
+HINA_FORCE_INLINE void RigidBodyBase<Type>::set_linear_damping(float d) const
+{ impl->d = d; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_angular_damping(float d)
-{
-    impl->ad = d;
-    return this;
-}
+HINA_FORCE_INLINE void RigidBodyBase<Type>::set_angular_damping(float d) const
+{ impl->ad = d; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE RigidBodyBase<T> *RigidBodyBase<Type>::set_mass(float m)
-{
-    impl->m = m;
-    return this;
-}
+HINA_FORCE_INLINE void RigidBodyBase<Type>::set_mass(float m) const
+{ impl->m = m; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE Vec3 RigidBodyBase<Type>::get_linear_velocity() const
-{
-    return impl->v;
-}
+{ return impl->v; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE Vec3 RigidBodyBase<Type>::get_angular_velocity() const
-{
-    return impl->w;
-}
+{ return impl->w; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE float RigidBodyBase<Type>::get_linear_damping() const
-{
-    return impl->ld;
-}
+{ return impl->ld; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE float RigidBodyBase<Type>::get_angular_damping() const
-{
-    return impl->ad;
-}
+{ return impl->ad; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 HINA_FORCE_INLINE float RigidBodyBase<Type>::get_mass() const
-{
-    return impl->m;
-}
+{ return impl->m; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
 Vec3 RigidBodyBase<Type>::get_force() const
-{
-    return impl->f;
-}
+{ return impl->f; }
 
 template<RigidBodyType Type>
 Vec3 RigidBodyBase<Type>::get_position() const
-{
-    return impl->p;
-}
+{ return impl->p; }
 
 template<RigidBodyType Type>
 Vec3 RigidBodyBase<Type>::get_rotation() const
-{
-    return impl->q.to_euler();
-}
+{ return impl->q.to_euler(); }
 
 template<RigidBodyType Type>
 void RigidBodyBase<Type>::set_position(const Vec3 &_p) const
-{
-    impl->p = _p;
-}
+{ impl->p = _p; }
 
 template<RigidBodyType Type>
 void RigidBodyBase<Type>::set_rotation(const Vec3 &r) const
-{
-
-}
+{ /** TODO: implement **/}
 }

@@ -18,10 +18,16 @@ void HinaPE::PBDKernel::simulate(HinaPE::PhysicsSystem &sys, float dt)
                 auto v = o->get_velocity();
                 auto m = o->get_mass();
                 auto f = o->get_force();
-                auto a = f / m;
+                auto a = Vec3(0.f, -9.8f, 0.f);
                 TimeIntegration::semi_implicit_euler(dt, m, p, v, a);
-                p += Vec3(0.f, 0.01f, 0.f);
+                /*
+                 * TODO: Implement more physically
+                 */
                 o->set_position(p);
+                if (p.y < -3.f)
+                    o->set_velocity(-v);
+                else
+                    o->set_velocity(v);
             }
                 break;
             case Deformable:

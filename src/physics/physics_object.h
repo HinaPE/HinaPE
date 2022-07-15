@@ -26,6 +26,7 @@ public:
     [[nodiscard]] float get_mass() const;
     void set_position(const Vec3&) const;
     void set_rotation(const Vec3&) const;
+    void set_velocity(const Vec3&) const;
 
     // rigidbody methods
     void switch_rigidbody_type(RigidBodyType to);
