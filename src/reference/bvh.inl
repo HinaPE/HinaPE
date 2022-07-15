@@ -5,6 +5,7 @@
 
 namespace PT
 {
+#define PARTS 32
 
 template<typename Primitive>
 void BVH<Primitive>::build(std::vector<Primitive> &&prims, size_t max_leaf_size)
@@ -38,13 +39,104 @@ void BVH<Primitive>::build(std::vector<Primitive> &&prims, size_t max_leaf_size)
     // size configuration. The starter code builds a BVH with a
     // single leaf node (which is also the root) that encloses all the
     // primitives.
-
+    typedef struct
+    {
+        BBox bbox;
+        size_t prim_count;
+        float total_area;
+    } Bucket;
     // Replace these
+    std::stack<size_t> S;
     BBox box;
     for (const Primitive &prim: primitives) box.enclose(prim.bbox());
 
-    new_node(box, 0, primitives.size(), 0, 0);
-    root_idx = 0;
+    root_idx = new_node(box, 0, primitives.size(), 0, 0);
+    S.push(root_idx);
+
+    while (!S.empty())
+    {
+        size_t curIdx = S.top();
+        S.pop();
+        Node &curNode = nodes[curIdx];
+        size_t pstart = curNode.start;
+        size_t pend = pstart + curNode.size;
+        if (curNode.size <= max_leaf_size)
+        {
+            continue;
+        }
+        std::vector<Bucket> buckets(PARTS);
+        BBox minBoxA;
+        BBox minBoxB;
+        int minAxis = 0;
+        size_t minACount = 0;
+        size_t minBCount = 0;
+        int minCut = 0;
+        BBox curBox = curNode.bbox;
+        float minSAH = FLT_MAX;
+        for (int axis = 0; axis < 3; axis++)
+        {
+            for (int i = 0; i < PARTS; i++)
+            {
+                buckets[i].bbox.reset();
+                buckets[i].prim_count = 0;
+                buckets[i].total_area = 0.0f;
+            }
+            for (size_t i = pstart; i < pend; i++)
+            {
+                Primitive &prim = primitives.at(i);
+                size_t bid = compute_bucket(curBox, prim.bbox().center(), axis);
+                Bucket &B = buckets.at(bid);
+                B.bbox.enclose(prim.bbox());
+                B.prim_count++;
+            }
+            for (size_t i = 1; i < PARTS; i++)
+            {
+                BBox boxA = BBox();
+                BBox boxB = BBox();
+                size_t ACount = 0;
+                size_t BCount = 0;
+                for (size_t j = 0; j < i; j++)
+                {
+                    boxA.enclose(buckets.at(j).bbox);
+                    ACount += buckets.at(j).prim_count;
+                }
+                for (size_t j = i; j < PARTS; j++)
+                {
+                    boxB.enclose(buckets.at(j).bbox);
+                    BCount += buckets.at(j).prim_count;
+                }
+                float SAH = (float) ACount * boxA.surface_area() + (float) BCount * boxB.surface_area();
+                if (SAH < minSAH)
+                {
+                    // save some info
+                    minSAH = SAH;
+                    minBoxA = boxA;
+                    minBoxB = boxB;
+                    minBCount = BCount;
+                    minACount = ACount;
+                    minCut = (int) i;
+                    minAxis = axis;
+                }
+            }
+        }
+        BBox boxA = minBoxA;
+        BBox boxB = minBoxB;
+        size_t ACount = minACount;
+        size_t BCount = minBCount;
+        auto part = [curBox, minAxis, minCut](Primitive &prim)
+        {
+            float pos = (prim.bbox().center()[minAxis] - curBox.min[minAxis]) / (curBox.max[minAxis] - curBox.min[minAxis]);
+            int idx = (size_t) (pos * (float) PARTS);
+            return idx < minCut;
+        };
+        std::partition(primitives.begin() + pstart, primitives.begin() + pend, part);
+        size_t lchild = new_node(boxA, pstart, ACount, 0, 0);
+        size_t rchild = new_node(boxB, pstart + ACount, BCount, 0, 0);
+        nodes[curIdx].l = lchild;
+        nodes[curIdx].r = rchild;
+        S.push(lchild);
+        S.push(rchild);
+    }
 }
 
 template<typename Primitive>
@@ -60,10 +152,13 @@ Trace BVH<Primitive>::hit(const Ray &ray) const
     // Again, remember you can use hit() on any Primitive value.
 
     Trace ret;
-    for (const Primitive &prim: primitives)
+    Vec2 range;
+    range.x = 0.0f;
+    range.y = FLT_MAX;
+    if (nodes[root_idx].bbox.hit(ray, range))
     {
-        Trace hit = prim.hit(ray);
-        ret = Trace::min(ret, hit);
+        // iterate until leaf
+        ret = find_closest_hit(ray, root_idx, range);
     }
     return ret;
 }

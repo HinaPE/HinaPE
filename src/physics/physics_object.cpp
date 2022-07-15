@@ -91,14 +91,14 @@ void HinaPE::PhysicsObject::set_rotation(const Vec3 &r) const
 void HinaPE::PhysicsObject::set_velocity(const Vec3 &v) const
 {
     std::visit(overloaded{
-                              [&](const RigidBodyBase<DYNAMIC> &rb)
-                              { rb.set_linear_velocity(v); },
-                              [&](const RigidBodyBase<STATIC> &rb)
-                              { throw std::runtime_error("DO NOT GET MASS FOR STATIC RIGIDBODY"); },
-                              [&](const RigidBodyBase<KINEMATIC> &rb)
-                              { throw std::runtime_error("DO NOT GET MASS FOR STATIC RIGIDBODY"); }
-                      },
-                      physics_object_opt.value());
+                       [&](const RigidBodyBase<DYNAMIC> &rb)
+                       { rb.set_linear_velocity(v); },
+                       [&](const RigidBodyBase<STATIC> &rb)
+                       { throw std::runtime_error("DO NOT GET MASS FOR STATIC RIGIDBODY"); },
+                       [&](const RigidBodyBase<KINEMATIC> &rb)
+                       { throw std::runtime_error("DO NOT GET MASS FOR STATIC RIGIDBODY"); }
+               },
+               physics_object_opt.value());
 }
 
 void HinaPE::PhysicsObject::switch_rigidbody_type(HinaPE::RigidBodyType to)

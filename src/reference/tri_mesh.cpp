@@ -8,14 +8,61 @@ namespace PT
 BBox Triangle::bbox() const
 {
 
-    // TODO (PathTracer): Task 2 or 3
+    // TODO (PathTracer): Task 2
     // Compute the bounding box of the triangle.
 
     // Beware of flat/zero-volume boxes! You may need to
-    // account for that here, or later on in BBox::hit.
+    // account for that here, or later on in BBox::intersect.
+    float EPS = 0.000001f;
+    Vec3 p0 = vertex_list[v0].position;
+    Vec3 p1 = vertex_list[v1].position;
+    Vec3 p2 = vertex_list[v2].position;
 
     BBox box;
+    float xmax = std::max(std::max(p0.x, p1.x), p2.x);
+    float ymax = std::max(std::max(p0.y, p1.y), p2.y);
+    float zmax = std::max(std::max(p0.z, p1.z), p2.z);
+    float xmin = std::min(std::min(p0.x, p1.x), p2.x);
+    float ymin = std::min(std::min(p0.y, p1.y), p2.y);
+    float zmin = std::min(std::min(p0.z, p1.z), p2.z);
+    if (xmax == xmin)
+    {
+        xmax += EPS;
+        xmin -= EPS;
+    }
+    if (ymax == ymin)
+    {
+        ymax += EPS;
+        ymin -= EPS;
+    }
+    if (zmax == zmin)
+    {
+        zmax += EPS;
+        zmin -= EPS;
+    }
+    Vec3 min = Vec3(xmin, ymin, zmin);
+    Vec3 max = Vec3(xmax, ymax, zmax);
+    box.min = min;
+    box.max = max;
+
     return box;
+}
+
+bool uvvalid(float x, float y)
+{
+    if (x > 1.0f || x < 0.0f)
+    {
+        return false;
+    }
+    if (y > 1.0f || y < 0.0f)
+    {
+        return false;
+    }
+    if (x + y > 1.0f)
+    {
+        return false;
+    }
+    return true;
 }
 
 Trace Triangle::hit(const Ray &ray) const
@@ -25,20 +72,40 @@ Trace Triangle::hit(const Ray &ray) const
     Tri_Mesh_Vert v_0 = vertex_list[v0];
     Tri_Mesh_Vert v_1 = vertex_list[v1];
     Tri_Mesh_Vert v_2 = vertex_list[v2];
-    (void) v_0;
-    (void) v_1;
-    (void) v_2;
 
     // TODO (PathTracer): Task 2
     // Intersect the ray with the triangle defined by the three vertices.
 
     Trace ret;
     ret.origin = ray.point;
-    ret.hit = false;       // was there an intersection?
-    ret.distance = 0.0f;   // at what distance did the intersection occur?
-    ret.position = Vec3{}; // where was the intersection?
-    ret.normal = Vec3{};   // what was the surface normal at the intersection?
-    // (this should be interpolated between the three vertex normals)
+    Vec3 o = ray.point;
+    Vec3 d = ray.dir;
+    Vec3 e1 = v_1.position - v_0.position;
+    Vec3 e2 = v_2.position - v_0.position;
+    Vec3 s = o - v_0.position;
+    if ((dot(cross(e1, d), e2)) == 0)
+    {
+        ret.hit = false;
+        return ret;
+    }
+    Vec3 rhs = Vec3(-dot(cross(s, e2), d), dot(cross(e1, d), s), -dot(cross(s, e2), e1));
+    float lhs = 1.0f / (dot(cross(e1, d), e2));
+    Vec3 res = lhs * rhs;
+    float t = res.z;
+    if (t >= ray.dist_bounds.x && t <= ray.dist_bounds.y)
+    {
+        if (uvvalid(res.x, res.y))
+        {
+            ret.hit = true;
+            ret.position = ray.at(t);
+            ret.distance = t;
+            float w = (1.0f - res.x - res.y);
+            ray.dist_bounds.y = t;
+            ret.normal = w * v_0.normal + res.x * v_1.normal + res.y * v_2.normal;
+            return ret;
+        }
+    }
+    ret.hit = false;
     return ret;
 }
 

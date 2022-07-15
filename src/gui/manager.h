@@ -5,7 +5,7 @@
 #include <imgui/imgui.h>
 
 #ifndef SCOTTY3D_BUILD_REF
-#include "../student/debug.h"
+#include "../reference/debug.h"
 #endif
 
 #include "../lib/mathlib.h"

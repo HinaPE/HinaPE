@@ -8,7 +8,7 @@ file(GLOB_RECURSE HinaUTIL "src/util/*.cpp" "src/util/*.h")
 file(GLOB_RECURSE HinaSCENE "src/scene/*.cpp" "src/scene/*.h")
 file(GLOB_RECURSE HinaLIB "src/lib/*.cpp" "src/lib/*.h")
 file(GLOB_RECURSE HinaPHYSICS "src/physics/*.cpp" "src/physics/*.h" "src/physics/*.inl")
-file(GLOB_RECURSE HinaTOIMPL "src/student/*.cpp" "src/student/*.h" "src/student/*.inl")
+file(GLOB_RECURSE HinaTOIMPL "src/reference/*.cpp" "src/reference/*.h" "src/reference/*.inl")
 
 set(HinaPLATFORM
         "src/platform/gl.cpp"

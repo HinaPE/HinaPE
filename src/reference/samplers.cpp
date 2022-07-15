@@ -12,8 +12,9 @@ Vec2 Rect::sample() const
 
     // Generate a uniformly random point on a rectangle of size size.x * size.y
     // Tip: RNG::unit()
+    Vec2 res = RNG::unit() * size;
 
-    return Vec2{};
+    return res;
 }
 
 Vec3 Sphere::Uniform::sample() const
@@ -23,8 +24,12 @@ Vec3 Sphere::Uniform::sample() const
 
     // Generate a uniformly random point on the unit sphere.
     // Tip: start with Hemisphere::Uniform
-
-    return Vec3{};
+    Vec3 sample = hemi.sample();
+    if (RNG::coin_flip(0.5f))
+    {
+        sample.y = -sample.y;
+    }
+    return sample;
 }
 
 Sphere::Image::Image(const HDR_Image &image)
@@ -38,6 +43,35 @@ Sphere::Image::Image(const HDR_Image &image)
     const auto [_w, _h] = image.dimension();
     w = _w;
     h = _h;
+    total = 0.0f;
+    for (size_t i = 0; i < h; i++)
+    {
+        float v = (float) i / ((float) h);
+        float theta = PI_F - v * PI_F;
+        for (size_t j = 0; j < w; j++)
+        {
+            Spectrum curS = image.at(j, i);
+            float curLuma = curS.luma() * std::sin(theta);
+            total += curLuma;
+        }
+    }
+    _cdf.clear();
+    _pdf.clear();
+    float sofar = 0.0f;
+    for (size_t i = 0; i < h; i++)
+    {
+        float v = (float) i / ((float) h);
+        float theta = PI_F - v * PI_F;
+        for (size_t j = 0; j < w; j++)
+        {
+            float curLuma = image.at(j, i).luma() * std::sin(theta);
+            float curProb = curLuma / total;
+            sofar += curProb;
+            _cdf.push_back(sofar);
+            _pdf.push_back(curProb);
+        }
+    }
+
 }
 
 Vec3 Sphere::Image::sample() const
@@ -47,8 +81,22 @@ Vec3 Sphere::Image::sample() const
 
     // Use your importance sampling data structure to generate a sample direction.
     // Tip: std::upper_bound
-
-    return Vec3{};
+    float rng = RNG::unit();
+    auto upper = std::upper_bound(_cdf.begin(), _cdf.end(), rng);
+    // Get a (x,y) coordinate based on coordinate, and convert it
+    // to phi/theta and convert that to (x,y,z)
+    Vec3 res;
+    size_t idx = std::distance(_cdf.begin(), upper) - 1;
+    size_t x = idx % w;
+    size_t y = idx / w;
+    float u = (float) x / ((float) w);
+    float v = (float) y / ((float) h);
+    float phi = u * 2.0f * PI_F;
+    float theta = PI_F - v * PI_F;
+    res.y = std::cos(theta);
+    res.x = std::sin(theta) * std::cos(phi);
+    res.z = std::sin(theta) * std::sin(phi);
+    return res;
 }
 
 float Sphere::Image::pdf(Vec3 dir) const
@@ -57,8 +105,15 @@ float Sphere::Image::pdf(Vec3 dir) const
     // TODO (PathTracer): Task 7
 
     // What is the PDF of this distribution at a particular direction?
-
-    return 0.0f;
+    float phi = std::atan2(dir.z, dir.x);
+    float theta = acos(dir.y);
+    float u = phi / (2.0f * PI_F);
+    if (u < 0.0f) u += 1.0f;
+    float v = 1.0f - theta / PI_F;
+    int i = (int) floor(u * w);
+    int j = (int) floor(v * h);
+    float jacob = (float) (w * h) / (2.0f * PI_F * PI_F * std::sin(theta));
+    return _pdf.at(i + j * w) * jacob;
 }
 
 Vec3 Point::sample() const
