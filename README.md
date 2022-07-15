@@ -7,12 +7,13 @@
 ## Instruction
 
 1. HinaPE is a recursive acronym for "**HinaPE is not a Physics Engine!**".
-2. HinaPE is a light and easy-to-use research-oriented physics engine developed after [CMU Scotty3D](https://github.com/CMU-Graphics/Scotty3D), consisting Rigidbody Dynamics, Deformables and Fluids.
+2. HinaPE is a cross-platform, light and easy-to-use research-oriented physics engine developed after [CMU Scotty3D](https://github.com/CMU-Graphics/Scotty3D), consisting Rigidbody Dynamics, Deformables and Fluids.
 3. HinaPE contains a built-in workbench renderer, a built-in rasterizer and a built-in pathtracer.
 
 ## Gallery
 
 ![HinaPE](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20220715.png?raw=true)
+more illustrations in coming...
 
 ## Build Instruction
 
