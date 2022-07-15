@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(HinaPE VERSION 1.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
-set(SCOTTY3D_BUILD_REF false)
 file(GLOB_RECURSE HinaGUI "src/gui/*.cpp" "src/gui/*.h")
 file(GLOB_RECURSE HinaGEOM "src/geometry/*.cpp" "src/geometry/*.h" "src/geometry/*.inl")
 file(GLOB_RECURSE HinaRAYS "src/rays/*.cpp" "src/rays/*.h")
@@ -36,7 +35,6 @@ set(Hina_SOURCES
         src/main.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/icon.rc
         )
-
 
 
 
@@ -87,7 +85,6 @@ target_link_libraries(HinaPE PRIVATE Threads::Threads)
 
 
 
-
 # define include paths
 
 target_include_directories(HinaPE PRIVATE "deps/" "deps/assimp/include")
@@ -98,7 +95,6 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/")
 source_group(lib FILES ${HinaLIB})
 source_group(scene FILES ${HinaSCENE})
 source_group(platform FILES ${HinaPLATFORM})
-
 
 
 
@@ -120,7 +116,6 @@ set(ASSIMP_BUILD_BLEND_IMPORTER TRUE)
 set(ASSIMP_BUILD_COLLADA_EXPORTER TRUE)
 add_subdirectory("deps/assimp/")
 include_directories(${ASSIMP_INCLUDE_DIRS})
-
 
 
 
