@@ -14,6 +14,7 @@
 
 ![HinaPE](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20220715.png?raw=true)
 ![HinaPE Renderer](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20220715-2.png?raw=true)
+![HinaPE Renderer](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20220715-3.png?raw=true)
 more illustrations in coming...
 
 ## Build Instruction
