@@ -4,7 +4,7 @@
 [![Cmake Build](https://github.com/Xayah-Hina/HinaPE/actions/workflows/macos.yml/badge.svg)](https://github.com/Xayah-Hina/HinaPE/actions/workflows/macos.yml)
 [![Cmake Build](https://github.com/Xayah-Hina/HinaPE/actions/workflows/windows.yml/badge.svg)](https://github.com/Xayah-Hina/HinaPE/actions/workflows/windows.yml)
 
-## Instruction
+## Introduction
 
 1. HinaPE is a recursive acronym for "**HinaPE is not a Physics Engine!**".
 2. HinaPE is a cross-platform, light and easy-to-use research-oriented physics engine developed after [CMU Scotty3D](https://github.com/CMU-Graphics/Scotty3D), consisting Rigidbody Dynamics, Deformables and Fluids.
@@ -13,6 +13,7 @@
 ## Gallery
 
 ![HinaPE](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20220715.png?raw=true)
+![HinaPE Renderer](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20220715-2.png?raw=true)
 more illustrations in coming...
 
 ## Build Instruction
