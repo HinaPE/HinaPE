@@ -518,6 +518,10 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
             {
                 ImGui::Text("Hello Rigid Body~");
                 static int rt = obj.opt.rigidbody;
+                if (rt == HinaPE::NOT_PHYSICS_OBJECT)
+                {
+
+                }
                 ImGui::RadioButton("Dynamic", &rt, 0);
                 ImGui::SameLine();
                 ImGui::RadioButton("Static", &rt, 1);

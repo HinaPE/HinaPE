@@ -291,6 +291,14 @@ void Scene_Object::check_switch_rigidbody_type()
 
 void Scene_Object::apply_physics_result()
 {
+    if (physics_object->is_rigidbody())
+    {
+        Vec3 pos = physics_object->get_position();
+        Vec3 rot = physics_object->get_rotation();
+        pose.pos = pos;
+        pose.euler = rot;
+        set_pose_dirty();
+    }
 }
 
 bool operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r)

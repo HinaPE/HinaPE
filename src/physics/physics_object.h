@@ -29,6 +29,7 @@ public:
 
     // rigidbody methods
     void switch_rigidbody_type(RigidBodyType to);
+    bool is_rigidbody();
 
 public:
     explicit PhysicsObject(PhysicsObjectType type);
