@@ -51,4 +51,3 @@ cmake -S . -B build
 ```shell
 cmake -S . -B build
 ```
-
