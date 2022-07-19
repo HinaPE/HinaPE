@@ -55,6 +55,7 @@ public:
     bool is_editable() const;
     bool is_shape() const;
     bool is_rigidbody() const;
+    bool is_deformable() const;
     void try_make_editable(PT::Shape_Type prev = PT::Shape_Type::none);
     void flip_normals();
     void check_switch_rigidbody_type();

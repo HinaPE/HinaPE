@@ -13,37 +13,38 @@ class RigidBodyBase
 {
 public:
 
-    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_position() const;
-    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_rotation() const;
-    template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
-    [[nodiscard]] HINA_FORCE_INLINE float get_mass() const;
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_force() const;
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_linear_velocity() const;
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] HINA_FORCE_INLINE Vec3 get_angular_velocity() const;
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] HINA_FORCE_INLINE float get_linear_damping() const;
-    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] HINA_FORCE_INLINE float get_angular_damping() const;
+    [[nodiscard]] Vec3 get_position() const;
+    [[nodiscard]] Vec3 get_rotation() const;
+    void set_position(const Vec3 &) const;
+    void set_rotation(const Vec3 &) const;
 
-    HINA_FORCE_INLINE void set_position(const Vec3 &) const;
-    HINA_FORCE_INLINE void set_rotation(const Vec3 &) const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
-    HINA_FORCE_INLINE void set_mass(float m) const;
+    [[nodiscard]] float get_mass() const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE void set_linear_velocity(const Vec3 &v) const;
+    [[nodiscard]] Vec3 get_force() const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE void add_force(const Vec3 &f) const;
+    [[nodiscard]] Vec3 get_linear_velocity() const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE void add_acceleration(const Vec3 &a) const;
+    [[nodiscard]] Vec3 get_angular_velocity() const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE void set_angular_velocity(const Vec3 &w) const;
+    [[nodiscard]] float get_linear_damping() const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE void set_linear_damping(float d) const;
+    [[nodiscard]] float get_angular_damping() const;
+
+    template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
+    void set_mass(float m) const;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    HINA_FORCE_INLINE void set_angular_damping(float d) const;
+    void set_linear_velocity(const Vec3 &v) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    void add_force(const Vec3 &f) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    void add_acceleration(const Vec3 &a) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    void set_angular_velocity(const Vec3 &w) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    void set_linear_damping(float d) const;
+    template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
+    void set_angular_damping(float d) const;
 
 public:
     RigidBodyBase();
@@ -53,13 +54,12 @@ public:
     RigidBodyBase(RigidBodyBase &&src) noexcept;
     RigidBodyBase &operator=(RigidBodyBase &&src) noexcept;
 
-public:
+private:
     template<RigidBodyType FromType, RigidBodyType ResType>
     friend RigidBodyBase<ResType> switch_rigidbody_type(const RigidBodyBase<FromType> &from);
     template<RigidBodyType FromType, RigidBodyType ResType>
     friend void copy_impl(typename RigidBodyBase<FromType>::Impl *from, typename RigidBodyBase<ResType>::Impl *res);
 
-private:
     struct Impl;
     std::unique_ptr<Impl> impl;
 };

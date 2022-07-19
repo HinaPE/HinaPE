@@ -48,62 +48,62 @@ void copy_impl(typename RigidBodyBase<FromType>::Impl *from, typename RigidBodyB
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE void RigidBodyBase<Type>::add_force(const Vec3 &f) const
+ void RigidBodyBase<Type>::add_force(const Vec3 &f) const
 { impl->f += f; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE void RigidBodyBase<Type>::add_acceleration(const Vec3 &a) const
+ void RigidBodyBase<Type>::add_acceleration(const Vec3 &a) const
 { impl->a = a; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE void RigidBodyBase<Type>::set_linear_velocity(const Vec3 &v) const
+ void RigidBodyBase<Type>::set_linear_velocity(const Vec3 &v) const
 { impl->v = v; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE void RigidBodyBase<Type>::set_angular_velocity(const Vec3 &w) const
+ void RigidBodyBase<Type>::set_angular_velocity(const Vec3 &w) const
 { impl->w = w; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE void RigidBodyBase<Type>::set_linear_damping(float d) const
+ void RigidBodyBase<Type>::set_linear_damping(float d) const
 { impl->d = d; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE void RigidBodyBase<Type>::set_angular_damping(float d) const
+ void RigidBodyBase<Type>::set_angular_damping(float d) const
 { impl->ad = d; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE void RigidBodyBase<Type>::set_mass(float m) const
+ void RigidBodyBase<Type>::set_mass(float m) const
 { impl->m = m; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE Vec3 RigidBodyBase<Type>::get_linear_velocity() const
+ Vec3 RigidBodyBase<Type>::get_linear_velocity() const
 { return impl->v; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE Vec3 RigidBodyBase<Type>::get_angular_velocity() const
+ Vec3 RigidBodyBase<Type>::get_angular_velocity() const
 { return impl->w; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE float RigidBodyBase<Type>::get_linear_damping() const
+ float RigidBodyBase<Type>::get_linear_damping() const
 { return impl->ld; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE float RigidBodyBase<Type>::get_angular_damping() const
+ float RigidBodyBase<Type>::get_angular_damping() const
 { return impl->ad; }
 
 template<RigidBodyType Type>
 template<RigidBodyType T, typename>
-HINA_FORCE_INLINE float RigidBodyBase<Type>::get_mass() const
+ float RigidBodyBase<Type>::get_mass() const
 { return impl->m; }
 
 template<RigidBodyType Type>

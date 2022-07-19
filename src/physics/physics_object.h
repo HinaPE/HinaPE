@@ -1,7 +1,7 @@
 #ifndef HINAPE_PHYSICS_OBJECT_H
 #define HINAPE_PHYSICS_OBJECT_H
 
-#include "physics_objects/cloth.h"
+#include "physics_objects/deformable.h"
 #include "physics_objects/rigidbody.h"
 
 #include <map>
@@ -29,8 +29,13 @@ public:
     void set_velocity(const Vec3 &) const;
 
     // rigidbody methods
-    void switch_rigidbody_type(RigidBodyType to);
     bool is_rigidbody();
+    void switch_rigidbody_type(RigidBodyType to);
+
+    // deformable methods
+    bool is_deformable();
+    const std::vector<Vec3>& dirty_pos();
+    const std::vector<unsigned int>& dirty_ind();
 
 public:
     explicit PhysicsObject(PhysicsObjectType type);
@@ -44,7 +49,9 @@ private:
     std::optional<std::variant<
             RigidBodyBase<HinaPE::DYNAMIC>,
             RigidBodyBase<HinaPE::STATIC>,
-            RigidBodyBase<HinaPE::KINEMATIC>>> physics_object_opt;
+            RigidBodyBase<HinaPE::KINEMATIC>,
+            DeformableBase<CLOTH>,
+            DeformableBase<MESH>>> physics_object_opt;
 };
 
 inline PhysicsObject::PhysicsObject(PhysicsObjectType type)

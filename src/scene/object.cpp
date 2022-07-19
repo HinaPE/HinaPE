@@ -21,10 +21,23 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n, int
     }
 
     opt.physics_object_type = static_cast<HinaPE::PhysicsObjectType>(physics_object_type);
-    if (opt.physics_object_type == HinaPE::Rigidbody)
+    switch (opt.physics_object_type)
     {
-        opt.rigidbody = HinaPE::DYNAMIC;
-        opt.old_rigidbody = opt.rigidbody;
+        case HinaPE::Rigidbody:
+        {
+            opt.rigidbody = HinaPE::DYNAMIC;
+            opt.old_rigidbody = opt.rigidbody;
+        }
+            break;
+        case HinaPE::Deformable:
+        {
+            // TODO: implement
+        }
+//            break;
+        case HinaPE::NOT_PHYSICS_OBJECT:
+            break;
+        default:
+            throw std::runtime_error("Invalid physics object type");
     }
     physics_object = std::make_shared<HinaPE::PhysicsObject>(opt.physics_object_type);
 
@@ -48,10 +61,23 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n
     sync_anim_mesh();
 
     opt.physics_object_type = static_cast<HinaPE::PhysicsObjectType>(physics_object_type);
-    if (opt.physics_object_type == HinaPE::Rigidbody)
+    switch (opt.physics_object_type)
     {
-        opt.rigidbody = HinaPE::DYNAMIC; // default to dynamic
-        opt.old_rigidbody = opt.rigidbody;
+        case HinaPE::Rigidbody:
+        {
+            opt.rigidbody = HinaPE::DYNAMIC;
+            opt.old_rigidbody = opt.rigidbody;
+        }
+            break;
+        case HinaPE::Deformable:
+        {
+            // TODO: implement
+        }
+//            break;
+        case HinaPE::NOT_PHYSICS_OBJECT:
+            break;
+        default:
+            throw std::runtime_error("Invalid physics object type");
     }
     physics_object = std::make_shared<HinaPE::PhysicsObject>(opt.physics_object_type);
 
@@ -100,6 +126,11 @@ bool Scene_Object::is_shape() const
 bool Scene_Object::is_rigidbody() const
 {
     return opt.physics_object_type == HinaPE::Rigidbody && opt.rigidbody != HinaPE::NOT_RIGIDBODY;
+}
+
+bool Scene_Object::is_deformable() const
+{
+    return false; // TODO: implement
 }
 
 void Scene_Object::set_time(float time)
@@ -194,6 +225,14 @@ void Scene_Object::sync_mesh()
     } else if (mesh_dirty && is_shape())
     {
         mesh_dirty = false;
+    }
+
+    if (opt.physics_object_type == HinaPE::Deformable)
+    {
+        if (!physics_object->is_deformable())
+            throw std::runtime_error("Deformable object is not initialized");
+
+
     }
 }
 
