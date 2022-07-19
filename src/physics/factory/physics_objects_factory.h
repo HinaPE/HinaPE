@@ -7,11 +7,16 @@
 
 namespace HinaPE
 {
+typedef std::shared_ptr<PhysicsObject> PhysicsObjectPtr;
+
 class ClothFactory
 {
 public:
     struct ClothDesc
     {
+        Vec3 position;
+        Vec3 rotation;
+
         int width;
         int height;
         int row;
@@ -21,8 +26,7 @@ public:
     };
 
 public:
-    typedef std::shared_ptr<DeformableBase<CLOTH>> ClothPtr;
-    static ClothPtr create_cloth(const ClothDesc &desc);
+    static std::shared_ptr<PhysicsObject> create_cloth(const ClothDesc &desc);
 };
 }
 

@@ -227,12 +227,27 @@ void Scene_Object::sync_mesh()
         mesh_dirty = false;
     }
 
+    // update deformable mesh
     if (opt.physics_object_type == HinaPE::Deformable)
     {
-        if (!physics_object->is_deformable())
-            throw std::runtime_error("Deformable object is not initialized");
+        auto &pos = physics_object->dirty_pos();
+        auto &ind = physics_object->dirty_ind();
 
+        if (!pos.empty())
+        {
+            auto &verts = _mesh.edit_verts();
+            for (auto i = 0; i < verts.size(); i++)
+                verts[i].pos = pos[i];
+            set_mesh_dirty();
+        }
 
+        if (!ind.empty())
+        {
+            auto &idxs = _mesh.edit_indices();
+            for (int i = 0; i < idxs.size(); ++i)
+                idxs[i] = ind[i];
+            set_mesh_dirty();
+        }
     }
 }
 

@@ -213,13 +213,13 @@ const std::vector<Vec3> &HinaPE::PhysicsObject::dirty_pos()
 
     switch (physics_object_opt.value().index())
     {
-        case 0:
-        case 1:
-        case 2:
+        case 0: // RigidBodyBase<DYNAMIC>
+        case 1: // RigidBodyBase<STATIC>
+        case 2: // RigidBodyBase<KINEMATIC>
             return null_vector;
-        case 3:
+        case 3: // DeformableBase<CLOTH>
             return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).dirty_pos();
-        case 4:
+        case 4: // DeformableBase<MESH>
             return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).dirty_pos();
         default:
             throw std::runtime_error("invalid rigidbody type");
@@ -232,13 +232,13 @@ const std::vector<unsigned int> &HinaPE::PhysicsObject::dirty_ind()
 
     switch (physics_object_opt.value().index())
     {
-        case 0:
-        case 1:
-        case 2:
+        case 0: // RigidBodyBase<DYNAMIC>
+        case 1: // RigidBodyBase<STATIC>
+        case 2: // RigidBodyBase<KINEMATIC>
             return null_vector;
-        case 3:
+        case 3: // DeformableBase<CLOTH>
             return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).dirty_ind();
-        case 4:
+        case 4: // DeformableBase<MESH>
             return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).dirty_ind();
         default:
             throw std::runtime_error("invalid rigidbody type");

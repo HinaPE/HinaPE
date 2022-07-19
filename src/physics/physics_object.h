@@ -34,8 +34,8 @@ public:
 
     // deformable methods
     bool is_deformable();
-    const std::vector<Vec3>& dirty_pos();
-    const std::vector<unsigned int>& dirty_ind();
+    const std::vector<Vec3> &dirty_pos();
+    const std::vector<unsigned int> &dirty_ind();
 
 public:
     explicit PhysicsObject(PhysicsObjectType type);
@@ -45,6 +45,15 @@ public:
     PhysicsObject(PhysicsObject &&src) = default;
     PhysicsObject &operator=(PhysicsObject &&src) = default;
 
+    template<RigidBodyType T>
+    explicit PhysicsObject(RigidBodyBase<T> &&rigidbody);
+    template<RigidBodyType T>
+    PhysicsObject &operator=(RigidBodyBase<T> &&rigidbody);
+    template<DeformableType T>
+    explicit PhysicsObject(DeformableBase<T> &&deformable);
+    template<DeformableType T>
+    PhysicsObject &operator=(DeformableBase<T> &&deformable);
+
 private:
     std::optional<std::variant<
             RigidBodyBase<HinaPE::DYNAMIC>,
@@ -53,6 +62,32 @@ private:
             DeformableBase<CLOTH>,
             DeformableBase<MESH>>> physics_object_opt;
 };
+
+template<HinaPE::RigidBodyType T>
+HinaPE::PhysicsObject::PhysicsObject(HinaPE::RigidBodyBase<T> &&rigidbody)
+{
+    physics_object_opt = std::move(rigidbody);
+}
+
+template<HinaPE::RigidBodyType T>
+HinaPE::PhysicsObject &HinaPE::PhysicsObject::operator=(HinaPE::RigidBodyBase<T> &&rigidbody)
+{
+    physics_object_opt = std::move(rigidbody);
+    return *this;
+}
+
+template<HinaPE::DeformableType T>
+HinaPE::PhysicsObject::PhysicsObject(HinaPE::DeformableBase<T> &&deformable)
+{
+    physics_object_opt = std::move(deformable);
+}
+
+template<HinaPE::DeformableType T>
+HinaPE::PhysicsObject &HinaPE::PhysicsObject::operator=(HinaPE::DeformableBase<T> &&deformable)
+{
+    physics_object_opt = std::move(deformable);
+    return *this;
+}
 
 inline PhysicsObject::PhysicsObject(PhysicsObjectType type)
 {
