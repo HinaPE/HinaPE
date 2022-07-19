@@ -1110,6 +1110,16 @@ void Manager::UInew_obj(Undo &undo)
         }
         ImGui::PopID();
     }
+
+    ImGui::Separator();
+
+    if (ImGui::CollapsingHeader("Cloth"))
+    {
+        ImGui::PushID(idx++);
+        static int width = 30, height = 30;
+
+
+    }
     ImGui::End();
 }
 
