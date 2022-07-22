@@ -79,6 +79,7 @@ public:
     struct Options
     {
         char name[MAX_NAME_LEN] = {};
+        bool surface = true;
         bool wireframe = false;
         bool smooth_normals = false;
         bool render = true;

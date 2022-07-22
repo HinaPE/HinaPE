@@ -483,6 +483,7 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
                 {
                     update();
                 }
+                if (ImGui::Checkbox("Show Surface", &obj.opt.surface)) update();
                 if (ImGui::Checkbox("Show Wireframe", &obj.opt.wireframe)) update();
                 if (ImGui::Checkbox("Render", &obj.opt.render)) update();
             }

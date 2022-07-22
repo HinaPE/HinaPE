@@ -37,6 +37,7 @@ public:
         Vec3 color, sel_color, hov_color;
         unsigned int sel_id = 0, hov_id = 0;
         float alpha = 1.0f;
+        bool surface = true;
         bool wireframe = false;
         bool solid_color = false;
         bool depth_only = false;

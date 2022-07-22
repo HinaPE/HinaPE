@@ -235,8 +235,11 @@ void Renderer::mesh(GL::Mesh &mesh, Renderer::MeshOpt opt)
         GL::disable(GL::Opt::wireframe);
     }
 
-    mesh_shader.uniform("color", opt.color);
-    mesh.render();
+    if (opt.surface)
+    {
+        mesh_shader.uniform("color", opt.color);
+        mesh.render();
+    }
 
     if (opt.depth_only) GL::color_mask(true);
 }
