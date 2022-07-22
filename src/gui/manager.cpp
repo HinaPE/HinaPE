@@ -1143,19 +1143,10 @@ void Manager::UInew_obj(Undo &undo)
     if (ImGui::CollapsingHeader("Cloth"))
     {
         ImGui::PushID(idx++);
-        static float width_height[2];
-        static int row_col[2];
-        static float mass_stiffness[2];
-        static float width = 2.f, height = 2.f;
-        static int row = 30, column = 30;
+        static float width_height[2] = {2.f, 2.f};
+        static int row_col[2] = {30,30};
         static float mass = 1.f;
         static float stiffness = 0.f;
-        width_height[0] = width;
-        width_height[1] = height;
-        row_col[0] = row;
-        row_col[1] = column;
-        mass_stiffness[0] = mass;
-        mass_stiffness[1] = stiffness;
         ImGui::SliderFloat2("Width & Height", width_height, 1.0f, 10.0f);
         ImGui::SliderInt2("Row & Height", row_col, 10, 100);
         ImGui::SliderFloat("Mass", &mass, 0.01f, 10.0f, "%.2f");
