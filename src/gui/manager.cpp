@@ -14,6 +14,7 @@ namespace Gui
 Manager::Manager(Scene &scene, Vec2 dim)
         : render(scene, dim), animate(simulate, dim), baseplane(1.0f), window_dim(dim)
 {
+    create_axis();
     create_baseplane();
 }
 
@@ -75,11 +76,12 @@ bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
 
 #ifdef __APPLE__
     Uint16 mod = KMOD_GUI;
-    if(key.sym == SDLK_BACKSPACE && key.mod & KMOD_GUI) {
-#else
-    Uint16 mod = KMOD_CTRL;
-    if (key.sym == SDLK_DELETE)
+    if (key.sym == SDLK_BACKSPACE && key.mod & KMOD_GUI)
     {
+#else
+        Uint16 mod = KMOD_CTRL;
+        if (key.sym == SDLK_DELETE)
+        {
 #endif
         if (layout.selected())
         {
@@ -140,6 +142,9 @@ bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
             break;
         case SDLK_SPACE:
             simulate.running = !simulate.running;
+            break;
+        case SDLK_b:
+            render_baseplane = !render_baseplane;
             break;
     }
 
@@ -421,7 +426,7 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
     };
 
     if (!(item.is<Scene_Light>() && item.get<Scene_Light>().is_env()) &&
-        ImGui::CollapsingHeader("Edit Pose"))
+        ImGui::CollapsingHeader("Edit Pose", ImGuiTreeNodeFlags_DefaultOpen))
     {
         ImGui::Indent();
 
@@ -465,7 +470,7 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
             undo.update_object(obj.id(), start_opt);
         };
 
-        if ((obj.is_editable() || obj.is_shape()) && ImGui::CollapsingHeader("Edit Mesh"))
+        if ((obj.is_editable() || obj.is_shape()) && ImGui::CollapsingHeader("Edit Mesh", ImGuiTreeNodeFlags_DefaultOpen))
         {
             ImGui::Indent();
             if (obj.is_editable())
@@ -505,13 +510,13 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
             if (E) obj.set_mesh_dirty();
             if (U) undo.update_object(obj.id(), old_opt);
         }
-        if (ImGui::CollapsingHeader("Edit Material"))
+        if (ImGui::CollapsingHeader("Edit Material", ImGuiTreeNodeFlags_DefaultOpen))
         {
             ImGui::Indent();
             material_edit_gui(undo, obj.id(), obj.material);
             ImGui::Unindent();
         }
-        if (ImGui::CollapsingHeader("Edit Physics"))
+        if (ImGui::CollapsingHeader("Edit Physics", ImGuiTreeNodeFlags_DefaultOpen))
         {
             ImGui::Indent();
             static int physics_object_type = static_cast<int>(obj.get_physics_object_type());
@@ -577,23 +582,6 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
                 default:
                     throw std::runtime_error("Unknown physics object type");
             }
-//            ImGui::Checkbox("IsRigidBody", &is_rigidbody);
-//            if (is_rigidbody)
-//            {
-//                ImGui::Text("Hello Rigid Body~");
-//                static int rt = obj.opt.rigidbody;
-//                if (rt == HinaPE::NOT_PHYSICS_OBJECT)
-//                {
-//
-//                }
-//                ImGui::RadioButton("Dynamic", &rt, 0);
-//                ImGui::SameLine();
-//                ImGui::RadioButton("Static", &rt, 1);
-//                ImGui::SameLine();
-//                ImGui::RadioButton("Kinematic", &rt, 2);
-//                obj.opt.rigidbody = static_cast<HinaPE::RigidBodyType>(rt);
-//            } else
-//                obj.opt.rigidbody = HinaPE::RigidBodyType::NOT_RIGIDBODY;
             ImGui::Unindent();
         }
 
@@ -1145,7 +1133,7 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float width_height[2] = {2.f, 2.f};
-        static int row_col[2] = {30,30};
+        static int row_col[2] = {30, 30};
         static float mass = 1.f;
         static float stiffness = 0.f;
         ImGui::SliderFloat2("Width & Height", width_height, 1.0f, 10.0f);
@@ -1386,6 +1374,12 @@ void Manager::UIbig_sim_button(Scene &scene, Undo &undo)
     ImGui::End();
 }
 
+void Manager::create_axis()
+{
+    axis.add(Vec3{-25, 0, 0}, Vec3{25, 0, 0}, Color::red);
+    axis.add(Vec3{0, 0, -25}, Vec3{0, 0, 25}, Color::blue);
+}
+
 void Manager::create_baseplane()
 {
 
@@ -1393,11 +1387,7 @@ void Manager::create_baseplane()
     for (int i = -R; i <= R; i++)
     {
         if (i == 0)
-        {
-            baseplane.add(Vec3{-R, 0, i}, Vec3{R, 0, i}, Color::red);
-            baseplane.add(Vec3{i, 0, -R}, Vec3{i, 0, R}, Color::blue);
             continue;
-        }
         baseplane.add(Vec3{i, 0, -R}, Vec3{i, 0, R}, Color::baseplane);
         baseplane.add(Vec3{-R, 0, i}, Vec3{R, 0, i}, Color::baseplane);
     }
@@ -1627,7 +1617,10 @@ void Manager::render_3d(Scene &scene, Undo &undo, Camera &camera)
         simulate.update_time();
     }
 
-    Renderer::get().lines(baseplane, view, Mat4::I, 1.0f);
+    Renderer::get().lines(axis, view, Mat4::I, 1.0f);
+
+    if (render_baseplane)
+        Renderer::get().lines(baseplane, view, Mat4::I, 1.0f);
 
     auto selected = scene.get(layout.selected());
     switch (mode)

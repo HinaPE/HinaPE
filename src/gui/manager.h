@@ -125,7 +125,10 @@ private:
     Scene::Load_Opts load_opt;
 
     Widgets widgets;
+    GL::Lines axis;
     GL::Lines baseplane;
+    bool render_baseplane = true;
+    void create_axis();
     void create_baseplane();
     Vec2 window_dim;
 };
