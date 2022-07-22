@@ -129,19 +129,19 @@ Scene_ID Scene::reserve_id()
     return next_id++;
 }
 
-Scene_ID Scene::add(Pose pose, Halfedge_Mesh &&mesh, std::string n, Scene_ID id, int physics_object_type)
+Scene_ID Scene::add(Pose pose, Halfedge_Mesh &&mesh, std::string n, Scene_ID id)
 {
     if (!id) id = next_id++;
     assert(objs.find(id) == objs.end());
-    objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n, physics_object_type)));
+    objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n)));
     return id;
 }
 
-Scene_ID Scene::add(Pose pose, GL::Mesh &&mesh, std::string n, Scene_ID id, int physics_object_type)
+Scene_ID Scene::add(Pose pose, GL::Mesh &&mesh, std::string n, Scene_ID id)
 {
     if (!id) id = next_id++;
     assert(objs.find(id) == objs.end());
-    objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n, physics_object_type)));
+    objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n)));
     return id;
 }
 

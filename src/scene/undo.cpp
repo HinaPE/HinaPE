@@ -14,9 +14,9 @@ void Undo::reset()
     redos = {};
 }
 
-Scene_Object &Undo::add_obj(Halfedge_Mesh &&mesh, std::string name, int physics_object_type)
+Scene_Object &Undo::add_obj(Halfedge_Mesh &&mesh, std::string name)
 {
-    Scene_ID id = scene.add({}, std::move(mesh), name, 0, physics_object_type);
+    Scene_ID id = scene.add({}, std::move(mesh), name, 0);
     scene.restore(id);
     action([id, this]()
            { scene.restore(id); },
@@ -247,9 +247,9 @@ void Undo::del_obj(Scene_ID id)
             { scene.restore(id); });
 }
 
-Scene_Object &Undo::add_obj(GL::Mesh &&mesh, std::string name, int physics_object_type)
+Scene_Object &Undo::add_obj(GL::Mesh &&mesh, std::string name)
 {
-    Scene_ID id = scene.add({}, std::move(mesh), name, 0, physics_object_type);
+    Scene_ID id = scene.add({}, std::move(mesh), name, 0);
     scene.restore(id);
     action([id, this]()
            { scene.restore(id); },

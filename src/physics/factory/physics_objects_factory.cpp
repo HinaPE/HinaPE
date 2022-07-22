@@ -2,6 +2,11 @@
 
 #include <algorithm>
 
+HinaPE::PhysicsObjectPtr HinaPE::RigidBodyFactory::create_rigidbody(HinaPE::RigidBodyType type)
+{
+    return std::make_shared<HinaPE::PhysicsObject>(HinaPE::PhysicsObjectType::Rigidbody); // TODO: to support change types
+}
+
 std::shared_ptr<HinaPE::PhysicsObject> HinaPE::ClothFactory::create_cloth(const HinaPE::ClothFactory::ClothDesc &desc)
 {
     DeformableBase<CLOTH> cloth;

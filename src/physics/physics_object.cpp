@@ -202,9 +202,41 @@ bool HinaPE::PhysicsObject::is_rigidbody()
     return physics_object_opt != std::nullopt && physics_object_opt->index() < 3;
 }
 
+HinaPE::RigidBodyType HinaPE::PhysicsObject::get_rigid_body_type() const
+{
+    if (!physics_object_opt.has_value())
+        throw std::runtime_error("physics object is not rigidbody");
+    switch (physics_object_opt.value().index())
+    {
+        case 0:
+            return DYNAMIC;
+        case 1:
+            return STATIC;
+        case 2:
+            return KINEMATIC;
+        default:
+            throw std::runtime_error("invalid rigidbody type");
+    }
+}
+
 bool HinaPE::PhysicsObject::is_deformable()
 {
     return physics_object_opt != std::nullopt && physics_object_opt->index() == 3;
+}
+
+HinaPE::DeformableType HinaPE::PhysicsObject::get_deformable_type() const
+{
+    if (!physics_object_opt.has_value())
+        throw std::runtime_error("physics object is not rigidbody");
+    switch (physics_object_opt.value().index())
+    {
+        case 3:
+            return CLOTH;
+        case 4:
+            return MESH;
+        default:
+            throw std::runtime_error("invalid rigidbody type");
+    }
 }
 
 const std::vector<Vec3> &HinaPE::PhysicsObject::dirty_pos()

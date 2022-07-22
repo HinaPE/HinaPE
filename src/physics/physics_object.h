@@ -30,10 +30,12 @@ public:
 
     // rigidbody methods
     bool is_rigidbody();
+    [[nodiscard]] RigidBodyType get_rigid_body_type() const;
     void switch_rigidbody_type(RigidBodyType to);
 
     // deformable methods
     bool is_deformable();
+    [[nodiscard]] DeformableType get_deformable_type() const;
     const std::vector<Vec3> &dirty_pos();
     const std::vector<unsigned int> &dirty_ind();
 

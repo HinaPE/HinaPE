@@ -6,6 +6,7 @@
 
 #include "../geometry/util.h"
 #include "../scene/renderer.h"
+#include "../physics/factory/physics_objects_factory.h"
 
 namespace Gui
 {
@@ -509,27 +510,74 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
             material_edit_gui(undo, obj.id(), obj.material);
             ImGui::Unindent();
         }
-        if (ImGui::CollapsingHeader("Rigid Body"))
+        if (ImGui::CollapsingHeader("Edit Physics"))
         {
             ImGui::Indent();
-            static bool is_rigidbody = obj.is_rigidbody();
-            ImGui::Checkbox("IsRigidBody", &is_rigidbody);
-            if (is_rigidbody)
+            static int physics_object_type = static_cast<int>(obj.get_physics_object_type());
+            switch (physics_object_type)
             {
-                ImGui::Text("Hello Rigid Body~");
-                static int rt = obj.opt.rigidbody;
-                if (rt == HinaPE::NOT_PHYSICS_OBJECT)
+                case -1: // NOT_PHYSICS_OBJECT
                 {
-
+                    if (ImGui::Button("Attach Rigid Body"))
+                    {
+                        obj.attach_physics_object(HinaPE::RigidBodyFactory::create_rigidbody(HinaPE::DYNAMIC));
+                        physics_object_type = HinaPE::PhysicsObjectType::Rigidbody;
+                    }
+                    if (ImGui::Button("Attach Deformable"))
+                    {
+//                        obj.attach_physics_object(HinaPE::ClothFactory::create_cloth());
+                        physics_object_type = HinaPE::PhysicsObjectType::Deformable;
+                    }
                 }
-                ImGui::RadioButton("Dynamic", &rt, 0);
-                ImGui::SameLine();
-                ImGui::RadioButton("Static", &rt, 1);
-                ImGui::SameLine();
-                ImGui::RadioButton("Kinematic", &rt, 2);
-                obj.opt.rigidbody = static_cast<HinaPE::RigidBodyType>(rt);
-            } else
-                obj.opt.rigidbody = HinaPE::RigidBodyType::NOT_RIGIDBODY;
+                    break;
+                case 0: // Rigidbody
+                {
+                    static int rt = static_cast<int>(obj.physics_object->get_rigid_body_type());
+                    static int pre_rt = rt;
+                    ImGui::RadioButton("Dynamic", &rt, 0);
+                    ImGui::SameLine();
+                    ImGui::RadioButton("Static", &rt, 1);
+                    ImGui::SameLine();
+                    ImGui::RadioButton("Kinematic", &rt, 2);
+                    if (rt != pre_rt)
+                    {
+                        obj.physics_object->switch_rigidbody_type(static_cast<HinaPE::RigidBodyType>(rt));
+                        pre_rt = rt;
+                    }
+                    // TODO: display rigidbody info
+                }
+                    break;
+                case 1: // Deformable
+                {
+                    static int def = static_cast<int>(obj.physics_object->get_deformable_type());
+                    // TODO: display deformable info
+                }
+                    break;
+                case 2: // Fluid
+                {
+                    // TODO: display fluid info
+                }
+                    break;
+                default:
+                    throw std::runtime_error("Unknown physics object type");
+            }
+//            ImGui::Checkbox("IsRigidBody", &is_rigidbody);
+//            if (is_rigidbody)
+//            {
+//                ImGui::Text("Hello Rigid Body~");
+//                static int rt = obj.opt.rigidbody;
+//                if (rt == HinaPE::NOT_PHYSICS_OBJECT)
+//                {
+//
+//                }
+//                ImGui::RadioButton("Dynamic", &rt, 0);
+//                ImGui::SameLine();
+//                ImGui::RadioButton("Static", &rt, 1);
+//                ImGui::SameLine();
+//                ImGui::RadioButton("Kinematic", &rt, 2);
+//                obj.opt.rigidbody = static_cast<HinaPE::RigidBodyType>(rt);
+//            } else
+//                obj.opt.rigidbody = HinaPE::RigidBodyType::NOT_RIGIDBODY;
             ImGui::Unindent();
         }
 
@@ -964,12 +1012,12 @@ void Manager::UInew_obj(Undo &undo)
 
     unsigned int idx = 0;
 
-    auto add_mesh = [&, this](std::string n, GL::Mesh &&mesh, bool flip = false, int physics_object_type = -1)
+    auto add_mesh = [&, this](std::string n, GL::Mesh &&mesh, bool flip = false)
     {
         Halfedge_Mesh hm;
         hm.from_mesh(mesh);
         if (flip) hm.flip();
-        undo.add_obj(std::move(hm), n, physics_object_type);
+        undo.add_obj(std::move(hm), n);
         new_obj_window = false;
     };
 
@@ -982,16 +1030,10 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float R = 1.0f;
-        static int physics_object_type = 0;
         ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
-        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
-        ImGui::SameLine();
-        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
-        ImGui::SameLine();
-        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Cube", Util::cube_mesh(R / 2.0f), true, physics_object_type);
+            add_mesh("Cube", Util::cube_mesh(R / 2.0f), true);
         }
         ImGui::PopID();
     }
@@ -1002,16 +1044,10 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float R = 1.0f;
-        static int physics_object_type = 0;
         ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
-        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
-        ImGui::SameLine();
-        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
-        ImGui::SameLine();
-        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Square", Util::square_mesh(R / 2.0f), false, physics_object_type);
+            add_mesh("Square", Util::square_mesh(R / 2.0f), false);
         }
         ImGui::PopID();
     }
@@ -1023,18 +1059,12 @@ void Manager::UInew_obj(Undo &undo)
         ImGui::PushID(idx++);
         static float R = 0.5f, H = 2.0f;
         static int S = 12;
-        static int physics_object_type = 0;
         ImGui::SliderFloat("Radius", &R, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Height", &H, 0.01f, 10.0f, "%.2f");
         ImGui::SliderInt("Sides", &S, 3, 100);
-        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
-        ImGui::SameLine();
-        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
-        ImGui::SameLine();
-        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Cylinder", Util::cyl_mesh(R, H, S), false, physics_object_type);
+            add_mesh("Cylinder", Util::cyl_mesh(R, H, S), false);
         }
         ImGui::PopID();
     }
@@ -1046,19 +1076,13 @@ void Manager::UInew_obj(Undo &undo)
         ImGui::PushID(idx++);
         static float IR = 0.8f, OR = 1.0f;
         static int SEG = 32, S = 16;
-        static int physics_object_type = 0;
         ImGui::SliderFloat("Inner Radius", &IR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Outer Radius", &OR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderInt("Segments", &SEG, 3, 100);
         ImGui::SliderInt("Sides", &S, 3, 100);
-        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
-        ImGui::SameLine();
-        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
-        ImGui::SameLine();
-        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Torus", Util::torus_mesh(IR, OR, SEG, S), false, physics_object_type);
+            add_mesh("Torus", Util::torus_mesh(IR, OR, SEG, S), false);
         }
         ImGui::PopID();
     }
@@ -1070,19 +1094,13 @@ void Manager::UInew_obj(Undo &undo)
         ImGui::PushID(idx++);
         static float BR = 1.0f, TR = 0.1f, H = 1.0f;
         static int S = 12;
-        static int physics_object_type = 0;
         ImGui::SliderFloat("Bottom Radius", &BR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Top Radius", &TR, 0.01f, 10.0f, "%.2f");
         ImGui::SliderFloat("Height", &H, 0.01f, 10.0f, "%.2f");
         ImGui::SliderInt("Sides", &S, 3, 100);
-        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
-        ImGui::SameLine();
-        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
-        ImGui::SameLine();
-        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            add_mesh("Cone", Util::cone_mesh(BR, TR, H, S), false, physics_object_type);
+            add_mesh("Cone", Util::cone_mesh(BR, TR, H, S), false);
         }
         ImGui::PopID();
     }
@@ -1093,16 +1111,10 @@ void Manager::UInew_obj(Undo &undo)
     {
         ImGui::PushID(idx++);
         static float R = 1.0f;
-        static int physics_object_type = 0;
         ImGui::SliderFloat("Radius", &R, 0.01f, 10.0f, "%.2f");
-        ImGui::RadioButton("NOT Physical", &physics_object_type, -1);
-        ImGui::SameLine();
-        ImGui::RadioButton("Rigidbody", &physics_object_type, 0);
-        ImGui::SameLine();
-        ImGui::RadioButton("Deformable", &physics_object_type, 1);
         if (ImGui::Button("Add"))
         {
-            Scene_Object &obj = undo.add_obj(GL::Mesh(), "Sphere", physics_object_type);
+            Scene_Object &obj = undo.add_obj(GL::Mesh(), "Sphere");
             obj.opt.shape_type = PT::Shape_Type::sphere;
             obj.opt.shape = PT::Shape(PT::Sphere(R));
             obj.set_mesh_dirty();

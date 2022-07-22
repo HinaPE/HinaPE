@@ -60,6 +60,7 @@ private:
     template<RigidBodyType FromType, RigidBodyType ResType>
     friend void copy_impl(typename RigidBodyBase<FromType>::Impl *from, typename RigidBodyBase<ResType>::Impl *res);
 
+    friend class RigidBodyFactory;
     struct Impl;
     std::unique_ptr<Impl> impl;
 };
