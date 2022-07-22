@@ -10,7 +10,6 @@
 Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n)
         : pose(p), _id(id), armature(id), _mesh(std::move(m))
 {
-
     set_skel_dirty();
     editable = false;
 
@@ -21,35 +20,11 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n)
     {
         snprintf(opt.name, MAX_NAME_LEN, "Object %d", id);
     }
-
-//    opt.physics_object_type = static_cast<HinaPE::PhysicsObjectType>(physics_object_type);
-//    switch (opt.physics_object_type)
-//    {
-//        case HinaPE::Rigidbody:
-//        {
-//            opt.rigidbody = HinaPE::DYNAMIC;
-//            opt.old_rigidbody = opt.rigidbody;
-//        }
-//            break;
-//        case HinaPE::Deformable:
-//        {
-//            // TODO: implement
-//        }
-////            break;
-//        case HinaPE::NOT_PHYSICS_OBJECT:
-//            break;
-//        default:
-//            throw std::runtime_error("Invalid physics object type");
-//    }
-//    physics_object = std::make_shared<HinaPE::PhysicsObject>(opt.physics_object_type);
-//
-//    HinaPE::PhysicsSystem::instance()._register_(_id, physics_object);
 }
 
 Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n)
         : pose(p), _id(id), armature(id), halfedge(std::move(m)), _mesh()
 {
-
     set_mesh_dirty();
 
     if (n.size())
@@ -61,29 +36,6 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n
     }
 
     sync_anim_mesh();
-
-//    opt.physics_object_type = static_cast<HinaPE::PhysicsObjectType>(physics_object_type);
-//    switch (opt.physics_object_type)
-//    {
-//        case HinaPE::Rigidbody:
-//        {
-//            opt.rigidbody = HinaPE::DYNAMIC;
-//            opt.old_rigidbody = opt.rigidbody;
-//        }
-//            break;
-//        case HinaPE::Deformable:
-//        {
-//            // TODO: implement
-//        }
-////            break;
-//        case HinaPE::NOT_PHYSICS_OBJECT:
-//            break;
-//        default:
-//            throw std::runtime_error("Invalid physics object type");
-//    }
-//    physics_object = std::make_shared<HinaPE::PhysicsObject>(opt.physics_object_type);
-//
-//    HinaPE::PhysicsSystem::instance()._register_(_id, physics_object);
 }
 
 const GL::Mesh &Scene_Object::posed_mesh()
@@ -106,7 +58,6 @@ const GL::Mesh &Scene_Object::mesh()
 
 void Scene_Object::try_make_editable(PT::Shape_Type prev)
 {
-
     _mesh = opt.shape.mesh();
 
     std::string err = halfedge.from_mesh(_mesh);
@@ -209,7 +160,6 @@ void Scene_Object::flip_normals()
 
 void Scene_Object::sync_mesh()
 {
-
     if (editable && mesh_dirty)
     {
         halfedge.to_mesh(_mesh, !opt.smooth_normals);
@@ -218,29 +168,6 @@ void Scene_Object::sync_mesh()
     {
         mesh_dirty = false;
     }
-
-//    // update deformable mesh
-//    if (opt.physics_object_type == HinaPE::Deformable)
-//    {
-//        auto &pos = physics_object->dirty_pos();
-//        auto &ind = physics_object->dirty_ind();
-//
-//        if (!pos.empty())
-//        {
-//            auto &verts = _mesh.edit_verts();
-//            for (auto i = 0; i < verts.size(); i++)
-//                verts[i].pos = pos[i];
-//            set_mesh_dirty();
-//        }
-//
-//        if (!ind.empty())
-//        {
-//            auto &idxs = _mesh.edit_indices();
-//            for (int i = 0; i < idxs.size(); ++i)
-//                idxs[i] = ind[i];
-//            set_mesh_dirty();
-//        }
-//    }
 }
 
 void Scene_Object::set_pose_dirty()
@@ -264,7 +191,6 @@ void Scene_Object::set_mesh_dirty()
 
 BBox Scene_Object::bbox()
 {
-
     sync_anim_mesh();
 
     BBox box;
@@ -284,7 +210,6 @@ BBox Scene_Object::bbox()
 
 void Scene_Object::render(const Mat4 &view, bool solid, bool depth_only, bool posed, bool do_anim)
 {
-
     if (!opt.render) return;
 
     if (do_anim)
@@ -339,6 +264,7 @@ bool operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r)
 void Scene_Object::attach_physics_object(std::shared_ptr<HinaPE::PhysicsObject> o)
 {
     this->physics_object = std::move(o);
+    HinaPE::PhysicsSystem::instance()._register_(_id, this->physics_object);
 }
 
 void Scene_Object::remove_physics_object()
@@ -348,7 +274,7 @@ void Scene_Object::remove_physics_object()
 
 void Scene_Object::sync_physics_result()
 {
-    if (physics_object)
+    if (!physics_object)
         return;
 
     if (physics_object->is_rigidbody())
@@ -358,11 +284,18 @@ void Scene_Object::sync_physics_result()
         pose.pos = pos;
         pose.euler = rot;
         set_pose_dirty();
+        return;
     }
 
     if (physics_object->is_deformable())
     {
-
+        auto &verts = physics_object->dirty_pos();
+        auto &inds = physics_object->dirty_ind();
+        Halfedge_Mesh hm;
+        hm.from_mesh(Util::Gen::generate(verts, inds));
+        take_mesh(std::move(hm));
+        set_mesh_dirty();
+        return;
     }
 }
 

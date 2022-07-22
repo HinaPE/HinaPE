@@ -53,7 +53,6 @@ void Simulate::update(Scene &scene, Undo &undo)
     last_update = time;
 
     step(scene, dt);
-    HinaPE::PhysicsSystem::instance()._tick_(dt); // TODO: move this to separate physics thread; Hina
 }
 
 void Simulate::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)

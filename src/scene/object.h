@@ -54,6 +54,8 @@ public:
 
     void step(const PT::Object &scene, float dt)
     {
+        for (int i = 0; i < sub_iteration; ++i)
+            HinaPE::PhysicsSystem::instance()._tick_(dt / (float)sub_iteration); // TODO: move this to separate physics thread; Hina
         sync_physics_result();
     }
 
@@ -73,6 +75,7 @@ public:
     void sync_physics_result();
     HinaPE::PhysicsObjectType get_physics_object_type() const;
     std::shared_ptr<HinaPE::PhysicsObject> physics_object;
+    int sub_iteration = 10;
 
 public:
 
