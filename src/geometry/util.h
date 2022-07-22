@@ -4,6 +4,7 @@
 #include "../platform/gl.h"
 
 #include <string>
+#include <vector>
 
 namespace Util
 {
@@ -41,6 +42,7 @@ GL::Mesh merge(Data &&l, Data &&r);
 LData merge(LData &&l, LData &&r);
 LData circle(Vec3 color, float r, int sides);
 GL::Mesh dedup(Data &&d);
+GL::Mesh generate(const std::vector<Vec3>& verts, const std::vector<unsigned int>& inds);
 
 // https://wiki.unity3d.com/index.php/ProceduralPrimitives
 Data cube(float r);

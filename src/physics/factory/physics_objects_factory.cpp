@@ -33,20 +33,26 @@ std::shared_ptr<HinaPE::PhysicsObject> HinaPE::ClothFactory::create_cloth(const 
     auto bias_x = (float) width / 2.f;
     auto bias_y = (float) height / 2.f;
 
-    _ps.reserve(width * height);
-    _vs.reserve(width * height);
-    _ms.reserve(width * height);
-    _ims.reserve(width * height);
-    _is.reserve(6 * (width - 1) * (height - 1));
+    _ps.reserve(row * col);
+    _vs.reserve(row * col);
+    _ms.reserve(row * col);
+    _ims.reserve(row * col);
+    _is.reserve(6 * (row - 1) * (col - 1));
+
+    for (int i = 0; i < col; ++i)
+    {
+        for (int j = 0; j < row; ++j)
+        {
+            Vec3 x((float) i * delta_x - bias_x, (float) j * delta_y - bias_y, 0.f);
+            x += position;
+            _ps.push_back(x);
+        }
+    }
 
     for (int i = 0; i < col - 1; ++i)
     {
         for (int j = 0; j < row - 1; ++j)
         {
-            Vec3 x((float) i * delta_x - bias_x, (float) j * delta_y - bias_y, 0.f);
-            x += position;
-            _ps.push_back(x);
-
             // counter-clockwise indices to form a (front-faced) triangle
             if ((i + j) % 2 == 0)
             {
@@ -67,6 +73,7 @@ std::shared_ptr<HinaPE::PhysicsObject> HinaPE::ClothFactory::create_cloth(const 
                 _is.push_back((j + 1) * col + i);
                 _is.push_back((j + 1) * col + i + 1);
             }
+
         }
     }
 

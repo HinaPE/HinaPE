@@ -158,6 +158,23 @@ GL::Mesh dedup(Data &&d)
     return GL::Mesh(std::move(verts), std::move(elems));
 }
 
+GL::Mesh generate(const std::vector<Vec3> &verts, const std::vector<unsigned int> &inds)
+{
+    std::vector<GL::Mesh::Vert> v;
+    std::vector<GL::Mesh::Index> e;
+    for (auto vert : verts)
+    {
+        v.push_back({vert, {}});
+    }
+    for (size_t i = 0; i < inds.size(); i += 3)
+    {
+        e.push_back(inds[i]);
+        e.push_back(inds[i + 1]);
+        e.push_back(inds[i + 2]);
+    }
+    return {std::move(v), std::move(e)};
+}
+
 GL::Mesh merge(Data &&l, Data &&r)
 {
     for (auto &i: r.elems) i += (GL::Mesh::Index) l.verts.size();

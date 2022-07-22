@@ -23,8 +23,8 @@ public:
         Vec3 position;
         Vec3 rotation;
 
-        int width;
-        int height;
+        float width;
+        float height;
         int row;
         int col;
         float mass;

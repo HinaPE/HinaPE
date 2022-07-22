@@ -551,6 +551,21 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
                 {
                     static int def = static_cast<int>(obj.physics_object->get_deformable_type());
                     // TODO: display deformable info
+                    switch (def)
+                    {
+                        case 0: // CLOTH
+                        {
+                            ImGui::Text("I am a Cloth");
+                        }
+                            break;
+                        case 1: // MESH
+                        {
+
+                        }
+                            break;
+                        default:
+                            throw std::runtime_error("invalid deformable type");
+                    }
                 }
                     break;
                 case 2: // Fluid
@@ -1128,9 +1143,43 @@ void Manager::UInew_obj(Undo &undo)
     if (ImGui::CollapsingHeader("Cloth"))
     {
         ImGui::PushID(idx++);
-        static int width = 30, height = 30;
-
-
+        static float width_height[2];
+        static int row_col[2];
+        static float mass_stiffness[2];
+        static float width = 2.f, height = 2.f;
+        static int row = 30, column = 30;
+        static float mass = 1.f;
+        static float stiffness = 0.f;
+        width_height[0] = width;
+        width_height[1] = height;
+        row_col[0] = row;
+        row_col[1] = column;
+        mass_stiffness[0] = mass;
+        mass_stiffness[1] = stiffness;
+        ImGui::SliderFloat2("Width & Height", width_height, 1.0f, 10.0f);
+        ImGui::SliderInt2("Row & Height", row_col, 10, 100);
+        ImGui::SliderFloat("Mass", &mass, 0.01f, 10.0f, "%.2f");
+        ImGui::SliderFloat("Stiffness", &stiffness, 0.01f, 10.0f, "%.2f");
+        HinaPE::ClothFactory::ClothDesc desc;
+        desc.width = width_height[0];
+        desc.height = width_height[1];
+        desc.row = row_col[0];
+        desc.col = row_col[1];
+        desc.mass = mass;
+        desc.stiffness = stiffness;
+        if (ImGui::Button("Add"))
+        {
+            auto cloth = HinaPE::ClothFactory::create_cloth(desc);
+            auto &verts = cloth->dirty_pos();
+            auto &inds = cloth->dirty_ind();
+            Halfedge_Mesh hm;
+            hm.from_mesh(Util::Gen::generate(verts, inds));
+            Scene_Object &obj = undo.add_obj(std::move(hm), "Cloth");
+            obj.physics_object = cloth;
+            obj.set_mesh_dirty();
+            new_obj_window = false;
+        }
+        ImGui::PopID();
     }
     ImGui::End();
 }

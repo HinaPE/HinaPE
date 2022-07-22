@@ -55,9 +55,6 @@ const std::vector<Vec3> &DeformableBase<Type>::dirty_pos()
 
 template<DeformableType Type>
 const std::vector<unsigned int> &DeformableBase<Type>::dirty_ind()
-{
-    static std::vector<unsigned int> null_vector;
-    return null_vector;
-}
+{ return impl->indices; }
 
 }
