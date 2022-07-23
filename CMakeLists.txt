@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE VERSION 1.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE VERSION 1.0.1 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 file(GLOB_RECURSE HinaGUI "src/gui/*.cpp" "src/gui/*.h")
 file(GLOB_RECURSE HinaGEOM "src/geometry/*.cpp" "src/geometry/*.h" "src/geometry/*.inl")
