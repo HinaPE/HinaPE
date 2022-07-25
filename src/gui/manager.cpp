@@ -79,9 +79,9 @@ bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
     if (key.sym == SDLK_BACKSPACE && key.mod & KMOD_GUI)
     {
 #else
-        Uint16 mod = KMOD_CTRL;
-        if (key.sym == SDLK_DELETE)
-        {
+    Uint16 mod = KMOD_CTRL;
+    if (key.sym == SDLK_DELETE)
+    {
 #endif
         if (layout.selected())
         {

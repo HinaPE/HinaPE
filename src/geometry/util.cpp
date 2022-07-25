@@ -162,7 +162,7 @@ GL::Mesh generate(const std::vector<Vec3> &verts, const std::vector<unsigned int
 {
     std::vector<GL::Mesh::Vert> v;
     std::vector<GL::Mesh::Index> e;
-    for (auto vert : verts)
+    for (auto vert: verts)
     {
         v.push_back({vert, {}});
     }

@@ -17,8 +17,8 @@ public:
     void set_position(const Vec3 &) const;
     void set_rotation(const Vec3 &) const;
 
-    const std::vector<Vec3>& dirty_pos();
-    const std::vector<unsigned int>& dirty_ind();
+    const std::vector<Vec3> &dirty_pos();
+    const std::vector<unsigned int> &dirty_ind();
 
 public:
     DeformableBase();
