@@ -81,20 +81,17 @@ public:
 
     Vec3 sample() const
     {
-        return std::visit([](const auto &h)
-                          { return h.sample(); }, underlying);
+        return std::visit([](const auto &h) { return h.sample(); }, underlying);
     }
 
     float pdf(Vec3 dir) const
     {
-        return std::visit([dir](const auto &h)
-                          { return h.pdf(dir); }, underlying);
+        return std::visit([dir](const auto &h) { return h.pdf(dir); }, underlying);
     }
 
     Spectrum evaluate(Vec3 dir) const
     {
-        return std::visit([&dir](const auto &h)
-                          { return h.evaluate(dir); }, underlying);
+        return std::visit([&dir](const auto &h) { return h.evaluate(dir); }, underlying);
     }
 
     bool is_discrete() const

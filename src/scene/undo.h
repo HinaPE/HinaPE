@@ -24,8 +24,7 @@ template<typename R, typename U>
 class Action : public Action_Base
 {
 public:
-    Action(R &&r, U &&u) : _undo(std::forward<U &&>(u)), _redo(std::forward<R &&>(r))
-    {};
+    Action(R &&r, U &&u) : _undo(std::forward<U &&>(u)), _redo(std::forward<R &&>(r)) {};
 
     ~Action()
     {
@@ -50,19 +49,20 @@ class Action_Bundle : public Action_Base
 {
     void undo()
     {
-        for (auto &a: list) a->undo();
+        for (auto &a: list)
+            a->undo();
     }
 
     void redo()
     {
-        for (auto i = list.rbegin(); i != list.rend(); i++) (*i)->redo();
+        for (auto i = list.rbegin(); i != list.rend(); i++)
+            (*i)->redo();
     }
 
     std::vector<std::unique_ptr<Action_Base>> list;
 
 public:
-    Action_Bundle(std::vector<std::unique_ptr<Action_Base>> &&bundle) : list(std::move(bundle))
-    {};
+    Action_Bundle(std::vector<std::unique_ptr<Action_Base>> &&bundle) : list(std::move(bundle)) {};
     ~Action_Bundle() = default;
 };
 
@@ -90,8 +90,7 @@ class MeshOp : public Action_Base
     Halfedge_Mesh mesh;
 
 public:
-    MeshOp(Scene &s, Scene_ID i, unsigned int e, Halfedge_Mesh &&m, T &&t)
-            : scene(s), id(i), eid(e), op(std::move(t)), mesh(std::move(m))
+    MeshOp(Scene &s, Scene_ID i, unsigned int e, Halfedge_Mesh &&m, T &&t) : scene(s), id(i), eid(e), op(std::move(t)), mesh(std::move(m))
     {
     }
 
@@ -108,13 +107,11 @@ public:
     {
         Scene_ID id = scene.add(std::forward<T &&>(obj));
         scene.restore(id);
-        action([id, this]()
-               { scene.restore(id); },
-               [id, this]()
-               {
-                   scene.erase(id);
-                   invalidate_obj(id);
-               });
+        action([id, this]() { scene.restore(id); }, [id, this]()
+        {
+            scene.erase(id);
+            invalidate_obj(id);
+        });
     }
 
     Scene_Object &add_obj(GL::Mesh &&mesh, std::string name);

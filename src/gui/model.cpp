@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <imgui/imgui.h>
 
@@ -13,9 +12,7 @@
 namespace Gui
 {
 
-Model::Model()
-        : spheres(Util::sphere_mesh(0.05f, 1)), cylinders(Util::cyl_mesh_disjoint(0.05f, 1.0f)),
-          arrows(Util::arrow_mesh(0.05f, 0.1f, 1.0f))
+Model::Model() : spheres(Util::sphere_mesh(0.05f, 1)), cylinders(Util::cyl_mesh_disjoint(0.05f, 1.0f)), arrows(Util::arrow_mesh(0.05f, 0.1f, 1.0f))
 {
 }
 
@@ -30,14 +27,11 @@ void Model::begin_transform()
                           {
                               trans_begin.verts = {vert->pos};
                               trans_begin.center = vert->pos;
-                          },
-                          [&](Halfedge_Mesh::EdgeRef edge)
+                          }, [&](Halfedge_Mesh::EdgeRef edge)
                           {
                               trans_begin.center = edge->center();
-                              trans_begin.verts = {edge->halfedge()->vertex()->pos,
-                                                   edge->halfedge()->twin()->vertex()->pos};
-                          },
-                          [&](Halfedge_Mesh::FaceRef face)
+                              trans_begin.verts = {edge->halfedge()->vertex()->pos, edge->halfedge()->twin()->vertex()->pos};
+                          }, [&](Halfedge_Mesh::FaceRef face)
                           {
                               auto h = face->halfedge();
                               trans_begin.center = face->center();
@@ -46,10 +40,7 @@ void Model::begin_transform()
                                   trans_begin.verts.push_back(h->vertex()->pos);
                                   h = h->next();
                               } while (h != face->halfedge());
-                          },
-                          [&](auto)
-                          {}},
-               elem);
+                          }, [&](auto) {}}, elem);
 }
 
 void Model::update_vertex(Halfedge_Mesh::VertexRef vert)
@@ -118,134 +109,126 @@ void Model::apply_transform(Widgets &widgets)
     Pose delta = widgets.apply_action({});
     Vec3 abs_pos = trans_begin.center + delta.pos;
 
-    std::visit(
-            overloaded{
-                    [&](Halfedge_Mesh::VertexRef vert)
-                    {
-                        if (action == Widget_Type::move)
-                        {
-                            vert->pos = abs_pos;
-                        }
-                        if (action == Widget_Type::extrude)
-                        {
-                            my_mesh->extrude_vertex_pos(trans_begin.verts, vert, delta.pos.x);
-                        }
-                        update_vertex(vert);
-                    },
+    std::visit(overloaded{[&](Halfedge_Mesh::VertexRef vert)
+                          {
+                              if (action == Widget_Type::move)
+                              {
+                                  vert->pos = abs_pos;
+                              }
+                              if (action == Widget_Type::extrude)
+                              {
+                                  my_mesh->extrude_vertex_pos(trans_begin.verts, vert, delta.pos.x);
+                              }
+                              update_vertex(vert);
+                          },
 
-                    [&](Halfedge_Mesh::EdgeRef edge)
-                    {
-                        auto h = edge->halfedge();
-                        Vec3 v0 = trans_begin.verts[0];
-                        Vec3 v1 = trans_begin.verts[1];
-                        Vec3 center = trans_begin.center;
+                          [&](Halfedge_Mesh::EdgeRef edge)
+                          {
+                              auto h = edge->halfedge();
+                              Vec3 v0 = trans_begin.verts[0];
+                              Vec3 v1 = trans_begin.verts[1];
+                              Vec3 center = trans_begin.center;
 
-                        if (action == Widget_Type::move)
-                        {
-                            Vec3 off = abs_pos - edge->center();
-                            h->vertex()->pos += off;
-                            h->twin()->vertex()->pos += off;
-                        } else if (action == Widget_Type::rotate)
-                        {
-                            Quat q = Quat::euler(delta.euler);
-                            h->vertex()->pos = q.rotate(v0 - center) + center;
-                            h->twin()->vertex()->pos = q.rotate(v1 - center) + center;
-                        } else if (action == Widget_Type::scale)
-                        {
-                            Mat4 s = Mat4::scale(delta.scale);
-                            h->vertex()->pos = s * (v0 - center) + center;
-                            h->twin()->vertex()->pos = s * (v1 - center) + center;
-                        }
-                        update_vertex(edge->halfedge()->vertex());
-                        update_vertex(edge->halfedge()->twin()->vertex());
-                    },
+                              if (action == Widget_Type::move)
+                              {
+                                  Vec3 off = abs_pos - edge->center();
+                                  h->vertex()->pos += off;
+                                  h->twin()->vertex()->pos += off;
+                              } else if (action == Widget_Type::rotate)
+                              {
+                                  Quat q = Quat::euler(delta.euler);
+                                  h->vertex()->pos = q.rotate(v0 - center) + center;
+                                  h->twin()->vertex()->pos = q.rotate(v1 - center) + center;
+                              } else if (action == Widget_Type::scale)
+                              {
+                                  Mat4 s = Mat4::scale(delta.scale);
+                                  h->vertex()->pos = s * (v0 - center) + center;
+                                  h->twin()->vertex()->pos = s * (v1 - center) + center;
+                              }
+                              update_vertex(edge->halfedge()->vertex());
+                              update_vertex(edge->halfedge()->twin()->vertex());
+                          },
 
-                    [&](Halfedge_Mesh::FaceRef face)
-                    {
-                        auto h = face->halfedge();
-                        Vec3 center = trans_begin.center;
+                          [&](Halfedge_Mesh::FaceRef face)
+                          {
+                              auto h = face->halfedge();
+                              Vec3 center = trans_begin.center;
 
-                        if (action == Widget_Type::move)
-                        {
-                            Vec3 off = abs_pos - face->center();
-                            do
-                            {
-                                h->vertex()->pos += off;
-                                h = h->next();
-                            } while (h != face->halfedge());
-                        } else if (action == Widget_Type::rotate)
-                        {
-                            Quat q = Quat::euler(delta.euler);
-                            int i = 0;
-                            do
-                            {
-                                h->vertex()->pos = q.rotate(trans_begin.verts[i] - center) + center;
-                                h = h->next();
-                                i++;
-                            } while (h != face->halfedge());
-                        } else if (action == Widget_Type::scale)
-                        {
-                            Mat4 s = Mat4::scale(delta.scale);
-                            int i = 0;
-                            do
-                            {
-                                h->vertex()->pos = s * (trans_begin.verts[i] - center) + center;
-                                h = h->next();
-                                i++;
-                            } while (h != face->halfedge());
-                        } else if (action == Widget_Type::bevel)
-                        {
+                              if (action == Widget_Type::move)
+                              {
+                                  Vec3 off = abs_pos - face->center();
+                                  do
+                                  {
+                                      h->vertex()->pos += off;
+                                      h = h->next();
+                                  } while (h != face->halfedge());
+                              } else if (action == Widget_Type::rotate)
+                              {
+                                  Quat q = Quat::euler(delta.euler);
+                                  int i = 0;
+                                  do
+                                  {
+                                      h->vertex()->pos = q.rotate(trans_begin.verts[i] - center) + center;
+                                      h = h->next();
+                                      i++;
+                                  } while (h != face->halfedge());
+                              } else if (action == Widget_Type::scale)
+                              {
+                                  Mat4 s = Mat4::scale(delta.scale);
+                                  int i = 0;
+                                  do
+                                  {
+                                      h->vertex()->pos = s * (trans_begin.verts[i] - center) + center;
+                                      h = h->next();
+                                      i++;
+                                  } while (h != face->halfedge());
+                              } else if (action == Widget_Type::bevel)
+                              {
 
-                            if (beveling == Bevel::vert)
-                            {
-                                my_mesh->bevel_vertex_positions(trans_begin.verts, face, delta.pos.x);
-                            } else if (beveling == Bevel::edge)
-                            {
-                                my_mesh->bevel_edge_positions(trans_begin.verts, face, delta.pos.x);
-                            } else
-                            {
-                                my_mesh->bevel_face_positions(trans_begin.verts, face, delta.pos.x,
-                                                              delta.pos.y);
-                            }
-                        } else if (action == Widget_Type::extrude)
-                        {
+                                  if (beveling == Bevel::vert)
+                                  {
+                                      my_mesh->bevel_vertex_positions(trans_begin.verts, face, delta.pos.x);
+                                  } else if (beveling == Bevel::edge)
+                                  {
+                                      my_mesh->bevel_edge_positions(trans_begin.verts, face, delta.pos.x);
+                                  } else
+                                  {
+                                      my_mesh->bevel_face_positions(trans_begin.verts, face, delta.pos.x, delta.pos.y);
+                                  }
+                              } else if (action == Widget_Type::extrude)
+                              {
 
-                            if (beveling == Bevel::face)
-                            {
-                                my_mesh->bevel_face_positions(trans_begin.verts, face, 0.0f, delta.pos.y);
-                            }
-                        }
+                                  if (beveling == Bevel::face)
+                                  {
+                                      my_mesh->bevel_face_positions(trans_begin.verts, face, 0.0f, delta.pos.y);
+                                  }
+                              }
 
-                        h = face->halfedge();
-                        do
-                        {
-                            update_vertex(h->vertex());
-                            update_vertex(h->twin()->next()->twin()->vertex());
-                            h = h->next();
-                        } while (h != face->halfedge());
-                    },
+                              h = face->halfedge();
+                              do
+                              {
+                                  update_vertex(h->vertex());
+                                  update_vertex(h->twin()->next()->twin()->vertex());
+                                  h = h->next();
+                              } while (h != face->halfedge());
+                          },
 
-                    [&](auto)
-                    {}},
-            elem);
+                          [&](auto) {}}, elem);
 }
 
 void Model::set_selected(Halfedge_Mesh::ElementRef elem)
 {
 
-    std::visit(overloaded{[&](Halfedge_Mesh::VertexRef vert)
-                          { selected_elem_id = vert->id(); },
-                          [&](Halfedge_Mesh::EdgeRef edge)
-                          { selected_elem_id = edge->id(); },
+    std::visit(overloaded{[&](Halfedge_Mesh::VertexRef vert) { selected_elem_id = vert->id(); }, [&](Halfedge_Mesh::EdgeRef edge) { selected_elem_id = edge->id(); },
                           [&](Halfedge_Mesh::FaceRef face)
                           {
-                              if (!face->is_boundary()) selected_elem_id = face->id();
-                          },
-                          [&](Halfedge_Mesh::HalfedgeRef halfedge)
+                              if (!face->is_boundary())
+                                  selected_elem_id = face->id();
+                          }, [&](Halfedge_Mesh::HalfedgeRef halfedge)
                           {
-                              if (!halfedge->is_boundary()) selected_elem_id = halfedge->id();
-                          }},
-               elem);
+                              if (!halfedge->is_boundary())
+                                  selected_elem_id = halfedge->id();
+                          }}, elem);
 }
 
 std::tuple<GL::Mesh &, GL::Instances &, GL::Instances &, GL::Instances &> Model::shapes()
@@ -256,11 +239,14 @@ std::tuple<GL::Mesh &, GL::Instances &, GL::Instances &, GL::Instances &> Model:
 std::optional<Halfedge_Mesh::ElementRef> Model::selected_element()
 {
 
-    if (!my_mesh) return std::nullopt;
-    if (my_mesh->render_dirty_flag) rebuild();
+    if (!my_mesh)
+        return std::nullopt;
+    if (my_mesh->render_dirty_flag)
+        rebuild();
 
     auto entry = id_to_info.find(selected_elem_id);
-    if (entry == id_to_info.end()) return std::nullopt;
+    if (entry == id_to_info.end())
+        return std::nullopt;
     return entry->second.ref;
 }
 
@@ -290,8 +276,7 @@ void Model::vertex_viz(Halfedge_Mesh::VertexRef v, float &size, Mat4 &transform)
     avg = avg / d;
     size = clamp(min, avg / 10.0f, avg);
 
-    transform = Mat4{Vec4{size, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, size, 0.0f, 0.0f},
-                     Vec4{0.0f, 0.0f, size, 0.0f}, Vec4{v->pos, 1.0f}};
+    transform = Mat4{Vec4{size, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, size, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, size, 0.0f}, Vec4{v->pos, 1.0f}};
 }
 
 void Model::edge_viz(Halfedge_Mesh::EdgeRef e, Mat4 &transform)
@@ -313,8 +298,7 @@ void Model::edge_viz(Halfedge_Mesh::EdgeRef e, Mat4 &transform)
     if (1.0f - std::abs(dir.y) < EPS_F)
     {
         l *= sign(dir.y);
-        transform = Mat4{Vec4{s, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, l, 0.0f, 0.0f},
-                         Vec4{0.0f, 0.0f, s, 0.0f}, Vec4{v0, 1.0f}};
+        transform = Mat4{Vec4{s, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, l, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, s, 0.0f}, Vec4{v0, 1.0f}};
     } else
     {
         Vec3 x = cross(dir, Vec3{0.0f, 1.0f, 0.0f}).unit();
@@ -371,19 +355,16 @@ void Model::halfedge_viz(Halfedge_Mesh::HalfedgeRef h, Mat4 &transform)
     if (1.0f - std::abs(dir.y) < EPS_F)
     {
         l *= sign(dir.y);
-        transform = Mat4{Vec4{s, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, l, 0.0f, 0.0f},
-                         Vec4{0.0f, 0.0f, s, 0.0f}, Vec4{v0 + offset, 1.0f}};
+        transform = Mat4{Vec4{s, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, l, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, s, 0.0f}, Vec4{v0 + offset, 1.0f}};
     } else
     {
         Vec3 x = cross(dir, Vec3{0.0f, 1.0f, 0.0f}).unit();
         Vec3 z = cross(x, dir).unit();
-        transform = Mat4{Vec4{x * s, 0.0f}, Vec4{dir * l, 0.0f}, Vec4{z * s, 0.0f},
-                         Vec4{v0 + offset, 1.0f}};
+        transform = Mat4{Vec4{x * s, 0.0f}, Vec4{dir * l, 0.0f}, Vec4{z * s, 0.0f}, Vec4{v0 + offset, 1.0f}};
     }
 }
 
-void Model::face_viz(Halfedge_Mesh::FaceRef face, std::vector<GL::Mesh::Vert> &verts,
-                     std::vector<GL::Mesh::Index> &idxs, size_t insert_at)
+void Model::face_viz(Halfedge_Mesh::FaceRef face, std::vector<GL::Mesh::Vert> &verts, std::vector<GL::Mesh::Index> &idxs, size_t insert_at)
 {
 
     std::vector<GL::Mesh::Vert> face_verts;
@@ -399,11 +380,14 @@ void Model::face_viz(Halfedge_Mesh::FaceRef face, std::vector<GL::Mesh::Vert> &v
 
     id_to_info[face->id()] = {face, insert_at};
 
-    if (face_verts.size() < 3) return;
+    if (face_verts.size() < 3)
+        return;
 
     size_t max = insert_at + (face_verts.size() - 2) * 3;
-    if (verts.size() < max) verts.resize(max);
-    if (idxs.size() < max) idxs.resize(max);
+    if (verts.size() < max)
+        verts.resize(max);
+    if (idxs.size() < max)
+        idxs.resize(max);
 
     Vec3 v0 = face_verts[0].pos;
     for (size_t i = 1; i <= face_verts.size() - 2; i++)
@@ -411,7 +395,8 @@ void Model::face_viz(Halfedge_Mesh::FaceRef face, std::vector<GL::Mesh::Vert> &v
         Vec3 v1 = face_verts[i].pos;
         Vec3 v2 = face_verts[i + 1].pos;
         Vec3 n = cross(v1 - v0, v2 - v0).unit();
-        if (my_mesh->flipped()) n = -n;
+        if (my_mesh->flipped())
+            n = -n;
 
         idxs[insert_at] = (GL::Mesh::Index) insert_at;
         verts[insert_at++] = {v0, n, id};
@@ -427,7 +412,8 @@ void Model::face_viz(Halfedge_Mesh::FaceRef face, std::vector<GL::Mesh::Vert> &v
 void Model::rebuild()
 {
 
-    if (!my_mesh) return;
+    if (!my_mesh)
+        return;
     Halfedge_Mesh &mesh = *my_mesh;
 
     mesh.render_dirty_flag = false;
@@ -440,7 +426,8 @@ void Model::rebuild()
 
     for (auto f = mesh.faces_begin(); f != mesh.faces_end(); f++)
     {
-        if (!f->is_boundary()) face_viz(f, verts, idxs, verts.size());
+        if (!f->is_boundary())
+            face_viz(f, verts, idxs, verts.size());
     }
     face_mesh.recreate(std::move(verts), std::move(idxs));
 
@@ -468,7 +455,8 @@ void Model::rebuild()
 
             // Unless both surrounding boundaries are the same face, in which case we should
             // render this edge to show that the next vertex is connected
-            if (e->halfedge()->face() != e->halfedge()->twin()->face()) continue;
+            if (e->halfedge()->face() != e->halfedge()->twin()->face())
+                continue;
         }
 
         Mat4 transform;
@@ -481,7 +469,8 @@ void Model::rebuild()
     for (auto h = mesh.halfedges_begin(); h != mesh.halfedges_end(); h++)
     {
 
-        if (h->is_boundary()) continue;
+        if (h->is_boundary())
+            continue;
 
         Mat4 transform;
         halfedge_viz(h, transform);
@@ -495,29 +484,24 @@ bool Model::begin_bevel(std::string &err)
 {
 
     auto sel = selected_element();
-    if (!sel.has_value()) return false;
+    if (!sel.has_value())
+        return false;
 
     my_mesh->copy_to(old_mesh);
 
-    auto new_face = std::visit(
-            overloaded{[&](Halfedge_Mesh::VertexRef vert)
-                       {
-                           beveling = Bevel::vert;
-                           return my_mesh->bevel_vertex(vert);
-                       },
-                       [&](Halfedge_Mesh::EdgeRef edge)
-                       {
-                           beveling = Bevel::edge;
-                           return my_mesh->bevel_edge(edge);
-                       },
-                       [&](Halfedge_Mesh::FaceRef face)
-                       {
-                           beveling = Bevel::face;
-                           return my_mesh->bevel_face(face);
-                       },
-                       [&](auto) -> std::optional<Halfedge_Mesh::FaceRef>
-                       { return std::nullopt; }},
-            *sel);
+    auto new_face = std::visit(overloaded{[&](Halfedge_Mesh::VertexRef vert)
+                                          {
+                                              beveling = Bevel::vert;
+                                              return my_mesh->bevel_vertex(vert);
+                                          }, [&](Halfedge_Mesh::EdgeRef edge)
+                                          {
+                                              beveling = Bevel::edge;
+                                              return my_mesh->bevel_edge(edge);
+                                          }, [&](Halfedge_Mesh::FaceRef face)
+                                          {
+                                              beveling = Bevel::face;
+                                              return my_mesh->bevel_face(face);
+                                          }, [&](auto) -> std::optional<Halfedge_Mesh::FaceRef> { return std::nullopt; }}, *sel);
 
     err = validate();
     if (!err.empty() || !new_face.has_value())
@@ -547,25 +531,20 @@ bool Model::begin_extrude(std::string &err)
 {
 
     auto sel = selected_element();
-    if (!sel.has_value()) return false;
+    if (!sel.has_value())
+        return false;
     Halfedge_Mesh::FaceRef f;
     my_mesh->copy_to(old_mesh);
 
-    std::optional<Halfedge_Mesh::ElementRef> new_obj = std::visit(
-            overloaded{[&](Halfedge_Mesh::FaceRef face)
-                       {
-                           beveling = Bevel::face;
-                           return std::optional<Halfedge_Mesh::ElementRef>{my_mesh->bevel_face(face)};
-                       },
-                       [&](Halfedge_Mesh::VertexRef vert)
-                       {
-                           beveling = Bevel::vert;
-                           return std::optional<Halfedge_Mesh::ElementRef>{
-                                   my_mesh->extrude_vertex(vert)};
-                       },
-                       [&](auto) -> std::optional<Halfedge_Mesh::ElementRef>
-                       { return std::nullopt; }},
-            *sel);
+    std::optional<Halfedge_Mesh::ElementRef> new_obj = std::visit(overloaded{[&](Halfedge_Mesh::FaceRef face)
+                                                                             {
+                                                                                 beveling = Bevel::face;
+                                                                                 return std::optional<Halfedge_Mesh::ElementRef>{my_mesh->bevel_face(face)};
+                                                                             }, [&](Halfedge_Mesh::VertexRef vert)
+                                                                             {
+                                                                                 beveling = Bevel::vert;
+                                                                                 return std::optional<Halfedge_Mesh::ElementRef>{my_mesh->extrude_vertex(vert)};
+                                                                             }, [&](auto) -> std::optional<Halfedge_Mesh::ElementRef> { return std::nullopt; }}, *sel);
 
     err = validate();
     if (!err.empty() || !new_obj.has_value())
@@ -582,8 +561,7 @@ bool Model::begin_extrude(std::string &err)
                                      trans_begin = {};
                                      trans_begin.verts.push_back(vert->pos);
                                      return true;
-                                 },
-                                 [&](Halfedge_Mesh::FaceRef face)
+                                 }, [&](Halfedge_Mesh::FaceRef face)
                                  {
                                      my_mesh->render_dirty_flag = true;
                                      set_selected(face);
@@ -598,17 +576,15 @@ bool Model::begin_extrude(std::string &err)
                                      } while (h != face->halfedge());
 
                                      return true;
-                                 },
-                                 [](auto) -> bool
-                                 { return false; }},
-                      elem);
+                                 }, [](auto) -> bool { return false; }}, elem);
 }
 
 bool Model::keydown(Widgets &widgets, SDL_Keysym key, Camera &cam)
 {
 
     auto sel = selected_element();
-    if (!sel.has_value()) return false;
+    if (!sel.has_value())
+        return false;
 
     if (std::holds_alternative<Halfedge_Mesh::HalfedgeRef>(*sel))
     {
@@ -649,16 +625,9 @@ bool Model::keydown(Widgets &widgets, SDL_Keysym key, Camera &cam)
             return true;
         case SDLK_h:
         {
-            std::visit(
-                    overloaded{[&](Halfedge_Mesh::VertexRef vert)
-                               { set_selected(vert->halfedge()); },
-                               [&](Halfedge_Mesh::EdgeRef edge)
-                               { set_selected(edge->halfedge()); },
-                               [&](Halfedge_Mesh::FaceRef face)
-                               { set_selected(face->halfedge()); },
-                               [&](auto)
-                               {}},
-                    *sel);
+            std::visit(overloaded{[&](Halfedge_Mesh::VertexRef vert) { set_selected(vert->halfedge()); },
+                                  [&](Halfedge_Mesh::EdgeRef edge) { set_selected(edge->halfedge()); },
+                                  [&](Halfedge_Mesh::FaceRef face) { set_selected(face->halfedge()); }, [&](auto) {}}, *sel);
         }
             return true;
         case SDLK_f:
@@ -672,8 +641,7 @@ bool Model::keydown(Widgets &widgets, SDL_Keysym key, Camera &cam)
 }
 
 template<typename T>
-std::string Model::update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before,
-                               Halfedge_Mesh::ElementRef ref, T &&op)
+std::string Model::update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, Halfedge_Mesh::ElementRef ref, T &&op)
 {
 
     unsigned int id = Halfedge_Mesh::id_of(ref);
@@ -695,8 +663,7 @@ std::string Model::update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&be
 }
 
 template<typename T>
-std::string Model::update_mesh_global(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before,
-                                      T &&op)
+std::string Model::update_mesh_global(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, T &&op)
 {
 
     bool success = op(*my_mesh);
@@ -810,7 +777,8 @@ std::string Model::UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj_opt, 
     }
 
     auto opt = set_my_obj(obj_opt);
-    if (!opt.has_value()) return {};
+    if (!opt.has_value())
+        return {};
     Scene_Object &obj = opt.value();
 
     Halfedge_Mesh &mesh = *my_mesh;
@@ -821,23 +789,17 @@ std::string Model::UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj_opt, 
     if (ImGui::Button("Linear"))
     {
         mesh.copy_to(before);
-        return update_mesh_global(undo, obj, std::move(before),
-                                  [](Halfedge_Mesh &m)
-                                  { return m.subdivide(SubD::linear); });
+        return update_mesh_global(undo, obj, std::move(before), [](Halfedge_Mesh &m) { return m.subdivide(SubD::linear); });
     }
     if (Manager::wrap_button("Catmull-Clark"))
     {
         mesh.copy_to(before);
-        return update_mesh_global(undo, obj, std::move(before),
-                                  [](Halfedge_Mesh &m)
-                                  { return m.subdivide(SubD::catmullclark); });
+        return update_mesh_global(undo, obj, std::move(before), [](Halfedge_Mesh &m) { return m.subdivide(SubD::catmullclark); });
     }
     if (Manager::wrap_button("Loop"))
     {
         mesh.copy_to(before);
-        return update_mesh_global(undo, obj, std::move(before),
-                                  [](Halfedge_Mesh &m)
-                                  { return m.subdivide(SubD::loop); });
+        return update_mesh_global(undo, obj, std::move(before), [](Halfedge_Mesh &m) { return m.subdivide(SubD::loop); });
     }
     if (ImGui::Button("Triangulate"))
     {
@@ -851,16 +813,12 @@ std::string Model::UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj_opt, 
     if (Manager::wrap_button("Remesh"))
     {
         mesh.copy_to(before);
-        return update_mesh_global(undo, obj, std::move(before),
-                                  [](Halfedge_Mesh &m)
-                                  { return m.isotropic_remesh(); });
+        return update_mesh_global(undo, obj, std::move(before), [](Halfedge_Mesh &m) { return m.isotropic_remesh(); });
     }
     if (Manager::wrap_button("Simplify"))
     {
         mesh.copy_to(before);
-        return update_mesh_global(undo, obj, std::move(before),
-                                  [](Halfedge_Mesh &m)
-                                  { return m.simplify(); });
+        return update_mesh_global(undo, obj, std::move(before), [](Halfedge_Mesh &m) { return m.simplify(); });
     }
 
     {
@@ -874,115 +832,91 @@ std::string Model::UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj_opt, 
             widgets.action_button(Widget_Type::scale, "Scale [s]");
             widgets.action_button(Widget_Type::bevel, "Bevel [b]");
             widgets.action_button(Widget_Type::extrude, "Extrude [e]");
-            std::string err = std::visit(
-                    overloaded{
-                            [&](Halfedge_Mesh::VertexRef vert) -> std::string
-                            {
-                                if (ImGui::Button("Erase [del]"))
-                                {
-                                    mesh.copy_to(before);
-                                    return update_mesh(
-                                            undo, obj, std::move(before), vert,
-                                            [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef vert)
-                                            {
-                                                return m.erase_vertex(std::get<Halfedge_Mesh::VertexRef>(vert));
-                                            });
-                                }
-                                return {};
-                            },
-                            [&](Halfedge_Mesh::EdgeRef edge) -> std::string
-                            {
-                                if (ImGui::Button("Erase [del]"))
-                                {
-                                    mesh.copy_to(before);
-                                    return update_mesh(
-                                            undo, obj, std::move(before), edge,
-                                            [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
-                                            {
-                                                return m.erase_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
-                                            });
-                                }
-                                if (Manager::wrap_button("Collapse"))
-                                {
-                                    mesh.copy_to(before);
-                                    return update_mesh(
-                                            undo, obj, std::move(before), edge,
-                                            [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
-                                            {
-                                                return m.collapse_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
-                                            });
-                                }
-                                if (Manager::wrap_button("Flip"))
-                                {
-                                    mesh.copy_to(before);
-                                    return update_mesh(
-                                            undo, obj, std::move(before), edge,
-                                            [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
-                                            {
-                                                return m.flip_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
-                                            });
-                                }
-                                if (Manager::wrap_button("Split"))
-                                {
-                                    mesh.copy_to(before);
-                                    return update_mesh(
-                                            undo, obj, std::move(before), edge,
-                                            [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
-                                            {
-                                                return m.split_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
-                                            });
-                                }
-                                if (Manager::wrap_button("Bisect"))
-                                {
-                                    mesh.copy_to(before);
-                                    return update_mesh(
-                                            undo, obj, std::move(before), edge,
-                                            [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
-                                            {
-                                                return m.bisect_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
-                                            });
-                                }
-                                return {};
-                            },
-                            [&](Halfedge_Mesh::FaceRef face) -> std::string
-                            {
-                                if (ImGui::Button("Collapse"))
-                                {
-                                    mesh.copy_to(before);
-                                    return update_mesh(
-                                            undo, obj, std::move(before), face,
-                                            [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef face)
-                                            {
-                                                return m.collapse_face(std::get<Halfedge_Mesh::FaceRef>(face));
-                                            });
-                                }
-                                if (ImGui::Button("Inset"))
-                                {
-                                    mesh.copy_to(before);
-                                    return update_mesh(
-                                            undo, obj, std::move(before), face,
-                                            [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef face)
-                                            {
-                                                return m.inset_face(std::get<Halfedge_Mesh::FaceRef>(face));
-                                            });
-                                }
-                                if (ImGui::Button("Inset Vertex"))
-                                {
-                                    mesh.copy_to(before);
-                                    return update_mesh(
-                                            undo, obj, std::move(before), face,
-                                            [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef face)
-                                            {
-                                                return m.inset_vertex(std::get<Halfedge_Mesh::FaceRef>(face));
-                                            });
-                                }
-                                return {};
-                            },
-                            [&](auto) -> std::string
-                            { return {}; }},
-                    *sel);
+            std::string err = std::visit(overloaded{[&](Halfedge_Mesh::VertexRef vert) -> std::string
+                                                    {
+                                                        if (ImGui::Button("Erase [del]"))
+                                                        {
+                                                            mesh.copy_to(before);
+                                                            return update_mesh(undo, obj, std::move(before), vert, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef vert)
+                                                            {
+                                                                return m.erase_vertex(std::get<Halfedge_Mesh::VertexRef>(vert));
+                                                            });
+                                                        }
+                                                        return {};
+                                                    }, [&](Halfedge_Mesh::EdgeRef edge) -> std::string
+                                                    {
+                                                        if (ImGui::Button("Erase [del]"))
+                                                        {
+                                                            mesh.copy_to(before);
+                                                            return update_mesh(undo, obj, std::move(before), edge, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
+                                                            {
+                                                                return m.erase_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
+                                                            });
+                                                        }
+                                                        if (Manager::wrap_button("Collapse"))
+                                                        {
+                                                            mesh.copy_to(before);
+                                                            return update_mesh(undo, obj, std::move(before), edge, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
+                                                            {
+                                                                return m.collapse_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
+                                                            });
+                                                        }
+                                                        if (Manager::wrap_button("Flip"))
+                                                        {
+                                                            mesh.copy_to(before);
+                                                            return update_mesh(undo, obj, std::move(before), edge, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
+                                                            {
+                                                                return m.flip_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
+                                                            });
+                                                        }
+                                                        if (Manager::wrap_button("Split"))
+                                                        {
+                                                            mesh.copy_to(before);
+                                                            return update_mesh(undo, obj, std::move(before), edge, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
+                                                            {
+                                                                return m.split_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
+                                                            });
+                                                        }
+                                                        if (Manager::wrap_button("Bisect"))
+                                                        {
+                                                            mesh.copy_to(before);
+                                                            return update_mesh(undo, obj, std::move(before), edge, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
+                                                            {
+                                                                return m.bisect_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
+                                                            });
+                                                        }
+                                                        return {};
+                                                    }, [&](Halfedge_Mesh::FaceRef face) -> std::string
+                                                    {
+                                                        if (ImGui::Button("Collapse"))
+                                                        {
+                                                            mesh.copy_to(before);
+                                                            return update_mesh(undo, obj, std::move(before), face, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef face)
+                                                            {
+                                                                return m.collapse_face(std::get<Halfedge_Mesh::FaceRef>(face));
+                                                            });
+                                                        }
+                                                        if (ImGui::Button("Inset"))
+                                                        {
+                                                            mesh.copy_to(before);
+                                                            return update_mesh(undo, obj, std::move(before), face, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef face)
+                                                            {
+                                                                return m.inset_face(std::get<Halfedge_Mesh::FaceRef>(face));
+                                                            });
+                                                        }
+                                                        if (ImGui::Button("Inset Vertex"))
+                                                        {
+                                                            mesh.copy_to(before);
+                                                            return update_mesh(undo, obj, std::move(before), face, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef face)
+                                                            {
+                                                                return m.inset_vertex(std::get<Halfedge_Mesh::FaceRef>(face));
+                                                            });
+                                                        }
+                                                        return {};
+                                                    }, [&](auto) -> std::string { return {}; }}, *sel);
 
-            if (!err.empty()) return err;
+            if (!err.empty())
+                return err;
         }
     }
 
@@ -1003,22 +937,19 @@ std::string Model::UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj_opt, 
                                       {
                                           set_selected(vert->halfedge());
                                       }
-                                  },
-                                  [&](Halfedge_Mesh::EdgeRef edge)
+                                  }, [&](Halfedge_Mesh::EdgeRef edge)
                                   {
                                       if (ImGui::Button("Halfedge [h]"))
                                       {
                                           set_selected(edge->halfedge());
                                       }
-                                  },
-                                  [&](Halfedge_Mesh::FaceRef face)
+                                  }, [&](Halfedge_Mesh::FaceRef face)
                                   {
                                       if (ImGui::Button("Halfedge [h]"))
                                       {
                                           set_selected(face->halfedge());
                                       }
-                                  },
-                                  [&](Halfedge_Mesh::HalfedgeRef halfedge)
+                                  }, [&](Halfedge_Mesh::HalfedgeRef halfedge)
                                   {
                                       if (ImGui::Button("Vertex [v]"))
                                       {
@@ -1040,8 +971,7 @@ std::string Model::UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj_opt, 
                                       {
                                           set_selected(halfedge->next());
                                       }
-                                  }},
-                       *sel);
+                                  }}, *sel);
         }
     }
 
@@ -1056,24 +986,20 @@ std::string Model::UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj_opt, 
             std::visit(overloaded{[&](Halfedge_Mesh::VertexRef vert)
                                   {
                                       ImGui::Text("Halfedge: %u", vert->halfedge()->id());
-                                  },
-                                  [&](Halfedge_Mesh::EdgeRef edge)
+                                  }, [&](Halfedge_Mesh::EdgeRef edge)
                                   {
                                       ImGui::Text("Halfedge: %u", edge->halfedge()->id());
-                                  },
-                                  [&](Halfedge_Mesh::FaceRef face)
+                                  }, [&](Halfedge_Mesh::FaceRef face)
                                   {
                                       ImGui::Text("Halfedge: %u", face->halfedge()->id());
-                                  },
-                                  [&](Halfedge_Mesh::HalfedgeRef halfedge)
+                                  }, [&](Halfedge_Mesh::HalfedgeRef halfedge)
                                   {
                                       ImGui::Text("Vertex: %u", halfedge->vertex()->id());
                                       ImGui::Text("Edge: %u", halfedge->edge()->id());
                                       ImGui::Text("Face: %u", halfedge->face()->id());
                                       ImGui::Text("Twin: %u", halfedge->twin()->id());
                                       ImGui::Text("Next: %u", halfedge->next()->id());
-                                  }},
-                       *sel);
+                                  }}, *sel);
         }
     }
 
@@ -1115,11 +1041,13 @@ void Model::erase_selected(Undo &undo, Scene_Maybe obj_opt)
 {
 
     auto opt = set_my_obj(obj_opt);
-    if (!opt.has_value()) return;
+    if (!opt.has_value())
+        return;
     Scene_Object &obj = opt.value();
 
     auto sel_ = selected_element();
-    if (!sel_.has_value()) return;
+    if (!sel_.has_value())
+        return;
 
     Halfedge_Mesh::ElementRef sel = sel_.value();
     Halfedge_Mesh &mesh = *my_mesh;
@@ -1129,26 +1057,17 @@ void Model::erase_selected(Undo &undo, Scene_Maybe obj_opt)
 
     std::visit(overloaded{[&](Halfedge_Mesh::VertexRef vert)
                           {
-                              return update_mesh(
-                                      undo, obj, std::move(before), vert,
-                                      [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef vert)
-                                      {
-                                          return m.erase_vertex(
-                                                  std::get<Halfedge_Mesh::VertexRef>(vert));
-                                      });
-                          },
-                          [&](Halfedge_Mesh::EdgeRef edge)
+                              return update_mesh(undo, obj, std::move(before), vert, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef vert)
+                              {
+                                  return m.erase_vertex(std::get<Halfedge_Mesh::VertexRef>(vert));
+                              });
+                          }, [&](Halfedge_Mesh::EdgeRef edge)
                           {
-                              return update_mesh(
-                                      undo, obj, std::move(before), edge,
-                                      [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
-                                      {
-                                          return m.erase_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
-                                      });
-                          },
-                          [](auto)
-                          { return std::string{}; }},
-               sel);
+                              return update_mesh(undo, obj, std::move(before), edge, [](Halfedge_Mesh &m, Halfedge_Mesh::ElementRef edge)
+                              {
+                                  return m.erase_edge(std::get<Halfedge_Mesh::EdgeRef>(edge));
+                              });
+                          }, [](auto) { return std::string{}; }}, sel);
 }
 
 void Model::clear_select()
@@ -1160,7 +1079,8 @@ void Model::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
 {
 
     auto obj = set_my_obj(obj_opt);
-    if (!obj.has_value()) return;
+    if (!obj.has_value())
+        return;
 
     Mat4 view = cam.get_view();
 
@@ -1224,8 +1144,7 @@ std::string Model::select(Widgets &widgets, Scene_ID click, Vec3 cam, Vec2 spos,
             return err;
         } else
         {
-            widgets.start_drag(Halfedge_Mesh::center_of(selected_element().value()), cam, spos,
-                               dir);
+            widgets.start_drag(Halfedge_Mesh::center_of(selected_element().value()), cam, spos, dir);
             apply_transform(widgets);
         }
 
@@ -1239,20 +1158,15 @@ std::string Model::select(Widgets &widgets, Scene_ID click, Vec3 cam, Vec2 spos,
             return err;
         } else
         {
-            std::visit(
-                    overloaded{[&](Halfedge_Mesh::VertexRef vert)
-                               {
-                                   widgets.start_drag(Halfedge_Mesh::center_of(vert), cam, spos, dir);
-                                   apply_transform(widgets);
-                               },
-                               [&](Halfedge_Mesh::FaceRef face)
-                               {
-                                   widgets.start_drag(Halfedge_Mesh::center_of(face), cam, spos, dir);
-                                   apply_transform(widgets);
-                               },
-                               [](auto)
-                               { return; }},
-                    selected_element().value());
+            std::visit(overloaded{[&](Halfedge_Mesh::VertexRef vert)
+                                  {
+                                      widgets.start_drag(Halfedge_Mesh::center_of(vert), cam, spos, dir);
+                                      apply_transform(widgets);
+                                  }, [&](Halfedge_Mesh::FaceRef face)
+                                  {
+                                      widgets.start_drag(Halfedge_Mesh::center_of(face), cam, spos, dir);
+                                      apply_transform(widgets);
+                                  }, [](auto) { return; }}, selected_element().value());
         }
 
     } else if (!widgets.is_dragging() && click >= n_Widget_IDs)

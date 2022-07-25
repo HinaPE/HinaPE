@@ -1,4 +1,3 @@
-
 #include "../rays/pathtracer.h"
 #include "../rays/samplers.h"
 #include "../util/rand.h"
@@ -170,22 +169,24 @@ std::pair<Spectrum, Spectrum> Pathtracer::trace(const Ray &ray)
 
     // TODO (PathTracer): Task 4
     // You will want to change the default normal_colors in debug.h, or delete this early out.
-    if (debug_data.normal_colors) return {Spectrum::direction(result.normal), {}};
+    if (debug_data.normal_colors)
+        return {Spectrum::direction(result.normal), {}};
 
     // If the BSDF is emissive, stop tracing and return the emitted light
     Spectrum emissive = bsdf.emissive();
-    if (emissive.luma() > 0.0f) return {emissive, {}};
+    if (emissive.luma() > 0.0f)
+        return {emissive, {}};
 
     // If the ray has reached maximum depth, stop tracing
-    if (ray.depth == 0) return {emissive, {}};
+    if (ray.depth == 0)
+        return {emissive, {}};
 
     // Set up shading information
     Mat4 object_to_world = Mat4::rotate_to(result.normal);
     Mat4 world_to_object = object_to_world.T();
     Vec3 out_dir = world_to_object.rotate(ray.point - result.position).unit();
 
-    Shading_Info hit = {bsdf, world_to_object, object_to_world, result.position,
-                        out_dir, result.normal, ray.depth};
+    Shading_Info hit = {bsdf, world_to_object, object_to_world, result.position, out_dir, result.normal, ray.depth};
 
     // Sample and return light reflected through the intersection
     return {emissive, sample_direct_lighting(hit) + sample_indirect_lighting(hit)};

@@ -31,8 +31,7 @@ private:
 class Animate
 {
 public:
-    Animate(Simulate &sim, Vec2 screen_dim)
-            : ui_camera(screen_dim), anim_camera(screen_dim), ui_render(screen_dim), simulate(sim)
+    Animate(Simulate &sim, Vec2 screen_dim) : ui_camera(screen_dim), anim_camera(screen_dim), ui_render(screen_dim), simulate(sim)
     {
     }
 
@@ -42,8 +41,7 @@ public:
     Vec3 selected_pos(Scene_Item &item);
     void end_transform(Undo &undo, Scene_Item &obj);
     void apply_transform(Widgets &widgets, Scene_Item &obj);
-    bool select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID id, Vec3 cam, Vec2 spos,
-                Vec3 dir);
+    bool select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir);
 
     void render(Scene &scene, Scene_Maybe obj_opt, Widgets &widgets, Camera &cam);
     void timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe obj, Camera &user_cam);

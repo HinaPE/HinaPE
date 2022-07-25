@@ -28,11 +28,9 @@ public:
     Scene_Item() = default;
 
     template<typename T>
-    Scene_Item(T &&obj) : data(std::forward<T &&>(obj))
-    {}
+    Scene_Item(T &&obj) : data(std::forward<T &&>(obj)) {}
 
-    Scene_Item(Scene_Item &&src) : data(std::move(src.data))
-    {}
+    Scene_Item(Scene_Item &&src) : data(std::move(src.data)) {}
 
     Scene_Item(const Scene_Item &src) = delete;
 
@@ -54,16 +52,13 @@ public:
     std::pair<char *, int> name();
 
     template<typename T>
-    bool is() const
-    { return std::holds_alternative<T>(data); }
+    bool is() const { return std::holds_alternative<T>(data); }
 
     template<typename T>
-    T &get()
-    { return std::get<T>(data); }
+    T &get() { return std::get<T>(data); }
 
     template<typename T>
-    const T &get() const
-    { return std::get<T>(data); }
+    const T &get() const { return std::get<T>(data); }
 
 private:
     std::variant<Scene_Object, Scene_Light, Scene_Particles> data;

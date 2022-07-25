@@ -1,12 +1,10 @@
-
 #include "../geometry/util.h"
 #include "../rays/pathtracer.h"
 
 #include "particles.h"
 #include "renderer.h"
 
-Scene_Particles::Scene_Particles(Scene_ID id)
-        : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(Util::sphere_mesh(1.0f, 1))
+Scene_Particles::Scene_Particles(Scene_ID id) : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(Util::sphere_mesh(1.0f, 1))
 {
 
     _id = id;
@@ -14,8 +12,7 @@ Scene_Particles::Scene_Particles(Scene_ID id)
     get_r();
 }
 
-Scene_Particles::Scene_Particles(Scene_ID id, GL::Mesh &&mesh)
-        : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(std::move(mesh))
+Scene_Particles::Scene_Particles(Scene_ID id, GL::Mesh &&mesh) : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(std::move(mesh))
 {
 
     _id = id;
@@ -23,8 +20,7 @@ Scene_Particles::Scene_Particles(Scene_ID id, GL::Mesh &&mesh)
     get_r();
 }
 
-Scene_Particles::Scene_Particles(Scene_ID id, Pose p, std::string name)
-        : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(Util::sphere_mesh(1.0f, 1))
+Scene_Particles::Scene_Particles(Scene_ID id, Pose p, std::string name) : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(Util::sphere_mesh(1.0f, 1))
 {
 
     _id = id;
@@ -100,7 +96,8 @@ void Scene_Particles::set_time(float time)
     if (panim.splines.any())
     {
         panim.at(time, opt);
-        if (!opt.enabled) clear();
+        if (!opt.enabled)
+            clear();
     }
     if (anim.splines.any())
     {
@@ -121,7 +118,8 @@ void Scene_Particles::step(const PT::Object &scene, float dt)
         clear();
         return;
     }
-    if (opt.dt < EPS_F) return;
+    if (opt.dt < EPS_F)
+        return;
 
     last_update += dt;
 
@@ -140,8 +138,7 @@ void Scene_Particles::gen_instances()
 
     for (Particle &p: particles)
     {
-        Mat4 T = Mat4{Vec4{opt.scale, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, opt.scale, 0.0f, 0.0f},
-                      Vec4{0.0f, 0.0f, opt.scale, 0.0f}, Vec4{p.pos, 1.0f}};
+        Mat4 T = Mat4{Vec4{opt.scale, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, opt.scale, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, opt.scale, 0.0f}, Vec4{p.pos, 1.0f}};
         particle_instances.add(T);
     }
 }
@@ -205,7 +202,6 @@ void Scene_Particles::Anim_Particles::set(float t, Scene_Particles::Options o)
 
 bool operator!=(const Scene_Particles::Options &l, const Scene_Particles::Options &r)
 {
-    return l.color != r.color || l.velocity != r.velocity || l.angle != r.angle ||
-           l.scale != r.scale || l.lifetime != r.lifetime || l.pps != r.pps ||
+    return l.color != r.color || l.velocity != r.velocity || l.angle != r.angle || l.scale != r.scale || l.lifetime != r.lifetime || l.pps != r.pps ||
            l.enabled != r.enabled || l.dt != r.dt;
 }

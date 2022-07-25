@@ -26,29 +26,14 @@ static const int n_Widget_Types = (int) Widget_Type::count;
 
 enum class Widget_IDs : Scene_ID
 {
-    none,
-    x_mov,
-    y_mov,
-    z_mov,
-    xy_mov,
-    yz_mov,
-    xz_mov,
-    x_rot,
-    y_rot,
-    z_rot,
-    x_scl,
-    y_scl,
-    z_scl,
-    xyz_scl,
-    count
+    none, x_mov, y_mov, z_mov, xy_mov, yz_mov, xz_mov, x_rot, y_rot, z_rot, x_scl, y_scl, z_scl, xyz_scl, count
 };
 static const int n_Widget_IDs = (int) Widget_IDs::count;
 
 class Widget_Camera
 {
 public:
-    Widget_Camera(Vec2 screen_dim)
-            : screen_dim(screen_dim), render_cam(screen_dim), saved_cam(screen_dim)
+    Widget_Camera(Vec2 screen_dim) : screen_dim(screen_dim), render_cam(screen_dim), saved_cam(screen_dim)
     {
         generate_cage();
     }
@@ -105,8 +90,7 @@ public:
     void animate(Scene &scene, Widget_Camera &cam, Camera &user_cam, int max_frame);
     std::string step(Animate &animate, Scene &scene);
 
-    std::string headless(Animate &animate, Scene &scene, const Camera &cam,
-                         const Launch_Settings &set);
+    std::string headless(Animate &animate, Scene &scene, const Camera &cam, const Launch_Settings &set);
 
     void log_ray(const Ray &ray, float t, Spectrum color = Spectrum{1.0f});
     void render_log(const Mat4 &view) const;

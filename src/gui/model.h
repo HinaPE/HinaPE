@@ -41,8 +41,7 @@ public:
 
 private:
     template<typename T>
-    std::string update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before,
-                            Halfedge_Mesh::ElementRef ref, T &&op);
+    std::string update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, Halfedge_Mesh::ElementRef ref, T &&op);
     template<typename T>
     std::string update_mesh_global(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, T &&op);
 
@@ -59,8 +58,7 @@ private:
     void vertex_viz(Halfedge_Mesh::VertexRef v, float &size, Mat4 &transform);
     void edge_viz(Halfedge_Mesh::EdgeRef e, Mat4 &transform);
     void halfedge_viz(Halfedge_Mesh::HalfedgeRef h, Mat4 &transform);
-    void face_viz(Halfedge_Mesh::FaceRef face, std::vector<GL::Mesh::Vert> &verts,
-                  std::vector<GL::Mesh::Index> &idxs, size_t insert_at);
+    void face_viz(Halfedge_Mesh::FaceRef face, std::vector<GL::Mesh::Vert> &verts, std::vector<GL::Mesh::Index> &idxs, size_t insert_at);
 
     std::string validate();
     std::string warn_msg, err_msg;
@@ -87,8 +85,7 @@ private:
     Transform_Data trans_begin;
     GL::Instances spheres, cylinders, arrows;
     GL::Mesh face_mesh;
-    Vec3 f_col = Vec3{1.0f}, v_col = Vec3{1.0f}, e_col = Vec3{0.8f}, he_col = Vec3{0.6f},
-            err_col = Vec3{1.0f, 0.0f, 0.0f};
+    Vec3 f_col = Vec3{1.0f}, v_col = Vec3{1.0f}, e_col = Vec3{0.8f}, he_col = Vec3{0.6f}, err_col = Vec3{1.0f, 0.0f, 0.0f};
 
     // This is a kind of bad design and would be un-necessary if we used
     // a halfedge implementation with contiguous iterators. For now this map must

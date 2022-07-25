@@ -1,13 +1,10 @@
-
 #include "material.h"
 
-const char *Material_Type_Names[(int) Material_Type::count] = {"Lambertian", "Mirror", "Refract",
-                                                               "Glass", "Diffuse Light"};
+const char *Material_Type_Names[(int) Material_Type::count] = {"Lambertian", "Mirror", "Refract", "Glass", "Diffuse Light"};
 
 bool operator!=(const Material::Options &l, const Material::Options &r)
 {
-    return l.albedo != r.albedo || l.emissive != r.emissive || l.ior != r.ior ||
-           l.reflectance != r.reflectance || l.transmittance != r.transmittance ||
+    return l.albedo != r.albedo || l.emissive != r.emissive || l.ior != r.ior || l.reflectance != r.reflectance || l.transmittance != r.transmittance ||
            l.type != r.type || l.intensity != r.intensity;
 }
 

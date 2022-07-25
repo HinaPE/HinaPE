@@ -1,4 +1,3 @@
-
 #include "../rays/samplers.h"
 #include "../util/rand.h"
 
@@ -108,7 +107,8 @@ float Sphere::Image::pdf(Vec3 dir) const
     float phi = std::atan2(dir.z, dir.x);
     float theta = acos(dir.y);
     float u = phi / (2.0f * PI_F);
-    if (u < 0.0f) u += 1.0f;
+    if (u < 0.0f)
+        u += 1.0f;
     float v = 1.0f - theta / PI_F;
     int i = (int) floor(u * w);
     int j = (int) floor(v * h);

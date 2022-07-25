@@ -1,4 +1,3 @@
-
 #include "rig.h"
 #include "../scene/renderer.h"
 #include "manager.h"
@@ -9,7 +8,8 @@ namespace Gui
 bool Rig::keydown(Widgets &widgets, Undo &undo, SDL_Keysym key)
 {
 
-    if (!my_obj) return false;
+    if (!my_obj)
+        return false;
 
 #ifdef __APPLE__
     if(key.sym == SDLK_BACKSPACE && key.mod & KMOD_GUI) {
@@ -94,13 +94,16 @@ void Rig::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
 
 void Rig::invalidate(Joint *j)
 {
-    if (selected == j) selected = nullptr;
-    if (new_joint == j) new_joint = nullptr;
+    if (selected == j)
+        selected = nullptr;
+    if (new_joint == j)
+        new_joint = nullptr;
 }
 
 void Rig::invalidate(Skeleton::IK_Handle *j)
 {
-    if (handle == j) handle = nullptr;
+    if (handle == j)
+        handle = nullptr;
 }
 
 void Rig::end_transform(Widgets &widgets, Undo &undo, Scene_Object &obj)
@@ -149,11 +152,11 @@ Vec3 Rig::selected_pos()
     return Vec3();
 }
 
-void Rig::select(Scene &scene, Widgets &widgets, Undo &undo, Scene_ID id, Vec3 cam, Vec2 spos,
-                 Vec3 dir)
+void Rig::select(Scene &scene, Widgets &widgets, Undo &undo, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir)
 {
 
-    if (!my_obj) return;
+    if (!my_obj)
+        return;
 
     if (creating_bone)
     {
@@ -217,13 +220,15 @@ void Rig::hover(Vec3 cam, Vec2 spos, Vec3 dir)
 
         Ray f(cam, dir);
         PT::Trace hit1 = mesh_bvh.hit(f);
-        if (!hit1.hit) return;
+        if (!hit1.hit)
+            return;
 
         Ray s(hit1.position + dir * EPS_F, dir);
         PT::Trace hit2 = mesh_bvh.hit(s);
 
         Vec3 pos = hit1.position;
-        if (hit2.hit) pos = 0.5f * (hit1.position + hit2.position);
+        if (hit2.hit)
+            pos = 0.5f * (hit1.position + hit2.position);
 
         new_joint->extent = pos - old_base;
         my_obj->set_skel_dirty();
@@ -233,15 +238,19 @@ void Rig::hover(Vec3 cam, Vec2 spos, Vec3 dir)
 Mode Rig::UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt)
 {
 
-    if (!my_obj) return Mode::rig;
+    if (!my_obj)
+        return Mode::rig;
 
-    if (!obj_opt.has_value()) return Mode::rig;
+    if (!obj_opt.has_value())
+        return Mode::rig;
 
     Scene_Item &item = obj_opt.value();
-    if (!item.is<Scene_Object>()) return Mode::rig;
+    if (!item.is<Scene_Object>())
+        return Mode::rig;
 
     Scene_Object &obj = item.get<Scene_Object>();
-    if (obj.opt.shape_type != PT::Shape_Type::none) return Mode::rig;
+    if (obj.opt.shape_type != PT::Shape_Type::none)
+        return Mode::rig;
 
     if (my_obj != &obj)
     {
@@ -295,14 +304,15 @@ Mode Rig::UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe 
 
         reskin |= ImGui::DragFloat3("Extent", selected->extent.data, 0.1f);
 
-        if (ImGui::IsItemActivated()) old_ext = selected->extent;
+        if (ImGui::IsItemActivated())
+            old_ext = selected->extent;
         if (ImGui::IsItemDeactivated() && old_ext != selected->extent)
             undo.move_bone(my_obj->id(), selected, old_ext);
 
-        reskin |= ImGui::DragFloat("Radius", &selected->radius, 0.01f, 0.0f,
-                                   std::numeric_limits<float>::infinity());
+        reskin |= ImGui::DragFloat("Radius", &selected->radius, 0.01f, 0.0f, std::numeric_limits<float>::infinity());
 
-        if (ImGui::IsItemActivated()) old_r = selected->radius;
+        if (ImGui::IsItemActivated())
+            old_r = selected->radius;
         if (ImGui::IsItemDeactivated() && old_r != selected->radius)
             undo.rad_bone(my_obj->id(), selected, old_r);
 
@@ -311,7 +321,8 @@ Mode Rig::UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe 
             my_obj->set_pose_dirty();
         }
 
-        if (ImGui::IsItemActivated()) old_pos = selected->pose;
+        if (ImGui::IsItemActivated())
+            old_pos = selected->pose;
         if (ImGui::IsItemDeactivated() && old_pos != selected->pose)
             undo.pose_bone(my_obj->id(), selected, old_pos);
 

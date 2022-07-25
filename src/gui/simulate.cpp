@@ -1,4 +1,3 @@
-
 #include "../geometry/util.h"
 #include "../scene/renderer.h"
 
@@ -8,8 +7,7 @@
 namespace Gui
 {
 
-const char *Solid_Type_Names[(int) Solid_Type::count] = {"Sphere", "Cube", "Cylinder", "Torus",
-                                                         "Custom"};
+const char *Solid_Type_Names[(int) Solid_Type::count] = {"Sphere", "Cube", "Cylinder", "Torus", "Custom"};
 
 Simulate::Simulate() : thread_pool(std::thread::hardware_concurrency())
 {
@@ -29,8 +27,7 @@ bool Simulate::keydown(Widgets &widgets, Undo &undo, SDL_Keysym key)
 
 void Simulate::step(Scene &scene, float dt)
 {
-    scene.for_items([this, dt](Scene_Item &item)
-                    { item.step(scene_obj, dt); });
+    scene.for_items([this, dt](Scene_Item &item) { item.step(scene_obj, dt); });
 }
 
 void Simulate::update_time()
@@ -58,13 +55,15 @@ void Simulate::update(Scene &scene, Undo &undo)
 void Simulate::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
 {
 
-    if (!obj_opt.has_value()) return;
+    if (!obj_opt.has_value())
+        return;
     Scene_Item &item = obj_opt.value();
 
     if (item.is<Scene_Light>())
     {
         Scene_Light &light = item.get<Scene_Light>();
-        if (light.is_env()) return;
+        if (light.is_env())
+            return;
     }
 
     Mat4 view = cam.get_view();
@@ -79,7 +78,8 @@ void Simulate::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
 void Simulate::build_scene(Scene &scene)
 {
 
-    if (!scene.has_sim()) return;
+    if (!scene.has_sim())
+        return;
 
     std::vector<PT::Object> obj_list;
     std::vector<std::future<PT::Object>> futures;
@@ -138,8 +138,7 @@ void Simulate::update_bvh(Scene &scene, Undo &undo)
     }
 }
 
-Mode Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets,
-                         Scene_Maybe obj_opt)
+Mode Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt)
 {
 
     Mode mode = Mode::simulate;
@@ -167,21 +166,19 @@ Mode Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &wi
         static Scene_Particles::Options gui_opt;
         static Solid_Type gui_type;
         ImGui::ColorEdit3("Color", gui_opt.color.data);
-        ImGui::DragFloat("Speed", &gui_opt.velocity, 0.1f, 0.0f, std::numeric_limits<float>::max(),
-                         "%.2f");
+        ImGui::DragFloat("Speed", &gui_opt.velocity, 0.1f, 0.0f, std::numeric_limits<float>::max(), "%.2f");
         ImGui::SliderFloat("Angle", &gui_opt.angle, 0.0f, 180.0f, "%.2f");
         ImGui::DragFloat("Scale", &gui_opt.scale, 0.01f, 0.01f, 1.0f, "%.2f");
-        ImGui::DragFloat("Lifetime", &gui_opt.lifetime, 0.01f, 0.0f,
-                         std::numeric_limits<float>::max(), "%.2f");
-        ImGui::DragFloat("Particles/Sec", &gui_opt.pps, 1.0f, 1.0f,
-                         std::numeric_limits<float>::max(), "%.2f");
+        ImGui::DragFloat("Lifetime", &gui_opt.lifetime, 0.01f, 0.0f, std::numeric_limits<float>::max(), "%.2f");
+        ImGui::DragFloat("Particles/Sec", &gui_opt.pps, 1.0f, 1.0f, std::numeric_limits<float>::max(), "%.2f");
         ImGui::Checkbox("Enabled", &gui_opt.enabled);
 
         int n_types = (int) Solid_Type::count;
         if (!scene.has_obj())
         {
             n_types--;
-            if (gui_type == Solid_Type::custom) gui_type = Solid_Type::sphere;
+            if (gui_type == Solid_Type::custom)
+                gui_type = Solid_Type::sphere;
         }
         ImGui::Combo("Particle", (int *) &gui_type, Solid_Type_Names, n_types);
 

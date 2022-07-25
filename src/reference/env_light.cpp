@@ -1,4 +1,3 @@
-
 #include "../rays/env_light.h"
 
 #include <limits>
@@ -41,7 +40,8 @@ Spectrum Env_Map::evaluate(Vec3 dir) const
     float phi = std::atan2(dir.z, dir.x);
     float theta = acos(dir.y);
     float u = phi / (2.0f * PI_F);
-    if (u < 0.0f) u += 1.0f;
+    if (u < 0.0f)
+        u += 1.0f;
     float v = 1.0f - theta / PI_F;
     int i = (int) floor(u * (float) w - 0.5f);
     int j = (int) floor(v * (float) h - 0.5f);
@@ -71,7 +71,8 @@ float Env_Hemisphere::pdf(Vec3 dir) const
 
 Spectrum Env_Hemisphere::evaluate(Vec3 dir) const
 {
-    if (dir.y > 0.0f) return radiance;
+    if (dir.y > 0.0f)
+        return radiance;
     return {};
 }
 

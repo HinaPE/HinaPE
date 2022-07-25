@@ -1,4 +1,3 @@
-
 #include "../rays/bvh.h"
 #include "debug.h"
 #include <stack>
@@ -48,7 +47,8 @@ void BVH<Primitive>::build(std::vector<Primitive> &&prims, size_t max_leaf_size)
     // Replace these
     std::stack<size_t> S;
     BBox box;
-    for (const Primitive &prim: primitives) box.enclose(prim.bbox());
+    for (const Primitive &prim: primitives)
+        box.enclose(prim.bbox());
 
     root_idx = new_node(box, 0, primitives.size(), 0, 0);
     S.push(root_idx);
@@ -221,15 +221,15 @@ void BVH<Primitive>::clear()
 }
 
 template<typename Primitive>
-size_t BVH<Primitive>::visualize(GL::Lines &lines, GL::Lines &active, size_t level,
-                                 const Mat4 &trans) const
+size_t BVH<Primitive>::visualize(GL::Lines &lines, GL::Lines &active, size_t level, const Mat4 &trans) const
 {
 
     std::stack<std::pair<size_t, size_t>> tstack;
     tstack.push({root_idx, 0});
     size_t max_level = 0;
 
-    if (nodes.empty()) return max_level;
+    if (nodes.empty())
+        return max_level;
 
     while (!tstack.empty())
     {
@@ -246,8 +246,7 @@ size_t BVH<Primitive>::visualize(GL::Lines &lines, GL::Lines &active, size_t lev
         box.transform(trans);
         Vec3 min = box.min, max = box.max;
 
-        auto edge = [&](Vec3 a, Vec3 b)
-        { add.add(a, b, color); };
+        auto edge = [&](Vec3 a, Vec3 b) { add.add(a, b, color); };
 
         edge(min, Vec3{max.x, min.y, min.z});
         edge(min, Vec3{min.x, max.y, min.z});

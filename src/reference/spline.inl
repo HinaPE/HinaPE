@@ -1,10 +1,8 @@
-
 #include "../geometry/spline.h"
 #include "debug.h"
 
 template<typename T>
-T Spline<T>::cubic_unit_spline(float time, const T &position0, const T &position1,
-                               const T &tangent0, const T &tangent1)
+T Spline<T>::cubic_unit_spline(float time, const T &position0, const T &position1, const T &tangent0, const T &tangent1)
 {
 
     // TODO (Animation): Task 1a
@@ -37,10 +35,14 @@ T Spline<T>::at(float time) const
     // Be wary of edge cases! What if time is before the first knot,
     // before the second knot, etc...
     size_t control_size = control_points.size();
-    if (control_size == 0) return T();
-    if (control_size == 1) return control_points.begin()->second;
-    if (control_points.begin()->first >= time) return control_points.begin()->second;
-    if (control_points.rbegin()->first <= time) return control_points.rbegin()->second;
+    if (control_size == 0)
+        return T();
+    if (control_size == 1)
+        return control_points.begin()->second;
+    if (control_points.begin()->first >= time)
+        return control_points.begin()->second;
+    if (control_points.rbegin()->first <= time)
+        return control_points.rbegin()->second;
 
     // More general case: use bound functions
     // auto upper = std::upper_bound(_cdf.begin(), _cdf.end(), rng);

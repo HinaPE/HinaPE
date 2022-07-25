@@ -1,4 +1,3 @@
-
 #include "pathtracer.h"
 #include "../geometry/util.h"
 #include "../gui/render.h"
@@ -9,9 +8,7 @@
 namespace PT
 {
 
-Pathtracer::Pathtracer(Gui::Widget_Render &gui, Vec2 screen_dim)
-        : thread_pool(std::thread::hardware_concurrency()), gui(gui), camera(screen_dim),
-          scene(List<Object>())
+Pathtracer::Pathtracer(Gui::Widget_Render &gui, Vec2 screen_dim) : thread_pool(std::thread::hardware_concurrency()), gui(gui), camera(screen_dim), scene(List<Object>())
 {
     accumulator_samples = 0;
     total_epochs = 0;
@@ -44,8 +41,7 @@ void Pathtracer::build_lights(Scene &layout_scene)
                                    {
                                        case Light_Type::directional:
                                        {
-                                           point_lights.push_back(
-                                                   Delta_Light(Directional_Light(r), light.id(), light.pose.transform()));
+                                           point_lights.push_back(Delta_Light(Directional_Light(r), light.id(), light.pose.transform()));
                                        }
                                            break;
                                        case Light_Type::sphere:
@@ -66,14 +62,12 @@ void Pathtracer::build_lights(Scene &layout_scene)
                                            break;
                                        case Light_Type::point:
                                        {
-                                           point_lights.push_back(
-                                                   Delta_Light(Point_Light(r), light.id(), light.pose.transform()));
+                                           point_lights.push_back(Delta_Light(Point_Light(r), light.id(), light.pose.transform()));
                                        }
                                            break;
                                        case Light_Type::spot:
                                        {
-                                           point_lights.push_back(Delta_Light(Spot_Light(r, light.opt.angle_bounds),
-                                                                              light.id(), light.pose.transform()));
+                                           point_lights.push_back(Delta_Light(Spot_Light(r, light.opt.angle_bounds), light.id(), light.pose.transform()));
                                        }
                                            break;
                                        default:
@@ -111,7 +105,8 @@ void Pathtracer::build_scene(Scene &layout_scene)
                                    unsigned int idx = (unsigned int) materials.size();
                                    const Material::Options &opt = obj.material.opt;
 
-                                   if (!obj.opt.render) return;
+                                   if (!obj.opt.render)
+                                       return;
 
                                    switch (opt.type)
                                    {
@@ -142,12 +137,10 @@ void Pathtracer::build_scene(Scene &layout_scene)
                                            // because PT::Object only supports sampling triangles
                                            if (obj.is_shape())
                                            {
-                                               area_light_list.push_back(Object(Tri_Mesh(obj.opt.shape.mesh(), false),
-                                                                                obj.id(), idx, obj.pose.transform()));
+                                               area_light_list.push_back(Object(Tri_Mesh(obj.opt.shape.mesh(), false), obj.id(), idx, obj.pose.transform()));
                                            } else
                                            {
-                                               area_light_list.push_back(Object(Tri_Mesh(obj.posed_mesh(), false), obj.id(),
-                                                                                idx, obj.pose.transform()));
+                                               area_light_list.push_back(Object(Tri_Mesh(obj.posed_mesh(), false), obj.id(), idx, obj.pose.transform()));
                                            }
                                        }
                                            break;
@@ -278,10 +271,12 @@ void Pathtracer::do_trace(size_t samples)
                     sampled++;
                 }
 
-                if (cancel_flag) return;
+                if (cancel_flag)
+                    return;
             }
 
-            if (sampled > 0) sample.at(i, j) *= (1.0f / sampled);
+            if (sampled > 0)
+                sample.at(i, j) *= (1.0f / sampled);
         }
     }
     accumulate(sample);
@@ -371,7 +366,8 @@ Vec3 Pathtracer::sample_area_lights(Vec3 from)
 {
     if (!area_lights.empty() && env_light.has_value())
     {
-        if (RNG::coin_flip(0.5f)) return env_light.value().sample();
+        if (RNG::coin_flip(0.5f))
+            return env_light.value().sample();
         return area_lights.sample(from);
     }
     if (env_light.has_value())
@@ -395,14 +391,16 @@ float Pathtracer::area_lights_pdf(Vec3 from, Vec3 dir)
         pdf += env_light.value().pdf(dir);
         n++;
     }
-    if (n) pdf /= n;
+    if (n)
+        pdf /= n;
     return pdf;
 }
 
 Spectrum Pathtracer::point_lighting(const Shading_Info &hit)
 {
 
-    if (hit.bsdf.is_discrete()) return {};
+    if (hit.bsdf.is_discrete())
+        return {};
 
     Spectrum radiance;
     for (auto &light: point_lights)
@@ -411,7 +409,8 @@ Spectrum Pathtracer::point_lighting(const Shading_Info &hit)
         Vec3 in_dir = hit.world_to_object.rotate(sample.direction);
 
         Spectrum attenuation = hit.bsdf.evaluate(hit.out_dir, in_dir);
-        if (attenuation.luma() == 0.0f) continue;
+        if (attenuation.luma() == 0.0f)
+            continue;
 
         Ray shadow_ray(hit.pos, sample.direction, Vec2{EPS_F, sample.distance - EPS_F});
 

@@ -1,4 +1,3 @@
-
 #include "../lib/log.h"
 
 #include "font.dat"
@@ -72,8 +71,7 @@ void Platform::platform_init()
 
     Vec2 wsize = Vec2(1280, 720);
 
-    window = SDL_CreateWindow("HinaPE is not a Physics Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              (int) wsize.x, (int) wsize.y,
+    window = SDL_CreateWindow("HinaPE is not a Physics Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, (int) wsize.x, (int) wsize.y,
                               SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
     if (!window)
     {
@@ -82,7 +80,8 @@ void Platform::platform_init()
 
     auto context = [&](int major, int minor)
     {
-        if (gl_context) return;
+        if (gl_context)
+            return;
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, major);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor);
         gl_context = SDL_GL_CreateContext(window);
@@ -90,12 +89,15 @@ void Platform::platform_init()
 
 #ifndef __APPLE__ // >:|
     context(4, 5);
-    if (!gl_context) info("Failed to create OpenGL 4.5 context, trying 4.1 (%s)", SDL_GetError());
+    if (!gl_context)
+        info("Failed to create OpenGL 4.5 context, trying 4.1 (%s)", SDL_GetError());
 #endif
     context(4, 1);
-    if (!gl_context) warn("Failed to create OpenGL 4.1 context, trying 3.3 (%s)", SDL_GetError());
+    if (!gl_context)
+        warn("Failed to create OpenGL 4.1 context, trying 3.3 (%s)", SDL_GetError());
     context(3, 3);
-    if (!gl_context) die("Failed to create OpenGL 3.3 context, shutting down (%s)", SDL_GetError());
+    if (!gl_context)
+        die("Failed to create OpenGL 3.3 context, shutting down (%s)", SDL_GetError());
 
     SDL_GL_MakeCurrent(window, gl_context);
     if (SDL_GL_SetSwapInterval(-1))
@@ -131,7 +133,8 @@ void Platform::set_dpi()
         return;
     }
     float scale = window_draw().x / window_size().x;
-    if (prev_dpi == dpi && prev_scale == scale) return;
+    if (prev_dpi == dpi && prev_scale == scale)
+        return;
 
     ImGuiStyle style;
     ImGui::StyleColorsDark(&style);
@@ -226,7 +229,8 @@ void Platform::loop(App &app)
             {
                 case SDL_QUIT:
                 {
-                    if (app.quit()) running = false;
+                    if (app.quit())
+                        running = false;
                 }
                     break;
             }

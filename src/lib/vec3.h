@@ -214,15 +214,22 @@ struct Vec3
     /// Make sure all components are in the range [min,max) with floating point mod logic
     Vec3 range(float min, float max) const
     {
-        if (!valid()) return Vec3();
+        if (!valid())
+            return Vec3();
         Vec3 r = *this;
         float range = max - min;
-        while (r.x < min) r.x += range;
-        while (r.x >= max) r.x -= range;
-        while (r.y < min) r.y += range;
-        while (r.y >= max) r.y -= range;
-        while (r.z < min) r.z += range;
-        while (r.z >= max) r.z -= range;
+        while (r.x < min)
+            r.x += range;
+        while (r.x >= max)
+            r.x -= range;
+        while (r.y < min)
+            r.y += range;
+        while (r.y >= max)
+            r.y -= range;
+        while (r.z < min)
+            r.z += range;
+        while (r.z >= max)
+            r.z -= range;
         return r;
     }
 

@@ -1,4 +1,3 @@
-
 #include <imgui/imgui.h>
 
 #include "layout.h"
@@ -18,13 +17,15 @@ bool Layout::keydown(Widgets &widgets, SDL_Keysym key)
 void Layout::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
 {
 
-    if (!obj_opt.has_value()) return;
+    if (!obj_opt.has_value())
+        return;
     Scene_Item &item = obj_opt.value();
 
     if (item.is<Scene_Light>())
     {
         Scene_Light &light = item.get<Scene_Light>();
-        if (light.is_env()) return;
+        if (light.is_env())
+            return;
     }
 
     Pose &pose = item.pose();
@@ -55,7 +56,8 @@ Vec3 Layout::selected_pos(Scene &scene)
 {
 
     auto obj = scene.get(selected_mesh);
-    if (obj.has_value()) return obj->get().pose().pos;
+    if (obj.has_value())
+        return obj->get().pose().pos;
     return {};
 }
 
@@ -85,7 +87,8 @@ void Layout::end_transform(Undo &undo, Scene_Item &obj)
 Mode Layout::UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt)
 {
 
-    if (!obj_opt.has_value()) return Mode::layout;
+    if (!obj_opt.has_value())
+        return Mode::layout;
     ImGui::Text("Object Options");
     Mode ret = manager.item_options(undo, Mode::layout, obj_opt.value(), old_pose);
     ImGui::Separator();

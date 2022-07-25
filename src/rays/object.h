@@ -17,26 +17,24 @@ namespace PT
 class Object
 {
 public:
-    Object(Shape &&shape, Scene_ID id, unsigned int m = 0, const Mat4 &T = Mat4::I)
-            : trans(T), itrans(T.inverse()), _id(id), material(m), underlying(std::move(shape))
+    Object(Shape &&shape, Scene_ID id, unsigned int m = 0, const Mat4 &T = Mat4::I) : trans(T), itrans(T.inverse()), _id(id), material(m), underlying(std::move(shape))
     {
         has_trans = trans != Mat4::I;
     }
 
-    Object(Tri_Mesh &&tri_mesh, Scene_ID id, unsigned int m = 0, const Mat4 &T = Mat4::I)
-            : trans(T), itrans(T.inverse()), _id(id), material(m), underlying(std::move(tri_mesh))
+    Object(Tri_Mesh &&tri_mesh, Scene_ID id, unsigned int m = 0, const Mat4 &T = Mat4::I) : trans(T), itrans(T.inverse()), _id(id), material(m),
+                                                                                            underlying(std::move(tri_mesh))
     {
         has_trans = trans != Mat4::I;
     }
 
-    Object(List<Object> &&list, Scene_ID id, unsigned int m = 0, const Mat4 &T = Mat4::I)
-            : trans(T), itrans(T.inverse()), _id(id), material(m), underlying(std::move(list))
+    Object(List<Object> &&list, Scene_ID id, unsigned int m = 0, const Mat4 &T = Mat4::I) : trans(T), itrans(T.inverse()), _id(id), material(m),
+                                                                                            underlying(std::move(list))
     {
         has_trans = trans != Mat4::I;
     }
 
-    Object(BVH<Object> &&bvh, Scene_ID id, unsigned int m = 0, const Mat4 &T = Mat4::I)
-            : trans(T), itrans(T.inverse()), _id(id), material(m), underlying(std::move(bvh))
+    Object(BVH<Object> &&bvh, Scene_ID id, unsigned int m = 0, const Mat4 &T = Mat4::I) : trans(T), itrans(T.inverse()), _id(id), material(m), underlying(std::move(bvh))
     {
         has_trans = trans != Mat4::I;
     }
@@ -45,14 +43,12 @@ public:
     {
     }
 
-    Object(List<Object> &&list, const Mat4 &T = Mat4::I)
-            : trans(T), itrans(T.inverse()), underlying(std::move(list))
+    Object(List<Object> &&list, const Mat4 &T = Mat4::I) : trans(T), itrans(T.inverse()), underlying(std::move(list))
     {
         has_trans = trans != Mat4::I;
     }
 
-    Object(BVH<Object> &&bvh, const Mat4 &T = Mat4::I)
-            : trans(T), itrans(T.inverse()), underlying(std::move(bvh))
+    Object(BVH<Object> &&bvh, const Mat4 &T = Mat4::I) : trans(T), itrans(T.inverse()), underlying(std::move(bvh))
     {
         has_trans = trans != Mat4::I;
     }
@@ -64,53 +60,47 @@ public:
 
     BBox bbox() const
     {
-        BBox box = std::visit([](const auto &o)
-                              { return o.bbox(); }, underlying);
-        if (has_trans) box.transform(trans);
+        BBox box = std::visit([](const auto &o) { return o.bbox(); }, underlying);
+        if (has_trans)
+            box.transform(trans);
         return box;
     }
 
     Trace hit(Ray ray) const
     {
-        if (has_trans) ray.transform(itrans);
-        Trace ret = std::visit([&ray](const auto &o)
-                               { return o.hit(ray); }, underlying);
+        if (has_trans)
+            ray.transform(itrans);
+        Trace ret = std::visit([&ray](const auto &o) { return o.hit(ray); }, underlying);
         if (ret.hit)
         {
-            if (material != -1) ret.material = material;
-            if (has_trans) ret.transform(trans, itrans.T());
+            if (material != -1)
+                ret.material = material;
+            if (has_trans)
+                ret.transform(trans, itrans.T());
         }
         return ret;
     }
 
     size_t visualize(GL::Lines &lines, GL::Lines &active, size_t level, Mat4 vtrans) const
     {
-        if (has_trans) vtrans = vtrans * trans;
-        return std::visit(
-                overloaded{
-                        [&](const BVH<Object> &bvh)
-                        { return bvh.visualize(lines, active, level, vtrans); },
-                        [&](const Tri_Mesh &mesh)
-                        { return mesh.visualize(lines, active, level, vtrans); },
-                        [](const auto &)
-                        { return size_t(0); }},
-                underlying);
+        if (has_trans)
+            vtrans = vtrans * trans;
+        return std::visit(overloaded{[&](const BVH<Object> &bvh) { return bvh.visualize(lines, active, level, vtrans); },
+                                     [&](const Tri_Mesh &mesh) { return mesh.visualize(lines, active, level, vtrans); }, [](const auto &) { return size_t(0); }},
+                          underlying);
     }
 
     Vec3 sample(Vec3 from) const
     {
-        if (has_trans) from = itrans * from;
-        Vec3 dir =
-                std::visit(overloaded{[from](const List<Object> &list)
-                                      { return list.sample(from); },
-                                      [from](const Tri_Mesh &mesh)
-                                      { return mesh.sample(from); },
-                                      [](const auto &) -> Vec3
-                                      {
-                                          die("Sampling implicit objects/BVHs is not yet supported.");
-                                      }},
-                           underlying);
-        if (has_trans) dir = trans.rotate(dir).unit();
+        if (has_trans)
+            from = itrans * from;
+        Vec3 dir = std::visit(overloaded{[from](const List<Object> &list) { return list.sample(from); }, [from](const Tri_Mesh &mesh) { return mesh.sample(from); },
+                                         [](const auto &) -> Vec3
+                                         {
+                                             die("Sampling implicit objects/BVHs is not yet supported.");
+                                         }}, underlying);
+        if (has_trans)
+            dir = trans.rotate(dir).unit();
         return dir;
     }
 
@@ -122,15 +112,11 @@ public:
             iT = itrans * iT;
         }
         return std::visit(
-                overloaded{[ray, T, iT](const List<Object> &list)
-                           { return list.pdf(ray, T, iT); },
-                           [ray, T, iT](const Tri_Mesh &mesh)
-                           { return mesh.pdf(ray, T, iT); },
+                overloaded{[ray, T, iT](const List<Object> &list) { return list.pdf(ray, T, iT); }, [ray, T, iT](const Tri_Mesh &mesh) { return mesh.pdf(ray, T, iT); },
                            [](const auto &) -> float
                            {
                                die("Sampling implicit objects/BVHs is not yet supported.");
-                           }},
-                underlying);
+                           }}, underlying);
     }
 
     Scene_ID id() const

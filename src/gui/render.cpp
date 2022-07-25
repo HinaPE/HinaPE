@@ -1,4 +1,3 @@
-
 #include <imgui/imgui.h>
 #include <nfd/nfd.h>
 #include <sf_libs/stb_image_write.h>
@@ -61,7 +60,8 @@ void Render::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &user_cam)
         if (item.is<Scene_Light>())
         {
             Scene_Light &light = item.get<Scene_Light>();
-            if (light.is_env()) return;
+            if (light.is_env())
+                return;
         }
 
         item.render(view);
@@ -78,7 +78,8 @@ const Camera &Render::get_cam() const
 void Render::load_cam(Vec3 pos, Vec3 center, float ar, float hfov, float ap, float dist)
 {
 
-    if (ar == 0.0f) ar = ui_render.wh_ar();
+    if (ar == 0.0f)
+        ar = ui_render.wh_ar();
 
     float fov = 2.0f * std::atan((1.0f / ar) * std::tan(hfov / 2.0f));
     fov = Degrees(fov);
@@ -92,8 +93,7 @@ void Render::load_cam(Vec3 pos, Vec3 center, float ar, float hfov, float ap, flo
     ui_camera.load(c);
 }
 
-Mode Render::UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe obj_opt,
-                       Camera &user_cam)
+Mode Render::UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe obj_opt, Camera &user_cam)
 {
 
     Mode mode = Mode::render;

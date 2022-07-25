@@ -30,31 +30,21 @@ struct DeformableBase<Type>::Impl
 };
 
 template<DeformableType Type>
-Vec3 DeformableBase<Type>::get_position() const
-{
-    return impl->p;
-}
+Vec3 DeformableBase<Type>::get_position() const { return impl->p; }
 
 template<DeformableType Type>
-Vec3 DeformableBase<Type>::get_rotation() const
-{
-    return impl->q.to_euler();
-}
+Vec3 DeformableBase<Type>::get_rotation() const { return impl->q.to_euler(); }
 
 template<DeformableType Type>
-void HinaPE::DeformableBase<Type>::set_position(const Vec3 &_p) const
-{ impl->p = _p; }
+void HinaPE::DeformableBase<Type>::set_position(const Vec3 &_p) const { impl->p = _p; }
 
 template<DeformableType Type>
-void HinaPE::DeformableBase<Type>::set_rotation(const Vec3 &_r) const
-{ /** TODO: implement **/}
+void HinaPE::DeformableBase<Type>::set_rotation(const Vec3 &_r) const { /** TODO: implement **/}
 
 template<DeformableType Type>
-const std::vector<Vec3> &DeformableBase<Type>::dirty_pos()
-{ return impl->positions; }
+const std::vector<Vec3> &DeformableBase<Type>::dirty_pos() { return impl->positions; }
 
 template<DeformableType Type>
-const std::vector<unsigned int> &DeformableBase<Type>::dirty_ind()
-{ return impl->indices; }
+const std::vector<unsigned int> &DeformableBase<Type>::dirty_ind() { return impl->indices; }
 
 }

@@ -1,4 +1,3 @@
-
 #include "thread_pool.h"
 #include "../util/rand.h"
 
@@ -30,7 +29,8 @@ void Thread_Pool::start(size_t threads)
                                          {
                                              return this->stop_now || this->stop_when_done || !this->tasks.empty();
                                          });
-                                         if (this->stop_now || (this->stop_when_done && this->tasks.empty())) return;
+                                         if (this->stop_now || (this->stop_when_done && this->tasks.empty()))
+                                             return;
                                          task = std::move(this->tasks.front());
                                          this->tasks.pop();
                                      }

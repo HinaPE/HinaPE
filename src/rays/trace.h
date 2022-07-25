@@ -18,11 +18,14 @@ struct Trace
     {
         if (l.hit && r.hit)
         {
-            if (l.distance < r.distance) return l;
+            if (l.distance < r.distance)
+                return l;
             return r;
         }
-        if (l.hit) return l;
-        if (r.hit) return r;
+        if (l.hit)
+            return l;
+        if (r.hit)
+            return r;
         return {};
     }
 

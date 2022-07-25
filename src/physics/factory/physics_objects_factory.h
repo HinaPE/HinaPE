@@ -36,5 +36,4 @@ public:
 };
 }
 
-
 #endif //HINAPE_PHYSICS_OBJECTS_FACTORY_H

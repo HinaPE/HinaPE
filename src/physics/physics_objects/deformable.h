@@ -35,8 +35,7 @@ private:
 };
 
 template<DeformableType Type>
-DeformableBase<Type>::DeformableBase() : impl(std::make_unique<Impl>())
-{}
+DeformableBase<Type>::DeformableBase() : impl(std::make_unique<Impl>()) {}
 
 template<DeformableType Type>
 DeformableBase<Type>::~DeformableBase() = default;

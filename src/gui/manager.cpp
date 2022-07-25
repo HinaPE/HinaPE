@@ -1,4 +1,3 @@
-
 #include <imgui/imgui.h>
 #include <nfd/nfd.h>
 
@@ -11,8 +10,7 @@
 namespace Gui
 {
 
-Manager::Manager(Scene &scene, Vec2 dim)
-        : render(scene, dim), animate(simulate, dim), baseplane(1.0f), window_dim(dim)
+Manager::Manager(Scene &scene, Vec2 dim) : render(scene, dim), animate(simulate, dim), baseplane(1.0f), window_dim(dim)
 {
     create_axis();
     create_baseplane();
@@ -72,7 +70,8 @@ void Manager::invalidate_obj(Scene_ID id)
 bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
 {
 
-    if (widgets.is_dragging()) return false;
+    if (widgets.is_dragging())
+        return false;
 
 #ifdef __APPLE__
     Uint16 mod = KMOD_GUI;
@@ -237,7 +236,8 @@ void Manager::load_scene(Scene &scene, Undo &undo, bool clear)
 
         char *path = nullptr;
         NFD_OpenDialog(scene_file_types, nullptr, &path);
-        if (!path) return;
+        if (!path)
+            return;
 
         if (clear)
         {
@@ -310,11 +310,9 @@ void Manager::particles_edit_gui(Undo &undo, Scene_Particles &particles)
     activate();
     ImGui::DragFloat("Scale", &opt.scale, 0.01f, 0.01f, std::numeric_limits<float>::max(), "%.2f");
     activate();
-    ImGui::DragFloat("Lifetime", &opt.lifetime, 0.01f, 0.0f, std::numeric_limits<float>::max(),
-                     "%.2f");
+    ImGui::DragFloat("Lifetime", &opt.lifetime, 0.01f, 0.0f, std::numeric_limits<float>::max(), "%.2f");
     activate();
-    ImGui::DragFloat("Particles/Sec", &opt.pps, 1.0f, 0.0f, std::numeric_limits<float>::max(),
-                     "%.2f");
+    ImGui::DragFloat("Particles/Sec", &opt.pps, 1.0f, 0.0f, std::numeric_limits<float>::max(), "%.2f");
     activate();
     ImGui::DragFloat("Timestep", &opt.dt, 0.001f, 0.0f, std::numeric_limits<float>::max(), "%.4f");
     activate();
@@ -376,8 +374,7 @@ void Manager::material_edit_gui(Undo &undo, Scene_ID obj_id, Material &material)
         {
             ImGui::ColorEdit3("Transmittance", opt.transmittance.data);
             activate();
-            ImGui::DragFloat("Index of Refraction", &opt.ior, 0.1f, 0.0f,
-                             std::numeric_limits<float>::max(), "%.2f");
+            ImGui::DragFloat("Index of Refraction", &opt.ior, 0.1f, 0.0f, std::numeric_limits<float>::max(), "%.2f");
             activate();
         }
             break;
@@ -387,8 +384,7 @@ void Manager::material_edit_gui(Undo &undo, Scene_ID obj_id, Material &material)
             activate();
             ImGui::ColorEdit3("Transmittance", opt.transmittance.data);
             activate();
-            ImGui::DragFloat("Index of Refraction", &opt.ior, 0.1f, 0.0f,
-                             std::numeric_limits<float>::max(), "%.2f");
+            ImGui::DragFloat("Index of Refraction", &opt.ior, 0.1f, 0.0f, std::numeric_limits<float>::max(), "%.2f");
             activate();
         }
             break;
@@ -396,8 +392,7 @@ void Manager::material_edit_gui(Undo &undo, Scene_ID obj_id, Material &material)
         {
             ImGui::ColorEdit3("Emissive", opt.emissive.data);
             activate();
-            ImGui::DragFloat("Intensity", &opt.intensity, 0.1f, 0.0f, std::numeric_limits<float>::max(),
-                             "%.2f");
+            ImGui::DragFloat("Intensity", &opt.intensity, 0.1f, 0.0f, std::numeric_limits<float>::max(), "%.2f");
             activate();
         }
             break;
@@ -419,14 +414,15 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
     auto sliders = [&](Widget_Type act, std::string label, Vec3 &data, float sens)
     {
         label += "##" + std::to_string(item.id());
-        if (ImGui::DragFloat3(label.c_str(), data.data, sens)) widgets.active = act;
-        if (ImGui::IsItemActivated()) old_pose = pose;
+        if (ImGui::DragFloat3(label.c_str(), data.data, sens))
+            widgets.active = act;
+        if (ImGui::IsItemActivated())
+            old_pose = pose;
         if (ImGui::IsItemDeactivatedAfterEdit() && old_pose != pose)
             undo.update_pose(item.id(), old_pose);
     };
 
-    if (!(item.is<Scene_Light>() && item.get<Scene_Light>().is_env()) &&
-        ImGui::CollapsingHeader("Edit Pose", ImGuiTreeNodeFlags_DefaultOpen))
+    if (!(item.is<Scene_Light>() && item.get<Scene_Light>().is_env()) && ImGui::CollapsingHeader("Edit Pose", ImGuiTreeNodeFlags_DefaultOpen))
     {
         ImGui::Indent();
 
@@ -458,7 +454,8 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
         bool U = false, E = false;
         auto activate = [&]()
         {
-            if (ImGui::IsItemActive()) E = true;
+            if (ImGui::IsItemActive())
+                E = true;
             if (ImGui::IsItemDeactivated() && old_opt != obj.opt)
                 U = true;
             else if (ImGui::IsItemActivated())
@@ -488,12 +485,14 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
                 {
                     update();
                 }
-                if (ImGui::Checkbox("Show Surface", &obj.opt.surface)) update();
-                if (ImGui::Checkbox("Show Wireframe", &obj.opt.wireframe)) update();
-                if (ImGui::Checkbox("Render", &obj.opt.render)) update();
+                if (ImGui::Checkbox("Show Surface", &obj.opt.surface))
+                    update();
+                if (ImGui::Checkbox("Show Wireframe", &obj.opt.wireframe))
+                    update();
+                if (ImGui::Checkbox("Render", &obj.opt.render))
+                    update();
             }
-            if (ImGui::Combo("Use Implicit Shape", (int *) &obj.opt.shape_type, PT::Shape_Type_Names,
-                             (int) PT::Shape_Type::count))
+            if (ImGui::Combo("Use Implicit Shape", (int *) &obj.opt.shape_type, PT::Shape_Type_Names, (int) PT::Shape_Type::count))
             {
                 if (obj.opt.shape_type == PT::Shape_Type::none)
                     obj.try_make_editable(start_opt.shape_type);
@@ -501,14 +500,15 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
             }
             if (obj.opt.shape_type == PT::Shape_Type::sphere)
             {
-                ImGui::DragFloat("Radius", &obj.opt.shape.get<PT::Sphere>().radius, 0.1f, 0.0f,
-                                 std::numeric_limits<float>::max(), "%.2f");
+                ImGui::DragFloat("Radius", &obj.opt.shape.get<PT::Sphere>().radius, 0.1f, 0.0f, std::numeric_limits<float>::max(), "%.2f");
                 activate();
             }
             ImGui::Unindent();
 
-            if (E) obj.set_mesh_dirty();
-            if (U) undo.update_object(obj.id(), old_opt);
+            if (E)
+                obj.set_mesh_dirty();
+            if (U)
+                undo.update_object(obj.id(), old_opt);
         }
         if (ImGui::CollapsingHeader("Edit Material", ImGuiTreeNodeFlags_DefaultOpen))
         {
@@ -531,7 +531,7 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
                     }
                     if (ImGui::Button("Attach Deformable"))
                     {
-//                        obj.attach_physics_object(HinaPE::ClothFactory::create_cloth());
+                        //                        obj.attach_physics_object(HinaPE::ClothFactory::create_cloth());
                         physics_object_type = HinaPE::PhysicsObjectType::Deformable;
                     }
                 }
@@ -620,7 +620,8 @@ void Manager::light_edit_gui(Undo &undo, Scene_Light &light)
 
     auto activate = [&]()
     {
-        if (ImGui::IsItemActive()) E = true;
+        if (ImGui::IsItemActive())
+            E = true;
         if (ImGui::IsItemDeactivated() && old_opt != light.opt)
             U = true;
         else if (ImGui::IsItemActivated())
@@ -642,8 +643,7 @@ void Manager::light_edit_gui(Undo &undo, Scene_Light &light)
         ImGui::ColorEdit3("Spectrum", light.opt.spectrum.data);
         activate();
 
-        ImGui::DragFloat("Intensity", &light.opt.intensity, 0.1f, 0.0f,
-                         std::numeric_limits<float>::max(), "%.2f");
+        ImGui::DragFloat("Intensity", &light.opt.intensity, 0.1f, 0.0f, std::numeric_limits<float>::max(), "%.2f");
         activate();
     }
 
@@ -694,8 +694,10 @@ void Manager::light_edit_gui(Undo &undo, Scene_Light &light)
             break;
     }
 
-    if (E) light.dirty();
-    if (U) undo.update_light(light.id(), old_opt);
+    if (E)
+        light.dirty();
+    if (U)
+        undo.update_light(light.id(), old_opt);
 }
 
 bool Manager::wrap_button(std::string label)
@@ -703,15 +705,16 @@ bool Manager::wrap_button(std::string label)
     ImGuiStyle &style = ImGui::GetStyle();
     float available_w = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
     float last_w = ImGui::GetItemRectMax().x;
-    float next_w = last_w + style.ItemSpacing.x + ImGui::CalcTextSize(label.c_str()).x +
-                   style.FramePadding.x * 2;
-    if (next_w < available_w) ImGui::SameLine();
+    float next_w = last_w + style.ItemSpacing.x + ImGui::CalcTextSize(label.c_str()).x + style.FramePadding.x * 2;
+    if (next_w < available_w)
+        ImGui::SameLine();
     return ImGui::Button(label.c_str());
 };
 
 void Manager::frame(Scene &scene, Camera &cam)
 {
-    if (!layout.selected()) return;
+    if (!layout.selected())
+        return;
 
     Vec3 center = layout.selected_pos(scene);
     Vec3 dir = cam.front() * cam.dist();
@@ -721,29 +724,29 @@ void Manager::frame(Scene &scene, Camera &cam)
 void Manager::UIsidebar(Scene &scene, Undo &undo, float menu_height, Camera &cam)
 {
 
-    const ImGuiWindowFlags flags =
-            ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
+    const ImGuiWindowFlags flags = ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing;
     static float anim_height = 0.0f;
 
     ImGui::SetNextWindowPos({0.0, menu_height});
 
     float h_cut = menu_height + (mode == Mode::animate ? anim_height : 0.0f);
 
-    ImGui::SetNextWindowSizeConstraints({window_dim.x / 4.75f, window_dim.y - h_cut},
-                                        {window_dim.x, window_dim.y - h_cut});
+    ImGui::SetNextWindowSizeConstraints({window_dim.x / 4.75f, window_dim.y - h_cut}, {window_dim.x, window_dim.y - h_cut});
     ImGui::Begin("Menu", nullptr, flags);
 
     if (mode == Mode::layout)
     {
         ImGui::Text("Edit Scene");
-        if (ImGui::Button("Open Scene")) load_scene(scene, undo, true);
-        if (wrap_button("Export Scene")) write_scene(scene);
+        if (ImGui::Button("Open Scene"))
+            load_scene(scene, undo, true);
+        if (wrap_button("Export Scene"))
+            write_scene(scene);
         if (wrap_button("Clear"))
         {
             std::vector<Scene_ID> ids;
-            scene.for_items([&](Scene_Item &item)
-                            { ids.push_back(item.id()); });
-            for (auto id: ids) undo.del_obj(id);
+            scene.for_items([&](Scene_Item &item) { ids.push_back(item.id()); });
+            for (auto id: ids)
+                undo.del_obj(id);
             undo.bundle_last(ids.size());
         }
 
@@ -771,8 +774,7 @@ void Manager::UIsidebar(Scene &scene, Undo &undo, float menu_height, Camera &cam
 
         scene.for_items([&](Scene_Item &obj)
                         {
-                            if ((mode == Mode::model || mode == Mode::rig) &&
-                                (!obj.is<Scene_Object>() || !obj.get<Scene_Object>().is_editable()))
+                            if ((mode == Mode::model || mode == Mode::rig) && (!obj.is<Scene_Object>() || !obj.get<Scene_Object>().is_editable()))
                                 return;
 
                             ImGui::PushID(obj.id());
@@ -793,8 +795,7 @@ void Manager::UIsidebar(Scene &scene, Undo &undo, float menu_height, Camera &cam
                             ImGui::PopID();
                         });
 
-        if (mode != Mode::model && mode != Mode::rig && layout.selected() &&
-            ImGui::Button("Center Object [f]"))
+        if (mode != Mode::model && mode != Mode::rig && layout.selected() && ImGui::Button("Center Object [f]"))
         {
             frame(scene, cam);
         }
@@ -839,7 +840,8 @@ void Manager::UIsidebar(Scene &scene, Undo &undo, float menu_height, Camera &cam
 
         case Mode::animate:
         {
-            if (layout.UIsidebar(*this, undo, widgets, selected) == Mode::model) mode = Mode::model;
+            if (layout.UIsidebar(*this, undo, widgets, selected) == Mode::model)
+                mode = Mode::model;
             animate.UIsidebar(*this, undo, selected, cam);
             ImGui::End();
             ImGui::SetNextWindowPos({0.0, window_dim.y}, ImGuiCond_Always, {0.0f, 1.0f});
@@ -887,8 +889,7 @@ void Manager::UInew_light(Scene &scene, Undo &undo)
 
     ImGui::SetNextWindowSizeConstraints({200.0f, 0.0f}, {FLT_MAX, FLT_MAX});
     ImGui::Begin("New Light", &new_light_window,
-                 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar |
-                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+                 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
     static Spectrum color = Spectrum(1.0f);
     static float intensity = 1.0f;
@@ -1020,15 +1021,15 @@ void Manager::UInew_obj(Undo &undo)
     {
         Halfedge_Mesh hm;
         hm.from_mesh(mesh);
-        if (flip) hm.flip();
+        if (flip)
+            hm.flip();
         undo.add_obj(std::move(hm), n);
         new_obj_window = false;
     };
 
     ImGui::SetNextWindowSizeConstraints({200.0f, 0.0f}, {FLT_MAX, FLT_MAX});
     ImGui::Begin("New Object", &new_obj_window,
-                 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar |
-                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+                 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
     if (ImGui::CollapsingHeader("Cube"))
     {
@@ -1166,7 +1167,8 @@ void Manager::UInew_obj(Undo &undo)
 
 void Manager::set_error(std::string msg)
 {
-    if (msg.empty()) return;
+    if (msg.empty())
+        return;
     error_msg = msg;
     error_shown = true;
 }
@@ -1202,13 +1204,12 @@ Animate &Manager::get_animate()
 void Manager::UIsavefirst(Scene &scene, Undo &undo)
 {
 
-    if (!save_first_shown) return;
+    if (!save_first_shown)
+        return;
 
     Vec2 center = window_dim / 2.0f;
     ImGui::SetNextWindowPos(Vec2{center.x, center.y}, 0, Vec2{0.5f, 0.5f});
-    ImGui::Begin("Save Changes?", &save_first_shown,
-                 ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoResize |
-                 ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Save Changes?", &save_first_shown, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
     if (ImGui::Button("Yes"))
     {
         save_first_shown = false;
@@ -1232,10 +1233,10 @@ void Manager::UIsavefirst(Scene &scene, Undo &undo)
 void Manager::UIsettings()
 {
 
-    if (!settings_shown) return;
+    if (!settings_shown)
+        return;
 
-    ImGui::Begin("Settings", &settings_shown,
-                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
+    ImGui::Begin("Settings", &settings_shown, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings);
 
     // TODO How can we use this checkbox to set this flag for all cameras?
     // ImGui::Text("Camera");
@@ -1252,8 +1253,7 @@ void Manager::UIsettings()
 
     ImGui::Separator();
     ImGui::Text("UI Renderer");
-    ImGui::Combo("Multisampling", (int *) &samples.samples, GL::Sample_Count_Names,
-                 samples.n_options());
+    ImGui::Combo("Multisampling", (int *) &samples.samples, GL::Sample_Count_Names, samples.n_options());
 
     if (ImGui::Button("Apply"))
     {
@@ -1269,7 +1269,8 @@ void Manager::UIsettings()
 
 void Manager::UIstudent()
 {
-    if (!debug_shown) return;
+    if (!debug_shown)
+        return;
     ImGui::Begin("Debug Data", &debug_shown, ImGuiWindowFlags_NoSavedSettings);
 #ifndef SCOTTY3D_BUILD_REF
     student_debug_ui();
@@ -1279,13 +1280,13 @@ void Manager::UIstudent()
 
 void Manager::UIerror()
 {
-    if (!error_shown) return;
+    if (!error_shown)
+        return;
     Vec2 center = window_dim / 2.0f;
     ImGui::SetNextWindowPos(Vec2{center.x, center.y}, 0, Vec2{0.5f, 0.5f});
-    ImGui::Begin("Errors", &error_shown,
-                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
-                 ImGuiWindowFlags_NoResize);
-    if (!error_msg.empty()) ImGui::Text("%s", error_msg.c_str());
+    ImGui::Begin("Errors", &error_shown, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoResize);
+    if (!error_msg.empty())
+        ImGui::Text("%s", error_msg.c_str());
     if (ImGui::Button("Close"))
     {
         error_shown = false;
@@ -1302,7 +1303,8 @@ float Manager::UImenu(Scene &scene, Undo &undo)
         if (active)
             ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonActive));
         bool clicked = ImGui::Button(name.c_str());
-        if (active) ImGui::PopStyleColor();
+        if (active)
+            ImGui::PopStyleColor();
         return clicked;
     };
 
@@ -1313,40 +1315,52 @@ float Manager::UImenu(Scene &scene, Undo &undo)
         if (ImGui::BeginMenu("File"))
         {
 
-            if (ImGui::MenuItem("Open Scene (Ctrl+o)")) load_scene(scene, undo, true);
-            if (ImGui::MenuItem("Export Scene (Ctrl+e)")) write_scene(scene);
-            if (ImGui::MenuItem("Save Scene (Ctrl+s)")) save_scene(scene, undo);
+            if (ImGui::MenuItem("Open Scene (Ctrl+o)"))
+                load_scene(scene, undo, true);
+            if (ImGui::MenuItem("Export Scene (Ctrl+e)"))
+                write_scene(scene);
+            if (ImGui::MenuItem("Save Scene (Ctrl+s)"))
+                save_scene(scene, undo);
             ImGui::EndMenu();
         }
 
         if (ImGui::BeginMenu("Edit"))
         {
 
-            if (ImGui::MenuItem("Undo (Ctrl+z)")) undo.undo();
-            if (ImGui::MenuItem("Redo (Ctrl+y)")) undo.redo();
-            if (ImGui::MenuItem("Edit Debug Data (Ctrl+d)")) debug_shown = true;
-            if (ImGui::MenuItem("Settings")) settings_shown = true;
+            if (ImGui::MenuItem("Undo (Ctrl+z)"))
+                undo.undo();
+            if (ImGui::MenuItem("Redo (Ctrl+y)"))
+                undo.redo();
+            if (ImGui::MenuItem("Edit Debug Data (Ctrl+d)"))
+                debug_shown = true;
+            if (ImGui::MenuItem("Settings"))
+                settings_shown = true;
             ImGui::EndMenu();
         }
 
         if (mode_button(Gui::Mode::layout, "Layout"))
         {
             mode = Gui::Mode::layout;
-            if (widgets.active == Widget_Type::bevel) widgets.active = Widget_Type::move;
+            if (widgets.active == Widget_Type::bevel)
+                widgets.active = Widget_Type::move;
         }
 
-        if (mode_button(Gui::Mode::model, "Model")) mode = Gui::Mode::model;
+        if (mode_button(Gui::Mode::model, "Model"))
+            mode = Gui::Mode::model;
 
-        if (mode_button(Gui::Mode::render, "Render")) mode = Gui::Mode::render;
+        if (mode_button(Gui::Mode::render, "Render"))
+            mode = Gui::Mode::render;
 
-        if (mode_button(Gui::Mode::rig, "Rig")) mode = Gui::Mode::rig;
+        if (mode_button(Gui::Mode::rig, "Rig"))
+            mode = Gui::Mode::rig;
 
-        if (mode_button(Gui::Mode::animate, "Animate")) mode = Gui::Mode::animate;
+        if (mode_button(Gui::Mode::animate, "Animate"))
+            mode = Gui::Mode::animate;
 
-        if (mode_button(Gui::Mode::simulate, "Simulate")) mode = Gui::Mode::simulate;
+        if (mode_button(Gui::Mode::simulate, "Simulate"))
+            mode = Gui::Mode::simulate;
 
         ImGui::Text("FPS: %.0f", ImGui::GetIO().Framerate);
-
 
         menu_height = ImGui::GetWindowSize().y;
         ImGui::EndMainMenuBar();
@@ -1358,18 +1372,16 @@ float Manager::UImenu(Scene &scene, Undo &undo)
 void Manager::UIbig_sim_button(Scene &scene, Undo &undo)
 {
     ImGui::SetNextWindowPos(Vec2{ImGui::GetIO().DisplaySize.x * 0.8f, ImGui::GetIO().DisplaySize.y * 0.2f});
-    ImGui::Begin("Sim", nullptr,
-                 ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
-                 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+    ImGui::Begin("Sim", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
     static std::string Sim = "Simulate";
     static std::string Stop = "Stop";
 
-//    static const ImVec4 pressColor { 0.5f, 0, 0, 1.0f };
-//    ImGui::PushStyleColor(ImGuiCol_Button, pressColor);
+    //    static const ImVec4 pressColor { 0.5f, 0, 0, 1.0f };
+    //    ImGui::PushStyleColor(ImGuiCol_Button, pressColor);
     if (ImGui::Button(simulate.running ? Stop.c_str() : Sim.c_str(), ImVec2(70, 30)))
         simulate.running = !simulate.running;
-//    ImGui::PopStyleColor(1);
+    //    ImGui::PopStyleColor(1);
 
     ImGui::End();
 }
@@ -1396,7 +1408,8 @@ void Manager::create_baseplane()
 void Manager::end_drag(Undo &undo, Scene &scene)
 {
 
-    if (!widgets.is_dragging()) return;
+    if (!widgets.is_dragging())
+        return;
 
     Scene_Item &obj = *scene.get(layout.selected());
 
@@ -1443,7 +1456,8 @@ void Manager::end_drag(Undo &undo, Scene &scene)
 void Manager::drag_to(Scene &scene, Vec3 cam, Vec2 spos, Vec3 dir)
 {
 
-    if (!widgets.is_dragging()) return;
+    if (!widgets.is_dragging())
+        return;
     Scene_Item &obj = *scene.get(layout.selected());
 
     Vec3 pos;

@@ -1,4 +1,3 @@
-
 #include "util.h"
 
 #include <map>
@@ -15,7 +14,8 @@ GL::Mesh arrow_mesh(float rbase, float rtip, float height)
 {
     Gen::Data base = Gen::cone(rbase, rbase, 0.75f * height, 10, true);
     Gen::Data tip = Gen::cone(rtip, 0.001f, 0.25f * height, 10, true);
-    for (auto &v: tip.verts) v.pos.y += 0.7f;
+    for (auto &v: tip.verts)
+        v.pos.y += 0.7f;
     return Gen::merge(std::move(base), std::move(tip));
 }
 
@@ -23,7 +23,8 @@ GL::Mesh scale_mesh()
 {
     Gen::Data base = Gen::cone(0.03f, 0.03f, 0.7f, 10, true);
     Gen::Data tip = Gen::cube(0.1f);
-    for (auto &v: tip.verts) v.pos.y += 0.7f;
+    for (auto &v: tip.verts)
+        v.pos.y += 0.7f;
     return Gen::merge(std::move(base), std::move(tip));
 }
 
@@ -80,14 +81,17 @@ GL::Mesh capsule_mesh(float h, float r)
 
     Gen::Data bottom = Gen::uv_hemisphere(r);
     Gen::Data top = Gen::uv_hemisphere(r);
-    for (auto &v: top.verts) v.pos.y = -v.pos.y + h;
+    for (auto &v: top.verts)
+        v.pos.y = -v.pos.y + h;
     Gen::Data cyl = Gen::cone(r, r, h, 64, false);
 
     GL::Mesh::Index cyl_off = (GL::Mesh::Index) bottom.verts.size();
     GL::Mesh::Index top_off = cyl_off + (GL::Mesh::Index) cyl.verts.size();
 
-    for (auto &i: cyl.elems) i += cyl_off;
-    for (auto &i: top.elems) i += top_off;
+    for (auto &i: cyl.elems)
+        i += cyl_off;
+    for (auto &i: top.elems)
+        i += top_off;
 
     bottom.verts.insert(bottom.verts.end(), cyl.verts.begin(), cyl.verts.end());
     bottom.elems.insert(bottom.elems.end(), cyl.elems.begin(), cyl.elems.end());
@@ -112,7 +116,8 @@ GL::Lines spotlight_mesh(Vec3 color, float inner, float outer)
     Gen::LData iring = Gen::circle(color, ri, steps);
     Gen::LData oring = Gen::circle(color, ro, steps);
     Gen::LData rings = Gen::merge(std::move(iring), std::move(oring));
-    for (auto &v: rings.verts) v.pos.y += 5.0f;
+    for (auto &v: rings.verts)
+        v.pos.y += 5.0f;
 
     float t = 0.0f;
     for (int i = 0; i < steps; i += steps / 4)
@@ -177,7 +182,8 @@ GL::Mesh generate(const std::vector<Vec3> &verts, const std::vector<unsigned int
 
 GL::Mesh merge(Data &&l, Data &&r)
 {
-    for (auto &i: r.elems) i += (GL::Mesh::Index) l.verts.size();
+    for (auto &i: r.elems)
+        i += (GL::Mesh::Index) l.verts.size();
     l.verts.insert(l.verts.end(), r.verts.begin(), r.verts.end());
     l.elems.insert(l.elems.end(), r.elems.begin(), r.elems.end());
     return GL::Mesh(std::move(l.verts), std::move(l.elems));
@@ -213,25 +219,25 @@ LData circle(Vec3 color, float r, int sides)
 
 Data quad(float x, float y)
 {
-    return {{{Vec3{-x, 0.0f, -y}, Vec3{0.0f, 1.0f, 0.0f}, 0},
-                    {Vec3{-x, 0.0f, y}, Vec3{0.0f, 1.0f, 0.0f}, 0},
-                       {Vec3{x, 0.0f, -y}, Vec3{0.0f, 1.0f, 0.0f}, 0},
-                          {Vec3{x, 0.0f, y}, Vec3{0.0f, 1.0f, 0.0f}, 0}},
-            {0,     1, 2, 2, 1, 3}};
+    return {{{Vec3{-x, 0.0f, -y}, Vec3{0.0f, 1.0f, 0.0f}, 0}, {Vec3{-x, 0.0f, y}, Vec3{0.0f, 1.0f, 0.0f}, 0}, {Vec3{x, 0.0f, -y}, Vec3{0.0f, 1.0f, 0.0f}, 0}, {Vec3{x,
+                                                                                                                                                                    0.0f,
+                                                                                                                                                                    y}, Vec3{
+            0.0f, 1.0f, 0.0f}, 0}},
+            {0,                                               1,                                              2,                                              2, 1, 3}};
 }
 
 Data cube(float r)
 {
-    return {{{Vec3{-r, -r, -r}, Vec3{-r, -r, -r}.unit(), 0},
-                    {Vec3{r, -r, -r}, Vec3{r, -r, -r}.unit(), 0},
-                       {Vec3{r, r, -r}, Vec3{r, r, -r}.unit(), 0},
-                          {Vec3{-r, r, -r}, Vec3{-r, r, -r}.unit(), 0},
-                             {Vec3{-r, -r, r}, Vec3{-r, -r, r}.unit(), 0},
-                                {Vec3{r, -r, r}, Vec3{r, -r, r}.unit(), 0},
-                                   {Vec3{r, r, r}, Vec3{r, r, r}.unit(), 0},
-                                      {Vec3{-r, r, r}, Vec3{-r, r, r}.unit(), 0}},
-            {0,     1, 3, 3, 1, 2, 1, 5, 2, 2, 5, 6, 5, 4, 6, 6, 4, 7,
-                    4, 0, 7, 7, 0, 3, 3, 2, 7, 7, 2, 6, 4, 5, 0, 0, 5, 1}};
+    return {{{Vec3{-r, -r, -r}, Vec3{-r, -r, -r}.unit(), 0}, {Vec3{r, -r, -r}, Vec3{r, -r, -r}.unit(), 0}, {Vec3{r, r, -r}, Vec3{r, r, -r}.unit(), 0}, {Vec3{-r, r,
+                                                                                                                                                             -r}, Vec3{-r,
+                                                                                                                                                                       r,
+                                                                                                                                                                       -r}.unit(), 0}, {Vec3{
+            -r, -r, r}, Vec3{-r, -r, r}.unit(), 0},                                                                                                                                       {Vec3{
+r, -r, r}, Vec3{r, -r, r}.unit(), 0},                                                                                                                                                        {Vec3{
+r, r, r}, Vec3{r, r, r}.unit(), 0},                                                                                                                                                             {Vec3{
+-r, r, r}, Vec3{-r, r,
+                                                                                                                                                                r}.unit(), 0}},
+            {0,                                              1,                                            3,                                          3,                              1, 2, 1, 5, 2, 2, 5, 6, 5, 4, 6, 6, 4, 7, 4, 0, 7, 7, 0, 3, 3, 2, 7, 7, 2, 6, 4, 5, 0, 0, 5, 1}};
 }
 
 // https://wiki.unity3d.com/index.php/ProceduralPrimitives
@@ -392,8 +398,7 @@ Data torus(float iradius, float oradius, int segments, int sides)
 
             int cur_side = side == n_sides ? 0 : side;
             float t2 = (float) cur_side / n_sides * _2pi;
-            Vec3 r2 = Mat4::rotate(Degrees(-t1), Vec3{0.0f, 1.0f, 0.0f}) *
-                      Vec3(std::sin(t2) * iradius, std::cos(t2) * iradius, 0.0f);
+            Vec3 r2 = Mat4::rotate(Degrees(-t1), Vec3{0.0f, 1.0f, 0.0f}) * Vec3(std::sin(t2) * iradius, std::cos(t2) * iradius, 0.0f);
 
             vertices[side + seg * (n_sides + 1)] = r1 + r2;
         }
@@ -409,8 +414,7 @@ Data torus(float iradius, float oradius, int segments, int sides)
 
         for (int side = 0; side <= n_sides; side++)
         {
-            normals[side + seg * (n_sides + 1)] =
-                    (vertices[side + seg * (n_sides + 1)] - r1).unit();
+            normals[side + seg * (n_sides + 1)] = (vertices[side + seg * (n_sides + 1)] - r1).unit();
         }
     }
 
@@ -476,7 +480,8 @@ Data uv_hemisphere(float radius)
     vertices[vertices.size() - 1] = Vec3{0.0f, -radius, 0.0f};
 
     std::vector<Vec3> normals(vertices.size());
-    for (size_t n = 0; n < vertices.size(); n++) normals[n] = vertices[n].unit();
+    for (size_t n = 0; n < vertices.size(); n++)
+        normals[n] = vertices[n].unit();
 
     int nbFaces = (int) vertices.size();
     int nbTriangles = nbFaces * 2;
@@ -524,8 +529,7 @@ Data ico_sphere(float radius, int level)
         int v1, v2, v3;
     };
 
-    auto middle_point = [&](int p1, int p2, std::vector<Vec3> &vertices,
-                            std::map<int64_t, size_t> &cache, float radius) -> size_t
+    auto middle_point = [&](int p1, int p2, std::vector<Vec3> &vertices, std::map<int64_t, size_t> &cache, float radius) -> size_t
     {
         bool firstIsSmaller = p1 < p2;
         int64_t smallerIndex = firstIsSmaller ? p1 : p2;
@@ -540,8 +544,7 @@ Data ico_sphere(float radius, int level)
 
         Vec3 point1 = vertices[p1];
         Vec3 point2 = vertices[p2];
-        Vec3 middle((point1.x + point2.x) / 2.0f, (point1.y + point2.y) / 2.0f,
-                    (point1.z + point2.z) / 2.0f);
+        Vec3 middle((point1.x + point2.x) / 2.0f, (point1.y + point2.y) / 2.0f, (point1.z + point2.z) / 2.0f);
         size_t i = vertices.size();
         vertices.push_back(middle.unit() * radius);
         cache[key] = i;
@@ -611,7 +614,8 @@ Data ico_sphere(float radius, int level)
     }
 
     std::vector<Vec3> normals(vertices.size());
-    for (size_t i = 0; i < normals.size(); i++) normals[i] = vertices[i].unit();
+    for (size_t i = 0; i < normals.size(); i++)
+        normals[i] = vertices[i].unit();
 
     std::vector<GL::Mesh::Vert> verts;
     for (size_t i = 0; i < vertices.size(); i++)

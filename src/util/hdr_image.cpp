@@ -1,4 +1,3 @@
-
 #include "hdr_image.h"
 #include "../lib/log.h"
 
@@ -42,7 +41,8 @@ void HDR_Image::resize(size_t _w, size_t _h)
 
 void HDR_Image::clear(Spectrum color)
 {
-    for (auto &s: pixels) s = color;
+    for (auto &s: pixels)
+        s = color;
     dirty = true;
 }
 
@@ -109,7 +109,8 @@ std::string HDR_Image::load_from(std::string file)
                     size_t didx = 4 * (j * w + i);
                     size_t pidx = (h - j - 1) * w + i;
                     pixels[pidx] = Spectrum(data[didx], data[didx + 1], data[didx + 2]);
-                    if (!pixels[pidx].valid()) pixels[pidx] = {};
+                    if (!pixels[pidx].valid())
+                        pixels[pidx] = {};
                 }
             }
 
@@ -124,8 +125,10 @@ std::string HDR_Image::load_from(std::string file)
         int n_w, n_h, channels;
         unsigned char *data = stbi_load(file.c_str(), &n_w, &n_h, &channels, 0);
 
-        if (!data) return std::string(stbi_failure_reason());
-        if (channels < 3) return "Image has less than 3 color channels.";
+        if (!data)
+            return std::string(stbi_failure_reason());
+        if (channels < 3)
+            return "Image has less than 3 color channels.";
 
         resize(n_w, n_h);
 
@@ -141,7 +144,8 @@ std::string HDR_Image::load_from(std::string file)
 
         for (size_t i = 0; i < pixels.size(); i++)
         {
-            if (!pixels[i].valid()) pixels[i] = {};
+            if (!pixels[i].valid())
+                pixels[i] = {};
             pixels[i] = pixels[i].to_linear();
         }
     }
@@ -168,7 +172,8 @@ void HDR_Image::tonemap(float e) const
         dirty = true;
     }
 
-    if (!dirty) return;
+    if (!dirty)
+        return;
 
     std::vector<unsigned char> data;
     tonemap_to(data, e);
@@ -191,7 +196,8 @@ void HDR_Image::tonemap_to(std::vector<unsigned char> &data, float e) const
         e = exposure;
     }
 
-    if (data.size() != w * h * 4) data.resize(w * h * 4);
+    if (data.size() != w * h * 4)
+        data.resize(w * h * 4);
 
     for (size_t j = 0; j < h; j++)
     {

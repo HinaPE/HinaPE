@@ -38,5 +38,4 @@ private:
 };
 }
 
-
 #endif //HINAPE_PHYSICS_SYSTEM_H

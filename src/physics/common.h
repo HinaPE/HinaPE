@@ -9,35 +9,28 @@ namespace HinaPE
 
 enum PhysicsObjectType : int
 {
-    Rigidbody = 0,
-    Deformable = 1,
-    Fluid = 2,
+    Rigidbody = 0, Deformable = 1, Fluid = 2,
 
     NOT_PHYSICS_OBJECT = -1
 };
 
 enum RigidBodyType : int
 {
-    DYNAMIC = 0,
-    STATIC = 1,
-    KINEMATIC = 2,
+    DYNAMIC = 0, STATIC = 1, KINEMATIC = 2,
 
     NOT_RIGIDBODY = -1
 };
 
 enum DeformableType : int
 {
-    CLOTH = 0,
-    MESH = 1,
+    CLOTH = 0, MESH = 1,
 
     NOT_DEFORMABLE = -1
 };
 
 enum FluidType : int
 {
-    PARTICLE = 0,
-    GRID = 1,
-    HYBRID = 2,
+    PARTICLE = 0, GRID = 1, HYBRID = 2,
 
     NOT_FLUID = -1
 };

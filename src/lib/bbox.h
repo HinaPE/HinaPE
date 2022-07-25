@@ -64,7 +64,8 @@ struct BBox
     /// Get surface area of the box
     float surface_area() const
     {
-        if (empty()) return 0.0f;
+        if (empty())
+            return 0.0f;
         Vec3 extent = max - min;
         return 2.0f * (extent.x * extent.z + extent.x * extent.y + extent.y * extent.z);
     }

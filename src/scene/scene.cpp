@@ -1,4 +1,3 @@
-
 #include <assimp/Exporter.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -35,84 +34,67 @@ Scene_Item &Scene_Item::operator=(Scene_Item &&src)
 
 void Scene_Item::set_time(float time)
 {
-    return std::visit([time](auto &obj)
-                      { obj.set_time(time); }, data);
+    return std::visit([time](auto &obj) { obj.set_time(time); }, data);
 }
 
 BBox Scene_Item::bbox()
 {
-    return std::visit([](auto &obj)
-                      { return obj.bbox(); }, data);
+    return std::visit([](auto &obj) { return obj.bbox(); }, data);
 }
 
 void Scene_Item::render(const Mat4 &view, bool solid, bool depth_only, bool posed)
 {
-    std::visit(
-            overloaded{[&](Scene_Object &obj)
-                       { obj.render(view, solid, depth_only, posed); },
-                       [&](Scene_Light &light)
-                       { light.render(view, depth_only, posed); },
-                       [&](Scene_Particles &particles)
-                       { particles.render(view, depth_only, posed); }},
-            data);
+    std::visit(overloaded{[&](Scene_Object &obj) { obj.render(view, solid, depth_only, posed); }, [&](Scene_Light &light) { light.render(view, depth_only, posed); },
+                          [&](Scene_Particles &particles) { particles.render(view, depth_only, posed); }}, data);
 }
 
 Scene_ID Scene_Item::id() const
 {
-    return std::visit([](auto &obj)
-                      { return obj.id(); }, data);
+    return std::visit([](auto &obj) { return obj.id(); }, data);
 }
 
 void Scene_Item::step(const PT::Object &scene, float dt)
 {
-    std::visit([&](auto &obj)
-               { obj.step(scene, dt); }, data);
+    std::visit([&](auto &obj) { obj.step(scene, dt); }, data);
 }
 
 Anim_Pose &Scene_Item::animation()
 {
 
-    return std::visit([](auto &obj) -> Anim_Pose &
-                      { return obj.anim; }, data);
+    return std::visit([](auto &obj) -> Anim_Pose & { return obj.anim; }, data);
 }
 
 const Anim_Pose &Scene_Item::animation() const
 {
 
-    return std::visit([](auto &obj) -> const Anim_Pose &
-                      { return obj.anim; }, data);
+    return std::visit([](auto &obj) -> const Anim_Pose & { return obj.anim; }, data);
 }
 
 Pose &Scene_Item::pose()
 {
 
-    return std::visit([](auto &obj) -> Pose &
-                      { return obj.pose; }, data);
+    return std::visit([](auto &obj) -> Pose & { return obj.pose; }, data);
 }
 
 const Pose &Scene_Item::pose() const
 {
 
-    return std::visit([](auto &obj) -> const Pose &
-                      { return obj.pose; }, data);
+    return std::visit([](auto &obj) -> const Pose & { return obj.pose; }, data);
 }
 
 std::pair<char *, int> Scene_Item::name()
 {
 
-    return std::visit(
-            [](auto &obj) -> std::pair<char *, int>
-            {
-                return {obj.opt.name, MAX_NAME_LEN};
-            },
-            data);
+    return std::visit([](auto &obj) -> std::pair<char *, int>
+                      {
+                          return {obj.opt.name, MAX_NAME_LEN};
+                      }, data);
 }
 
 std::string Scene_Item::name() const
 {
 
-    return std::visit([](auto &obj)
-                      { return std::string(obj.opt.name); }, data);
+    return std::visit([](auto &obj) { return std::string(obj.opt.name); }, data);
 }
 
 Scene::Scene(Scene_ID start) : next_id(start), first_id(start)
@@ -131,7 +113,8 @@ Scene_ID Scene::reserve_id()
 
 Scene_ID Scene::add(Pose pose, Halfedge_Mesh &&mesh, std::string n, Scene_ID id)
 {
-    if (!id) id = next_id++;
+    if (!id)
+        id = next_id++;
     assert(objs.find(id) == objs.end());
     objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n)));
     return id;
@@ -139,7 +122,8 @@ Scene_ID Scene::add(Pose pose, Halfedge_Mesh &&mesh, std::string n, Scene_ID id)
 
 Scene_ID Scene::add(Pose pose, GL::Mesh &&mesh, std::string n, Scene_ID id)
 {
-    if (!id) id = next_id++;
+    if (!id)
+        id = next_id++;
     assert(objs.find(id) == objs.end());
     objs.emplace(std::make_pair(id, Scene_Object(id, pose, std::move(mesh), n)));
     return id;
@@ -150,13 +134,15 @@ std::string Scene::set_env_map(std::string file)
     Scene_ID id = 0;
     for_items([&id](const Scene_Item &item)
               {
-                  if (item.is<Scene_Light>() && item.get<Scene_Light>().is_env()) id = item.id();
+                  if (item.is<Scene_Light>() && item.get<Scene_Light>().is_env())
+                      id = item.id();
               });
     Scene_Light l(Light_Type::sphere, reserve_id(), {}, "env_map");
     std::string err = l.emissive_load(file);
     if (err.empty())
     {
-        if (id) erase(id);
+        if (id)
+            erase(id);
         add(std::move(l));
     }
     return err;
@@ -175,22 +161,21 @@ bool Scene::has_env_light() const
 bool Scene::has_obj() const
 {
     bool ret = false;
-    for_items([&ret](const Scene_Item &item)
-              { ret = ret || item.is<Scene_Object>(); });
+    for_items([&ret](const Scene_Item &item) { ret = ret || item.is<Scene_Object>(); });
     return ret;
 }
 
 bool Scene::has_sim() const
 {
     bool ret = false;
-    for_items([&ret](const Scene_Item &item)
-              { ret = ret || item.is<Scene_Particles>(); });
+    for_items([&ret](const Scene_Item &item) { ret = ret || item.is<Scene_Particles>(); });
     return ret;
 }
 
 void Scene::restore(Scene_ID id)
 {
-    if (objs.find(id) != objs.end()) return;
+    if (objs.find(id) != objs.end())
+        return;
     assert(erased.find(id) != erased.end());
     objs.insert({id, std::move(erased[id])});
     erased.erase(id);
@@ -234,7 +219,8 @@ bool Scene::empty()
 Scene_Maybe Scene::get(Scene_ID id)
 {
     auto entry = objs.find(id);
-    if (entry == objs.end()) return std::nullopt;
+    if (entry == objs.end())
+        return std::nullopt;
     return entry->second;
 }
 
@@ -296,14 +282,13 @@ static Spectrum aiSpec(aiColor3D aiv)
 
 static aiMatrix4x4 matMat(const Mat4 &T)
 {
-    return {T[0][0], T[1][0], T[2][0], T[3][0], T[0][1], T[1][1], T[2][1], T[3][1],
-            T[0][2], T[1][2], T[2][2], T[3][2], T[0][3], T[1][3], T[2][3], T[3][3]};
+    return {T[0][0], T[1][0], T[2][0], T[3][0], T[0][1], T[1][1], T[2][1], T[3][1], T[0][2], T[1][2], T[2][2], T[3][2], T[0][3], T[1][3], T[2][3], T[3][3]};
 }
 
 static Mat4 aiMat(aiMatrix4x4 T)
 {
-    return Mat4{Vec4{T[0][0], T[1][0], T[2][0], T[3][0]}, Vec4{T[0][1], T[1][1], T[2][1], T[3][1]},
-                Vec4{T[0][2], T[1][2], T[2][2], T[3][2]}, Vec4{T[0][3], T[1][3], T[2][3], T[3][3]}};
+    return Mat4{Vec4{T[0][0], T[1][0], T[2][0], T[3][0]}, Vec4{T[0][1], T[1][1], T[2][1], T[3][1]}, Vec4{T[0][2], T[1][2], T[2][2], T[3][2]},
+                Vec4{T[0][3], T[1][3], T[2][3], T[3][3]}};
 }
 
 static aiMatrix4x4 node_transform(const aiNode *node)
@@ -337,7 +322,8 @@ static GL::Mesh mesh_from(const aiMesh *mesh, bool n_flip)
     for (unsigned int j = 0; j < mesh->mNumFaces; j++)
     {
         const aiFace &face = mesh->mFaces[j];
-        if (face.mNumIndices < 3) continue;
+        if (face.mNumIndices < 3)
+            continue;
         unsigned int start = face.mIndices[0];
         for (size_t k = 1; k <= face.mNumIndices - 2; k++)
         {
@@ -390,7 +376,8 @@ static vp_pair load_mesh(const aiMesh *mesh)
     for (unsigned int j = 0; j < mesh->mNumFaces; j++)
     {
         const aiFace &face = mesh->mFaces[j];
-        if (face.mNumIndices < 3) continue;
+        if (face.mNumIndices < 3)
+            continue;
         std::vector<Halfedge_Mesh::Index> poly;
         for (unsigned int k = 0; k < face.mNumIndices; k++)
         {
@@ -538,11 +525,9 @@ static Material::Options load_material(aiMaterial *ai_mat, float &was_sphere)
     return mat;
 }
 
-static void load_node(Scene &scobj, std::vector<std::string> &errors,
-                      std::unordered_map<aiNode *, Scene_ID> &node_to_obj,
-                      std::unordered_map<aiNode *, Joint *> &node_to_bone,
-                      std::unordered_map<aiNode *, Skeleton::IK_Handle *> &node_to_ik,
-                      const aiScene *scene, aiNode *node, aiMatrix4x4 transform)
+static void
+load_node(Scene &scobj, std::vector<std::string> &errors, std::unordered_map<aiNode *, Scene_ID> &node_to_obj, std::unordered_map<aiNode *, Joint *> &node_to_bone,
+          std::unordered_map<aiNode *, Skeleton::IK_Handle *> &node_to_ik, const aiScene *scene, aiNode *node, aiMatrix4x4 transform)
 {
 
     transform = transform * node->mTransformation;
@@ -559,14 +544,18 @@ static void load_node(Scene &scobj, std::vector<std::string> &errors,
         {
             name = std::string(mesh->mName.C_Str());
 
-            if (name.find(FAKE_NAME) != std::string::npos) continue;
+            if (name.find(FAKE_NAME) != std::string::npos)
+                continue;
 
             size_t special = name.find("-S3D-");
             if (special != std::string::npos)
             {
-                if (name.find(FLIPPED_TAG) != std::string::npos) do_flip = true;
-                if (name.find(SMOOTHED_TAG) != std::string::npos) do_smooth = true;
-                if (name.find(EMITTER_TAG) != std::string::npos) continue;
+                if (name.find(FLIPPED_TAG) != std::string::npos)
+                    do_flip = true;
+                if (name.find(SMOOTHED_TAG) != std::string::npos)
+                    do_smooth = true;
+                if (name.find(EMITTER_TAG) != std::string::npos)
+                    continue;
                 name = name.substr(0, special);
                 std::replace(name.begin(), name.end(), '_', ' ');
             }
@@ -582,8 +571,7 @@ static void load_node(Scene &scobj, std::vector<std::string> &errors,
         Pose p = {pos, Degrees(rot).range(0.0f, 360.0f), scale};
 
         float was_sphere = -1.0f;
-        Material::Options mat_opt =
-                load_material(scene->mMaterials[mesh->mMaterialIndex], was_sphere);
+        Material::Options mat_opt = load_material(scene->mMaterials[mesh->mMaterialIndex], was_sphere);
 
         Scene_Object new_obj;
 
@@ -611,7 +599,8 @@ static void load_node(Scene &scobj, std::vector<std::string> &errors,
             } else
             {
 
-                if (do_flip) hemesh.flip();
+                if (do_flip)
+                    hemesh.flip();
                 Scene_Object obj(scobj.reserve_id(), p, std::move(hemesh), name);
                 obj.opt.smooth_normals = do_smooth;
                 obj.set_mesh_dirty();
@@ -701,16 +690,14 @@ static void load_node(Scene &scobj, std::vector<std::string> &errors,
 
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        load_node(scobj, errors, node_to_obj, node_to_bone, node_to_ik, scene, node->mChildren[i],
-                  transform);
+        load_node(scobj, errors, node_to_obj, node_to_bone, node_to_ik, scene, node->mChildren[i], transform);
     }
 }
 
 static unsigned int load_flags(Scene::Load_Opts opt)
 {
 
-    unsigned int flags = aiProcess_OptimizeMeshes | aiProcess_FindInvalidData |
-                         aiProcess_FindInstances | aiProcess_FindDegenerates;
+    unsigned int flags = aiProcess_OptimizeMeshes | aiProcess_FindInvalidData | aiProcess_FindInstances | aiProcess_FindDegenerates;
 
     if (opt.drop_normals)
     {
@@ -771,8 +758,7 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
     scene->mRootNode->mTransformation = aiMatrix4x4();
 
     // Load objects
-    load_node(*this, errors, node_to_obj, node_to_bone, node_to_ik, scene, scene->mRootNode,
-              aiMatrix4x4());
+    load_node(*this, errors, node_to_obj, node_to_bone, node_to_ik, scene, scene->mRootNode, aiMatrix4x4());
 
     // Load cameras
     if (loader.new_scene && scene->mNumCameras > 0)
@@ -788,12 +774,10 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
             std::string name(aiCam.mName.C_Str());
             if (name.find(ANIM_CAM_NAME) != std::string::npos)
             {
-                gui.get_animate().load_cam(pos, center, aiCam.mAspect, aiCam.mHorizontalFOV,
-                                           aiCam.mClipPlaneNear, aiCam.mClipPlaneFar);
+                gui.get_animate().load_cam(pos, center, aiCam.mAspect, aiCam.mHorizontalFOV, aiCam.mClipPlaneNear, aiCam.mClipPlaneFar);
             } else
             {
-                gui.get_render().load_cam(pos, center, aiCam.mAspect, aiCam.mHorizontalFOV,
-                                          aiCam.mClipPlaneNear, aiCam.mClipPlaneFar);
+                gui.get_render().load_cam(pos, center, aiCam.mAspect, aiCam.mHorizontalFOV, aiCam.mClipPlaneNear, aiCam.mClipPlaneFar);
             }
         };
 
@@ -909,13 +893,14 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
     bool loaded = false;
     auto load_anim = [&loaded](aiNodeAnim *node, std::string name, auto set_frame)
     {
-        if (loaded) return;
+        if (loaded)
+            return;
         std::string node_name(node->mNodeName.C_Str());
-        if (node_name.find(name) == std::string::npos) return;
+        if (node_name.find(name) == std::string::npos)
+            return;
 
         loaded = true;
-        unsigned int keys = std::min(node->mNumPositionKeys,
-                                     std::min(node->mNumRotationKeys, node->mNumScalingKeys));
+        unsigned int keys = std::min(node->mNumPositionKeys, std::min(node->mNumRotationKeys, node->mNumScalingKeys));
 
         for (unsigned int k = 0; k < keys; k++)
         {
@@ -931,7 +916,8 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
     {
         aiNode *obj_node = scene->mRootNode->FindNode(node->mNodeName);
         auto entry = node_to_obj.find(obj_node);
-        if (entry == node_to_obj.end()) return 0;
+        if (entry == node_to_obj.end())
+            return 0;
         return entry->second;
     };
 
@@ -939,7 +925,8 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
     {
         aiNode *obj_node = scene->mRootNode->FindNode(node->mNodeName);
         auto entry = node_to_bone.find(obj_node);
-        if (entry == node_to_bone.end()) return nullptr;
+        if (entry == node_to_bone.end())
+            return nullptr;
         return entry->second;
     };
 
@@ -947,7 +934,8 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
     {
         aiNode *obj_node = scene->mRootNode->FindNode(node->mNodeName);
         auto entry = node_to_ik.find(obj_node);
-        if (entry == node_to_ik.end()) return nullptr;
+        if (entry == node_to_ik.end())
+            return nullptr;
         return entry->second;
     };
 
@@ -975,22 +963,19 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
             Joint *jt = get_bone(node);
             if (jt)
             {
-                load_anim(node, JOINT_TAG,
-                          [jt](float t, Vec3 p, Quat q, Vec3 s)
-                          { jt->anim.set(t, q); });
+                load_anim(node, JOINT_TAG, [jt](float t, Vec3 p, Quat q, Vec3 s) { jt->anim.set(t, q); });
             }
 
             // Load animated IK handles
             Skeleton::IK_Handle *h = get_ik(node);
             if (h)
             {
-                load_anim(node, IK_TAG,
-                          [h](float t, Vec3 p, Quat q, Vec3 s)
-                          { h->anim.set(t, p, s.x > 1.0f); });
+                load_anim(node, IK_TAG, [h](float t, Vec3 p, Quat q, Vec3 s) { h->anim.set(t, p, s.x > 1.0f); });
             }
 
             Scene_ID id = get_id(node);
-            if (!id) continue;
+            if (!id)
+                continue;
 
             // Load animated light
             load_anim(node, LIGHT_ANIM, [&](float t, Vec3 p, Quat q, Vec3 s)
@@ -1005,8 +990,7 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
             {
                 Scene_Particles::Anim_Particles &particles = get<Scene_Particles>(id).panim;
                 Vec3 a = q.to_euler();
-                particles.splines.set(t, Spectrum{std::abs(p.x), p.y, p.z}, s.z - 1.0f, a.z, a.x,
-                                      s.y - 1.0f, s.x - 1.0f, p.x > 0.0f);
+                particles.splines.set(t, Spectrum{std::abs(p.x), p.y, p.z}, s.z - 1.0f, a.z, a.x, s.y - 1.0f, s.x - 1.0f, p.x > 0.0f);
             });
 
             // Load animated material part 1
@@ -1049,8 +1033,7 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
 
         if (anim->mDuration > 0.0f)
         {
-            gui.get_animate().set((int) std::ceil(anim->mDuration),
-                                  (int) std::round(anim->mTicksPerSecond), loader.new_scene);
+            gui.get_animate().set((int) std::ceil(anim->mDuration), (int) std::round(anim->mTicksPerSecond), loader.new_scene);
         }
     }
     gui.get_animate().refresh(*this);
@@ -1058,8 +1041,7 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
     std::stringstream stream;
     if (errors.size())
     {
-        stream << "Meshes with errors may not be edit-able in the model mode." << std::endl
-               << std::endl;
+        stream << "Meshes with errors may not be edit-able in the model mode." << std::endl << std::endl;
     }
     for (size_t i = 0; i < errors.size(); i++)
     {
@@ -1068,8 +1050,7 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
     return stream.str();
 }
 
-static void write_particles(aiLight *ai_light, const Scene_Particles::Options &opt,
-                            std::string name)
+static void write_particles(aiLight *ai_light, const Scene_Particles::Options &opt, std::string name)
 {
 
     Spectrum r = opt.color;
@@ -1085,8 +1066,7 @@ static void write_particles(aiLight *ai_light, const Scene_Particles::Options &o
     ai_light->mAttenuationQuadratic = opt.enabled ? opt.angle : -opt.angle;
 }
 
-static std::string write_light(aiLight *ai_light, const Scene_Light::Options &opt, std::string name,
-                               Scene_ID id, std::string map)
+static std::string write_light(aiLight *ai_light, const Scene_Light::Options &opt, std::string name, Scene_ID id, std::string map)
 {
 
     Spectrum r = opt.spectrum * opt.intensity;
@@ -1191,15 +1171,10 @@ static void write_material(aiMaterial *ai_mat, const Material::Options &opt, flo
     Spectrum emissive = opt.emissive * opt.intensity;
 
     ai_mat->AddProperty(new aiString(mat_name), AI_MATKEY_NAME);
-    ai_mat->AddProperty(new aiColor3D(opt.albedo.r, opt.albedo.g, opt.albedo.b), 1,
-                        AI_MATKEY_COLOR_DIFFUSE);
-    ai_mat->AddProperty(new aiColor3D(opt.reflectance.r, opt.reflectance.g, opt.reflectance.b), 1,
-                        AI_MATKEY_COLOR_REFLECTIVE);
-    ai_mat->AddProperty(
-            new aiColor3D(opt.transmittance.r, opt.transmittance.g, opt.transmittance.b), 1,
-            AI_MATKEY_COLOR_TRANSPARENT);
-    ai_mat->AddProperty(new aiColor3D(emissive.r, emissive.g, emissive.b), 1,
-                        AI_MATKEY_COLOR_EMISSIVE);
+    ai_mat->AddProperty(new aiColor3D(opt.albedo.r, opt.albedo.g, opt.albedo.b), 1, AI_MATKEY_COLOR_DIFFUSE);
+    ai_mat->AddProperty(new aiColor3D(opt.reflectance.r, opt.reflectance.g, opt.reflectance.b), 1, AI_MATKEY_COLOR_REFLECTIVE);
+    ai_mat->AddProperty(new aiColor3D(opt.transmittance.r, opt.transmittance.g, opt.transmittance.b), 1, AI_MATKEY_COLOR_TRANSPARENT);
+    ai_mat->AddProperty(new aiColor3D(emissive.r, emissive.g, emissive.b), 1, AI_MATKEY_COLOR_EMISSIVE);
     ai_mat->AddProperty(new float(opt.ior), 1, AI_MATKEY_REFRACTI);
     ai_mat->AddProperty(new float(opt.intensity), 1, AI_MATKEY_SHININESS);
 }
@@ -1230,7 +1205,8 @@ static void write_hemesh(aiMesh *ai_mesh, const Halfedge_Mesh &mesh)
     for (auto f = mesh.faces_begin(); f != mesh.faces_end(); f++)
     {
 
-        if (f->is_boundary()) continue;
+        if (f->is_boundary())
+            continue;
 
         aiFace &face = ai_mesh->mFaces[face_idx];
         face.mIndices = new unsigned int[f->degree()];
@@ -1347,11 +1323,13 @@ Scene::Stats Scene::get_stats(const Gui::Animate &animation)
                       }
                       obj.armature.for_joints([&](Joint *j)
                                               {
-                                                  if (j->anim.any()) s.anims++;
+                                                  if (j->anim.any())
+                                                      s.anims++;
                                               });
                       obj.armature.for_handles([&](Skeleton::IK_Handle *h)
                                                {
-                                                   if (h->anim.any()) s.anims++;
+                                                   if (h->anim.any())
+                                                       s.anims++;
                                                });
 
                       if (obj.armature.has_bones())
@@ -1407,8 +1385,7 @@ Scene::Stats Scene::get_stats(const Gui::Animate &animation)
     return s;
 }
 
-std::string Scene::write(std::string file, const Camera &render_cam,
-                         const Gui::Animate &animation)
+std::string Scene::write(std::string file, const Camera &render_cam, const Gui::Animate &animation)
 {
 
     size_t mesh_idx = 0, light_idx = 0, node_idx = 0, anim_idx = 0;
@@ -1523,8 +1500,10 @@ std::string Scene::write(std::string file, const Camera &render_cam,
                 std::replace(name.begin(), name.end(), ' ', '_');
                 name += "-S3D-" + std::to_string(obj.id());
 
-                if (obj.get_mesh().flipped()) name += "-" + FLIPPED_TAG;
-                if (obj.opt.smooth_normals) name += "-" + SMOOTHED_TAG;
+                if (obj.get_mesh().flipped())
+                    name += "-" + FLIPPED_TAG;
+                if (obj.opt.smooth_normals)
+                    name += "-" + SMOOTHED_TAG;
             }
 
             ai_mesh->mName = aiString(name);
@@ -1586,7 +1565,8 @@ std::string Scene::write(std::string file, const Camera &render_cam,
                             children++;
                         }
                     }
-                    if (children == 0) return;
+                    if (children == 0)
+                        return;
 
                     node->mNumChildren = (unsigned int) children;
                     node->mChildren = new aiNode *[children];
@@ -1706,8 +1686,7 @@ std::string Scene::write(std::string file, const Camera &render_cam,
             ai_mesh_node->mName = aiString(name + "-" + EMITTER_ANIM);
             ai_mesh_node->mNumMeshes = 1;
             ai_mesh_node->mMeshes = new unsigned int((unsigned int) m_idx);
-            ai_mesh_node->mTransformation =
-                    matMat(Mat4::translate(Vec3{particles.opt.lifetime, 0.0f, 0.0f}));
+            ai_mesh_node->mTransformation = matMat(Mat4::translate(Vec3{particles.opt.lifetime, 0.0f, 0.0f}));
 
         } else if (entry.second.is<Scene_Light>())
         {
@@ -1745,10 +1724,10 @@ std::string Scene::write(std::string file, const Camera &render_cam,
     }
 
     { // Animation data
-        auto write_anim = [ai_anim = scene.mAnimations[0], &anim_idx](std::string name,
-                                                                      auto splines, auto get_info)
+        auto write_anim = [ai_anim = scene.mAnimations[0], &anim_idx](std::string name, auto splines, auto get_info)
         {
-            if (!splines.any()) return;
+            if (!splines.any())
+                return;
 
             std::set<float> keys = splines.keys();
             unsigned int n_keys = (unsigned int) keys.size();
@@ -1776,13 +1755,12 @@ std::string Scene::write(std::string file, const Camera &render_cam,
         };
 
         const auto &anim_cam = animation.camera();
-        write_anim(ANIM_CAM_NODE, anim_cam.splines,
-                   [&anim_cam](float t) -> std::tuple<Vec3, Quat, Vec3>
-                   {
-                       auto [p, r, fov, ar, ap, d] = anim_cam.splines.at(t);
-                       (void) ar;
-                       return {p, r, Vec3{fov, ap + 1.0f, d}};
-                   });
+        write_anim(ANIM_CAM_NODE, anim_cam.splines, [&anim_cam](float t) -> std::tuple<Vec3, Quat, Vec3>
+        {
+            auto [p, r, fov, ar, ap, d] = anim_cam.splines.at(t);
+            (void) ar;
+            return {p, r, Vec3{fov, ap + 1.0f, d}};
+        });
 
         for (auto &entry: objs)
         {
@@ -1791,10 +1769,7 @@ std::string Scene::write(std::string file, const Camera &render_cam,
             const Anim_Pose &pose = item.animation();
             aiNode *node = item_nodes[item.id()];
 
-            write_anim(
-                    std::string(node->mName.C_Str()), pose.splines,
-                    [&pose](float t) -> std::tuple<Vec3, Quat, Vec3>
-                    { return pose.splines.at(t); });
+            write_anim(std::string(node->mName.C_Str()), pose.splines, [&pose](float t) -> std::tuple<Vec3, Quat, Vec3> { return pose.splines.at(t); });
 
             if (item.is<Scene_Object>())
             {
@@ -1806,22 +1781,20 @@ std::string Scene::write(std::string file, const Camera &render_cam,
                     skel.for_joints([&](Joint *j)
                                     {
                                         aiNode *node = bone_nodes[{item.id(), j->_id}];
-                                        write_anim(std::string(node->mName.C_Str()), j->anim,
-                                                   [j](float t) -> std::tuple<Vec3, Quat, Vec3>
-                                                   {
-                                                       return {Vec3{0.0f}, j->anim.at(t), Vec3{1.0f}};
-                                                   });
+                                        write_anim(std::string(node->mName.C_Str()), j->anim, [j](float t) -> std::tuple<Vec3, Quat, Vec3>
+                                        {
+                                            return {Vec3{0.0f}, j->anim.at(t), Vec3{1.0f}};
+                                        });
                                     });
 
                     skel.for_handles([&](Skeleton::IK_Handle *h)
                                      {
                                          aiNode *node = bone_nodes[{item.id(), h->_id}];
-                                         write_anim(std::string(node->mName.C_Str()), h->anim,
-                                                    [h](float t) -> std::tuple<Vec3, Quat, Vec3>
-                                                    {
-                                                        auto [tr, e] = h->anim.at(t);
-                                                        return {tr, Quat{}, e ? Vec3{2.0f} : Vec3{1.0f}};
-                                                    });
+                                         write_anim(std::string(node->mName.C_Str()), h->anim, [h](float t) -> std::tuple<Vec3, Quat, Vec3>
+                                         {
+                                             auto [tr, e] = h->anim.at(t);
+                                             return {tr, Quat{}, e ? Vec3{2.0f} : Vec3{1.0f}};
+                                         });
                                      });
                 }
                 {
@@ -1838,16 +1811,14 @@ std::string Scene::write(std::string file, const Camera &render_cam,
                         (void) tr;
                         (void) in;
                         (void) ior;
-                        return {Vec3{a.r, a.g, a.b}, Quat::euler(Vec3{e.r, 0.0f, 0.0f}),
-                                Vec3{r.r, r.g, r.b} + Vec3{1.0f}};
+                        return {Vec3{a.r, a.g, a.b}, Quat::euler(Vec3{e.r, 0.0f, 0.0f}), Vec3{r.r, r.g, r.b} + Vec3{1.0f}};
                     });
                     write_anim(name1, mat.splines, [&mat](float t) -> std::tuple<Vec3, Quat, Vec3>
                     {
                         auto [a, r, tr, e, in, ior] = mat.splines.at(t);
                         (void) a;
                         (void) r;
-                        return {Vec3{tr.r, tr.g, tr.b}, Quat::euler(Vec3{e.g, 0.0f, 0.0f}),
-                                Vec3{in, ior, e.b} + Vec3{1.0f}};
+                        return {Vec3{tr.r, tr.g, tr.b}, Quat::euler(Vec3{e.g, 0.0f, 0.0f}), Vec3{in, ior, e.b} + Vec3{1.0f}};
                     });
                 }
 
@@ -1862,8 +1833,7 @@ std::string Scene::write(std::string file, const Camera &render_cam,
                 write_anim(name, light.splines, [&light](float t) -> std::tuple<Vec3, Quat, Vec3>
                 {
                     auto [spec, inten, angle] = light.splines.at(t);
-                    return {Vec3{spec.r, spec.g, spec.b}, Quat::euler(Vec3{angle.x, 0.0f, angle.y}),
-                            Vec3{inten, 1.0f, 1.0f}};
+                    return {Vec3{spec.r, spec.g, spec.b}, Quat::euler(Vec3{angle.x, 0.0f, angle.y}), Vec3{inten, 1.0f, 1.0f}};
                 });
 
             } else if (item.is<Scene_Particles>())
@@ -1872,17 +1842,13 @@ std::string Scene::write(std::string file, const Camera &render_cam,
                 std::string name(node->mName.C_Str());
                 name += "-" + EMITTER_ANIM;
 
-                const Scene_Particles::Anim_Particles &particles =
-                        item.get<Scene_Particles>().panim;
+                const Scene_Particles::Anim_Particles &particles = item.get<Scene_Particles>().panim;
 
-                write_anim(name, particles.splines,
-                           [&particles](float t) -> std::tuple<Vec3, Quat, Vec3>
-                           {
-                               auto [col, vel, ang, scl, life, pps, en] = particles.splines.at(t);
-                               return {Vec3{en ? col.r : -col.r, col.g, col.b},
-                                       Quat::euler(Vec3{scl, 0.0f, ang}),
-                                       Vec3{pps + 1.0f, life + 1.0f, vel + 1.0f}};
-                           });
+                write_anim(name, particles.splines, [&particles](float t) -> std::tuple<Vec3, Quat, Vec3>
+                {
+                    auto [col, vel, ang, scl, life, pps, en] = particles.splines.at(t);
+                    return {Vec3{en ? col.r : -col.r, col.g, col.b}, Quat::euler(Vec3{scl, 0.0f, ang}), Vec3{pps + 1.0f, life + 1.0f, vel + 1.0f}};
+                });
             }
         }
     }

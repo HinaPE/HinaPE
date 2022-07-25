@@ -1,4 +1,3 @@
-
 #include "../scene/skeleton.h"
 #define TAU 0.001f;
 
@@ -13,8 +12,10 @@ Vec3 closest_on_line_segment(Vec3 start, Vec3 end, Vec3 point)
     gradient.normalize();
     Vec3 v = point - start;
     float d = dot(v, gradient);
-    if (d > len) d = len;
-    if (d < 0.0f) d = 0.0f;
+    if (d > len)
+        d = len;
+    if (d < 0.0f)
+        d = 0.0f;
     return start + gradient * d;
 }
 
@@ -147,8 +148,7 @@ void Skeleton::find_joints(const GL::Mesh &mesh, std::vector<std::vector<Joint *
 
 }
 
-void Skeleton::skin(const GL::Mesh &input, GL::Mesh &output,
-                    const std::vector<std::vector<Joint *>> &map)
+void Skeleton::skin(const GL::Mesh &input, GL::Mesh &output, const std::vector<std::vector<Joint *>> &map)
 {
 
     // TODO(Animation): Task 3

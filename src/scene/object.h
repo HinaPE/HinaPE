@@ -41,8 +41,7 @@ public:
     void sync_mesh();
     void sync_anim_mesh();
 
-    void render(const Mat4 &view, bool solid = false, bool depth_only = false, bool posed = true,
-                bool anim = true);
+    void render(const Mat4 &view, bool solid = false, bool depth_only = false, bool posed = true, bool anim = true);
 
     void copy_mesh(Halfedge_Mesh &out);
     void take_mesh(Halfedge_Mesh &&in);

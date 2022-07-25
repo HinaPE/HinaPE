@@ -1,4 +1,3 @@
-
 #include "../scene/particles.h"
 #include "../rays/pathtracer.h"
 

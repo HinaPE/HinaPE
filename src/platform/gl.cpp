@@ -1,4 +1,3 @@
-
 #include "gl.h"
 #include "../lib/log.h"
 
@@ -12,11 +11,16 @@ const char *Sample_Count_Names[(int) Sample_Count::count] = {"1", "2", "4", "8",
 int MSAA::n_options()
 {
     int max = max_msaa();
-    if (max >= 32) return 6;
-    if (max >= 16) return 5;
-    if (max >= 8) return 4;
-    if (max >= 4) return 3;
-    if (max >= 2) return 2;
+    if (max >= 32)
+        return 6;
+    if (max >= 16)
+        return 5;
+    if (max >= 8)
+        return 4;
+    if (max >= 4)
+        return 3;
+    if (max >= 2)
+        return 2;
     return 1;
 }
 
@@ -87,7 +91,8 @@ void global_params()
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_GREATER);
     glClearDepth(0.0);
-    if (glClipControl) glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+    if (glClipControl)
+        glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
     glCullFace(GL_BACK);
 }
 
@@ -179,13 +184,15 @@ Tex2D::Tex2D(Tex2D &&src)
 
 Tex2D::~Tex2D()
 {
-    if (id) glDeleteTextures(1, &id);
+    if (id)
+        glDeleteTextures(1, &id);
     id = 0;
 }
 
 void Tex2D::operator=(Tex2D &&src)
 {
-    if (id) glDeleteTextures(1, &id);
+    if (id)
+        glDeleteTextures(1, &id);
     id = src.id;
     src.id = 0;
 }
@@ -198,7 +205,8 @@ void Tex2D::bind(int idx) const
 
 void Tex2D::image(int w, int h, unsigned char *img)
 {
-    if (!id) glGenTextures(1, &id);
+    if (!id)
+        glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -269,7 +277,8 @@ Mesh::~Mesh()
 void Mesh::create()
 {
     // Hack to let stuff get created for headless mode
-    if (!glGenVertexArrays) return;
+    if (!glGenVertexArrays)
+        return;
 
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
@@ -295,7 +304,8 @@ void Mesh::create()
 void Mesh::destroy()
 {
     // Hack to let stuff get destroyed for headless mode
-    if (!glDeleteBuffers) return;
+    if (!glDeleteBuffers)
+        return;
 
     glDeleteBuffers(1, &ebo);
     glDeleteBuffers(1, &vbo);
@@ -311,8 +321,7 @@ void Mesh::update()
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vert) * _verts.size(), _verts.data(), GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Index) * _idxs.size(), _idxs.data(),
-                 GL_DYNAMIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Index) * _idxs.size(), _idxs.data(), GL_DYNAMIC_DRAW);
 
     glBindVertexArray(0);
 
@@ -375,7 +384,8 @@ BBox Mesh::bbox() const
 
 void Mesh::render()
 {
-    if (dirty) update();
+    if (dirty)
+        update();
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, n_elem, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
@@ -420,7 +430,8 @@ void Instances::operator=(Instances &&src)
 void Instances::create()
 {
     // Hack to let stuff get created for headless mode
-    if (!glGenBuffers) return;
+    if (!glGenBuffers)
+        return;
 
     glGenBuffers(1, &vbo);
     glBindVertexArray(_mesh.vao);
@@ -434,8 +445,7 @@ void Instances::create()
     for (int i = 0; i < 4; i++)
     {
         glEnableVertexAttribArray(base_idx + i);
-        glVertexAttribPointer(base_idx + i, 4, GL_FLOAT, GL_FALSE, sizeof(Info),
-                              (void *) (sizeof(GLuint) + sizeof(Vec4) * i));
+        glVertexAttribPointer(base_idx + i, 4, GL_FLOAT, GL_FALSE, sizeof(Info), (void *) (sizeof(GLuint) + sizeof(Vec4) * i));
         glVertexAttribDivisor(base_idx + i, 1);
     }
     glBindVertexArray(0);
@@ -444,12 +454,13 @@ void Instances::create()
 void Instances::render()
 {
 
-    if (_mesh.dirty) _mesh.update();
-    if (dirty) update();
+    if (_mesh.dirty)
+        _mesh.update();
+    if (dirty)
+        update();
 
     glBindVertexArray(_mesh.vao);
-    glDrawElementsInstanced(GL_TRIANGLES, _mesh.n_elem, GL_UNSIGNED_INT, nullptr,
-                            (GLsizei) data.size());
+    glDrawElementsInstanced(GL_TRIANGLES, _mesh.n_elem, GL_UNSIGNED_INT, nullptr, (GLsizei) data.size());
     glBindVertexArray(0);
 }
 
@@ -488,15 +499,15 @@ void Instances::update()
 void Instances::destroy()
 {
     // Hack to let stuff get destroyed for headless mode
-    if (!glDeleteBuffers) return;
+    if (!glDeleteBuffers)
+        return;
 
     glDeleteBuffers(1, &vbo);
     vbo = 0;
     _mesh.destroy();
 }
 
-Lines::Lines(std::vector<Vert> &&verts, float thickness)
-        : thickness(thickness), vertices(std::move(verts))
+Lines::Lines(std::vector<Vert> &&verts, float thickness) : thickness(thickness), vertices(std::move(verts))
 {
     create();
     dirty = true;
@@ -553,7 +564,8 @@ void Lines::update() const
 void Lines::render(bool smooth) const
 {
 
-    if (dirty) update();
+    if (dirty)
+        update();
 
     glLineWidth(thickness);
     if (smooth)
@@ -590,7 +602,8 @@ void Lines::add(Vec3 start, Vec3 end, Vec3 color)
 void Lines::create()
 {
     // Hack to let stuff get created for headless mode
-    if (!glGenBuffers) return;
+    if (!glGenBuffers)
+        return;
 
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
@@ -610,7 +623,8 @@ void Lines::create()
 void Lines::destroy()
 {
     // Hack to let stuff get destroyed for headless mode
-    if (!glDeleteBuffers) return;
+    if (!glDeleteBuffers)
+        return;
 
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
@@ -662,7 +676,8 @@ void Shader::bind() const
 void Shader::destroy()
 {
     // Hack to let stuff get destroyed for headless mode
-    if (!glUseProgram) return;
+    if (!glUseProgram)
+        return;
 
     glUseProgram(0);
     glDeleteShader(v);
@@ -830,17 +845,20 @@ Framebuffer::~Framebuffer()
 void Framebuffer::create()
 {
     // Hack to let stuff get created for headless mode
-    if (!glGenFramebuffers) return;
+    if (!glGenFramebuffers)
+        return;
 
     glGenFramebuffers(1, &framebuffer);
     glGenTextures((GLsizei) output_textures.size(), (GLuint *) output_textures.data());
-    if (depth) glGenTextures(1, &depth_tex);
+    if (depth)
+        glGenTextures(1, &depth_tex);
 }
 
 void Framebuffer::destroy()
 {
     // Hack to let stuff get destroyed for headless mode
-    if (!glDeleteFramebuffers) return;
+    if (!glDeleteFramebuffers)
+        return;
 
     glDeleteTextures(1, &depth_tex);
     glDeleteTextures((GLsizei) output_textures.size(), (GLuint *) output_textures.data());
@@ -880,8 +898,7 @@ void Framebuffer::resize(Vec2 dim, int samples)
             glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         }
 
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, type, output_textures[i],
-                               0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, type, output_textures[i], 0);
 
         draw_buffers.push_back(GL_COLOR_ATTACHMENT0 + i);
 
@@ -968,8 +985,7 @@ void Framebuffer::read_at(int buf, int x, int y, GLubyte *data) const
 {
     assert(can_read_at());
     assert(buf >= 0 && buf < (int) output_textures.size());
-    glGetTextureSubImage(output_textures[buf], 0, x, y, 0, 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, 4,
-                         data);
+    glGetTextureSubImage(output_textures[buf], 0, x, y, 0, 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, 4, data);
 }
 
 void Framebuffer::read(int buf, GLubyte *data) const
@@ -1013,8 +1029,7 @@ void Framebuffer::blit_to_screen(int buf, Vec2 dim) const
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
     glReadBuffer(GL_COLOR_ATTACHMENT0 + buf);
-    glBlitFramebuffer(0, 0, w, h, 0, 0, (GLint) dim.x, (GLint) dim.y, GL_COLOR_BUFFER_BIT,
-                      GL_NEAREST);
+    glBlitFramebuffer(0, 0, w, h, 0, 0, (GLint) dim.x, (GLint) dim.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -1027,7 +1042,8 @@ bool Framebuffer::is_multisampled() const
 void Effects::init()
 {
     // Hack to let stuff get created for headless mode
-    if (!glGenVertexArrays) return;
+    if (!glGenVertexArrays)
+        return;
 
     glGenVertexArrays(1, &vao);
     resolve_shader.load(effects_v, resolve_f);
@@ -1038,7 +1054,8 @@ void Effects::init()
 void Effects::destroy()
 {
     // Hack to let stuff get destroyed for headless mode
-    if (!glDeleteVertexArrays) return;
+    if (!glDeleteVertexArrays)
+        return;
 
     glDeleteVertexArrays(1, &vao);
     vao = 0;
@@ -1047,8 +1064,7 @@ void Effects::destroy()
     outline_shader_ms.~Shader();
 }
 
-void Effects::outline(const Framebuffer &from, const Framebuffer &to, Vec3 color, Vec2 min,
-                      Vec2 max)
+void Effects::outline(const Framebuffer &from, const Framebuffer &to, Vec3 color, Vec2 min, Vec2 max)
 {
 
     glFlush();
@@ -1123,8 +1139,7 @@ void Effects::resolve_to(int buf, const Framebuffer &from, const Framebuffer &to
     glBindVertexArray(0);
 }
 
-static void debug_proc(GLenum glsource, GLenum gltype, GLuint, GLenum severity, GLsizei,
-                       const GLchar *glmessage, const void *)
+static void debug_proc(GLenum glsource, GLenum gltype, GLuint, GLenum severity, GLsizei, const GLchar *glmessage, const void *)
 {
 
     std::string message(glmessage);
@@ -1187,8 +1202,7 @@ static void debug_proc(GLenum glsource, GLenum gltype, GLuint, GLenum severity, 
     {
         case GL_DEBUG_SEVERITY_HIGH:
         case GL_DEBUG_SEVERITY_MEDIUM:
-            warn("OpenGL | source: %s type: %s message: %s", source.c_str(), type.c_str(),
-                 message.c_str());
+            warn("OpenGL | source: %s type: %s message: %s", source.c_str(), type.c_str(), message.c_str());
             break;
     }
 }
@@ -1240,7 +1254,8 @@ static void check_leaked_handles()
 
 static void setup_debug_proc()
 {
-    if (!glDebugMessageCallback || !glDebugMessageControl) return;
+    if (!glDebugMessageCallback || !glDebugMessageControl)
+        return;
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(debug_proc, nullptr);

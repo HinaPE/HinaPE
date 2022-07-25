@@ -54,16 +54,19 @@ public:
 
     Vec3 sample(Vec3 from) const
     {
-        if (prims.empty()) return {};
+        if (prims.empty())
+            return {};
         int n = RNG::integer(0, (int) prims.size());
         return prims[n].sample(from);
     }
 
     float pdf(Ray ray, const Mat4 &T = Mat4::I, const Mat4 &iT = Mat4::I) const
     {
-        if (prims.empty()) return 0.0f;
+        if (prims.empty())
+            return 0.0f;
         float ret = 0.0f;
-        for (auto &prim: prims) ret += prim.pdf(ray, T, iT);
+        for (auto &prim: prims)
+            ret += prim.pdf(ray, T, iT);
         return ret / prims.size();
     }
 

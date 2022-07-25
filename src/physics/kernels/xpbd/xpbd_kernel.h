@@ -13,5 +13,4 @@ public:
 
 }
 
-
 #endif //HINAPE_XPBD_KERNEL_H

@@ -275,11 +275,9 @@ class Effects
 {
 public:
     static void resolve_to_screen(int buf, const Framebuffer &framebuffer);
-    static void resolve_to(int buf, const Framebuffer &from, const Framebuffer &to,
-                           bool avg = true);
+    static void resolve_to(int buf, const Framebuffer &from, const Framebuffer &to, bool avg = true);
 
-    static void outline(const Framebuffer &from, const Framebuffer &to, Vec3 color, Vec2 min,
-                        Vec2 max);
+    static void outline(const Framebuffer &from, const Framebuffer &to, Vec3 color, Vec2 min, Vec2 max);
 
 private:
     static void init();
@@ -287,8 +285,7 @@ private:
 
     static inline Shader resolve_shader, outline_shader, outline_shader_ms;
     static inline GLuint vao;
-    static inline const Vec2 screen_quad[] = {Vec2{-1.0f, 1.0f}, Vec2{-1.0f, -1.0f},
-                                              Vec2{1.0f, 1.0f}, Vec2{1.0f, -1.0f}};
+    static inline const Vec2 screen_quad[] = {Vec2{-1.0f, 1.0f}, Vec2{-1.0f, -1.0f}, Vec2{1.0f, 1.0f}, Vec2{1.0f, -1.0f}};
 
     friend void setup();
     friend void shutdown();

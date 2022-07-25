@@ -1,4 +1,3 @@
-
 #include "pose.h"
 
 Mat4 Pose::transform() const
@@ -23,13 +22,20 @@ bool Pose::valid() const
 
 void Pose::clamp_euler()
 {
-    if (!valid()) return;
-    while (euler.x < 0) euler.x += 360.0f;
-    while (euler.x >= 360.0f) euler.x -= 360.0f;
-    while (euler.y < 0) euler.y += 360.0f;
-    while (euler.y >= 360.0f) euler.y -= 360.0f;
-    while (euler.z < 0) euler.z += 360.0f;
-    while (euler.z >= 360.0f) euler.z -= 360.0f;
+    if (!valid())
+        return;
+    while (euler.x < 0)
+        euler.x += 360.0f;
+    while (euler.x >= 360.0f)
+        euler.x -= 360.0f;
+    while (euler.y < 0)
+        euler.y += 360.0f;
+    while (euler.y >= 360.0f)
+        euler.y -= 360.0f;
+    while (euler.z < 0)
+        euler.z += 360.0f;
+    while (euler.z >= 360.0f)
+        euler.z -= 360.0f;
 }
 
 Pose Pose::rotated(Vec3 angles)

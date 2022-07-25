@@ -1,4 +1,3 @@
-
 #include "light.h"
 
 #include "../geometry/util.h"
@@ -6,11 +5,9 @@
 
 #include <sstream>
 
-const char *Light_Type_Names[(int) Light_Type::count] = {"Directional", "Sphere", "Hemisphere",
-                                                         "Point", "Spot"};
+const char *Light_Type_Names[(int) Light_Type::count] = {"Directional", "Sphere", "Hemisphere", "Point", "Spot"};
 
-Scene_Light::Scene_Light(Light_Type type, Scene_ID id, Pose p, std::string n)
-        : pose(p), _id(id), _lines(1.0f)
+Scene_Light::Scene_Light(Light_Type type, Scene_ID id, Pose p, std::string n) : pose(p), _id(id), _lines(1.0f)
 {
     opt.type = type;
     if (n.size())
@@ -129,7 +126,8 @@ Spectrum Scene_Light::radiance() const
 void Scene_Light::render(const Mat4 &view, bool depth_only, bool posed)
 {
 
-    if (_dirty) regen_mesh();
+    if (_dirty)
+        regen_mesh();
 
     Renderer &renderer = Renderer::get();
 
@@ -139,7 +137,8 @@ void Scene_Light::render(const Mat4 &view, bool depth_only, bool posed)
 
     Mat4 T = posed ? pose.transform() : Mat4::I;
 
-    if (opt.type == Light_Type::spot && !depth_only) renderer.lines(_lines, view, T);
+    if (opt.type == Light_Type::spot && !depth_only)
+        renderer.lines(_lines, view, T);
     if (opt.type == Light_Type::hemisphere)
     {
         renderer.skydome(rot, col, 0.0f);
@@ -163,9 +162,8 @@ void Scene_Light::render(const Mat4 &view, bool depth_only, bool posed)
 
 bool operator!=(const Scene_Light::Options &l, const Scene_Light::Options &r)
 {
-    return l.type != r.type || std::string(l.name) != std::string(r.name) ||
-           l.spectrum != r.spectrum || l.intensity != r.intensity ||
-           l.angle_bounds != r.angle_bounds || l.has_emissive_map != r.has_emissive_map;
+    return l.type != r.type || std::string(l.name) != std::string(r.name) || l.spectrum != r.spectrum || l.intensity != r.intensity || l.angle_bounds != r.angle_bounds ||
+           l.has_emissive_map != r.has_emissive_map;
 }
 
 void Scene_Light::Anim_Light::at(float t, Options &o) const

@@ -63,20 +63,17 @@ struct Spot_Light
 class Delta_Light
 {
 public:
-    Delta_Light(Directional_Light &&l, Scene_ID id, const Mat4 &T = Mat4::I)
-            : trans(T), itrans(T.inverse()), _id(id), underlying(std::move(l))
+    Delta_Light(Directional_Light &&l, Scene_ID id, const Mat4 &T = Mat4::I) : trans(T), itrans(T.inverse()), _id(id), underlying(std::move(l))
     {
         has_trans = trans != Mat4::I;
     }
 
-    Delta_Light(Point_Light &&l, Scene_ID id, const Mat4 &T = Mat4::I)
-            : trans(T), itrans(T.inverse()), _id(id), underlying(std::move(l))
+    Delta_Light(Point_Light &&l, Scene_ID id, const Mat4 &T = Mat4::I) : trans(T), itrans(T.inverse()), _id(id), underlying(std::move(l))
     {
         has_trans = trans != Mat4::I;
     }
 
-    Delta_Light(Spot_Light &&l, Scene_ID id, const Mat4 &T = Mat4::I)
-            : trans(T), itrans(T.inverse()), _id(id), underlying(std::move(l))
+    Delta_Light(Spot_Light &&l, Scene_ID id, const Mat4 &T = Mat4::I) : trans(T), itrans(T.inverse()), _id(id), underlying(std::move(l))
     {
         has_trans = trans != Mat4::I;
     }
@@ -88,10 +85,11 @@ public:
 
     Light_Sample sample(Vec3 from) const
     {
-        if (has_trans) from = itrans * from;
-        Light_Sample ret = std::visit([from](const auto &l)
-                                      { return l.sample(from); }, underlying);
-        if (has_trans) ret.transform(trans);
+        if (has_trans)
+            from = itrans * from;
+        Light_Sample ret = std::visit([from](const auto &l) { return l.sample(from); }, underlying);
+        if (has_trans)
+            ret.transform(trans);
         return ret;
     }
 

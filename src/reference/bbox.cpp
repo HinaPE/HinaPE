@@ -1,4 +1,3 @@
-
 #include "../lib/mathlib.h"
 #include "debug.h"
 
@@ -14,12 +13,14 @@ bool BBox::hit(const Ray &ray, Vec2 &times) const
     float tmin = (min.x - O.x) / D.x;
     float tmax = (max.x - O.x) / D.x;
 
-    if (tmin > tmax) std::swap(tmin, tmax);
+    if (tmin > tmax)
+        std::swap(tmin, tmax);
 
     float tymin = (min.y - O.y) / D.y;
     float tymax = (max.y - O.y) / D.y;
 
-    if (tymin > tymax) std::swap(tymin, tymax);
+    if (tymin > tymax)
+        std::swap(tymin, tymax);
 
     if ((tmin > tymax) || (tymin > tmax))
         return false;
@@ -33,7 +34,8 @@ bool BBox::hit(const Ray &ray, Vec2 &times) const
     float tzmin = (min.z - O.z) / D.z;
     float tzmax = (max.z - O.z) / D.z;
 
-    if (tzmin > tzmax) std::swap(tzmin, tzmax);
+    if (tzmin > tzmax)
+        std::swap(tzmin, tzmax);
 
     if ((tmin > tzmax) || (tzmin > tmax))
         return false;

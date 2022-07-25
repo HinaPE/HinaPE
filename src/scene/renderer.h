@@ -63,8 +63,7 @@ public:
     // NOTE(max): updates & uses the indices in mesh for selection/traversal
     void halfedge_editor(HalfedgeOpt opt);
     void mesh(GL::Mesh &mesh, MeshOpt opt);
-    void lines(const GL::Lines &lines, const Mat4 &view, const Mat4 &model = Mat4::I,
-               float alpha = 1.0f);
+    void lines(const GL::Lines &lines, const Mat4 &view, const Mat4 &model = Mat4::I, float alpha = 1.0f);
     void instances(Renderer::MeshOpt opt, GL::Instances &inst);
 
     void outline(const Mat4 &view, Scene_Item &obj);

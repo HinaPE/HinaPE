@@ -16,8 +16,7 @@ class Rig
 public:
     bool keydown(Widgets &widgets, Undo &undo, SDL_Keysym key);
 
-    void select(Scene &scene, Widgets &widgets, Undo &undo, Scene_ID id, Vec3 cam, Vec2 spos,
-                Vec3 dir);
+    void select(Scene &scene, Widgets &widgets, Undo &undo, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir);
     void hover(Vec3 cam, Vec2 spos, Vec3 dir);
 
     void end_transform(Widgets &widgets, Undo &undo, Scene_Object &obj);

@@ -1,4 +1,3 @@
-
 #include "animate.h"
 #include "../scene/renderer.h"
 #include "manager.h"
@@ -23,8 +22,7 @@ Camera Anim_Camera::at(float t) const
 
 void Anim_Camera::set(float t, const Camera &cam)
 {
-    splines.set(t, cam.pos(), Quat::euler(Mat4::rotate_z_to(cam.center() - cam.pos()).to_euler()),
-                cam.get_fov(), cam.get_ar(), cam.get_ap(), cam.get_dist());
+    splines.set(t, cam.pos(), Quat::euler(Mat4::rotate_z_to(cam.center() - cam.pos()).to_euler()), cam.get_fov(), cam.get_ar(), cam.get_ap(), cam.get_dist());
 }
 
 void Animate::update_dim(Vec2 dim)
@@ -53,7 +51,8 @@ Camera Animate::current_camera() const
 void Animate::load_cam(Vec3 pos, Vec3 center, float ar, float hfov, float ap, float dist)
 {
 
-    if (ar == 0.0f) ar = ui_render.wh_ar();
+    if (ar == 0.0f)
+        ar = ui_render.wh_ar();
 
     float fov = 2.0f * std::atan((1.0f / ar) * std::tan(hfov / 2.0f));
     fov = Degrees(fov);
@@ -76,15 +75,18 @@ void Animate::render(Scene &scene, Scene_Maybe obj_opt, Widgets &widgets, Camera
     ui_camera.render(view);
 
     if (visualize_splines)
-        for (auto &e: spline_cache) R.lines(e.second, view);
+        for (auto &e: spline_cache)
+            R.lines(e.second, view);
 
-    if (!obj_opt.has_value()) return;
+    if (!obj_opt.has_value())
+        return;
     Scene_Item &item = obj_opt.value();
 
     if (item.is<Scene_Light>())
     {
         Scene_Light &light = item.get<Scene_Light>();
-        if (light.is_env()) return;
+        if (light.is_env())
+            return;
     }
 
     Pose &pose = item.pose();
@@ -95,8 +97,7 @@ void Animate::render(Scene &scene, Scene_Maybe obj_opt, Widgets &widgets, Camera
 
         Scene_Object &obj = item.get<Scene_Object>();
         joint_id_offset = scene.used_ids();
-        obj.armature.render(view * obj.pose.transform(), joint_select, handle_select, false, true,
-                            joint_id_offset);
+        obj.armature.render(view * obj.pose.transform(), joint_select, handle_select, false, true, joint_id_offset);
 
         if (!joint_select && !handle_select)
         {
@@ -145,7 +146,8 @@ void Animate::render(Scene &scene, Scene_Maybe obj_opt, Widgets &widgets, Camera
 void Animate::make_spline(Scene_ID id, const Anim_Pose &pose)
 {
 
-    if (!pose.splines.any()) return;
+    if (!pose.splines.any())
+        return;
 
     auto entry = spline_cache.find(id);
     if (entry == spline_cache.end())
@@ -207,7 +209,8 @@ void Animate::UIsidebar(Manager &manager, Undo &undo, Scene_Maybe obj_opt, Camer
 
         ImGui::Text("Edit IK Handle");
         ImGui::DragFloat3("Pos", handle_select->target.data, 0.1f, 0.0f, 0.0f, "%.2f");
-        if (ImGui::IsItemActivated()) old_euler = handle_select->target;
+        if (ImGui::IsItemActivated())
+            old_euler = handle_select->target;
         if (ImGui::IsItemDeactivatedAfterEdit() && old_euler != handle_select->target)
         {
             undo.move_handle(id, handle_select, old_euler);
@@ -225,7 +228,8 @@ void Animate::UIsidebar(Manager &manager, Undo &undo, Scene_Maybe obj_opt, Camer
 
         if (ImGui::DragFloat3("Pose", joint_select->pose.data, 1.0f, 0.0f, 0.0f, "%.2f"))
             obj_opt.value().get().get<Scene_Object>().set_pose_dirty();
-        if (ImGui::IsItemActivated()) old_euler = joint_select->pose;
+        if (ImGui::IsItemActivated())
+            old_euler = joint_select->pose;
         if (ImGui::IsItemDeactivatedAfterEdit() && old_euler != joint_select->pose)
         {
             joint_select->pose = joint_select->pose.range(0.0f, 360.0f);
@@ -242,7 +246,8 @@ void Animate::UIsidebar(Manager &manager, Undo &undo, Scene_Maybe obj_opt, Camer
             Scene_Object &obj = item.get<Scene_Object>();
             if (obj.armature.has_bones())
             {
-                if (obj.armature.do_ik()) obj.set_pose_dirty();
+                if (obj.armature.do_ik())
+                    obj.set_pose_dirty();
             }
         }
     }
@@ -250,7 +255,8 @@ void Animate::UIsidebar(Manager &manager, Undo &undo, Scene_Maybe obj_opt, Camer
     if (ui_camera.UI(undo, user_cam))
     {
         camera_selected = true;
-        if (obj_opt.has_value()) prev_selected = obj_opt.value().get().id();
+        if (obj_opt.has_value())
+            prev_selected = obj_opt.value().get().id();
     }
 }
 
@@ -275,12 +281,10 @@ Vec3 Animate::selected_pos(Scene_Item &item)
 {
     if (handle_select)
     {
-        return item.pose().transform() *
-               (handle_select->target + item.get<Scene_Object>().armature.base());
+        return item.pose().transform() * (handle_select->target + item.get<Scene_Object>().armature.base());
     } else if (joint_select)
     {
-        return item.pose().transform() *
-               item.get<Scene_Object>().armature.posed_base_of(joint_select);
+        return item.pose().transform() * item.get<Scene_Object>().armature.posed_base_of(joint_select);
     }
     return item.pose().pos;
 }
@@ -306,8 +310,7 @@ void Animate::apply_transform(Widgets &widgets, Scene_Item &item)
     }
 }
 
-bool Animate::select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID id, Vec3 cam,
-                     Vec2 spos, Vec3 dir)
+bool Animate::select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir)
 {
 
     if (widgets.want_drag())
@@ -391,8 +394,7 @@ bool Animate::select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID
     return false;
 }
 
-void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe obj,
-                       Camera &user_cam)
+void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe obj, Camera &user_cam)
 {
 
     // NOTE(max): this is pretty messy
@@ -420,7 +422,8 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
         }
     }
 
-    if (ui_render.in_progress()) playing = false;
+    if (ui_render.in_progress())
+        playing = false;
 
     ImGui::SameLine();
     if (ImGui::Button("Render"))
@@ -627,8 +630,7 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
     {
         frame_changed = true;
     }
-    ImGui::BeginChild("Timeline", {size.x - 20.0f, size.y - 80.0f}, false,
-                      ImGuiWindowFlags_HorizontalScrollbar);
+    ImGui::BeginChild("Timeline", {size.x - 20.0f, size.y - 80.0f}, false, ImGuiWindowFlags_HorizontalScrollbar);
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0.0f, 0.0f});
 
@@ -643,8 +645,7 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
         std::string name = "Camera";
         ImVec2 sz = ImGui::CalcTextSize(name.c_str());
         if (camera_selected)
-            ImGui::TextColored({Color::outline.x, Color::outline.y, Color::outline.z, 1.0f}, "%s",
-                               name.c_str());
+            ImGui::TextColored({Color::outline.x, Color::outline.y, Color::outline.z, 1.0f}, "%s", name.c_str());
         else
             ImGui::Text("%s", name.c_str());
         ImGui::SameLine();
@@ -657,12 +658,14 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
         for (float f: keys)
         {
             int frame = (int) std::round(f);
-            if (frame >= 0 && frame < max_frame) frames[frame] = true;
+            if (frame >= 0 && frame < max_frame)
+                frames[frame] = true;
         }
 
         for (int i = 0; i < max_frame; i++)
         {
-            if (i > 0) ImGui::SameLine();
+            if (i > 0)
+                ImGui::SameLine();
             ImGui::PushID(i);
 
             bool color = false;
@@ -680,8 +683,7 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
                 if (i != current_frame)
                 {
                     color = true;
-                    ImGui::PushStyleColor(ImGuiCol_Button,
-                                          ImGui::GetColorU32(ImGuiCol_ButtonHovered));
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonHovered));
                 }
             }
             if (ImGui::SmallButton(label.c_str()))
@@ -690,7 +692,8 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
                 frame_changed = true;
                 camera_selected = true;
             }
-            if (color) ImGui::PopStyleColor();
+            if (color)
+                ImGui::PopStyleColor();
             ImGui::PopID();
         }
         ImGui::PopID();
@@ -706,8 +709,7 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
 
                         ImVec2 size = ImGui::CalcTextSize(name.c_str());
                         if (!camera_selected && select && item.id() == select->id())
-                            ImGui::TextColored({Color::outline.x, Color::outline.y, Color::outline.z, 1.0f}, "%s",
-                                               name.c_str());
+                            ImGui::TextColored({Color::outline.x, Color::outline.y, Color::outline.z, 1.0f}, "%s", name.c_str());
                         else
                             ImGui::Text("%s", name.c_str());
                         ImGui::SameLine();
@@ -720,12 +722,14 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
                         for (float f: keys)
                         {
                             int frame = (int) std::round(f);
-                            if (frame >= 0 && frame < max_frame) frames[frame] = true;
+                            if (frame >= 0 && frame < max_frame)
+                                frames[frame] = true;
                         }
 
                         for (int i = 0; i < max_frame; i++)
                         {
-                            if (i > 0) ImGui::SameLine();
+                            if (i > 0)
+                                ImGui::SameLine();
                             ImGui::PushID(i);
 
                             bool color = false;
@@ -743,8 +747,7 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
                                 if (i != current_frame)
                                 {
                                     color = true;
-                                    ImGui::PushStyleColor(ImGuiCol_Button,
-                                                          ImGui::GetColorU32(ImGuiCol_ButtonHovered));
+                                    ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonHovered));
                                 }
                             }
 
@@ -755,7 +758,8 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
                                 camera_selected = false;
                                 manager.set_select(item.id());
                             }
-                            if (color) ImGui::PopStyleColor();
+                            if (color)
+                                ImGui::PopStyleColor();
                             ImGui::PopID();
                         }
 
@@ -780,7 +784,8 @@ void Animate::timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
     }
     spline_cache = std::move(new_cache);
 
-    if (frame_changed) update(scene);
+    if (frame_changed)
+        update(scene);
 }
 
 void Animate::step_sim(Scene &scene)
@@ -793,8 +798,7 @@ Camera Animate::set_time(Scene &scene, float time)
 
     current_frame = (int) time;
 
-    scene.for_items([time](Scene_Item &item)
-                    { item.set_time(time); });
+    scene.for_items([time](Scene_Item &item) { item.set_time(time); });
 
     Camera cam = anim_camera.at(time);
     if (anim_camera.splines.any())
@@ -868,12 +872,14 @@ void Animate::clear()
 
 void Animate::invalidate(Skeleton::IK_Handle *handle)
 {
-    if (handle_select == handle) handle_select = nullptr;
+    if (handle_select == handle)
+        handle_select = nullptr;
 }
 
 void Animate::invalidate(Joint *j)
 {
-    if (joint_select == j) joint_select = nullptr;
+    if (joint_select == j)
+        joint_select = nullptr;
 }
 
 bool Animate::playing_or_rendering()

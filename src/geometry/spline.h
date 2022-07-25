@@ -62,7 +62,8 @@ public:
     std::set<float> keys() const
     {
         std::set<float> ret;
-        for (auto &e: control_points) ret.insert(e.first);
+        for (auto &e: control_points)
+            ret.insert(e.first);
         return ret;
     }
 
@@ -72,8 +73,7 @@ private:
     // Given a time between 0 and 1, evaluates a cubic polynomial with
     // the given endpoint and tangent values at the beginning (0) and
     // end (1) of the interval
-    static T cubic_unit_spline(float time, const T &position0, const T &position1,
-                               const T &tangent0, const T &tangent1);
+    static T cubic_unit_spline(float time, const T &position0, const T &position1, const T &tangent0, const T &tangent1);
 };
 
 template<typename T, typename... Ts>

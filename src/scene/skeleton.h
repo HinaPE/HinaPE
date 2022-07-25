@@ -143,10 +143,8 @@ public:
     bool is_root_id(unsigned int id);
 
     bool set_time(float time);
-    void render(const Mat4 &view, Joint *jselect, IK_Handle *hselect, bool root, bool posed,
-                unsigned int offset = 0);
-    void outline(const Mat4 &view, const Mat4 &model, bool root, bool posed, BBox &box,
-                 unsigned int offset = 0);
+    void render(const Mat4 &view, Joint *jselect, IK_Handle *hselect, bool root, bool posed, unsigned int offset = 0);
+    void outline(const Mat4 &view, const Mat4 &model, bool root, bool posed, BBox &box, unsigned int offset = 0);
 
     void set(float t);
     void crop(float t);

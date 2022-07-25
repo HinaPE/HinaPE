@@ -273,8 +273,7 @@ public:
         Computes vertex positions for a face that was just created by beveling a vertex,
         but not yet confirmed.
     */
-    void bevel_vertex_positions(const std::vector<Vec3> &start_positions, FaceRef face,
-                                float tangent_offset);
+    void bevel_vertex_positions(const std::vector<Vec3> &start_positions, FaceRef face, float tangent_offset);
 
     /*
        Computes vertex position for the new extruded vertex created
@@ -291,15 +290,13 @@ public:
         Computes vertex positions for a face that was just created by beveling an edge,
         but not yet confirmed.
     */
-    void bevel_edge_positions(const std::vector<Vec3> &start_positions, FaceRef face,
-                              float tangent_offset);
+    void bevel_edge_positions(const std::vector<Vec3> &start_positions, FaceRef face, float tangent_offset);
 
     /*
         Computes vertex positions for a face that was just created by beveling a face,
         but not yet confirmed.
     */
-    void bevel_face_positions(const std::vector<Vec3> &start_positions, FaceRef face,
-                              float tangent_offset, float normal_offset);
+    void bevel_face_positions(const std::vector<Vec3> &start_positions, FaceRef face, float tangent_offset, float normal_offset);
 
     /*
         Collapse an edge, returning a pointer to the collapsed vertex
@@ -564,8 +561,7 @@ public:
         }
 
         // Convenience function for setting all members of the halfedge
-        void set_neighbors(HalfedgeRef next, HalfedgeRef twin, VertexRef vertex, EdgeRef edge,
-                           FaceRef face)
+        void set_neighbors(HalfedgeRef next, HalfedgeRef twin, VertexRef vertex, EdgeRef edge, FaceRef face)
         {
             _next = next;
             _twin = twin;
@@ -795,8 +791,7 @@ public:
     /// Export to renderable vertex-index mesh. Indexes the mesh.
     void to_mesh(GL::Mesh &mesh, bool split_faces) const;
     /// Create mesh from polygon list
-    std::string from_poly(const std::vector<std::vector<Index>> &polygons,
-                          const std::vector<Vec3> &verts);
+    std::string from_poly(const std::vector<std::vector<Index>> &polygons, const std::vector<Vec3> &verts);
     /// Create mesh from renderable triangle mesh (beware of connectivity, does not de-duplicate
     /// vertices)
     std::string from_mesh(const GL::Mesh &mesh);

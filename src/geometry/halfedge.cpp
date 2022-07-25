@@ -1,4 +1,3 @@
-
 #include "halfedge.h"
 
 #include <map>
@@ -19,8 +18,7 @@ Halfedge_Mesh::Halfedge_Mesh(const GL::Mesh &mesh)
     from_mesh(mesh);
 }
 
-Halfedge_Mesh::Halfedge_Mesh(const std::vector<std::vector<Index>> &polygons,
-                             const std::vector<Vec3> &verts)
+Halfedge_Mesh::Halfedge_Mesh(const std::vector<std::vector<Index>> &polygons, const std::vector<Vec3> &verts)
 {
     next_id = Gui::n_Widget_IDs;
     from_poly(polygons, verts);
@@ -65,25 +63,29 @@ Halfedge_Mesh::ElementRef Halfedge_Mesh::copy_to(Halfedge_Mesh &mesh, unsigned i
     for (HalfedgeCRef h = halfedges_begin(); h != halfedges_end(); h++)
     {
         auto hn = mesh.halfedges.insert(mesh.halfedges.end(), *h);
-        if (h->id() == eid) ret = hn;
+        if (h->id() == eid)
+            ret = hn;
         halfedgeOldToNew[h->id()] = hn;
     }
     for (VertexCRef v = vertices_begin(); v != vertices_end(); v++)
     {
         auto vn = mesh.vertices.insert(mesh.vertices.end(), *v);
-        if (v->id() == eid) ret = vn;
+        if (v->id() == eid)
+            ret = vn;
         vertexOldToNew[v->id()] = vn;
     }
     for (EdgeCRef e = edges_begin(); e != edges_end(); e++)
     {
         auto en = mesh.edges.insert(mesh.edges.end(), *e);
-        if (e->id() == eid) ret = en;
+        if (e->id() == eid)
+            ret = en;
         edgeOldToNew[e->id()] = en;
     }
     for (FaceCRef f = faces_begin(); f != faces_end(); f++)
     {
         auto fn = mesh.faces.insert(mesh.faces.end(), *f);
-        if (f->id() == eid) ret = fn;
+        if (f->id() == eid)
+            ret = fn;
         faceOldToNew[f->id()] = fn;
     }
 
@@ -135,7 +137,8 @@ unsigned int Halfedge_Mesh::Vertex::degree() const
     HalfedgeCRef h = _halfedge;
     do
     {
-        if (!h->face()->is_boundary()) d++;
+        if (!h->face()->is_boundary())
+            d++;
         h = h->twin()->next();
     } while (h != _halfedge);
     return d;
@@ -169,7 +172,8 @@ bool Halfedge_Mesh::has_boundary() const
 {
     for (const auto &f: faces)
     {
-        if (f.is_boundary()) return true;
+        if (f.is_boundary())
+            return true;
     }
     return false;
 }
@@ -179,7 +183,8 @@ size_t Halfedge_Mesh::n_boundaries() const
     size_t n = 0;
     for (const auto &f: faces)
     {
-        if (f.is_boundary()) n++;
+        if (f.is_boundary())
+            n++;
     }
     return n;
 }
@@ -267,30 +272,16 @@ Vec3 Halfedge_Mesh::Face::center() const
 unsigned int Halfedge_Mesh::id_of(ElementRef elem)
 {
     unsigned int id;
-    std::visit(overloaded{[&](VertexRef vert)
-                          { id = vert->id(); },
-                          [&](EdgeRef edge)
-                          { id = edge->id(); },
-                          [&](FaceRef face)
-                          { id = face->id(); },
-                          [&](HalfedgeRef halfedge)
-                          { id = halfedge->id(); }},
-               elem);
+    std::visit(overloaded{[&](VertexRef vert) { id = vert->id(); }, [&](EdgeRef edge) { id = edge->id(); }, [&](FaceRef face) { id = face->id(); },
+                          [&](HalfedgeRef halfedge) { id = halfedge->id(); }}, elem);
     return id;
 }
 
 Vec3 Halfedge_Mesh::normal_of(Halfedge_Mesh::ElementRef elem)
 {
     Vec3 n;
-    std::visit(overloaded{[&](VertexRef vert)
-                          { n = vert->normal(); },
-                          [&](EdgeRef edge)
-                          { n = edge->normal(); },
-                          [&](FaceRef face)
-                          { n = face->normal(); },
-                          [&](HalfedgeRef he)
-                          { n = he->edge()->normal(); }},
-               elem);
+    std::visit(overloaded{[&](VertexRef vert) { n = vert->normal(); }, [&](EdgeRef edge) { n = edge->normal(); }, [&](FaceRef face) { n = face->normal(); },
+                          [&](HalfedgeRef he) { n = he->edge()->normal(); }}, elem);
     if (flip_orientation)
     {
         n = -n;
@@ -301,15 +292,8 @@ Vec3 Halfedge_Mesh::normal_of(Halfedge_Mesh::ElementRef elem)
 Vec3 Halfedge_Mesh::center_of(Halfedge_Mesh::ElementRef elem)
 {
     Vec3 pos;
-    std::visit(overloaded{[&](VertexRef vert)
-                          { pos = vert->center(); },
-                          [&](EdgeRef edge)
-                          { pos = edge->center(); },
-                          [&](FaceRef face)
-                          { pos = face->center(); },
-                          [&](HalfedgeRef he)
-                          { pos = he->edge()->center(); }},
-               elem);
+    std::visit(overloaded{[&](VertexRef vert) { pos = vert->center(); }, [&](EdgeRef edge) { pos = edge->center(); }, [&](FaceRef face) { pos = face->center(); },
+                          [&](HalfedgeRef he) { pos = he->edge()->center(); }}, elem);
     return pos;
 }
 
@@ -326,7 +310,8 @@ void Halfedge_Mesh::to_mesh(GL::Mesh &mesh, bool split_faces) const
         for (FaceCRef f = faces_begin(); f != faces_end(); f++)
         {
 
-            if (f->is_boundary()) continue;
+            if (f->is_boundary())
+                continue;
 
             HalfedgeCRef h = f->halfedge();
             face_verts.clear();
@@ -334,7 +319,8 @@ void Halfedge_Mesh::to_mesh(GL::Mesh &mesh, bool split_faces) const
             {
                 VertexCRef v = h->vertex();
                 Vec3 n = v->normal();
-                if (flip_orientation) n = -n;
+                if (flip_orientation)
+                    n = -n;
                 face_verts.push_back({v->pos, n, f->id()});
                 h = h->next();
             } while (h != f->halfedge());
@@ -345,7 +331,8 @@ void Halfedge_Mesh::to_mesh(GL::Mesh &mesh, bool split_faces) const
                 Vec3 v1 = face_verts[i].pos;
                 Vec3 v2 = face_verts[i + 1].pos;
                 Vec3 n = cross(v1 - v0, v2 - v0).unit();
-                if (flip_orientation) n = -n;
+                if (flip_orientation)
+                    n = -n;
                 GL::Mesh::Index idx = (GL::Mesh::Index) verts.size();
                 verts.push_back({v0, n, f->_id});
                 verts.push_back({v1, n, f->_id});
@@ -366,14 +353,16 @@ void Halfedge_Mesh::to_mesh(GL::Mesh &mesh, bool split_faces) const
         {
             vref_to_idx[v] = i;
             Vec3 n = v->normal();
-            if (flip_orientation) n = -n;
+            if (flip_orientation)
+                n = -n;
             verts.push_back({v->pos, n, v->_id});
         }
 
         for (FaceCRef f = faces_begin(); f != faces_end(); f++)
         {
 
-            if (f->is_boundary()) continue;
+            if (f->is_boundary())
+                continue;
 
             std::vector<Index> face_verts;
             HalfedgeCRef h = f->halfedge();
@@ -444,7 +433,8 @@ std::optional<std::pair<Halfedge_Mesh::ElementRef, std::string>> Halfedge_Mesh::
     {
         Vec3 p = v->pos;
         bool finite = std::isfinite(p.x) && std::isfinite(p.y) && std::isfinite(p.z);
-        if (!finite) return {{v, "A vertex position was set to a non-finite value."}};
+        if (!finite)
+            return {{v, "A vertex position was set to a non-finite value."}};
     }
 
     std::unordered_map<VertexRef, std::set<HalfedgeRef>> v_accessible;
@@ -456,7 +446,8 @@ std::optional<std::pair<Halfedge_Mesh::ElementRef, std::string>> Halfedge_Mesh::
     for (HalfedgeRef h = halfedges_begin(); h != halfedges_end(); h++)
     {
 
-        if (herased.find(h) != herased.end()) continue;
+        if (herased.find(h) != herased.end())
+            continue;
 
         if (herased.find(h->next()) != herased.end())
         {
@@ -493,7 +484,8 @@ std::optional<std::pair<Halfedge_Mesh::ElementRef, std::string>> Halfedge_Mesh::
     for (VertexRef v = vertices_begin(); v != vertices_end(); v++)
     {
 
-        if (verased.find(v) != verased.end()) continue;
+        if (verased.find(v) != verased.end())
+            continue;
 
         HalfedgeRef h = v->halfedge();
         if (herased.find(h) != herased.end())
@@ -518,7 +510,8 @@ std::optional<std::pair<Halfedge_Mesh::ElementRef, std::string>> Halfedge_Mesh::
     for (EdgeRef e = edges_begin(); e != edges_end(); e++)
     {
 
-        if (eerased.find(e) != eerased.end()) continue;
+        if (eerased.find(e) != eerased.end())
+            continue;
 
         HalfedgeRef h = e->halfedge();
         if (herased.find(h) != herased.end())
@@ -543,7 +536,8 @@ std::optional<std::pair<Halfedge_Mesh::ElementRef, std::string>> Halfedge_Mesh::
     for (FaceRef f = faces_begin(); f != faces_end(); f++)
     {
 
-        if (ferased.find(f) != ferased.end()) continue;
+        if (ferased.find(f) != ferased.end())
+            continue;
 
         HalfedgeRef h = f->halfedge();
         if (herased.find(h) != herased.end())
@@ -567,7 +561,8 @@ std::optional<std::pair<Halfedge_Mesh::ElementRef, std::string>> Halfedge_Mesh::
     for (HalfedgeRef h = halfedges_begin(); h != halfedges_end(); h++)
     {
 
-        if (herased.find(h) != herased.end()) continue;
+        if (herased.find(h) != herased.end())
+            continue;
 
         // Check whether each halfedge was pointed to by a halfedge
         if (permutation.find(h) == permutation.end())
@@ -648,10 +643,12 @@ std::string Halfedge_Mesh::from_mesh(const GL::Mesh &mesh)
     }
 
     std::string err = from_poly(polys, verts);
-    if (!err.empty()) return err;
+    if (!err.empty())
+        return err;
 
     auto valid = validate();
-    if (valid.has_value()) return valid.value().second;
+    if (valid.has_value())
+        return valid.value().second;
 
     return {};
 }
@@ -673,17 +670,20 @@ bool Halfedge_Mesh::subdivide(SubD strategy)
 
         case SubD::catmullclark:
         {
-            if (has_boundary()) return false;
+            if (has_boundary())
+                return false;
             catmullclark_subdivide_positions();
         }
             break;
 
         case SubD::loop:
         {
-            if (has_boundary()) return false;
+            if (has_boundary())
+                return false;
             for (FaceRef f = faces_begin(); f != faces_end(); f++)
             {
-                if (f->degree() != 3) return false;
+                if (f->degree() != 3)
+                    return false;
             }
             loop_subdivide();
             return true;
@@ -712,7 +712,8 @@ bool Halfedge_Mesh::subdivide(SubD strategy)
     }
     for (FaceRef f = faces_begin(); f != faces_end(); f++)
     {
-        if (f->is_boundary()) continue;
+        if (f->is_boundary())
+            continue;
         verts[idx] = f->new_pos;
         layout[f->id()] = idx;
         idx++;
@@ -720,7 +721,8 @@ bool Halfedge_Mesh::subdivide(SubD strategy)
 
     for (auto f = faces_begin(); f != faces_end(); f++)
     {
-        if (f->is_boundary()) continue;
+        if (f->is_boundary())
+            continue;
         Index i = layout[f->id()];
         HalfedgeRef h = f->halfedge();
         do
@@ -738,8 +740,7 @@ bool Halfedge_Mesh::subdivide(SubD strategy)
     return true;
 }
 
-std::string Halfedge_Mesh::from_poly(const std::vector<std::vector<Index>> &polygons,
-                                     const std::vector<Vec3> &verts)
+std::string Halfedge_Mesh::from_poly(const std::vector<std::vector<Index>> &polygons, const std::vector<Vec3> &verts)
 {
 
     // This method initializes the halfedge data structure from a raw list of
@@ -846,7 +847,8 @@ std::string Halfedge_Mesh::from_poly(const std::vector<std::vector<Index>> &poly
 
     // The number of faces is just the number of polygons in the input.
     Size nFaces = polygons.size();
-    for (Size i = 0; i < nFaces; i++) new_face();
+    for (Size i = 0; i < nFaces; i++)
+        new_face();
 
     // We will store a map from ordered pairs of vertex indices to
     // the corresponding halfedge object in our new (halfedge) mesh;
@@ -878,14 +880,11 @@ std::string Halfedge_Mesh::from_poly(const std::vector<std::vector<Index>> &poly
             if (pairToHalfedge.find(ab) != pairToHalfedge.end())
             {
                 std::stringstream stream;
-                stream << "Found multiple oriented edges with indices (" << a << ", " << b << ")."
-                       << std::endl;
+                stream << "Found multiple oriented edges with indices (" << a << ", " << b << ")." << std::endl;
                 stream << "This means that either (i) more than two faces contain this "
-                          "edge (hence the surface is nonmanifold), or"
-                       << std::endl;
+                          "edge (hence the surface is nonmanifold), or" << std::endl;
                 stream << "(ii) there are exactly two faces containing this edge, but "
-                          "they have the same orientation (hence the surface is"
-                       << std::endl;
+                          "they have the same orientation (hence the surface is" << std::endl;
                 stream << "not consistently oriented." << std::endl;
                 return stream.str();
             } else // otherwise, the halfedge hasn't been allocated yet
@@ -1092,9 +1091,7 @@ std::string Halfedge_Mesh::from_poly(const std::vector<std::vector<Index>> &poly
     if (verts.size() < vertices.size())
     {
         std::stringstream stream;
-        stream
-                << "The number of vertex positions is different from the number of distinct vertices!"
-                << std::endl;
+        stream << "The number of vertex positions is different from the number of distinct vertices!" << std::endl;
         stream << "(number of positions in input: " << verts.size() << ")" << std::endl;
         stream << "(number of vertices in mesh: " << vertices.size() << ")" << std::endl;
         return stream.str();
@@ -1104,8 +1101,7 @@ std::string Halfedge_Mesh::from_poly(const std::vector<std::vector<Index>> &poly
     // from vertex indices to vertex iterators to visit our (input) vertices in
     // lexicographic order
     int i = 0;
-    for (std::map<Index, VertexRef>::const_iterator e = indexToVertex.begin();
-         e != indexToVertex.end(); e++)
+    for (std::map<Index, VertexRef>::const_iterator e = indexToVertex.begin(); e != indexToVertex.end(); e++)
     {
         // grab a pointer to the vertex associated with the current key (i.e., the
         // current index)

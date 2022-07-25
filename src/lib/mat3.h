@@ -15,8 +15,7 @@ struct Mat3
 
     static Mat3 inverse(const Mat3 &m);
 
-    Mat3()
-    { *this = I; }
+    Mat3() { *this = I; }
 
     explicit Mat3(Vec3 x, Vec3 y, Vec3 z)
     {
@@ -43,79 +42,91 @@ struct Mat3
 
     Mat3 operator+=(const Mat3 &m)
     {
-        for (int i = 0; i < 3; i++) cols[i] += m.cols[i];
+        for (int i = 0; i < 3; i++)
+            cols[i] += m.cols[i];
         return *this;
     }
 
     Mat3 operator-=(const Mat3 &m)
     {
-        for (int i = 0; i < 3; i++) cols[i] -= m.cols[i];
+        for (int i = 0; i < 3; i++)
+            cols[i] -= m.cols[i];
         return *this;
     }
 
     Mat3 operator+=(float s)
     {
-        for (auto &col: cols) col += s;
+        for (auto &col: cols)
+            col += s;
         return *this;
     }
 
     Mat3 operator-=(float s)
     {
-        for (auto &col: cols) col -= s;
+        for (auto &col: cols)
+            col -= s;
         return *this;
     }
 
     Mat3 operator*=(float s)
     {
-        for (auto &col: cols) col *= s;
+        for (auto &col: cols)
+            col *= s;
         return *this;
     }
 
     Mat3 operator/=(float s)
     {
-        for (auto &col: cols) col /= s;
+        for (auto &col: cols)
+            col /= s;
         return *this;
     }
 
     Mat3 operator+(const Mat3 &m) const
     {
         Mat3 r;
-        for (int i = 0; i < 3; i++) r.cols[i] = cols[i] + m.cols[i];
+        for (int i = 0; i < 3; i++)
+            r.cols[i] = cols[i] + m.cols[i];
         return r;
     }
 
     Mat3 operator-(const Mat3 &m) const
     {
         Mat3 r;
-        for (int i = 0; i < 3; i++) r.cols[i] = cols[i] - m.cols[i];
+        for (int i = 0; i < 3; i++)
+            r.cols[i] = cols[i] - m.cols[i];
         return r;
     }
 
     Mat3 operator+(float s) const
     {
         Mat3 r;
-        for (int i = 0; i < 3; i++) r.cols[i] = cols[i] + s;
+        for (int i = 0; i < 3; i++)
+            r.cols[i] = cols[i] + s;
         return r;
     }
 
     Mat3 operator-(float s) const
     {
         Mat3 r;
-        for (int i = 0; i < 3; i++) r.cols[i] = cols[i] - s;
+        for (int i = 0; i < 3; i++)
+            r.cols[i] = cols[i] - s;
         return r;
     }
 
     Mat3 operator*(float s) const
     {
         Mat3 r;
-        for (int i = 0; i < 3; i++) r.cols[i] = cols[i] * s;
+        for (int i = 0; i < 3; i++)
+            r.cols[i] = cols[i] * s;
         return r;
     }
 
     Mat3 operator/(float s) const
     {
         Mat3 r;
-        for (int i = 0; i < 3; i++) r.cols[i] = cols[i] / s;
+        for (int i = 0; i < 3; i++)
+            r.cols[i] = cols[i] / s;
         return r;
     }
 
@@ -173,49 +184,53 @@ struct Mat3
 inline bool operator==(const Mat3 &l, const Mat3 &r)
 {
     for (int i = 0; i < 9; i++)
-        if (l.data[i] != r.data[i]) return false;
+        if (l.data[i] != r.data[i])
+            return false;
     return true;
 }
 
 inline bool operator!=(const Mat3 &l, const Mat3 &r)
 {
     for (int i = 0; i < 9; i++)
-        if (l.data[i] != r.data[i]) return true;
+        if (l.data[i] != r.data[i])
+            return true;
     return false;
 }
 
 inline Mat3 operator+(float s, const Mat3 &m)
 {
     Mat3 r;
-    for (int i = 0; i < 3; i++) r.cols[i] = m.cols[i] + s;
+    for (int i = 0; i < 3; i++)
+        r.cols[i] = m.cols[i] + s;
     return r;
 }
 
 inline Mat3 operator-(float s, const Mat3 &m)
 {
     Mat3 r;
-    for (int i = 0; i < 3; i++) r.cols[i] = m.cols[i] - s;
+    for (int i = 0; i < 3; i++)
+        r.cols[i] = m.cols[i] - s;
     return r;
 }
 
 inline Mat3 operator*(float s, const Mat3 &m)
 {
     Mat3 r;
-    for (int i = 0; i < 3; i++) r.cols[i] = m.cols[i] * s;
+    for (int i = 0; i < 3; i++)
+        r.cols[i] = m.cols[i] * s;
     return r;
 }
 
 inline Mat3 operator/(float s, const Mat3 &m)
 {
     Mat3 r;
-    for (int i = 0; i < 3; i++) r.cols[i] = m.cols[i] / s;
+    for (int i = 0; i < 3; i++)
+        r.cols[i] = m.cols[i] / s;
     return r;
 }
 
-const inline Mat3 Mat3::I = Mat3{Vec3{1.0f, 0.0f, 0.0f}, Vec3{0.0f, 1.0f, 0.0f},
-                                 Vec3{0.0f, 0.0f, 1.0f}};
-const inline Mat3 Mat3::Zero = Mat3{Vec3{0.0f, 0.0f, 0.0f}, Vec3{0.0f, 0.0f, 0.0f},
-                                    Vec3{0.0f, 0.0f, 0.0f}};
+const inline Mat3 Mat3::I = Mat3{Vec3{1.0f, 0.0f, 0.0f}, Vec3{0.0f, 1.0f, 0.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+const inline Mat3 Mat3::Zero = Mat3{Vec3{0.0f, 0.0f, 0.0f}, Vec3{0.0f, 0.0f, 0.0f}, Vec3{0.0f, 0.0f, 0.0f}};
 
 inline Mat3 Mat3::transpose(const Mat3 &m)
 {

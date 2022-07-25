@@ -1,4 +1,3 @@
-
 #include <queue>
 #include <set>
 #include <unordered_map>
@@ -227,8 +226,7 @@ std::optional<Halfedge_Mesh::VertexRef> Halfedge_Mesh::collapse_edge(Halfedge_Me
     }
     if (h1->next()->next()->next() == h1 && ha->next()->next()->next() == ha)
     {
-        if (h1->next()->edge() == ha->next()->next()->edge() &&
-            h1->next()->next()->edge() == ha->next()->edge())
+        if (h1->next()->edge() == ha->next()->next()->edge() && h1->next()->next()->edge() == ha->next()->edge())
         {
             return std::nullopt;
         }
@@ -620,7 +618,6 @@ std::optional<Halfedge_Mesh::VertexRef> Halfedge_Mesh::split_edge(Halfedge_Mesh:
     return vnew;
 }
 
-
 /*
     This method should insets a vertex into the given face, returning a pointer to the new center vertex
 */
@@ -740,8 +737,7 @@ std::optional<Halfedge_Mesh::FaceRef> Halfedge_Mesh::bevel_face(Halfedge_Mesh::F
     and use the original vertex position and its associated outgoing edge
     to compute a new vertex position along the outgoing edge.
 */
-void Halfedge_Mesh::bevel_vertex_positions(const std::vector<Vec3> &start_positions,
-                                           Halfedge_Mesh::FaceRef face, float tangent_offset)
+void Halfedge_Mesh::bevel_vertex_positions(const std::vector<Vec3> &start_positions, Halfedge_Mesh::FaceRef face, float tangent_offset)
 {
 
     std::vector<HalfedgeRef> new_halfedges;
@@ -778,8 +774,7 @@ void Halfedge_Mesh::bevel_vertex_positions(const std::vector<Vec3> &start_positi
             position corresponding to vertex i
     }
 */
-void Halfedge_Mesh::bevel_edge_positions(const std::vector<Vec3> &start_positions,
-                                         Halfedge_Mesh::FaceRef face, float tangent_offset)
+void Halfedge_Mesh::bevel_edge_positions(const std::vector<Vec3> &start_positions, Halfedge_Mesh::FaceRef face, float tangent_offset)
 {
 
     std::vector<HalfedgeRef> new_halfedges;
@@ -817,12 +812,11 @@ void Halfedge_Mesh::bevel_edge_positions(const std::vector<Vec3> &start_position
             position corresponding to vertex i
     }
 */
-void Halfedge_Mesh::bevel_face_positions(const std::vector<Vec3> &start_positions,
-                                         Halfedge_Mesh::FaceRef face, float tangent_offset,
-                                         float normal_offset)
+void Halfedge_Mesh::bevel_face_positions(const std::vector<Vec3> &start_positions, Halfedge_Mesh::FaceRef face, float tangent_offset, float normal_offset)
 {
 
-    if (flip_orientation) normal_offset = -normal_offset;
+    if (flip_orientation)
+        normal_offset = -normal_offset;
     std::vector<HalfedgeRef> new_halfedges;
     auto h = face->halfedge();
     do
@@ -864,8 +858,10 @@ void Halfedge_Mesh::triangulate()
     std::vector<FaceRef> all_faces;
     for (f = faces_begin(); f != faces_end(); f++)
     {
-        if (ferased.find(f) != ferased.end()) continue;
-        if (f->is_boundary()) continue;
+        if (ferased.find(f) != ferased.end())
+            continue;
+        if (f->is_boundary())
+            continue;
         all_faces.push_back(f);
     }
 
@@ -1215,9 +1211,7 @@ struct Edge_Record
     {
     }
 
-    Edge_Record(std::unordered_map<Halfedge_Mesh::VertexRef, Mat4> &vertex_quadrics,
-                Halfedge_Mesh::EdgeRef e)
-            : edge(e)
+    Edge_Record(std::unordered_map<Halfedge_Mesh::VertexRef, Mat4> &vertex_quadrics, Halfedge_Mesh::EdgeRef e) : edge(e)
     {
 
         // Compute the combined quadric from the edge endpoints.

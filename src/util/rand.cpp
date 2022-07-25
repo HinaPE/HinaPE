@@ -1,4 +1,3 @@
-
 #include "rand.h"
 #include "../lib/mathlib.h"
 
@@ -31,10 +30,8 @@ bool coin_flip(float p)
 void seed()
 {
     std::random_device r;
-    std::random_device::result_type seed =
-            r() ^
-            (std::random_device::result_type) std::hash<std::thread::id>()(std::this_thread::get_id()) ^
-            (std::random_device::result_type) std::hash<time_t>()(std::time(nullptr));
+    std::random_device::result_type seed = r() ^ (std::random_device::result_type) std::hash<std::thread::id>()(std::this_thread::get_id()) ^
+                                           (std::random_device::result_type) std::hash<time_t>()(std::time(nullptr));
     rng.seed(seed);
 }
 

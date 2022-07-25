@@ -28,8 +28,7 @@ public:
     std::pair<float, float> completion_time() const;
 
     bool keydown(Widgets &widgets, SDL_Keysym key);
-    Mode UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe selected,
-                   Camera &user_cam);
+    Mode UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe selected, Camera &user_cam);
     void render(Scene_Maybe obj, Widgets &widgets, Camera &user_cam);
 
     void update_dim(Vec2 dim);

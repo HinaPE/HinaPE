@@ -85,79 +85,91 @@ struct Mat4
 
     Mat4 operator+=(const Mat4 &m)
     {
-        for (int i = 0; i < 4; i++) cols[i] += m.cols[i];
+        for (int i = 0; i < 4; i++)
+            cols[i] += m.cols[i];
         return *this;
     }
 
     Mat4 operator-=(const Mat4 &m)
     {
-        for (int i = 0; i < 4; i++) cols[i] -= m.cols[i];
+        for (int i = 0; i < 4; i++)
+            cols[i] -= m.cols[i];
         return *this;
     }
 
     Mat4 operator+=(float s)
     {
-        for (int i = 0; i < 4; i++) cols[i] += s;
+        for (int i = 0; i < 4; i++)
+            cols[i] += s;
         return *this;
     }
 
     Mat4 operator-=(float s)
     {
-        for (int i = 0; i < 4; i++) cols[i] -= s;
+        for (int i = 0; i < 4; i++)
+            cols[i] -= s;
         return *this;
     }
 
     Mat4 operator*=(float s)
     {
-        for (int i = 0; i < 4; i++) cols[i] *= s;
+        for (int i = 0; i < 4; i++)
+            cols[i] *= s;
         return *this;
     }
 
     Mat4 operator/=(float s)
     {
-        for (int i = 0; i < 4; i++) cols[i] /= s;
+        for (int i = 0; i < 4; i++)
+            cols[i] /= s;
         return *this;
     }
 
     Mat4 operator+(const Mat4 &m) const
     {
         Mat4 r;
-        for (int i = 0; i < 4; i++) r.cols[i] = cols[i] + m.cols[i];
+        for (int i = 0; i < 4; i++)
+            r.cols[i] = cols[i] + m.cols[i];
         return r;
     }
 
     Mat4 operator-(const Mat4 &m) const
     {
         Mat4 r;
-        for (int i = 0; i < 4; i++) r.cols[i] = cols[i] - m.cols[i];
+        for (int i = 0; i < 4; i++)
+            r.cols[i] = cols[i] - m.cols[i];
         return r;
     }
 
     Mat4 operator+(float s) const
     {
         Mat4 r;
-        for (int i = 0; i < 4; i++) r.cols[i] = cols[i] + s;
+        for (int i = 0; i < 4; i++)
+            r.cols[i] = cols[i] + s;
         return r;
     }
 
     Mat4 operator-(float s) const
     {
         Mat4 r;
-        for (int i = 0; i < 4; i++) r.cols[i] = cols[i] - s;
+        for (int i = 0; i < 4; i++)
+            r.cols[i] = cols[i] - s;
         return r;
     }
 
     Mat4 operator*(float s) const
     {
         Mat4 r;
-        for (int i = 0; i < 4; i++) r.cols[i] = cols[i] * s;
+        for (int i = 0; i < 4; i++)
+            r.cols[i] = cols[i] * s;
         return r;
     }
 
     Mat4 operator/(float s) const
     {
         Mat4 r;
-        for (int i = 0; i < 4; i++) r.cols[i] = cols[i] / s;
+        for (int i = 0; i < 4; i++)
+            r.cols[i] = cols[i] / s;
         return r;
     }
 
@@ -206,8 +218,7 @@ struct Mat4
     {
 
         bool single = true;
-        static const float singularity[] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
-                                            0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0};
+        static const float singularity[] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0};
 
         for (int i = 0; i < 3 && single; i++)
         {
@@ -216,7 +227,8 @@ struct Mat4
                 single = single && std::abs(cols[i][j] - singularity[i * 4 + j]) < EPS_F;
             }
         }
-        if (single) return Vec3{0.0f, 0.0f, 180.0f};
+        if (single)
+            return Vec3{0.0f, 0.0f, 180.0f};
 
         Vec3 eul1, eul2;
 
@@ -260,30 +272,14 @@ struct Mat4
     /// Returns determinant (brute force).
     float det() const
     {
-        return cols[0][3] * cols[1][2] * cols[2][1] * cols[3][0] -
-               cols[0][2] * cols[1][3] * cols[2][1] * cols[3][0] -
-               cols[0][3] * cols[1][1] * cols[2][2] * cols[3][0] +
-               cols[0][1] * cols[1][3] * cols[2][2] * cols[3][0] +
-               cols[0][2] * cols[1][1] * cols[2][3] * cols[3][0] -
-               cols[0][1] * cols[1][2] * cols[2][3] * cols[3][0] -
-               cols[0][3] * cols[1][2] * cols[2][0] * cols[3][1] +
-               cols[0][2] * cols[1][3] * cols[2][0] * cols[3][1] +
-               cols[0][3] * cols[1][0] * cols[2][2] * cols[3][1] -
-               cols[0][0] * cols[1][3] * cols[2][2] * cols[3][1] -
-               cols[0][2] * cols[1][0] * cols[2][3] * cols[3][1] +
-               cols[0][0] * cols[1][2] * cols[2][3] * cols[3][1] +
-               cols[0][3] * cols[1][1] * cols[2][0] * cols[3][2] -
-               cols[0][1] * cols[1][3] * cols[2][0] * cols[3][2] -
-               cols[0][3] * cols[1][0] * cols[2][1] * cols[3][2] +
-               cols[0][0] * cols[1][3] * cols[2][1] * cols[3][2] +
-               cols[0][1] * cols[1][0] * cols[2][3] * cols[3][2] -
-               cols[0][0] * cols[1][1] * cols[2][3] * cols[3][2] -
-               cols[0][2] * cols[1][1] * cols[2][0] * cols[3][3] +
-               cols[0][1] * cols[1][2] * cols[2][0] * cols[3][3] +
-               cols[0][2] * cols[1][0] * cols[2][1] * cols[3][3] -
-               cols[0][0] * cols[1][2] * cols[2][1] * cols[3][3] -
-               cols[0][1] * cols[1][0] * cols[2][2] * cols[3][3] +
-               cols[0][0] * cols[1][1] * cols[2][2] * cols[3][3];
+        return cols[0][3] * cols[1][2] * cols[2][1] * cols[3][0] - cols[0][2] * cols[1][3] * cols[2][1] * cols[3][0] - cols[0][3] * cols[1][1] * cols[2][2] * cols[3][0] +
+               cols[0][1] * cols[1][3] * cols[2][2] * cols[3][0] + cols[0][2] * cols[1][1] * cols[2][3] * cols[3][0] - cols[0][1] * cols[1][2] * cols[2][3] * cols[3][0] -
+               cols[0][3] * cols[1][2] * cols[2][0] * cols[3][1] + cols[0][2] * cols[1][3] * cols[2][0] * cols[3][1] + cols[0][3] * cols[1][0] * cols[2][2] * cols[3][1] -
+               cols[0][0] * cols[1][3] * cols[2][2] * cols[3][1] - cols[0][2] * cols[1][0] * cols[2][3] * cols[3][1] + cols[0][0] * cols[1][2] * cols[2][3] * cols[3][1] +
+               cols[0][3] * cols[1][1] * cols[2][0] * cols[3][2] - cols[0][1] * cols[1][3] * cols[2][0] * cols[3][2] - cols[0][3] * cols[1][0] * cols[2][1] * cols[3][2] +
+               cols[0][0] * cols[1][3] * cols[2][1] * cols[3][2] + cols[0][1] * cols[1][0] * cols[2][3] * cols[3][2] - cols[0][0] * cols[1][1] * cols[2][3] * cols[3][2] -
+               cols[0][2] * cols[1][1] * cols[2][0] * cols[3][3] + cols[0][1] * cols[1][2] * cols[2][0] * cols[3][3] + cols[0][2] * cols[1][0] * cols[2][1] * cols[3][3] -
+               cols[0][0] * cols[1][2] * cols[2][1] * cols[3][3] - cols[0][1] * cols[1][0] * cols[2][2] * cols[3][3] + cols[0][0] * cols[1][1] * cols[2][2] * cols[3][3];
     }
 
     union
@@ -296,55 +292,60 @@ struct Mat4
 inline bool operator==(const Mat4 &l, const Mat4 &r)
 {
     for (int i = 0; i < 16; i++)
-        if (l.data[i] != r.data[i]) return false;
+        if (l.data[i] != r.data[i])
+            return false;
     return true;
 }
 
 inline bool operator!=(const Mat4 &l, const Mat4 &r)
 {
     for (int i = 0; i < 16; i++)
-        if (l.data[i] != r.data[i]) return true;
+        if (l.data[i] != r.data[i])
+            return true;
     return false;
 }
 
 inline Mat4 operator+(float s, const Mat4 &m)
 {
     Mat4 r;
-    for (int i = 0; i < 4; i++) r.cols[i] = m.cols[i] + s;
+    for (int i = 0; i < 4; i++)
+        r.cols[i] = m.cols[i] + s;
     return r;
 }
 
 inline Mat4 operator-(float s, const Mat4 &m)
 {
     Mat4 r;
-    for (int i = 0; i < 4; i++) r.cols[i] = m.cols[i] - s;
+    for (int i = 0; i < 4; i++)
+        r.cols[i] = m.cols[i] - s;
     return r;
 }
 
 inline Mat4 operator*(float s, const Mat4 &m)
 {
     Mat4 r;
-    for (int i = 0; i < 4; i++) r.cols[i] = m.cols[i] * s;
+    for (int i = 0; i < 4; i++)
+        r.cols[i] = m.cols[i] * s;
     return r;
 }
 
 inline Mat4 operator/(float s, const Mat4 &m)
 {
     Mat4 r;
-    for (int i = 0; i < 4; i++) r.cols[i] = m.cols[i] / s;
+    for (int i = 0; i < 4; i++)
+        r.cols[i] = m.cols[i] / s;
     return r;
 }
 
-const inline Mat4 Mat4::I = Mat4{Vec4{1.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 1.0f, 0.0f, 0.0f},
-                                 Vec4{0.0f, 0.0f, 1.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 1.0f}};
-const inline Mat4 Mat4::Zero = Mat4{Vec4{0.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 0.0f},
-                                    Vec4{0.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 0.0f}};
+const inline Mat4 Mat4::I = Mat4{Vec4{1.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 1.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 1.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 1.0f}};
+const inline Mat4 Mat4::Zero = Mat4{Vec4{0.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 0.0f}};
 
 inline Mat4 outer(Vec4 u, Vec4 v)
 {
     Mat4 B;
     for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++) B[i][j] = u[i] * v[j];
+        for (int j = 0; j < 4; j++)
+            B[i][j] = u[i] * v[j];
     return B;
 }
 
@@ -364,54 +365,38 @@ inline Mat4 Mat4::transpose(const Mat4 &m)
 inline Mat4 Mat4::inverse(const Mat4 &m)
 {
     Mat4 r;
-    r[0][0] = m[1][2] * m[2][3] * m[3][1] - m[1][3] * m[2][2] * m[3][1] +
-              m[1][3] * m[2][1] * m[3][2] - m[1][1] * m[2][3] * m[3][2] -
-              m[1][2] * m[2][1] * m[3][3] + m[1][1] * m[2][2] * m[3][3];
-    r[0][1] = m[0][3] * m[2][2] * m[3][1] - m[0][2] * m[2][3] * m[3][1] -
-              m[0][3] * m[2][1] * m[3][2] + m[0][1] * m[2][3] * m[3][2] +
-              m[0][2] * m[2][1] * m[3][3] - m[0][1] * m[2][2] * m[3][3];
-    r[0][2] = m[0][2] * m[1][3] * m[3][1] - m[0][3] * m[1][2] * m[3][1] +
-              m[0][3] * m[1][1] * m[3][2] - m[0][1] * m[1][3] * m[3][2] -
-              m[0][2] * m[1][1] * m[3][3] + m[0][1] * m[1][2] * m[3][3];
-    r[0][3] = m[0][3] * m[1][2] * m[2][1] - m[0][2] * m[1][3] * m[2][1] -
-              m[0][3] * m[1][1] * m[2][2] + m[0][1] * m[1][3] * m[2][2] +
-              m[0][2] * m[1][1] * m[2][3] - m[0][1] * m[1][2] * m[2][3];
-    r[1][0] = m[1][3] * m[2][2] * m[3][0] - m[1][2] * m[2][3] * m[3][0] -
-              m[1][3] * m[2][0] * m[3][2] + m[1][0] * m[2][3] * m[3][2] +
-              m[1][2] * m[2][0] * m[3][3] - m[1][0] * m[2][2] * m[3][3];
-    r[1][1] = m[0][2] * m[2][3] * m[3][0] - m[0][3] * m[2][2] * m[3][0] +
-              m[0][3] * m[2][0] * m[3][2] - m[0][0] * m[2][3] * m[3][2] -
-              m[0][2] * m[2][0] * m[3][3] + m[0][0] * m[2][2] * m[3][3];
-    r[1][2] = m[0][3] * m[1][2] * m[3][0] - m[0][2] * m[1][3] * m[3][0] -
-              m[0][3] * m[1][0] * m[3][2] + m[0][0] * m[1][3] * m[3][2] +
-              m[0][2] * m[1][0] * m[3][3] - m[0][0] * m[1][2] * m[3][3];
-    r[1][3] = m[0][2] * m[1][3] * m[2][0] - m[0][3] * m[1][2] * m[2][0] +
-              m[0][3] * m[1][0] * m[2][2] - m[0][0] * m[1][3] * m[2][2] -
-              m[0][2] * m[1][0] * m[2][3] + m[0][0] * m[1][2] * m[2][3];
-    r[2][0] = m[1][1] * m[2][3] * m[3][0] - m[1][3] * m[2][1] * m[3][0] +
-              m[1][3] * m[2][0] * m[3][1] - m[1][0] * m[2][3] * m[3][1] -
-              m[1][1] * m[2][0] * m[3][3] + m[1][0] * m[2][1] * m[3][3];
-    r[2][1] = m[0][3] * m[2][1] * m[3][0] - m[0][1] * m[2][3] * m[3][0] -
-              m[0][3] * m[2][0] * m[3][1] + m[0][0] * m[2][3] * m[3][1] +
-              m[0][1] * m[2][0] * m[3][3] - m[0][0] * m[2][1] * m[3][3];
-    r[2][2] = m[0][1] * m[1][3] * m[3][0] - m[0][3] * m[1][1] * m[3][0] +
-              m[0][3] * m[1][0] * m[3][1] - m[0][0] * m[1][3] * m[3][1] -
-              m[0][1] * m[1][0] * m[3][3] + m[0][0] * m[1][1] * m[3][3];
-    r[2][3] = m[0][3] * m[1][1] * m[2][0] - m[0][1] * m[1][3] * m[2][0] -
-              m[0][3] * m[1][0] * m[2][1] + m[0][0] * m[1][3] * m[2][1] +
-              m[0][1] * m[1][0] * m[2][3] - m[0][0] * m[1][1] * m[2][3];
-    r[3][0] = m[1][2] * m[2][1] * m[3][0] - m[1][1] * m[2][2] * m[3][0] -
-              m[1][2] * m[2][0] * m[3][1] + m[1][0] * m[2][2] * m[3][1] +
-              m[1][1] * m[2][0] * m[3][2] - m[1][0] * m[2][1] * m[3][2];
-    r[3][1] = m[0][1] * m[2][2] * m[3][0] - m[0][2] * m[2][1] * m[3][0] +
-              m[0][2] * m[2][0] * m[3][1] - m[0][0] * m[2][2] * m[3][1] -
-              m[0][1] * m[2][0] * m[3][2] + m[0][0] * m[2][1] * m[3][2];
-    r[3][2] = m[0][2] * m[1][1] * m[3][0] - m[0][1] * m[1][2] * m[3][0] -
-              m[0][2] * m[1][0] * m[3][1] + m[0][0] * m[1][2] * m[3][1] +
-              m[0][1] * m[1][0] * m[3][2] - m[0][0] * m[1][1] * m[3][2];
-    r[3][3] = m[0][1] * m[1][2] * m[2][0] - m[0][2] * m[1][1] * m[2][0] +
-              m[0][2] * m[1][0] * m[2][1] - m[0][0] * m[1][2] * m[2][1] -
-              m[0][1] * m[1][0] * m[2][2] + m[0][0] * m[1][1] * m[2][2];
+    r[0][0] = m[1][2] * m[2][3] * m[3][1] - m[1][3] * m[2][2] * m[3][1] + m[1][3] * m[2][1] * m[3][2] - m[1][1] * m[2][3] * m[3][2] - m[1][2] * m[2][1] * m[3][3] +
+              m[1][1] * m[2][2] * m[3][3];
+    r[0][1] = m[0][3] * m[2][2] * m[3][1] - m[0][2] * m[2][3] * m[3][1] - m[0][3] * m[2][1] * m[3][2] + m[0][1] * m[2][3] * m[3][2] + m[0][2] * m[2][1] * m[3][3] -
+              m[0][1] * m[2][2] * m[3][3];
+    r[0][2] = m[0][2] * m[1][3] * m[3][1] - m[0][3] * m[1][2] * m[3][1] + m[0][3] * m[1][1] * m[3][2] - m[0][1] * m[1][3] * m[3][2] - m[0][2] * m[1][1] * m[3][3] +
+              m[0][1] * m[1][2] * m[3][3];
+    r[0][3] = m[0][3] * m[1][2] * m[2][1] - m[0][2] * m[1][3] * m[2][1] - m[0][3] * m[1][1] * m[2][2] + m[0][1] * m[1][3] * m[2][2] + m[0][2] * m[1][1] * m[2][3] -
+              m[0][1] * m[1][2] * m[2][3];
+    r[1][0] = m[1][3] * m[2][2] * m[3][0] - m[1][2] * m[2][3] * m[3][0] - m[1][3] * m[2][0] * m[3][2] + m[1][0] * m[2][3] * m[3][2] + m[1][2] * m[2][0] * m[3][3] -
+              m[1][0] * m[2][2] * m[3][3];
+    r[1][1] = m[0][2] * m[2][3] * m[3][0] - m[0][3] * m[2][2] * m[3][0] + m[0][3] * m[2][0] * m[3][2] - m[0][0] * m[2][3] * m[3][2] - m[0][2] * m[2][0] * m[3][3] +
+              m[0][0] * m[2][2] * m[3][3];
+    r[1][2] = m[0][3] * m[1][2] * m[3][0] - m[0][2] * m[1][3] * m[3][0] - m[0][3] * m[1][0] * m[3][2] + m[0][0] * m[1][3] * m[3][2] + m[0][2] * m[1][0] * m[3][3] -
+              m[0][0] * m[1][2] * m[3][3];
+    r[1][3] = m[0][2] * m[1][3] * m[2][0] - m[0][3] * m[1][2] * m[2][0] + m[0][3] * m[1][0] * m[2][2] - m[0][0] * m[1][3] * m[2][2] - m[0][2] * m[1][0] * m[2][3] +
+              m[0][0] * m[1][2] * m[2][3];
+    r[2][0] = m[1][1] * m[2][3] * m[3][0] - m[1][3] * m[2][1] * m[3][0] + m[1][3] * m[2][0] * m[3][1] - m[1][0] * m[2][3] * m[3][1] - m[1][1] * m[2][0] * m[3][3] +
+              m[1][0] * m[2][1] * m[3][3];
+    r[2][1] = m[0][3] * m[2][1] * m[3][0] - m[0][1] * m[2][3] * m[3][0] - m[0][3] * m[2][0] * m[3][1] + m[0][0] * m[2][3] * m[3][1] + m[0][1] * m[2][0] * m[3][3] -
+              m[0][0] * m[2][1] * m[3][3];
+    r[2][2] = m[0][1] * m[1][3] * m[3][0] - m[0][3] * m[1][1] * m[3][0] + m[0][3] * m[1][0] * m[3][1] - m[0][0] * m[1][3] * m[3][1] - m[0][1] * m[1][0] * m[3][3] +
+              m[0][0] * m[1][1] * m[3][3];
+    r[2][3] = m[0][3] * m[1][1] * m[2][0] - m[0][1] * m[1][3] * m[2][0] - m[0][3] * m[1][0] * m[2][1] + m[0][0] * m[1][3] * m[2][1] + m[0][1] * m[1][0] * m[2][3] -
+              m[0][0] * m[1][1] * m[2][3];
+    r[3][0] = m[1][2] * m[2][1] * m[3][0] - m[1][1] * m[2][2] * m[3][0] - m[1][2] * m[2][0] * m[3][1] + m[1][0] * m[2][2] * m[3][1] + m[1][1] * m[2][0] * m[3][2] -
+              m[1][0] * m[2][1] * m[3][2];
+    r[3][1] = m[0][1] * m[2][2] * m[3][0] - m[0][2] * m[2][1] * m[3][0] + m[0][2] * m[2][0] * m[3][1] - m[0][0] * m[2][2] * m[3][1] - m[0][1] * m[2][0] * m[3][2] +
+              m[0][0] * m[2][1] * m[3][2];
+    r[3][2] = m[0][2] * m[1][1] * m[3][0] - m[0][1] * m[1][2] * m[3][0] - m[0][2] * m[1][0] * m[3][1] + m[0][0] * m[1][2] * m[3][1] + m[0][1] * m[1][0] * m[3][2] -
+              m[0][0] * m[1][1] * m[3][2];
+    r[3][3] = m[0][1] * m[1][2] * m[2][0] - m[0][2] * m[1][1] * m[2][0] + m[0][2] * m[1][0] * m[2][1] - m[0][0] * m[1][2] * m[2][1] - m[0][1] * m[1][0] * m[2][2] +
+              m[0][0] * m[1][1] * m[2][2];
     r /= m.det();
     return r;
 }
@@ -424,8 +409,7 @@ inline Mat4 Mat4::rotate_to(Vec3 dir)
     if (std::abs(dir.y - 1.0f) < EPS_F)
         return Mat4::I;
     else if (std::abs(dir.y + 1.0f) < EPS_F)
-        return Mat4{Vec4{1.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, -1.0f, 0.0f, 0.0f},
-                    Vec4{0.0f, 0.0f, 1.0f, 0.0}, Vec4{0.0f, 0.0f, 0.0f, 1.0f}};
+        return Mat4{Vec4{1.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, -1.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 1.0f, 0.0}, Vec4{0.0f, 0.0f, 0.0f, 1.0f}};
     else
     {
         Vec3 x = cross(dir, Vec3{0.0f, 1.0f, 0.0f}).unit();
@@ -458,9 +442,7 @@ inline Mat4 Mat4::translate(Vec3 t)
 
 inline Mat4 Mat4::euler(Vec3 angles)
 {
-    return Mat4::rotate(angles.z, Vec3{0.0f, 0.0f, 1.0f}) *
-           Mat4::rotate(angles.y, Vec3{0.0f, 1.0f, 0.0f}) *
-           Mat4::rotate(angles.x, Vec3{1.0f, 0.0f, 0.0f});
+    return Mat4::rotate(angles.z, Vec3{0.0f, 0.0f, 1.0f}) * Mat4::rotate(angles.y, Vec3{0.0f, 1.0f, 0.0f}) * Mat4::rotate(angles.x, Vec3{1.0f, 0.0f, 0.0f});
 }
 
 inline Mat4 Mat4::rotate(float t, Vec3 axis)

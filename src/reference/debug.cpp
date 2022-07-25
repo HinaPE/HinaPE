@@ -1,4 +1,3 @@
-
 #include "debug.h"
 #include <imgui/imgui.h>
 

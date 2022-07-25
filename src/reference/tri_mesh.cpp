@@ -1,4 +1,3 @@
-
 #include "../rays/tri_mesh.h"
 #include "../rays/samplers.h"
 
@@ -109,8 +108,7 @@ Trace Triangle::hit(const Ray &ray) const
     return ret;
 }
 
-Triangle::Triangle(Tri_Mesh_Vert *verts, unsigned int v0, unsigned int v1, unsigned int v2)
-        : vertex_list(verts), v0(v0), v1(v1), v2(v2)
+Triangle::Triangle(Tri_Mesh_Vert *verts, unsigned int v0, unsigned int v1, unsigned int v2) : vertex_list(verts), v0(v0), v1(v1), v2(v2)
 {
 }
 
@@ -138,8 +136,7 @@ float Triangle::pdf(Ray wray, const Mat4 &T, const Mat4 &iT) const
         Vec3 v_1 = T * vertex_list[v1].position;
         Vec3 v_2 = T * vertex_list[v2].position;
         float a = 2.0f / cross(v_1 - v_0, v_2 - v_0).norm();
-        float g =
-                (trace.position - wray.point).norm_squared() / std::abs(dot(trace.normal, wray.dir));
+        float g = (trace.position - wray.point).norm_squared() / std::abs(dot(trace.normal, wray.dir));
         return a * g;
     }
     return 0.0f;
@@ -192,20 +189,22 @@ Tri_Mesh Tri_Mesh::copy() const
 
 BBox Tri_Mesh::bbox() const
 {
-    if (use_bvh) return triangle_bvh.bbox();
+    if (use_bvh)
+        return triangle_bvh.bbox();
     return triangle_list.bbox();
 }
 
 Trace Tri_Mesh::hit(const Ray &ray) const
 {
-    if (use_bvh) return triangle_bvh.hit(ray);
+    if (use_bvh)
+        return triangle_bvh.hit(ray);
     return triangle_list.hit(ray);
 }
 
-size_t Tri_Mesh::visualize(GL::Lines &lines, GL::Lines &active, size_t level,
-                           const Mat4 &trans) const
+size_t Tri_Mesh::visualize(GL::Lines &lines, GL::Lines &active, size_t level, const Mat4 &trans) const
 {
-    if (use_bvh) return triangle_bvh.visualize(lines, active, level, trans);
+    if (use_bvh)
+        return triangle_bvh.visualize(lines, active, level, trans);
     return 0;
 }
 

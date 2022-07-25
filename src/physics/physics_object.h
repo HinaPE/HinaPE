@@ -57,12 +57,7 @@ public:
     PhysicsObject &operator=(DeformableBase<T> &&deformable);
 
 private:
-    std::optional<std::variant<
-            RigidBodyBase<HinaPE::DYNAMIC>,
-            RigidBodyBase<HinaPE::STATIC>,
-            RigidBodyBase<HinaPE::KINEMATIC>,
-            DeformableBase<CLOTH>,
-            DeformableBase<MESH>>> physics_object_opt;
+    std::optional<std::variant<RigidBodyBase<HinaPE::DYNAMIC>, RigidBodyBase<HinaPE::STATIC>, RigidBodyBase<HinaPE::KINEMATIC>, DeformableBase<CLOTH>, DeformableBase<MESH>>> physics_object_opt;
 };
 
 template<HinaPE::RigidBodyType T>

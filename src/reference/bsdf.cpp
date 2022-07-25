@@ -1,4 +1,3 @@
-
 #include "../rays/bsdf.h"
 #include "../util/rand.h"
 

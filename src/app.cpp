@@ -1,4 +1,3 @@
-
 #include <SDL2/SDL.h>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl.h>
@@ -8,13 +7,12 @@
 #include "platform/platform.h"
 #include "scene/renderer.h"
 
-App::App(Launch_Settings set, Platform *plt)
-        : window_dim(plt ? plt->window_draw() : Vec2{1.0f}),
-          camera(plt ? plt->window_draw() : Vec2{1.0f}), plt(plt), scene(Gui::n_Widget_IDs),
-          gui(scene, plt ? plt->window_size() : Vec2{1.0f}), undo(scene, gui)
+App::App(Launch_Settings set, Platform *plt) : window_dim(plt ? plt->window_draw() : Vec2{1.0f}), camera(plt ? plt->window_draw() : Vec2{1.0f}), plt(plt),
+                                               scene(Gui::n_Widget_IDs), gui(scene, plt ? plt->window_size() : Vec2{1.0f}), undo(scene, gui)
 {
 
-    if (!set.headless) assert(plt);
+    if (!set.headless)
+        assert(plt);
 
     std::string err;
     bool loaded_scene = true;
@@ -38,7 +36,8 @@ App::App(Launch_Settings set, Platform *plt)
     {
         info("Loading environment map...");
         err = scene.set_env_map(set.env_map_file);
-        if (!err.empty()) warn("Error loading environment map: %s", err.c_str());
+        if (!err.empty())
+            warn("Error loading environment map: %s", err.c_str());
     }
 
     if (!set.headless)
@@ -82,8 +81,10 @@ void App::event(SDL_Event e)
     {
         case SDL_KEYDOWN:
         {
-            if (IO.WantCaptureKeyboard) break;
-            if (gui.keydown(undo, e.key.keysym, scene, camera)) break;
+            if (IO.WantCaptureKeyboard)
+                break;
+            if (gui.keydown(undo, e.key.keysym, scene, camera))
+                break;
 
 #ifdef __APPLE__
             Uint16 mod = KMOD_GUI;
@@ -109,8 +110,7 @@ void App::event(SDL_Event e)
 
         case SDL_WINDOWEVENT:
         {
-            if (e.window.event == SDL_WINDOWEVENT_RESIZED ||
-                e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+            if (e.window.event == SDL_WINDOWEVENT_RESIZED || e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
             {
 
                 apply_window_dim(plt->window_draw());
@@ -146,7 +146,8 @@ void App::event(SDL_Event e)
         case SDL_MOUSEBUTTONDOWN:
         {
 
-            if (IO.WantCaptureMouse) break;
+            if (IO.WantCaptureMouse)
+                break;
 
             Vec2 p = plt->scale(Vec2{e.button.x, e.button.y});
             Vec2 dim = plt->window_draw();
@@ -158,8 +159,7 @@ void App::event(SDL_Event e)
                 Scene_ID id = Renderer::get().read_id(p);
 
                 if (cam_mode == Camera_Control::none &&
-                    ((plt->is_down(SDL_SCANCODE_LSHIFT) | plt->is_down(SDL_SCANCODE_RSHIFT) |
-                      (plt->is_down(SDL_SCANCODE_LALT) | plt->is_down(SDL_SCANCODE_RALT)))))
+                    ((plt->is_down(SDL_SCANCODE_LSHIFT) | plt->is_down(SDL_SCANCODE_RSHIFT) | (plt->is_down(SDL_SCANCODE_LALT) | plt->is_down(SDL_SCANCODE_RALT)))))
                 {
                     cam_mode = Camera_Control::orbit;
                 } else if (gui.select(scene, undo, id, camera.pos(), n, screen_to_world(p)))
@@ -182,8 +182,7 @@ void App::event(SDL_Event e)
                 }
             } else if (e.button.button == SDL_BUTTON_MIDDLE)
             {
-                if (cam_mode == Camera_Control::none &&
-                    ((plt->is_down(SDL_SCANCODE_LALT) | plt->is_down(SDL_SCANCODE_RALT))))
+                if (cam_mode == Camera_Control::none && ((plt->is_down(SDL_SCANCODE_LALT) | plt->is_down(SDL_SCANCODE_RALT))))
                 {
                     cam_mode = Camera_Control::move;
                 } else
@@ -224,8 +223,7 @@ void App::event(SDL_Event e)
 
             if ((e.button.button == SDL_BUTTON_LEFT && cam_mode == Camera_Control::orbit) ||
                 (e.button.button == SDL_BUTTON_MIDDLE && cam_mode == Camera_Control::orbit) ||
-                (e.button.button == SDL_BUTTON_RIGHT && cam_mode == Camera_Control::move) ||
-                (e.button.button == SDL_BUTTON_MIDDLE && cam_mode == Camera_Control::move))
+                (e.button.button == SDL_BUTTON_RIGHT && cam_mode == Camera_Control::move) || (e.button.button == SDL_BUTTON_MIDDLE && cam_mode == Camera_Control::move))
             {
                 cam_mode = Camera_Control::none;
             }
@@ -235,7 +233,8 @@ void App::event(SDL_Event e)
 
         case SDL_MOUSEWHEEL:
         {
-            if (IO.WantCaptureMouse) break;
+            if (IO.WantCaptureMouse)
+                break;
             camera.mouse_radius((float) e.wheel.y);
         }
             break;

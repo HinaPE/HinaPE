@@ -53,14 +53,12 @@ public:
 
     BBox bbox() const
     {
-        return std::visit(overloaded{[](const auto &o)
-                                     { return o.bbox(); }}, underlying);
+        return std::visit(overloaded{[](const auto &o) { return o.bbox(); }}, underlying);
     }
 
     Trace hit(Ray ray) const
     {
-        return std::visit(overloaded{[&ray](const auto &o)
-                                     { return o.hit(ray); }}, underlying);
+        return std::visit(overloaded{[&ray](const auto &o) { return o.hit(ray); }}, underlying);
     }
 
     template<typename T>
@@ -82,10 +80,7 @@ public:
 
     GL::Mesh mesh() const
     {
-        return std::visit(
-                [](const PT::Sphere &sphere)
-                { return Util::sphere_mesh(sphere.radius, 2); },
-                underlying);
+        return std::visit([](const PT::Sphere &sphere) { return Util::sphere_mesh(sphere.radius, 2); }, underlying);
     }
 
 private:

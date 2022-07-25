@@ -134,8 +134,8 @@ struct Quat
 
     Quat operator*(const Quat &r) const
     {
-        return Quat(y * r.z - z * r.y + x * r.w + w * r.x, z * r.x - x * r.z + y * r.w + w * r.y,
-                    x * r.y - y * r.x + z * r.w + w * r.z, w * r.w - x * r.x - y * r.y - z * r.z);
+        return Quat(y * r.z - z * r.y + x * r.w + w * r.x, z * r.x - x * r.z + y * r.w + w * r.y, x * r.y - y * r.x + z * r.w + w * r.z,
+                    w * r.w - x * r.x - y * r.y - z * r.z);
     }
 
     Quat operator*(float s) const
@@ -167,11 +167,9 @@ struct Quat
     /// Convert quaternion to equivalent rotation matrix (orthonormal, 3x3)
     Mat4 to_mat() const
     {
-        return Mat4{
-                Vec4{1 - 2 * y * y - 2 * z * z, 2 * x * y + 2 * z * w, 2 * x * z - 2 * y * w, 0.0f},
-                Vec4{2 * x * y - 2 * z * w, 1 - 2 * x * x - 2 * z * z, 2 * y * z + 2 * x * w, 0.0f},
-                Vec4{2 * x * z + 2 * y * w, 2 * y * z - 2 * x * w, 1 - 2 * x * x - 2 * y * y, 0.0f},
-                Vec4{0.0f, 0.0f, 0.0f, 1.0f}};
+        return Mat4{Vec4{1 - 2 * y * y - 2 * z * z, 2 * x * y + 2 * z * w, 2 * x * z - 2 * y * w, 0.0f},
+                    Vec4{2 * x * y - 2 * z * w, 1 - 2 * x * x - 2 * z * z, 2 * y * z + 2 * x * w, 0.0f},
+                    Vec4{2 * x * z + 2 * y * w, 2 * y * z - 2 * x * w, 1 - 2 * x * x - 2 * y * y, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 1.0f}};
     }
 
     /// Apply rotation to given vector

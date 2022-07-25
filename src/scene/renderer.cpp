@@ -1,4 +1,3 @@
-
 #include <imgui/imgui.h>
 
 #include "../geometry/util.h"
@@ -10,16 +9,11 @@
 
 static const int DEFAULT_SAMPLES = 4;
 
-Renderer::Renderer(Vec2 dim)
-        : framebuffer(2, dim, DEFAULT_SAMPLES, true), id_resolve(1, dim, 1, false),
-          save_buffer(1, dim, DEFAULT_SAMPLES, true), save_output(1, dim, 1, false),
-          mesh_shader(GL::Shaders::mesh_v, GL::Shaders::mesh_f),
-          line_shader(GL::Shaders::line_v, GL::Shaders::line_f),
-          inst_shader(GL::Shaders::inst_v, GL::Shaders::mesh_f),
-          dome_shader(GL::Shaders::dome_v, GL::Shaders::dome_f), _sphere(Util::sphere_mesh(1.0f, 3)),
-          _cyl(Util::cyl_mesh(1.0f, 1.0f, 64, false)), _hemi(Util::hemi_mesh(1.0f)),
-          samples(DEFAULT_SAMPLES), window_dim(dim),
-          id_buffer(new GLubyte[(int) dim.x * (int) dim.y * 4])
+Renderer::Renderer(Vec2 dim) : framebuffer(2, dim, DEFAULT_SAMPLES, true), id_resolve(1, dim, 1, false), save_buffer(1, dim, DEFAULT_SAMPLES, true),
+                               save_output(1, dim, 1, false), mesh_shader(GL::Shaders::mesh_v, GL::Shaders::mesh_f),
+                               line_shader(GL::Shaders::line_v, GL::Shaders::line_f), inst_shader(GL::Shaders::inst_v, GL::Shaders::mesh_f),
+                               dome_shader(GL::Shaders::dome_v, GL::Shaders::dome_f), _sphere(Util::sphere_mesh(1.0f, 3)), _cyl(Util::cyl_mesh(1.0f, 1.0f, 64, false)),
+                               _hemi(Util::hemi_mesh(1.0f)), samples(DEFAULT_SAMPLES), window_dim(dim), id_buffer(new GLubyte[(int) dim.x * (int) dim.y * 4])
 {
 }
 
@@ -68,7 +62,8 @@ void Renderer::complete()
 
     framebuffer.blit_to(1, id_resolve, false);
 
-    if (!id_resolve.can_read_at()) id_resolve.read(0, id_buffer);
+    if (!id_resolve.can_read_at())
+        id_resolve.read(0, id_buffer);
 
     framebuffer.blit_to_screen(0, window_dim);
 }
@@ -103,7 +98,8 @@ void Renderer::save(Scene &scene, const Camera &cam, int w, int h, int s)
                         if (item.is<Scene_Light>())
                         {
                             Scene_Light &light = item.get<Scene_Light>();
-                            if (!light.is_env()) return;
+                            if (!light.is_env())
+                                return;
                         }
 
                         if (item.is<Scene_Particles>())
@@ -181,8 +177,7 @@ void Renderer::capsule(MeshOpt opt, const Mat4 &mdl, float height, float rad, BB
     Mat4 T = opt.modelview;
     Mat4 cyl = mdl * Mat4::scale(Vec3{rad, height, rad});
     Mat4 bot = mdl * Mat4::scale(Vec3{rad});
-    Mat4 top = mdl * Mat4::translate(Vec3{0.0f, height, 0.0f}) *
-               Mat4::euler(Vec3{180.0f, 0.0f, 0.0f}) * Mat4::scale(Vec3{rad});
+    Mat4 top = mdl * Mat4::translate(Vec3{0.0f, height, 0.0f}) * Mat4::euler(Vec3{180.0f, 0.0f, 0.0f}) * Mat4::scale(Vec3{rad});
 
     opt.modelview = T * cyl;
     mesh(_cyl, opt);
@@ -225,7 +220,8 @@ void Renderer::mesh(GL::Mesh &mesh, Renderer::MeshOpt opt)
     mesh_shader.uniform("err_color", Vec3{1.0f});
     mesh_shader.uniform("err_id", 0u);
 
-    if (opt.depth_only) GL::color_mask(false);
+    if (opt.depth_only)
+        GL::color_mask(false);
 
     if (opt.wireframe)
     {
@@ -241,7 +237,8 @@ void Renderer::mesh(GL::Mesh &mesh, Renderer::MeshOpt opt)
         mesh.render();
     }
 
-    if (opt.depth_only) GL::color_mask(true);
+    if (opt.depth_only)
+        GL::color_mask(true);
 }
 
 void Renderer::set_samples(int s)
@@ -295,8 +292,7 @@ void Renderer::end_outline(const Mat4 &view, BBox box)
     box.screen_rect(viewproj, min, max);
 
     Vec2 thickness = Vec2(3.0f / window_dim.x, 3.0f / window_dim.y);
-    GL::Effects::outline(framebuffer, framebuffer, Gui::Color::outline, min - thickness,
-                         max + thickness);
+    GL::Effects::outline(framebuffer, framebuffer, Gui::Color::outline, min - thickness, max + thickness);
 }
 
 void Renderer::outline(const Mat4 &view, Scene_Item &obj)
@@ -311,8 +307,7 @@ void Renderer::outline(const Mat4 &view, Scene_Item &obj)
     obj.bbox().screen_rect(viewproj, min, max);
 
     Vec2 thickness = Vec2(3.0f / window_dim.x, 3.0f / window_dim.y);
-    GL::Effects::outline(framebuffer, framebuffer, Gui::Color::outline, min - thickness,
-                         max + thickness);
+    GL::Effects::outline(framebuffer, framebuffer, Gui::Color::outline, min - thickness, max + thickness);
 }
 
 void Renderer::instances(Renderer::MeshOpt opt, GL::Instances &inst)
@@ -333,7 +328,8 @@ void Renderer::instances(Renderer::MeshOpt opt, GL::Instances &inst)
     inst_shader.uniform("err_color", Vec3{1.0f});
     inst_shader.uniform("err_id", 0u);
 
-    if (opt.depth_only) GL::color_mask(false);
+    if (opt.depth_only)
+        GL::color_mask(false);
 
     if (opt.wireframe)
     {
@@ -346,7 +342,8 @@ void Renderer::instances(Renderer::MeshOpt opt, GL::Instances &inst)
     inst_shader.uniform("color", opt.color);
     inst.render();
 
-    if (opt.depth_only) GL::color_mask(true);
+    if (opt.depth_only)
+        GL::color_mask(true);
 }
 
 void Renderer::halfedge_editor(Renderer::HalfedgeOpt opt)

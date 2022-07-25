@@ -1,4 +1,3 @@
-
 #include "../util/camera.h"
 #include "../rays/samplers.h"
 #include "debug.h"

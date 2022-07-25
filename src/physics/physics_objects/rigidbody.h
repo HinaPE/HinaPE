@@ -74,16 +74,13 @@ RigidBodyBase<ResType> switch_rigidbody_type(const RigidBodyBase<FromType> &from
 }
 
 template<RigidBodyType Type>
-RigidBodyBase<Type>::RigidBodyBase() : impl(std::make_unique<Impl>())
-{}
+RigidBodyBase<Type>::RigidBodyBase() : impl(std::make_unique<Impl>()) {}
 
 template<RigidBodyType Type>
-RigidBodyBase<Type>::~RigidBodyBase()
-= default;
+RigidBodyBase<Type>::~RigidBodyBase() = default;
 
 template<RigidBodyType Type>
-RigidBodyBase<Type>::RigidBodyBase(RigidBodyBase &&src) noexcept
-{ impl = std::move(src.impl); }
+RigidBodyBase<Type>::RigidBodyBase(RigidBodyBase &&src) noexcept { impl = std::move(src.impl); }
 
 template<RigidBodyType Type>
 RigidBodyBase<Type> &RigidBodyBase<Type>::operator=(RigidBodyBase &&src) noexcept
@@ -94,6 +91,5 @@ RigidBodyBase<Type> &RigidBodyBase<Type>::operator=(RigidBodyBase &&src) noexcep
 }
 
 #include "rigidbody_impl.inl"
-
 
 #endif //HINAPE_RIGIDBODY_H

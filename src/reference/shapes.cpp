@@ -1,4 +1,3 @@
-
 #include "../rays/shapes.h"
 #include "debug.h"
 
@@ -38,7 +37,8 @@ Trace Sphere::hit(const Ray &ray) const
     float r2 = radius * radius;
     float od = dot(o, d);
     float det = od * od - o.norm_squared() + r2;
-    if (det < 0.0f) return ret;
+    if (det < 0.0f)
+        return ret;
     float t1 = -od - sqrt(det);
     float t2 = -od + sqrt(det);
     if (t1 >= ray.dist_bounds.x && t1 <= ray.dist_bounds.y)

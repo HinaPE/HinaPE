@@ -201,13 +201,18 @@ struct Vec2
 
     Vec2 range(float min, float max) const
     {
-        if (!valid()) return Vec2();
+        if (!valid())
+            return Vec2();
         Vec2 r = *this;
         float range = max - min;
-        while (r.x < min) r.x += range;
-        while (r.x >= max) r.x -= range;
-        while (r.y < min) r.y += range;
-        while (r.y >= max) r.y -= range;
+        while (r.x < min)
+            r.x += range;
+        while (r.x >= max)
+            r.x -= range;
+        while (r.y < min)
+            r.y += range;
+        while (r.y >= max)
+            r.y -= range;
         return r;
     }
 

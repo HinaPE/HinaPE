@@ -1,4 +1,3 @@
-
 #include <imgui/imgui.h>
 #include <iomanip>
 #include <iostream>
@@ -21,29 +20,21 @@ namespace Gui
 Widgets::Widgets() : lines(1.0f)
 {
 
-    x_mov = Scene_Object((Scene_ID) Widget_IDs::x_mov, Pose::rotated(Vec3{0.0f, 0.0f, -90.0f}),
-                         Util::arrow_mesh(0.03f, 0.075f, 1.0f));
+    x_mov = Scene_Object((Scene_ID) Widget_IDs::x_mov, Pose::rotated(Vec3{0.0f, 0.0f, -90.0f}), Util::arrow_mesh(0.03f, 0.075f, 1.0f));
     y_mov = Scene_Object((Scene_ID) Widget_IDs::y_mov, {}, Util::arrow_mesh(0.03f, 0.075f, 1.0f));
-    z_mov = Scene_Object((Scene_ID) Widget_IDs::z_mov, Pose::rotated(Vec3{90.0f, 0.0f, 0.0f}),
-                         Util::arrow_mesh(0.03f, 0.075f, 1.0f));
+    z_mov = Scene_Object((Scene_ID) Widget_IDs::z_mov, Pose::rotated(Vec3{90.0f, 0.0f, 0.0f}), Util::arrow_mesh(0.03f, 0.075f, 1.0f));
 
-    xy_mov = Scene_Object((Scene_ID) Widget_IDs::xy_mov, Pose::rotated(Vec3{-90.0f, 0.0f, 0.0f}),
-                          Util::square_mesh(0.1f));
-    yz_mov = Scene_Object((Scene_ID) Widget_IDs::yz_mov, Pose::rotated(Vec3{0.0f, 0.0f, -90.0f}),
-                          Util::square_mesh(0.1f));
+    xy_mov = Scene_Object((Scene_ID) Widget_IDs::xy_mov, Pose::rotated(Vec3{-90.0f, 0.0f, 0.0f}), Util::square_mesh(0.1f));
+    yz_mov = Scene_Object((Scene_ID) Widget_IDs::yz_mov, Pose::rotated(Vec3{0.0f, 0.0f, -90.0f}), Util::square_mesh(0.1f));
     xz_mov = Scene_Object((Scene_ID) Widget_IDs::xz_mov, {}, Util::square_mesh(0.1f));
 
-    x_rot = Scene_Object((Scene_ID) Widget_IDs::x_rot, Pose::rotated(Vec3{0.0f, 0.0f, -90.0f}),
-                         Util::torus_mesh(0.975f, 1.0f));
+    x_rot = Scene_Object((Scene_ID) Widget_IDs::x_rot, Pose::rotated(Vec3{0.0f, 0.0f, -90.0f}), Util::torus_mesh(0.975f, 1.0f));
     y_rot = Scene_Object((Scene_ID) Widget_IDs::y_rot, {}, Util::torus_mesh(0.975f, 1.0f));
-    z_rot = Scene_Object((Scene_ID) Widget_IDs::z_rot, Pose::rotated(Vec3{90.0f, 0.0f, 0.0f}),
-                         Util::torus_mesh(0.975f, 1.0f));
+    z_rot = Scene_Object((Scene_ID) Widget_IDs::z_rot, Pose::rotated(Vec3{90.0f, 0.0f, 0.0f}), Util::torus_mesh(0.975f, 1.0f));
 
-    x_scl = Scene_Object((Scene_ID) Widget_IDs::x_scl, Pose::rotated(Vec3{0.0f, 0.0f, -90.0f}),
-                         Util::scale_mesh());
+    x_scl = Scene_Object((Scene_ID) Widget_IDs::x_scl, Pose::rotated(Vec3{0.0f, 0.0f, -90.0f}), Util::scale_mesh());
     y_scl = Scene_Object((Scene_ID) Widget_IDs::y_scl, {}, Util::scale_mesh());
-    z_scl = Scene_Object((Scene_ID) Widget_IDs::z_scl, Pose::rotated(Vec3{90.0f, 0.0f, 0.0f}),
-                         Util::scale_mesh());
+    z_scl = Scene_Object((Scene_ID) Widget_IDs::z_scl, Pose::rotated(Vec3{90.0f, 0.0f, 0.0f}), Util::scale_mesh());
     xyz_scl = Scene_Object((Scene_ID) Widget_IDs::xyz_scl, {}, Util::cube_mesh(0.15f));
 
 #define setcolor(o, c) o.material.opt.albedo = Spectrum((c).x, (c).y, (c).z);
@@ -92,10 +83,13 @@ void Widgets::generate_lines(Vec3 pos)
 bool Widgets::action_button(Widget_Type act, std::string name, bool wrap)
 {
     bool is_active = act == active;
-    if (is_active) ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonActive));
+    if (is_active)
+        ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetColorU32(ImGuiCol_ButtonActive));
     bool clicked = wrap ? Manager::wrap_button(name) : ImGui::Button(name.c_str());
-    if (is_active) ImGui::PopStyleColor();
-    if (clicked) active = act;
+    if (is_active)
+        ImGui::PopStyleColor();
+    if (clicked)
+        active = act;
     return clicked;
 };
 
@@ -108,7 +102,8 @@ void Widgets::render(const Mat4 &view, Vec3 pos, float scl)
     Vec3 scale(scl);
     r.lines(lines, view, Mat4::I, 0.5f);
 
-    if (dragging && (active == Widget_Type::move || active == Widget_Type::scale)) return;
+    if (dragging && (active == Widget_Type::move || active == Widget_Type::scale))
+        return;
 
     if (active == Widget_Type::move)
     {
@@ -211,8 +206,7 @@ Pose Widgets::apply_action(const Pose &pose)
                 result.scale = Vec3{1.0f};
                 result.scale[(int) axis] = drag_end[(int) axis];
                 Mat4 rot = pose.rotation_mat();
-                Mat4 trans =
-                        Mat4::transpose(rot) * Mat4::scale(result.scale) * rot * Mat4::scale(pose.scale);
+                Mat4 trans = Mat4::transpose(rot) * Mat4::scale(result.scale) * rot * Mat4::scale(pose.scale);
                 result.scale = Vec3(trans[0][0], trans[1][1], trans[2][2]);
             }
 
@@ -287,12 +281,16 @@ bool Widgets::to_axis3(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit)
     bool hl = l.hit(select, hit2);
     bool hr = r.hit(select, hit3);
 
-    if (!hl && !hr && !hk) return false;
+    if (!hl && !hr && !hk)
+        return false;
 
     Vec3 close{FLT_MAX};
-    if (hk && (hit1 - cam_pos).norm() < (close - cam_pos).norm()) close = hit1;
-    if (hl && (hit2 - cam_pos).norm() < (close - cam_pos).norm()) close = hit2;
-    if (hr && (hit3 - cam_pos).norm() < (close - cam_pos).norm()) close = hit3;
+    if (hk && (hit1 - cam_pos).norm() < (close - cam_pos).norm())
+        close = hit1;
+    if (hl && (hit2 - cam_pos).norm() < (close - cam_pos).norm())
+        close = hit2;
+    if (hr && (hit3 - cam_pos).norm() < (close - cam_pos).norm())
+        close = hit3;
 
     hit = close;
     return hit.valid();
@@ -347,7 +345,8 @@ void Widgets::start_drag(Vec3 pos, Vec3 cam, Vec2 spos, Vec3 dir)
         else
             good = to_axis(pos, cam, dir, hit);
 
-        if (!good) return;
+        if (!good)
+            return;
 
         if (active == Widget_Type::bevel)
         {
@@ -361,7 +360,8 @@ void Widgets::start_drag(Vec3 pos, Vec3 cam, Vec2 spos, Vec3 dir)
             drag_end = Vec3{1.0f};
         }
 
-        if (active != Widget_Type::bevel && active != Widget_Type::extrude) generate_lines(pos);
+        if (active != Widget_Type::bevel && active != Widget_Type::extrude)
+            generate_lines(pos);
     }
 }
 
@@ -390,7 +390,8 @@ void Widgets::drag_to(Vec3 pos, Vec3 cam, Vec2 spos, Vec3 dir, bool scale_invert
     } else if (active == Widget_Type::rotate)
     {
 
-        if (!to_plane(pos, cam, dir, norm, hit)) return;
+        if (!to_plane(pos, cam, dir, norm, hit))
+            return;
 
         Vec3 ang = (hit - pos).unit();
         float sgn = sign(cross(drag_start, ang)[(int) axis]);
@@ -409,7 +410,8 @@ void Widgets::drag_to(Vec3 pos, Vec3 cam, Vec2 spos, Vec3 dir, bool scale_invert
         else
             good = to_axis(pos, cam, dir, hit);
 
-        if (!good) return;
+        if (!good)
+            return;
 
         if (active == Widget_Type::move)
         {
@@ -601,7 +603,8 @@ bool Widget_Camera::UI(Undo &undo, Camera &user_cam)
         old = render_cam;
         old_ar = cam_ar;
     }
-    if (ImGui::IsItemDeactivated() && old_ar != cam_ar) do_undo = true;
+    if (ImGui::IsItemDeactivated() && old_ar != cam_ar)
+        do_undo = true;
 
     update_cam |= ImGui::SliderFloat("FOV", &cam_fov, 10.0f, 160.0f, "%.2f");
 
@@ -610,7 +613,8 @@ bool Widget_Camera::UI(Undo &undo, Camera &user_cam)
         old = render_cam;
         old_fov = cam_fov;
     }
-    if (ImGui::IsItemDeactivated() && old_fov != cam_fov) do_undo = true;
+    if (ImGui::IsItemDeactivated() && old_fov != cam_fov)
+        do_undo = true;
 
     update_cam |= ImGui::SliderFloat("Aperture", &cam_ap, 0.0f, 0.2f, "%.3f");
     if (ImGui::IsItemActivated())
@@ -618,7 +622,8 @@ bool Widget_Camera::UI(Undo &undo, Camera &user_cam)
         old = render_cam;
         old_ap = cam_ap;
     }
-    if (ImGui::IsItemDeactivated() && old_ap != cam_ap) do_undo = true;
+    if (ImGui::IsItemDeactivated() && old_ap != cam_ap)
+        do_undo = true;
 
     update_cam |= ImGui::SliderFloat("Focal Distance", &cam_dist, 0.2f, 10.0f, "%.2f");
     if (ImGui::IsItemActivated())
@@ -626,15 +631,18 @@ bool Widget_Camera::UI(Undo &undo, Camera &user_cam)
         old = render_cam;
         old_dist = cam_dist;
     }
-    if (ImGui::IsItemDeactivated() && old_dist != cam_dist) do_undo = true;
+    if (ImGui::IsItemDeactivated() && old_dist != cam_dist)
+        do_undo = true;
 
     cam_ar = clamp(cam_ar, 0.1f, 10.0f);
     cam_fov = clamp(cam_fov, 10.0f, 160.0f);
     cam_ap = clamp(cam_ap, 0.0f, 1.0f);
     cam_dist = clamp(cam_dist, 0.01f, 100.0f);
 
-    if (update_cam) update_cameras(user_cam);
-    if (do_undo) undo.update_camera(*this, old);
+    if (update_cam)
+        update_cameras(user_cam);
+    if (do_undo)
+        undo.update_camera(*this, old);
 
     return update_cam;
 }
@@ -671,7 +679,8 @@ void Widget_Camera::load(Camera c)
 
 void Widget_Camera::render(const Mat4 &view)
 {
-    if (!moving_camera) Renderer::get().lines(cam_cage, view);
+    if (!moving_camera)
+        Renderer::get().lines(cam_cage, view);
 }
 
 void Widget_Camera::generate_cage()
@@ -812,8 +821,7 @@ std::string Widget_Render::step(Animate &animate, Scene &scene)
 #endif
 
             stbi_flip_vertically_on_write(true);
-            if (!stbi_write_png(path.c_str(), (int) out_w, (int) out_h, 4, data.data(),
-                                (int) out_w * 4))
+            if (!stbi_write_png(path.c_str(), (int) out_w, (int) out_h, 4, data.data(), (int) out_w * 4))
             {
                 animating = false;
                 return "Failed to write output!";
@@ -843,8 +851,7 @@ std::string Widget_Render::step(Animate &animate, Scene &scene)
 #endif
 
                 stbi_flip_vertically_on_write(false);
-                if (!stbi_write_png(path.c_str(), (int) out_w, (int) out_h, 4, data.data(),
-                                    (int) out_w * 4))
+                if (!stbi_write_png(path.c_str(), (int) out_w, (int) out_h, 4, data.data(), (int) out_w * 4))
                 {
                     animating = false;
                     return "Failed to write output!";
@@ -862,7 +869,8 @@ std::string Widget_Render::step(Animate &animate, Scene &scene)
 void Widget_Render::animate(Scene &scene, Widget_Camera &cam, Camera &user_cam, int last_frame)
 {
 
-    if (!render_window) return;
+    if (!render_window)
+        return;
 
     begin(scene, cam, user_cam);
 
@@ -924,12 +932,10 @@ void Widget_Render::animate(Scene &scene, Widget_Camera &cam, Camera &user_cam, 
 
     if (method == 1)
     {
-        ImGui::Image((ImTextureID) (long long) pathtracer.get_output_texture(exposure).get_id(),
-                     {w, h});
+        ImGui::Image((ImTextureID) (long long) pathtracer.get_output_texture(exposure).get_id(), {w, h});
     } else
     {
-        ImGui::Image((ImTextureID) (long long) Renderer::get().saved(), {w, h}, {0.0f, 1.0f},
-                     {1.0f, 0.0f});
+        ImGui::Image((ImTextureID) (long long) Renderer::get().saved(), {w, h}, {0.0f, 1.0f}, {1.0f, 0.0f});
     }
 
     ImGui::End();
@@ -946,7 +952,8 @@ bool Widget_Render::UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::
 {
 
     bool ret = false;
-    if (!render_window) return ret;
+    if (!render_window)
+        return ret;
 
     begin(scene, cam, user_cam);
 
@@ -1010,8 +1017,7 @@ bool Widget_Render::UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::
                 stbi_flip_vertically_on_write(true);
             }
 
-            if (!stbi_write_png(spath.c_str(), (int) out_w, (int) out_h, 4, data.data(),
-                                (int) out_w * 4))
+            if (!stbi_write_png(spath.c_str(), (int) out_w, (int) out_h, 4, data.data(), (int) out_w * 4))
             {
                 err = "Failed to write png!";
             }
@@ -1035,8 +1041,7 @@ bool Widget_Render::UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::
 
     if (method == 1)
     {
-        ImGui::Image((ImTextureID) (long long) pathtracer.get_output_texture(exposure).get_id(),
-                     {w, h});
+        ImGui::Image((ImTextureID) (long long) pathtracer.get_output_texture(exposure).get_id(), {w, h});
 
         if (!pathtracer.in_progress() && has_rendered)
         {
@@ -1045,16 +1050,14 @@ bool Widget_Render::UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::
         }
     } else
     {
-        ImGui::Image((ImTextureID) (long long) Renderer::get().saved(), {w, h}, {0.0f, 1.0f},
-                     {1.0f, 0.0f});
+        ImGui::Image((ImTextureID) (long long) Renderer::get().saved(), {w, h}, {0.0f, 1.0f}, {1.0f, 0.0f});
     }
 
     ImGui::End();
     return ret;
 }
 
-std::string Widget_Render::headless(Animate &animate, Scene &scene, const Camera &cam,
-                                    const Launch_Settings &set)
+std::string Widget_Render::headless(Animate &animate, Scene &scene, const Camera &cam, const Launch_Settings &set)
 {
 
     info("Render settings:");
@@ -1064,7 +1067,8 @@ std::string Widget_Render::headless(Animate &animate, Scene &scene, const Camera
     info("\tmax depth: %d", set.d);
     info("\texposure: %f", set.exp);
     info("\trender threads: %u", std::thread::hardware_concurrency());
-    if (set.no_bvh) info("\tusing object list instead of BVH");
+    if (set.no_bvh)
+        info("\tusing object list instead of BVH");
 
     out_w = set.w;
     out_h = set.h;
@@ -1078,13 +1082,16 @@ std::string Widget_Render::headless(Animate &animate, Scene &scene, const Camera
         if (width)
         {
             int bar = (int) (width * f);
-            for (int i = 0; i < bar; i++) std::cout << "-";
-            for (int i = bar; i < width; i++) std::cout << " ";
+            for (int i = 0; i < bar; i++)
+                std::cout << "-";
+            for (int i = bar; i < width; i++)
+                std::cout << " ";
             std::cout << "] ";
         }
 
         float percent = 100.0f * f;
-        if (percent < 10.0f) std::cout << "0";
+        if (percent < 10.0f)
+            std::cout << "0";
         std::cout << percent << "%\r";
         std::cout.flush();
     };
@@ -1102,7 +1109,8 @@ std::string Widget_Render::headless(Animate &animate, Scene &scene, const Camera
         while (next_frame < max_frame)
         {
             std::string err = step(animate, scene);
-            if (!err.empty()) return err;
+            if (!err.empty())
+                return err;
             print_progress(((float) next_frame + pathtracer.progress()) / (max_frame + 1));
             std::this_thread::sleep_for(std::chrono::milliseconds(250));
         }

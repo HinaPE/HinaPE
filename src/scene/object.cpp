@@ -1,4 +1,3 @@
-
 #include "object.h"
 
 #include <utility>
@@ -7,8 +6,7 @@
 #include "../geometry/util.h"
 #include "../gui/render.h"
 
-Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n)
-        : pose(p), _id(id), armature(id), _mesh(std::move(m))
+Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n) : pose(p), _id(id), armature(id), _mesh(std::move(m))
 {
     set_skel_dirty();
     editable = false;
@@ -22,8 +20,7 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, GL::Mesh &&m, std::string n)
     }
 }
 
-Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n)
-        : pose(p), _id(id), armature(id), halfedge(std::move(m)), _mesh()
+Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n) : pose(p), _id(id), armature(id), halfedge(std::move(m)), _mesh()
 {
     set_mesh_dirty();
 
@@ -41,7 +38,8 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n
 const GL::Mesh &Scene_Object::posed_mesh()
 {
     sync_anim_mesh();
-    if (armature.has_bones()) return _anim_mesh;
+    if (armature.has_bones())
+        return _anim_mesh;
     return _mesh;
 }
 
@@ -78,9 +76,12 @@ bool Scene_Object::is_shape() const
 
 void Scene_Object::set_time(float time)
 {
-    if (anim.splines.any()) pose = anim.at(time);
-    if (armature.set_time(time)) set_pose_dirty();
-    if (material.anim.splines.any()) material.anim.at(time, material.opt);
+    if (anim.splines.any())
+        pose = anim.at(time);
+    if (armature.set_time(time))
+        set_pose_dirty();
+    if (material.anim.splines.any())
+        material.anim.at(time, material.opt);
 }
 
 bool Scene_Object::is_editable() const
@@ -210,7 +211,8 @@ BBox Scene_Object::bbox()
 
 void Scene_Object::render(const Mat4 &view, bool solid, bool depth_only, bool posed, bool do_anim)
 {
-    if (!opt.render) return;
+    if (!opt.render)
+        return;
 
     if (do_anim)
         sync_anim_mesh();
@@ -256,8 +258,7 @@ void Scene_Object::render(const Mat4 &view, bool solid, bool depth_only, bool po
 
 bool operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r)
 {
-    return std::string(l.name) != std::string(r.name) || l.shape_type != r.shape_type ||
-           l.smooth_normals != r.smooth_normals || l.wireframe != r.wireframe ||
+    return std::string(l.name) != std::string(r.name) || l.shape_type != r.shape_type || l.smooth_normals != r.smooth_normals || l.wireframe != r.wireframe ||
            l.shape != r.shape || l.render != r.render;
 }
 

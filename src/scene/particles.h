@@ -51,8 +51,7 @@ public:
     const std::vector<Particle> &get_particles() const;
 
     BBox bbox() const;
-    void render(const Mat4 &view, bool depth_only = false, bool posed = true,
-                bool particles_only = false);
+    void render(const Mat4 &view, bool depth_only = false, bool posed = true, bool particles_only = false);
     Scene_ID id() const;
     void set_time(float time);
 

@@ -1,4 +1,3 @@
-
 #include "light.h"
 
 namespace PT
@@ -29,8 +28,7 @@ Light_Sample Spot_Light::sample(Vec3 from) const
     angle = std::abs(Degrees(angle));
     ret.direction = -from.unit();
     ret.distance = from.norm();
-    ret.radiance =
-            (1.0f - smoothstep(angle_bounds.x / 2.0f, angle_bounds.y / 2.0f, angle)) * radiance;
+    ret.radiance = (1.0f - smoothstep(angle_bounds.x / 2.0f, angle_bounds.y / 2.0f, angle)) * radiance;
     return ret;
 }
 
