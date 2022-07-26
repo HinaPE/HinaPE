@@ -45,7 +45,7 @@ void student_debug_ui()
     // ImGui examples
     if (Button("Press Me"))
     {
-        info("Debug button pressed!");
+        Hina_info("Debug button pressed!");
     }
 
     // We need to store values somewhere, or else they will get reset every time

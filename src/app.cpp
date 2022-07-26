@@ -19,7 +19,7 @@ App::App(Launch_Settings set, Platform *plt) : window_dim(plt ? plt->window_draw
 
     if (!set.scene_file.empty())
     {
-        info("Loading scene file...");
+        Hina_info("Loading scene file...");
         Scene::Load_Opts opts;
         opts.new_scene = true;
         err = scene.load(opts, undo, gui, set.scene_file);
@@ -28,16 +28,16 @@ App::App(Launch_Settings set, Platform *plt) : window_dim(plt ? plt->window_draw
 
     if (!err.empty())
     {
-        warn("Error loading scene: %s", err.c_str());
+        Hina_warn("Error loading scene: %s", err.c_str());
         loaded_scene = false;
     }
 
     if (!set.env_map_file.empty())
     {
-        info("Loading environment map...");
+        Hina_info("Loading environment map...");
         err = scene.set_env_map(set.env_map_file);
         if (!err.empty())
-            warn("Error loading environment map: %s", err.c_str());
+            Hina_warn("Error loading environment map: %s", err.c_str());
     }
 
     if (!set.headless)
@@ -48,15 +48,15 @@ App::App(Launch_Settings set, Platform *plt) : window_dim(plt ? plt->window_draw
     } else if (loaded_scene)
     {
 
-        info("Rendering scene...");
+        Hina_info("Rendering scene...");
         err = gui.get_render().headless_render(gui.get_animate(), scene, set);
 
         if (!err.empty())
-            warn("Error rendering scene: %s", err.c_str());
+            Hina_warn("Error rendering scene: %s", err.c_str());
         else
         {
             auto [build, render] = gui.get_render().completion_time();
-            info("Built scene in %.2fs, rendered in %.2fs", build, render);
+            Hina_info("Built scene in %.2fs, rendered in %.2fs", build, render);
         }
     }
 }

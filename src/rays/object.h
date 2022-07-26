@@ -97,7 +97,7 @@ public:
         Vec3 dir = std::visit(overloaded{[from](const List<Object> &list) { return list.sample(from); }, [from](const Tri_Mesh &mesh) { return mesh.sample(from); },
                                          [](const auto &) -> Vec3
                                          {
-                                             die("Sampling implicit objects/BVHs is not yet supported.");
+                                             Hina_die("Sampling implicit objects/BVHs is not yet supported.");
                                          }}, underlying);
         if (has_trans)
             dir = trans.rotate(dir).unit();
@@ -115,7 +115,7 @@ public:
                 overloaded{[ray, T, iT](const List<Object> &list) { return list.pdf(ray, T, iT); }, [ray, T, iT](const Tri_Mesh &mesh) { return mesh.pdf(ray, T, iT); },
                            [](const auto &) -> float
                            {
-                               die("Sampling implicit objects/BVHs is not yet supported.");
+                               Hina_die("Sampling implicit objects/BVHs is not yet supported.");
                            }}, underlying);
     }
 

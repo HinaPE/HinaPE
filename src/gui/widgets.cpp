@@ -1060,15 +1060,15 @@ bool Widget_Render::UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::
 std::string Widget_Render::headless(Animate &animate, Scene &scene, const Camera &cam, const Launch_Settings &set)
 {
 
-    info("Render settings:");
-    info("\twidth: %d", set.w);
-    info("\theight: %d", set.h);
-    info("\tsamples: %d", set.s);
-    info("\tmax depth: %d", set.d);
-    info("\texposure: %f", set.exp);
-    info("\trender threads: %u", std::thread::hardware_concurrency());
+    Hina_info("Render settings:");
+    Hina_info("\twidth: %d", set.w);
+    Hina_info("\theight: %d", set.h);
+    Hina_info("\tsamples: %d", set.s);
+    Hina_info("\tmax depth: %d", set.d);
+    Hina_info("\texposure: %f", set.exp);
+    Hina_info("\trender threads: %u", std::thread::hardware_concurrency());
     if (set.no_bvh)
-        info("\tusing object list instead of BVH");
+        Hina_info("\tusing object list instead of BVH");
 
     out_w = set.w;
     out_h = set.h;

@@ -122,20 +122,20 @@ public:
     {
         return std::visit(overloaded{[](const BSDF_Diffuse &d) -> Scatter
                                      {
-                                         die("You scattered an emissive BSDF!");
+                                         Hina_die("You scattered an emissive BSDF!");
                                      }, [out_dir](const auto &b) { return b.scatter(out_dir); }}, underlying);
     }
 
     Spectrum evaluate(Vec3 out_dir, Vec3 in_dir) const
     {
         return std::visit(overloaded{[out_dir, in_dir](const BSDF_Lambertian &l) { return l.evaluate(out_dir, in_dir); },
-                                     [](const auto &) -> Spectrum { die("You evaluated a delta BSDF!"); }}, underlying);
+                                     [](const auto &) -> Spectrum { Hina_die("You evaluated a delta BSDF!"); }}, underlying);
     }
 
     float pdf(Vec3 out_dir, Vec3 in_dir) const
     {
         return std::visit(overloaded{[out_dir, in_dir](const BSDF_Lambertian &l) { return l.pdf(out_dir, in_dir); },
-                                     [](const auto &) -> float { die("You evaluated the pdf of a delta BSDF!"); }}, underlying);
+                                     [](const auto &) -> float { Hina_die("You evaluated the pdf of a delta BSDF!"); }}, underlying);
     }
 
     Spectrum emissive() const

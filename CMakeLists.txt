@@ -87,7 +87,7 @@ target_link_libraries(HinaPE PRIVATE Threads::Threads)
 
 # define include paths
 
-target_include_directories(HinaPE PRIVATE "deps/" "deps/assimp/include")
+target_include_directories(HinaPE PRIVATE "deps/" "deps/assimp/include" "deps/eigen3")
 target_include_directories(HinaPE PRIVATE "${CMAKE_BINARY_DIR}/deps/assimp/include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/deps/")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/")

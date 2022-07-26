@@ -780,7 +780,7 @@ bool Shader::validate(GLuint program)
         GLchar *msg = new GLchar[len];
         glGetShaderInfoLog(program, len, &len, msg);
 
-        warn("Shader %d failed to compile: %s", program, msg);
+        Hina_warn("Shader %d failed to compile: %s", program, msg);
         delete[] msg;
 
         return false;
@@ -1202,7 +1202,7 @@ static void debug_proc(GLenum glsource, GLenum gltype, GLuint, GLenum severity, 
     {
         case GL_DEBUG_SEVERITY_HIGH:
         case GL_DEBUG_SEVERITY_MEDIUM:
-            warn("OpenGL | source: %s type: %s message: %s", source.c_str(), type.c_str(), message.c_str());
+            Hina_warn("OpenGL | source: %s type: %s message: %s", source.c_str(), type.c_str(), message.c_str());
             break;
     }
 }
@@ -1212,7 +1212,7 @@ static void check_leaked_handles()
 
 #define GL_CHECK(type)                                                                             \
     if(glIs##type && glIs##type(i) == GL_TRUE) {                                                   \
-        warn("Leaked OpenGL handle %u of type %s", i, #type);                                      \
+        Hina_warn("Leaked OpenGL handle %u of type %s", i, #type);                                      \
         leaked = true;                                                                             \
     }
 
@@ -1238,7 +1238,7 @@ static void check_leaked_handles()
             GLchar *shader = new GLchar[shader_len];
             glGetShaderSource(i, shader_len, nullptr, shader);
 
-            warn("Leaked OpenGL shader %u. Source: %s", i, shader);
+            Hina_warn("Leaked OpenGL shader %u. Source: %s", i, shader);
 
             delete[] shader;
         }
@@ -1246,7 +1246,7 @@ static void check_leaked_handles()
 
     if (leaked)
     {
-        warn("Leaked OpenGL objects!");
+        Hina_warn("Leaked OpenGL objects!");
     }
 
 #undef GL_CHECK

@@ -16,3 +16,6 @@
 [submodule "deps/assimp"]
 	path = deps/assimp
 	url = https://github.com/BFU-Graphics/Hina_assimp.git
+[submodule "deps/eigen3"]
+	path = deps/eigen3
+	url = https://github.com/BFU-Graphics/Hina_eigen3.git

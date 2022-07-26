@@ -212,7 +212,7 @@ Vec3 Tri_Mesh::sample(Vec3 from) const
 {
     if (use_bvh)
     {
-        die("Sampling BVH-based triangle meshes is not yet supported.");
+        Hina_die("Sampling BVH-based triangle meshes is not yet supported.");
     }
     return triangle_list.sample(from);
 }
@@ -221,7 +221,7 @@ float Tri_Mesh::pdf(Ray ray, const Mat4 &T, const Mat4 &iT) const
 {
     if (use_bvh)
     {
-        die("Sampling BVH-based triangle meshes is not yet supported.");
+        Hina_die("Sampling BVH-based triangle meshes is not yet supported.");
     }
     return triangle_list.pdf(ray, T, iT);
 }

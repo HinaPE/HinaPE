@@ -35,16 +35,16 @@ inline std::string last_file(std::string path)
 #endif
 
 /// Log informational message
-#define info(fmt, ...)                                                                             \
+#define Hina_info(fmt, ...)                                                                             \
     (void)(log("%s:%u [info] " fmt "\n", last_file(__FILE__).c_str(), __LINE__, ##__VA_ARGS__))
 
 /// Log warning (red)
-#define warn(fmt, ...)                                                                             \
+#define Hina_warn(fmt, ...)                                                                             \
     (void)(log("\033[0;31m%s:%u [warn] " fmt "\033[0m\n", last_file(__FILE__).c_str(), __LINE__,   \
                ##__VA_ARGS__))
 
 /// Log fatal error and exit program
-#define die(fmt, ...)                                                                              \
+#define Hina_die(fmt, ...)                                                                              \
     (void)(log("\033[0;31m%s:%u [fatal] " fmt "\033[0m\n", last_file(__FILE__).c_str(), __LINE__,  \
                ##__VA_ARGS__),                                                                     \
            DEBUG_BREAK, std::exit(__LINE__));
