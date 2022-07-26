@@ -95,30 +95,15 @@ public:
     void log_ray(const Ray &ray, float t, Spectrum color = Spectrum{1.0f});
     void render_log(const Mat4 &view) const;
 
-    PT::Pathtracer &tracer()
-    {
-        return pathtracer;
-    }
+    PT::Pathtracer &tracer() { return pathtracer; }
 
-    bool rendered() const
-    {
-        return has_rendered;
-    }
+    bool rendered() const { return has_rendered; }
 
-    std::pair<float, float> completion_time() const
-    {
-        return pathtracer.completion_time();
-    }
+    std::pair<float, float> completion_time() const { return pathtracer.completion_time(); }
 
-    bool in_progress() const
-    {
-        return pathtracer.in_progress() || animating;
-    }
+    bool in_progress() const { return pathtracer.in_progress() || animating; }
 
-    float wh_ar() const
-    {
-        return (float) out_w / (float) out_h;
-    }
+    float wh_ar() const { return (float) out_w / (float) out_h; }
 
 private:
     void begin(Scene &scene, Widget_Camera &cam, Camera &user_cam);

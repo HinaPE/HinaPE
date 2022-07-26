@@ -25,8 +25,3 @@ void HinaPE::PhysicsSystem::_register_(unsigned int ID, std::shared_ptr<PhysicsO
 {
     physics_objects[ID] = std::move(ptr);
 }
-
-void HinaPE::PhysicsSystem::_kernel_()
-{
-
-}

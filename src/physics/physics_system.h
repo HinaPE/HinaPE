@@ -3,8 +3,11 @@
 
 #include "kernels/pbd/pbd_kernel.h"
 #include "kernels/xpbd/xpbd_kernel.h"
-#include "time_integration/time_integration.h"
 #include "physics_object.h"
+
+#include <vector>
+#include <variant>
+#include <map>
 
 namespace HinaPE
 {
@@ -17,14 +20,12 @@ public: // Singleton Pattern
 public:
     void _tick_(float dt);
     void _register_(unsigned int ID, std::shared_ptr<PhysicsObject> ptr);
-    void _kernel_();
 
 public:
     PhysicsSystem(const PhysicsSystem &) = delete;
     PhysicsSystem &operator=(const PhysicsSystem &) = delete;
     PhysicsSystem(PhysicsSystem &&) = delete;
     PhysicsSystem &operator=(PhysicsSystem &&) = delete;
-
 private: // disable any instantiation outside
     PhysicsSystem() = default;
     ~PhysicsSystem() = default;
@@ -35,6 +36,7 @@ private:
     std::variant<PBDKernel, XPBDKernel> kernel;
     std::map<unsigned int, std::shared_ptr<PhysicsObject>> physics_objects;
     std::map<unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects;
+    std::vector<Constraint> constraints;
 };
 }
 
