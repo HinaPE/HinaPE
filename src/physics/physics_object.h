@@ -37,6 +37,7 @@ public:
     // deformable methods
     bool is_deformable();
     [[nodiscard]] DeformableType get_deformable_type() const;
+    std::vector<Vec3> &pos();
     const std::vector<Vec3> &dirty_pos();
     const std::vector<unsigned int> &dirty_ind();
 

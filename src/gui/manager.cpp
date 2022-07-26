@@ -1156,7 +1156,7 @@ void Manager::UInew_obj(Undo &undo)
             Halfedge_Mesh hm;
             hm.from_mesh(Util::Gen::generate(verts, inds));
             Scene_Object &obj = undo.add_obj(std::move(hm), "Cloth");
-            obj.physics_object = cloth;
+            obj.attach_physics_object(cloth);
             obj.set_mesh_dirty();
             new_obj_window = false;
         }

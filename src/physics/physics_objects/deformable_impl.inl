@@ -42,6 +42,9 @@ template<DeformableType Type>
 void HinaPE::DeformableBase<Type>::set_rotation(const Vec3 &_r) const { /** TODO: implement **/}
 
 template<DeformableType Type>
+std::vector<Vec3> &DeformableBase<Type>::pos() { return impl->positions; }
+
+template<DeformableType Type>
 const std::vector<Vec3> &DeformableBase<Type>::dirty_pos() { return impl->positions; }
 
 template<DeformableType Type>

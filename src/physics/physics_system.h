@@ -3,6 +3,7 @@
 
 #include "kernels/pbd/pbd_kernel.h"
 #include "kernels/xpbd/xpbd_kernel.h"
+#include "kernels/fast-mass-spring/fms_kernel.h"
 #include "physics_object.h"
 
 #include <vector>
@@ -27,13 +28,14 @@ public:
     PhysicsSystem(PhysicsSystem &&) = delete;
     PhysicsSystem &operator=(PhysicsSystem &&) = delete;
 private: // disable any instantiation outside
-    PhysicsSystem() = default;
+    PhysicsSystem() : kernel(FastMassSpringKernel()) {}
     ~PhysicsSystem() = default;
 
 private:
     friend PBDKernel;
     friend XPBDKernel;
-    std::variant<PBDKernel, XPBDKernel> kernel;
+    friend FastMassSpringKernel;
+    std::variant<PBDKernel, XPBDKernel, FastMassSpringKernel> kernel;
     std::map<unsigned int, std::shared_ptr<PhysicsObject>> physics_objects;
     std::map<unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects;
     std::vector<Constraint> constraints;

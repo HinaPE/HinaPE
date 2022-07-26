@@ -5,6 +5,9 @@
 #include <cstdio>
 #include <mutex>
 #include <string>
+#include <chrono>
+#include <functional>
+#include <iostream>
 
 inline std::mutex printf_lock;
 
@@ -22,6 +25,15 @@ inline std::string last_file(std::string path)
 {
     size_t p = path.find_last_of("\\/") + 1;
     return path.substr(p, path.size() - p);
+}
+
+inline void check_time(const std::function<void()> &func)
+{
+    auto start = std::chrono::high_resolution_clock::now();
+    func();
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    std::cout << duration.count() << std::endl;
 }
 
 #ifdef _MSC_VER

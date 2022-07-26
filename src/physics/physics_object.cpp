@@ -207,6 +207,24 @@ HinaPE::DeformableType HinaPE::PhysicsObject::get_deformable_type() const
             throw std::runtime_error("invalid rigidbody type");
     }
 }
+std::vector<Vec3> &HinaPE::PhysicsObject::pos()
+{
+    static std::vector<Vec3> null_vector;
+
+    switch (physics_object_opt.value().index())
+    {
+        case 0: // RigidBodyBase<DYNAMIC>
+        case 1: // RigidBodyBase<STATIC>
+        case 2: // RigidBodyBase<KINEMATIC>
+            return null_vector;
+        case 3: // DeformableBase<CLOTH>
+            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).pos();
+        case 4: // DeformableBase<MESH>
+            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).pos();
+        default:
+            throw std::runtime_error("invalid rigidbody type");
+    }
+}
 
 const std::vector<Vec3> &HinaPE::PhysicsObject::dirty_pos()
 {
