@@ -37,29 +37,28 @@ set(Hina_SOURCES
         )
 
 
-
 # setup OS-specific options
 
-if(UNIX AND NOT APPLE)
+if (UNIX AND NOT APPLE)
     set(LINUX TRUE)
-endif()
+endif ()
 
-if(APPLE)
+if (APPLE)
     set(CMAKE_EXE_LINKER_FLAGS "-framework AppKit")
     find_package(SDL2 REQUIRED)
     include_directories(${SDL2_INCLUDE_DIRS}/..)
     include_directories(${SDL2_INCLUDE_DIRS})
     link_directories(${SDL2_LIBRARY_DIRS})
     add_definitions(${SDL2_CFLAGS_OTHER})
-endif()
+endif ()
 
-if(LINUX)
+if (LINUX)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(SDL2 REQUIRED sdl2)
     include_directories(${SDL2_INCLUDE_DIRS})
     link_directories(${SDL2_LIBRARY_DIRS})
     add_definitions(${SDL2_CFLAGS_OTHER})
-endif()
+endif ()
 
 add_executable(HinaPE ${Hina_SOURCES})
 set_target_properties(HinaPE PROPERTIES
@@ -73,16 +72,15 @@ set_target_properties(HinaPE PROPERTIES
 #    target_compile_options(HinaPE PRIVATE -Wall -Wextra -Wno-reorder -Wno-unused-function -Wno-unused-parameter)
 #endif()
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(HinaPE PRIVATE -fno-omit-frame-pointer)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
     set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
-endif()
+endif ()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(HinaPE PRIVATE Threads::Threads)
-
 
 
 # define include paths
@@ -95,7 +93,6 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/")
 source_group(lib FILES ${HinaLIB})
 source_group(scene FILES ${HinaSCENE})
 source_group(platform FILES ${HinaPLATFORM})
-
 
 
 # build dependencies
@@ -118,14 +115,10 @@ add_subdirectory("deps/assimp/")
 include_directories(${ASSIMP_INCLUDE_DIRS})
 
 
-
 # link libraries
 
-if(WIN32)
+if (WIN32)
     target_include_directories(HinaPE PRIVATE "deps/win")
-#    if(MSVC)
-#        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \"${CMAKE_CURRENT_SOURCE_DIR}/src/platform/icon.res\" /IGNORE:4098 /IGNORE:4099")
-#    endif()
     add_definitions(-DWIN32_LEAN_AND_MEAN)
     target_link_libraries(HinaPE PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/deps/win/SDL2/SDL2main.lib")
     target_link_libraries(HinaPE PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/deps/win/SDL2/SDL2.lib")
@@ -133,18 +126,26 @@ if(WIN32)
     target_link_libraries(HinaPE PRIVATE Version)
     target_link_libraries(HinaPE PRIVATE Setupapi)
     target_link_libraries(HinaPE PRIVATE Shcore)
-endif()
+endif ()
 
-if(LINUX)
+if (LINUX)
     target_link_libraries(HinaPE PRIVATE SDL2)
-endif()
+endif ()
 
-if(APPLE)
+if (APPLE)
     target_link_libraries(HinaPE PRIVATE ${SDL2_LIBRARIES})
-endif()
+endif ()
 
 target_link_libraries(HinaPE PRIVATE assimp)
 target_link_libraries(HinaPE PRIVATE nfd)
 target_link_libraries(HinaPE PRIVATE sf_libs)
 target_link_libraries(HinaPE PRIVATE imgui)
 target_link_libraries(HinaPE PRIVATE glad)
+
+
+option(HINAPE_TEST "Enable Test" ON)
+if (HINAPE_TEST)
+    file(GLOB_RECURSE HINA_TEST test/*.h test/*.cpp)
+    target_sources(HinaPE PRIVATE ${HINA_TEST})
+    target_include_directories(HinaPE PRIVATE test)
+endif ()
