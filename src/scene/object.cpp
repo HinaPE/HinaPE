@@ -292,9 +292,10 @@ void Scene_Object::sync_physics_result()
     {
         auto &verts = physics_object->dirty_pos();
         auto &inds = physics_object->dirty_ind();
-        Halfedge_Mesh hm;
-        hm.from_mesh(Util::Gen::generate(verts, inds));
-        take_mesh(std::move(hm));
+//        Halfedge_Mesh hm;
+//        hm.from_mesh(Util::Gen::generate(verts, inds));
+//        take_mesh(std::move(hm));
+        _mesh = Util::Gen::generate(verts, inds);
         set_mesh_dirty();
         return;
     }
