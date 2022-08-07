@@ -78,9 +78,9 @@ bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
     if (key.sym == SDLK_BACKSPACE && key.mod & KMOD_GUI)
     {
 #else
-    Uint16 mod = KMOD_CTRL;
-    if (key.sym == SDLK_DELETE)
-    {
+        Uint16 mod = KMOD_CTRL;
+        if (key.sym == SDLK_DELETE)
+        {
 #endif
         if (layout.selected())
         {
@@ -531,7 +531,7 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
                     }
                     if (ImGui::Button("Attach Deformable"))
                     {
-                        //                        obj.attach_physics_object(HinaPE::ClothFactory::create_cloth());
+                        // obj.attach_physics_object(HinaPE::ClothFactory::create_cloth());
                         physics_object_type = HinaPE::PhysicsObjectType::Deformable;
                     }
                 }
@@ -744,7 +744,8 @@ void Manager::UIsidebar(Scene &scene, Undo &undo, float menu_height, Camera &cam
         if (wrap_button("Clear"))
         {
             std::vector<Scene_ID> ids;
-            scene.for_items([&](Scene_Item &item) { ids.push_back(item.id()); });
+            scene.for_items([&](Scene_Item &item)
+                            { ids.push_back(item.id()); });
             for (auto id: ids)
                 undo.del_obj(id);
             undo.bundle_last(ids.size());
