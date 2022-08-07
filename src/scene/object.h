@@ -53,9 +53,15 @@ public:
 
     void step(const PT::Object &scene, float dt)
     {
-        for (int i = 0; i < sub_iteration; ++i)
-            HinaPE::PhysicsSystem::instance()._tick_(dt / (float) sub_iteration); // TODO: move this to separate physics thread; Hina
-        sync_physics_result();
+//        for (int i = 0; i < sub_iteration; ++i)
+//            HinaPE::PhysicsSystem::instance()._tick_(dt / (float) sub_iteration); // TODO: move this to separate physics thread; Hina
+//        sync_physics_result();
+
+        // step 1: 球体自由落体运动
+
+        // step 2: 添加隐形的地板 (0.f, -5.f, 0.f)
+
+        // step 3: 添加初速度，添加四周六堵墙
     }
 
 public:
