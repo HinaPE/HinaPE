@@ -10,7 +10,7 @@ void HinaPE::PhysicsSystem::_tick_(float dt)
                }, kernel);
 }
 
-HinaPE::PhysicsSystem &HinaPE::PhysicsSystem::instance()
+auto HinaPE::PhysicsSystem::instance() -> HinaPE::PhysicsSystem &
 {
     static PhysicsSystem instance;
     return instance;

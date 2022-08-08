@@ -13,23 +13,23 @@ class RigidBodyBase
 {
 public:
 
-    [[nodiscard]] Vec3 get_position() const;
-    [[nodiscard]] Vec3 get_rotation() const;
+    [[nodiscard]] auto get_position() const -> Vec3;
+    [[nodiscard]] auto get_rotation() const -> Vec3;
     void set_position(const Vec3 &) const;
     void set_rotation(const Vec3 &) const;
 
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
-    [[nodiscard]] float get_mass() const;
+    [[nodiscard]] auto get_mass() const -> float;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] Vec3 get_force() const;
+    [[nodiscard]] auto get_force() const -> Vec3;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] Vec3 get_linear_velocity() const;
+    [[nodiscard]] auto get_linear_velocity() const -> Vec3;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] Vec3 get_angular_velocity() const;
+    [[nodiscard]] auto get_angular_velocity() const -> Vec3;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] float get_linear_damping() const;
+    [[nodiscard]] auto get_linear_damping() const -> float;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] float get_angular_damping() const;
+    [[nodiscard]] auto get_angular_damping() const -> float;
 
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
     void set_mass(float m) const;
@@ -50,13 +50,13 @@ public:
     RigidBodyBase();
     ~RigidBodyBase();
     RigidBodyBase(const RigidBodyBase &src) = delete;
-    RigidBodyBase &operator=(const RigidBodyBase &src) = delete;
+    auto operator=(const RigidBodyBase &src) -> RigidBodyBase & = delete;
     RigidBodyBase(RigidBodyBase &&src) noexcept;
-    RigidBodyBase &operator=(RigidBodyBase &&src) noexcept;
+    auto operator=(RigidBodyBase &&src) noexcept -> RigidBodyBase &;
 
 private:
     template<RigidBodyType FromType, RigidBodyType ResType>
-    friend RigidBodyBase<ResType> switch_rigidbody_type(const RigidBodyBase<FromType> &from);
+    friend auto switch_rigidbody_type(const RigidBodyBase<FromType> &from) -> RigidBodyBase<ResType>;
     template<RigidBodyType FromType, RigidBodyType ResType>
     friend void copy_impl(typename RigidBodyBase<FromType>::Impl *from, typename RigidBodyBase<ResType>::Impl *res);
 
@@ -66,7 +66,7 @@ private:
 };
 
 template<RigidBodyType FromType, RigidBodyType ResType>
-RigidBodyBase<ResType> switch_rigidbody_type(const RigidBodyBase<FromType> &from)
+auto switch_rigidbody_type(const RigidBodyBase<FromType> &from) -> RigidBodyBase<ResType>
 {
     RigidBodyBase<ResType> res;
     copy_impl<FromType, ResType>(from.impl.get(), res.impl.get());
@@ -83,7 +83,7 @@ template<RigidBodyType Type>
 RigidBodyBase<Type>::RigidBodyBase(RigidBodyBase &&src) noexcept { impl = std::move(src.impl); }
 
 template<RigidBodyType Type>
-RigidBodyBase<Type> &RigidBodyBase<Type>::operator=(RigidBodyBase &&src) noexcept
+auto RigidBodyBase<Type>::operator=(RigidBodyBase &&src) noexcept -> RigidBodyBase<Type> &
 {
     impl = std::move(src.impl);
     return *this;

@@ -15,7 +15,7 @@ namespace HinaPE
 class PhysicsSystem
 {
 public: // Singleton Pattern
-    static PhysicsSystem &instance();
+    static auto instance() -> PhysicsSystem &;
     static void destroy();
 
 public:
@@ -24,9 +24,9 @@ public:
 
 public:
     PhysicsSystem(const PhysicsSystem &) = delete;
-    PhysicsSystem &operator=(const PhysicsSystem &) = delete;
+    auto operator=(const PhysicsSystem &) -> PhysicsSystem & = delete;
     PhysicsSystem(PhysicsSystem &&) = delete;
-    PhysicsSystem &operator=(PhysicsSystem &&) = delete;
+    auto operator=(PhysicsSystem &&) -> PhysicsSystem & = delete;
 private: // disable any instantiation outside
     PhysicsSystem() : kernel(FastMassSpringKernel()) {}
     ~PhysicsSystem() = default;

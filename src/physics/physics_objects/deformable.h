@@ -12,22 +12,22 @@ template<DeformableType Type>
 class DeformableBase
 {
 public:
-    [[nodiscard]] Vec3 get_position() const;
-    [[nodiscard]] Vec3 get_rotation() const;
+    [[nodiscard]] auto get_position() const -> Vec3;
+    [[nodiscard]] auto get_rotation() const -> Vec3;
     void set_position(const Vec3 &) const;
     void set_rotation(const Vec3 &) const;
 
-    std::vector<Vec3> &pos();
-    const std::vector<Vec3> &dirty_pos();
-    const std::vector<unsigned int> &dirty_ind();
+    auto pos() -> std::vector<Vec3> &;
+    auto dirty_pos() -> const std::vector<Vec3> &;
+    auto dirty_ind() -> const std::vector<unsigned int> &;
 
 public:
     DeformableBase();
     ~DeformableBase();
     DeformableBase(const DeformableBase &) = delete;
-    DeformableBase &operator=(const DeformableBase &) = delete;
+    auto operator=(const DeformableBase &) -> DeformableBase & = delete;
     DeformableBase(DeformableBase &&) noexcept = default;
-    DeformableBase &operator=(DeformableBase &&) noexcept = default;
+    auto operator=(DeformableBase &&) noexcept -> DeformableBase & = default;
 
 private:
     friend class ClothFactory;

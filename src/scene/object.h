@@ -23,16 +23,16 @@ class Object;
 class Scene_Object
 {
 public:
-    Scene_ID id() const;
+    auto id() const -> Scene_ID;
 
-    BBox bbox();
-    const GL::Mesh &mesh();
-    const GL::Mesh &posed_mesh();
-    Halfedge_Mesh &get_mesh();
-    const Halfedge_Mesh &get_mesh() const;
+    auto bbox() -> BBox;
+    auto mesh() -> const GL::Mesh &;
+    auto posed_mesh() -> const GL::Mesh &;
+    auto get_mesh() -> Halfedge_Mesh &;
+    auto get_mesh() const -> const Halfedge_Mesh &;
 
-    bool is_shape() const;
-    bool is_editable() const;
+    auto is_shape() const -> bool;
+    auto is_editable() const -> bool;
     void set_mesh_dirty();
     void set_skel_dirty();
     void set_pose_dirty();
@@ -46,7 +46,7 @@ public:
     void copy_mesh(Halfedge_Mesh &out);
     void take_mesh(Halfedge_Mesh &&in);
     void set_mesh(Halfedge_Mesh &in);
-    Halfedge_Mesh::ElementRef set_mesh(Halfedge_Mesh &in, unsigned int eid);
+    auto set_mesh(Halfedge_Mesh &in, unsigned int eid) -> Halfedge_Mesh::ElementRef;
 
     void try_make_editable(PT::Shape_Type prev = PT::Shape_Type::none);
     void flip_normals();
@@ -72,13 +72,13 @@ public:
     Scene_Object(const Scene_Object &src) = delete;
     void operator=(const Scene_Object &src) = delete;
     Scene_Object(Scene_Object &&src) = default;
-    Scene_Object &operator=(Scene_Object &&src) = default;
+    auto operator=(Scene_Object &&src) -> Scene_Object & = default;
 
 public:
     void attach_physics_object(std::shared_ptr<HinaPE::PhysicsObject> o);
     void remove_physics_object();
     void sync_physics_result();
-    HinaPE::PhysicsObjectType get_physics_object_type() const;
+    auto get_physics_object_type() const -> HinaPE::PhysicsObjectType;
     std::shared_ptr<HinaPE::PhysicsObject> physics_object;
     int sub_iteration = 10;
 
@@ -115,6 +115,6 @@ private:
     mutable std::vector<std::vector<Joint *>> vertex_joints;
 };
 
-bool operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r);
+auto operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r) -> bool;
 
 #endif

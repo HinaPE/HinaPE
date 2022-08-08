@@ -7,12 +7,12 @@
 
 namespace HinaPE
 {
-typedef std::shared_ptr<PhysicsObject> PhysicsObjectPtr;
+using PhysicsObjectPtr = std::shared_ptr<PhysicsObject>;
 
 class RigidBodyFactory
 {
 public:
-    static PhysicsObjectPtr create_rigidbody(RigidBodyType type);
+    static auto create_rigidbody(RigidBodyType type) -> PhysicsObjectPtr;
 };
 
 class ClothFactory
@@ -32,7 +32,7 @@ public:
     };
 
 public:
-    static std::shared_ptr<PhysicsObject> create_cloth(const ClothDesc &desc);
+    static auto create_cloth(const ClothDesc &desc) -> std::shared_ptr<PhysicsObject>;
 };
 }
 
