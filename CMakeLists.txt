@@ -61,13 +61,11 @@ if (LINUX)
 endif ()
 
 add_executable(HinaPE ${Hina_SOURCES})
-set_target_properties(HinaPE PROPERTIES
-        CXX_STANDARD 20
-        CXX_EXTENSIONS OFF)
+set_target_properties(HinaPE PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 
 if(MSVC)
 #    target_compile_options(HinaPE PRIVATE /MP /W4 /WX /wd4201 /wd4840 /wd4100 /wd4505 /fp:fast)
-    target_compile_options(HinaPE PRIVATE /wd4819 /wd5054 /wd4458 /MP /W4 /WX /wd4201 /wd4840 /wd4100 /wd4505 /fp:fast)
+    target_compile_options(HinaPE PRIVATE /wd4819 /wd4189 /wd4459 /wd5054 /wd4458 /MP /W4 /WX /wd4201 /wd4840 /wd4100 /wd4505 /fp:fast)
 else()
 #    target_compile_options(HinaPE PRIVATE -Wall -Wextra -Werror -Wno-reorder -Wno-unused-function -Wno-unused-parameter -Wordered-compare-function-pointers)
     target_compile_options(HinaPE PRIVATE -Wall -Wextra -Wno-reorder -Wno-unused-function -Wno-unused-parameter)

@@ -1,6 +1,11 @@
 #include "physics_system.h"
 
 #include <utility>
+#include "lib/point.h"
+#include "lib/point2.h"
+
+HinaPE::Point<int, 1> a;
+HinaPE::Point<int, 2> b;
 
 void HinaPE::PhysicsSystem::_tick_(float dt)
 {
