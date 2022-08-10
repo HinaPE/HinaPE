@@ -37,32 +37,32 @@ public:
 public:
     template<typename U>
     Point(const std::initializer_list<U> &lst);
-    constexpr Point() : x(0), y(0) {}
-    constexpr Point(T x_, T y_) : x(x_), y(y_) {}
-    constexpr Point(const Point &v) : x(v.x), y(v.y) {}
-    constexpr Point(Point &&v)  noexcept : x(v.x), y(v.y) {}
-    constexpr ~Point() = default;
-    constexpr auto operator=(const Point &v) -> Point & { x = v.x; y = v.y; return *this; }
-    constexpr auto operator=(Point &&v) noexcept -> Point & { x = v.x; y = v.y; return *this; }
-    constexpr auto operator==(const Point &v) const -> bool { return x == v.x && y == v.y; }
-    constexpr auto operator!=(const Point &v) const -> bool { return x != v.x || y != v.y; }
-    constexpr auto operator+(const Point &v) const -> Point { return add(v); }
-    constexpr auto operator-(const Point &v) const -> Point { return sub(v); }
-    constexpr auto operator*(const Point &v) const -> Point { return mul(v); }
-    constexpr auto operator/(const Point &v) const -> Point { return div(v); }
-    constexpr auto operator-() const -> Point { return Point(-x, -y); }
-    constexpr auto operator+=(const Point &v) -> Point & { return set(add(v)); }
-    constexpr auto operator-=(const Point &v) -> Point & { return set(sub(v)); }
-    constexpr auto operator*=(const Point &v) -> Point & { return set(mul(v)); }
-    constexpr auto operator/=(const Point &v) -> Point & { return set(div(v)); }
-    constexpr auto operator+=(T v) -> Point & { return set(add(v)); }
-    constexpr auto operator-=(T v) -> Point & { return set(sub(v)); }
-    constexpr auto operator*=(T v) -> Point & { return set(mul(v)); }
-    constexpr auto operator/=(T v) -> Point & { return set(div(v)); }
-    constexpr auto operator[](int i) const -> T { return i == 0 ? x : y; }
-    constexpr auto operator[](int i) -> T & { return i == 0 ? x : y; }
-    constexpr auto operator()(int i) const -> T { return i == 0 ? x : y; }
-    constexpr auto operator()(int i) -> T & { return i == 0 ? x : y; }
+    Point() : x(0), y(0) {}
+    Point(T x_, T y_) : x(x_), y(y_) {}
+    Point(const Point &v) : x(v.x), y(v.y) {}
+    Point(Point &&v)  noexcept : x(v.x), y(v.y) {}
+    ~Point() = default;
+    auto operator=(const Point &v) -> Point & { x = v.x; y = v.y; return *this; }
+    auto operator=(Point &&v) noexcept -> Point & { x = v.x; y = v.y; return *this; }
+    auto operator==(const Point &v) const -> bool { return x == v.x && y == v.y; }
+    auto operator!=(const Point &v) const -> bool { return x != v.x || y != v.y; }
+    auto operator+(const Point &v) const -> Point { return add(v); }
+    auto operator-(const Point &v) const -> Point { return sub(v); }
+    auto operator*(const Point &v) const -> Point { return mul(v); }
+    auto operator/(const Point &v) const -> Point { return div(v); }
+    auto operator-() const -> Point { return Point(-x, -y); }
+    auto operator+=(const Point &v) -> Point & { return set(add(v)); }
+    auto operator-=(const Point &v) -> Point & { return set(sub(v)); }
+    auto operator*=(const Point &v) -> Point & { return set(mul(v)); }
+    auto operator/=(const Point &v) -> Point & { return set(div(v)); }
+    auto operator+=(T v) -> Point & { return set(add(v)); }
+    auto operator-=(T v) -> Point & { return set(sub(v)); }
+    auto operator*=(T v) -> Point & { return set(mul(v)); }
+    auto operator/=(T v) -> Point & { return set(div(v)); }
+    auto operator[](int i) const -> T { return i == 0 ? x : y; }
+    auto operator[](int i) -> T & { return i == 0 ? x : y; }
+    auto operator()(int i) const -> T { return i == 0 ? x : y; }
+    auto operator()(int i) -> T & { return i == 0 ? x : y; }
 
 public:
     static_assert(std::is_arithmetic<T>::value, "Point only can be instantiated with arithmetic types");
