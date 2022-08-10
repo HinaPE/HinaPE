@@ -3,9 +3,11 @@
 #include <utility>
 #include "lib/point.h"
 #include "lib/point2.h"
+#include "lib/array1.h"
 
 HinaPE::Point<int, 1> a;
 HinaPE::Point<int, 2> b;
+HinaPE::Array1<int> c;
 
 void HinaPE::PhysicsSystem::_tick_(float dt)
 {
