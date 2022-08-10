@@ -16,6 +16,7 @@ class Array<T, 1> final
     using ConstIterator = typename ContainerType::const_iterator;
 private:
     ContainerType _data;
+
 public:
     auto set(const std::initializer_list<std::initializer_list<std::initializer_list<T>>> &lst) -> void;
     auto set(const T &value) -> void;
@@ -52,6 +53,8 @@ public:
     Array(const std::initializer_list<std::initializer_list<std::initializer_list<T>>> &lst);
     Array(const Array &other);
     Array(Array &&other) noexcept;
+
+    auto operator=(const std::initializer_list<T> &lst) -> Array &;
 };
 
 template<typename T>
@@ -140,6 +143,14 @@ void Array<T, 1>::parallelForEach(Callback func) { accessor().parallelForEach(fu
 template<typename T>
 template<typename Callback>
 void Array<T, 1>::parallelForEachIndex(Callback func) const { const_accessor().parallelForEachIndex(func); }
+
+template<typename T>
+auto Array<T, 1>::operator=(const std::initializer_list<T> &lst) -> Array<T, 1> &
+{
+    set(lst);
+    return *this;
+}
+
 template<typename T> using Array1 = Array<T, 1>;
 }
 
