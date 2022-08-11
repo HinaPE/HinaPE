@@ -142,7 +142,7 @@ target_link_libraries(HinaPE PRIVATE imgui)
 target_link_libraries(HinaPE PRIVATE glad)
 
 option(HINAPE_TBB "Enable TBB" OFF)
-find_package(TBB REQUIRED)
+find_package(TBB)
 if (TBB_FOUND)
     option(HINAPE_TBB ON)
     message(STATUS "TBB found")
