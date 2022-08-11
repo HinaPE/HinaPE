@@ -18,7 +18,7 @@ private:
     ContainerType _data;
 
 public:
-    auto set(const std::initializer_list<std::initializer_list<std::initializer_list<T>>> &lst) -> void;
+    auto set(const std::initializer_list<T> &lst) -> void;
     auto set(const T &value) -> void;
     auto set(const Array &other) -> void;
     auto clear() -> void;
@@ -50,10 +50,11 @@ public:
 public:
     Array();
     explicit Array(size_t size, const T &init_val = T());
-    Array(const std::initializer_list<std::initializer_list<std::initializer_list<T>>> &lst);
+    Array(const std::initializer_list<T> &lst);
     Array(const Array &other);
     Array(Array &&other) noexcept;
 
+    auto operator=(const Array &other) -> Array &;
     auto operator=(const std::initializer_list<T> &lst) -> Array &;
 };
 
@@ -62,20 +63,20 @@ Array<T, 1>::Array() = default;
 template<typename T>
 Array<T, 1>::Array(size_t size, const T &init_val) { resize(size, init_val); }
 template<typename T>
-Array<T, 1>::Array(const std::initializer_list<std::initializer_list<std::initializer_list<T>>> &lst) { set(lst); }
+Array<T, 1>::Array(const std::initializer_list<T> &lst) { set(lst); }
 template<typename T>
 Array<T, 1>::Array(const Array &other) { set(other); }
 template<typename T>
 Array<T, 1>::Array(Array &&other) noexcept { (*this) = std::move(other); }
 template<typename T>
-auto Array<T, 1>::set(const std::initializer_list<std::initializer_list<std::initializer_list<T>>> &lst) -> void
+auto Array<T, 1>::set(const std::initializer_list<T> &lst) -> void
 {
     size_t size = lst.size();
     resize(size);
     auto col_iter = lst.begin();
     for (size_t i = 0; i < size; ++i)
     {
-        (*this)[i] = *col_iter;
+        //        (*this)[i] = *col_iter;
         ++col_iter;
     }
 }
@@ -143,6 +144,13 @@ void Array<T, 1>::parallelForEach(Callback func) { accessor().parallelForEach(fu
 template<typename T>
 template<typename Callback>
 void Array<T, 1>::parallelForEachIndex(Callback func) const { const_accessor().parallelForEachIndex(func); }
+
+template<typename T>
+auto Array<T, 1>::operator=(const Array &other) -> Array &
+{
+    set(other);
+    return *this;
+}
 
 template<typename T>
 auto Array<T, 1>::operator=(const std::initializer_list<T> &lst) -> Array<T, 1> &
