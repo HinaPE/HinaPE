@@ -1,7 +1,9 @@
 #ifndef HINAPE_PARALLEL_FOR_H
 #define HINAPE_PARALLEL_FOR_H
 
+#ifdef HINAPE_TBB_SUPPORT
 #include "tbb/parallel_for.h"
+#endif
 #include <thread>
 
 namespace HinaPE
