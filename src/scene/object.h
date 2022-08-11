@@ -56,11 +56,23 @@ public:
 //        for (int i = 0; i < sub_iteration; ++i)
 //            HinaPE::PhysicsSystem::instance()._tick_(dt / (float) sub_iteration); // TODO: move this to separate physics thread; Hina
 //        sync_physics_result();
-
         // step 1: 球体自由落体运动
             //1111
+            Vec3 p = pose.pos;
+
+            Vec3 newV = v + a  * dt;
+            Vec3 newP = p + newV * dt;
+
+            pose.pos = newP;
+            v = newV;
+            set_pose_dirty();
         // step 2: 添加隐形的地板 (0.f, -5.f, 0.f)
             //2222
+            Vec3 floor = Vec3(0.f, -5.f, 0.f);
+            if(pose.pos.y <= floor.y){
+                v.y = -v.y;
+            }
+            set_pose_dirty();
         // step 3: 添加初速度，添加四周六堵墙
     }
 
@@ -113,6 +125,9 @@ private:
 
     mutable GL::Mesh _mesh, _anim_mesh;
     mutable std::vector<std::vector<Joint *>> vertex_joints;
+private:
+    Vec3 v = Vec3(0.f,0.f,0.f);
+    Vec3 a = Vec3(0.f,-9.8f,0.f);
 };
 
 bool operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r);
