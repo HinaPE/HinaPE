@@ -159,7 +159,7 @@ if (benchmark_FOUND)
     add_definitions(-DHINAPE_GOOGLE_BENCHMARK_SUPPORT)
 endif ()
 
-option(HINAPE_TEST "Enable Test" ON)
+option(HINAPE_TEST "Enable Test" OFF)
 if (HINAPE_TEST)
     file(GLOB_RECURSE HINA_TEST test/*.h test/*.cpp)
     target_sources(HinaPE PRIVATE ${HINA_TEST})
