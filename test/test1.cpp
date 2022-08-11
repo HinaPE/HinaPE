@@ -12,7 +12,7 @@
 
 void HinaPE::TEST::Test1::test()
 {
-    std::atomic counter = 0;
+    std::atomic<int> counter = 0;
     std::thread t1([&]()
                    {
                        for (int i = 0; i < 10000; i++)
