@@ -72,8 +72,28 @@ public:
             if(pose.pos.y <= floor.y){
                 v.y = -v.y;
             }
-            set_pose_dirty();
         // step 3: 添加初速度，添加四周六堵墙
+            Vec3 top = Vec3(0.f, 5.f, 0.f);
+            if(pose.pos.y >= top.y){
+                v.y = -v.y;
+            }
+            Vec3 left = Vec3(-5.f, 0.f, 0.f);
+            if(pose.pos.x <= left.x){
+                v.x = -v.x;
+            }
+            Vec3 right = Vec3(5.f, -0.f, 0.f);
+            if(pose.pos.x >= right.x){
+                v.x = -v.x;
+            }
+            Vec3 front = Vec3(0.f, 0.f, -8.f);
+            if(pose.pos.z <= front.z){
+                v.z = -v.z;
+            }
+            Vec3 back = Vec3(0.f, 0.f, 8.f);
+            if(pose.pos.z >= back.z){
+                v.z = -v.z;
+            }
+            set_pose_dirty();
     }
 
 public:
@@ -127,7 +147,7 @@ private:
     mutable std::vector<std::vector<Joint *>> vertex_joints;
 private:
     Vec3 v = Vec3(0.f,0.f,0.f);
-    Vec3 a = Vec3(0.f,-9.8f,0.f);
+    Vec3 a = Vec3(5.f,-9.8f,6.f);
 };
 
 bool operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r);
