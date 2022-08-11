@@ -24,28 +24,40 @@ auto HinaPE::ParticleSystemData3::resize(size_t new_number_of_particles) -> void
 auto HinaPE::ParticleSystemData3::number_of_particles() const -> size_t { return _number_of_particles; }
 auto HinaPE::ParticleSystemData3::radius() const -> double { return _radius; }
 auto HinaPE::ParticleSystemData3::mass() const -> double { return _mass; }
-auto HinaPE::ParticleSystemData3::addScalarData(double initialVal) -> size_t
+auto HinaPE::ParticleSystemData3::add_scalar_data(double initial_val) -> size_t
 {
     size_t attrIdx = _scalar_data_list.size();
-    _scalar_data_list.emplace_back(number_of_particles(), initialVal);
+    _scalar_data_list.emplace_back(number_of_particles(), initial_val);
     return attrIdx;
 }
-auto HinaPE::ParticleSystemData3::addVectorData(const Vector3D &initial_val) -> size_t
+auto HinaPE::ParticleSystemData3::add_vector_data(const Vector3D &initial_val) -> size_t
 {
     size_t attrIdx = _vector_data_list.size();
     _vector_data_list.emplace_back(number_of_particles(), initial_val);
     return attrIdx;
 }
-auto HinaPE::ParticleSystemData3::setRadius(double new_radius) -> void { _radius = std::max(new_radius, 0.0); }
-auto HinaPE::ParticleSystemData3::setMass(double new_mass) -> void { _mass = std::max(new_mass, 0.0); }
-void HinaPE::ParticleSystemData3::addParticle(const Vector3D &position, const Vector3D &velocity, const Vector3D &force)
+auto HinaPE::ParticleSystemData3::set_radius(double new_radius) -> void { _radius = std::max(new_radius, 0.0); }
+auto HinaPE::ParticleSystemData3::set_mass(double new_mass) -> void { _mass = std::max(new_mass, 0.0); }
+void HinaPE::ParticleSystemData3::add_particle(const Vector3D &position, const Vector3D &velocity, const Vector3D &force)
 {
-    Array1<Vector3D> newPositions = {position};
-    Array1<Vector3D> newVelocities = {velocity};
-    Array1<Vector3D> newForces = {force};
+    Array1<Vector3D> new_positions = {position};
+    Array1<Vector3D> new_velocities = {velocity};
+    Array1<Vector3D> new_forces = {force};
+
+    HinaPE::ConstArrayAccessor1<Vector3D> a;
+    add_particles(new_positions.const_accessor(), new_velocities.const_accessor(), new_forces.const_accessor());
 }
-void HinaPE::ParticleSystemData3::addParticles(const HinaPE::ConstArrayAccessor1<Vector3D> &positions, const HinaPE::ConstArrayAccessor1<Vector3D> &velocities,
-                                               const HinaPE::ConstArrayAccessor1<Vector3D> &forces)
+void HinaPE::ParticleSystemData3::add_particles(const HinaPE::ConstArrayAccessor1<Vector3D> &new_positions, const HinaPE::ConstArrayAccessor1<Vector3D> &new_velocities,
+                                                const HinaPE::ConstArrayAccessor1<Vector3D> &new_forces)
 {
+    size_t old_number_of_particles = number_of_particles();
+    size_t new_number_of_particles = old_number_of_particles + new_positions.size();
+
+    resize(new_number_of_particles);
+
+    auto pos = positions();
+    auto vel = velocities();
+    auto frc = forces();
+
 
 }

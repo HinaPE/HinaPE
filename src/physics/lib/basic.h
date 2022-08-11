@@ -3,6 +3,6 @@
 
 #include "Eigen/Eigen"
 
-using Vector3D = Eigen::Vector3f;
+using Vector3D = Eigen::Vector3d;
 
 #endif //HINAPE_BASIC_H

@@ -45,13 +45,13 @@ public:
     [[nodiscard]] auto radius() const -> double;
     [[nodiscard]] auto mass() const -> double;
     auto resize(size_t new_number_of_particles) -> void;
-    auto addScalarData(double initialVal = 0.0) -> size_t;
-    auto addVectorData(const Vector3D &initial_val = Vector3D()) -> size_t;
-    virtual auto setRadius(double new_radius) -> void;
-    virtual auto setMass(double new_mass) -> void;
-    void addParticle(const Vector3D &position, const Vector3D &velocity = Vector3D(), const Vector3D &force = Vector3D());
-    void addParticles(const ConstArrayAccessor1<Vector3D> &positions, const ConstArrayAccessor1<Vector3D> &velocities = ConstArrayAccessor1<Vector3D>(),
-                      const ConstArrayAccessor1<Vector3D> &forces = ConstArrayAccessor1<Vector3D>());
+    auto add_scalar_data(double initial_val = 0.0) -> size_t;
+    auto add_vector_data(const Vector3D &initial_val = Vector3D()) -> size_t;
+    virtual auto set_radius(double new_radius) -> void;
+    virtual auto set_mass(double new_mass) -> void;
+    void add_particle(const Vector3D &position, const Vector3D &velocity = Vector3D(), const Vector3D &force = Vector3D());
+    void add_particles(const ConstArrayAccessor1<Vector3D> &positions, const ConstArrayAccessor1<Vector3D> &velocities = ConstArrayAccessor1<Vector3D>(),
+                       const ConstArrayAccessor1<Vector3D> &forces = ConstArrayAccessor1<Vector3D>());
 
 public:
     ParticleSystemData3();

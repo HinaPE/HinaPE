@@ -3,6 +3,8 @@
 
 #include "array_accessor.h"
 
+#include "../parallel_lib/parallel_for.h"
+
 namespace HinaPE
 {
 template<typename T>
@@ -106,13 +108,13 @@ template<typename T>
 template<typename Callback>
 auto ArrayAccessor<T, 1>::parallelForEach(Callback func) -> void
 {
-    // TODO: parallel for each
+    parallel_for(0, size(), [&](size_t i) { func(at(i)); });
 }
 template<typename T>
 template<typename Callback>
 auto ArrayAccessor<T, 1>::parallelForEachIndex(Callback func) -> void
 {
-    // TODO: parallel for each
+    parallel_for(0, size(), func);
 }
 template<typename T>
 auto ArrayAccessor<T, 1>::operator[](size_t i) -> T & { return _data[i]; }
@@ -127,8 +129,6 @@ auto ArrayAccessor<T, 1>::operator=(const ArrayAccessor &other) -> ArrayAccessor
 template<typename T>
 ArrayAccessor<T, 1>::operator ConstArrayAccessor<T, 1>() const { return ConstArrayAccessor<T, 1>(*this); }
 template<typename T> using ArrayAccessor1 = ArrayAccessor<T, 1>;
-
-
 
 template<typename T>
 class ConstArrayAccessor<T, 1>
@@ -219,7 +219,7 @@ void ConstArrayAccessor<T, 1>::parallelForEachIndex(Callback func)
 }
 template<typename T>
 auto ConstArrayAccessor<T, 1>::operator[](size_t i) const -> const T & { return _data[i]; }
-template <typename T> using ConstArrayAccessor1 = ConstArrayAccessor<T, 1>;
+template<typename T> using ConstArrayAccessor1 = ConstArrayAccessor<T, 1>;
 }
 
 #endif //HINAPE_ARRAY_ACCESSOR1_H
