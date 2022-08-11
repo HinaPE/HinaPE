@@ -6,7 +6,9 @@
 #include <thread>
 #include <iostream>
 
+#ifdef HINAPE_TBB_SUPPORT
 #include "tbb/parallel_for.h"
+#endif
 
 void HinaPE::TEST::Test1::test()
 {
