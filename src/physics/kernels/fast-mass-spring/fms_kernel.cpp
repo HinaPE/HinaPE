@@ -18,8 +18,9 @@ auto HinaPE::FastMassSpringKernel::simulate(HinaPE::PhysicsSystem &sys, float dt
         }
     }
 }
+
 auto
-HinaPE::FastMassSpringKernel::simulate_for_each(Eigen::Map<Eigen::MatrixXf> &pos, Eigen::Map<Eigen::MatrixXf> &vel, Eigen::Map<Eigen::MatrixXf> &acc, float dt) -> void
+HinaPE::FastMassSpringKernel::simulate_for_each(Eigen::Map<Eigen::MatrixXf> &pos, Eigen::Map<Eigen::MatrixXf> &vel, Eigen::Map<Eigen::MatrixXf> &frc, float dt) -> void
 {
 
 }
