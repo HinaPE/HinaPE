@@ -25,14 +25,14 @@ public:
     [[nodiscard]] auto get_velocity() const -> Vec3;
     [[nodiscard]] auto get_force() const -> Vec3;
     [[nodiscard]] auto get_mass() const -> float;
-    void set_position(const Vec3 &) const;
-    void set_rotation(const Vec3 &) const;
-    void set_velocity(const Vec3 &) const;
+    auto set_position(const Vec3 &) const -> void;
+    auto set_rotation(const Vec3 &) const -> void;
+    auto set_velocity(const Vec3 &) const -> void;
 
     // rigidbody methods
     auto is_rigidbody() -> bool;
     [[nodiscard]] auto get_rigid_body_type() const -> RigidBodyType;
-    void switch_rigidbody_type(RigidBodyType to);
+    auto switch_rigidbody_type(RigidBodyType to) -> void;
 
     // deformable methods
     auto is_deformable() -> bool;
@@ -89,7 +89,7 @@ auto HinaPE::PhysicsObject::operator=(HinaPE::DeformableBase<T> &&deformable) ->
     return *this;
 }
 
-inline PhysicsObject::PhysicsObject(PhysicsObjectType type)
+inline HinaPE::PhysicsObject::PhysicsObject(PhysicsObjectType type)
 {
     switch (type)
     {

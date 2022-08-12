@@ -14,8 +14,8 @@ class DeformableBase
 public:
     [[nodiscard]] auto get_position() const -> Vec3;
     [[nodiscard]] auto get_rotation() const -> Vec3;
-    void set_position(const Vec3 &) const;
-    void set_rotation(const Vec3 &) const;
+    auto set_position(const Vec3 &) const -> void;
+    auto set_rotation(const Vec3 &) const -> void;
 
     auto pos() -> std::vector<Vec3> &;
     auto dirty_pos() -> const std::vector<Vec3> &;

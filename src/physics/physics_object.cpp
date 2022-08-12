@@ -65,7 +65,7 @@ auto HinaPE::PhysicsObject::get_mass() const -> float
                       physics_object_opt.value());
 }
 
-void HinaPE::PhysicsObject::set_position(const Vec3 &p) const
+auto HinaPE::PhysicsObject::set_position(const Vec3 &p) const -> void
 {
     std::visit([&](auto &o)
                {
@@ -73,7 +73,7 @@ void HinaPE::PhysicsObject::set_position(const Vec3 &p) const
                }, physics_object_opt.value());
 }
 
-void HinaPE::PhysicsObject::set_rotation(const Vec3 &r) const
+auto HinaPE::PhysicsObject::set_rotation(const Vec3 &r) const -> void
 {
     std::visit([&](auto &o)
                {
@@ -81,7 +81,7 @@ void HinaPE::PhysicsObject::set_rotation(const Vec3 &r) const
                }, physics_object_opt.value());
 }
 
-void HinaPE::PhysicsObject::set_velocity(const Vec3 &v) const
+auto HinaPE::PhysicsObject::set_velocity(const Vec3 &v) const -> void
 {
     std::visit(overloaded{[&](const RigidBodyBase<DYNAMIC> &rb) { rb.set_linear_velocity(v); },
                           [&](const RigidBodyBase<STATIC> &rb) { throw std::runtime_error("DO NOT SET VELOCITY FOR STATIC RIGIDBODY"); },
@@ -90,7 +90,7 @@ void HinaPE::PhysicsObject::set_velocity(const Vec3 &v) const
                           [&](const HinaPE::DeformableBase<MESH> &mesh) { throw std::runtime_error("DO NOT SET VELOCITY FOR MESH"); }}, physics_object_opt.value());
 }
 
-void HinaPE::PhysicsObject::switch_rigidbody_type(HinaPE::RigidBodyType to)
+auto HinaPE::PhysicsObject::switch_rigidbody_type(HinaPE::RigidBodyType to) -> void
 {
     if (physics_object_opt == std::nullopt)
         switch (to)

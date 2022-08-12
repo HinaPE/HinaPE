@@ -15,8 +15,8 @@ public:
 
     [[nodiscard]] auto get_position() const -> Vec3;
     [[nodiscard]] auto get_rotation() const -> Vec3;
-    void set_position(const Vec3 &) const;
-    void set_rotation(const Vec3 &) const;
+    auto set_position(const Vec3 &) const -> void;
+    auto set_rotation(const Vec3 &) const -> void;
 
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
     [[nodiscard]] auto get_mass() const -> float;
@@ -32,19 +32,19 @@ public:
     [[nodiscard]] auto get_angular_damping() const -> float;
 
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
-    void set_mass(float m) const;
+    auto set_mass(float m) const-> void;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    void set_linear_velocity(const Vec3 &v) const;
+    auto set_linear_velocity(const Vec3 &v) const-> void;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    void add_force(const Vec3 &f) const;
+    auto add_force(const Vec3 &f) const-> void;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    void add_acceleration(const Vec3 &a) const;
+    auto add_acceleration(const Vec3 &a) const-> void;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    void set_angular_velocity(const Vec3 &w) const;
+    auto set_angular_velocity(const Vec3 &w) const-> void;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    void set_linear_damping(float d) const;
+    auto set_linear_damping(float d) const-> void;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    void set_angular_damping(float d) const;
+    auto set_angular_damping(float d) const-> void;
 
 public:
     RigidBodyBase();
