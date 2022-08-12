@@ -4,6 +4,7 @@
 #include "kernels/pbd/pbd_kernel.h"
 #include "kernels/xpbd/xpbd_kernel.h"
 #include "kernels/fast-mass-spring/fms_kernel.h"
+#include "collision/simple_collision.h"
 #include "physics_object.h"
 
 #include <vector>
@@ -35,7 +36,9 @@ private:
     friend PBDKernel;
     friend XPBDKernel;
     friend FastMassSpringKernel;
+    friend SimpleCollision;
     std::variant<PBDKernel, XPBDKernel, FastMassSpringKernel> kernel;
+    std::variant<SimpleCollision> collision;
     std::map<unsigned int, std::shared_ptr<PhysicsObject>> physics_objects;
     std::map<unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects;
     std::vector<Constraint> constraints;

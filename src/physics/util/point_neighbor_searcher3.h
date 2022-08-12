@@ -1,7 +1,6 @@
 #ifndef HINAPE_POINT_NEIGHBOR_SEARCHER3_H
 #define HINAPE_POINT_NEIGHBOR_SEARCHER3_H
 
-#include "lib/basic.h"
 #include "lib/array_accessor1.h"
 
 #include <functional>

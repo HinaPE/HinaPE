@@ -45,9 +45,9 @@ template<DeformableType Type>
 auto DeformableBase<Type>::pos() -> std::vector<Vec3> & { return impl->positions; }
 
 template<DeformableType Type>
-auto DeformableBase<Type>::dirty_pos() -> const std::vector<Vec3> & { return impl->positions; }
+auto DeformableBase<Type>::vel() -> std::vector<Vec3> & { return impl->velocities; }
 
 template<DeformableType Type>
-auto DeformableBase<Type>::dirty_ind() -> const std::vector<unsigned int> & { return impl->indices; }
+auto DeformableBase<Type>::ind() -> std::vector<unsigned int> & { return impl->indices; }
 
 }

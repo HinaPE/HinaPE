@@ -30,16 +30,16 @@ public:
     auto set_velocity(const Vec3 &) const -> void;
 
     // rigidbody methods
-    auto is_rigidbody() -> bool;
+    [[nodiscard]] auto is_rigidbody() -> bool;
     [[nodiscard]] auto get_rigid_body_type() const -> RigidBodyType;
     auto switch_rigidbody_type(RigidBodyType to) -> void;
 
     // deformable methods
-    auto is_deformable() -> bool;
+    [[nodiscard]] auto is_deformable() -> bool;
     [[nodiscard]] auto get_deformable_type() const -> DeformableType;
-    auto pos() -> std::vector<Vec3> &;
-    auto dirty_pos() -> const std::vector<Vec3> &;
-    auto dirty_ind() -> const std::vector<unsigned int> &;
+    [[nodiscard]] auto pos() -> std::vector<Vec3> &;
+    [[nodiscard]] auto ind() -> std::vector<unsigned int> &;
+    [[nodiscard]] auto vel() -> std::vector<Vec3> &;
 
 public:
     explicit PhysicsObject(PhysicsObjectType type);

@@ -1,7 +1,7 @@
 #ifndef HINAPE_PARTICLE_SYSTEM_DATA3_H
 #define HINAPE_PARTICLE_SYSTEM_DATA3_H
 
-#include "../util/lib/basic.h"
+#include "../common.h"
 #include "../util/lib/array1.h"
 #include "../util/point_neighbor_searcher3.h"
 

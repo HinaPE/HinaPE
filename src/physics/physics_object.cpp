@@ -207,6 +207,7 @@ auto HinaPE::PhysicsObject::get_deformable_type() const -> HinaPE::DeformableTyp
             throw std::runtime_error("invalid rigidbody type");
     }
 }
+
 auto HinaPE::PhysicsObject::pos() -> std::vector<Vec3> &
 {
     static std::vector<Vec3> null_vector;
@@ -226,7 +227,7 @@ auto HinaPE::PhysicsObject::pos() -> std::vector<Vec3> &
     }
 }
 
-auto HinaPE::PhysicsObject::dirty_pos() -> const std::vector<Vec3> &
+auto HinaPE::PhysicsObject::vel() -> std::vector<Vec3> &
 {
     static std::vector<Vec3> null_vector;
 
@@ -235,17 +236,17 @@ auto HinaPE::PhysicsObject::dirty_pos() -> const std::vector<Vec3> &
         case 0: // RigidBodyBase<DYNAMIC>
         case 1: // RigidBodyBase<STATIC>
         case 2: // RigidBodyBase<KINEMATIC>
-            return null_vector;
+            return null_vector; // TODO: use vel, old vel, and last vel instead
         case 3: // DeformableBase<CLOTH>
-            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).dirty_pos();
+            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).vel();
         case 4: // DeformableBase<MESH>
-            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).dirty_pos();
+            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).vel();
         default:
             throw std::runtime_error("invalid rigidbody type");
     }
 }
 
-auto HinaPE::PhysicsObject::dirty_ind() -> const std::vector<unsigned int> &
+auto HinaPE::PhysicsObject::ind() -> std::vector<unsigned int> &
 {
     static std::vector<unsigned int> null_vector;
 
@@ -256,9 +257,9 @@ auto HinaPE::PhysicsObject::dirty_ind() -> const std::vector<unsigned int> &
         case 2: // RigidBodyBase<KINEMATIC>
             return null_vector;
         case 3: // DeformableBase<CLOTH>
-            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).dirty_ind();
+            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).ind();
         case 4: // DeformableBase<MESH>
-            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).dirty_ind();
+            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).ind();
         default:
             throw std::runtime_error("invalid rigidbody type");
     }

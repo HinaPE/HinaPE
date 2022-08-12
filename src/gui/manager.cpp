@@ -1153,8 +1153,8 @@ void Manager::UInew_obj(Undo &undo)
         if (ImGui::Button("Add"))
         {
             auto cloth = HinaPE::ClothFactory::create_cloth(desc);
-            auto &verts = cloth->dirty_pos();
-            auto &inds = cloth->dirty_ind();
+            auto &verts = cloth->pos();
+            auto &inds = cloth->ind();
 //            Halfedge_Mesh hm;
 //            hm.from_mesh(Util::Gen::generate(verts, inds));
             Scene_Object &obj = undo.add_obj(Util::Gen::generate(verts, inds), "Cloth");

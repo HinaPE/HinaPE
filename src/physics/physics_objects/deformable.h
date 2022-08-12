@@ -18,8 +18,8 @@ public:
     auto set_rotation(const Vec3 &) const -> void;
 
     auto pos() -> std::vector<Vec3> &;
-    auto dirty_pos() -> const std::vector<Vec3> &;
-    auto dirty_ind() -> const std::vector<unsigned int> &;
+    auto ind() -> std::vector<unsigned int> &;
+    auto vel() -> std::vector<Vec3> &;
 
 public:
     DeformableBase();

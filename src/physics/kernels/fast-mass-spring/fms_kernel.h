@@ -10,7 +10,7 @@ class PhysicsSystem;
 class FastMassSpringKernel
 {
 public:
-    void simulate(PhysicsSystem &sys, float dt);
+    auto simulate(PhysicsSystem &sys, float dt)->void;
 
     struct Opt
     {
@@ -19,6 +19,7 @@ public:
     Opt opt;
 
 private:
+    auto simulate_for_each(Eigen::Map<Eigen::MatrixXf> &pos, Eigen::Map<Eigen::MatrixXf> &vel, Eigen::Map<Eigen::MatrixXf> &acc, float dt)->void;
 };
 }
 #endif //HINAPE_FMS_KERNEL_H
