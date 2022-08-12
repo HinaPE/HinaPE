@@ -467,6 +467,13 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
             undo.update_object(obj.id(), start_opt);
         };
 
+        if (ImGui::Checkbox("Show Surface", &obj.opt.surface))
+            update();
+        if (ImGui::Checkbox("Show Wireframe", &obj.opt.wireframe))
+            update();
+        if (ImGui::Checkbox("Render", &obj.opt.render))
+            update();
+
         if ((obj.is_editable() || obj.is_shape()) && ImGui::CollapsingHeader("Edit Mesh", ImGuiTreeNodeFlags_DefaultOpen))
         {
             ImGui::Indent();
@@ -485,12 +492,6 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
                 {
                     update();
                 }
-                if (ImGui::Checkbox("Show Surface", &obj.opt.surface))
-                    update();
-                if (ImGui::Checkbox("Show Wireframe", &obj.opt.wireframe))
-                    update();
-                if (ImGui::Checkbox("Render", &obj.opt.render))
-                    update();
             }
             if (ImGui::Combo("Use Implicit Shape", (int *) &obj.opt.shape_type, PT::Shape_Type_Names, (int) PT::Shape_Type::count))
             {
@@ -1154,10 +1155,10 @@ void Manager::UInew_obj(Undo &undo)
             auto cloth = HinaPE::ClothFactory::create_cloth(desc);
             auto &verts = cloth->dirty_pos();
             auto &inds = cloth->dirty_ind();
-            Halfedge_Mesh hm;
-            hm.from_mesh(Util::Gen::generate(verts, inds));
-//            Scene_Object &obj = undo.add_obj(Util::Gen::generate(verts, inds), "Cloth");
-            Scene_Object &obj = undo.add_obj(std::move(hm), "Cloth");
+//            Halfedge_Mesh hm;
+//            hm.from_mesh(Util::Gen::generate(verts, inds));
+            Scene_Object &obj = undo.add_obj(Util::Gen::generate(verts, inds), "Cloth");
+//            Scene_Object &obj = undo.add_obj(std::move(hm), "Cloth");
             obj.attach_physics_object(cloth);
             obj.set_mesh_dirty();
             new_obj_window = false;
