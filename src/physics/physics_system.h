@@ -4,6 +4,7 @@
 #include "kernels/pbd/pbd_kernel.h"
 #include "kernels/xpbd/xpbd_kernel.h"
 #include "kernels/fast-mass-spring/fms_kernel.h"
+#include "kernels/sph/sph_kernel.h"
 #include "physics_object.h"
 
 #include <vector>
@@ -35,7 +36,8 @@ private:
     friend PBDKernel;
     friend XPBDKernel;
     friend FastMassSpringKernel;
-    std::variant<PBDKernel, XPBDKernel, FastMassSpringKernel> kernel;
+    friend SPHKernel;
+    std::variant<PBDKernel, XPBDKernel, FastMassSpringKernel, SPHKernel> kernel;
     std::map<unsigned int, std::shared_ptr<PhysicsObject>> physics_objects;
     std::map<unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects;
     std::vector<Constraint> constraints;
