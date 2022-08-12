@@ -39,9 +39,9 @@ auto HinaPE::ClothFactory::create_cloth(const HinaPE::ClothFactory::ClothDesc &d
     _ims.reserve(row * col);
     _is.reserve(6 * (row - 1) * (col - 1));
 
-    for (int i = 0; i < row; ++i)
+    for (int j = 0; j < row; ++j)
     {
-        for (int j = 0; j < col; ++j)
+        for (int i = 0; i < col; ++i)
         {
             Vec3 x((float) i * delta_x - bias_x, (float) j * delta_y - bias_y, 0.f);
             x += position;
