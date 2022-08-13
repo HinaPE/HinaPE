@@ -5,7 +5,7 @@
 namespace Gui
 {
 
-bool Rig::keydown(Widgets &widgets, Undo &undo, SDL_Keysym key)
+auto Rig::keydown(Widgets &widgets, Undo &undo, SDL_Keysym key) -> bool
 {
 
     if (!my_obj)
