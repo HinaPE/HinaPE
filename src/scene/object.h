@@ -9,6 +9,10 @@
 #include "material.h"
 #include "pose.h"
 #include "skeleton.h"
+#include "stdio.h"
+#include "stdlib.h"
+
+#define random(x) (rand()%x)
 
 using Scene_ID = unsigned int;
 constexpr int MAX_NAME_LEN = 256;
@@ -51,17 +55,77 @@ public:
     void try_make_editable(PT::Shape_Type prev = PT::Shape_Type::none);
     void flip_normals();
 
-    void step(const PT::Object &scene, float dt)
-    {
+    void step(const PT::Object &scene, float dt) {
 //        for (int i = 0; i < sub_iteration; ++i)
 //            HinaPE::PhysicsSystem::instance()._tick_(dt / (float) sub_iteration); // TODO: move this to separate physics thread; Hina
 //        sync_physics_result();
 
-        // step 1: 球体自由落体运动
+        float R = 1.0f;
+        Vec3 p = pose.pos;
+        Vec3 newV = v + a * dt;
+        //显示欧拉
+        //Vec3 newP = p + v * dt;
+        //隐式欧拉
+        Vec3 newP = p + newV * dt;
+        pose.pos = newP;
+        v = newV;
 
-        // step 2: 添加隐形的地板 (0.f, -5.f, 0.f)
+        //球和墙面的碰撞
+        Vec3 floor = Vec3(0.f, -5.f, 0.f);
+        if (pose.pos.y + R <= floor.y) {
+            v.y = -v.y;
+        }
+        Vec3 top = Vec3(0.f, 5.f, 0.f);
+        if (pose.pos.y + R >= top.y) {
+            v.y = -v.y;
+        }
+        Vec3 left = Vec3(-5.f, 0.f, 0.f);
+        if (pose.pos.x + R <= left.x) {
+            v.x = -v.x;
+        }
+        Vec3 right = Vec3(5.f, -0.f, 0.f);
+        if (pose.pos.x + R >= right.x) {
+            v.x = -v.x;
+        }
+        Vec3 front = Vec3(0.f, 0.f, -8.f);
+        if (pose.pos.z + R <= front.z) {
+            v.z = -v.z;
+        }
+        Vec3 back = Vec3(0.f, 0.f, 8.f);
+        if (pose.pos.z + R >= back.z) {
+            v.z = -v.z;
+        }
+        set_pose_dirty();
 
-        // step 3: 添加初速度，添加四周六堵墙
+        //球和球
+        //Vec3 dir;
+        //dir.x = pose2.pos.x - pose1.pos.x
+        //dir.y = pose2.pos.y - pose1.pos.y
+        //dir.z = pose2.pos.z - pose1.pos.z
+        //float distance = sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
+        //if( distance != 0 && distance < r1 + r2){
+        //   float corr = (r1 + r2 - distance) / 2.0f;
+        //   pose1.pos.x += dir.x * (-corr);
+        //   pose1.pos.y += dir.y * (-corr);
+        //   pose1.pos.z += dir.z * (-corr);
+        //   pose2.pos.x += dir.x * corr;
+        //   pose2.pos.y += dir.y * corr;
+        //   pose2.pos.z += dir.z * corr;
+
+        //   考虑动量守恒
+        //   Vec3 v1,v2;
+        //   float m1,m2;
+        //   float restitution = 1.f;
+        //   Vec3 newV1 = (m1 * v1 + m2 * v2 - m2 * (v1 - v2) * restitution) / (m1 + m2);
+        //   Vec3 newV1 = (m1 * v1 + m2 * v2 - m1 * (v2 - v1) * restitution) / (m1 + m2);
+        //   v1.x += dir.x * (newV1 - v1);
+        //   v1.y += dir.y * (newV1 - v1);
+        //   v2.x += dir.x * (newV1 - v1);
+        //   v2.y += dir.y * (newV2 - v2);
+        
+        //}
+
+
     }
 
 public:
@@ -113,6 +177,9 @@ private:
 
     mutable GL::Mesh _mesh, _anim_mesh;
     mutable std::vector<std::vector<Joint *>> vertex_joints;
+private:
+    Vec3 v = Vec3(-1.0f + 2.f * random(3),-1.0f + 2.f * random(3),-1.0f + 2.f * random(3));
+    Vec3 a = Vec3(-1.0f + 2.f * random(5),-9.8f,-1.0f + 2.f * random(5));
 };
 
 auto operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r) -> bool;
