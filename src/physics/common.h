@@ -4,6 +4,10 @@
 #include "lib/vec3.h"
 #include "lib/quat.h"
 
+#include "Eigen/Eigen"
+
+using Vector3D = Eigen::Vector3d;
+
 namespace HinaPE
 {
 

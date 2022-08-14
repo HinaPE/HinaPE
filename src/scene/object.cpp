@@ -290,11 +290,8 @@ void Scene_Object::sync_physics_result()
 
     if (physics_object->is_deformable())
     {
-        auto &verts = physics_object->dirty_pos();
-        auto &inds = physics_object->dirty_ind();
-//        Halfedge_Mesh hm;
-//        hm.from_mesh(Util::Gen::generate(verts, inds));
-//        take_mesh(std::move(hm));
+        auto &verts = physics_object->pos();
+        auto &inds = physics_object->ind();
         _mesh = Util::Gen::generate(verts, inds);
         set_mesh_dirty();
         return;

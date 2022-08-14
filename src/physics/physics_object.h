@@ -16,47 +16,47 @@ class PhysicsObject
 public:
     // common methods
     template<class T>
-    [[nodiscard]] const T &get_object() const;
-    [[nodiscard]] PhysicsObjectType get_type() const;
+    [[nodiscard]] auto get_object() const -> const T &;
+    [[nodiscard]] auto get_type() const -> PhysicsObjectType;
 
     // universal methods
-    [[nodiscard]] Vec3 get_position() const;
-    [[nodiscard]] Vec3 get_rotation() const;
-    [[nodiscard]] Vec3 get_velocity() const;
-    [[nodiscard]] Vec3 get_force() const;
-    [[nodiscard]] float get_mass() const;
-    void set_position(const Vec3 &) const;
-    void set_rotation(const Vec3 &) const;
-    void set_velocity(const Vec3 &) const;
+    [[nodiscard]] auto get_position() const -> Vec3;
+    [[nodiscard]] auto get_rotation() const -> Vec3;
+    [[nodiscard]] auto get_velocity() const -> Vec3;
+    [[nodiscard]] auto get_force() const -> Vec3;
+    [[nodiscard]] auto get_mass() const -> float;
+    auto set_position(const Vec3 &) const -> void;
+    auto set_rotation(const Vec3 &) const -> void;
+    auto set_velocity(const Vec3 &) const -> void;
 
     // rigidbody methods
-    bool is_rigidbody();
-    [[nodiscard]] RigidBodyType get_rigid_body_type() const;
-    void switch_rigidbody_type(RigidBodyType to);
+    [[nodiscard]] auto is_rigidbody() -> bool;
+    [[nodiscard]] auto get_rigid_body_type() const -> RigidBodyType;
+    auto switch_rigidbody_type(RigidBodyType to) -> void;
 
     // deformable methods
-    bool is_deformable();
-    [[nodiscard]] DeformableType get_deformable_type() const;
-    std::vector<Vec3> &pos();
-    const std::vector<Vec3> &dirty_pos();
-    const std::vector<unsigned int> &dirty_ind();
+    [[nodiscard]] auto is_deformable() -> bool;
+    [[nodiscard]] auto get_deformable_type() const -> DeformableType;
+    [[nodiscard]] auto pos() -> std::vector<Vec3> &;
+    [[nodiscard]] auto ind() -> std::vector<unsigned int> &;
+    [[nodiscard]] auto vel() -> std::vector<Vec3> &;
 
 public:
     explicit PhysicsObject(PhysicsObjectType type);
     ~PhysicsObject() = default;
     PhysicsObject(const PhysicsObject &src) = delete;
-    PhysicsObject &operator=(const PhysicsObject &src) = delete;
+    auto operator=(const PhysicsObject &src) -> PhysicsObject & = delete;
     PhysicsObject(PhysicsObject &&src) = default;
-    PhysicsObject &operator=(PhysicsObject &&src) = default;
+    auto operator=(PhysicsObject &&src) -> PhysicsObject & = default;
 
     template<RigidBodyType T>
     explicit PhysicsObject(RigidBodyBase<T> &&rigidbody);
     template<RigidBodyType T>
-    PhysicsObject &operator=(RigidBodyBase<T> &&rigidbody);
+    auto operator=(RigidBodyBase<T> &&rigidbody) -> PhysicsObject &;
     template<DeformableType T>
     explicit PhysicsObject(DeformableBase<T> &&deformable);
     template<DeformableType T>
-    PhysicsObject &operator=(DeformableBase<T> &&deformable);
+    auto operator=(DeformableBase<T> &&deformable) -> PhysicsObject &;
 
 private:
     std::optional<std::variant<RigidBodyBase<HinaPE::DYNAMIC>, RigidBodyBase<HinaPE::STATIC>, RigidBodyBase<HinaPE::KINEMATIC>, DeformableBase<CLOTH>, DeformableBase<MESH>>> physics_object_opt;
@@ -70,7 +70,7 @@ HinaPE::PhysicsObject::PhysicsObject(HinaPE::RigidBodyBase<T> &&rigidbody)
 }
 
 template<HinaPE::RigidBodyType T>
-HinaPE::PhysicsObject &HinaPE::PhysicsObject::operator=(HinaPE::RigidBodyBase<T> &&rigidbody)
+auto HinaPE::PhysicsObject::operator=(HinaPE::RigidBodyBase<T> &&rigidbody) -> HinaPE::PhysicsObject &
 {
     physics_object_opt = std::move(rigidbody);
     return *this;
@@ -83,13 +83,13 @@ HinaPE::PhysicsObject::PhysicsObject(HinaPE::DeformableBase<T> &&deformable)
 }
 
 template<HinaPE::DeformableType T>
-HinaPE::PhysicsObject &HinaPE::PhysicsObject::operator=(HinaPE::DeformableBase<T> &&deformable)
+auto HinaPE::PhysicsObject::operator=(HinaPE::DeformableBase<T> &&deformable) -> HinaPE::PhysicsObject &
 {
     physics_object_opt = std::move(deformable);
     return *this;
 }
 
-inline PhysicsObject::PhysicsObject(PhysicsObjectType type)
+inline HinaPE::PhysicsObject::PhysicsObject(PhysicsObjectType type)
 {
     switch (type)
     {
@@ -109,7 +109,7 @@ inline PhysicsObject::PhysicsObject(PhysicsObjectType type)
 }
 
 template<class T>
-const T &HinaPE::PhysicsObject::get_object() const
+auto HinaPE::PhysicsObject::get_object() const -> const T &
 {
     return std::get<T>(physics_object_opt.value());
 }

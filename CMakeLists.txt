@@ -61,16 +61,15 @@ if (LINUX)
 endif ()
 
 add_executable(HinaPE ${Hina_SOURCES})
-set_target_properties(HinaPE PROPERTIES
-        CXX_STANDARD 20
-        CXX_EXTENSIONS OFF)
+set_target_properties(HinaPE PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 
-#if(MSVC)
-#    target_compile_options(HinaPE PRIVATE /MP /W4 /WX /wd4201 /wd4840 /wd4100 /wd4505 /fp:fast)
-#else()
-##    target_compile_options(HinaPE PRIVATE -Wall -Wextra -Werror -Wno-reorder -Wno-unused-function -Wno-unused-parameter -Wordered-compare-function-pointers)
-#    target_compile_options(HinaPE PRIVATE -Wall -Wextra -Wno-reorder -Wno-unused-function -Wno-unused-parameter)
-#endif()
+if (MSVC)
+    #    target_compile_options(HinaPE PRIVATE /MP /W4 /WX /wd4201 /wd4840 /wd4100 /wd4505 /fp:fast)
+    target_compile_options(HinaPE PRIVATE /wd4127 /wd4819 /wd4189 /wd4459 /wd5054 /wd4458 /MP /W4 /WX /wd4201 /wd4840 /wd4100 /wd4505 /fp:fast)
+else ()
+    #    target_compile_options(HinaPE PRIVATE -Wall -Wextra -Werror -Wno-reorder -Wno-unused-function -Wno-unused-parameter -Wordered-compare-function-pointers)
+    target_compile_options(HinaPE PRIVATE -Wall -Wextra -Wno-reorder -Wno-unused-function -Wno-unused-parameter -Wdelete-abstract-non-virtual-dtor)
+endif ()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(HinaPE PRIVATE -fno-omit-frame-pointer)
@@ -80,7 +79,7 @@ endif ()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(HinaPE PRIVATE Threads::Threads)
+target_link_libraries(HinaPE PRIVATE Threads::Threads) # std::thread need pthread lib to be linked
 
 
 # define include paths
@@ -142,10 +141,27 @@ target_link_libraries(HinaPE PRIVATE sf_libs)
 target_link_libraries(HinaPE PRIVATE imgui)
 target_link_libraries(HinaPE PRIVATE glad)
 
+option(HINAPE_TBB "Enable TBB" OFF)
+find_package(TBB CONFIG)
+if (TBB_FOUND)
+    option(HINAPE_TBB ON)
+    message(STATUS "TBB found")
+    target_link_libraries(HinaPE PUBLIC TBB::tbb)
+    add_definitions(-DHINAPE_TBB_SUPPORT)
+endif ()
+
+option(HINAPE_GOOGLE_BENCHMARK "Enable Google Benchmark" OFF)
+find_package(benchmark CONFIG)
+if (benchmark_FOUND)
+    option(HINAPE_GOOGLE_BENCHMARK ON)
+    message(STATUS "Google Benchmark found")
+    target_link_libraries(HinaPE PUBLIC benchmark::benchmark benchmark::benchmark_main)
+    add_definitions(-DHINAPE_GOOGLE_BENCHMARK_SUPPORT)
+endif ()
 
 option(HINAPE_TEST "Enable Test" ON)
 if (HINAPE_TEST)
     file(GLOB_RECURSE HINA_TEST test/*.h test/*.cpp)
     target_sources(HinaPE PRIVATE ${HINA_TEST})
-    target_include_directories(HinaPE PRIVATE test)
+    target_include_directories(HinaPE PUBLIC test)
 endif ()

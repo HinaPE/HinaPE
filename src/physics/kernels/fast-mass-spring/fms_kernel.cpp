@@ -1,9 +1,7 @@
 #include "fms_kernel.h"
 #include "../../physics_system.h"
 
-#include "Eigen/Eigen"
-
-void HinaPE::FastMassSpringKernel::simulate(HinaPE::PhysicsSystem &sys, float dt)
+auto HinaPE::FastMassSpringKernel::simulate(HinaPE::PhysicsSystem &sys, float dt) -> void
 {
     auto &os = sys.physics_objects;
     for (auto &pair: os)
@@ -12,16 +10,17 @@ void HinaPE::FastMassSpringKernel::simulate(HinaPE::PhysicsSystem &sys, float dt
         if (o->get_type() == Deformable)
         {
             auto &pos = o->pos();
+            auto &vel = o->vel();
+            Eigen::Map<Eigen::MatrixXf> M_positions(pos.data()->data, static_cast<int>(pos.size()), 3);
+            Eigen::Map<Eigen::MatrixXf> M_velocities(vel.data()->data, static_cast<int>(vel.size()), 3);
 
-            auto func = [&]
-            {
-                Eigen::Map<Eigen::MatrixXf> M(pos.data()->data, static_cast<int>(pos.size()), 3);
-            };
-
-            check_time(func);
-
-//            std::cout << M.rows() << std::endl;
-//            std::cout << M.cols() << std::endl;
+            simulate_for_each(M_positions, M_velocities, M_positions, dt);
         }
     }
+}
+
+auto
+HinaPE::FastMassSpringKernel::simulate_for_each(Eigen::Map<Eigen::MatrixXf> &pos, Eigen::Map<Eigen::MatrixXf> &vel, Eigen::Map<Eigen::MatrixXf> &frc, float dt) -> void
+{
+
 }

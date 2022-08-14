@@ -5,7 +5,7 @@ namespace HinaPE
 {
 class PhysicsSystem;
 
-class XPBDKernel
+class XPBDKernel final
 {
 public:
     void simulate(PhysicsSystem &sys, float dt);

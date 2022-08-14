@@ -2,12 +2,12 @@
 
 #include <algorithm>
 
-HinaPE::PhysicsObjectPtr HinaPE::RigidBodyFactory::create_rigidbody(HinaPE::RigidBodyType type)
+auto HinaPE::RigidBodyFactory::create_rigidbody(HinaPE::RigidBodyType type) -> HinaPE::PhysicsObjectPtr
 {
     return std::make_shared<HinaPE::PhysicsObject>(HinaPE::PhysicsObjectType::Rigidbody); // TODO: to support change types
 }
 
-std::shared_ptr<HinaPE::PhysicsObject> HinaPE::ClothFactory::create_cloth(const HinaPE::ClothFactory::ClothDesc &desc)
+auto HinaPE::ClothFactory::create_cloth(const HinaPE::ClothFactory::ClothDesc &desc) -> std::shared_ptr<HinaPE::PhysicsObject>
 {
     DeformableBase<CLOTH> cloth;
 
@@ -39,9 +39,9 @@ std::shared_ptr<HinaPE::PhysicsObject> HinaPE::ClothFactory::create_cloth(const 
     _ims.reserve(row * col);
     _is.reserve(6 * (row - 1) * (col - 1));
 
-    for (int i = 0; i < col; ++i)
+    for (int j = 0; j < row; ++j)
     {
-        for (int j = 0; j < row; ++j)
+        for (int i = 0; i < col; ++i)
         {
             Vec3 x((float) i * delta_x - bias_x, (float) j * delta_y - bias_y, 0.f);
             x += position;

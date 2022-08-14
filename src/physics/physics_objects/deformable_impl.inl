@@ -24,16 +24,16 @@ struct DeformableBase<Type>::Impl
     Impl() = default;
     ~Impl() = default;
     Impl(const Impl &src) = delete;
-    Impl &operator=(const Impl &src) = delete;
+    auto operator=(const Impl &src) -> Impl & = delete;
     Impl(Impl &&src) noexcept = default;
-    Impl &operator=(Impl &&src) noexcept = default;
+    auto operator=(Impl &&src) noexcept -> Impl & = default;
 };
 
 template<DeformableType Type>
-Vec3 DeformableBase<Type>::get_position() const { return impl->p; }
+auto DeformableBase<Type>::get_position() const -> Vec3 { return impl->p; }
 
 template<DeformableType Type>
-Vec3 DeformableBase<Type>::get_rotation() const { return impl->q.to_euler(); }
+auto DeformableBase<Type>::get_rotation() const -> Vec3 { return impl->q.to_euler(); }
 
 template<DeformableType Type>
 void HinaPE::DeformableBase<Type>::set_position(const Vec3 &_p) const { impl->p = _p; }
@@ -42,12 +42,12 @@ template<DeformableType Type>
 void HinaPE::DeformableBase<Type>::set_rotation(const Vec3 &_r) const { /** TODO: implement **/}
 
 template<DeformableType Type>
-std::vector<Vec3> &DeformableBase<Type>::pos() { return impl->positions; }
+auto DeformableBase<Type>::pos() -> std::vector<Vec3> & { return impl->positions; }
 
 template<DeformableType Type>
-const std::vector<Vec3> &DeformableBase<Type>::dirty_pos() { return impl->positions; }
+auto DeformableBase<Type>::vel() -> std::vector<Vec3> & { return impl->velocities; }
 
 template<DeformableType Type>
-const std::vector<unsigned int> &DeformableBase<Type>::dirty_ind() { return impl->indices; }
+auto DeformableBase<Type>::ind() -> std::vector<unsigned int> & { return impl->indices; }
 
 }
