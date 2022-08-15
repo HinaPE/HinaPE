@@ -1,21 +1,21 @@
 #include "pose.h"
 
-Mat4 Pose::transform() const
+auto Pose::transform() const -> Mat4
 {
     return Mat4::translate(pos) * rotation_mat() * Mat4::scale(scale);
 }
 
-Mat4 Pose::rotation_mat() const
+auto Pose::rotation_mat() const -> Mat4
 {
     return Mat4::euler(euler);
 }
 
-Quat Pose::rotation_quat() const
+auto Pose::rotation_quat() const -> Quat
 {
     return Quat::euler(euler);
 }
 
-bool Pose::valid() const
+auto Pose::valid() const -> bool
 {
     return pos.valid() && euler.valid() && scale.valid();
 }
@@ -38,37 +38,37 @@ void Pose::clamp_euler()
         euler.z -= 360.0f;
 }
 
-Pose Pose::rotated(Vec3 angles)
+auto Pose::rotated(Vec3 angles) -> Pose
 {
     return Pose{Vec3{}, angles, Vec3{1.0f, 1.0f, 1.0f}};
 }
 
-Pose Pose::moved(Vec3 t)
+auto Pose::moved(Vec3 t) -> Pose
 {
     return Pose{t, Vec3{}, Vec3{1.0f, 1.0f, 1.0f}};
 }
 
-Pose Pose::scaled(Vec3 s)
+auto Pose::scaled(Vec3 s) -> Pose
 {
     return Pose{Vec3{}, Vec3{}, s};
 }
 
-Pose Pose::id()
+auto Pose::id() -> Pose
 {
     return Pose{Vec3{}, Vec3{}, Vec3{1.0f, 1.0f, 1.0f}};
 }
 
-bool operator==(const Pose &l, const Pose &r)
+auto operator==(const Pose &l, const Pose &r) -> bool
 {
     return l.pos == r.pos && l.euler == r.euler && l.scale == r.scale;
 }
 
-bool operator!=(const Pose &l, const Pose &r)
+auto operator!=(const Pose &l, const Pose &r) -> bool
 {
     return l.pos != r.pos || l.euler != r.euler || l.scale != r.scale;
 }
 
-Pose Anim_Pose::at(float t) const
+auto Anim_Pose::at(float t) const -> Pose
 {
     auto [p, r, s] = splines.at(t);
     return Pose{p, r.to_euler(), s};
