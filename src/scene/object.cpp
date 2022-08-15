@@ -35,7 +35,7 @@ Scene_Object::Scene_Object(Scene_ID id, Pose p, Halfedge_Mesh &&m, std::string n
     sync_anim_mesh();
 }
 
-const GL::Mesh &Scene_Object::posed_mesh()
+auto Scene_Object::posed_mesh() -> const GL::Mesh &
 {
     sync_anim_mesh();
     if (armature.has_bones())
@@ -43,12 +43,12 @@ const GL::Mesh &Scene_Object::posed_mesh()
     return _mesh;
 }
 
-Scene_ID Scene_Object::id() const
+auto Scene_Object::id() const -> Scene_ID
 {
     return _id;
 }
 
-const GL::Mesh &Scene_Object::mesh()
+auto Scene_Object::mesh() -> const GL::Mesh &
 {
     sync_mesh();
     return _mesh;
@@ -69,7 +69,7 @@ void Scene_Object::try_make_editable(PT::Shape_Type prev)
     skel_dirty = true;
 }
 
-bool Scene_Object::is_shape() const
+auto Scene_Object::is_shape() const -> bool
 {
     return opt.shape_type != PT::Shape_Type::none;
 }
@@ -84,7 +84,7 @@ void Scene_Object::set_time(float time)
         material.anim.at(time, material.opt);
 }
 
-bool Scene_Object::is_editable() const
+auto Scene_Object::is_editable() const -> bool
 {
     return editable && opt.shape_type == PT::Shape_Type::none;
 }
@@ -100,7 +100,7 @@ void Scene_Object::set_mesh(Halfedge_Mesh &in)
     set_mesh_dirty();
 }
 
-Halfedge_Mesh::ElementRef Scene_Object::set_mesh(Halfedge_Mesh &in, unsigned int eid)
+auto Scene_Object::set_mesh(Halfedge_Mesh &in, unsigned int eid) -> Halfedge_Mesh::ElementRef
 {
     auto e = in.copy_to(halfedge, eid);
     set_mesh_dirty();
@@ -113,12 +113,12 @@ void Scene_Object::take_mesh(Halfedge_Mesh &&in)
     set_mesh_dirty();
 }
 
-Halfedge_Mesh &Scene_Object::get_mesh()
+auto Scene_Object::get_mesh() -> Halfedge_Mesh &
 {
     return halfedge;
 }
 
-const Halfedge_Mesh &Scene_Object::get_mesh() const
+auto Scene_Object::get_mesh() const -> const Halfedge_Mesh &
 {
     return halfedge;
 }
@@ -190,7 +190,7 @@ void Scene_Object::set_mesh_dirty()
     pose_dirty = true;
 }
 
-BBox Scene_Object::bbox()
+auto Scene_Object::bbox() -> BBox
 {
     sync_anim_mesh();
 
@@ -256,7 +256,7 @@ void Scene_Object::render(const Mat4 &view, bool solid, bool depth_only, bool po
     }
 }
 
-bool operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r)
+auto operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r) -> bool
 {
     return std::string(l.name) != std::string(r.name) || l.shape_type != r.shape_type || l.smooth_normals != r.smooth_normals || l.wireframe != r.wireframe ||
            l.shape != r.shape || l.render != r.render;
@@ -298,7 +298,7 @@ void Scene_Object::sync_physics_result()
     }
 }
 
-HinaPE::PhysicsObjectType Scene_Object::get_physics_object_type() const
+auto Scene_Object::get_physics_object_type() const -> HinaPE::PhysicsObjectType
 {
     if (!physics_object)
         return HinaPE::PhysicsObjectType::NOT_PHYSICS_OBJECT;

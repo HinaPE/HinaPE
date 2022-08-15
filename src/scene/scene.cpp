@@ -17,7 +17,7 @@ namespace std
 template<typename T1, typename T2>
 struct hash<pair<T1, T2>>
 {
-    uint64_t operator()(const pair<T1, T2> &p) const
+    auto operator()(const pair<T1, T2> &p) const -> uint64_t
     {
         static const hash<T1> h1;
         static const hash<T2> h2;
@@ -26,7 +26,7 @@ struct hash<pair<T1, T2>>
 };
 } // namespace std
 
-Scene_Item &Scene_Item::operator=(Scene_Item &&src)
+auto Scene_Item::operator=(Scene_Item &&src) noexcept -> Scene_Item &
 {
     data = std::move(src.data);
     return *this;
@@ -37,7 +37,7 @@ void Scene_Item::set_time(float time)
     return std::visit([time](auto &obj) { obj.set_time(time); }, data);
 }
 
-BBox Scene_Item::bbox()
+auto Scene_Item::bbox() -> BBox
 {
     return std::visit([](auto &obj) { return obj.bbox(); }, data);
 }
@@ -48,7 +48,7 @@ void Scene_Item::render(const Mat4 &view, bool solid, bool depth_only, bool pose
                           [&](Scene_Particles &particles) { particles.render(view, depth_only, posed); }}, data);
 }
 
-Scene_ID Scene_Item::id() const
+auto Scene_Item::id() const -> Scene_ID
 {
     return std::visit([](auto &obj) { return obj.id(); }, data);
 }
@@ -58,31 +58,31 @@ void Scene_Item::step(const PT::Object &scene, float dt)
     std::visit([&](auto &obj) { obj.step(scene, dt); }, data);
 }
 
-Anim_Pose &Scene_Item::animation()
+auto Scene_Item::animation() -> Anim_Pose &
 {
 
     return std::visit([](auto &obj) -> Anim_Pose & { return obj.anim; }, data);
 }
 
-const Anim_Pose &Scene_Item::animation() const
+auto Scene_Item::animation() const -> const Anim_Pose &
 {
 
     return std::visit([](auto &obj) -> const Anim_Pose & { return obj.anim; }, data);
 }
 
-Pose &Scene_Item::pose()
+auto Scene_Item::pose() -> Pose &
 {
 
     return std::visit([](auto &obj) -> Pose & { return obj.pose; }, data);
 }
 
-const Pose &Scene_Item::pose() const
+auto Scene_Item::pose() const -> const Pose &
 {
 
     return std::visit([](auto &obj) -> const Pose & { return obj.pose; }, data);
 }
 
-std::pair<char *, int> Scene_Item::name()
+auto Scene_Item::name() -> std::pair<char *, int>
 {
 
     return std::visit([](auto &obj) -> std::pair<char *, int>
@@ -91,7 +91,7 @@ std::pair<char *, int> Scene_Item::name()
                       }, data);
 }
 
-std::string Scene_Item::name() const
+auto Scene_Item::name() const -> std::string
 {
 
     return std::visit([](auto &obj) { return std::string(obj.opt.name); }, data);
@@ -101,17 +101,17 @@ Scene::Scene(Scene_ID start) : next_id(start), first_id(start)
 {
 }
 
-Scene_ID Scene::used_ids()
+auto Scene::used_ids() const -> Scene_ID
 {
     return next_id;
 }
 
-Scene_ID Scene::reserve_id()
+auto Scene::reserve_id() -> Scene_ID
 {
     return next_id++;
 }
 
-Scene_ID Scene::add(Pose pose, Halfedge_Mesh &&mesh, std::string n, Scene_ID id)
+auto Scene::add(Pose pose, Halfedge_Mesh &&mesh, std::string n, Scene_ID id) -> Scene_ID
 {
     if (!id)
         id = next_id++;
@@ -120,7 +120,7 @@ Scene_ID Scene::add(Pose pose, Halfedge_Mesh &&mesh, std::string n, Scene_ID id)
     return id;
 }
 
-Scene_ID Scene::add(Pose pose, GL::Mesh &&mesh, std::string n, Scene_ID id)
+auto Scene::add(Pose pose, GL::Mesh &&mesh, std::string n, Scene_ID id) -> Scene_ID
 {
     if (!id)
         id = next_id++;
@@ -129,7 +129,7 @@ Scene_ID Scene::add(Pose pose, GL::Mesh &&mesh, std::string n, Scene_ID id)
     return id;
 }
 
-std::string Scene::set_env_map(std::string file)
+auto Scene::set_env_map(std::string file) -> std::string
 {
     Scene_ID id = 0;
     for_items([&id](const Scene_Item &item)
@@ -138,7 +138,7 @@ std::string Scene::set_env_map(std::string file)
                       id = item.id();
               });
     Scene_Light l(Light_Type::sphere, reserve_id(), {}, "env_map");
-    std::string err = l.emissive_load(file);
+    std::string err = l.emissive_load(std::move(file));
     if (err.empty())
     {
         if (id)
@@ -148,7 +148,7 @@ std::string Scene::set_env_map(std::string file)
     return err;
 }
 
-bool Scene::has_env_light() const
+auto Scene::has_env_light() const -> bool
 {
     bool ret = false;
     for_items([&ret](const Scene_Item &item)
@@ -158,14 +158,14 @@ bool Scene::has_env_light() const
     return ret;
 }
 
-bool Scene::has_obj() const
+auto Scene::has_obj() const -> bool
 {
     bool ret = false;
     for_items([&ret](const Scene_Item &item) { ret = ret || item.is<Scene_Object>(); });
     return ret;
 }
 
-bool Scene::has_sim() const
+auto Scene::has_sim() const -> bool
 {
     bool ret = false;
     for_items([&ret](const Scene_Item &item) { ret = ret || item.is<Scene_Particles>(); });
@@ -190,7 +190,7 @@ void Scene::erase(Scene_ID id)
     objs.erase(id);
 }
 
-void Scene::for_items(std::function<void(const Scene_Item &)> func) const
+void Scene::for_items(const std::function<void(const Scene_Item &)>& func) const
 {
     for (const auto &obj: objs)
     {
@@ -198,7 +198,7 @@ void Scene::for_items(std::function<void(const Scene_Item &)> func) const
     }
 }
 
-void Scene::for_items(std::function<void(Scene_Item &)> func)
+void Scene::for_items(const std::function<void(Scene_Item &)>& func)
 {
     for (auto &obj: objs)
     {
@@ -206,17 +206,17 @@ void Scene::for_items(std::function<void(Scene_Item &)> func)
     }
 }
 
-size_t Scene::size()
+auto Scene::size() -> size_t
 {
     return objs.size();
 }
 
-bool Scene::empty()
+auto Scene::empty() -> bool
 {
     return objs.size() == 0;
 }
 
-Scene_Maybe Scene::get(Scene_ID id)
+auto Scene::get(Scene_ID id) -> Scene_Maybe
 {
     auto entry = objs.find(id);
     if (entry == objs.end())
@@ -260,38 +260,38 @@ static const std::string ARMATURE_TAG = "ARMATURE";
 static const std::string MAT_ANIM0 = "MAT_ANIM_NODE0";
 static const std::string MAT_ANIM1 = "MAT_ANIM_NODE1";
 
-static aiVector3D vecVec(Vec3 v)
+static auto vecVec(Vec3 v) -> aiVector3D
 {
-    return aiVector3D(v.x, v.y, v.z);
+    return {v.x, v.y, v.z};
 }
 
-static Quat aiQuat(aiQuaternion aiv)
+static auto aiQuat(aiQuaternion aiv) -> Quat
 {
     return Quat(aiv.x, aiv.y, aiv.z, aiv.w);
 }
 
-static Vec3 aiVec(aiVector3D aiv)
+static auto aiVec(aiVector3D aiv) -> Vec3
 {
     return Vec3(aiv.x, aiv.y, aiv.z);
 }
 
-static Spectrum aiSpec(aiColor3D aiv)
+static auto aiSpec(aiColor3D aiv) -> Spectrum
 {
     return Spectrum(aiv.r, aiv.g, aiv.b);
 }
 
-static aiMatrix4x4 matMat(const Mat4 &T)
+static auto matMat(const Mat4 &T) -> aiMatrix4x4
 {
     return {T[0][0], T[1][0], T[2][0], T[3][0], T[0][1], T[1][1], T[2][1], T[3][1], T[0][2], T[1][2], T[2][2], T[3][2], T[0][3], T[1][3], T[2][3], T[3][3]};
 }
 
-static Mat4 aiMat(aiMatrix4x4 T)
+static auto aiMat(aiMatrix4x4 T) -> Mat4
 {
     return Mat4{Vec4{T[0][0], T[1][0], T[2][0], T[3][0]}, Vec4{T[0][1], T[1][1], T[2][1], T[3][1]}, Vec4{T[0][2], T[1][2], T[2][2], T[3][2]},
                 Vec4{T[0][3], T[1][3], T[2][3], T[3][3]}};
 }
 
-static aiMatrix4x4 node_transform(const aiNode *node)
+static auto node_transform(const aiNode *node) -> aiMatrix4x4
 {
     aiMatrix4x4 T;
     while (node)
@@ -302,7 +302,7 @@ static aiMatrix4x4 node_transform(const aiNode *node)
     return T;
 }
 
-static GL::Mesh mesh_from(const aiMesh *mesh, bool n_flip)
+static auto mesh_from(const aiMesh *mesh, bool n_flip) -> GL::Mesh
 {
 
     std::vector<GL::Mesh::Vert> mesh_verts;
@@ -356,12 +356,12 @@ static GL::Mesh mesh_from(const aiMesh *mesh, bool n_flip)
         }
     }
 
-    return GL::Mesh(std::move(mesh_verts), std::move(mesh_inds));
+    return {std::move(mesh_verts), std::move(mesh_inds)};
 }
 
 using vp_pair = std::pair<std::vector<Vec3>, std::vector<std::vector<Halfedge_Mesh::Index>>>;
 
-static vp_pair load_mesh(const aiMesh *mesh)
+static auto load_mesh(const aiMesh *mesh) -> vp_pair
 {
 
     std::vector<Vec3> verts;
@@ -369,7 +369,7 @@ static vp_pair load_mesh(const aiMesh *mesh)
     for (unsigned int j = 0; j < mesh->mNumVertices; j++)
     {
         const aiVector3D &pos = mesh->mVertices[j];
-        verts.push_back(Vec3(pos.x, pos.y, pos.z));
+        verts.emplace_back(pos.x, pos.y, pos.z);
     }
 
     std::vector<std::vector<Halfedge_Mesh::Index>> polys;
@@ -388,7 +388,7 @@ static vp_pair load_mesh(const aiMesh *mesh)
     return {verts, polys};
 }
 
-static Scene_Particles::Options load_particles(aiLight *ai_light, aiNode *anim_node)
+static auto load_particles(aiLight *ai_light, aiNode *anim_node) -> Scene_Particles::Options
 {
 
     Scene_Particles::Options opt;
@@ -412,7 +412,7 @@ static Scene_Particles::Options load_particles(aiLight *ai_light, aiNode *anim_n
     return opt;
 }
 
-static Scene_Light::Options load_light(aiLight *ai_light, bool hemi, bool sphere)
+static auto load_light(aiLight *ai_light, bool hemi, bool sphere) -> Scene_Light::Options
 {
 
     Scene_Light::Options opt;
@@ -465,7 +465,7 @@ static Scene_Light::Options load_light(aiLight *ai_light, bool hemi, bool sphere
     return opt;
 }
 
-static Material::Options load_material(aiMaterial *ai_mat, float &was_sphere)
+static auto load_material(aiMaterial *ai_mat, float &was_sphere) -> Material::Options
 {
 
     Material::Options mat;
@@ -694,7 +694,7 @@ load_node(Scene &scobj, std::vector<std::string> &errors, std::unordered_map<aiN
     }
 }
 
-static unsigned int load_flags(Scene::Load_Opts opt)
+static auto load_flags(Scene::Load_Opts opt) -> unsigned int
 {
 
     unsigned int flags = aiProcess_OptimizeMeshes | aiProcess_FindInvalidData | aiProcess_FindInstances | aiProcess_FindDegenerates;
@@ -733,7 +733,7 @@ static unsigned int load_flags(Scene::Load_Opts opt)
     return flags;
 }
 
-std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::string file)
+auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::string file) -> std::string
 {
 
     if (loader.new_scene)
@@ -1050,7 +1050,7 @@ std::string Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, 
     return stream.str();
 }
 
-static void write_particles(aiLight *ai_light, const Scene_Particles::Options &opt, std::string name)
+static void write_particles(aiLight *ai_light, const Scene_Particles::Options &opt, const std::string& name)
 {
 
     Spectrum r = opt.color;
@@ -1066,7 +1066,7 @@ static void write_particles(aiLight *ai_light, const Scene_Particles::Options &o
     ai_light->mAttenuationQuadratic = opt.enabled ? opt.angle : -opt.angle;
 }
 
-static std::string write_light(aiLight *ai_light, const Scene_Light::Options &opt, std::string name, Scene_ID id, std::string map)
+static auto write_light(aiLight *ai_light, const Scene_Light::Options &opt, std::string name, Scene_ID id, std::string map) -> std::string
 {
 
     Spectrum r = opt.spectrum * opt.intensity;
@@ -1297,7 +1297,7 @@ static void add_fake_mesh(aiScene *scene)
     scene->mMaterials[0] = new aiMaterial();
 }
 
-Scene::Stats Scene::get_stats(const Gui::Animate &animation)
+auto Scene::get_stats(const Gui::Animate &animation) -> Scene::Stats
 {
 
     Stats s;
@@ -1385,7 +1385,7 @@ Scene::Stats Scene::get_stats(const Gui::Animate &animation)
     return s;
 }
 
-std::string Scene::write(std::string file, const Camera &render_cam, const Gui::Animate &animation)
+auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate &animation) -> std::string
 {
 
     size_t mesh_idx = 0, light_idx = 0, node_idx = 0, anim_idx = 0;

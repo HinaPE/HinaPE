@@ -30,35 +30,35 @@ public:
     template<typename T>
     Scene_Item(T &&obj) : data(std::forward<T &&>(obj)) {}
 
-    Scene_Item(Scene_Item &&src) : data(std::move(src.data)) {}
+    Scene_Item(Scene_Item &&src)  noexcept : data(std::move(src.data)) {}
 
     Scene_Item(const Scene_Item &src) = delete;
 
-    Scene_Item &operator=(Scene_Item &&src);
-    Scene_Item &operator=(const Scene_Item &src) = delete;
+    auto operator=(Scene_Item &&src) noexcept -> Scene_Item & ;
+    auto operator=(const Scene_Item &src) -> Scene_Item & = delete;
 
-    BBox bbox();
+    auto bbox() -> BBox;
     void render(const Mat4 &view, bool solid = false, bool depth_only = false, bool posed = true);
-    Scene_ID id() const;
+    auto id() const -> Scene_ID;
 
-    Pose &pose();
-    const Pose &pose() const;
-    Anim_Pose &animation();
-    const Anim_Pose &animation() const;
+    auto pose() -> Pose &;
+    auto pose() const -> const Pose &;
+    auto animation() -> Anim_Pose &;
+    auto animation() const -> const Anim_Pose &;
     void set_time(float time);
     void step(const PT::Object &scene, float dt);
 
-    std::string name() const;
-    std::pair<char *, int> name();
+    auto name() const -> std::string;
+    auto name() -> std::pair<char *, int>;
 
     template<typename T>
-    bool is() const { return std::holds_alternative<T>(data); }
+    auto is() const -> bool { return std::holds_alternative<T>(data); }
 
     template<typename T>
-    T &get() { return std::get<T>(data); }
+    auto get() -> T & { return std::get<T>(data); }
 
     template<typename T>
-    const T &get() const { return std::get<T>(data); }
+    auto get() const -> const T & { return std::get<T>(data); }
 
 private:
     std::variant<Scene_Object, Scene_Light, Scene_Particles> data;
@@ -69,7 +69,7 @@ using Scene_Maybe = std::optional<std::reference_wrapper<Scene_Item>>;
 class Scene
 {
 public:
-    Scene(Scene_ID start);
+    explicit Scene(Scene_ID start);
     ~Scene() = default;
 
     struct Load_Opts
@@ -84,36 +84,36 @@ public:
         bool debone = false;
     };
 
-    std::string write(std::string file, const Camera &cam, const Gui::Animate &animation);
-    std::string load(Load_Opts opt, Undo &undo, Gui::Manager &gui, std::string file);
+    auto write(std::string file, const Camera &cam, const Gui::Animate &animation) -> std::string;
+    auto load(Load_Opts opt, Undo &undo, Gui::Manager &gui, std::string file) -> std::string;
     void clear(Undo &undo);
 
-    bool empty();
-    size_t size();
+    auto empty() -> bool;
+    auto size() -> size_t;
 
     template<typename T>
-    Scene_ID add(T &&obj)
+    auto add(T &&obj) -> Scene_ID
     {
         assert(objs.find(obj.id()) == objs.end());
-        objs.emplace(std::make_pair(obj.id(), std::move(obj)));
+        objs.emplace(std::make_pair(obj.id(), std::forward<T>(obj)));
         return obj.id();
     }
 
-    Scene_ID add(Pose pose, GL::Mesh &&mesh, std::string n = {}, Scene_ID id = 0);
-    Scene_ID add(Pose pose, Halfedge_Mesh &&mesh, std::string n = {}, Scene_ID id = 0);
-    Scene_ID reserve_id();
-    Scene_ID used_ids();
+    auto add(Pose pose, GL::Mesh &&mesh, std::string n = {}, Scene_ID id = 0) -> Scene_ID;
+    auto add(Pose pose, Halfedge_Mesh &&mesh, std::string n = {}, Scene_ID id = 0) -> Scene_ID;
+    auto reserve_id() -> Scene_ID;
+    auto used_ids() const -> Scene_ID;
 
     void erase(Scene_ID id);
     void restore(Scene_ID id);
 
-    void for_items(std::function<void(Scene_Item &)> func);
-    void for_items(std::function<void(const Scene_Item &)> func) const;
+    void for_items(const std::function<void(Scene_Item &)>& func);
+    void for_items(const std::function<void(const Scene_Item &)>& func) const;
 
-    Scene_Maybe get(Scene_ID id);
+    auto get(Scene_ID id) -> Scene_Maybe;
 
     template<typename T>
-    T &get(Scene_ID id)
+    auto get(Scene_ID id) -> T &
     {
         auto entry = objs.find(id);
         assert(entry != objs.end());
@@ -121,11 +121,11 @@ public:
         return entry->second.get<T>();
     }
 
-    std::string set_env_map(std::string file);
+    auto set_env_map(std::string file) -> std::string;
 
-    bool has_env_light() const;
-    bool has_obj() const;
-    bool has_sim() const;
+    [[nodiscard]] auto has_env_light() const -> bool;
+    [[nodiscard]] auto has_obj() const -> bool;
+    [[nodiscard]] auto has_sim() const -> bool;
 
 private:
     struct Stats
@@ -138,7 +138,7 @@ private:
         unsigned int objs = 0;
         unsigned int nodes = 0;
     };
-    Stats get_stats(const Gui::Animate &animation);
+    auto get_stats(const Gui::Animate &animation) -> Stats;
 
     std::map<Scene_ID, Scene_Item> objs;
     std::map<Scene_ID, Scene_Item> erased;
