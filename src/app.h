@@ -36,16 +36,16 @@ struct Launch_Settings
 class App
 {
 public:
-    App(Launch_Settings set, Platform *plt = nullptr);
+    explicit App(const Launch_Settings& set, Platform *plt = nullptr);
     ~App();
 
     void render();
-    bool quit();
+    auto quit() -> bool;
     void event(SDL_Event e);
 
 private:
     void apply_window_dim(Vec2 new_dim);
-    Vec3 screen_to_world(Vec2 mouse);
+    auto screen_to_world(Vec2 mouse) -> Vec3;
 
     // Camera data
     enum class Camera_Control

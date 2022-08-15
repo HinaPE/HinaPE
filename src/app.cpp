@@ -7,7 +7,7 @@
 #include "platform/platform.h"
 #include "scene/renderer.h"
 
-App::App(Launch_Settings set, Platform *plt) : window_dim(plt ? plt->window_draw() : Vec2{1.0f}), camera(plt ? plt->window_draw() : Vec2{1.0f}), plt(plt),
+App::App(const Launch_Settings& set, Platform *plt) : window_dim(plt ? plt->window_draw() : Vec2{1.0f}), camera(plt ? plt->window_draw() : Vec2{1.0f}), plt(plt),
                                                scene(Gui::n_Widget_IDs), gui(scene, plt ? plt->window_size() : Vec2{1.0f}), undo(scene, gui)
 {
 
@@ -66,7 +66,7 @@ App::~App()
     Renderer::shutdown();
 }
 
-bool App::quit()
+auto App::quit() -> bool
 {
     return gui.quit(undo);
 }
@@ -259,7 +259,7 @@ void App::render()
     gui.render_ui(scene, undo, camera);
 }
 
-Vec3 App::screen_to_world(Vec2 mouse)
+auto App::screen_to_world(Vec2 mouse) -> Vec3
 {
 
     Vec2 t(2.0f * mouse.x / window_dim.x - 1.0f, 1.0f - 2.0f * mouse.y / window_dim.y);

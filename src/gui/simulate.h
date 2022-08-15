@@ -25,7 +25,7 @@ class Simulate
 public:
     Simulate();
     ~Simulate();
-    bool keydown(Widgets &widgets, Undo &undo, SDL_Keysym key);
+    auto keydown(Widgets &widgets, Undo &undo, SDL_Keysym key) -> bool;
 
     void update(Scene &scene, Undo &undo);
     void update_time();
@@ -37,7 +37,7 @@ public:
     void build_scene(Scene &scene);
 
     void render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam);
-    Mode UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj);
+    auto UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj) -> Mode;
 
     bool running = false;
 

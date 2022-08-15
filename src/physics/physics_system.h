@@ -20,6 +20,8 @@ public: // Singleton Pattern
     static auto destroy() -> void;
 
 public:
+    auto _start_() -> void;
+    auto _pause_() -> void;
     auto _tick_(float dt) -> void;
     auto _register_(unsigned int ID, std::shared_ptr<PhysicsObject> ptr) -> void;
 

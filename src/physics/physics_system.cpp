@@ -1,8 +1,19 @@
 #include "physics_system.h"
 
 #include <utility>
+#include <thread>
 
-void HinaPE::PhysicsSystem::_tick_(float dt)
+auto HinaPE::PhysicsSystem::_start_() -> void
+{
+
+}
+
+auto HinaPE::PhysicsSystem::_pause_() -> void
+{
+
+}
+
+auto HinaPE::PhysicsSystem::_tick_(float dt) -> void
 {
     std::visit([&](auto &k)
                {
@@ -16,12 +27,12 @@ auto HinaPE::PhysicsSystem::instance() -> HinaPE::PhysicsSystem &
     return instance;
 }
 
-void HinaPE::PhysicsSystem::destroy()
+auto HinaPE::PhysicsSystem::destroy() -> void
 {
     instance().~PhysicsSystem();
 }
 
-void HinaPE::PhysicsSystem::_register_(unsigned int ID, std::shared_ptr<PhysicsObject> ptr) // pass smart ptr by value
+auto HinaPE::PhysicsSystem::_register_(unsigned int ID, std::shared_ptr<PhysicsObject> ptr) -> void // pass smart ptr by value
 {
     physics_objects[ID] = std::move(ptr);
 }

@@ -20,7 +20,7 @@ Simulate::~Simulate()
     thread_pool.stop();
 }
 
-bool Simulate::keydown(Widgets &widgets, Undo &undo, SDL_Keysym key)
+auto Simulate::keydown(Widgets &widgets, Undo &undo, SDL_Keysym key) -> bool
 {
     return false;
 }
@@ -138,7 +138,7 @@ void Simulate::update_bvh(Scene &scene, Undo &undo)
     }
 }
 
-Mode Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt)
+auto Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt) -> Mode
 {
 
     Mode mode = Mode::simulate;
