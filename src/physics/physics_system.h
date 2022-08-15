@@ -17,11 +17,11 @@ class PhysicsSystem
 {
 public: // Singleton Pattern
     static auto instance() -> PhysicsSystem &;
-    static void destroy();
+    static auto destroy() -> void;
 
 public:
-    void _tick_(float dt);
-    void _register_(unsigned int ID, std::shared_ptr<PhysicsObject> ptr);
+    auto _tick_(float dt) -> void;
+    auto _register_(unsigned int ID, std::shared_ptr<PhysicsObject> ptr) -> void;
 
 public:
     PhysicsSystem(const PhysicsSystem &) = delete;
