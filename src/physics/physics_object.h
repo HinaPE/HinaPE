@@ -16,8 +16,9 @@ class PhysicsObject
 public:
     // common methods
     template<class T>
-    [[nodiscard]] auto get_object() const -> const T &;
-    [[nodiscard]] auto get_type() const -> PhysicsObjectType;
+    [[nodiscard]] auto get_object() -> T &;
+    template<class T>
+    [[nodiscard]] auto is() const -> bool;
 
     // universal methods
     [[nodiscard]] auto get_position() const -> Vec3;
@@ -107,9 +108,20 @@ inline HinaPE::PhysicsObject::PhysicsObject(PhysicsObjectType type)
 }
 
 template<class T>
-auto HinaPE::PhysicsObject::get_object() const -> const T &
+auto HinaPE::PhysicsObject::get_object() -> T &
 {
-    return std::get<T>(physics_object_opt.value());
+    return *std::get_if<T>(&physics_object_opt.value());
+}
+
+template<class T>
+auto PhysicsObject::is() const -> bool
+{
+    if (!physics_object_opt.has_value())
+        return false;
+
+    if (std::get_if<T>(&physics_object_opt.value()))
+        return true;
+    return false;
 }
 
 }

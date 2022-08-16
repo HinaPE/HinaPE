@@ -258,8 +258,7 @@ void Scene_Object::render(const Mat4 &view, bool solid, bool depth_only, bool po
 
 auto operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r) -> bool
 {
-    return std::string(l.name) != std::string(r.name) || l.shape_type != r.shape_type || l.smooth_normals != r.smooth_normals || l.wireframe != r.wireframe ||
-           l.shape != r.shape || l.render != r.render;
+    return std::string(l.name) != std::string(r.name) || l.shape_type != r.shape_type || l.smooth_normals != r.smooth_normals || l.wireframe != r.wireframe || l.shape != r.shape || l.render != r.render;
 }
 
 void Scene_Object::attach_physics_object(std::shared_ptr<HinaPE::PhysicsObject> o)
@@ -300,7 +299,15 @@ void Scene_Object::sync_physics_result()
 
 auto Scene_Object::get_physics_object_type() const -> HinaPE::PhysicsObjectType
 {
-    if (!physics_object)
-        return HinaPE::PhysicsObjectType::NOT_PHYSICS_OBJECT;
-    return physics_object->get_type();
+    if (physics_object->is<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>())
+        return HinaPE::Rigidbody;
+    if (physics_object->is<HinaPE::RigidBodyBase<HinaPE::STATIC>>())
+        return HinaPE::Rigidbody;
+    if (physics_object->is<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>())
+        return HinaPE::Rigidbody;
+    if (physics_object->is<HinaPE::DeformableBase<HinaPE::CLOTH>>())
+        return HinaPE::Deformable;
+    if (physics_object->is<HinaPE::DeformableBase<HinaPE::MESH>>())
+        return HinaPE::Deformable;
+    return HinaPE::PhysicsObjectType::NOT_PHYSICS_OBJECT;
 }
