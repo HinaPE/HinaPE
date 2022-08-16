@@ -1,7 +1,7 @@
 #include "pbd_kernel.h"
 #include "../../physics_system.h"
 
-void HinaPE::PBDKernel::simulate(HinaPE::PhysicsSystem &sys, float dt)
+void HinaPE::PBDKernel::simulate(float dt)
 {
 }
 

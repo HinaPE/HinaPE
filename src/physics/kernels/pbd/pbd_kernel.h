@@ -7,10 +7,10 @@ namespace HinaPE
 {
 class PhysicsSystem;
 
-class PBDKernel
+class PBDKernel final
 {
 public:
-    void simulate(PhysicsSystem &sys, float dt);
+    void simulate(float dt);
 
     struct Opt
     {
@@ -32,4 +32,4 @@ private: // time integration
 
 }
 
-#endif //HINAPE_PBD_KERNEL_H
+#endif //HINAPE_PBD_KERN

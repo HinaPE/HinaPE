@@ -3,6 +3,8 @@
 
 #include "../../common.h"
 
+#include <map>
+
 namespace HinaPE
 {
 class PhysicsSystem;
@@ -11,9 +13,10 @@ class FastMassSpringKernel final
 {
     using CholeskySolver = Eigen::SimplicialCholesky<Eigen::SparseMatrix<float>>;
     using SparseMatrix = Eigen::SparseMatrix<float>;
+    using TripletList = std::vector<Eigen::Triplet<float>>;
 
 public:
-    auto simulate(PhysicsSystem &sys, float dt) -> void;
+    auto simulate(float dt) -> void;
 
     struct Opt
     {
@@ -24,13 +27,19 @@ public:
     };
     Opt opt;
 
-private:
-    auto simulate_for_each(Eigen::Map<Eigen::MatrixXf> &pos, Eigen::Map<Eigen::MatrixXf> &vel, Eigen::Map<Eigen::MatrixXf> &frc, float dt) -> void;
-    auto local_step() -> void;
-    auto global_step() -> void;
+public:
+    explicit FastMassSpringKernel(PhysicsSystem &sys);
 
 private:
-//    CholeskySolver solver;
+    auto simulate_for_each(Eigen::Map<Eigen::MatrixXf> &pos, Eigen::Map<Eigen::MatrixXf> &vel, Eigen::Map<Eigen::MatrixXf> &frc, float dt) -> void;
+
+private:
+    PhysicsSystem &physics_system;
+
+    // first: cloth id, second: cached sparse matrix
+    std::map<unsigned int, SparseMatrix> Ms;
+    std::map<unsigned int, SparseMatrix> Ls;
+    std::map<unsigned int, SparseMatrix> Js;
 };
 }
 #endif //HINAPE_FMS_KERNEL_H

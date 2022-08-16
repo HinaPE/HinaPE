@@ -17,7 +17,7 @@ auto HinaPE::PhysicsSystem::_tick_(float dt) -> void
 {
     std::visit([&](auto &k)
                {
-                   k.simulate(*this, dt);
+                   k.simulate(dt);
                }, kernel);
 }
 

@@ -27,11 +27,11 @@ public:
 
 public:
     PhysicsSystem(const PhysicsSystem &) = delete;
-    auto operator=(const PhysicsSystem &) -> PhysicsSystem & = delete;
     PhysicsSystem(PhysicsSystem &&) = delete;
+    auto operator=(const PhysicsSystem &) -> PhysicsSystem & = delete;
     auto operator=(PhysicsSystem &&) -> PhysicsSystem & = delete;
 private: // disable any instantiation outside
-    PhysicsSystem() : kernel(FastMassSpringKernel()) {}
+    PhysicsSystem() : kernel(FastMassSpringKernel(*this)) {}
     ~PhysicsSystem() = default;
 
 private:
@@ -40,8 +40,8 @@ private:
     friend FastMassSpringKernel;
     friend SPHKernel;
     std::variant<PBDKernel, XPBDKernel, FastMassSpringKernel, SPHKernel> kernel;
-    std::map<unsigned int, std::shared_ptr<PhysicsObject>> physics_objects;
-    std::map<unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects;
+    std::map<const unsigned int, std::shared_ptr<PhysicsObject>> physics_objects;
+    std::map<const unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects;
     std::vector<Constraint> constraints;
 };
 }

@@ -1,9 +1,35 @@
 #include "fms_kernel.h"
 #include "../../physics_system.h"
 
-auto HinaPE::FastMassSpringKernel::simulate(HinaPE::PhysicsSystem &sys, float dt) -> void
+HinaPE::FastMassSpringKernel::FastMassSpringKernel(HinaPE::PhysicsSystem &sys) : physics_system(sys)
 {
-    auto &os = sys.physics_objects;
+    auto &os = physics_system.physics_objects;
+    for (auto &pair: os)
+    {
+        auto id = pair.first;
+        auto &o = pair.second;
+        auto &verts = o->get_vertices();
+        Eigen::Map<Eigen::MatrixXf> M_vertices(verts.data()->data, static_cast<int>(verts.size()), 3);
+        auto vertices_num = M_vertices.rows();
+
+        TripletList LTriplets, JTriplets;
+        SparseMatrix L;
+        L.resize(3 * vertices_num, 3 * vertices_num);
+
+
+        if (o->get_type() == Deformable)
+        {
+            auto &vel = o->get_velocities();
+            auto &mass = o->get_masses();
+            Eigen::Map<Eigen::MatrixXf> M_velocities(vel.data()->data, static_cast<int>(vel.size()), 3);
+            Eigen::Map<Eigen::MatrixXf> M_masses(vel.data()->data, static_cast<int>(vel.size()), 3);
+        }
+    }
+}
+
+auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
+{
+    auto &os = physics_system.physics_objects;
     for (auto &pair: os)
     {
         auto &o = pair.second;
@@ -22,16 +48,6 @@ auto HinaPE::FastMassSpringKernel::simulate(HinaPE::PhysicsSystem &sys, float dt
 }
 
 auto HinaPE::FastMassSpringKernel::simulate_for_each(Eigen::Map<Eigen::MatrixXf> &pos, Eigen::Map<Eigen::MatrixXf> &vel, Eigen::Map<Eigen::MatrixXf> &frc, float dt) -> void
-{
-
-}
-
-auto HinaPE::FastMassSpringKernel::local_step() -> void
-{
-
-}
-
-auto HinaPE::FastMassSpringKernel::global_step() -> void
 {
 
 }

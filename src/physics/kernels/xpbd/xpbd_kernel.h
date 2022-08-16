@@ -8,7 +8,7 @@ class PhysicsSystem;
 class XPBDKernel final
 {
 public:
-    void simulate(PhysicsSystem &sys, float dt);
+    void simulate(float dt);
 };
 
 }

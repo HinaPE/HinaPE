@@ -10,7 +10,7 @@ class PhysicsSystem;
 class SPHKernel
 {
 public:
-    auto simulate(PhysicsSystem &sys, float dt) -> void;
+    auto simulate(float dt) -> void;
 
 private:
 

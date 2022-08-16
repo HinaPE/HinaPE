@@ -8,11 +8,12 @@ auto HinaPE::PhysicsObject::get_type() const -> HinaPE::PhysicsObjectType
         return NOT_PHYSICS_OBJECT;
     switch (physics_object_opt.value().index())
     {
-        case 0:
-        case 1:
-        case 2:
+        case 0: // RigidBodyBase<DYNAMIC>
+        case 1: // RigidBodyBase<STATIC>
+        case 2: // RigidBodyBase<KINEMATIC>
             return Rigidbody;
-        case 3:
+        case 3: // DeformableBase<CLOTH>
+        case 4: // DeformableBase<MESH>
             return Deformable;
         default:
             throw std::runtime_error("invalid rigidbody type");
