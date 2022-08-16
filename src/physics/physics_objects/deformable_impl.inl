@@ -42,12 +42,18 @@ template<DeformableType Type>
 void HinaPE::DeformableBase<Type>::set_rotation(const Vec3 &_r) const { /** TODO: implement **/}
 
 template<DeformableType Type>
-auto DeformableBase<Type>::pos() -> std::vector<Vec3> & { return impl->positions; }
+auto DeformableBase<Type>::vertices() -> std::vector<Vec3> & { return impl->positions; }
 
 template<DeformableType Type>
-auto DeformableBase<Type>::vel() -> std::vector<Vec3> & { return impl->velocities; }
+auto DeformableBase<Type>::indices() -> std::vector<unsigned int> & { return impl->indices; }
 
 template<DeformableType Type>
-auto DeformableBase<Type>::ind() -> std::vector<unsigned int> & { return impl->indices; }
+auto DeformableBase<Type>::velocities() -> std::vector<Vec3> & { return impl->velocities; }
+
+template<DeformableType Type>
+auto DeformableBase<Type>::masses() -> std::vector<float> & { return impl->masses; }
+
+template<DeformableType Type>
+auto DeformableBase<Type>::inv_masses() -> std::vector<float> & { return impl->inv_masses; }
 
 }

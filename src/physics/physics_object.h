@@ -22,12 +22,10 @@ public:
     // universal methods
     [[nodiscard]] auto get_position() const -> Vec3;
     [[nodiscard]] auto get_rotation() const -> Vec3;
-    [[nodiscard]] auto get_velocity() const -> Vec3;
-    [[nodiscard]] auto get_force() const -> Vec3;
-    [[nodiscard]] auto get_mass() const -> float;
+    [[nodiscard]] auto get_vertices() -> std::vector<Vec3> &;
+    [[nodiscard]] auto get_indices() -> std::vector<unsigned int> &;
     auto set_position(const Vec3 &) const -> void;
     auto set_rotation(const Vec3 &) const -> void;
-    auto set_velocity(const Vec3 &) const -> void;
 
     // rigidbody methods
     [[nodiscard]] auto is_rigidbody() -> bool;
@@ -37,9 +35,9 @@ public:
     // deformable methods
     [[nodiscard]] auto is_deformable() -> bool;
     [[nodiscard]] auto get_deformable_type() const -> DeformableType;
-    [[nodiscard]] auto pos() -> std::vector<Vec3> &;
-    [[nodiscard]] auto ind() -> std::vector<unsigned int> &;
-    [[nodiscard]] auto vel() -> std::vector<Vec3> &;
+    [[nodiscard]] auto get_velocities() -> std::vector<Vec3> &;
+    [[nodiscard]] auto get_masses() -> std::vector<float> &;
+    [[nodiscard]] auto get_inv_masses() -> std::vector<float> &;
 
 public:
     explicit PhysicsObject(PhysicsObjectType type);

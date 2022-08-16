@@ -35,34 +35,38 @@ auto HinaPE::PhysicsObject::get_rotation() const -> Vec3
                       }, physics_object_opt.value());
 }
 
-auto HinaPE::PhysicsObject::get_velocity() const -> Vec3
+auto HinaPE::PhysicsObject::get_vertices() -> std::vector<Vec3> &
 {
-    return std::visit(overloaded{[&](const RigidBodyBase<DYNAMIC> &rb) -> Vec3 { return rb.get_linear_velocity(); },
-                                 [&](const RigidBodyBase<STATIC> &rb) -> Vec3 { throw std::runtime_error("DO NOT GET VELOCITY FOR STATIC RIGIDBODY"); },
-                                 [&](const RigidBodyBase<KINEMATIC> &rb) -> Vec3 { throw std::runtime_error("DO NOT GET VELOCITY FOR KINEMATIC RIGIDBODY"); },
-                                 [&](const HinaPE::DeformableBase<CLOTH> &cloth) -> Vec3 { throw std::runtime_error("DO NOT GET VELOCITY FOR CLOTH"); },
-                                 [&](const HinaPE::DeformableBase<MESH> &mesh) -> Vec3 { throw std::runtime_error("DO NOT GET VELOCITY FOR MESH"); }},
-                      physics_object_opt.value());
+    switch (physics_object_opt.value().index())
+    {
+        case 0: // RigidBodyBase<DYNAMIC>
+        case 1: // RigidBodyBase<STATIC>
+        case 2: // RigidBodyBase<KINEMATIC>
+            throw std::runtime_error("rigidbody geometry not implemented"); // TODO: to support in the future
+        case 3: // DeformableBase<CLOTH>
+            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).vertices();
+        case 4: // DeformableBase<MESH>
+            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).vertices();
+        default:
+            throw std::runtime_error("invalid rigidbody type");
+    }
 }
 
-auto HinaPE::PhysicsObject::get_force() const -> Vec3
+auto HinaPE::PhysicsObject::get_indices() -> std::vector<unsigned int> &
 {
-    return std::visit(overloaded{[&](const RigidBodyBase<DYNAMIC> &rb) -> Vec3 { return rb.get_force(); },
-                                 [&](const RigidBodyBase<STATIC> &rb) -> Vec3 { throw std::runtime_error("DO NOT GET FORCE FOR STATIC RIGIDBODY"); },
-                                 [&](const RigidBodyBase<KINEMATIC> &rb) -> Vec3 { throw std::runtime_error("DO NOT GET FORCE FOR KINEMATIC RIGIDBODY"); },
-                                 [&](const HinaPE::DeformableBase<CLOTH> &cloth) -> Vec3 { throw std::runtime_error("DO NOT GET FORCE FOR CLOTH"); },
-                                 [&](const HinaPE::DeformableBase<MESH> &mesh) -> Vec3 { throw std::runtime_error("DO NOT GET FORCE FOR MESH"); }},
-                      physics_object_opt.value());
-}
-
-auto HinaPE::PhysicsObject::get_mass() const -> float
-{
-    return std::visit(overloaded{[&](const RigidBodyBase<DYNAMIC> &rb) -> float { return rb.get_mass(); },
-                                 [&](const RigidBodyBase<STATIC> &rb) -> float { throw std::runtime_error("DO NOT GET MASS FOR STATIC RIGIDBODY"); },
-                                 [&](const RigidBodyBase<KINEMATIC> &rb) -> float { return rb.get_mass(); },
-                                 [&](const HinaPE::DeformableBase<CLOTH> &cloth) -> float { throw std::runtime_error("DO NOT GET MASS FOR CLOTH"); },
-                                 [&](const HinaPE::DeformableBase<MESH> &mesh) -> float { throw std::runtime_error("DO NOT GET MASS FOR MESH"); }},
-                      physics_object_opt.value());
+    switch (physics_object_opt.value().index())
+    {
+        case 0: // RigidBodyBase<DYNAMIC>
+        case 1: // RigidBodyBase<STATIC>
+        case 2: // RigidBodyBase<KINEMATIC>
+            throw std::runtime_error("rigidbody geometry not implemented"); // TODO: to support in the future
+        case 3: // DeformableBase<CLOTH>
+            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).indices();
+        case 4: // DeformableBase<MESH>
+            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).indices();
+        default:
+            throw std::runtime_error("invalid rigidbody type");
+    }
 }
 
 auto HinaPE::PhysicsObject::set_position(const Vec3 &p) const -> void
@@ -79,15 +83,6 @@ auto HinaPE::PhysicsObject::set_rotation(const Vec3 &r) const -> void
                {
                    o.set_rotation(r);
                }, physics_object_opt.value());
-}
-
-auto HinaPE::PhysicsObject::set_velocity(const Vec3 &v) const -> void
-{
-    std::visit(overloaded{[&](const RigidBodyBase<DYNAMIC> &rb) { rb.set_linear_velocity(v); },
-                          [&](const RigidBodyBase<STATIC> &rb) { throw std::runtime_error("DO NOT SET VELOCITY FOR STATIC RIGIDBODY"); },
-                          [&](const RigidBodyBase<KINEMATIC> &rb) { throw std::runtime_error("DO NOT SET VELOCITY FOR STATIC RIGIDBODY"); },
-                          [&](const HinaPE::DeformableBase<CLOTH> &cloth) { throw std::runtime_error("DO NOT SET VELOCITY FOR CLOTH"); },
-                          [&](const HinaPE::DeformableBase<MESH> &mesh) { throw std::runtime_error("DO NOT SET VELOCITY FOR MESH"); }}, physics_object_opt.value());
 }
 
 auto HinaPE::PhysicsObject::switch_rigidbody_type(HinaPE::RigidBodyType to) -> void
@@ -116,12 +111,10 @@ auto HinaPE::PhysicsObject::switch_rigidbody_type(HinaPE::RigidBodyType to) -> v
                                           physics_object_opt = std::nullopt;
                                           break;
                                       case HinaPE::STATIC:
-                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::DYNAMIC, HinaPE::STATIC>(
-                                                  std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(physics_object_opt.value()));
+                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::DYNAMIC, HinaPE::STATIC>(std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(physics_object_opt.value()));
                                           break;
                                       case HinaPE::KINEMATIC:
-                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::DYNAMIC, HinaPE::KINEMATIC>(
-                                                  std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(physics_object_opt.value()));
+                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::DYNAMIC, HinaPE::KINEMATIC>(std::get<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>(physics_object_opt.value()));
                                           break;
                                       default:
                                           throw std::runtime_error("invalid rigidbody type");
@@ -134,12 +127,10 @@ auto HinaPE::PhysicsObject::switch_rigidbody_type(HinaPE::RigidBodyType to) -> v
                                           physics_object_opt = std::nullopt;
                                           break;
                                       case HinaPE::DYNAMIC:
-                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::STATIC, HinaPE::DYNAMIC>(
-                                                  std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(physics_object_opt.value()));
+                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::STATIC, HinaPE::DYNAMIC>(std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(physics_object_opt.value()));
                                           break;
                                       case HinaPE::KINEMATIC:
-                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::STATIC, HinaPE::KINEMATIC>(
-                                                  std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(physics_object_opt.value()));
+                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::STATIC, HinaPE::KINEMATIC>(std::get<HinaPE::RigidBodyBase<HinaPE::STATIC>>(physics_object_opt.value()));
                                           break;
                                       default:
                                           throw std::runtime_error("invalid rigidbody type");
@@ -152,18 +143,15 @@ auto HinaPE::PhysicsObject::switch_rigidbody_type(HinaPE::RigidBodyType to) -> v
                                           physics_object_opt = std::nullopt;
                                           break;
                                       case HinaPE::DYNAMIC:
-                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::KINEMATIC, HinaPE::DYNAMIC>(
-                                                  std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(physics_object_opt.value()));
+                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::KINEMATIC, HinaPE::DYNAMIC>(std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(physics_object_opt.value()));
                                           break;
                                       case HinaPE::STATIC:
-                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::KINEMATIC, HinaPE::STATIC>(
-                                                  std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(physics_object_opt.value()));
+                                          physics_object_opt = HinaPE::switch_rigidbody_type<HinaPE::KINEMATIC, HinaPE::STATIC>(std::get<HinaPE::RigidBodyBase<HinaPE::KINEMATIC>>(physics_object_opt.value()));
                                           break;
                                       default:
                                           throw std::runtime_error("invalid rigidbody type");
                                   }
-                              }, [&](HinaPE::DeformableBase<CLOTH> &cloth) { throw std::runtime_error("invalid rigidbody type"); },
-                              [&](HinaPE::DeformableBase<MESH> &mesh) { throw std::runtime_error("invalid rigidbody type"); }}, physics_object_opt.value());
+                              }, [&](HinaPE::DeformableBase<CLOTH> &cloth) { throw std::runtime_error("invalid rigidbody type"); }, [&](HinaPE::DeformableBase<MESH> &mesh) { throw std::runtime_error("invalid rigidbody type"); }}, physics_object_opt.value());
 }
 
 auto HinaPE::PhysicsObject::is_rigidbody() -> bool
@@ -208,58 +196,51 @@ auto HinaPE::PhysicsObject::get_deformable_type() const -> HinaPE::DeformableTyp
     }
 }
 
-auto HinaPE::PhysicsObject::pos() -> std::vector<Vec3> &
+auto HinaPE::PhysicsObject::get_velocities() -> std::vector<Vec3> &
 {
-    static std::vector<Vec3> null_vector;
-
     switch (physics_object_opt.value().index())
     {
         case 0: // RigidBodyBase<DYNAMIC>
         case 1: // RigidBodyBase<STATIC>
         case 2: // RigidBodyBase<KINEMATIC>
-            return null_vector;
+            throw std::runtime_error("use get velocity for rigid body"); // TODO: to support in the future
         case 3: // DeformableBase<CLOTH>
-            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).pos();
+            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).velocities();
         case 4: // DeformableBase<MESH>
-            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).pos();
+            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).velocities();
         default:
             throw std::runtime_error("invalid rigidbody type");
     }
 }
 
-auto HinaPE::PhysicsObject::vel() -> std::vector<Vec3> &
+auto HinaPE::PhysicsObject::get_masses() -> std::vector<float> &
 {
-    static std::vector<Vec3> null_vector;
-
     switch (physics_object_opt.value().index())
     {
         case 0: // RigidBodyBase<DYNAMIC>
         case 1: // RigidBodyBase<STATIC>
         case 2: // RigidBodyBase<KINEMATIC>
-            return null_vector; // TODO: use vel, old vel, and last vel instead
+            throw std::runtime_error("use get mass for rigid body"); // TODO: to support in the future
         case 3: // DeformableBase<CLOTH>
-            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).vel();
+            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).masses();
         case 4: // DeformableBase<MESH>
-            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).vel();
+            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).masses();
         default:
             throw std::runtime_error("invalid rigidbody type");
     }
 }
-
-auto HinaPE::PhysicsObject::ind() -> std::vector<unsigned int> &
+auto HinaPE::PhysicsObject::get_inv_masses() -> std::vector<float> &
 {
-    static std::vector<unsigned int> null_vector;
-
     switch (physics_object_opt.value().index())
     {
         case 0: // RigidBodyBase<DYNAMIC>
         case 1: // RigidBodyBase<STATIC>
         case 2: // RigidBodyBase<KINEMATIC>
-            return null_vector;
+            throw std::runtime_error("use get inv mass for rigid body"); // TODO: to support in the future
         case 3: // DeformableBase<CLOTH>
-            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).ind();
+            return std::get<HinaPE::DeformableBase<CLOTH>>(physics_object_opt.value()).inv_masses();
         case 4: // DeformableBase<MESH>
-            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).ind();
+            return std::get<HinaPE::DeformableBase<MESH>>(physics_object_opt.value()).inv_masses();
         default:
             throw std::runtime_error("invalid rigidbody type");
     }

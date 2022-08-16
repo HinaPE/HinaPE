@@ -290,8 +290,8 @@ void Scene_Object::sync_physics_result()
 
     if (physics_object->is_deformable())
     {
-        auto &verts = physics_object->pos();
-        auto &inds = physics_object->ind();
+        auto &verts = physics_object->get_vertices();
+        auto &inds = physics_object->get_indices();
         _mesh = Util::Gen::generate(verts, inds);
         set_mesh_dirty();
         return;
