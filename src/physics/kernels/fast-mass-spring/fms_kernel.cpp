@@ -1,7 +1,9 @@
 #include "fms_kernel.h"
 #include "../../physics_system.h"
 
-HinaPE::FastMassSpringKernel::FastMassSpringKernel(HinaPE::PhysicsSystem &sys) : physics_system(sys)
+HinaPE::FastMassSpringKernel::FastMassSpringKernel(HinaPE::PhysicsSystem &sys) : physics_system(sys) {}
+
+auto HinaPE::FastMassSpringKernel::init() -> void
 {
     auto &os = physics_system.physics_objects;
     for (auto &pair: os)
@@ -66,7 +68,7 @@ HinaPE::FastMassSpringKernel::FastMassSpringKernel(HinaPE::PhysicsSystem &sys) :
 
             SparseMatrix A = M + opt.fixed_dt * opt.fixed_dt * L;
             auto system_matrix = std::make_shared<CholeskySolver>();
-            system_matrix->solve(A);
+            system_matrix->compute(A);
 
             Ls_cached[id] = L;
             Js_cached[id] = J;
@@ -74,10 +76,13 @@ HinaPE::FastMassSpringKernel::FastMassSpringKernel(HinaPE::PhysicsSystem &sys) :
             solver_cached[id] = system_matrix;
         }
     }
+    inited = true;
 }
 
 auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
 {
+    if (!inited)
+        init();
     //    auto &os = physics_system.physics_objects;
     //    for (auto &pair: os)
     //    {

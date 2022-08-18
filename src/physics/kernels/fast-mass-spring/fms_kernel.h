@@ -16,6 +16,7 @@ class FastMassSpringKernel final
     using TripletList = std::vector<Eigen::Triplet<float>>;
 
 public:
+    auto init() -> void;
     auto simulate(float dt) -> void;
 
     struct Opt
@@ -35,6 +36,7 @@ private:
 
 private:
     PhysicsSystem &physics_system;
+    bool inited = false;
 
     // first: cloth id, second: cached sparse matrix
     std::map<unsigned int, SparseMatrix> Ms_cached;
