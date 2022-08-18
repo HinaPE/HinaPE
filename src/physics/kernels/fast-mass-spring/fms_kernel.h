@@ -37,9 +37,9 @@ private:
     PhysicsSystem &physics_system;
 
     // first: cloth id, second: cached sparse matrix
-    std::map<unsigned int, SparseMatrix> Ms;
-    std::map<unsigned int, SparseMatrix> Ls;
-    std::map<unsigned int, SparseMatrix> Js;
+    std::map<unsigned int, SparseMatrix> Ms_cached;
+    std::map<unsigned int, SparseMatrix> Ls_cached;
+    std::map<unsigned int, SparseMatrix> Js_cached;
 };
 }
 #endif //HINAPE_FMS_KERNEL_H

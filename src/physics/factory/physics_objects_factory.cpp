@@ -12,7 +12,7 @@ auto HinaPE::ClothFactory::create_cloth(const HinaPE::ClothFactory::ClothDesc &d
     DeformableBase<CLOTH> cloth;
 
     auto &_p = cloth.impl->p;
-    auto &_r = cloth.impl->p;
+    auto &_r = cloth.impl->q;
 
     auto &_ps = cloth.impl->positions;
     auto &_vs = cloth.impl->velocities;
@@ -82,7 +82,9 @@ auto HinaPE::ClothFactory::create_cloth(const HinaPE::ClothFactory::ClothDesc &d
     std::fill(_ims.begin(), _ims.end(), 1.f / desc.mass);
 
     _p = position;
-    _r = rotation;
+    //    _r = rotation; TODO: fix here
+
+    cloth.setup_geometry();
 
     return std::make_shared<PhysicsObject>(std::move(cloth));
 }

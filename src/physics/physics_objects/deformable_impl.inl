@@ -1,6 +1,7 @@
 #include "deformable.h"
 
 #include <vector>
+#include <utility>
 
 namespace HinaPE
 {
@@ -20,6 +21,7 @@ struct DeformableBase<Type>::Impl
     std::vector<float> inv_masses;
 
     std::vector<unsigned int> indices;
+    std::vector<std::pair<unsigned int, unsigned int>> edges;
 
     Impl() = default;
     ~Impl() = default;
@@ -45,9 +47,6 @@ template<DeformableType Type>
 auto DeformableBase<Type>::vertices() -> std::vector<Vec3> & { return impl->positions; }
 
 template<DeformableType Type>
-auto DeformableBase<Type>::indices() -> std::vector<unsigned int> & { return impl->indices; }
-
-template<DeformableType Type>
 auto DeformableBase<Type>::velocities() -> std::vector<Vec3> & { return impl->velocities; }
 
 template<DeformableType Type>
@@ -55,5 +54,31 @@ auto DeformableBase<Type>::masses() -> std::vector<float> & { return impl->masse
 
 template<DeformableType Type>
 auto DeformableBase<Type>::inv_masses() -> std::vector<float> & { return impl->inv_masses; }
+
+template<DeformableType Type>
+auto DeformableBase<Type>::indices() -> std::vector<unsigned int> & { return impl->indices; }
+
+template<DeformableType Type>
+auto DeformableBase<Type>::edges() -> std::vector<std::pair<unsigned int, unsigned int>> & { return impl->edges; }
+
+template<DeformableType Type>
+auto DeformableBase<Type>::setup_geometry() -> void
+{
+    // simple impl of initiating edges
+    auto &inds = impl->indices;
+    auto &edges = impl->edges;
+    auto size = inds.size();
+
+    assert(size % 3 == 0); // make sure is triangle geom mesh
+    for (int i = 0; i < size; i += 3)
+    {
+        if (std::find(edges.begin(), edges.end(), std::make_pair(inds[i], inds[i + 1])) == edges.end() && std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 1], inds[i])) == edges.end())
+            edges.push_back(std::make_pair(inds[i], inds[i + 1]));
+        if (std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 1], inds[i + 2])) == edges.end() && std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 2], inds[i + 1])) == edges.end())
+            edges.push_back(std::make_pair(inds[i], inds[i + 1]));
+        if (std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 2], inds[i])) == edges.end() && std::find(edges.begin(), edges.end(), std::make_pair(inds[i], inds[i + 2])) == edges.end())
+            edges.push_back(std::make_pair(inds[i], inds[i + 1]));
+    }
+}
 
 }

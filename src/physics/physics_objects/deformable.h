@@ -18,10 +18,13 @@ public:
     auto set_rotation(const Vec3 &) const -> void;
 
     auto vertices() -> std::vector<Vec3> &;
-    auto indices() -> std::vector<unsigned int> &;
     auto velocities() -> std::vector<Vec3> &;
     auto masses() -> std::vector<float> &;
     auto inv_masses() -> std::vector<float> &;
+    auto indices() -> std::vector<unsigned int> &;
+    auto edges() -> std::vector<std::pair<unsigned int, unsigned int>> &;
+
+    auto setup_geometry() -> void;
 
 public:
     DeformableBase();
