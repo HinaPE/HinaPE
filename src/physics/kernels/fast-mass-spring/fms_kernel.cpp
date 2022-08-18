@@ -64,13 +64,14 @@ HinaPE::FastMassSpringKernel::FastMassSpringKernel(HinaPE::PhysicsSystem &sys) :
             }
             M.setFromTriplets(MTriplets.begin(), MTriplets.end());
 
+            SparseMatrix A = M + opt.fixed_dt * opt.fixed_dt * L;
+            auto system_matrix = std::make_shared<CholeskySolver>();
+            system_matrix->solve(A);
+
             Ls_cached[id] = L;
             Js_cached[id] = J;
             Ms_cached[id] = M;
-
-            SparseMatrix A = M + opt.fixed_dt * opt.fixed_dt * L;
-            CholeskySolver _system_matrix;
-            _system_matrix.solve(A);
+            solver_cached[id] = system_matrix;
         }
     }
 }
