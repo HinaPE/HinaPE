@@ -74,6 +74,7 @@ auto HinaPE::FastMassSpringKernel::init() -> void
             Js_cached[id] = J;
             Ms_cached[id] = M;
             solver_cached[id] = system_matrix;
+            
         }
     }
     inited = true;
