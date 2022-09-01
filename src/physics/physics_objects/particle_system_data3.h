@@ -12,6 +12,7 @@ namespace HinaPE
 {
 class ParticleSystemData3
 {
+public:
     using ScalarData = Array1<double>;
     using VectorData = Array1<Vector3D>;
 
