@@ -75,6 +75,7 @@ private:
     ParticleSystemData3Ptr data_ptr;
     std::variant<PointGenerator> particle_generator;
 };
+using ParticleEmitter3Ptr = std::shared_ptr<ParticleEmitter3>;
 
 }
 

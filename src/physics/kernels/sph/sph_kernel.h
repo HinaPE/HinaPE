@@ -5,6 +5,7 @@
 
 #include "../../util/lib/frame.h"
 #include "../../physics_objects/particle_system_data3.h"
+#include "../../physics_objects/particle_emitter3.h"
 
 namespace HinaPE
 {
@@ -33,7 +34,7 @@ private:
     ParticleSystemData3::VectorData new_positions;
     ParticleSystemData3::VectorData new_velocities;
     // TODO: add colliders
-    // TODO: add emitters
+    ParticleEmitter3Ptr emitter_ptr;
     // TODO: add environments (winds etc.)
 };
 }
