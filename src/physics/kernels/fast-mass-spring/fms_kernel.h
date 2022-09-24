@@ -26,6 +26,9 @@ public:
     auto init() -> void;
     auto simulate(float dt) -> void;
 
+    void spring_deformation_constraint(float rest_length);
+    void sphere_collision_constraint(float radius, Eigen::Vector3f center);
+
 
     struct Opt
     {
@@ -81,58 +84,11 @@ public:
     IndexList getBendIndex(); // bending springs
 
     mass_spring_system* getResult();
-
-};
-
-////////////////////////////
-
-// Constraint Graph
-class CgNodeVisitor; // Constraint graph node visitor
-
-// Constraint graph node
-class CgNode {
 protected:
-    mass_spring_system* system;
-    float* vbuff;
-
-public:
-    explicit CgNode(mass_spring_system* system);
-
-    virtual void satisfy() = 0; // satisfy constraint
-    virtual bool accept(CgNodeVisitor& visitor) = 0; // accept visitor
+    std::unordered_map<unsigned int, Eigen::Vector3f> fix_map;
+    virtual void fixPoint(unsigned int i);
+    virtual void releasePoint(unsigned int i);
+    bool is_fixed();
 };
-
-class CgPointNode : public CgNode {
-    public:
-        explicit CgPointNode(mass_spring_system* system);
-        [[nodiscard]] virtual bool query(unsigned int i) const = 0; // check if point with index i is constrained
-        bool accept(CgNodeVisitor& visitor) override;
-};
-
-// spring constraint node
-class CgSpringNode : public CgNode {
-protected:
-    typedef std::vector<CgNode*> NodeList;
-    NodeList children;
-
-public:
-    explicit CgSpringNode(mass_spring_system* system);
-
-    bool accept(CgNodeVisitor& visitor) override;
-    void addChild(CgNode* node);
-    void removeChild(CgNode* node);
-};
-
-// root node
-class CgRootNode : public CgSpringNode {
-public:
-    CgRootNode(mass_spring_system* system);
-
-    void satisfy() override;
-    bool accept(CgNodeVisitor& visitor) override;
-};
-
-
-
 }
 #endif //HINAPE_FMS_KERNEL_H

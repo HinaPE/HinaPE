@@ -93,7 +93,14 @@ auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
     for (auto &pair: os){
         auto id = pair.first;
         auto &o = pair.second->get_object<DeformableBase<CLOTH>>();
+
+        auto &verts = o.vertices();
         auto &edges = o.edges();
+        auto &masses = o.masses();
+        Eigen::Map<Eigen::MatrixXf> M_vertices(verts.data()->data, static_cast<int>(verts.size()), 3);
+        auto vertices_num = M_vertices.rows();
+        auto edges_num = (int) edges.size();
+
         inertial_term = Ms_cached[id] * ((a + 1) * (current_state) - a * prev_state);
         prev_state = current_state;
         for (unsigned int i = 0; i < 10; i++) {
@@ -106,6 +113,16 @@ auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
                         current_state[3 * edge.first + 1] - current_state[3 * edge.second + 1],
                         current_state[3 * edge.first + 2] - current_state[3 * edge.second + 2]
                 );
+
+                /// current_state &verts
+                verts[edge.first].x = current_state[3 * edge.first + 0];
+                verts[edge.first].y = current_state[3 * edge.first + 1];
+                verts[edge.first].z = current_state[3 * edge.first + 2];
+
+                verts[edge.second].x = current_state[3 * edge.second + 0];
+                verts[edge.second].y = current_state[3 * edge.second + 1];
+                verts[edge.second].z = current_state[3 * edge.second + 2];
+                ///
 
                 p12.normalize();
                 spring_directions[3 * j + 0] = 	system->rest_lengths[j] * p12[0];
@@ -161,6 +178,7 @@ void HinaPE::FastMassSpringKernel::uniformGrid(unsigned int n, float rest_length
             auto &o = pair.second->get_object<DeformableBase<CLOTH>>();
 
             ///////////////////
+            //如果所有弹簧的rest_length stiffness 相同的话就不需要这个了
             // n must be odd
             assert(n % 2 == 1);
 
@@ -188,6 +206,8 @@ void HinaPE::FastMassSpringKernel::uniformGrid(unsigned int n, float rest_length
                         continue;
                     }
                     if (i == n - 1) {
+                        float width = 2.0f;
+                        rest_length = width / (n - 1) * 1.05f;
                         system->rest_lengths[k] = rest_length;
                         system->stiffnesses[k] = stiffness;
                         structI.push_back(k++);
@@ -267,47 +287,119 @@ HinaPE::mass_spring_system *HinaPE::FastMassSpringKernel::getResult() {
     return result;
 }
 
-HinaPE::CgNode::CgNode(HinaPE::mass_spring_system *system) : system(system){
+void HinaPE::FastMassSpringKernel::spring_deformation_constraint(float rest_length) {
+    for (int k = 0; k < 15; k++){
+        auto &os = physics_system.physics_objects;
+        for (auto &pair: os) {
+            if (pair.second->is<DeformableBase<CLOTH>>()) {
+                auto id = pair.first;
+                auto &o = pair.second->get_object<DeformableBase<CLOTH>>();
 
-}
+                auto &verts = o.vertices();
+                auto &edges = o.edges();
+                auto &masses = o.masses();
+                Eigen::Map<Eigen::MatrixXf> M_vertices(verts.data()->data, static_cast<int>(verts.size()), 3);
+                auto vertices_num = M_vertices.rows();
+                auto edges_num = (int) edges.size();
 
-HinaPE::CgPointNode::CgPointNode(HinaPE::mass_spring_system *system) : CgNode(system) {
+                for (auto &edge : edges) {
+                    Eigen::Vector3f p12(
+                            verts[edge.first].x - verts[edge.second].x,
+                            verts[edge.first].y - verts[edge.second].y,
+                            verts[edge.first].z - verts[edge.second].z
+                    );
+                    float tauc = 0.4f; // critical deformation rate
+                    float len = p12.norm();
+                    float rlen = rest_length;
+                    float diff = (len - (1 + tauc) * rlen) / len;
+                    float rate = (len - rlen) / rlen;
 
-}
+                    if (rate <= tauc) continue;
 
-bool HinaPE::CgPointNode::accept(HinaPE::CgNodeVisitor &visitor) {
-    return visitor.visit(*this);
-}
+                    float f1, f2;
+                    f1 = f2 = 0.5f;
 
-HinaPE::CgSpringNode::CgSpringNode(HinaPE::mass_spring_system *system) : CgNode(system) {
+                    // if first point is fixed
+                    if((edge.first = vertices_num - 1) || (edge.first = 0))
+                    {
+                        f1 = 0.0f; f2 = 1.0f;
+                    }
+                    // if second point is fixed
+                    if((edge.second != 0) || (edge.second != vertices_num - 1))
+                    {
+                        f1 = (f1 != 0.0f ? 1.0f : 0.0f);
+                        f2 = 0.0f;
+                    }
 
-}
+                    verts[edge.first].x -= p12[0] * f1 * diff;
+                    verts[edge.first].y -= p12[1] * f1 * diff;
+                    verts[edge.first].z -= p12[2] * f1 * diff;
 
-void HinaPE::CgSpringNode::addChild(HinaPE::CgNode *node) {
-    children.push_back(node);
-}
-
-bool HinaPE::CgSpringNode::accept(HinaPE::CgNodeVisitor &visitor) {
-    for (CgNode* child : children) {
-        if (!child->accept(visitor)) return false;
+                    verts[edge.second].x += p12[0] * f2 * diff;
+                    verts[edge.second].y += p12[1] * f2 * diff;
+                    verts[edge.second].z += p12[2] * f2 * diff;
+                }
+            }
+        }
     }
-    return visitor.visit(*this);
 }
 
-void HinaPE::CgSpringNode::removeChild(HinaPE::CgNode *node) {
-    children.erase(find(children.begin(), children.end(), node));
-}
+void HinaPE::FastMassSpringKernel::sphere_collision_constraint(float radius, Eigen::Vector3f center) {
+    auto &os = physics_system.physics_objects;
+    for (auto &pair: os) {
+        if (pair.second->is<DeformableBase<CLOTH>>()) {
+            auto id = pair.first;
+            auto &o = pair.second->get_object<DeformableBase<CLOTH>>();
 
-void HinaPE::CgRootNode::satisfy() {
+            auto &verts = o.vertices();
+            auto &edges = o.edges();
+            auto &masses = o.masses();
+            Eigen::Map<Eigen::MatrixXf> M_vertices(verts.data()->data, static_cast<int>(verts.size()), 3);
+            auto vertices_num = M_vertices.rows();
+            auto edges_num = (int) edges.size();
+
+            for (int i = 0; i < vertices_num; i++){
+                Eigen::Vector3f p(
+                        (verts[i]-center[0]).x,
+                        (verts[i]-center[0]).y,
+                        (verts[i]-center[0]).z
+                    );
+
+                if (p.norm() < radius) {
+                    p.normalize();
+                    p = radius * p;
+                }
+                else continue;
+
+                verts[i].x = p[0] + center[0];
+                verts[i].y = p[1] + center[1];
+                verts[i].z = p[2] + center[2];
+            }
+        }
     }
-
-HinaPE::CgRootNode::CgRootNode(HinaPE::mass_spring_system *system) : CgSpringNode(system){
-
 }
 
-bool HinaPE::CgRootNode::accept(HinaPE::CgNodeVisitor &visitor) {
-    for (CgNode* child : children) {
-        if (!child->accept(visitor)) return false;
+void HinaPE::FastMassSpringKernel::fixPoint(unsigned int i) {
+    auto &os = physics_system.physics_objects;
+    for (auto &pair: os) {
+        if (pair.second->is<DeformableBase<CLOTH>>()) {
+            auto id = pair.first;
+            auto &o = pair.second->get_object<DeformableBase<CLOTH>>();
+
+            auto &verts = o.vertices();
+
+            fix_map[3 * i] = Eigen::Vector3f(verts[i].x, verts[i].y, verts[i].z);
+        }
     }
-    return true;
 }
+
+void HinaPE::FastMassSpringKernel::releasePoint(unsigned int i) {
+    fix_map.erase(3 * i);
+}
+
+bool HinaPE::FastMassSpringKernel::is_fixed() {
+     //0 n-1
+}
+
+
+
