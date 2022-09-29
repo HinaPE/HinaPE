@@ -54,12 +54,6 @@ public:
     void step(const PT::Object &scene, float dt)
     {
         sync_physics_result();
-        HinaPE::DeformableBase<HinaPE::CLOTH> cloth;
-
-
-
-        const float radius = 0.64f;
-
     }
 
 public:

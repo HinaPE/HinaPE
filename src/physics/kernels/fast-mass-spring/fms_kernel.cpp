@@ -100,66 +100,128 @@ auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
         Eigen::Map<Eigen::MatrixXf> M_vertices(verts.data()->data, static_cast<int>(verts.size()), 3);
         auto vertices_num = M_vertices.rows();
         auto edges_num = (int) edges.size();
-
-        inertial_term = Ms_cached[id] * ((a + 1) * (current_state) - a * prev_state);
-        prev_state = current_state;
-        for (unsigned int i = 0; i < 10; i++) {
-
-            // localStep(id);
-            unsigned int j = 0;
-            for (auto &edge : edges) {
-                Eigen::Vector3f p12(
-                        current_state[3 * edge.first + 0] - current_state[3 * edge.second + 0],
-                        current_state[3 * edge.first + 1] - current_state[3 * edge.second + 1],
-                        current_state[3 * edge.first + 2] - current_state[3 * edge.second + 2]
-                );
-
-                /// current_state &verts
-                verts[edge.first].x = current_state[3 * edge.first + 0];
-                verts[edge.first].y = current_state[3 * edge.first + 1];
-                verts[edge.first].z = current_state[3 * edge.first + 2];
-
-                verts[edge.second].x = current_state[3 * edge.second + 0];
-                verts[edge.second].y = current_state[3 * edge.second + 1];
-                verts[edge.second].z = current_state[3 * edge.second + 2];
-                ///
-
-                p12.normalize();
-                spring_directions[3 * j + 0] = 	system->rest_lengths[j] * p12[0];
-                spring_directions[3 * j + 1] =	system->rest_lengths[j] * p12[1];
-                spring_directions[3 * j + 2] =	system->rest_lengths[j] * p12[2];
-                j++;
-            }
-
-            // globalStep(id);
-            float h2 = opt.fixed_dt * opt.fixed_dt; // shorthand
-
-            // compute right hand side
-            Eigen::VectorXf b = inertial_term
-                                + h2 * Js_cached[id] * spring_directions
-                                + h2 * system->fext;
-
-            // solve system and update state
-            current_state = solver_cached[id]->solve(b);
-
-        }
+//        /////////// set constraint
+//
+//        /// sphere_collision_constraint
+//        float radius = 0.5f;
+//        Eigen::Vector3f center;
+//        for (int i = 0; i < vertices_num; i++){
+//            Eigen::Vector3f p(
+//                    (verts[i]-center[0]).x,
+//                    (verts[i]-center[0]).y,
+//                    (verts[i]-center[0]).z
+//            );
+//
+//            if (p.norm() < radius) {
+//                p.normalize();
+//                p = radius * p;
+//            }
+//            else continue;
+//
+//            verts[i].x = p[0] + center[0];
+//            verts[i].y = p[1] + center[1];
+//            verts[i].z = p[2] + center[2];
+//        }
+//        ///
+//
+//        /// spring_deformation_constraint
+//        for (auto &edge : edges) {
+//            Eigen::Vector3f p12(
+//                    verts[edge.first].x - verts[edge.second].x,
+//                    verts[edge.first].y - verts[edge.second].y,
+//                    verts[edge.first].z - verts[edge.second].z
+//            );
+//            float tauc = 0.4f; // critical deformation rate
+//            float len = p12.norm();
+//            float rlen = 0.065625; /// ?
+//            float diff = (len - (1 + tauc) * rlen) / len;
+//            float rate = (len - rlen) / rlen;
+//
+//            if (rate <= tauc) continue;
+//
+//            float f1, f2;
+//            f1 = f2 = 0.5f;
+//
+//            // if first point is fixed
+//            if((edge.first = vertices_num - 1) || (edge.first = 0))
+//            {
+//                f1 = 0.0f; f2 = 1.0f;
+//            }
+//            // if second point is fixed
+//            if((edge.second != 0) || (edge.second != vertices_num - 1))
+//            {
+//                f1 = (f1 != 0.0f ? 1.0f : 0.0f);
+//                f2 = 0.0f;
+//            }
+//
+//            verts[edge.first].x -= p12[0] * f1 * diff;
+//            verts[edge.first].y -= p12[1] * f1 * diff;
+//            verts[edge.first].z -= p12[2] * f1 * diff;
+//
+//            verts[edge.second].x += p12[0] * f2 * diff;
+//            verts[edge.second].y += p12[1] * f2 * diff;
+//            verts[edge.second].z += p12[2] * f2 * diff;
+//        }
+//        ///
+//
+//        /////////// animate cloth per frame
+//        inertial_term = Ms_cached[id] * ((a + 1) * (current_state) - a * prev_state);
+//        prev_state = current_state;
+//        for (unsigned int i = 0; i < 10; i++) {
+//            // localStep(id);
+//            unsigned int j = 0;
+//            for (auto &edge : edges) {
+//                Eigen::Vector3f p12(
+//                        current_state[3 * edge.first + 0] - current_state[3 * edge.second + 0],
+//                        current_state[3 * edge.first + 1] - current_state[3 * edge.second + 1],
+//                        current_state[3 * edge.first + 2] - current_state[3 * edge.second + 2]
+//                );
+//
+//                /// current_state &verts
+//                verts[edge.first].x = current_state[3 * edge.first + 0];
+//                verts[edge.first].y = current_state[3 * edge.first + 1];
+//                verts[edge.first].z = current_state[3 * edge.first + 2];
+//
+//                verts[edge.second].x = current_state[3 * edge.second + 0];
+//                verts[edge.second].y = current_state[3 * edge.second + 1];
+//                verts[edge.second].z = current_state[3 * edge.second + 2];
+//                ///
+//
+//                p12.normalize();
+//                spring_directions[3 * j + 0] = 	system->rest_lengths[j] * p12[0];
+//                spring_directions[3 * j + 1] =	system->rest_lengths[j] * p12[1];
+//                spring_directions[3 * j + 2] =	system->rest_lengths[j] * p12[2];
+//                j++;
+//            }
+//
+//            // globalStep(id);
+//            float h2 = opt.fixed_dt * opt.fixed_dt; // shorthand
+//
+//            // compute right hand side
+//            Eigen::VectorXf b = inertial_term
+//                                + h2 * Js_cached[id] * spring_directions
+//                                + h2 * system->fext;
+//
+//            // solve system and update state
+//            current_state = solver_cached[id]->solve(b);
+//        }
     }
-    //    auto &os = physics_system.physics_objects;
-    //    for (auto &pair: os)
-    //    {
-    //        auto &o = pair.second;
-    //        if (o->get_type() == Deformable)
-    //        {
-    //            auto &pos = o->get_vertices();
-    //            auto &vel = o->get_velocities();
-    //            auto &mass = o->get_masses();
-    //            Eigen::Map<Eigen::MatrixXf> M_positions(pos.data()->data, static_cast<int>(pos.size()), 3);
-    //            Eigen::Map<Eigen::MatrixXf> M_velocities(vel.data()->data, static_cast<int>(vel.size()), 3);
-    //            Eigen::Map<Eigen::MatrixXf> M_masses(vel.data()->data, static_cast<int>(vel.size()), 3);
-    //
-    //            simulate_for_each(M_positions, M_velocities, M_positions, dt);
-    //        }
-    //    }
+//    //    auto &os = physics_system.physics_objects;
+//    //    for (auto &pair: os)
+//    //    {
+//    //        auto &o = pair.second;
+//    //        if (o->get_type() == Deformable)
+//    //        {
+//    //            auto &pos = o->get_vertices();
+//    //            auto &vel = o->get_velocities();
+//    //            auto &mass = o->get_masses();
+//    //            Eigen::Map<Eigen::MatrixXf> M_positions(pos.data()->data, static_cast<int>(pos.size()), 3);
+//    //            Eigen::Map<Eigen::MatrixXf> M_velocities(vel.data()->data, static_cast<int>(vel.size()), 3);
+//    //            Eigen::Map<Eigen::MatrixXf> M_masses(vel.data()->data, static_cast<int>(vel.size()), 3);
+//    //
+//    //            simulate_for_each(M_positions, M_velocities, M_positions, dt);
+//    //        }
+//    //    }
 }
 
 auto HinaPE::FastMassSpringKernel::simulate_for_each(Eigen::Map<Eigen::MatrixXf> &pos, Eigen::Map<Eigen::MatrixXf> &vel, Eigen::Map<Eigen::MatrixXf> &frc, float dt) -> void
