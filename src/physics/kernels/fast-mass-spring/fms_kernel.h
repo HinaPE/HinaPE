@@ -45,10 +45,11 @@ public:
 
     mass_spring_system* system;
 
-    Eigen::Vector3f current_state; // q(n), current state
-    Eigen::Vector3f prev_state; // q(n - 1), previous state
-    Eigen::Vector3f spring_directions; // d, spring directions
-    Eigen::Vector3f inertial_term; // M * y, y = (a + 1) * q(n) - a * q(n - 1)
+    Eigen::VectorXf current_state; // q(n), current state
+    Eigen::VectorXf prev_state; // q(n - 1), previous state
+    Eigen::VectorXf spring_directions; // d, spring directions
+    Eigen::VectorXf inertial_term; // M * y, y = (a + 1) * q(n) - a * q(n - 1)
+
 
 public:
     explicit FastMassSpringKernel(PhysicsSystem &sys);

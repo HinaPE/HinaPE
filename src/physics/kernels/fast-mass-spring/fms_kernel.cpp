@@ -1,3 +1,4 @@
+#include <iostream>
 #include "fms_kernel.h"
 #include "../../physics_system.h"
 
@@ -20,9 +21,6 @@ auto HinaPE::FastMassSpringKernel::init() -> void
             auto vertices_num = M_vertices.rows();
             auto edges_num = (int) edges.size();
 
-            current_state(vertices_num * 3);
-            prev_state(current_state);
-            spring_directions(edges_num * 3);
 
             TripletList LTriplets;
             SparseMatrix L;
@@ -100,39 +98,55 @@ auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
         Eigen::Map<Eigen::MatrixXf> M_vertices(verts.data()->data, static_cast<int>(verts.size()), 3);
         auto vertices_num = M_vertices.rows();
         auto edges_num = (int) edges.size();
-//        /////////// set constraint
+
+//        for (int i = 0; i < vertices_num; i++){
 //
+//          std::cout << verts[0].x << std::endl;
+//          std::cout << verts[0].y << std::endl;
+//          std::cout << verts[0].z << std::endl;
+//          std::cout << std::endl;
+//
+//          verts[i].x+=0.01;
+//          verts[i].y+=0.01;
+//          verts[i].z+=0.01;
+//
+//          std::cout << verts[0].x << std::endl;
+//          std::cout << verts[0].y << std::endl;
+//          std::cout << verts[0].z << std::endl;
+//          std::cout << std::endl;
+//        }
+
+
+        /////////// set constraint
+
 //        /// sphere_collision_constraint
 //        float radius = 0.5f;
-//        Eigen::Vector3f center;
+//        Vec3 center(0.0f,0.0f,0.0f);
 //        for (int i = 0; i < vertices_num; i++){
-//            Eigen::Vector3f p(
-//                    (verts[i]-center[0]).x,
-//                    (verts[i]-center[0]).y,
-//                    (verts[i]-center[0]).z
+//            Vec3 p(
+//                    verts[i].x-center.x,
+//                    verts[i].x-center.y,
+//                    verts[i].x-center.z
 //            );
-//
 //            if (p.norm() < radius) {
-//                p.normalize();
-//                p = radius * p;
+//                p = radius * p.normalize();
+//                verts[i].x = p.x + center.x;
+//                verts[i].y = p.y + center.y;
+//                verts[i].z = p.z + center.z;
 //            }
-//            else continue;
-//
-//            verts[i].x = p[0] + center[0];
-//            verts[i].y = p[1] + center[1];
-//            verts[i].z = p[2] + center[2];
 //        }
 //        ///
 //
 //        /// spring_deformation_constraint
 //        for (auto &edge : edges) {
-//            Eigen::Vector3f p12(
+//            Vec3 p12(
 //                    verts[edge.first].x - verts[edge.second].x,
 //                    verts[edge.first].y - verts[edge.second].y,
 //                    verts[edge.first].z - verts[edge.second].z
 //            );
-//            float tauc = 0.4f; // critical deformation rate
+//
 //            float len = p12.norm();
+//            float tauc = 0.4f; // critical deformation rate
 //            float rlen = 0.065625; /// ?
 //            float diff = (len - (1 + tauc) * rlen) / len;
 //            float rate = (len - rlen) / rlen;
@@ -143,68 +157,74 @@ auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
 //            f1 = f2 = 0.5f;
 //
 //            // if first point is fixed
-//            if((edge.first = vertices_num - 1) || (edge.first = 0))
+//            if((edge.first == vertices_num - 1) || (edge.first == 0))
 //            {
 //                f1 = 0.0f; f2 = 1.0f;
 //            }
+//
 //            // if second point is fixed
-//            if((edge.second != 0) || (edge.second != vertices_num - 1))
+//            if((edge.second == 0) || (edge.second == vertices_num - 1))
 //            {
 //                f1 = (f1 != 0.0f ? 1.0f : 0.0f);
 //                f2 = 0.0f;
 //            }
 //
-//            verts[edge.first].x -= p12[0] * f1 * diff;
-//            verts[edge.first].y -= p12[1] * f1 * diff;
-//            verts[edge.first].z -= p12[2] * f1 * diff;
+//            verts[edge.first].x -= p12.x * f1 * diff;
+//            verts[edge.first].y -= p12.y * f1 * diff;
+//            verts[edge.first].z -= p12.z * f1 * diff;
 //
-//            verts[edge.second].x += p12[0] * f2 * diff;
-//            verts[edge.second].y += p12[1] * f2 * diff;
-//            verts[edge.second].z += p12[2] * f2 * diff;
+//            verts[edge.second].x += p12.x * f2 * diff;
+//            verts[edge.second].y += p12.y * f2 * diff;
+//            verts[edge.second].z += p12.z * f2 * diff;
 //        }
 //        ///
-//
-//        /////////// animate cloth per frame
-//        inertial_term = Ms_cached[id] * ((a + 1) * (current_state) - a * prev_state);
-//        prev_state = current_state;
-//        for (unsigned int i = 0; i < 10; i++) {
-//            // localStep(id);
-//            unsigned int j = 0;
-//            for (auto &edge : edges) {
-//                Eigen::Vector3f p12(
-//                        current_state[3 * edge.first + 0] - current_state[3 * edge.second + 0],
-//                        current_state[3 * edge.first + 1] - current_state[3 * edge.second + 1],
-//                        current_state[3 * edge.first + 2] - current_state[3 * edge.second + 2]
-//                );
-//
-//                /// current_state &verts
-//                verts[edge.first].x = current_state[3 * edge.first + 0];
-//                verts[edge.first].y = current_state[3 * edge.first + 1];
-//                verts[edge.first].z = current_state[3 * edge.first + 2];
-//
-//                verts[edge.second].x = current_state[3 * edge.second + 0];
-//                verts[edge.second].y = current_state[3 * edge.second + 1];
-//                verts[edge.second].z = current_state[3 * edge.second + 2];
-//                ///
-//
-//                p12.normalize();
-//                spring_directions[3 * j + 0] = 	system->rest_lengths[j] * p12[0];
-//                spring_directions[3 * j + 1] =	system->rest_lengths[j] * p12[1];
-//                spring_directions[3 * j + 2] =	system->rest_lengths[j] * p12[2];
-//                j++;
-//            }
-//
-//            // globalStep(id);
-//            float h2 = opt.fixed_dt * opt.fixed_dt; // shorthand
-//
-//            // compute right hand side
-//            Eigen::VectorXf b = inertial_term
-//                                + h2 * Js_cached[id] * spring_directions
-//                                + h2 * system->fext;
-//
-//            // solve system and update state
-//            current_state = solver_cached[id]->solve(b);
-//        }
+
+        /// animate cloth
+        for(int i = 0; i < vertices_num; i++){
+            current_state[3 * i + 0] = verts[i].x;
+            current_state[3 * i + 1] = verts[i].y;
+            current_state[3 * i + 2] = verts[i].z;
+        }
+        prev_state[0] = current_state[0];
+        inertial_term = Ms_cached[id] * ((a + 1) * (current_state) - a * prev_state);
+        prev_state = current_state;
+        float rest_lengths = 0.065625;
+        // localStep(id);
+        unsigned int j = 0;
+        for (auto &edge : edges) {
+            Vec3 p12(
+                verts[edge.first].x - verts[edge.second].x,
+                verts[edge.first].y - verts[edge.second].y,
+                verts[edge.first].z - verts[edge.second].z
+                );
+
+            p12.normalize();
+            spring_directions[3 * j + 0] = rest_lengths * p12.x;
+            spring_directions[3 * j + 1] = rest_lengths * p12.y;
+            spring_directions[3 * j + 2] = rest_lengths * p12.z;
+            j++;
+        }
+
+        // globalStep(id);
+        float h2 = opt.fixed_dt * opt.fixed_dt; // shorthand
+
+        float gravity = -9.8f;
+        Eigen::VectorXf fext = Eigen::Vector3f(0, 0, -gravity).replicate(vertices_num, 1);
+
+        // compute right hand side
+        Eigen::VectorXf b = inertial_term
+                            + h2 * Js_cached[id] * spring_directions
+                            + h2 * fext;
+
+        // solve system and update state
+        current_state = solver_cached[id]->solve(b);
+
+        for(int i = 0; i < vertices_num; i++){
+            verts[i].x = current_state[3 * i + 0];
+            verts[i].y = current_state[3 * i + 1];
+            verts[i].z = current_state[3 * i + 2];
+        }
+
     }
 //    //    auto &os = physics_system.physics_objects;
 //    //    for (auto &pair: os)
