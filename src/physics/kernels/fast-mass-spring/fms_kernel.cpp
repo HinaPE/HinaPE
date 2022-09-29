@@ -32,7 +32,7 @@ auto HinaPE::FastMassSpringKernel::init() -> void
             {
                 for (int i = 0; i < 3; ++i)
                 {
-                    LTriplets.push_back(Eigen::Triplet<float>(3 * edge.first + i, 3 * edge.second + i, 1.0f));/* TODO: initial stiffness here */
+                    LTriplets.push_back(Eigen::Triplet<float>(3 * edge.first + i, 3 * edge.second + i, 1.0f));
                     LTriplets.push_back(Eigen::Triplet<float>(3 * edge.first + i, 3 * edge.second + i, -1.0f));
                     LTriplets.push_back(Eigen::Triplet<float>(3 * edge.second + i, 3 * edge.first + i, -1.0f));
                     LTriplets.push_back(Eigen::Triplet<float>(3 * edge.second + i, 3 * edge.first + i, 1.0f));
@@ -49,7 +49,7 @@ auto HinaPE::FastMassSpringKernel::init() -> void
             {
                 for (int i = 0; i < 3; ++i)
                 {
-                    JTriplets.push_back(Eigen::Triplet<float>(3 * edge.first + i, 3 * k + i, 1.0f));/* TODO: initial stiffness here */
+                    JTriplets.push_back(Eigen::Triplet<float>(3 * edge.first + i, 3 * k + i, 1.0f));
                     JTriplets.push_back(Eigen::Triplet<float>(3 * edge.second + i, 3 * k + i, 1.0f));
                 }
                 ++k;
@@ -140,7 +140,7 @@ auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
                                 + h2 * system->fext;
 
             // solve system and update state
-            current_state = system_matrix.solve(b);
+            current_state = solver_cached[id]->solve(b);
 
         }
     }
@@ -399,6 +399,7 @@ void HinaPE::FastMassSpringKernel::releasePoint(unsigned int i) {
 
 bool HinaPE::FastMassSpringKernel::is_fixed() {
      //0 n-1
+     return false;
 }
 
 

@@ -44,7 +44,6 @@ public:
     //typedef std::vector<Edge> EdgeList;
 
     mass_spring_system* system;
-    CholeskySolver system_matrix;
 
     Eigen::Vector3f current_state; // q(n), current state
     Eigen::Vector3f prev_state; // q(n - 1), previous state
