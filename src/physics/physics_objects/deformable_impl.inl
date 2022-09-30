@@ -80,6 +80,7 @@ auto DeformableBase<Type>::setup_geometry() -> void
             _edges.push_back(std::make_pair(inds[i], inds[i + 1]));
     }
 
+    std::sort(_edges.begin(), _edges.end());
     HinaUtil::Log::info(_edges);
 }
 }
