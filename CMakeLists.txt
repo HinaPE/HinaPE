@@ -10,6 +10,11 @@ file(GLOB_RECURSE HinaLIB "src/lib/*.cpp" "src/lib/*.h")
 file(GLOB_RECURSE HinaPHYSICS "src/physics/*.cpp" "src/physics/*.h" "src/physics/*.inl")
 file(GLOB_RECURSE HinaTOIMPL "src/reference/*.cpp" "src/reference/*.h" "src/reference/*.inl")
 
+# decouple the physics module
+add_library(HinaPhysics STATIC ${HinaPHYSICS})
+set_target_properties(HinaPhysics PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+target_include_directories(HinaPhysics PRIVATE "deps/" "deps/assimp/include" "deps/eigen3")
+
 set(HinaPLATFORM
         "src/platform/gl.cpp"
         "src/platform/platform.cpp"
@@ -28,7 +33,7 @@ set(Hina_SOURCES
         ${HinaPLATFORM}
         ${HinaSCENE}
         ${HinaLIB}
-        ${HinaPHYSICS}
+#        ${HinaPHYSICS}
         ${HinaTOIMPL}
         src/app.cpp
         src/app.h
@@ -62,6 +67,7 @@ endif ()
 
 add_executable(HinaPE ${Hina_SOURCES})
 set_target_properties(HinaPE PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+target_link_libraries(HinaPE PUBLIC HinaPhysics)
 
 if (MSVC)
     #    target_compile_options(HinaPE PRIVATE /MP /W4 /WX /wd4201 /wd4840 /wd4100 /wd4505 /fp:fast)
@@ -147,7 +153,7 @@ find_package(TBB CONFIG)
 if (TBB_FOUND)
     option(HINAPE_TBB ON)
     message(STATUS "TBB found")
-    target_link_libraries(HinaPE PUBLIC TBB::tbb)
+    target_link_libraries(HinaPhysics PUBLIC TBB::tbb)
     add_definitions(-DHINAPE_TBB_SUPPORT)
 endif ()
 
