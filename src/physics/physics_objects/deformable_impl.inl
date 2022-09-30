@@ -66,19 +66,20 @@ auto DeformableBase<Type>::setup_geometry() -> void
 {
     // simple impl of initiating edges
     auto &inds = impl->indices;
-    auto &edges = impl->edges;
+    auto &_edges = impl->edges;
     auto size = inds.size();
 
     assert(size % 3 == 0); // make sure is triangle geom mesh
     for (int i = 0; i < size; i += 3)
     {
-        if (std::find(edges.begin(), edges.end(), std::make_pair(inds[i], inds[i + 1])) == edges.end() && std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 1], inds[i])) == edges.end())
-            edges.push_back(std::make_pair(inds[i], inds[i + 1]));
-        if (std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 1], inds[i + 2])) == edges.end() && std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 2], inds[i + 1])) == edges.end())
-            edges.push_back(std::make_pair(inds[i], inds[i + 1]));
-        if (std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 2], inds[i])) == edges.end() && std::find(edges.begin(), edges.end(), std::make_pair(inds[i], inds[i + 2])) == edges.end())
-            edges.push_back(std::make_pair(inds[i], inds[i + 1]));
+        if (std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i], inds[i + 1])) == _edges.end() && std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i + 1], inds[i])) == _edges.end())
+            _edges.push_back(std::make_pair(inds[i], inds[i + 1]));
+        if (std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i + 1], inds[i + 2])) == _edges.end() && std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i + 2], inds[i + 1])) == _edges.end())
+            _edges.push_back(std::make_pair(inds[i], inds[i + 1]));
+        if (std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i + 2], inds[i])) == _edges.end() && std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i], inds[i + 2])) == _edges.end())
+            _edges.push_back(std::make_pair(inds[i], inds[i + 1]));
     }
-}
 
+    HinaUtil::Log::info(_edges);
+}
 }

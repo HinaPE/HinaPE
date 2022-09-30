@@ -293,6 +293,7 @@ void Scene_Object::sync_physics_result()
         auto &inds = physics_object->get_indices();
         _mesh = Util::Gen::generate(verts, inds);
         set_mesh_dirty();
+        // TODO: enable global pose + local position
         return;
     }
 }
