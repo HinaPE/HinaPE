@@ -35,7 +35,7 @@ auto HinaPE::PhysicsObject::get_vertices() -> std::vector<Vec3> &
     }
 }
 
-auto HinaPE::PhysicsObject::get_indices() -> std::vector<unsigned int> &
+auto HinaPE::PhysicsObject::get_indices() -> std::vector<int> &
 {
     switch (physics_object_opt.value().index())
     {

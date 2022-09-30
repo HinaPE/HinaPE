@@ -21,8 +21,8 @@ public:
     auto velocities() -> std::vector<Vec3> &;
     auto masses() -> std::vector<float> &;
     auto inv_masses() -> std::vector<float> &;
-    auto indices() -> std::vector<unsigned int> &;
-    auto edges() -> std::vector<std::pair<unsigned int, unsigned int>> &;
+    auto indices() -> std::vector<int> &;
+    auto edges() -> std::vector<std::pair<int, int>> &;
 
     auto setup_geometry() -> void;
 

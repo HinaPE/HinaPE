@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <utility>
+#include "igl/edges.h"
 
 namespace HinaPE
 {
@@ -20,8 +21,8 @@ struct DeformableBase<Type>::Impl
     std::vector<float> masses;
     std::vector<float> inv_masses;
 
-    std::vector<unsigned int> indices;
-    std::vector<std::pair<unsigned int, unsigned int>> edges;
+    std::vector<int> indices;
+    std::vector<std::pair<int, int>> edges;
 
     Impl() = default;
     ~Impl() = default;
@@ -56,10 +57,10 @@ template<DeformableType Type>
 auto DeformableBase<Type>::inv_masses() -> std::vector<float> & { return impl->inv_masses; }
 
 template<DeformableType Type>
-auto DeformableBase<Type>::indices() -> std::vector<unsigned int> & { return impl->indices; }
+auto DeformableBase<Type>::indices() -> std::vector<int> & { return impl->indices; }
 
 template<DeformableType Type>
-auto DeformableBase<Type>::edges() -> std::vector<std::pair<unsigned int, unsigned int>> & { return impl->edges; }
+auto DeformableBase<Type>::edges() -> std::vector<std::pair<int, int>> & { return impl->edges; }
 
 template<DeformableType Type>
 auto DeformableBase<Type>::setup_geometry() -> void
@@ -68,19 +69,13 @@ auto DeformableBase<Type>::setup_geometry() -> void
     auto &inds = impl->indices;
     auto &_edges = impl->edges;
     auto size = inds.size();
-
     assert(size % 3 == 0); // make sure is triangle geom mesh
-    for (int i = 0; i < size; i += 3)
-    {
-        if (std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i], inds[i + 1])) == _edges.end() && std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i + 1], inds[i])) == _edges.end())
-            _edges.push_back(std::make_pair(inds[i], inds[i + 1]));
-        if (std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i + 1], inds[i + 2])) == _edges.end() && std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i + 2], inds[i + 1])) == _edges.end())
-            _edges.push_back(std::make_pair(inds[i], inds[i + 1]));
-        if (std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i + 2], inds[i])) == _edges.end() && std::find(_edges.begin(), _edges.end(), std::make_pair(inds[i], inds[i + 2])) == _edges.end())
-            _edges.push_back(std::make_pair(inds[i], inds[i + 1]));
-    }
 
-    std::sort(_edges.begin(), _edges.end());
-    HinaUtil::Log::info(_edges);
+    Eigen::Map<Eigen::MatrixXi> M_inds(inds.data(), size / 3, 3);
+    Eigen::MatrixXi E;
+    igl::edges(M_inds, E);
+
+    for (int i = 0; i < E.rows(); ++i)
+        HinaUtil::Log::info(E.row(i));
 }
 }

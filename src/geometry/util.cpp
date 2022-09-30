@@ -163,7 +163,7 @@ GL::Mesh dedup(Data &&d)
     return GL::Mesh(std::move(verts), std::move(elems));
 }
 
-GL::Mesh generate(const std::vector<Vec3> &verts, const std::vector<unsigned int> &inds)
+GL::Mesh generate(const std::vector<Vec3> &verts, const std::vector<int> &inds)
 {
     std::vector<GL::Mesh::Vert> v;
     std::vector<GL::Mesh::Index> e;

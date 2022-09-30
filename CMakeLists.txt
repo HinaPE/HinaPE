@@ -13,7 +13,7 @@ file(GLOB_RECURSE HinaTOIMPL "src/reference/*.cpp" "src/reference/*.h" "src/refe
 # decouple the physics module
 add_library(HinaPhysics STATIC ${HinaPHYSICS})
 set_target_properties(HinaPhysics PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-target_include_directories(HinaPhysics PRIVATE "deps/" "deps/assimp/include" "deps/eigen3")
+target_include_directories(HinaPhysics PUBLIC "deps/" "deps/assimp/include" "deps/eigen3" "deps/libigl/include")
 
 set(HinaPLATFORM
         "src/platform/gl.cpp"
