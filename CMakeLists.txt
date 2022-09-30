@@ -100,6 +100,7 @@ add_subdirectory("deps/imgui/")
 add_subdirectory("deps/glad/")
 add_subdirectory("deps/nfd/")
 add_subdirectory("deps/sf_libs/")
+add_subdirectory("deps/libigl/")
 
 set(ASSIMP_BUILD_COLLADA_IMPORTER TRUE)
 set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
