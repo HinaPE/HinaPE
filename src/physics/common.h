@@ -7,6 +7,8 @@
 
 #include "Eigen/Eigen"
 
+#include <memory>
+
 using Vector3D = Eigen::Vector3d;
 
 namespace HinaPE
