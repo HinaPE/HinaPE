@@ -75,7 +75,9 @@ auto DeformableBase<Type>::setup_geometry() -> void
     Eigen::MatrixXi E;
     igl::edges(M_inds, E);
 
+    _edges.clear();
+    _edges.resize(E.rows());
     for (int i = 0; i < E.rows(); ++i)
-        HinaUtil::Log::info(E.row(i));
+        _edges[i] = std::make_pair(E(i, 0), E(i, 1));
 }
 }
