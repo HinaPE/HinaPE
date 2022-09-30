@@ -21,7 +21,6 @@ auto HinaPE::FastMassSpringKernel::init() -> void
             auto vertices_num = M_vertices.rows();
             auto edges_num = (int) edges.size();
 
-
             TripletList LTriplets;
             SparseMatrix L;
             L.resize(3 * vertices_num, 3 * vertices_num);
@@ -76,6 +75,16 @@ auto HinaPE::FastMassSpringKernel::init() -> void
             Js_cached[id] = J;
             Ms_cached[id] = M;
             solver_cached[id] = system_matrix;
+
+            current_state.resize(3 * vertices_num);
+            current_state.setZero();
+            prev_state.resize(3 * vertices_num);
+            prev_state.setZero();
+            spring_directions.resize(3 * edges_num);
+            spring_directions.setZero();
+            inertial_term.resize(3 * vertices_num);
+            inertial_term.setZero();
+
         }
     }
     inited = true;
@@ -99,85 +108,87 @@ auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
         auto vertices_num = M_vertices.rows();
         auto edges_num = (int) edges.size();
 
-//        for (int i = 0; i < vertices_num; i++){
-//
-//          std::cout << verts[0].x << std::endl;
-//          std::cout << verts[0].y << std::endl;
-//          std::cout << verts[0].z << std::endl;
-//          std::cout << std::endl;
-//
-//          verts[i].x+=0.01;
-//          verts[i].y+=0.01;
-//          verts[i].z+=0.01;
-//
-//          std::cout << verts[0].x << std::endl;
-//          std::cout << verts[0].y << std::endl;
-//          std::cout << verts[0].z << std::endl;
-//          std::cout << std::endl;
-//        }
-
-
         /////////// set constraint
 
-//        /// sphere_collision_constraint
-//        float radius = 0.5f;
-//        Vec3 center(0.0f,0.0f,0.0f);
+        /// sphere_collision_constraint
+        float radius = 0.64f;
+        Vec3 center(0.0f,0.0f,0.0f);
+        for (int i = 0; i < vertices_num; i++){
+            Vec3 p(
+                    verts[i].x-center.x,
+                    verts[i].y-center.y,
+                    verts[i].z-center.z
+            );
+            if (p.norm() < radius) {
+                p.normalize();
+                p = radius * p;
+            }
+            else continue;
+
+            verts[i].x = p.x + center.x;
+            verts[i].y = p.y + center.y;
+            verts[i].z = p.z + center.z;
+        }
+        ///
+
+        /// spring_deformation_constraint
+        for (auto &edge : edges) {
+            Vec3 p12(
+                    verts[edge.first].x - verts[edge.second].x,
+                    verts[edge.first].y - verts[edge.second].y,
+                    verts[edge.first].z - verts[edge.second].z
+            );
+
+            float len = p12.norm();
+            float tauc = 0.4f; // critical deformation rate
+            float rlen = 0.07;
+            float diff = (len - (1 + tauc) * rlen) / len;
+            float rate = (len - rlen) / rlen;
+
+            if (rate <= tauc) continue;
+
+            float f1, f2;
+            f1 = f2 = 0.5f;
+
+            // if first point is fixed
+            if((edge.first == vertices_num - 1) || (edge.first == 0))
+            {
+                f1 = 0.0f; f2 = 1.0f;
+            }
+
+            // if second point is fixed
+            if((edge.second == 0) || (edge.second == vertices_num - 1))
+            {
+                f1 = (f1 != 0.0f ? 1.0f : 0.0f);
+                f2 = 0.0f;
+            }
+
+            verts[edge.first].x -= p12.x * f1 * diff;
+            verts[edge.first].y -= p12.y * f1 * diff;
+            verts[edge.first].z -= p12.z * f1 * diff;
+
+            verts[edge.second].x += p12.x * f2 * diff;
+            verts[edge.second].y += p12.y * f2 * diff;
+            verts[edge.second].z += p12.z * f2 * diff;
+        }
+        ///
+
 //        for (int i = 0; i < vertices_num; i++){
-//            Vec3 p(
-//                    verts[i].x-center.x,
-//                    verts[i].x-center.y,
-//                    verts[i].x-center.z
-//            );
-//            if (p.norm() < radius) {
-//                p = radius * p.normalize();
-//                verts[i].x = p.x + center.x;
-//                verts[i].y = p.y + center.y;
-//                verts[i].z = p.z + center.z;
-//            }
+
+//          std::cout << verts[0].x << std::endl;
+//          std::cout << verts[0].y << std::endl;
+//          std::cout << verts[0].z << std::endl;
+//          std::cout << std::endl;
+
+//          verts[i].x+=0.01;
+//          verts[i].y+=0.01;
+//           verts[i].z+=0.001;
+
+//          std::cout << verts[0].x << std::endl;
+//          std::cout << verts[0].y << std::endl;
+//          std::cout << verts[0].z << std::endl;
+//          std::cout << std::endl;
 //        }
-//        ///
-//
-//        /// spring_deformation_constraint
-//        for (auto &edge : edges) {
-//            Vec3 p12(
-//                    verts[edge.first].x - verts[edge.second].x,
-//                    verts[edge.first].y - verts[edge.second].y,
-//                    verts[edge.first].z - verts[edge.second].z
-//            );
-//
-//            float len = p12.norm();
-//            float tauc = 0.4f; // critical deformation rate
-//            float rlen = 0.065625; /// ?
-//            float diff = (len - (1 + tauc) * rlen) / len;
-//            float rate = (len - rlen) / rlen;
-//
-//            if (rate <= tauc) continue;
-//
-//            float f1, f2;
-//            f1 = f2 = 0.5f;
-//
-//            // if first point is fixed
-//            if((edge.first == vertices_num - 1) || (edge.first == 0))
-//            {
-//                f1 = 0.0f; f2 = 1.0f;
-//            }
-//
-//            // if second point is fixed
-//            if((edge.second == 0) || (edge.second == vertices_num - 1))
-//            {
-//                f1 = (f1 != 0.0f ? 1.0f : 0.0f);
-//                f2 = 0.0f;
-//            }
-//
-//            verts[edge.first].x -= p12.x * f1 * diff;
-//            verts[edge.first].y -= p12.y * f1 * diff;
-//            verts[edge.first].z -= p12.z * f1 * diff;
-//
-//            verts[edge.second].x += p12.x * f2 * diff;
-//            verts[edge.second].y += p12.y * f2 * diff;
-//            verts[edge.second].z += p12.z * f2 * diff;
-//        }
-//        ///
 
         /// animate cloth
         for(int i = 0; i < vertices_num; i++){
@@ -185,46 +196,46 @@ auto HinaPE::FastMassSpringKernel::simulate(float dt) -> void
             current_state[3 * i + 1] = verts[i].y;
             current_state[3 * i + 2] = verts[i].z;
         }
-        prev_state[0] = current_state[0];
+//        prev_state[0] = current_state[0];
         inertial_term = Ms_cached[id] * ((a + 1) * (current_state) - a * prev_state);
+
         prev_state = current_state;
-        float rest_lengths = 0.065625;
-        // localStep(id);
-        unsigned int j = 0;
-        for (auto &edge : edges) {
-            Vec3 p12(
-                verts[edge.first].x - verts[edge.second].x,
-                verts[edge.first].y - verts[edge.second].y,
-                verts[edge.first].z - verts[edge.second].z
+
+        float rest_lengths = 0.07;
+
+        for (unsigned int i = 0; i < 10; i++){
+            // localStep(id);
+            unsigned int j = 0;
+            for (auto &edge : edges) {
+                Vec3 p12(
+                        current_state[3 * edge.first + 0] - current_state[3 * edge.second + 0],
+                        current_state[3 * edge.first + 1] - current_state[3 * edge.second + 1],
+                        current_state[3 * edge.first + 2] - current_state[3 * edge.second + 2]
                 );
 
-            p12.normalize();
-            spring_directions[3 * j + 0] = rest_lengths * p12.x;
-            spring_directions[3 * j + 1] = rest_lengths * p12.y;
-            spring_directions[3 * j + 2] = rest_lengths * p12.z;
-            j++;
+                p12.normalize();
+                spring_directions[3 * j + 0] = rest_lengths * p12.x;
+                spring_directions[3 * j + 1] = rest_lengths * p12.y;
+                spring_directions[3 * j + 2] = rest_lengths * p12.z;
+                j++;
+            }
+            // globalStep(id);
+            float gravity = 9.8f * 0.25f / (31 * 31);
+            Eigen::VectorXf fext = Eigen::Vector3f(0, 0, -gravity).replicate(vertices_num, 1);
+
+            float h2 = opt.fixed_dt * opt.fixed_dt; // shorthand
+            Eigen::VectorXf b = inertial_term
+                                + h2 * Js_cached[id] * spring_directions
+                                + h2 * fext;
+
+            // solve system and update state
+            current_state = solver_cached[id]->solve(b);
+            for(int i = 0; i < vertices_num; i++){
+                verts[i].x = current_state[3 * i + 0];
+                verts[i].y = current_state[3 * i + 1];
+                verts[i].z = current_state[3 * i + 2];
+            }
         }
-
-        // globalStep(id);
-        float h2 = opt.fixed_dt * opt.fixed_dt; // shorthand
-
-        float gravity = -9.8f;
-        Eigen::VectorXf fext = Eigen::Vector3f(0, 0, -gravity).replicate(vertices_num, 1);
-
-        // compute right hand side
-        Eigen::VectorXf b = inertial_term
-                            + h2 * Js_cached[id] * spring_directions
-                            + h2 * fext;
-
-        // solve system and update state
-        current_state = solver_cached[id]->solve(b);
-
-        for(int i = 0; i < vertices_num; i++){
-            verts[i].x = current_state[3 * i + 0];
-            verts[i].y = current_state[3 * i + 1];
-            verts[i].z = current_state[3 * i + 2];
-        }
-
     }
 //    //    auto &os = physics_system.physics_objects;
 //    //    for (auto &pair: os)
