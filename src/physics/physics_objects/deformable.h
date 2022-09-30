@@ -25,6 +25,7 @@ public:
     auto edges() -> std::vector<std::pair<int, int>> &;
 
     auto setup_geometry() -> void;
+    auto check_valid() -> bool;
 
 public:
     DeformableBase();

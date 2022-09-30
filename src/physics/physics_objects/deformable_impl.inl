@@ -23,6 +23,7 @@ struct DeformableBase<Type>::Impl
 
     std::vector<int> indices;
     std::vector<std::pair<int, int>> edges;
+    float stiffness;
 
     Impl() = default;
     ~Impl() = default;
@@ -79,5 +80,11 @@ auto DeformableBase<Type>::setup_geometry() -> void
     _edges.resize(E.rows());
     for (int i = 0; i < E.rows(); ++i)
         _edges[i] = std::make_pair(E(i, 0), E(i, 1));
+}
+
+template<DeformableType Type>
+auto DeformableBase<Type>::check_valid() -> bool
+{
+    return false;
 }
 }
