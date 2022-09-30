@@ -42,7 +42,7 @@ private:
     std::map<unsigned int, SparseMatrix> Ms_cached;
     std::map<unsigned int, SparseMatrix> Ls_cached;
     std::map<unsigned int, SparseMatrix> Js_cached;
-    std::map<unsigned int, std::shared_ptr<CholeskySolver>> solver_cached;
+    std::map<unsigned int, std::shared_ptr<CholeskySolver> > solver_cached;
 };
 }
 #endif //HINAPE_FMS_KERNEL_H

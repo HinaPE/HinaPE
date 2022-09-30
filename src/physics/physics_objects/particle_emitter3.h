@@ -42,7 +42,7 @@ struct PointGenerator
 
     auto generate(Array1<Vector3D> *new_positions, Array1<Vector3D> *new_velocities, size_t max_num) -> void
     {
-        for (int i = 0; i < max_num; ++i)
+        for (size_t i = 0; i < max_num; ++i)
         {
             Vector3D new_direction = uniform_sample_cone(random(), random(), direction, spread_angle_in_degree);
             new_positions->append(origin);
