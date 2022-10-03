@@ -5,12 +5,12 @@
 
 auto HinaPE::PhysicsSystem::_start_() -> void
 {
-
+    running = true;
 }
 
 auto HinaPE::PhysicsSystem::_pause_() -> void
 {
-
+    running = false;
 }
 
 auto HinaPE::PhysicsSystem::_tick_(float dt) -> void

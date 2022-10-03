@@ -24,7 +24,7 @@ public:
     [[nodiscard]] auto get_position() const -> Vec3;
     [[nodiscard]] auto get_rotation() const -> Vec3;
     [[nodiscard]] auto get_vertices() -> std::vector<Vec3> &;
-    [[nodiscard]] auto get_indices() -> std::vector<unsigned int> &;
+    [[nodiscard]] auto get_indices() -> std::vector<int> &;
     auto set_position(const Vec3 &) const -> void;
     auto set_rotation(const Vec3 &) const -> void;
 

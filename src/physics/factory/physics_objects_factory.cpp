@@ -19,6 +19,7 @@ auto HinaPE::ClothFactory::create_cloth(const HinaPE::ClothFactory::ClothDesc &d
     auto &_ms = cloth.impl->masses;
     auto &_ims = cloth.impl->inv_masses;
     auto &_is = cloth.impl->indices;
+    auto &_ss = cloth.impl->stiffness;
 
     auto width = desc.width;
     auto height = desc.height;
@@ -83,6 +84,7 @@ auto HinaPE::ClothFactory::create_cloth(const HinaPE::ClothFactory::ClothDesc &d
 
     _p = position;
     //    _r = rotation; TODO: fix here
+    _ss = desc.stiffness;
 
     cloth.setup_geometry();
 

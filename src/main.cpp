@@ -3,6 +3,8 @@
 #include <sf_libs/CLI11.hpp>
 #include "test1.h"
 
+std::ofstream HinaUtil::Log::o_info("../info.log", std::ios::app);
+
 int main(int argc, char **argv)
 {
     HinaPE::TEST::Test1::test();

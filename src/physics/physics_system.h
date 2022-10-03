@@ -26,6 +26,10 @@ public:
     auto _register_(unsigned int ID, std::shared_ptr<PhysicsObject> ptr) -> void;
 
 public:
+    bool running = true;
+    int sub_step = 5;
+
+public:
     PhysicsSystem(const PhysicsSystem &) = delete;
     PhysicsSystem(PhysicsSystem &&) = delete;
     auto operator=(const PhysicsSystem &) -> PhysicsSystem & = delete;
@@ -41,7 +45,7 @@ private:
     friend SPHKernel;
     std::variant<PBDKernel, XPBDKernel, FastMassSpringKernel, SPHKernel> kernel;
     std::map<const unsigned int, std::shared_ptr<PhysicsObject>> physics_objects;
-    std::map<const unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects;
+    std::map<const unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects; // don't delete object instantly, in case UNDO operation.
     std::vector<Constraint> constraints;
 };
 }

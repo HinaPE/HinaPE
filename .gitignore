@@ -5,3 +5,4 @@ cmake-build-minsizerel
 media
 .idea
 bin
+*.log

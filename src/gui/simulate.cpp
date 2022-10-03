@@ -27,8 +27,9 @@ auto Simulate::keydown(Widgets &widgets, Undo &undo, SDL_Keysym key) -> bool
 
 void Simulate::step(Scene &scene, float dt)
 {
-    for (int i = 0; i < 5; ++i)
-        HinaPE::PhysicsSystem::instance()._tick_(dt / (float) 5); // TODO: move this to separate physics thread; Hina
+    if (HinaPE::PhysicsSystem::instance().running)
+        for (int i = 0; i < HinaPE::PhysicsSystem::instance().sub_step; ++i)
+            HinaPE::PhysicsSystem::instance()._tick_(dt / (float) 5); // TODO: move this to separate physics thread;
     scene.for_items([this, dt](Scene_Item &item) { item.step(scene_obj, dt); });
 }
 

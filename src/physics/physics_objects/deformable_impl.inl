@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <utility>
+#include "igl/edges.h"
 
 namespace HinaPE
 {
@@ -20,8 +21,9 @@ struct DeformableBase<Type>::Impl
     std::vector<float> masses;
     std::vector<float> inv_masses;
 
-    std::vector<unsigned int> indices;
-    std::vector<std::pair<unsigned int, unsigned int>> edges;
+    std::vector<int> indices;
+    std::vector<std::pair<int, int>> edges;
+    float stiffness;
 
     Impl() = default;
     ~Impl() = default;
@@ -56,29 +58,33 @@ template<DeformableType Type>
 auto DeformableBase<Type>::inv_masses() -> std::vector<float> & { return impl->inv_masses; }
 
 template<DeformableType Type>
-auto DeformableBase<Type>::indices() -> std::vector<unsigned int> & { return impl->indices; }
+auto DeformableBase<Type>::indices() -> std::vector<int> & { return impl->indices; }
 
 template<DeformableType Type>
-auto DeformableBase<Type>::edges() -> std::vector<std::pair<unsigned int, unsigned int>> & { return impl->edges; }
+auto DeformableBase<Type>::edges() -> std::vector<std::pair<int, int>> & { return impl->edges; }
 
 template<DeformableType Type>
 auto DeformableBase<Type>::setup_geometry() -> void
 {
     // simple impl of initiating edges
     auto &inds = impl->indices;
-    auto &edges = impl->edges;
+    auto &_edges = impl->edges;
     auto size = inds.size();
-
     assert(size % 3 == 0); // make sure is triangle geom mesh
-    for (int i = 0; i < size; i += 3)
-    {
-        if (std::find(edges.begin(), edges.end(), std::make_pair(inds[i], inds[i + 1])) == edges.end() && std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 1], inds[i])) == edges.end())
-            edges.push_back(std::make_pair(inds[i], inds[i + 1]));
-        if (std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 1], inds[i + 2])) == edges.end() && std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 2], inds[i + 1])) == edges.end())
-            edges.push_back(std::make_pair(inds[i], inds[i + 1]));
-        if (std::find(edges.begin(), edges.end(), std::make_pair(inds[i + 2], inds[i])) == edges.end() && std::find(edges.begin(), edges.end(), std::make_pair(inds[i], inds[i + 2])) == edges.end())
-            edges.push_back(std::make_pair(inds[i], inds[i + 1]));
-    }
+
+    Eigen::Map<Eigen::MatrixXi> M_inds(inds.data(), size / 3, 3);
+    Eigen::MatrixXi E;
+    igl::edges(M_inds, E);
+
+    _edges.clear();
+    _edges.resize(E.rows());
+    for (int i = 0; i < E.rows(); ++i)
+        _edges[i] = std::make_pair(E(i, 0), E(i, 1));
 }
 
+template<DeformableType Type>
+auto DeformableBase<Type>::check_valid() -> bool
+{
+    return false;
+}
 }

@@ -68,5 +68,3 @@ ImGui::SliderFloat("Name", &num, /**最小值**/0.f, /**最大值**/10.f, "%.2f"
 static float num[2] = {0.f, 1.f};
 ImGui::SliderFloat2("Name", num, /**最小值**/1.0f, /**最大值**/10.0f /**format是可以不指定的**/); //数组名本身就是指针
 ```
-
-CopllasingHeader

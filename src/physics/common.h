@@ -3,8 +3,11 @@
 
 #include "lib/vec3.h"
 #include "lib/quat.h"
+#include "../util/log.h"
 
 #include "Eigen/Eigen"
+
+#include <memory>
 
 using Vector3D = Eigen::Vector3d;
 
