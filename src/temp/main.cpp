@@ -12,7 +12,10 @@ int main()
             .withTargetSpacing(0.02)
             .makeShared();
 
+    solver->setPseudoViscosityCoefficient(0.0);
+
     BoundingBox3D sourceBound(domain);
+    sourceBound.expand(-0.02);
 
 
     return 0;

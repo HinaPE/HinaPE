@@ -8,7 +8,7 @@
 #define INCLUDE_JET_DETAIL_ARRAY3_INL_H_
 
 #include "../macros.h"
-#include "parallel.h"
+#include "../parallel.h"
 
 #include <algorithm>
 #include <utility>  // just make cpplint happy..
