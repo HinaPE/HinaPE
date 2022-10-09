@@ -176,4 +176,5 @@ endif ()
 # temporary physics test
 file(GLOB_RECURSE HINA_TEMP "src/temp/*.cpp" "src/temp/*.h" "src/temp/*.inl")
 add_executable(FluidEngineDevTest ${HINA_TEMP})
+target_include_directories(FluidEngineDevTest PRIVATE "src/temp")
 set_target_properties(FluidEngineDevTest PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
