@@ -33,7 +33,7 @@ set(Hina_SOURCES
         ${HinaPLATFORM}
         ${HinaSCENE}
         ${HinaLIB}
-#        ${HinaPHYSICS}
+#        ${HinaPHYSICS} // separate the physics module
         ${HinaTOIMPL}
         src/app.cpp
         src/app.h
@@ -172,3 +172,8 @@ if (HINAPE_TEST)
     target_sources(HinaPE PRIVATE ${HINA_TEST})
     target_include_directories(HinaPE PUBLIC test)
 endif ()
+
+# temporary physics test
+file(GLOB_RECURSE HINA_TEMP "src/temp/*.cpp" "src/temp/*.h" "src/temp/*.inl")
+add_executable(FluidEngineDevTest ${HINA_TEMP})
+set_target_properties(FluidEngineDevTest PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
