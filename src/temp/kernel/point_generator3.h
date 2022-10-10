@@ -13,7 +13,8 @@
 #include <functional>
 #include <memory>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Abstract base class for 3-D point generator.
@@ -22,18 +23,16 @@ namespace jet {
 //! box and point spacing, the inherited classes generates points with specified
 //! pattern.
 //!
-class PointGenerator3 {
- public:
+class PointGenerator3
+{
+public:
     PointGenerator3();
 
     virtual ~PointGenerator3();
 
     //! Generates points to output array \p points inside given \p boundingBox
     //! with target point \p spacing.
-    void generate(
-        const BoundingBox3D& boundingBox,
-        double spacing,
-        Array1<Vector3D>* points) const;
+    void generate(const BoundingBox3D &boundingBox, double spacing, Array1<Vector3D> *points) const;
 
     //!
     //! \brief Iterates every point within the bounding box with specified
@@ -46,10 +45,7 @@ class PointGenerator3 {
     //! the position of the point and the return value tells whether the
     //! iteration should stop or not.
     //!
-    virtual void forEachPoint(
-        const BoundingBox3D& boundingBox,
-        double spacing,
-        const std::function<bool(const Vector3D&)>& callback) const = 0;
+    virtual void forEachPoint(const BoundingBox3D &boundingBox, double spacing, const std::function<bool(const Vector3D &)> &callback) const = 0;
 };
 
 //! Shared pointer for the PointGenerator3 type.

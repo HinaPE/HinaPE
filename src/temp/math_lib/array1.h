@@ -16,7 +16,8 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 1-D array class.
@@ -27,9 +28,10 @@ namespace jet {
 //!
 //! \tparam T - Type to store in the array.
 //!
-template <typename T>
-class Array<T, 1> final {
- public:
+template<typename T>
+class Array<T, 1> final
+{
+public:
     typedef std::vector<T> ContainerType;
     typedef typename ContainerType::iterator Iterator;
     typedef typename ContainerType::const_iterator ConstIterator;
@@ -40,7 +42,7 @@ class Array<T, 1> final {
     //! Constructs 1-D array with given \p size and fill it with \p initVal.
     //! \param size Initial size of the array.
     //! \param initVal Initial value of each array element.
-    explicit Array(size_t size, const T& initVal = T());
+    explicit Array(size_t size, const T &initVal = T());
 
     //!
     //! \brief Constructs 1-D array with given initializer list \p lst.
@@ -54,43 +56,43 @@ class Array<T, 1> final {
     //!
     //! \param lst Initializer list that should be copy to the new array.
     //!
-    Array(const std::initializer_list<T>& lst);
+    Array(const std::initializer_list<T> &lst);
 
     //! Copy constructor.
-    Array(const Array& other);
+    Array(const Array &other);
 
     //! Move constructor.
-    Array(Array&& other);
+    Array(Array &&other);
 
     //! Sets entire array with given \p value.
-    void set(const T& value);
+    void set(const T &value);
 
     //! Copies given array \p other to this array.
-    void set(const Array& other);
+    void set(const Array &other);
 
     //! Copies given initializer list \p lst to this array.
-    void set(const std::initializer_list<T>& lst);
+    void set(const std::initializer_list<T> &lst);
 
     //! Clears the array and resizes to zero.
     void clear();
 
     //! Resizes the array with \p size and fill the new element with \p initVal.
-    void resize(size_t size, const T& initVal = T());
+    void resize(size_t size, const T &initVal = T());
 
     //! Returns the reference to the i-th element.
-    T& at(size_t i);
+    T &at(size_t i);
 
     //! Returns the const reference to the i-th element.
-    const T& at(size_t i) const;
+    const T &at(size_t i) const;
 
     //! Returns size of the array.
     size_t size() const;
 
     //! Returns the raw pointer to the array data.
-    T* data();
+    T *data();
 
     //! Returns the const raw pointer to the array data.
-    const T* const data() const;
+    const T *const data() const;
 
     //! Returns the begin iterator of the array.
     Iterator begin();
@@ -111,13 +113,13 @@ class Array<T, 1> final {
     ConstArrayAccessor1<T> constAccessor() const;
 
     //! Swaps the content of the array with \p other array.
-    void swap(Array& other);
+    void swap(Array &other);
 
     //! Appends single value \p newVal at the end of the array.
-    void append(const T& newVal);
+    void append(const T &newVal);
 
     //! Appends \p other array at the end of the array.
-    void append(const Array& other);
+    void append(const Array &other);
 
     //!
     //! \brief Iterates the array and invoke given \p func for each element.
@@ -134,7 +136,7 @@ class Array<T, 1> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEach(Callback func) const;
 
     //!
@@ -152,7 +154,7 @@ class Array<T, 1> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEachIndex(Callback func) const;
 
     //!
@@ -175,7 +177,7 @@ class Array<T, 1> final {
     //! The parameter type of the callback function doesn't have to be T&, but
     //! const T& or T can be used as well.
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEach(Callback func);
 
     //!
@@ -195,26 +197,26 @@ class Array<T, 1> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEachIndex(Callback func) const;
 
     //! Returns the reference to i-th element.
-    T& operator[](size_t i);
+    T &operator[](size_t i);
 
     //! Returns the const reference to i-th element.
-    const T& operator[](size_t i) const;
+    const T &operator[](size_t i) const;
 
     //! Sets entire array with given \p value.
-    Array& operator=(const T& other);
+    Array &operator=(const T &other);
 
     //! Copies given array \p other to this array.
-    Array& operator=(const Array& other);
+    Array &operator=(const Array &other);
 
     //! Move assignment.
-    Array& operator=(Array&& other);
+    Array &operator=(Array &&other);
 
     //! Copies given initializer list \p lst to this array.
-    Array& operator=(const std::initializer_list<T>& lst);
+    Array &operator=(const std::initializer_list<T> &lst);
 
     //! Casts to array accessor.
     operator ArrayAccessor1<T>();
@@ -222,13 +224,12 @@ class Array<T, 1> final {
     //! Casts to const array accessor.
     operator ConstArrayAccessor1<T>() const;
 
- private:
+private:
     ContainerType _data;
 };
 
 //! Type alias for 1-D array.
-template <typename T>
-using Array1 = Array<T, 1>;
+template<typename T> using Array1 = Array<T, 1>;
 
 }  // namespace jet
 

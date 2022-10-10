@@ -11,24 +11,26 @@
 #include "ray2.h"
 #include "vector2.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Represents 2-D rigid body transform.
 //!
-class Transform2 {
- public:
+class Transform2
+{
+public:
     //! Constructs identity transform.
     Transform2();
 
     //! Constructs a transform with translation and orientation.
-    Transform2(const Vector2D& translation, double orientation);
+    Transform2(const Vector2D &translation, double orientation);
 
     //! Returns the translation.
-    const Vector2D& translation() const;
+    const Vector2D &translation() const;
 
     //! Sets the traslation.
-    void setTranslation(const Vector2D& translation);
+    void setTranslation(const Vector2D &translation);
 
     //! Returns the orientation in radians.
     double orientation() const;
@@ -37,30 +39,30 @@ class Transform2 {
     void setOrientation(double orientation);
 
     //! Transforms a point in world coordinate to the local frame.
-    Vector2D toLocal(const Vector2D& pointInWorld) const;
+    Vector2D toLocal(const Vector2D &pointInWorld) const;
 
     //! Transforms a direction in world coordinate to the local frame.
-    Vector2D toLocalDirection(const Vector2D& dirInWorld) const;
+    Vector2D toLocalDirection(const Vector2D &dirInWorld) const;
 
     //! Transforms a ray in world coordinate to the local frame.
-    Ray2D toLocal(const Ray2D& rayInWorld) const;
+    Ray2D toLocal(const Ray2D &rayInWorld) const;
 
     //! Transforms a bounding box in world coordinate to the local frame.
-    BoundingBox2D toLocal(const BoundingBox2D& bboxInWorld) const;
+    BoundingBox2D toLocal(const BoundingBox2D &bboxInWorld) const;
 
     //! Transforms a point in local space to the world coordinate.
-    Vector2D toWorld(const Vector2D& pointInLocal) const;
+    Vector2D toWorld(const Vector2D &pointInLocal) const;
 
     //! Transforms a direction in local space to the world coordinate.
-    Vector2D toWorldDirection(const Vector2D& dirInLocal) const;
+    Vector2D toWorldDirection(const Vector2D &dirInLocal) const;
 
     //! Transforms a ray in local space to the world coordinate.
-    Ray2D toWorld(const Ray2D& rayInLocal) const;
+    Ray2D toWorld(const Ray2D &rayInLocal) const;
 
     //! Transforms a bounding box in local space to the world coordinate.
-    BoundingBox2D toWorld(const BoundingBox2D& bboxInLocal) const;
+    BoundingBox2D toWorld(const BoundingBox2D &bboxInLocal) const;
 
- private:
+private:
     Vector2D _translation;
     double _orientation = 0.0;
     double _cosAngle = 1.0;

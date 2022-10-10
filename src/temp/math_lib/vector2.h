@@ -11,7 +11,8 @@
 #include <algorithm>  // just make cpplint happy..
 #include <limits>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 2-D vector class.
@@ -20,11 +21,11 @@ namespace jet {
 //!
 //! \tparam T - Type of the element
 //!
-template <typename T>
-class Vector<T, 2> final {
- public:
-    static_assert(std::is_floating_point<T>::value,
-                  "Vector only can be instantiated with floating point types");
+template<typename T>
+class Vector<T, 2> final
+{
+public:
+    static_assert(std::is_floating_point<T>::value, "Vector only can be instantiated with floating point types");
 
     //! X (or the first) component of the vector.
     T x;
@@ -41,11 +42,11 @@ class Vector<T, 2> final {
     constexpr Vector(T x_, T y_) : x(x_), y(y_) {}
 
     //! Constructs vector with initializer list.
-    template <typename U>
-    Vector(const std::initializer_list<U>& lst);
+    template<typename U>
+    Vector(const std::initializer_list<U> &lst);
 
     //! Copy constructor.
-    constexpr Vector(const Vector& v) : x(v.x), y(v.y) {}
+    constexpr Vector(const Vector &v) : x(v.x), y(v.y) {}
 
     // MARK: Basic setters
 
@@ -56,11 +57,11 @@ class Vector<T, 2> final {
     void set(T x, T y);
 
     //! Set x and y components with given initializer list.
-    template <typename U>
-    void set(const std::initializer_list<U>& lst);
+    template<typename U>
+    void set(const std::initializer_list<U> &lst);
 
     //! Set x and y with other vector \p pt.
-    void set(const Vector& pt);
+    void set(const Vector &pt);
 
     //! Set both x and y to zero.
     void setZero();
@@ -74,31 +75,31 @@ class Vector<T, 2> final {
     Vector add(T v) const;
 
     //! Computes this + (v.x, v.y).
-    Vector add(const Vector& v) const;
+    Vector add(const Vector &v) const;
 
     //! Computes this - (v, v).
     Vector sub(T v) const;
 
     //! Computes this - (v.x, v.y).
-    Vector sub(const Vector& v) const;
+    Vector sub(const Vector &v) const;
 
     //! Computes this * (v, v).
     Vector mul(T v) const;
 
     //! Computes this * (v.x, v.y).
-    Vector mul(const Vector& v) const;
+    Vector mul(const Vector &v) const;
 
     //! Computes this / (v, v).
     Vector div(T v) const;
 
     //! Computes this / (v.x, v.y).
-    Vector div(const Vector& v) const;
+    Vector div(const Vector &v) const;
 
     //! Computes dot product.
-    T dot(const Vector& v) const;
+    T dot(const Vector &v) const;
 
     //! Computes cross product.
-    T cross(const Vector& v) const;
+    T cross(const Vector &v) const;
 
     // MARK: Binary operations: new instance = v (+) this
 
@@ -106,16 +107,16 @@ class Vector<T, 2> final {
     Vector rsub(T v) const;
 
     //! Computes (v.x, v.y) - this.
-    Vector rsub(const Vector& v) const;
+    Vector rsub(const Vector &v) const;
 
     //! Computes (v, v) / this.
     Vector rdiv(T v) const;
 
     //! Computes (v.x, v.y) / this.
-    Vector rdiv(const Vector& v) const;
+    Vector rdiv(const Vector &v) const;
 
     //! Computes \p v cross this.
-    T rcross(const Vector& v) const;
+    T rcross(const Vector &v) const;
 
     // MARK: Augmented operations: this (+)= v
 
@@ -123,33 +124,33 @@ class Vector<T, 2> final {
     void iadd(T v);
 
     //! Computes this += (v.x, v.y).
-    void iadd(const Vector& v);
+    void iadd(const Vector &v);
 
     //! Computes this -= (v, v).
     void isub(T v);
 
     //! Computes this -= (v.x, v.y).
-    void isub(const Vector& v);
+    void isub(const Vector &v);
 
     //! Computes this *= (v, v).
     void imul(T v);
 
     //! Computes this *= (v.x, v.y).
-    void imul(const Vector& v);
+    void imul(const Vector &v);
 
     //! Computes this /= (v, v).
     void idiv(T v);
 
     //! Computes this /= (v.x, v.y).
-    void idiv(const Vector& v);
+    void idiv(const Vector &v);
 
     // MARK: Basic getters
 
     //! Returns const reference to the \p i -th element of the vector.
-    const T& at(size_t i) const;
+    const T &at(size_t i) const;
 
     //! Returns reference to the \p i -th element of the vector.
-    T& at(size_t i);
+    T &at(size_t i);
 
     //! Returns the sum of all the components (i.e. x + y).
     T sum() const;
@@ -185,153 +186,150 @@ class Vector<T, 2> final {
     T lengthSquared() const;
 
     //! Returns the distance to the other vector.
-    T distanceTo(const Vector& other) const;
+    T distanceTo(const Vector &other) const;
 
     //! Returns the squared distance to the other vector.
-    T distanceSquaredTo(const Vector& other) const;
+    T distanceSquaredTo(const Vector &other) const;
 
     //! Returns the reflection vector to the surface with given surface normal.
-    Vector reflected(const Vector& normal) const;
+    Vector reflected(const Vector &normal) const;
 
     //! Returns the projected vector to the surface with given surface normal.
-    Vector projected(const Vector& normal) const;
+    Vector projected(const Vector &normal) const;
 
     //! Returns the tangential vector for this vector.
     Vector tangential() const;
 
     //! Returns a vector with different value type.
-    template <typename U>
+    template<typename U>
     Vector<U, 2> castTo() const;
 
     //! Returns true if \p other is the same as this vector.
-    bool isEqual(const Vector& other) const;
+    bool isEqual(const Vector &other) const;
 
     //! Returns true if \p other is similar to this vector.
-    bool isSimilar(const Vector& other,
-                   T epsilon = std::numeric_limits<T>::epsilon()) const;
+    bool isSimilar(const Vector &other, T epsilon = std::numeric_limits<T>::epsilon()) const;
 
     // MARK: Operators
 
     //! Returns reference to the \p i -th element of the vector.
-    T& operator[](size_t i);
+    T &operator[](size_t i);
 
     //! Returns const reference to the \p i -th element of the vector.
-    const T& operator[](size_t i) const;
+    const T &operator[](size_t i) const;
 
     //! Set x and y components with given initializer list.
-    template <typename U>
-    Vector& operator=(const std::initializer_list<U>& lst);
+    template<typename U>
+    Vector &operator=(const std::initializer_list<U> &lst);
 
     //! Set x and y with other vector \p pt.
-    Vector& operator=(const Vector& v);
+    Vector &operator=(const Vector &v);
 
     //! Computes this += (v, v)
-    Vector& operator+=(T v);
+    Vector &operator+=(T v);
 
     //! Computes this += (v.x, v.y)
-    Vector& operator+=(const Vector& v);
+    Vector &operator+=(const Vector &v);
 
     //! Computes this -= (v, v)
-    Vector& operator-=(T v);
+    Vector &operator-=(T v);
 
     //! Computes this -= (v.x, v.y)
-    Vector& operator-=(const Vector& v);
+    Vector &operator-=(const Vector &v);
 
     //! Computes this *= (v, v)
-    Vector& operator*=(T v);
+    Vector &operator*=(T v);
 
     //! Computes this *= (v.x, v.y)
-    Vector& operator*=(const Vector& v);
+    Vector &operator*=(const Vector &v);
 
     //! Computes this /= (v, v)
-    Vector& operator/=(T v);
+    Vector &operator/=(T v);
 
     //! Computes this /= (v.x, v.y)
-    Vector& operator/=(const Vector& v);
+    Vector &operator/=(const Vector &v);
 
     //! Returns true if \p other is the same as this vector.
-    bool operator==(const Vector& v) const;
+    bool operator==(const Vector &v) const;
 
     //! Returns true if \p other is the not same as this vector.
-    bool operator!=(const Vector& v) const;
+    bool operator!=(const Vector &v) const;
 };
 
 //! Type alias for two dimensional vector.
-template <typename T>
-using Vector2 = Vector<T, 2>;
+template<typename T> using Vector2 = Vector<T, 2>;
 
 //! Positive sign operator.
-template <typename T>
-Vector2<T> operator+(const Vector2<T>& a);
+template<typename T>
+Vector2<T> operator+(const Vector2<T> &a);
 
 //! Negative sign operator.
-template <typename T>
-Vector2<T> operator-(const Vector2<T>& a);
+template<typename T>
+Vector2<T> operator-(const Vector2<T> &a);
 
 //! Computes (a, a) + (b.x, b.y).
-template <typename T>
-Vector2<T> operator+(T a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> operator+(T a, const Vector2<T> &b);
 
 //! Computes (a.x, a.y) + (b.x, b.y).
-template <typename T>
-Vector2<T> operator+(const Vector2<T>& a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> operator+(const Vector2<T> &a, const Vector2<T> &b);
 
 //! Computes (a.x, a.y) - (b, b).
-template <typename T>
-Vector2<T> operator-(const Vector2<T>& a, T b);
+template<typename T>
+Vector2<T> operator-(const Vector2<T> &a, T b);
 
 //! Computes (a, a) - (b.x, b.y).
-template <typename T>
-Vector2<T> operator-(T a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> operator-(T a, const Vector2<T> &b);
 
 //! Computes (a.x, a.y) - (b.x, b.y).
-template <typename T>
-Vector2<T> operator-(const Vector2<T>& a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> operator-(const Vector2<T> &a, const Vector2<T> &b);
 
 //! Computes (a.x, a.y) * (b, b).
-template <typename T>
-Vector2<T> operator*(const Vector2<T>& a, T b);
+template<typename T>
+Vector2<T> operator*(const Vector2<T> &a, T b);
 
 //! Computes (a, a) * (b.x, b.y).
-template <typename T>
-Vector2<T> operator*(T a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> operator*(T a, const Vector2<T> &b);
 
 //! Computes (a.x, a.y) * (b.x, b.y).
-template <typename T>
-Vector2<T> operator*(const Vector2<T>& a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> operator*(const Vector2<T> &a, const Vector2<T> &b);
 
 //! Computes (a.x, a.y) / (b, b).
-template <typename T>
-Vector2<T> operator/(const Vector2<T>& a, T b);
+template<typename T>
+Vector2<T> operator/(const Vector2<T> &a, T b);
 
 //! Computes (a, a) / (b.x, b.y).
-template <typename T>
-Vector2<T> operator/(T a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> operator/(T a, const Vector2<T> &b);
 
 //! Computes (a.x, a.y) / (b.x, b.y).
-template <typename T>
-Vector2<T> operator/(const Vector2<T>& a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> operator/(const Vector2<T> &a, const Vector2<T> &b);
 
 //! Returns element-wise min vector: (min(a.x, b.x), min(a.y, b.y)).
-template <typename T>
-Vector2<T> min(const Vector2<T>& a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> min(const Vector2<T> &a, const Vector2<T> &b);
 
 //! Returns element-wise max vector: (max(a.x, b.x), max(a.y, b.y)).
-template <typename T>
-Vector2<T> max(const Vector2<T>& a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> max(const Vector2<T> &a, const Vector2<T> &b);
 
 //! Returns element-wise clamped vector.
-template <typename T>
-Vector2<T> clamp(const Vector2<T>& v, const Vector2<T>& low,
-                 const Vector2<T>& high);
+template<typename T>
+Vector2<T> clamp(const Vector2<T> &v, const Vector2<T> &low, const Vector2<T> &high);
 
 //! Returns element-wise ceiled vector.
-template <typename T>
-Vector2<T> ceil(const Vector2<T>& a);
+template<typename T>
+Vector2<T> ceil(const Vector2<T> &a);
 
 //! Returns element-wise floored vector.
-template <typename T>
-Vector2<T> floor(const Vector2<T>& a);
+template<typename T>
+Vector2<T> floor(const Vector2<T> &a);
 
 //! Float-type 2D vector.
 typedef Vector2<float> Vector2F;
@@ -342,27 +340,29 @@ typedef Vector2<double> Vector2D;
 // MARK: Extensions
 
 //! Returns float-type zero vector.
-template <>
-constexpr Vector2F zero<Vector2F>() {
+template<>
+constexpr Vector2F zero<Vector2F>()
+{
     return Vector2F(0.f, 0.f);
 }
 
 //! Returns double-type zero vector.
-template <>
-constexpr Vector2D zero<Vector2D>() {
+template<>
+constexpr Vector2D zero<Vector2D>()
+{
     return Vector2D(0.0, 0.0);
 }
 
 //! Returns the type of the value itself.
-template <typename T>
-struct ScalarType<Vector2<T>> {
+template<typename T>
+struct ScalarType<Vector2<T>>
+{
     typedef T value;
 };
 
 //! Computes monotonic Catmull-Rom interpolation.
-template <typename T>
-Vector2<T> monotonicCatmullRom(const Vector2<T>& v0, const Vector2<T>& v1,
-                               const Vector2<T>& v2, const Vector2<T>& v3, T f);
+template<typename T>
+Vector2<T> monotonicCatmullRom(const Vector2<T> &v0, const Vector2<T> &v1, const Vector2<T> &v2, const Vector2<T> &v3, T f);
 
 }  // namespace jet
 

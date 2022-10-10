@@ -17,7 +17,8 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 2-D array class.
@@ -38,9 +39,10 @@ namespace jet {
 //!
 //! \tparam T - Type to store in the array.
 //!
-template <typename T>
-class Array<T, 2> final {
- public:
+template<typename T>
+class Array<T, 2> final
+{
+public:
     typedef std::vector<T> ContainerType;
     typedef typename ContainerType::iterator Iterator;
     typedef typename ContainerType::const_iterator ConstIterator;
@@ -51,14 +53,14 @@ class Array<T, 2> final {
     //! Constructs 2-D array with given \p size and fill it with \p initVal.
     //! \param size Initial size of the array.
     //! \param initVal Initial value of each array element.
-    explicit Array(const Size2& size, const T& initVal = T());
+    explicit Array(const Size2 &size, const T &initVal = T());
 
     //! Constructs 2-D array with size \p width x \p height and fill it with
     //! \p initVal.
     //! \param width Initial width of the array.
     //! \param height Initial height of the array.
     //! \param initVal Initial value of each array element.
-    Array(size_t width, size_t height, const T& initVal = T());
+    Array(size_t width, size_t height, const T &initVal = T());
 
     //!
     //! \brief Constructs 2-D array with given initializer list \p lst.
@@ -78,19 +80,19 @@ class Array<T, 2> final {
     //!
     //! \param lst Initializer list that should be copy to the new array.
     //!
-    Array(const std::initializer_list<std::initializer_list<T>>& lst);
+    Array(const std::initializer_list<std::initializer_list<T>> &lst);
 
     //! Copy constructor.
-    Array(const Array& other);
+    Array(const Array &other);
 
     //! Move constructor.
-    Array(Array&& other);
+    Array(Array &&other);
 
     //! Sets entire array with given \p value.
-    void set(const T& value);
+    void set(const T &value);
 
     //! Copies given array \p other to this array.
-    void set(const Array& other);
+    void set(const Array &other);
 
     //!
     //! Copies given initializer list \p lst to this array.
@@ -110,17 +112,17 @@ class Array<T, 2> final {
     //!
     //! \param lst Initializer list that should be copy to the new array.
     //!
-    void set(const std::initializer_list<std::initializer_list<T>>& lst);
+    void set(const std::initializer_list<std::initializer_list<T>> &lst);
 
     //! Clears the array and resizes to zero.
     void clear();
 
     //! Resizes the array with \p size and fill the new element with \p initVal.
-    void resize(const Size2& size, const T& initVal = T());
+    void resize(const Size2 &size, const T &initVal = T());
 
     //! Resizes the array with size \p width x \p height and fill the new
     //! element with \p initVal.
-    void resize(size_t width, size_t height, const T& initVal = T());
+    void resize(size_t width, size_t height, const T &initVal = T());
 
     //!
     //! \brief Returns the reference to the i-th element.
@@ -129,7 +131,7 @@ class Array<T, 2> final {
     //! where i is the index of linearly mapped elements such that
     //! i = x + (width * y) (x and y are the 2-D coordinates of the element).
     //!
-    T& at(size_t i);
+    T &at(size_t i);
 
     //!
     //! \brief Returns the const reference to the i-th element.
@@ -138,19 +140,19 @@ class Array<T, 2> final {
     //! array where i is the index of linearly mapped elements such that
     //! i = x + (width * y) (x and y are the 2-D coordinates of the element).
     //!
-    const T& at(size_t i) const;
+    const T &at(size_t i) const;
 
     //! Returns the reference to the element at (pt.x, pt.y).
-    T& at(const Point2UI& pt);
+    T &at(const Point2UI &pt);
 
     //! Returns the const reference to the element at (pt.x, pt.y).
-    const T& at(const Point2UI& pt) const;
+    const T &at(const Point2UI &pt) const;
 
     //! Returns the reference to the element at (i, j).
-    T& at(size_t i, size_t j);
+    T &at(size_t i, size_t j);
 
     //! Returns the const reference to the element at (i, j).
-    const T& at(size_t i, size_t j) const;
+    const T &at(size_t i, size_t j) const;
 
     //! Returns the size of the array.
     Size2 size() const;
@@ -162,10 +164,10 @@ class Array<T, 2> final {
     size_t height() const;
 
     //! Returns the raw pointer to the array data.
-    T* data();
+    T *data();
 
     //! Returns the const raw pointer to the array data.
-    const T* const data() const;
+    const T *const data() const;
 
     //! Returns the begin iterator of the array.
     Iterator begin();
@@ -186,7 +188,7 @@ class Array<T, 2> final {
     ConstArrayAccessor2<T> constAccessor() const;
 
     //! Swaps the content of the array with \p other array.
-    void swap(Array& other);
+    void swap(Array &other);
 
     //!
     //! \brief Iterates the array and invoke given \p func for each index.
@@ -214,7 +216,7 @@ class Array<T, 2> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEach(Callback func) const;
 
     //!
@@ -243,7 +245,7 @@ class Array<T, 2> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEachIndex(Callback func) const;
 
     //!
@@ -265,7 +267,7 @@ class Array<T, 2> final {
     //! The parameter type of the callback function doesn't have to be T&, but
     //! const T& or T can be used as well.
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEach(Callback func);
 
     //!
@@ -285,7 +287,7 @@ class Array<T, 2> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEachIndex(Callback func) const;
 
     //!
@@ -297,7 +299,7 @@ class Array<T, 2> final {
     //!
     //! \see Array<T, 2>::at
     //!
-    T& operator[](size_t i);
+    T &operator[](size_t i);
 
     //!
     //! \brief Returns the const reference to the i-th element.
@@ -308,28 +310,28 @@ class Array<T, 2> final {
     //!
     //! \see Array<T, 2>::at
     //!
-    const T& operator[](size_t i) const;
+    const T &operator[](size_t i) const;
 
     //! Returns the reference to the element at (pt.x, pt.y).
-    T& operator()(const Point2UI& pt);
+    T &operator()(const Point2UI &pt);
 
     //! Returns the const reference to the element at (pt.x, pt.y).
-    const T& operator()(const Point2UI& pt) const;
+    const T &operator()(const Point2UI &pt) const;
 
     //! Returns the reference to the element at (i, j).
-    T& operator()(size_t i, size_t j);
+    T &operator()(size_t i, size_t j);
 
     //! Returns the const reference to the element at (i, j).
-    const T& operator()(size_t i, size_t j) const;
+    const T &operator()(size_t i, size_t j) const;
 
     //! Sets entire array with given \p value.
-    Array& operator=(const T& other);
+    Array &operator=(const T &other);
 
     //! Copies given array \p other to this array.
-    Array& operator=(const Array& other);
+    Array &operator=(const Array &other);
 
     //! Move assignment.
-    Array& operator=(Array&& other);
+    Array &operator=(Array &&other);
 
     //!
     //! Copies given initializer list \p lst to this array.
@@ -349,8 +351,7 @@ class Array<T, 2> final {
     //!
     //! \param lst Initializer list that should be copy to the new array.
     //!
-    Array& operator=(
-        const std::initializer_list<std::initializer_list<T>>& lst);
+    Array &operator=(const std::initializer_list<std::initializer_list<T>> &lst);
 
     //! Casts to array accessor.
     operator ArrayAccessor2<T>();
@@ -358,14 +359,13 @@ class Array<T, 2> final {
     //! Casts to const array accessor.
     operator ConstArrayAccessor2<T>() const;
 
- private:
+private:
     Size2 _size;
     std::vector<T> _data;
 };
 
 //! Type alias for 2-D array.
-template <typename T>
-using Array2 = Array<T, 2>;
+template<typename T> using Array2 = Array<T, 2>;
 
 }  // namespace jet
 

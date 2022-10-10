@@ -18,9 +18,11 @@
 
 static unsigned int sMaxNumberOfThreads = std::thread::hardware_concurrency();
 
-namespace jet {
+namespace jet
+{
 
-void setMaxNumberOfThreads(unsigned int numThreads) {
+void setMaxNumberOfThreads(unsigned int numThreads)
+{
 #if defined(JET_TASKING_TBB)
     static std::unique_ptr<tbb::task_scheduler_init> tbbInit;
     if (!tbbInit.get())

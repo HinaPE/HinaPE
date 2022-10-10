@@ -35,8 +35,10 @@
 #include <exception>
 #include <string>
 
-inline void throwIfFailed(HRESULT hr) {
-    if (FAILED(hr)) {
+inline void throwIfFailed(HRESULT hr)
+{
+    if (FAILED(hr))
+    {
         throw std::runtime_error(std::to_string(hr).c_str());
     }
 }

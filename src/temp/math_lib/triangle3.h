@@ -9,7 +9,8 @@
 
 #include "surface3.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 3-D triangle geometry.
@@ -17,8 +18,9 @@ namespace jet {
 //! This class represents 3-D triangle geometry which extends Surface3 by
 //! overriding surface-related queries.
 //!
-class Triangle3 final : public Surface3 {
- public:
+class Triangle3 final : public Surface3
+{
+public:
     class Builder;
 
     //! Three points.
@@ -31,30 +33,19 @@ class Triangle3 final : public Surface3 {
     std::array<Vector2D, 3> uvs;
 
     //! Constructs an empty triangle.
-    Triangle3(
-        const Transform3& transform = Transform3(),
-        bool isNormalFlipped = false);
+    Triangle3(const Transform3 &transform = Transform3(), bool isNormalFlipped = false);
 
     //! Constructs a triangle with given \p points, \p normals, and \p uvs.
-    Triangle3(
-        const std::array<Vector3D, 3>& points,
-        const std::array<Vector3D, 3>& normals,
-        const std::array<Vector2D, 3>& uvs,
-        const Transform3& transform = Transform3(),
-        bool isNormalFlipped = false);
+    Triangle3(const std::array<Vector3D, 3> &points, const std::array<Vector3D, 3> &normals, const std::array<Vector2D, 3> &uvs, const Transform3 &transform = Transform3(), bool isNormalFlipped = false);
 
     //! Copy constructor
-    Triangle3(const Triangle3& other);
+    Triangle3(const Triangle3 &other);
 
     //! Returns the area of this triangle.
     double area() const;
 
     //! Returns barycentric coordinates for the given point \p pt.
-    void getBarycentricCoords(
-        const Vector3D& pt,
-        double* b0,
-        double* b1,
-        double* b2) const;
+    void getBarycentricCoords(const Vector3D &pt, double *b0, double *b1, double *b2) const;
 
     //! Returns the face normal of the triangle.
     Vector3D faceNormal() const;
@@ -65,38 +56,35 @@ class Triangle3 final : public Surface3 {
     //! Returns builder fox Triangle3.
     static Builder builder();
 
- protected:
-    Vector3D closestPointLocal(const Vector3D& otherPoint) const override;
+protected:
+    Vector3D closestPointLocal(const Vector3D &otherPoint) const override;
 
-    bool intersectsLocal(const Ray3D& ray) const override;
+    bool intersectsLocal(const Ray3D &ray) const override;
 
     BoundingBox3D boundingBoxLocal() const override;
 
-    Vector3D closestNormalLocal(
-        const Vector3D& otherPoint) const override;
+    Vector3D closestNormalLocal(const Vector3D &otherPoint) const override;
 
-    SurfaceRayIntersection3 closestIntersectionLocal(
-        const Ray3D& ray) const override;
+    SurfaceRayIntersection3 closestIntersectionLocal(const Ray3D &ray) const override;
 };
 
 //! Shared pointer for the Triangle3 type.
 typedef std::shared_ptr<Triangle3> Triangle3Ptr;
 
-
 //!
 //! \brief Front-end to create Triangle3 objects step by step.
 //!
-class Triangle3::Builder final
-    : public SurfaceBuilderBase3<Triangle3::Builder> {
- public:
+class Triangle3::Builder final : public SurfaceBuilderBase3<Triangle3::Builder>
+{
+public:
     //! Returns builder with points.
-    Builder& withPoints(const std::array<Vector3D, 3>& points);
+    Builder &withPoints(const std::array<Vector3D, 3> &points);
 
     //! Returns builder with normals.
-    Builder& withNormals(const std::array<Vector3D, 3>& normals);
+    Builder &withNormals(const std::array<Vector3D, 3> &normals);
 
     //! Returns builder with uvs.
-    Builder& withUvs(const std::array<Vector2D, 3>& uvs);
+    Builder &withUvs(const std::array<Vector2D, 3> &uvs);
 
     //! Builds Triangle3.
     Triangle3 build() const;
@@ -104,7 +92,7 @@ class Triangle3::Builder final
     //! Builds shared pointer of Triangle3 instance.
     Triangle3Ptr makeShared() const;
 
- private:
+private:
     std::array<Vector3D, 3> _points;
     std::array<Vector3D, 3> _normals;
     std::array<Vector2D, 3> _uvs;

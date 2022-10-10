@@ -12,11 +12,13 @@
 #include "vector_grid2.h"
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //! \brief Abstract base class for 2-D collocated vector grid structure.
-class CollocatedVectorGrid2 : public VectorGrid2 {
- public:
+class CollocatedVectorGrid2 : public VectorGrid2
+{
+public:
     //! Constructs an empty grid.
     CollocatedVectorGrid2();
 
@@ -35,10 +37,10 @@ class CollocatedVectorGrid2 : public VectorGrid2 {
     virtual Vector2D dataOrigin() const = 0;
 
     //! Returns the grid data at given data point.
-    const Vector2D& operator()(size_t i, size_t j) const;
+    const Vector2D &operator()(size_t i, size_t j) const;
 
     //! Returns the grid data at given data point.
-    Vector2D& operator()(size_t i, size_t j);
+    Vector2D &operator()(size_t i, size_t j);
 
     //! Returns divergence at data point location.
     double divergenceAtDataPoint(size_t i, size_t j) const;
@@ -62,8 +64,7 @@ class CollocatedVectorGrid2 : public VectorGrid2 {
     //! point in serial manner. The input parameters are i and j indices of a
     //! data point. The order of execution is i-first, j-last.
     //!
-    void forEachDataPointIndex(
-        const std::function<void(size_t, size_t)>& func) const;
+    void forEachDataPointIndex(const std::function<void(size_t, size_t)> &func) const;
 
     //!
     //! \brief Invokes the given function \p func for each data point
@@ -74,19 +75,18 @@ class CollocatedVectorGrid2 : public VectorGrid2 {
     //! data point. The order of execution can be arbitrary since it's
     //! multi-threaded.
     //!
-    void parallelForEachDataPointIndex(
-        const std::function<void(size_t, size_t)>& func) const;
+    void parallelForEachDataPointIndex(const std::function<void(size_t, size_t)> &func) const;
 
     // VectorField2 implementations
 
     //! Returns sampled value at given position \p x.
-    Vector2D sample(const Vector2D& x) const override;
+    Vector2D sample(const Vector2D &x) const override;
 
     //! Returns divergence at given position \p x.
-    double divergence(const Vector2D& x) const override;
+    double divergence(const Vector2D &x) const override;
 
     //! Returns curl at given position \p x.
-    double curl(const Vector2D& x) const override;
+    double curl(const Vector2D &x) const override;
 
     //!
     //! \brief Returns the sampler function.
@@ -94,31 +94,27 @@ class CollocatedVectorGrid2 : public VectorGrid2 {
     //! This function returns the data sampler function object. The sampling
     //! function is linear.
     //!
-    std::function<Vector2D(const Vector2D&)> sampler() const override;
+    std::function<Vector2D(const Vector2D &)> sampler() const override;
 
- protected:
+protected:
     //! Swaps the data storage and predefined samplers with given grid.
-    void swapCollocatedVectorGrid(CollocatedVectorGrid2* other);
+    void swapCollocatedVectorGrid(CollocatedVectorGrid2 *other);
 
     //! Sets the data storage and predefined samplers with given grid.
-    void setCollocatedVectorGrid(const CollocatedVectorGrid2& other);
+    void setCollocatedVectorGrid(const CollocatedVectorGrid2 &other);
 
     //! Fetches the data into a continuous linear array.
-    void getData(std::vector<double>* data) const override;
+    void getData(std::vector<double> *data) const override;
 
     //! Sets the data from a continuous linear array.
-    void setData(const std::vector<double>& data) override;
+    void setData(const std::vector<double> &data) override;
 
- private:
+private:
     Array2<Vector2D> _data;
     LinearArraySampler2<Vector2D, double> _linearSampler;
-    std::function<Vector2D(const Vector2D&)> _sampler;
+    std::function<Vector2D(const Vector2D &)> _sampler;
 
-    void onResize(
-        const Size2& resolution,
-        const Vector2D& gridSpacing,
-        const Vector2D& origin,
-        const Vector2D& initialValue) final;
+    void onResize(const Size2 &resolution, const Vector2D &gridSpacing, const Vector2D &origin, const Vector2D &initialValue) final;
 
     void resetSampler();
 };

@@ -10,7 +10,8 @@
 #include "surface3.h"
 #include <functional>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Abstract base class for generic collider object.
@@ -21,16 +22,16 @@ namespace jet {
 //! provide a Surface3 instance to define collider surface using
 //! Collider3::setSurface function.
 //!
-class Collider3 {
- public:
+class Collider3
+{
+public:
     //!
     //! \brief Callback function type for update calls.
     //!
     //! This type of callback function will take the collider pointer, current
     //! time, and time interval in seconds.
     //!
-    typedef std::function<void(Collider3*, double, double)>
-        OnBeginUpdateCallback;
+    typedef std::function<void(Collider3 *, double, double)> OnBeginUpdateCallback;
 
     //! Default constructor.
     Collider3();
@@ -39,7 +40,7 @@ class Collider3 {
     virtual ~Collider3();
 
     //! Returns the velocity of the collider at given \p point.
-    virtual Vector3D velocityAt(const Vector3D& point) const = 0;
+    virtual Vector3D velocityAt(const Vector3D &point) const = 0;
 
     //!
     //! Resolves collision for given point.
@@ -49,11 +50,7 @@ class Collider3 {
     //! \param position Input and output position of the point.
     //! \param position Input and output velocity of the point.
     //!
-    void resolveCollision(
-        double radius,
-        double restitutionCoefficient,
-        Vector3D* position,
-        Vector3D* velocity);
+    void resolveCollision(double radius, double restitutionCoefficient, Vector3D *position, Vector3D *velocity);
 
     //! Returns friction coefficent.
     double frictionCoefficient() const;
@@ -67,7 +64,7 @@ class Collider3 {
     void setFrictionCoefficient(double newFrictionCoeffient);
 
     //! Returns the surface instance.
-    const Surface3Ptr& surface() const;
+    const Surface3Ptr &surface() const;
 
     //! Updates the collider state.
     void update(double currentTimeInSeconds, double timeIntervalInSeconds);
@@ -82,11 +79,12 @@ class Collider3 {
     //!
     //! \param[in]  callback The callback function.
     //!
-    void setOnBeginUpdateCallback(const OnBeginUpdateCallback& callback);
+    void setOnBeginUpdateCallback(const OnBeginUpdateCallback &callback);
 
- protected:
+protected:
     //! Internal query result structure.
-    struct ColliderQueryResult final {
+    struct ColliderQueryResult final
+    {
         double distance;
         Vector3D point;
         Vector3D normal;
@@ -94,21 +92,15 @@ class Collider3 {
     };
 
     //! Assigns the surface instance from the subclass.
-    void setSurface(const Surface3Ptr& newSurface);
+    void setSurface(const Surface3Ptr &newSurface);
 
     //! Outputs closest point's information.
-    void getClosestPoint(
-        const Surface3Ptr& surface,
-        const Vector3D& queryPoint,
-        ColliderQueryResult* result) const;
+    void getClosestPoint(const Surface3Ptr &surface, const Vector3D &queryPoint, ColliderQueryResult *result) const;
 
     //! Returns true if given point is in the opposite side of the surface.
-    bool isPenetrating(
-        const ColliderQueryResult& colliderPoint,
-        const Vector3D& position,
-        double radius);
+    bool isPenetrating(const ColliderQueryResult &colliderPoint, const Vector3D &position, double radius);
 
- private:
+private:
     Surface3Ptr _surface;
     double _frictionCoeffient = 0.0;
     OnBeginUpdateCallback _onUpdateCallback;

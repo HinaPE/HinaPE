@@ -17,18 +17,21 @@
 #include <mutex>
 #include <string>
 
-namespace jet {
+namespace jet
+{
 
 static std::mutex critical;
 
-static std::ostream* infoOutStream = &std::cout;
-static std::ostream* warnOutStream = &std::cout;
-static std::ostream* errorOutStream = &std::cerr;
-static std::ostream* debugOutStream = &std::cout;
+static std::ostream *infoOutStream = &std::cout;
+static std::ostream *warnOutStream = &std::cout;
+static std::ostream *errorOutStream = &std::cerr;
+static std::ostream *debugOutStream = &std::cout;
 static LoggingLevel sLoggingLevel = LoggingLevel::All;
 
-inline std::ostream* levelToStream(LoggingLevel level) {
-    switch (level) {
+inline std::ostream *levelToStream(LoggingLevel level)
+{
+    switch (level)
+    {
         case LoggingLevel::Info:
             return infoOutStream;
         case LoggingLevel::Warn:
@@ -42,8 +45,10 @@ inline std::ostream* levelToStream(LoggingLevel level) {
     }
 }
 
-inline std::string levelToString(LoggingLevel level) {
-    switch (level) {
+inline std::string levelToString(LoggingLevel level)
+{
+    switch (level)
+    {
         case LoggingLevel::Info:
             return "INFO";
         case LoggingLevel::Warn:
@@ -57,51 +62,59 @@ inline std::string levelToString(LoggingLevel level) {
     }
 }
 
-inline bool isLeq(LoggingLevel a, LoggingLevel b) {
-    return (uint8_t)a <= (uint8_t)b;
+inline bool isLeq(LoggingLevel a, LoggingLevel b)
+{
+    return (uint8_t) a <= (uint8_t) b;
 }
 
 Logger::Logger(LoggingLevel level) : _level(level) {}
 
-Logger::~Logger() {
+Logger::~Logger()
+{
     std::lock_guard<std::mutex> lock(critical);
-    if (isLeq(sLoggingLevel, _level)) {
+    if (isLeq(sLoggingLevel, _level))
+    {
         auto strm = levelToStream(_level);
         (*strm) << _buffer.str() << std::endl;
         strm->flush();
     }
 }
 
-void Logging::setInfoStream(std::ostream* strm) {
+void Logging::setInfoStream(std::ostream *strm)
+{
     std::lock_guard<std::mutex> lock(critical);
     infoOutStream = strm;
 }
 
-void Logging::setWarnStream(std::ostream* strm) {
+void Logging::setWarnStream(std::ostream *strm)
+{
     std::lock_guard<std::mutex> lock(critical);
     warnOutStream = strm;
 }
 
-void Logging::setErrorStream(std::ostream* strm) {
+void Logging::setErrorStream(std::ostream *strm)
+{
     std::lock_guard<std::mutex> lock(critical);
     errorOutStream = strm;
 }
 
-void Logging::setDebugStream(std::ostream* strm) {
+void Logging::setDebugStream(std::ostream *strm)
+{
     std::lock_guard<std::mutex> lock(critical);
     debugOutStream = strm;
 }
 
-void Logging::setAllStream(std::ostream* strm) {
+void Logging::setAllStream(std::ostream *strm)
+{
     setInfoStream(strm);
     setWarnStream(strm);
     setErrorStream(strm);
     setDebugStream(strm);
 }
 
-std::string Logging::getHeader(LoggingLevel level) {
-    auto now =
-        std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+std::string Logging::getHeader(LoggingLevel level)
+{
+    auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     char timeStr[20];
 #ifdef JET_WINDOWS
     tm time;
@@ -116,12 +129,12 @@ std::string Logging::getHeader(LoggingLevel level) {
     strftime(timeStr, sizeof(timeStr), "%F %T", std::localtime(&now));
 #endif
     char header[256];
-    snprintf(header, sizeof(header), "[%s] %s ", levelToString(level).c_str(),
-             timeStr);
+    snprintf(header, sizeof(header), "[%s] %s ", levelToString(level).c_str(), timeStr);
     return header;
 }
 
-void Logging::setLevel(LoggingLevel level) {
+void Logging::setLevel(LoggingLevel level)
+{
     std::lock_guard<std::mutex> lock(critical);
     sLoggingLevel = level;
 }

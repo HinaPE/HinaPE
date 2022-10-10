@@ -13,7 +13,8 @@
 #include <array>
 #include <type_traits>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Static-sized M x N matrix class.
@@ -25,21 +26,15 @@ namespace jet {
 //! \tparam M - Number of rows.
 //! \tparam N - Number of columns.
 //!
-template <typename T, size_t M, size_t N>
-class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
- public:
-    static_assert(
-        M > 0,
-        "Number of rows for static-sized matrix should be greater than zero.");
-    static_assert(
-        N > 0,
-        "Number of columns for static-sized matrix should be greater than "
-        "zero.");
-    static_assert(!(M == 2 && N == 2) && !(M == 3 && N == 3) &&
-                      !(M == 4 && N == 4),
-                  "Use specialized matrix for 2z2, 3x3, and 4x4 matricies.");
-    static_assert(std::is_floating_point<T>::value,
-                  "Matrix only can be instantiated with floating point types");
+template<typename T, size_t M, size_t N>
+class Matrix final : public MatrixExpression<T, Matrix<T, M, N>>
+{
+public:
+    static_assert(M > 0, "Number of rows for static-sized matrix should be greater than zero.");
+    static_assert(N > 0, "Number of columns for static-sized matrix should be greater than "
+                         "zero.");
+    static_assert(!(M == 2 && N == 2) && !(M == 3 && N == 3) && !(M == 4 && N == 4), "Use specialized matrix for 2z2, 3x3, and 4x4 matricies.");
+    static_assert(std::is_floating_point<T>::value, "Matrix only can be instantiated with floating point types");
 
     typedef std::array<T, M * N> ContainerType;
     typedef typename ContainerType::iterator Iterator;
@@ -50,7 +45,7 @@ class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
     Matrix();
 
     //! Constructs matrix instance with parameters.
-    template <typename... Params>
+    template<typename... Params>
     explicit Matrix(Params... params);
 
     //!
@@ -69,22 +64,22 @@ class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
     //!
     //! \param lst Initializer list that should be copy to the new matrix.
     //!
-    Matrix(const std::initializer_list<std::initializer_list<T>>& lst);
+    Matrix(const std::initializer_list<std::initializer_list<T>> &lst);
 
     //! Constructs a matrix with expression template.
-    template <typename E>
-    Matrix(const MatrixExpression<T, E>& other);
+    template<typename E>
+    Matrix(const MatrixExpression<T, E> &other);
 
     //! Copy constructor.
-    Matrix(const Matrix& other);
+    Matrix(const Matrix &other);
 
     // MARK: Basic setters
 
     //! Resizes to m x n matrix with initial value \p s.
-    void resize(size_t m, size_t n, const T& s = T(0));
+    void resize(size_t m, size_t n, const T &s = T(0));
 
     //! Sets whole matrix with input scalar.
-    void set(const T& s);
+    void set(const T &s);
 
     //!
     //! \brief Sets a matrix with given initializer list \p lst.
@@ -103,35 +98,34 @@ class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
     //!
     //! \param lst Initializer list that should be copy to the new matrix.
     //!
-    void set(const std::initializer_list<std::initializer_list<T>>& lst);
+    void set(const std::initializer_list<std::initializer_list<T>> &lst);
 
     //! Copies from input matrix expression.
-    template <typename E>
-    void set(const MatrixExpression<T, E>& other);
+    template<typename E>
+    void set(const MatrixExpression<T, E> &other);
 
     //! Sets diagonal elements with input scalar.
-    void setDiagonal(const T& s);
+    void setDiagonal(const T &s);
 
     //! Sets off-diagonal elements with input scalar.
-    void setOffDiagonal(const T& s);
+    void setOffDiagonal(const T &s);
 
     //! Sets i-th row with input vector.
-    template <typename E>
-    void setRow(size_t i, const VectorExpression<T, E>& row);
+    template<typename E>
+    void setRow(size_t i, const VectorExpression<T, E> &row);
 
     //! Sets j-th column with input vector.
-    template <typename E>
-    void setColumn(size_t j, const VectorExpression<T, E>& col);
+    template<typename E>
+    void setColumn(size_t j, const VectorExpression<T, E> &col);
 
     // MARK: Basic getters
-    template <typename E>
-    bool isEqual(const MatrixExpression<T, E>& other) const;
+    template<typename E>
+    bool isEqual(const MatrixExpression<T, E> &other) const;
 
     //! Returns true if this matrix is similar to the input matrix within the
     //! given tolerance.
-    template <typename E>
-    bool isSimilar(const MatrixExpression<T, E>& other,
-                   double tol = std::numeric_limits<double>::epsilon()) const;
+    template<typename E>
+    bool isSimilar(const MatrixExpression<T, E> &other, double tol = std::numeric_limits<double>::epsilon()) const;
 
     //! Returns true if this matrix is a square matrix.
     constexpr bool isSquare() const;
@@ -146,10 +140,10 @@ class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
     constexpr size_t cols() const;
 
     //! Returns data pointer of this matrix.
-    T* data();
+    T *data();
 
     //! Returns constant pointer of this matrix.
-    const T* const data() const;
+    const T *const data() const;
 
     //! Returns the begin iterator of the matrix.
     Iterator begin();
@@ -166,83 +160,83 @@ class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
     // MARK: Binary operator methods - new instance = this instance (+) input
 
     //! Returns this matrix + input scalar.
-    MatrixScalarAdd<T, Matrix> add(const T& s) const;
+    MatrixScalarAdd<T, Matrix> add(const T &s) const;
 
     //! Returns this matrix + input matrix (element-wise).
-    template <typename E>
-    MatrixAdd<T, Matrix, E> add(const E& m) const;
+    template<typename E>
+    MatrixAdd<T, Matrix, E> add(const E &m) const;
 
     //! Returns this matrix - input scalar.
-    MatrixScalarSub<T, Matrix> sub(const T& s) const;
+    MatrixScalarSub<T, Matrix> sub(const T &s) const;
 
     //! Returns this matrix - input matrix (element-wise).
-    template <typename E>
-    MatrixSub<T, Matrix, E> sub(const E& m) const;
+    template<typename E>
+    MatrixSub<T, Matrix, E> sub(const E &m) const;
 
     //! Returns this matrix * input scalar.
-    MatrixScalarMul<T, Matrix> mul(const T& s) const;
+    MatrixScalarMul<T, Matrix> mul(const T &s) const;
 
     //! Returns this matrix * input vector.
-    template <typename VE>
-    MatrixVectorMul<T, Matrix, VE> mul(const VectorExpression<T, VE>& v) const;
+    template<typename VE>
+    MatrixVectorMul<T, Matrix, VE> mul(const VectorExpression<T, VE> &v) const;
 
     //! Returns this matrix * input matrix.
-    template <size_t L>
-    MatrixMul<T, Matrix, Matrix<T, N, L>> mul(const Matrix<T, N, L>& m) const;
+    template<size_t L>
+    MatrixMul<T, Matrix, Matrix<T, N, L>> mul(const Matrix<T, N, L> &m) const;
 
     //! Returns this matrix / input scalar.
-    MatrixScalarDiv<T, Matrix> div(const T& s) const;
+    MatrixScalarDiv<T, Matrix> div(const T &s) const;
 
     // MARK: Binary operator methods - new instance = input (+) this instance
     //! Returns input scalar + this matrix.
-    MatrixScalarAdd<T, Matrix> radd(const T& s) const;
+    MatrixScalarAdd<T, Matrix> radd(const T &s) const;
 
     //! Returns input matrix + this matrix (element-wise).
-    template <typename E>
-    MatrixAdd<T, Matrix, E> radd(const E& m) const;
+    template<typename E>
+    MatrixAdd<T, Matrix, E> radd(const E &m) const;
 
     //! Returns input scalar - this matrix.
-    MatrixScalarRSub<T, Matrix> rsub(const T& s) const;
+    MatrixScalarRSub<T, Matrix> rsub(const T &s) const;
 
     //! Returns input matrix - this matrix (element-wise).
-    template <typename E>
-    MatrixSub<T, Matrix, E> rsub(const E& m) const;
+    template<typename E>
+    MatrixSub<T, Matrix, E> rsub(const E &m) const;
 
     //! Returns input scalar * this matrix.
-    MatrixScalarMul<T, Matrix> rmul(const T& s) const;
+    MatrixScalarMul<T, Matrix> rmul(const T &s) const;
 
     //! Returns input matrix * this matrix.
-    template <size_t L>
-    MatrixMul<T, Matrix<T, N, L>, Matrix> rmul(const Matrix<T, N, L>& m) const;
+    template<size_t L>
+    MatrixMul<T, Matrix<T, N, L>, Matrix> rmul(const Matrix<T, N, L> &m) const;
 
     //! Returns input matrix / this scalar.
-    MatrixScalarRDiv<T, Matrix> rdiv(const T& s) const;
+    MatrixScalarRDiv<T, Matrix> rdiv(const T &s) const;
 
     // MARK: Augmented operator methods - this instance (+)= input
 
     //! Adds input scalar to this matrix.
-    void iadd(const T& s);
+    void iadd(const T &s);
 
     //! Adds input matrix to this matrix (element-wise).
-    template <typename E>
-    void iadd(const E& m);
+    template<typename E>
+    void iadd(const E &m);
 
     //! Subtracts input scalar from this matrix.
-    void isub(const T& s);
+    void isub(const T &s);
 
     //! Subtracts input matrix from this matrix (element-wise).
-    template <typename E>
-    void isub(const E& m);
+    template<typename E>
+    void isub(const E &m);
 
     //! Multiplies input scalar to this matrix.
-    void imul(const T& s);
+    void imul(const T &s);
 
     //! Multiplies input matrix to this matrix.
-    template <typename E>
-    void imul(const E& m);
+    template<typename E>
+    void imul(const E &m);
 
     //! Divides this matrix with input scalar.
-    void idiv(const T& s);
+    void idiv(const T &s);
 
     // MARK: Modifiers
 
@@ -306,63 +300,63 @@ class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
     //! Returns inverse matrix.
     Matrix inverse() const;
 
-    template <typename U>
+    template<typename U>
     MatrixTypeCast<U, Matrix, T> castTo() const;
 
     // MARK: Setter operators
 
     //! Assigns input matrix.
-    template <typename E>
-    Matrix& operator=(const E& m);
+    template<typename E>
+    Matrix &operator=(const E &m);
 
     //! Copies to this matrix.
-    Matrix& operator=(const Matrix& other);
+    Matrix &operator=(const Matrix &other);
 
     //! Addition assignment with input scalar.
-    Matrix& operator+=(const T& s);
+    Matrix &operator+=(const T &s);
 
     //! Addition assignment with input matrix (element-wise).
-    template <typename E>
-    Matrix& operator+=(const E& m);
+    template<typename E>
+    Matrix &operator+=(const E &m);
 
     //! Subtraction assignment with input scalar.
-    Matrix& operator-=(const T& s);
+    Matrix &operator-=(const T &s);
 
     //! Subtraction assignment with input matrix (element-wise).
-    template <typename E>
-    Matrix& operator-=(const E& m);
+    template<typename E>
+    Matrix &operator-=(const E &m);
 
     //! Multiplication assignment with input scalar.
-    Matrix& operator*=(const T& s);
+    Matrix &operator*=(const T &s);
 
     //! Multiplication assignment with input matrix.
-    template <typename E>
-    Matrix& operator*=(const E& m);
+    template<typename E>
+    Matrix &operator*=(const E &m);
 
     //! Division assignment with input scalar.
-    Matrix& operator/=(const T& s);
+    Matrix &operator/=(const T &s);
 
     // MARK: Getter operators
 
     //! Returns reference of i-th element.
-    T& operator[](size_t i);
+    T &operator[](size_t i);
 
     //! Returns constant reference of i-th element.
-    const T& operator[](size_t i) const;
+    const T &operator[](size_t i) const;
 
     //! Returns reference of (i,j) element.
-    T& operator()(size_t i, size_t j);
+    T &operator()(size_t i, size_t j);
 
     //! Returns constant reference of (i,j) element.
-    const T& operator()(size_t i, size_t j) const;
+    const T &operator()(size_t i, size_t j) const;
 
     //! Returns true if is equal to m.
-    template <typename E>
-    bool operator==(const MatrixExpression<T, E>& m) const;
+    template<typename E>
+    bool operator==(const MatrixExpression<T, E> &m) const;
 
     //! Returns true if is not equal to m.
-    template <typename E>
-    bool operator!=(const MatrixExpression<T, E>& m) const;
+    template<typename E>
+    bool operator!=(const MatrixExpression<T, E> &m) const;
 
     // MARK: Helpers
 
@@ -392,7 +386,7 @@ class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEach(Callback func) const;
 
     //!
@@ -421,7 +415,7 @@ class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEachIndex(Callback func) const;
 
     // MARK: Builders
@@ -433,10 +427,10 @@ class Matrix final : public MatrixExpression<T, Matrix<T, M, N>> {
     //! to 0.
     static MatrixIdentity<T> makeIdentity();
 
- private:
+private:
     ContainerType _elements;
 
-    template <typename... Params>
+    template<typename... Params>
     void setRowAt(size_t i, T v, Params... params);
     void setRowAt(size_t i, T v);
 };

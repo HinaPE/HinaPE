@@ -13,7 +13,8 @@
 
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Hash grid-based 2-D point searcher.
@@ -22,8 +23,9 @@ namespace jet {
 //! acceleration data structure. Each point is recorded to its corresponding
 //! bucket where the hashing function is 2-D grid mapping.
 //!
-class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
- public:
+class PointHashGridSearcher2 final : public PointNeighborSearcher2
+{
+public:
     JET_NEIGHBOR_SEARCHER2_TYPE_NAME(PointHashGridSearcher2)
 
     class Builder;
@@ -38,7 +40,7 @@ class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
     //! \param[in]  resolution  The resolution.
     //! \param[in]  gridSpacing The grid spacing.
     //!
-    PointHashGridSearcher2(const Size2& resolution, double gridSpacing);
+    PointHashGridSearcher2(const Size2 &resolution, double gridSpacing);
 
     //!
     //! \brief      Constructs hash grid with given resolution and grid spacing.
@@ -51,16 +53,13 @@ class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
     //! \param[in]  resolutionY The resolution y.
     //! \param[in]  gridSpacing The grid spacing.
     //!
-    PointHashGridSearcher2(
-        size_t resolutionX,
-        size_t resolutionY,
-        double gridSpacing);
+    PointHashGridSearcher2(size_t resolutionX, size_t resolutionY, double gridSpacing);
 
     //! Copy constructor.
-    PointHashGridSearcher2(const PointHashGridSearcher2& other);
+    PointHashGridSearcher2(const PointHashGridSearcher2 &other);
 
     //! Builds internal acceleration structure for given points list.
-    void build(const ConstArrayAccessor1<Vector2D>& points) override;
+    void build(const ConstArrayAccessor1<Vector2D> &points) override;
 
     //!
     //! Invokes the callback function for each nearby point around the origin
@@ -70,10 +69,7 @@ class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
     //! \param[in]  radius   The search radius.
     //! \param[in]  callback The callback function.
     //!
-    void forEachNearbyPoint(
-        const Vector2D& origin,
-        double radius,
-        const ForEachNearbyPointFunc& callback) const override;
+    void forEachNearbyPoint(const Vector2D &origin, double radius, const ForEachNearbyPointFunc &callback) const override;
 
     //!
     //! Returns true if there are any nearby points for given origin within
@@ -84,8 +80,7 @@ class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
     //!
     //! \return     True if has nearby point, false otherwise.
     //!
-    bool hasNearbyPoint(
-        const Vector2D& origin, double radius) const override;
+    bool hasNearbyPoint(const Vector2D &origin, double radius) const override;
 
     //!
     //! \brief      Adds a single point to the hash grid.
@@ -96,7 +91,7 @@ class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
     //!
     //! \param[in]  point The point to be added.
     //!
-    void add(const Vector2D& point);
+    void add(const Vector2D &point);
 
     //!
     //! \brief      Returns the internal bucket.
@@ -106,7 +101,7 @@ class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
     //!
     //! \return     List of buckets.
     //!
-    const std::vector<std::vector<size_t>>& buckets() const;
+    const std::vector<std::vector<size_t>> &buckets() const;
 
     //!
     //! Returns the hash value for given 2-D bucket index.
@@ -115,7 +110,7 @@ class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
     //!
     //! \return     The hash key from bucket index.
     //!
-    size_t getHashKeyFromBucketIndex(const Point2I& bucketIndex) const;
+    size_t getHashKeyFromBucketIndex(const Point2I &bucketIndex) const;
 
     //!
     //! Gets the bucket index from a point.
@@ -124,7 +119,7 @@ class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
     //!
     //! \return     The bucket index.
     //!
-    Point2I getBucketIndex(const Vector2D& position) const;
+    Point2I getBucketIndex(const Vector2D &position) const;
 
     //!
     //! \brief      Creates a new instance of the object with same properties
@@ -135,29 +130,29 @@ class PointHashGridSearcher2 final : public PointNeighborSearcher2 {
     PointNeighborSearcher2Ptr clone() const override;
 
     //! Assignment operator.
-    PointHashGridSearcher2& operator=(const PointHashGridSearcher2& other);
+    PointHashGridSearcher2 &operator=(const PointHashGridSearcher2 &other);
 
     //! Copy from the other instance.
-    void set(const PointHashGridSearcher2& other);
+    void set(const PointHashGridSearcher2 &other);
 
     //! Serializes the neighbor searcher into the buffer.
-    void serialize(std::vector<uint8_t>* buffer) const override;
+    void serialize(std::vector<uint8_t> *buffer) const override;
 
     //! Deserializes the neighbor searcher from the buffer.
-    void deserialize(const std::vector<uint8_t>& buffer) override;
+    void deserialize(const std::vector<uint8_t> &buffer) override;
 
     //! Returns builder fox PointHashGridSearcher2.
     static Builder builder();
 
- private:
+private:
     double _gridSpacing = 1.0;
     Point2I _resolution = Point2I(1, 1);
     std::vector<Vector2D> _points;
     std::vector<std::vector<size_t>> _buckets;
 
-    size_t getHashKeyFromPosition(const Vector2D& position) const;
+    size_t getHashKeyFromPosition(const Vector2D &position) const;
 
-    void getNearbyKeys(const Vector2D& position, size_t* bucketIndices) const;
+    void getNearbyKeys(const Vector2D &position, size_t *bucketIndices) const;
 };
 
 //! Shared pointer for the PointHashGridSearcher2 type.
@@ -166,14 +161,14 @@ typedef std::shared_ptr<PointHashGridSearcher2> PointHashGridSearcher2Ptr;
 //!
 //! \brief Front-end to create PointHashGridSearcher2 objects step by step.
 //!
-class PointHashGridSearcher2::Builder final
-    : public PointNeighborSearcherBuilder2 {
- public:
+class PointHashGridSearcher2::Builder final : public PointNeighborSearcherBuilder2
+{
+public:
     //! Returns builder with resolution.
-    Builder& withResolution(const Size2& resolution);
+    Builder &withResolution(const Size2 &resolution);
 
     //! Returns builder with grid spacing.
-    Builder& withGridSpacing(double gridSpacing);
+    Builder &withGridSpacing(double gridSpacing);
 
     //! Builds PointHashGridSearcher2 instance.
     PointHashGridSearcher2 build() const;
@@ -184,7 +179,7 @@ class PointHashGridSearcher2::Builder final
     //! Returns shared pointer of PointNeighborSearcher3 type.
     PointNeighborSearcher2Ptr buildPointNeighborSearcher() const override;
 
- private:
+private:
     Size2 _resolution{64, 64};
     double _gridSpacing = 1.0;
 };

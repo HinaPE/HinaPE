@@ -12,7 +12,8 @@
 #include "size2.h"
 #include <utility>  // just make cpplint happy..
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 2-D array accessor class.
@@ -27,64 +28,65 @@ namespace jet {
 //!
 //! \tparam T - Array value type.
 //!
-template <typename T>
-class ArrayAccessor<T, 2> final {
- public:
+template<typename T>
+class ArrayAccessor<T, 2> final
+{
+public:
     //! Constructs empty 2-D array accessor.
     ArrayAccessor();
 
     //! Constructs an array accessor that wraps given array.
     //! \param size Size of the 2-D array.
     //! \param data Raw array pointer.
-    ArrayAccessor(const Size2& size, T* const data);
+    ArrayAccessor(const Size2 &size, T *const data);
 
     //! Constructs an array accessor that wraps given array.
     //! \param width Width of the 2-D array.
     //! \param height Height of the 2-D array.
     //! \param data Raw array pointer.
-    ArrayAccessor(size_t width, size_t height, T* const data);
+    ArrayAccessor(size_t width, size_t height, T *const data);
 
     //! Copy constructor.
-    ArrayAccessor(const ArrayAccessor& other);
+    ArrayAccessor(const ArrayAccessor &other);
 
     //! Replaces the content with given \p other array accessor.
-    void set(const ArrayAccessor& other);
+    void set(const ArrayAccessor &other);
 
     //! Resets the array.
-    void reset(const Size2& size, T* const data);
+    void reset(const Size2 &size, T *const data);
 
     //! Resets the array.
-    void reset(size_t width, size_t height, T* const data);
+    void reset(size_t width, size_t height, T *const data);
 
     //! Returns the reference to the i-th element.
-    T& at(size_t i);
+    T &at(size_t i);
 
     //! Returns the const reference to the i-th element.
-    const T& at(size_t i) const;
+    const T &at(size_t i) const;
 
     //! Returns the reference to the element at (pt.x, pt.y).
-    T& at(const Point2UI& pt);
+    T &at(const Point2UI &pt);
 
     //! Returns the const reference to the element at (pt.x, pt.y).
-    const T& at(const Point2UI& pt) const;
+    const T &at(const Point2UI &pt) const;
 
     //! Returns the reference to the element at (i, j).
-    T& at(size_t i, size_t j);
+    T &at(size_t i, size_t j);
 
     //! Returns the const reference to the element at (i, j).
-    const T& at(size_t i, size_t j) const;
+    const T &at(size_t i, size_t j) const;
 
     //! Returns the begin iterator of the array.
-    T* const begin() const;
+    T *const begin() const;
 
     //! Returns the end iterator of the array.
-    T* const end() const;
+    T *const end() const;
 
     //! Returns the begin iterator of the array.
-    T* begin();
+    T *begin();
 
     //! Returns the end iterator of the array.
-    T* end();
+    T *end();
 
     //! Returns the size of the array.
     Size2 size() const;
@@ -96,10 +98,10 @@ class ArrayAccessor<T, 2> final {
     size_t height() const;
 
     //! Returns the raw pointer to the array data.
-    T* const data() const;
+    T *const data() const;
 
     //! Swaps the content of with \p other array accessor.
-    void swap(ArrayAccessor& other);
+    void swap(ArrayAccessor &other);
 
     //!
     //! \brief Iterates the array and invoke given \p func for each index.
@@ -129,7 +131,7 @@ class ArrayAccessor<T, 2> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEach(Callback func) const;
 
     //!
@@ -160,7 +162,7 @@ class ArrayAccessor<T, 2> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEachIndex(Callback func) const;
 
     //!
@@ -183,7 +185,7 @@ class ArrayAccessor<T, 2> final {
     //! The parameter type of the callback function doesn't have to be T&, but
     //! const T& or T can be used as well.
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEach(Callback func);
 
     //!
@@ -204,47 +206,46 @@ class ArrayAccessor<T, 2> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEachIndex(Callback func) const;
 
     //! Returns the linear index of the given 2-D coordinate (pt.x, pt.y).
-    size_t index(const Point2UI& pt) const;
+    size_t index(const Point2UI &pt) const;
 
     //! Returns the linear index of the given 2-D coordinate (i, j).
     size_t index(size_t i, size_t j) const;
 
     //! Returns the reference to the i-th element.
-    T& operator[](size_t i);
+    T &operator[](size_t i);
 
     //! Returns the const reference to the i-th element.
-    const T& operator[](size_t i) const;
+    const T &operator[](size_t i) const;
 
     //! Returns the reference to the element at (pt.x, pt.y).
-    T& operator()(const Point2UI& pt);
+    T &operator()(const Point2UI &pt);
 
     //! Returns the const reference to the element at (pt.x, pt.y).
-    const T& operator()(const Point2UI& pt) const;
+    const T &operator()(const Point2UI &pt) const;
 
     //! Returns the reference to the element at (i, j).
-    T& operator()(size_t i, size_t j);
+    T &operator()(size_t i, size_t j);
 
     //! Returns the const reference to the element at (i, j).
-    const T& operator()(size_t i, size_t j) const;
+    const T &operator()(size_t i, size_t j) const;
 
     //! Copies given array accessor \p other.
-    ArrayAccessor& operator=(const ArrayAccessor& other);
+    ArrayAccessor &operator=(const ArrayAccessor &other);
 
     //! Casts type to ConstArrayAccessor.
     operator ConstArrayAccessor<T, 2>() const;
 
- private:
+private:
     Size2 _size;
-    T* _data;
+    T *_data;
 };
 
 //! Type alias for 2-D array accessor.
-template <typename T> using ArrayAccessor2 = ArrayAccessor<T, 2>;
-
+template<typename T> using ArrayAccessor2 = ArrayAccessor<T, 2>;
 
 //!
 //! \brief 2-D read-only array accessor class.
@@ -257,44 +258,44 @@ template <typename T> using ArrayAccessor2 = ArrayAccessor<T, 2>;
 //!
 //! \see Array2<T, 2>
 //!
-template <typename T>
-class ConstArrayAccessor<T, 2> {
- public:
+template<typename T>
+class ConstArrayAccessor<T, 2>
+{
+public:
     //! Constructs empty 2-D read-only array accessor.
     ConstArrayAccessor();
 
     //! Constructs a read-only array accessor that wraps given array.
     //! \param size Size of the 2-D array.
     //! \param data Raw array pointer.
-    ConstArrayAccessor(const Size2& size, const T* const data);
+    ConstArrayAccessor(const Size2 &size, const T *const data);
 
     //! Constructs an array accessor that wraps given array.
     //! \param width Width of the 2-D array.
     //! \param height Height of the 2-D array.
     //! \param data Raw array pointer.
-    ConstArrayAccessor(
-        size_t width, size_t height, const T* const data);
+    ConstArrayAccessor(size_t width, size_t height, const T *const data);
 
     //! Constructs a read-only array accessor from read/write accessor.
-    explicit ConstArrayAccessor(const ArrayAccessor<T, 2>& other);
+    explicit ConstArrayAccessor(const ArrayAccessor<T, 2> &other);
 
     //! Copy constructor.
-    ConstArrayAccessor(const ConstArrayAccessor& other);
+    ConstArrayAccessor(const ConstArrayAccessor &other);
 
     //! Returns the reference to the i-th element.
-    const T& at(size_t i) const;
+    const T &at(size_t i) const;
 
     //! Returns the const reference to the element at (pt.x, pt.y).
-    const T& at(const Point2UI& pt) const;
+    const T &at(const Point2UI &pt) const;
 
     //! Returns the const reference to the element at (i, j).
-    const T& at(size_t i, size_t j) const;
+    const T &at(size_t i, size_t j) const;
 
     //! Returns the begin iterator of the array.
-    const T* const begin() const;
+    const T *const begin() const;
 
     //! Returns the end iterator of the array.
-    const T* const end() const;
+    const T *const end() const;
 
     //! Returns the size of the array.
     Size2 size() const;
@@ -306,7 +307,7 @@ class ConstArrayAccessor<T, 2> {
     size_t height() const;
 
     //! Returns the raw pointer to the array data.
-    const T* const data() const;
+    const T *const data() const;
 
     //!
     //! \brief Iterates the array and invoke given \p func for each index.
@@ -336,7 +337,7 @@ class ConstArrayAccessor<T, 2> {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEach(Callback func) const;
 
     //!
@@ -367,7 +368,7 @@ class ConstArrayAccessor<T, 2> {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEachIndex(Callback func) const;
 
     //!
@@ -388,31 +389,31 @@ class ConstArrayAccessor<T, 2> {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEachIndex(Callback func) const;
 
     //! Returns the linear index of the given 2-D coordinate (pt.x, pt.y).
-    size_t index(const Point2UI& pt) const;
+    size_t index(const Point2UI &pt) const;
 
     //! Returns the linear index of the given 2-D coordinate (i, j).
     size_t index(size_t i, size_t j) const;
 
     //! Returns the const reference to the i-th element.
-    const T& operator[](size_t i) const;
+    const T &operator[](size_t i) const;
 
     //! Returns the const reference to the element at (pt.x, pt.y).
-    const T& operator()(const Point2UI& pt) const;
+    const T &operator()(const Point2UI &pt) const;
 
     //! Returns the const reference to the element at (i, j).
-    const T& operator()(size_t i, size_t j) const;
+    const T &operator()(size_t i, size_t j) const;
 
- private:
+private:
     Size2 _size;
-    const T* _data;
+    const T *_data;
 };
 
 //! Type alias for 2-D const array accessor.
-template <typename T> using ConstArrayAccessor2 = ConstArrayAccessor<T, 2>;
+template<typename T> using ConstArrayAccessor2 = ConstArrayAccessor<T, 2>;
 
 }  // namespace jet
 

@@ -13,41 +13,41 @@ using namespace jet;
 
 ImplicitSurfaceSet3::ImplicitSurfaceSet3() {}
 
-ImplicitSurfaceSet3::ImplicitSurfaceSet3(
-    const std::vector<ImplicitSurface3Ptr>& surfaces,
-    const Transform3& transform, bool isNormalFlipped)
-    : ImplicitSurface3(transform, isNormalFlipped), _surfaces(surfaces) {
-    for (auto surface : _surfaces) {
-        if (!surface->isBounded()) {
+ImplicitSurfaceSet3::ImplicitSurfaceSet3(const std::vector<ImplicitSurface3Ptr> &surfaces, const Transform3 &transform, bool isNormalFlipped) : ImplicitSurface3(transform, isNormalFlipped), _surfaces(surfaces)
+{
+    for (auto surface: _surfaces)
+    {
+        if (!surface->isBounded())
+        {
             _unboundedSurfaces.push_back(surface);
         }
     }
     invalidateBvh();
 }
 
-ImplicitSurfaceSet3::ImplicitSurfaceSet3(
-    const std::vector<Surface3Ptr>& surfaces, const Transform3& transform,
-    bool isNormalFlipped)
-    : ImplicitSurface3(transform, isNormalFlipped) {
-    for (const auto& surface : surfaces) {
+ImplicitSurfaceSet3::ImplicitSurfaceSet3(const std::vector<Surface3Ptr> &surfaces, const Transform3 &transform, bool isNormalFlipped) : ImplicitSurface3(transform, isNormalFlipped)
+{
+    for (const auto &surface: surfaces)
+    {
         addExplicitSurface(surface);
     }
 }
 
-ImplicitSurfaceSet3::ImplicitSurfaceSet3(const ImplicitSurfaceSet3& other)
-    : ImplicitSurface3(other),
-      _surfaces(other._surfaces),
-      _unboundedSurfaces(other._unboundedSurfaces) {}
+ImplicitSurfaceSet3::ImplicitSurfaceSet3(const ImplicitSurfaceSet3 &other) : ImplicitSurface3(other), _surfaces(other._surfaces), _unboundedSurfaces(other._unboundedSurfaces) {}
 
-void ImplicitSurfaceSet3::updateQueryEngine() {
+void ImplicitSurfaceSet3::updateQueryEngine()
+{
     invalidateBvh();
     buildBvh();
 }
 
-bool ImplicitSurfaceSet3::isBounded() const {
+bool ImplicitSurfaceSet3::isBounded() const
+{
     // All surfaces should be bounded.
-    for (auto surface : _surfaces) {
-        if (!surface->isBounded()) {
+    for (auto surface: _surfaces)
+    {
+        if (!surface->isBounded())
+        {
             return false;
         }
     }
@@ -56,10 +56,13 @@ bool ImplicitSurfaceSet3::isBounded() const {
     return !_surfaces.empty();
 }
 
-bool ImplicitSurfaceSet3::isValidGeometry() const {
+bool ImplicitSurfaceSet3::isValidGeometry() const
+{
     // All surfaces should be valid.
-    for (auto surface : _surfaces) {
-        if (!surface->isValidGeometry()) {
+    for (auto surface: _surfaces)
+    {
+        if (!surface->isValidGeometry())
+        {
             return false;
         }
     }
@@ -68,46 +71,54 @@ bool ImplicitSurfaceSet3::isValidGeometry() const {
     return !_surfaces.empty();
 }
 
-size_t ImplicitSurfaceSet3::numberOfSurfaces() const {
+size_t ImplicitSurfaceSet3::numberOfSurfaces() const
+{
     return _surfaces.size();
 }
 
-const ImplicitSurface3Ptr& ImplicitSurfaceSet3::surfaceAt(size_t i) const {
+const ImplicitSurface3Ptr &ImplicitSurfaceSet3::surfaceAt(size_t i) const
+{
     return _surfaces[i];
 }
 
-void ImplicitSurfaceSet3::addExplicitSurface(const Surface3Ptr& surface) {
+void ImplicitSurfaceSet3::addExplicitSurface(const Surface3Ptr &surface)
+{
     addSurface(std::make_shared<SurfaceToImplicit3>(surface));
 }
 
-void ImplicitSurfaceSet3::addSurface(const ImplicitSurface3Ptr& surface) {
+void ImplicitSurfaceSet3::addSurface(const ImplicitSurface3Ptr &surface)
+{
     _surfaces.push_back(surface);
-    if (!surface->isBounded()) {
+    if (!surface->isBounded())
+    {
         _unboundedSurfaces.push_back(surface);
     }
     invalidateBvh();
 }
 
-Vector3D ImplicitSurfaceSet3::closestPointLocal(
-    const Vector3D& otherPoint) const {
+Vector3D ImplicitSurfaceSet3::closestPointLocal(const Vector3D &otherPoint) const
+{
     buildBvh();
 
-    const auto distanceFunc = [](const Surface3Ptr& surface,
-                                 const Vector3D& pt) {
+    const auto distanceFunc = [](const Surface3Ptr &surface, const Vector3D &pt)
+    {
         return surface->closestDistance(pt);
     };
 
     Vector3D result{kMaxD, kMaxD, kMaxD};
     const auto queryResult = _bvh.nearest(otherPoint, distanceFunc);
-    if (queryResult.item != nullptr) {
+    if (queryResult.item != nullptr)
+    {
         result = (*queryResult.item)->closestPoint(otherPoint);
     }
 
     double minDist = queryResult.distance;
-    for (auto surface : _unboundedSurfaces) {
+    for (auto surface: _unboundedSurfaces)
+    {
         auto pt = surface->closestPoint(otherPoint);
         double dist = pt.distanceTo(otherPoint);
-        if (dist < minDist) {
+        if (dist < minDist)
+        {
             minDist = dist;
             result = surface->closestPoint(otherPoint);
         }
@@ -116,22 +127,24 @@ Vector3D ImplicitSurfaceSet3::closestPointLocal(
     return result;
 }
 
-double ImplicitSurfaceSet3::closestDistanceLocal(
-    const Vector3D& otherPoint) const {
+double ImplicitSurfaceSet3::closestDistanceLocal(const Vector3D &otherPoint) const
+{
     buildBvh();
 
-    const auto distanceFunc = [](const Surface3Ptr& surface,
-                                 const Vector3D& pt) {
+    const auto distanceFunc = [](const Surface3Ptr &surface, const Vector3D &pt)
+    {
         return surface->closestDistance(pt);
     };
 
     const auto queryResult = _bvh.nearest(otherPoint, distanceFunc);
 
     double minDist = queryResult.distance;
-    for (auto surface : _unboundedSurfaces) {
+    for (auto surface: _unboundedSurfaces)
+    {
         auto pt = surface->closestPoint(otherPoint);
         double dist = pt.distanceTo(otherPoint);
-        if (dist < minDist) {
+        if (dist < minDist)
+        {
             minDist = dist;
         }
     }
@@ -139,26 +152,29 @@ double ImplicitSurfaceSet3::closestDistanceLocal(
     return minDist;
 }
 
-Vector3D ImplicitSurfaceSet3::closestNormalLocal(
-    const Vector3D& otherPoint) const {
+Vector3D ImplicitSurfaceSet3::closestNormalLocal(const Vector3D &otherPoint) const
+{
     buildBvh();
 
-    const auto distanceFunc = [](const Surface3Ptr& surface,
-                                 const Vector3D& pt) {
+    const auto distanceFunc = [](const Surface3Ptr &surface, const Vector3D &pt)
+    {
         return surface->closestDistance(pt);
     };
 
     Vector3D result{1.0, 0.0, 0.0};
     const auto queryResult = _bvh.nearest(otherPoint, distanceFunc);
-    if (queryResult.item != nullptr) {
+    if (queryResult.item != nullptr)
+    {
         result = (*queryResult.item)->closestNormal(otherPoint);
     }
 
     double minDist = queryResult.distance;
-    for (auto surface : _unboundedSurfaces) {
+    for (auto surface: _unboundedSurfaces)
+    {
         auto pt = surface->closestPoint(otherPoint);
         double dist = pt.distanceTo(otherPoint);
-        if (dist < minDist) {
+        if (dist < minDist)
+        {
             minDist = dist;
             result = surface->closestNormal(otherPoint);
         }
@@ -167,26 +183,30 @@ Vector3D ImplicitSurfaceSet3::closestNormalLocal(
     return result;
 }
 
-bool ImplicitSurfaceSet3::intersectsLocal(const Ray3D& ray) const {
+bool ImplicitSurfaceSet3::intersectsLocal(const Ray3D &ray) const
+{
     buildBvh();
 
-    const auto testFunc = [](const Surface3Ptr& surface, const Ray3D& ray) {
+    const auto testFunc = [](const Surface3Ptr &surface, const Ray3D &ray)
+    {
         return surface->intersects(ray);
     };
 
     bool result = _bvh.intersects(ray, testFunc);
-    for (auto surface : _unboundedSurfaces) {
+    for (auto surface: _unboundedSurfaces)
+    {
         result |= surface->intersects(ray);
     }
 
     return result;
 }
 
-SurfaceRayIntersection3 ImplicitSurfaceSet3::closestIntersectionLocal(
-    const Ray3D& ray) const {
+SurfaceRayIntersection3 ImplicitSurfaceSet3::closestIntersectionLocal(const Ray3D &ray) const
+{
     buildBvh();
 
-    const auto testFunc = [](const Surface3Ptr& surface, const Ray3D& ray) {
+    const auto testFunc = [](const Surface3Ptr &surface, const Ray3D &ray)
+    {
         SurfaceRayIntersection3 result = surface->closestIntersection(ray);
         return result.distance;
     };
@@ -195,14 +215,17 @@ SurfaceRayIntersection3 ImplicitSurfaceSet3::closestIntersectionLocal(
     SurfaceRayIntersection3 result;
     result.distance = queryResult.distance;
     result.isIntersecting = queryResult.item != nullptr;
-    if (queryResult.item != nullptr) {
+    if (queryResult.item != nullptr)
+    {
         result.point = ray.pointAt(queryResult.distance);
         result.normal = (*queryResult.item)->closestNormal(result.point);
     }
 
-    for (auto surface : _unboundedSurfaces) {
+    for (auto surface: _unboundedSurfaces)
+    {
         SurfaceRayIntersection3 localResult = surface->closestIntersection(ray);
-        if (localResult.distance < result.distance) {
+        if (localResult.distance < result.distance)
+        {
             result = localResult;
         }
     }
@@ -210,15 +233,19 @@ SurfaceRayIntersection3 ImplicitSurfaceSet3::closestIntersectionLocal(
     return result;
 }
 
-BoundingBox3D ImplicitSurfaceSet3::boundingBoxLocal() const {
+BoundingBox3D ImplicitSurfaceSet3::boundingBoxLocal() const
+{
     buildBvh();
 
     return _bvh.boundingBox();
 }
 
-bool ImplicitSurfaceSet3::isInsideLocal(const Vector3D& otherPoint) const {
-    for (auto surface : _surfaces) {
-        if (surface->isInside(otherPoint)) {
+bool ImplicitSurfaceSet3::isInsideLocal(const Vector3D &otherPoint) const
+{
+    for (auto surface: _surfaces)
+    {
+        if (surface->isInside(otherPoint))
+        {
             return true;
         }
     }
@@ -226,10 +253,11 @@ bool ImplicitSurfaceSet3::isInsideLocal(const Vector3D& otherPoint) const {
     return false;
 }
 
-double ImplicitSurfaceSet3::signedDistanceLocal(
-    const Vector3D& otherPoint) const {
+double ImplicitSurfaceSet3::signedDistanceLocal(const Vector3D &otherPoint) const
+{
     double sdf = kMaxD;
-    for (const auto& surface : _surfaces) {
+    for (const auto &surface: _surfaces)
+    {
         sdf = std::min(sdf, surface->signedDistance(otherPoint));
     }
 
@@ -238,12 +266,16 @@ double ImplicitSurfaceSet3::signedDistanceLocal(
 
 void ImplicitSurfaceSet3::invalidateBvh() { _bvhInvalidated = true; }
 
-void ImplicitSurfaceSet3::buildBvh() const {
-    if (_bvhInvalidated) {
+void ImplicitSurfaceSet3::buildBvh() const
+{
+    if (_bvhInvalidated)
+    {
         std::vector<ImplicitSurface3Ptr> surfs;
         std::vector<BoundingBox3D> bounds;
-        for (size_t i = 0; i < _surfaces.size(); ++i) {
-            if (_surfaces[i]->isBounded()) {
+        for (size_t i = 0; i < _surfaces.size(); ++i)
+        {
+            if (_surfaces[i]->isBounded())
+            {
                 surfs.push_back(_surfaces[i]);
                 bounds.push_back(_surfaces[i]->boundingBox());
             }
@@ -255,32 +287,33 @@ void ImplicitSurfaceSet3::buildBvh() const {
 
 // ImplicitSurfaceSet3::Builder
 
-ImplicitSurfaceSet3::Builder ImplicitSurfaceSet3::builder() {
+ImplicitSurfaceSet3::Builder ImplicitSurfaceSet3::builder()
+{
     return Builder();
 }
 
-ImplicitSurfaceSet3::Builder& ImplicitSurfaceSet3::Builder::withSurfaces(
-    const std::vector<ImplicitSurface3Ptr>& surfaces) {
+ImplicitSurfaceSet3::Builder &ImplicitSurfaceSet3::Builder::withSurfaces(const std::vector<ImplicitSurface3Ptr> &surfaces)
+{
     _surfaces = surfaces;
     return *this;
 }
 
-ImplicitSurfaceSet3::Builder&
-ImplicitSurfaceSet3::Builder::withExplicitSurfaces(
-    const std::vector<Surface3Ptr>& surfaces) {
+ImplicitSurfaceSet3::Builder &ImplicitSurfaceSet3::Builder::withExplicitSurfaces(const std::vector<Surface3Ptr> &surfaces)
+{
     _surfaces.clear();
-    for (const auto& surface : surfaces) {
+    for (const auto &surface: surfaces)
+    {
         _surfaces.push_back(std::make_shared<SurfaceToImplicit3>(surface));
     }
     return *this;
 }
 
-ImplicitSurfaceSet3 ImplicitSurfaceSet3::Builder::build() const {
+ImplicitSurfaceSet3 ImplicitSurfaceSet3::Builder::build() const
+{
     return ImplicitSurfaceSet3(_surfaces, _transform, _isNormalFlipped);
 }
 
-ImplicitSurfaceSet3Ptr ImplicitSurfaceSet3::Builder::makeShared() const {
-    return std::shared_ptr<ImplicitSurfaceSet3>(
-        new ImplicitSurfaceSet3(_surfaces, _transform, _isNormalFlipped),
-        [](ImplicitSurfaceSet3* obj) { delete obj; });
+ImplicitSurfaceSet3Ptr ImplicitSurfaceSet3::Builder::makeShared() const
+{
+    return std::shared_ptr<ImplicitSurfaceSet3>(new ImplicitSurfaceSet3(_surfaces, _transform, _isNormalFlipped), [](ImplicitSurfaceSet3 *obj) { delete obj; });
 }

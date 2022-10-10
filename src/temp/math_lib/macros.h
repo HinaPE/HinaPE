@@ -94,6 +94,4 @@ using ssize_t = SSIZE_T;
 #endif
 #endif
 
-
-
 #endif  // INCLUDE_JET_MACROS_H_

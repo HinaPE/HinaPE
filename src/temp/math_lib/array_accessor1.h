@@ -10,7 +10,8 @@
 #include "array_accessor.h"
 #include <utility>  // just make cpplint happy..
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 1-D array accessor class.
@@ -23,50 +24,51 @@ namespace jet {
 //!
 //! \tparam T - Array value type.
 //!
-template <typename T>
-class ArrayAccessor<T, 1> final {
- public:
+template<typename T>
+class ArrayAccessor<T, 1> final
+{
+public:
     //! Constructs empty 1-D array accessor.
     ArrayAccessor();
 
     //! Constructs an array accessor that wraps given array.
-    ArrayAccessor(size_t size, T* const data);
+    ArrayAccessor(size_t size, T *const data);
 
     //! Copy constructor.
-    ArrayAccessor(const ArrayAccessor& other);
+    ArrayAccessor(const ArrayAccessor &other);
 
     //! Replaces the content with given \p other array accessor.
-    void set(const ArrayAccessor& other);
+    void set(const ArrayAccessor &other);
 
     //! Resets the array.
-    void reset(size_t size, T* const data);
+    void reset(size_t size, T *const data);
 
     //! Returns the reference to the i-th element.
-    T& at(size_t i);
+    T &at(size_t i);
 
     //! Returns the const reference to the i-th element.
-    const T& at(size_t i) const;
+    const T &at(size_t i) const;
 
     //! Returns the begin iterator of the array.
-    T* const begin() const;
+    T *const begin() const;
 
     //! Returns the end iterator of the array.
-    T* const end() const;
+    T *const end() const;
 
     //! Returns the begin iterator of the array.
-    T* begin();
+    T *begin();
 
     //! Returns the end iterator of the array.
-    T* end();
+    T *end();
 
     //! Returns size of the array.
     size_t size() const;
 
     //! Returns the raw pointer to the array data.
-    T* const data() const;
+    T *const data() const;
 
     //! Swaps the content of with \p other array accessor.
-    void swap(ArrayAccessor& other);
+    void swap(ArrayAccessor &other);
 
     //!
     //! \brief Iterates the array and invoke given \p func for each element.
@@ -84,7 +86,7 @@ class ArrayAccessor<T, 1> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEach(Callback func) const;
 
     //!
@@ -103,7 +105,7 @@ class ArrayAccessor<T, 1> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEachIndex(Callback func) const;
 
     //!
@@ -127,7 +129,7 @@ class ArrayAccessor<T, 1> final {
     //! The parameter type of the callback function doesn't have to be T&, but
     //! const T& or T can be used as well.
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEach(Callback func);
 
     //!
@@ -148,29 +150,28 @@ class ArrayAccessor<T, 1> final {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEachIndex(Callback func) const;
 
     //! Returns the reference to i-th element.
-    T& operator[](size_t i);
+    T &operator[](size_t i);
 
     //! Returns the const reference to i-th element.
-    const T& operator[](size_t i) const;
+    const T &operator[](size_t i) const;
 
     //! Copies given array accessor \p other.
-    ArrayAccessor& operator=(const ArrayAccessor& other);
+    ArrayAccessor &operator=(const ArrayAccessor &other);
 
     //! Casts type to ConstArrayAccessor.
     operator ConstArrayAccessor<T, 1>() const;
 
- private:
+private:
     size_t _size;
-    T* _data;
+    T *_data;
 };
 
 //! Type alias for 1-D array accessor.
-template <typename T> using ArrayAccessor1 = ArrayAccessor<T, 1>;
-
+template<typename T> using ArrayAccessor1 = ArrayAccessor<T, 1>;
 
 //!
 //! \brief 1-D read-only array accessor class.
@@ -180,35 +181,36 @@ template <typename T> using ArrayAccessor1 = ArrayAccessor<T, 1>;
 //! Thus, it is more like a random access iterator, but with multi-dimension
 //! support.
 //!
-template <typename T>
-class ConstArrayAccessor<T, 1> {
- public:
+template<typename T>
+class ConstArrayAccessor<T, 1>
+{
+public:
     //! Constructs empty 1-D array accessor.
     ConstArrayAccessor();
 
     //! Constructs an read-only array accessor that wraps given array.
-    ConstArrayAccessor(size_t size, const T* const data);
+    ConstArrayAccessor(size_t size, const T *const data);
 
     //! Constructs a read-only array accessor from read/write accessor.
-    explicit ConstArrayAccessor(const ArrayAccessor<T, 1>& other);
+    explicit ConstArrayAccessor(const ArrayAccessor<T, 1> &other);
 
     //! Copy constructor.
-    ConstArrayAccessor(const ConstArrayAccessor& other);
+    ConstArrayAccessor(const ConstArrayAccessor &other);
 
     //! Returns the const reference to the i-th element.
-    const T& at(size_t i) const;
+    const T &at(size_t i) const;
 
     //! Returns the begin iterator of the array.
-    const T* const begin() const;
+    const T *const begin() const;
 
     //! Returns the end iterator of the array.
-    const T* const end() const;
+    const T *const end() const;
 
     //! Returns size of the array.
     size_t size() const;
 
     //! Returns the raw pointer to the array data.
-    const T* const data() const;
+    const T *const data() const;
 
     //!
     //! \brief Iterates the array and invoke given \p func for each element.
@@ -226,7 +228,7 @@ class ConstArrayAccessor<T, 1> {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEach(Callback func) const;
 
     //!
@@ -245,7 +247,7 @@ class ConstArrayAccessor<T, 1> {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void forEachIndex(Callback func) const;
 
     //!
@@ -266,19 +268,19 @@ class ConstArrayAccessor<T, 1> {
     //! });
     //! \endcode
     //!
-    template <typename Callback>
+    template<typename Callback>
     void parallelForEachIndex(Callback func) const;
 
     //! Returns the const reference to i-th element.
-    const T& operator[](size_t i) const;
+    const T &operator[](size_t i) const;
 
- private:
+private:
     size_t _size;
-    const T* _data;
+    const T *_data;
 };
 
 //! Type alias for 1-D const array accessor.
-template <typename T> using ConstArrayAccessor1 = ConstArrayAccessor<T, 1>;
+template<typename T> using ConstArrayAccessor1 = ConstArrayAccessor<T, 1>;
 
 }  // namespace jet
 

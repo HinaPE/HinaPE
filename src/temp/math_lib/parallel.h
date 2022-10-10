@@ -7,7 +7,8 @@
 #ifndef INCLUDE_JET_PARALLEL_H_
 #define INCLUDE_JET_PARALLEL_H_
 
-namespace jet {
+namespace jet
+{
 
 //! Execution policy tag.
 enum class ExecutionPolicy { kSerial, kParallel };
@@ -27,10 +28,8 @@ enum class ExecutionPolicy { kSerial, kParallel };
 //! \tparam     RandomIterator Random iterator type.
 //! \tparam     T              Value type of a container.
 //!
-template <typename RandomIterator, typename T>
-void parallelFill(const RandomIterator& begin, const RandomIterator& end,
-                  const T& value,
-                  ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename RandomIterator, typename T>
+void parallelFill(const RandomIterator &begin, const RandomIterator &end, const T &value, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //!
 //! \brief      Makes a for-loop from \p beginIndex \p to endIndex in parallel.
@@ -47,10 +46,8 @@ void parallelFill(const RandomIterator& begin, const RandomIterator& end,
 //! \tparam     IndexType  Index type.
 //! \tparam     Function   Function type.
 //!
-template <typename IndexType, typename Function>
-void parallelFor(IndexType beginIndex, IndexType endIndex,
-                 const Function& function,
-                 ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename IndexType, typename Function>
+void parallelFor(IndexType beginIndex, IndexType endIndex, const Function &function, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //!
 //! \brief      Makes a range-loop from \p beginIndex \p to endIndex in
@@ -69,10 +66,8 @@ void parallelFor(IndexType beginIndex, IndexType endIndex,
 //! \tparam     IndexType  Index type.
 //! \tparam     Function   Function type.
 //!
-template <typename IndexType, typename Function>
-void parallelRangeFor(IndexType beginIndex, IndexType endIndex,
-                      const Function& function,
-                      ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename IndexType, typename Function>
+void parallelRangeFor(IndexType beginIndex, IndexType endIndex, const Function &function, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //!
 //! \brief      Makes a 2D nested for-loop in parallel.
@@ -92,11 +87,8 @@ void parallelRangeFor(IndexType beginIndex, IndexType endIndex,
 //! \tparam     IndexType  Index type.
 //! \tparam     Function   Function type.
 //!
-template <typename IndexType, typename Function>
-void parallelFor(IndexType beginIndexX, IndexType endIndexX,
-                 IndexType beginIndexY, IndexType endIndexY,
-                 const Function& function,
-                 ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename IndexType, typename Function>
+void parallelFor(IndexType beginIndexX, IndexType endIndexX, IndexType beginIndexY, IndexType endIndexY, const Function &function, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //!
 //! \brief      Makes a 2D nested range-loop in parallel.
@@ -117,11 +109,8 @@ void parallelFor(IndexType beginIndexX, IndexType endIndexX,
 //! \tparam     IndexType  Index type.
 //! \tparam     Function   Function type.
 //!
-template <typename IndexType, typename Function>
-void parallelRangeFor(IndexType beginIndexX, IndexType endIndexX,
-                      IndexType beginIndexY, IndexType endIndexY,
-                      const Function& function,
-                      ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename IndexType, typename Function>
+void parallelRangeFor(IndexType beginIndexX, IndexType endIndexX, IndexType beginIndexY, IndexType endIndexY, const Function &function, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //!
 //! \brief      Makes a 3D nested for-loop in parallel.
@@ -143,12 +132,8 @@ void parallelRangeFor(IndexType beginIndexX, IndexType endIndexX,
 //! \tparam     IndexType   Index type.
 //! \tparam     Function    Function type.
 //!
-template <typename IndexType, typename Function>
-void parallelFor(IndexType beginIndexX, IndexType endIndexX,
-                 IndexType beginIndexY, IndexType endIndexY,
-                 IndexType beginIndexZ, IndexType endIndexZ,
-                 const Function& function,
-                 ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename IndexType, typename Function>
+void parallelFor(IndexType beginIndexX, IndexType endIndexX, IndexType beginIndexY, IndexType endIndexY, IndexType beginIndexZ, IndexType endIndexZ, const Function &function, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //!
 //! \brief      Makes a 3D nested range-loop in parallel.
@@ -171,12 +156,8 @@ void parallelFor(IndexType beginIndexX, IndexType endIndexX,
 //! \tparam     IndexType   Index type.
 //! \tparam     Function    Function type.
 //!
-template <typename IndexType, typename Function>
-void parallelRangeFor(IndexType beginIndexX, IndexType endIndexX,
-                      IndexType beginIndexY, IndexType endIndexY,
-                      IndexType beginIndexZ, IndexType endIndexZ,
-                      const Function& function,
-                      ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename IndexType, typename Function>
+void parallelRangeFor(IndexType beginIndexX, IndexType endIndexX, IndexType beginIndexY, IndexType endIndexY, IndexType beginIndexZ, IndexType endIndexZ, const Function &function, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //!
 //! \brief      Performs reduce operation in parallel.
@@ -195,12 +176,8 @@ void parallelRangeFor(IndexType beginIndexX, IndexType endIndexX,
 //! \tparam     Value      Value type.
 //! \tparam     Function   Reduce function type.
 //!
-template <typename IndexType, typename Value, typename Function,
-          typename Reduce>
-Value parallelReduce(IndexType beginIndex, IndexType endIndex,
-                     const Value& identity, const Function& func,
-                     const Reduce& reduce,
-                     ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename IndexType, typename Value, typename Function, typename Reduce>
+Value parallelReduce(IndexType beginIndex, IndexType endIndex, const Value &identity, const Function &func, const Reduce &reduce, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //!
 //! \brief      Sorts a container in parallel.
@@ -213,9 +190,8 @@ Value parallelReduce(IndexType beginIndex, IndexType endIndex,
 //!
 //! \tparam     RandomIterator Iterator type.
 //!
-template <typename RandomIterator>
-void parallelSort(RandomIterator begin, RandomIterator end,
-                  ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename RandomIterator>
+void parallelSort(RandomIterator begin, RandomIterator end, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //!
 //! \brief      Sorts a container in parallel with a custom compare function.
@@ -232,10 +208,8 @@ void parallelSort(RandomIterator begin, RandomIterator end,
 //! \tparam     RandomIterator  Iterator type.
 //! \tparam     CompareFunction Compare function type.
 //!
-template <typename RandomIterator, typename CompareFunction>
-void parallelSort(RandomIterator begin, RandomIterator end,
-                  CompareFunction compare,
-                  ExecutionPolicy policy = ExecutionPolicy::kParallel);
+template<typename RandomIterator, typename CompareFunction>
+void parallelSort(RandomIterator begin, RandomIterator end, CompareFunction compare, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
 //! Sets maximum number of threads to use.
 void setMaxNumberOfThreads(unsigned int numThreads);

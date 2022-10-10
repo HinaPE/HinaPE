@@ -14,7 +14,8 @@
 #include "particle_system_data3.h"
 #include "physics_animation.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief      Basic 3-D particle system solver.
@@ -28,17 +29,16 @@ namespace jet {
 //!
 //! \see        SphSolver3
 //!
-class ParticleSystemSolver3 : public PhysicsAnimation {
- public:
+class ParticleSystemSolver3 : public PhysicsAnimation
+{
+public:
     class Builder;
 
     //! Constructs an empty solver.
     ParticleSystemSolver3();
 
     //! Constructs a solver with particle parameters.
-    ParticleSystemSolver3(
-        double radius,
-        double mass);
+    ParticleSystemSolver3(double radius, double mass);
 
     //! Destructor.
     virtual ~ParticleSystemSolver3();
@@ -71,10 +71,10 @@ class ParticleSystemSolver3 : public PhysicsAnimation {
     void setRestitutionCoefficient(double newRestitutionCoefficient);
 
     //! Returns the gravity.
-    const Vector3D& gravity() const;
+    const Vector3D &gravity() const;
 
     //! Sets the gravity.
-    void setGravity(const Vector3D& newGravity);
+    void setGravity(const Vector3D &newGravity);
 
     //!
     //! \brief      Returns the particle system data.
@@ -84,22 +84,22 @@ class ParticleSystemSolver3 : public PhysicsAnimation {
     //!
     //! \return     The particle system data.
     //!
-    const ParticleSystemData3Ptr& particleSystemData() const;
+    const ParticleSystemData3Ptr &particleSystemData() const;
 
     //! Returns the collider.
-    const Collider3Ptr& collider() const;
+    const Collider3Ptr &collider() const;
 
     //! Sets the collider.
-    void setCollider(const Collider3Ptr& newCollider);
+    void setCollider(const Collider3Ptr &newCollider);
 
     //! Returns the emitter.
-    const ParticleEmitter3Ptr& emitter() const;
+    const ParticleEmitter3Ptr &emitter() const;
 
     //! Sets the emitter.
-    void setEmitter(const ParticleEmitter3Ptr& newEmitter);
+    void setEmitter(const ParticleEmitter3Ptr &newEmitter);
 
     //! Returns the wind field.
-    const VectorField3Ptr& wind() const;
+    const VectorField3Ptr &wind() const;
 
     //!
     //! \brief      Sets the wind.
@@ -109,12 +109,12 @@ class ParticleSystemSolver3 : public PhysicsAnimation {
     //!
     //! \param[in]  newWind The new wind.
     //!
-    void setWind(const VectorField3Ptr& newWind);
+    void setWind(const VectorField3Ptr &newWind);
 
     //! Returns builder fox ParticleSystemSolver3.
     static Builder builder();
 
- protected:
+protected:
     //! Initializes the simulator.
     void onInitialize() override;
 
@@ -135,14 +135,12 @@ class ParticleSystemSolver3 : public PhysicsAnimation {
 
     //! Resolves any collisions occured by the particles where the particle
     //! state is given by the position and velocity arrays.
-    void resolveCollision(
-        ArrayAccessor1<Vector3D> newPositions,
-        ArrayAccessor1<Vector3D> newVelocities);
+    void resolveCollision(ArrayAccessor1<Vector3D> newPositions, ArrayAccessor1<Vector3D> newVelocities);
 
     //! Assign a new particle system data.
-    void setParticleSystemData(const ParticleSystemData3Ptr& newParticles);
+    void setParticleSystemData(const ParticleSystemData3Ptr &newParticles);
 
- private:
+private:
     double _dragCoefficient = 1e-4;
     double _restitutionCoefficient = 0.0;
     Vector3D _gravity = Vector3D(0.0, kGravity, 0.0);
@@ -170,42 +168,44 @@ class ParticleSystemSolver3 : public PhysicsAnimation {
 //! Shared pointer type for the ParticleSystemSolver3.
 typedef std::shared_ptr<ParticleSystemSolver3> ParticleSystemSolver3Ptr;
 
-
 //!
 //! \brief Base class for particle-based solver builder.
 //!
-template <typename DerivedBuilder>
-class ParticleSystemSolverBuilderBase3 {
- public:
+template<typename DerivedBuilder>
+class ParticleSystemSolverBuilderBase3
+{
+public:
     //! Returns builder with particle radius.
-    DerivedBuilder& withRadius(double radius);
+    DerivedBuilder &withRadius(double radius);
 
     //! Returns builder with mass per particle.
-    DerivedBuilder& withMass(double mass);
+    DerivedBuilder &withMass(double mass);
 
- protected:
+protected:
     double _radius = 1e-3;
     double _mass = 1e-3;
 };
 
-template <typename T>
-T& ParticleSystemSolverBuilderBase3<T>::withRadius(double radius) {
+template<typename T>
+T &ParticleSystemSolverBuilderBase3<T>::withRadius(double radius)
+{
     _radius = radius;
-    return static_cast<T&>(*this);
+    return static_cast<T &>(*this);
 }
 
-template <typename T>
-T& ParticleSystemSolverBuilderBase3<T>::withMass(double mass) {
+template<typename T>
+T &ParticleSystemSolverBuilderBase3<T>::withMass(double mass)
+{
     _mass = mass;
-    return static_cast<T&>(*this);
+    return static_cast<T &>(*this);
 }
 
 //!
 //! \brief Front-end to create ParticleSystemSolver3 objects step by step.
 //!
-class ParticleSystemSolver3::Builder final
-    : public ParticleSystemSolverBuilderBase3<ParticleSystemSolver3::Builder> {
- public:
+class ParticleSystemSolver3::Builder final : public ParticleSystemSolverBuilderBase3<ParticleSystemSolver3::Builder>
+{
+public:
     //! Builds ParticleSystemSolver3.
     ParticleSystemSolver3 build() const;
 

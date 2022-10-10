@@ -9,7 +9,8 @@
 
 #include "animation.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief      Abstract base class for physics-based animation.
@@ -17,8 +18,9 @@ namespace jet {
 //! This class represents physics-based animation by adding time-integration
 //! specific functions to Animation class.
 //!
-class PhysicsAnimation : public Animation {
- public:
+class PhysicsAnimation : public Animation
+{
+public:
     //! Default constructor.
     PhysicsAnimation();
 
@@ -84,7 +86,7 @@ class PhysicsAnimation : public Animation {
     //!
     //! \brief      Sets current frame cursor (but do not invoke update()).
     //!
-    void setCurrentFrame(const Frame& frame);
+    void setCurrentFrame(const Frame &frame);
 
     //!
     //! \brief      Returns current time in seconds.
@@ -94,7 +96,7 @@ class PhysicsAnimation : public Animation {
     //!
     double currentTimeInSeconds() const;
 
- protected:
+protected:
     //!
     //! \brief      Called when a single time-step should be advanced.
     //!
@@ -121,8 +123,7 @@ class PhysicsAnimation : public Animation {
     //!
     //! \return     The required number of sub-timesteps.
     //!
-    virtual unsigned int numberOfSubTimeSteps(
-        double timeIntervalInSeconds) const;
+    virtual unsigned int numberOfSubTimeSteps(double timeIntervalInSeconds) const;
 
     //!
     //! \brief      Called at frame 0 to initialize the physics state.
@@ -132,13 +133,13 @@ class PhysicsAnimation : public Animation {
     //!
     virtual void onInitialize();
 
- private:
+private:
     Frame _currentFrame;
     bool _isUsingFixedSubTimeSteps = true;
     unsigned int _numberOfFixedSubTimeSteps = 1;
     double _currentTime = 0.0;
 
-    void onUpdate(const Frame& frame) final;
+    void onUpdate(const Frame &frame) final;
 
     void advanceTimeStep(double timeIntervalInSeconds);
 

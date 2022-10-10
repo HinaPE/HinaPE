@@ -15,11 +15,13 @@
 #include <memory>
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //! Abstract base class for 3-D scalar grid structure.
-class ScalarGrid3 : public ScalarField3, public Grid3 {
- public:
+class ScalarGrid3 : public ScalarField3, public Grid3
+{
+public:
     //! Read-write array accessor type.
     typedef ArrayAccessor3<double> ScalarDataAccessor;
 
@@ -56,42 +58,22 @@ class ScalarGrid3 : public ScalarField3, public Grid3 {
     void clear();
 
     //! Resizes the grid using given parameters.
-    void resize(
-        size_t resolutionX,
-        size_t resolutionY,
-        size_t resolutionZ,
-        double gridSpacingX = 1.0,
-        double gridSpacingY = 1.0,
-        double gridSpacingZ = 1.0,
-        double originX = 0.0,
-        double originY = 0.0,
-        double originZ = 0.0,
-        double initialValue = 0.0);
+    void resize(size_t resolutionX, size_t resolutionY, size_t resolutionZ, double gridSpacingX = 1.0, double gridSpacingY = 1.0, double gridSpacingZ = 1.0, double originX = 0.0, double originY = 0.0, double originZ = 0.0, double initialValue = 0.0);
 
     //! Resizes the grid using given parameters.
-    void resize(
-        const Size3& resolution,
-        const Vector3D& gridSpacing = Vector3D(1, 1, 1),
-        const Vector3D& origin = Vector3D(),
-        double initialValue = 0.0);
+    void resize(const Size3 &resolution, const Vector3D &gridSpacing = Vector3D(1, 1, 1), const Vector3D &origin = Vector3D(), double initialValue = 0.0);
 
     //! Resizes the grid using given parameters.
-    void resize(
-        double gridSpacingX,
-        double gridSpacingY,
-        double gridSpacingZ,
-        double originX,
-        double originY,
-        double originZ);
+    void resize(double gridSpacingX, double gridSpacingY, double gridSpacingZ, double originX, double originY, double originZ);
 
     //! Resizes the grid using given parameters.
-    void resize(const Vector3D& gridSpacing, const Vector3D& origin);
+    void resize(const Vector3D &gridSpacing, const Vector3D &origin);
 
     //! Returns the grid data at given data point.
-    const double& operator()(size_t i, size_t j, size_t k) const;
+    const double &operator()(size_t i, size_t j, size_t k) const;
 
     //! Returns the grid data at given data point.
-    double& operator()(size_t i, size_t j, size_t k);
+    double &operator()(size_t i, size_t j, size_t k);
 
     //! Returns the gradient vector at given data point.
     Vector3D gradientAtDataPoint(size_t i, size_t j, size_t k) const;
@@ -109,12 +91,10 @@ class ScalarGrid3 : public ScalarField3, public Grid3 {
     DataPositionFunc dataPosition() const;
 
     //! Fills the grid with given value.
-    void fill(double value,
-              ExecutionPolicy policy = ExecutionPolicy::kParallel);
+    void fill(double value, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
     //! Fills the grid with given position-to-value mapping function.
-    void fill(const std::function<double(const Vector3D&)>& func,
-              ExecutionPolicy policy = ExecutionPolicy::kParallel);
+    void fill(const std::function<double(const Vector3D &)> &func, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
     //!
     //! \brief Invokes the given function \p func for each data point.
@@ -123,8 +103,7 @@ class ScalarGrid3 : public ScalarField3, public Grid3 {
     //! point in serial manner. The input parameters are i and j indices of a
     //! data point. The order of execution is i-first, j-last.
     //!
-    void forEachDataPointIndex(
-        const std::function<void(size_t, size_t, size_t)>& func) const;
+    void forEachDataPointIndex(const std::function<void(size_t, size_t, size_t)> &func) const;
 
     //!
     //! \brief Invokes the given function \p func for each data point
@@ -135,8 +114,7 @@ class ScalarGrid3 : public ScalarField3, public Grid3 {
     //! data point. The order of execution can be arbitrary since it's
     //! multi-threaded.
     //!
-    void parallelForEachDataPointIndex(
-        const std::function<void(size_t, size_t, size_t)>& func) const;
+    void parallelForEachDataPointIndex(const std::function<void(size_t, size_t, size_t)> &func) const;
 
     // ScalarField3 implementations
 
@@ -146,7 +124,7 @@ class ScalarGrid3 : public ScalarField3, public Grid3 {
     //! This function returns the data sampled at arbitrary position \p x.
     //! The sampling function is linear.
     //!
-    double sample(const Vector3D& x) const override;
+    double sample(const Vector3D &x) const override;
 
     //!
     //! \brief Returns the sampler function.
@@ -154,37 +132,37 @@ class ScalarGrid3 : public ScalarField3, public Grid3 {
     //! This function returns the data sampler function object. The sampling
     //! function is linear.
     //!
-    std::function<double(const Vector3D&)> sampler() const override;
+    std::function<double(const Vector3D &)> sampler() const override;
 
     //! Returns the gradient vector at given position \p x.
-    Vector3D gradient(const Vector3D& x) const override;
+    Vector3D gradient(const Vector3D &x) const override;
 
     //! Returns the Laplacian at given position \p x.
-    double laplacian(const Vector3D& x) const override;
+    double laplacian(const Vector3D &x) const override;
 
     //! Serializes the grid instance to the output buffer.
-    void serialize(std::vector<uint8_t>* buffer) const override;
+    void serialize(std::vector<uint8_t> *buffer) const override;
 
     //! Deserializes the input buffer to the grid instance.
-    void deserialize(const std::vector<uint8_t>& buffer) override;
+    void deserialize(const std::vector<uint8_t> &buffer) override;
 
- protected:
+protected:
     //! Swaps the data storage and predefined samplers with given grid.
-    void swapScalarGrid(ScalarGrid3* other);
+    void swapScalarGrid(ScalarGrid3 *other);
 
     //! Sets the data storage and predefined samplers with given grid.
-    void setScalarGrid(const ScalarGrid3& other);
+    void setScalarGrid(const ScalarGrid3 &other);
 
     //! Fetches the data into a continuous linear array.
-    void getData(std::vector<double>* data) const override;
+    void getData(std::vector<double> *data) const override;
 
     //! Sets the data from a continuous linear array.
-    void setData(const std::vector<double>& data) override;
+    void setData(const std::vector<double> &data) override;
 
- private:
+private:
     Array3<double> _data;
     LinearArraySampler3<double, double> _linearSampler;
-    std::function<double(const Vector3D&)> _sampler;
+    std::function<double(const Vector3D &)> _sampler;
 
     void resetSampler();
 };
@@ -193,8 +171,9 @@ class ScalarGrid3 : public ScalarField3, public Grid3 {
 typedef std::shared_ptr<ScalarGrid3> ScalarGrid3Ptr;
 
 //! Abstract base class for 3-D scalar grid builder.
-class ScalarGridBuilder3 {
- public:
+class ScalarGridBuilder3
+{
+public:
     //! Creates a builder.
     ScalarGridBuilder3();
 
@@ -202,11 +181,7 @@ class ScalarGridBuilder3 {
     virtual ~ScalarGridBuilder3();
 
     //! Returns 3-D scalar grid with given parameters.
-    virtual ScalarGrid3Ptr build(
-        const Size3& resolution,
-        const Vector3D& gridSpacing,
-        const Vector3D& gridOrigin,
-        double initialVal) const = 0;
+    virtual ScalarGrid3Ptr build(const Size3 &resolution, const Vector3D &gridSpacing, const Vector3D &gridOrigin, double initialVal) const = 0;
 };
 
 //! Shared pointer for the ScalarGridBuilder3 type.

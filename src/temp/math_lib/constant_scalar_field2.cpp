@@ -9,42 +9,46 @@
 
 using namespace jet;
 
-ConstantScalarField2::ConstantScalarField2(double value) :
-    _value(value) {
+ConstantScalarField2::ConstantScalarField2(double value) : _value(value)
+{
 }
 
-double ConstantScalarField2::sample(const Vector2D& x) const {
+double ConstantScalarField2::sample(const Vector2D &x) const
+{
     UNUSED_VARIABLE(x);
 
     return _value;
 }
 
-std::function<double(const Vector2D&)> ConstantScalarField2::sampler() const {
+std::function<double(const Vector2D &)> ConstantScalarField2::sampler() const
+{
     double value = _value;
-    return [value](const Vector2D&) -> double {
+    return [value](const Vector2D &) -> double
+    {
         return value;
     };
 }
 
-ConstantScalarField2::Builder ConstantScalarField2::builder() {
+ConstantScalarField2::Builder ConstantScalarField2::builder()
+{
     return Builder();
 }
 
-
-ConstantScalarField2::Builder&
-ConstantScalarField2::Builder::withValue(double value) {
+ConstantScalarField2::Builder &ConstantScalarField2::Builder::withValue(double value)
+{
     _value = value;
     return *this;
 }
 
-ConstantScalarField2 ConstantScalarField2::Builder::build() const {
+ConstantScalarField2 ConstantScalarField2::Builder::build() const
+{
     return ConstantScalarField2(_value);
 }
 
-ConstantScalarField2Ptr ConstantScalarField2::Builder::makeShared() const {
-    return std::shared_ptr<ConstantScalarField2>(
-        new ConstantScalarField2(_value),
-        [] (ConstantScalarField2* obj) {
-            delete obj;
-        });
+ConstantScalarField2Ptr ConstantScalarField2::Builder::makeShared() const
+{
+    return std::shared_ptr<ConstantScalarField2>(new ConstantScalarField2(_value), [](ConstantScalarField2 *obj)
+    {
+        delete obj;
+    });
 }

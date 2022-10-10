@@ -17,7 +17,8 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Abstract base class for 3-D cartesian grid structure.
@@ -27,8 +28,9 @@ namespace jet {
 //! shape of the grid. The grid structure is axis-aligned and can have different
 //! grid spacing per axis.
 //!
-class Grid3 : public Serializable {
- public:
+class Grid3 : public Serializable
+{
+public:
     //! Function type for mapping data index to actual position.
     typedef std::function<Vector3D(size_t, size_t, size_t)> DataPositionFunc;
 
@@ -42,16 +44,16 @@ class Grid3 : public Serializable {
     virtual std::string typeName() const = 0;
 
     //! Returns the grid resolution.
-    const Size3& resolution() const;
+    const Size3 &resolution() const;
 
     //! Returns the grid origin.
-    const Vector3D& origin() const;
+    const Vector3D &origin() const;
 
     //! Returns the grid spacing.
-    const Vector3D& gridSpacing() const;
+    const Vector3D &gridSpacing() const;
 
     //! Returns the bounding box of the grid.
-    const BoundingBox3D& boundingBox() const;
+    const BoundingBox3D &boundingBox() const;
 
     //! Returns the function that maps grid index to the cell-center position.
     DataPositionFunc cellCenterPosition() const;
@@ -63,8 +65,7 @@ class Grid3 : public Serializable {
     //! cell in serial manner. The input parameters are i, j, and k indices of a
     //! grid cell. The order of execution is i-first, j-next, k-last.
     //!
-    void forEachCellIndex(
-        const std::function<void(size_t, size_t, size_t)>& func) const;
+    void forEachCellIndex(const std::function<void(size_t, size_t, size_t)> &func) const;
 
     //!
     //! \brief Invokes the given function \p func for each grid cell parallelly.
@@ -74,40 +75,38 @@ class Grid3 : public Serializable {
     //! a grid cell. The order of execution can be arbitrary since it's
     //! multi-threaded.
     //!
-    void parallelForEachCellIndex(
-        const std::function<void(size_t, size_t, size_t)>& func) const;
+    void parallelForEachCellIndex(const std::function<void(size_t, size_t, size_t)> &func) const;
 
     //! Serializes the grid instance to the output buffer.
-    virtual void serialize(std::vector<uint8_t>* buffer) const = 0;
+    virtual void serialize(std::vector<uint8_t> *buffer) const = 0;
 
     //! Deserializes the input buffer to the grid instance.
-    virtual void deserialize(const std::vector<uint8_t>& buffer) = 0;
+    virtual void deserialize(const std::vector<uint8_t> &buffer) = 0;
 
     //! Returns true if resolution, grid-spacing and origin are same.
-    bool hasSameShape(const Grid3& other) const;
+    bool hasSameShape(const Grid3 &other) const;
 
     //! Swaps the data with other grid.
-    virtual void swap(Grid3* other) = 0;
+    virtual void swap(Grid3 *other) = 0;
 
- protected:
+protected:
     //! Sets the size parameters including the resolution, grid spacing, and
     //! origin.
-    void setSizeParameters(const Size3& resolution, const Vector3D& gridSpacing,
-                           const Vector3D& origin);
+    void setSizeParameters(const Size3 &resolution, const Vector3D &gridSpacing, const Vector3D &origin);
 
     //! Swaps the size parameters with given grid \p other.
-    void swapGrid(Grid3* other);
+    void swapGrid(Grid3 *other);
 
     //! Sets the size parameters with given grid \p other.
-    void setGrid(const Grid3& other);
+    void setGrid(const Grid3 &other);
 
     //! Fetches the data into a continuous linear array.
-    virtual void getData(std::vector<double>* data) const = 0;
+    virtual void getData(std::vector<double> *data) const = 0;
 
     //! Sets the data from a continuous linear array.
-    virtual void setData(const std::vector<double>& data) = 0;
+    virtual void setData(const std::vector<double> &data) = 0;
 
- private:
+private:
     Size3 _resolution;
     Vector3D _gridSpacing = Vector3D(1, 1, 1);
     Vector3D _origin;

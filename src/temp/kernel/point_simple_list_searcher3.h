@@ -10,7 +10,8 @@
 #include "point_neighbor_searcher3.h"
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Simple ad-hoc 3-D point searcher.
@@ -19,8 +20,9 @@ namespace jet {
 //! the list. Thus, this class is not ideal for searches involing large number
 //! of points, but only for small set of items.
 //!
-class PointSimpleListSearcher3 final : public PointNeighborSearcher3 {
- public:
+class PointSimpleListSearcher3 final : public PointNeighborSearcher3
+{
+public:
     JET_NEIGHBOR_SEARCHER3_TYPE_NAME(PointSimpleListSearcher3)
 
     class Builder;
@@ -29,7 +31,7 @@ class PointSimpleListSearcher3 final : public PointNeighborSearcher3 {
     PointSimpleListSearcher3();
 
     //! Copy constructor.
-    PointSimpleListSearcher3(const PointSimpleListSearcher3& other);
+    PointSimpleListSearcher3(const PointSimpleListSearcher3 &other);
 
     //!
     //! \brief      Builds internal structure for given points list.
@@ -39,7 +41,7 @@ class PointSimpleListSearcher3 final : public PointNeighborSearcher3 {
     //!
     //! \param[in]  points The points to search.
     //!
-    void build(const ConstArrayAccessor1<Vector3D>& points) override;
+    void build(const ConstArrayAccessor1<Vector3D> &points) override;
 
     //!
     //! Invokes the callback function for each nearby point around the origin
@@ -49,10 +51,7 @@ class PointSimpleListSearcher3 final : public PointNeighborSearcher3 {
     //! \param[in]  radius   The search radius.
     //! \param[in]  callback The callback function.
     //!
-    void forEachNearbyPoint(
-        const Vector3D& origin,
-        double radius,
-        const ForEachNearbyPointFunc& callback) const override;
+    void forEachNearbyPoint(const Vector3D &origin, double radius, const ForEachNearbyPointFunc &callback) const override;
 
     //!
     //! Returns true if there are any nearby points for given origin within
@@ -63,8 +62,7 @@ class PointSimpleListSearcher3 final : public PointNeighborSearcher3 {
     //!
     //! \return     True if has nearby point, false otherwise.
     //!
-    bool hasNearbyPoint(
-        const Vector3D& origin, double radius) const override;
+    bool hasNearbyPoint(const Vector3D &origin, double radius) const override;
 
     //!
     //! \brief      Creates a new instance of the object with same properties
@@ -75,21 +73,21 @@ class PointSimpleListSearcher3 final : public PointNeighborSearcher3 {
     PointNeighborSearcher3Ptr clone() const override;
 
     //! Assignment operator.
-    PointSimpleListSearcher3& operator=(const PointSimpleListSearcher3& other);
+    PointSimpleListSearcher3 &operator=(const PointSimpleListSearcher3 &other);
 
     //! Copy from the other instance.
-    void set(const PointSimpleListSearcher3& other);
+    void set(const PointSimpleListSearcher3 &other);
 
     //! Serializes the neighbor searcher into the buffer.
-    void serialize(std::vector<uint8_t>* buffer) const override;
+    void serialize(std::vector<uint8_t> *buffer) const override;
 
     //! Deserializes the neighbor searcher from the buffer.
-    void deserialize(const std::vector<uint8_t>& buffer) override;
+    void deserialize(const std::vector<uint8_t> &buffer) override;
 
     //! Returns builder fox PointSimpleListSearcher3.
     static Builder builder();
 
- private:
+private:
     std::vector<Vector3D> _points;
 };
 
@@ -99,9 +97,9 @@ typedef std::shared_ptr<PointSimpleListSearcher3> PointSimpleListSearcher3Ptr;
 //!
 //! \brief Front-end to create PointSimpleListSearcher3 objects step by step.
 //!
-class PointSimpleListSearcher3::Builder final
-    : public PointNeighborSearcherBuilder3 {
- public:
+class PointSimpleListSearcher3::Builder final : public PointNeighborSearcherBuilder3
+{
+public:
     //! Builds PointSimpleListSearcher3 instance.
     PointSimpleListSearcher3 build() const;
 

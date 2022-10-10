@@ -15,17 +15,20 @@
 
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //! Generic k-d tree structure.
-template <typename T, size_t K>
-class KdTree final {
- public:
+template<typename T, size_t K>
+class KdTree final
+{
+public:
     typedef Vector<T, K> Point;
     typedef BoundingBox<T, K> BBox;
 
     //! Simple K-d tree node.
-    struct Node {
+    struct Node
+    {
         //! Split axis if flags < K, leaf indicator if flags == K.
         size_t flags = 0;
 
@@ -43,10 +46,10 @@ class KdTree final {
         Node();
 
         //! Initializes leaf node.
-        void initLeaf(size_t it, const Point& pt);
+        void initLeaf(size_t it, const Point &pt);
 
         //! Initializes internal node.
-        void initInternal(size_t axis, size_t it, size_t c, const Point& pt);
+        void initInternal(size_t axis, size_t it, size_t c, const Point &pt);
 
         //! Returns true if leaf.
         bool isLeaf() const;
@@ -64,7 +67,7 @@ class KdTree final {
     KdTree();
 
     //! Builds internal acceleration structure for given points list.
-    void build(const ConstArrayAccessor1<Point>& points);
+    void build(const ConstArrayAccessor1<Point> &points);
 
     //!
     //! Invokes the callback function for each nearby point around the origin
@@ -74,9 +77,8 @@ class KdTree final {
     //! \param[in]  radius   The search radius.
     //! \param[in]  callback The callback function.
     //!
-    void forEachNearbyPoint(
-        const Point& origin, T radius,
-        const std::function<void(size_t, const Point&)>& callback) const;
+    void forEachNearbyPoint(const Point &origin, T radius, const std::function<void(size_t, const Point &
+    )>& callback) const;
 
     //!
     //! Returns true if there are any nearby points for given origin within
@@ -87,10 +89,10 @@ class KdTree final {
     //!
     //! \return     True if has nearby point, false otherwise.
     //!
-    bool hasNearbyPoint(const Point& origin, T radius) const;
+    bool hasNearbyPoint(const Point &origin, T radius) const;
 
     //! Returns index of the nearest point.
-    size_t nearestPoint(const Point& origin) const;
+    size_t nearestPoint(const Point &origin) const;
 
     //! Returns the mutable begin iterator of the item.
     Iterator begin();
@@ -119,12 +121,11 @@ class KdTree final {
     //! Reserves memory space for this tree.
     void reserve(size_t numPoints, size_t numNodes);
 
- private:
+private:
     std::vector<Point> _points;
     std::vector<Node> _nodes;
 
-    size_t build(size_t nodeIndex, size_t* itemIndices, size_t nItems,
-                 size_t currentDepth);
+    size_t build(size_t nodeIndex, size_t *itemIndices, size_t nItems, size_t currentDepth);
 };
 
 }  // namespace jet

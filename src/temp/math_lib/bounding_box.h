@@ -9,7 +9,8 @@
 
 #include "vector.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Generic N-D axis-aligned bounding box class.
@@ -17,11 +18,11 @@ namespace jet {
 //! \tparam T - Real number type.
 //! \tparam N - Dimension.
 //!
-template <typename T, size_t N>
-class BoundingBox {
- public:
-    static_assert(
-        N > 0, "Size of static-sized box should be greater than zero.");
+template<typename T, size_t N>
+class BoundingBox
+{
+public:
+    static_assert(N > 0, "Size of static-sized box should be greater than zero.");
 
     typedef Vector<T, N> VectorType;
 
@@ -35,17 +36,16 @@ class BoundingBox {
     BoundingBox();
 
     //! Constructs a box that tightly covers two points.
-    BoundingBox(const VectorType& point1, const VectorType& point2);
+    BoundingBox(const VectorType &point1, const VectorType &point2);
 
     //! Constructs a box with other box instance.
-    BoundingBox(const BoundingBox& other);
-
+    BoundingBox(const BoundingBox &other);
 
     //! Returns true of this box and other box overlaps.
-    bool overlaps(const BoundingBox& other) const;
+    bool overlaps(const BoundingBox &other) const;
 
     //! Returns true if the input point is inside of this box.
-    bool contains(const VectorType& point) const;
+    bool contains(const VectorType &point) const;
 
     //! Returns the mid-point of this box.
     VectorType midPoint() const;
@@ -56,15 +56,14 @@ class BoundingBox {
     //! Returns squared diagonal length of this box.
     T diagonalLengthSquared() const;
 
-
     //! Resets this box to initial state (min=infinite, max=-infinite).
     void reset();
 
     //! Merges this and other point.
-    void merge(const VectorType& point);
+    void merge(const VectorType &point);
 
     //! Merges this and other boxes.
-    void merge(const BoundingBox& other);
+    void merge(const BoundingBox &other);
 
     //! Expands this box by given delta to all direction.
     //! If the width of the box was x, expand(y) will result a box with

@@ -9,8 +9,10 @@
 
 using namespace jet;
 
-PointNeighborSearcher3::PointNeighborSearcher3() {
+PointNeighborSearcher3::PointNeighborSearcher3()
+{
 }
 
-PointNeighborSearcher3::~PointNeighborSearcher3() {
+PointNeighborSearcher3::~PointNeighborSearcher3()
+{
 }

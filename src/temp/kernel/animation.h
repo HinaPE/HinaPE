@@ -10,7 +10,8 @@
 #include "math_lib/macros.h"
 #include <memory>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Representation of an animation frame.
@@ -18,7 +19,8 @@ namespace jet {
 //! This struct holds current animation frame index and frame interval in
 //! seconds.
 //!
-struct Frame final {
+struct Frame final
+{
     //! Frame index.
     int index = 0;
 
@@ -42,7 +44,7 @@ struct Frame final {
     void advance(int delta);
 
     //! Advances single frame (prefix).
-    auto operator++() -> Frame&;
+    auto operator++() -> Frame &;
 
     //! Advances single frame (postfix).
     auto operator++(int) -> Frame;
@@ -56,8 +58,9 @@ struct Frame final {
 //! This base class provides a virtual function update() which can be
 //! overriden by its sub-classes to implement their own state update logic.
 //!
-class Animation {
- public:
+class Animation
+{
+public:
     Animation();
 
     virtual ~Animation();
@@ -68,9 +71,9 @@ class Animation {
     //! This function updates animation state by calling Animation::onUpdate
     //! function.
     //!
-    void update(const Frame& frame);
+    void update(const Frame &frame);
 
- protected:
+protected:
     //!
     //! \brief The implementation of this function should update the animation
     //!     state for given Frame instance \p frame.
@@ -79,7 +82,7 @@ class Animation {
     //! instance needs to be updated. Thus, the inherited class should overrride
     //! this function and implement its logic for updating the animation state.
     //!
-    virtual void onUpdate(const Frame& frame) = 0;
+    virtual void onUpdate(const Frame &frame) = 0;
 };
 
 //! Shared pointer for the Animation type.

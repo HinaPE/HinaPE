@@ -9,11 +9,13 @@
 
 #include <chrono>
 
-namespace jet {
+namespace jet
+{
 
 //! Simple timer class.
-class Timer {
- public:
+class Timer
+{
+public:
     //! Constructs the timer and start ticking.
     Timer();
 
@@ -23,7 +25,7 @@ class Timer {
     //! Resets the timer.
     void reset();
 
- private:
+private:
     std::chrono::steady_clock _clock;
     std::chrono::steady_clock::time_point _startingPoint;
 };

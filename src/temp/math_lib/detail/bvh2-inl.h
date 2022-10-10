@@ -13,52 +13,58 @@
 
 #include <numeric>
 
-namespace jet {
+namespace jet
+{
 
-template <typename T>
-Bvh2<T>::Node::Node() : flags(0) {
+template<typename T>
+Bvh2<T>::Node::Node() : flags(0)
+{
     child = kMaxSize;
 }
 
-template <typename T>
-void Bvh2<T>::Node::initLeaf(size_t it, const BoundingBox2D& b) {
+template<typename T>
+void Bvh2<T>::Node::initLeaf(size_t it, const BoundingBox2D &b)
+{
     flags = 2;
     item = it;
     bound = b;
 }
 
-template <typename T>
-void Bvh2<T>::Node::initInternal(uint8_t axis, size_t c,
-                                 const BoundingBox2D& b) {
+template<typename T>
+void Bvh2<T>::Node::initInternal(uint8_t axis, size_t c, const BoundingBox2D &b)
+{
     flags = axis;
     child = c;
     bound = b;
 }
 
-template <typename T>
-bool Bvh2<T>::Node::isLeaf() const {
+template<typename T>
+bool Bvh2<T>::Node::isLeaf() const
+{
     return flags == 2;
 }
 
 //
 
-template <typename T>
+template<typename T>
 Bvh2<T>::Bvh2() {}
 
-template <typename T>
-void Bvh2<T>::build(const std::vector<T>& items,
-                    const std::vector<BoundingBox2D>& itemsBounds) {
+template<typename T>
+void Bvh2<T>::build(const std::vector<T> &items, const std::vector<BoundingBox2D> &itemsBounds)
+{
     _items = items;
     _itemBounds = itemsBounds;
 
-    if (_items.empty()) {
+    if (_items.empty())
+    {
         return;
     }
 
     _nodes.clear();
     _bound = BoundingBox2D();
 
-    for (size_t i = 0; i < _items.size(); ++i) {
+    for (size_t i = 0; i < _items.size(); ++i)
+    {
         _bound.merge(_itemBounds[i]);
     }
 
@@ -68,50 +74,56 @@ void Bvh2<T>::build(const std::vector<T>& items,
     build(0, itemIndices.data(), _items.size(), 0);
 }
 
-template <typename T>
-void Bvh2<T>::clear() {
+template<typename T>
+void Bvh2<T>::clear()
+{
     _bound = BoundingBox2D();
     _items.clear();
     _itemBounds.clear();
     _nodes.clear();
 }
 
-template <typename T>
-inline NearestNeighborQueryResult2<T> Bvh2<T>::nearest(
-    const Vector2D& pt,
-    const NearestNeighborDistanceFunc2<T>& distanceFunc) const {
+template<typename T>
+inline NearestNeighborQueryResult2<T> Bvh2<T>::nearest(const Vector2D &pt, const NearestNeighborDistanceFunc2<T> &distanceFunc) const
+{
     NearestNeighborQueryResult2<T> best;
     best.distance = kMaxD;
     best.item = nullptr;
 
     // Prepare to traverse BVH
     static const int kMaxTreeDepth = 8 * sizeof(size_t);
-    const Node* todo[kMaxTreeDepth];
+    const Node *todo[kMaxTreeDepth];
     size_t todoPos = 0;
 
     // Traverse BVH nodes
-    const Node* node = _nodes.data();
-    while (node != nullptr) {
-        if (node->isLeaf()) {
+    const Node *node = _nodes.data();
+    while (node != nullptr)
+    {
+        if (node->isLeaf())
+        {
             double dist = distanceFunc(_items[node->item], pt);
-            if (dist < best.distance) {
+            if (dist < best.distance)
+            {
                 best.distance = dist;
                 best.item = &_items[node->item];
             }
 
             // Grab next node to process from todo stack
-            if (todoPos > 0) {
+            if (todoPos > 0)
+            {
                 // Dequeue
                 --todoPos;
                 node = todo[todoPos];
-            } else {
+            } else
+            {
                 break;
             }
-        } else {
+        } else
+        {
             const double bestDistSqr = best.distance * best.distance;
 
-            const Node* left = node + 1;
-            const Node* right = &_nodes[node->child];
+            const Node *left = node + 1;
+            const Node *right = &_nodes[node->child];
 
             // If pt is inside the box, then the closestLeft and Right will be
             // identical to pt. This will make distMinLeftSqr and
@@ -126,13 +138,16 @@ inline NearestNeighborQueryResult2<T> Bvh2<T>::nearest(
             bool shouldVisitLeft = distMinLeftSqr < bestDistSqr;
             bool shouldVisitRight = distMinRightSqr < bestDistSqr;
 
-            const Node* firstChild;
-            const Node* secondChild;
-            if (shouldVisitLeft && shouldVisitRight) {
-                if (distMinLeftSqr < distMinRightSqr) {
+            const Node *firstChild;
+            const Node *secondChild;
+            if (shouldVisitLeft && shouldVisitRight)
+            {
+                if (distMinLeftSqr < distMinRightSqr)
+                {
                     firstChild = left;
                     secondChild = right;
-                } else {
+                } else
+                {
                     firstChild = right;
                     secondChild = left;
                 }
@@ -141,16 +156,21 @@ inline NearestNeighborQueryResult2<T> Bvh2<T>::nearest(
                 todo[todoPos] = secondChild;
                 ++todoPos;
                 node = firstChild;
-            } else if (shouldVisitLeft) {
+            } else if (shouldVisitLeft)
+            {
                 node = left;
-            } else if (shouldVisitRight) {
+            } else if (shouldVisitRight)
+            {
                 node = right;
-            } else {
-                if (todoPos > 0) {
+            } else
+            {
+                if (todoPos > 0)
+                {
                     // Dequeue
                     --todoPos;
                     node = todo[todoPos];
-                } else {
+                } else
+                {
                     break;
                 }
             }
@@ -160,47 +180,56 @@ inline NearestNeighborQueryResult2<T> Bvh2<T>::nearest(
     return best;
 }
 
-template <typename T>
-inline bool Bvh2<T>::intersects(
-    const BoundingBox2D& box,
-    const BoxIntersectionTestFunc2<T>& testFunc) const {
-    if (!_bound.overlaps(box)) {
+template<typename T>
+inline bool Bvh2<T>::intersects(const BoundingBox2D &box, const BoxIntersectionTestFunc2<T> &testFunc) const
+{
+    if (!_bound.overlaps(box))
+    {
         return false;
     }
 
     // prepare to traverse BVH for box
     static const int kMaxTreeDepth = 8 * sizeof(size_t);
-    const Node* todo[kMaxTreeDepth];
+    const Node *todo[kMaxTreeDepth];
     size_t todoPos = 0;
 
     // traverse BVH nodes for box
-    const Node* node = _nodes.data();
+    const Node *node = _nodes.data();
 
-    while (node != nullptr) {
-        if (node->isLeaf()) {
-            if (testFunc(_items[node->item], box)) {
+    while (node != nullptr)
+    {
+        if (node->isLeaf())
+        {
+            if (testFunc(_items[node->item], box))
+            {
                 return true;
             }
 
             // grab next node to process from todo stack
-            if (todoPos > 0) {
+            if (todoPos > 0)
+            {
                 // Dequeue
                 --todoPos;
                 node = todo[todoPos];
-            } else {
+            } else
+            {
                 break;
             }
-        } else {
+        } else
+        {
             // get node children pointers for box
-            const Node* firstChild = node + 1;
-            const Node* secondChild = (Node*)&_nodes[node->child];
+            const Node *firstChild = node + 1;
+            const Node *secondChild = (Node * ) & _nodes[node->child];
 
             // advance to next child node, possibly enqueue other child
-            if (!firstChild->bound.overlaps(box)) {
+            if (!firstChild->bound.overlaps(box))
+            {
                 node = secondChild;
-            } else if (!secondChild->bound.overlaps(box)) {
+            } else if (!secondChild->bound.overlaps(box))
+            {
                 node = firstChild;
-            } else {
+            } else
+            {
                 // enqueue secondChild in todo stack
                 todo[todoPos] = secondChild;
                 ++todoPos;
@@ -212,53 +241,65 @@ inline bool Bvh2<T>::intersects(
     return false;
 }
 
-template <typename T>
-inline bool Bvh2<T>::intersects(
-    const Ray2D& ray, const RayIntersectionTestFunc2<T>& testFunc) const {
-    if (!_bound.intersects(ray)) {
+template<typename T>
+inline bool Bvh2<T>::intersects(const Ray2D &ray, const RayIntersectionTestFunc2<T> &testFunc) const
+{
+    if (!_bound.intersects(ray))
+    {
         return false;
     }
 
     // prepare to traverse BVH for ray
     static const int kMaxTreeDepth = 8 * sizeof(size_t);
-    const Node* todo[kMaxTreeDepth];
+    const Node *todo[kMaxTreeDepth];
     size_t todoPos = 0;
 
     // traverse BVH nodes for ray
-    const Node* node = _nodes.data();
+    const Node *node = _nodes.data();
 
-    while (node != nullptr) {
-        if (node->isLeaf()) {
-            if (testFunc(_items[node->item], ray)) {
+    while (node != nullptr)
+    {
+        if (node->isLeaf())
+        {
+            if (testFunc(_items[node->item], ray))
+            {
                 return true;
             }
 
             // grab next node to process from todo stack
-            if (todoPos > 0) {
+            if (todoPos > 0)
+            {
                 // Dequeue
                 --todoPos;
                 node = todo[todoPos];
-            } else {
+            } else
+            {
                 break;
             }
-        } else {
+        } else
+        {
             // get node children pointers for ray
-            const Node* firstChild;
-            const Node* secondChild;
-            if (ray.direction[node->flags] > 0.0) {
+            const Node *firstChild;
+            const Node *secondChild;
+            if (ray.direction[node->flags] > 0.0)
+            {
                 firstChild = node + 1;
-                secondChild = (Node*)&_nodes[node->child];
-            } else {
-                firstChild = (Node*)&_nodes[node->child];
+                secondChild = (Node * ) & _nodes[node->child];
+            } else
+            {
+                firstChild = (Node * ) & _nodes[node->child];
                 secondChild = node + 1;
             }
 
             // advance to next child node, possibly enqueue other child
-            if (!firstChild->bound.intersects(ray)) {
+            if (!firstChild->bound.intersects(ray))
+            {
                 node = secondChild;
-            } else if (!secondChild->bound.intersects(ray)) {
+            } else if (!secondChild->bound.intersects(ray))
+            {
                 node = firstChild;
-            } else {
+            } else
+            {
                 // enqueue secondChild in todo stack
                 todo[todoPos] = secondChild;
                 ++todoPos;
@@ -270,47 +311,56 @@ inline bool Bvh2<T>::intersects(
     return false;
 }
 
-template <typename T>
-inline void Bvh2<T>::forEachIntersectingItem(
-    const BoundingBox2D& box, const BoxIntersectionTestFunc2<T>& testFunc,
-    const IntersectionVisitorFunc2<T>& visitorFunc) const {
-    if (!_bound.overlaps(box)) {
+template<typename T>
+inline void Bvh2<T>::forEachIntersectingItem(const BoundingBox2D &box, const BoxIntersectionTestFunc2<T> &testFunc, const IntersectionVisitorFunc2<T> &visitorFunc) const
+{
+    if (!_bound.overlaps(box))
+    {
         return;
     }
 
     // prepare to traverse BVH for box
     static const int kMaxTreeDepth = 8 * sizeof(size_t);
-    const Node* todo[kMaxTreeDepth];
+    const Node *todo[kMaxTreeDepth];
     size_t todoPos = 0;
 
     // traverse BVH nodes for box
-    const Node* node = _nodes.data();
+    const Node *node = _nodes.data();
 
-    while (node != nullptr) {
-        if (node->isLeaf()) {
-            if (testFunc(_items[node->item], box)) {
+    while (node != nullptr)
+    {
+        if (node->isLeaf())
+        {
+            if (testFunc(_items[node->item], box))
+            {
                 visitorFunc(_items[node->item]);
             }
 
             // grab next node to process from todo stack
-            if (todoPos > 0) {
+            if (todoPos > 0)
+            {
                 // Dequeue
                 --todoPos;
                 node = todo[todoPos];
-            } else {
+            } else
+            {
                 break;
             }
-        } else {
+        } else
+        {
             // get node children pointers for box
-            const Node* firstChild = node + 1;
-            const Node* secondChild = (Node*)&_nodes[node->child];
+            const Node *firstChild = node + 1;
+            const Node *secondChild = (Node * ) & _nodes[node->child];
 
             // advance to next child node, possibly enqueue other child
-            if (!firstChild->bound.overlaps(box)) {
+            if (!firstChild->bound.overlaps(box))
+            {
                 node = secondChild;
-            } else if (!secondChild->bound.overlaps(box)) {
+            } else if (!secondChild->bound.overlaps(box))
+            {
                 node = firstChild;
-            } else {
+            } else
+            {
                 // enqueue secondChild in todo stack
                 todo[todoPos] = secondChild;
                 ++todoPos;
@@ -320,54 +370,65 @@ inline void Bvh2<T>::forEachIntersectingItem(
     }
 }
 
-template <typename T>
-inline void Bvh2<T>::forEachIntersectingItem(
-    const Ray2D& ray, const RayIntersectionTestFunc2<T>& testFunc,
-    const IntersectionVisitorFunc2<T>& visitorFunc) const {
-    if (!_bound.intersects(ray)) {
+template<typename T>
+inline void Bvh2<T>::forEachIntersectingItem(const Ray2D &ray, const RayIntersectionTestFunc2<T> &testFunc, const IntersectionVisitorFunc2<T> &visitorFunc) const
+{
+    if (!_bound.intersects(ray))
+    {
         return;
     }
 
     // prepare to traverse BVH for ray
     static const int kMaxTreeDepth = 8 * sizeof(size_t);
-    const Node* todo[kMaxTreeDepth];
+    const Node *todo[kMaxTreeDepth];
     size_t todoPos = 0;
 
     // traverse BVH nodes for ray
-    const Node* node = _nodes.data();
+    const Node *node = _nodes.data();
 
-    while (node != nullptr) {
-        if (node->isLeaf()) {
-            if (testFunc(_items[node->item], ray)) {
+    while (node != nullptr)
+    {
+        if (node->isLeaf())
+        {
+            if (testFunc(_items[node->item], ray))
+            {
                 visitorFunc(_items[node->item]);
             }
 
             // grab next node to process from todo stack
-            if (todoPos > 0) {
+            if (todoPos > 0)
+            {
                 // Dequeue
                 --todoPos;
                 node = todo[todoPos];
-            } else {
+            } else
+            {
                 break;
             }
-        } else {
+        } else
+        {
             // get node children pointers for ray
-            const Node* firstChild;
-            const Node* secondChild;
-            if (ray.direction[node->flags] > 0.0) {
+            const Node *firstChild;
+            const Node *secondChild;
+            if (ray.direction[node->flags] > 0.0)
+            {
                 firstChild = node + 1;
-                secondChild = (Node*)&_nodes[node->child];
-            } else {
-                firstChild = (Node*)&_nodes[node->child];
+                secondChild = (Node * ) & _nodes[node->child];
+            } else
+            {
+                firstChild = (Node * ) & _nodes[node->child];
                 secondChild = node + 1;
             }
 
             // advance to next child node, possibly enqueue other child
-            if (!firstChild->bound.intersects(ray)) {
+            if (!firstChild->bound.intersects(ray))
+            {
                 node = secondChild;
-            } else if (!secondChild->bound.intersects(ray)) {
+            } else if (!secondChild->bound.intersects(ray))
+            {
                 node = firstChild;
-            } else {
+            } else
+            {
                 // enqueue secondChild in todo stack
                 todo[todoPos] = secondChild;
                 ++todoPos;
@@ -377,59 +438,71 @@ inline void Bvh2<T>::forEachIntersectingItem(
     }
 }
 
-template <typename T>
-inline ClosestIntersectionQueryResult2<T> Bvh2<T>::closestIntersection(
-    const Ray2D& ray, const GetRayIntersectionFunc2<T>& testFunc) const {
+template<typename T>
+inline ClosestIntersectionQueryResult2<T> Bvh2<T>::closestIntersection(const Ray2D &ray, const GetRayIntersectionFunc2<T> &testFunc) const
+{
     ClosestIntersectionQueryResult2<T> best;
     best.distance = kMaxD;
     best.item = nullptr;
 
-    if (!_bound.intersects(ray)) {
+    if (!_bound.intersects(ray))
+    {
         return best;
     }
 
     // prepare to traverse BVH for ray
     static const int kMaxTreeDepth = 8 * sizeof(size_t);
-    const Node* todo[kMaxTreeDepth];
+    const Node *todo[kMaxTreeDepth];
     size_t todoPos = 0;
 
     // traverse BVH nodes for ray
-    const Node* node = _nodes.data();
+    const Node *node = _nodes.data();
 
-    while (node != nullptr) {
-        if (node->isLeaf()) {
+    while (node != nullptr)
+    {
+        if (node->isLeaf())
+        {
             double dist = testFunc(_items[node->item], ray);
-            if (dist < best.distance) {
+            if (dist < best.distance)
+            {
                 best.distance = dist;
                 best.item = _items.data() + node->item;
             }
 
             // grab next node to process from todo stack
-            if (todoPos > 0) {
+            if (todoPos > 0)
+            {
                 // Dequeue
                 --todoPos;
                 node = todo[todoPos];
-            } else {
+            } else
+            {
                 break;
             }
-        } else {
+        } else
+        {
             // get node children pointers for ray
-            const Node* firstChild;
-            const Node* secondChild;
-            if (ray.direction[node->flags] > 0.0) {
+            const Node *firstChild;
+            const Node *secondChild;
+            if (ray.direction[node->flags] > 0.0)
+            {
                 firstChild = node + 1;
-                secondChild = (Node*)&_nodes[node->child];
-            } else {
-                firstChild = (Node*)&_nodes[node->child];
+                secondChild = (Node * ) & _nodes[node->child];
+            } else
+            {
+                firstChild = (Node * ) & _nodes[node->child];
                 secondChild = node + 1;
             }
 
             // advance to next child node, possibly enqueue other child
-            if (!firstChild->bound.intersects(ray)) {
+            if (!firstChild->bound.intersects(ray))
+            {
                 node = secondChild;
-            } else if (!secondChild->bound.intersects(ray)) {
+            } else if (!secondChild->bound.intersects(ray))
+            {
                 node = firstChild;
-            } else {
+            } else
+            {
                 // enqueue secondChild in todo stack
                 todo[todoPos] = secondChild;
                 ++todoPos;
@@ -441,98 +514,119 @@ inline ClosestIntersectionQueryResult2<T> Bvh2<T>::closestIntersection(
     return best;
 }
 
-template <typename T>
-const BoundingBox2D& Bvh2<T>::boundingBox() const {
+template<typename T>
+const BoundingBox2D &Bvh2<T>::boundingBox() const
+{
     return _bound;
 }
 
-template <typename T>
-typename Bvh2<T>::Iterator Bvh2<T>::begin() {
+template<typename T>
+typename Bvh2<T>::Iterator Bvh2<T>::begin()
+{
     return _items.begin();
 }
 
-template <typename T>
-typename Bvh2<T>::Iterator Bvh2<T>::end() {
+template<typename T>
+typename Bvh2<T>::Iterator Bvh2<T>::end()
+{
     return _items.end();
 }
 
-template <typename T>
-typename Bvh2<T>::ConstIterator Bvh2<T>::begin() const {
+template<typename T>
+typename Bvh2<T>::ConstIterator Bvh2<T>::begin() const
+{
     return _items.begin();
 }
 
-template <typename T>
-typename Bvh2<T>::ConstIterator Bvh2<T>::end() const {
+template<typename T>
+typename Bvh2<T>::ConstIterator Bvh2<T>::end() const
+{
     return _items.end();
 }
 
-template <typename T>
-size_t Bvh2<T>::numberOfItems() const {
+template<typename T>
+size_t Bvh2<T>::numberOfItems() const
+{
     return _items.size();
 }
 
-template <typename T>
-const T& Bvh2<T>::item(size_t i) const {
+template<typename T>
+const T &Bvh2<T>::item(size_t i) const
+{
     return _items[i];
 }
 
-template <typename T>
-size_t Bvh2<T>::numberOfNodes() const {
+template<typename T>
+size_t Bvh2<T>::numberOfNodes() const
+{
     return _nodes.size();
 }
 
-template <typename T>
-std::pair<size_t, size_t> Bvh2<T>::children(size_t i) const {
-    if (isLeaf(i)) {
+template<typename T>
+std::pair<size_t, size_t> Bvh2<T>::children(size_t i) const
+{
+    if (isLeaf(i))
+    {
         return std::make_pair(kMaxSize, kMaxSize);
-    } else {
+    } else
+    {
         return std::make_pair(i + 1, _nodes[i].child);
     }
 }
 
-template <typename T>
-bool Bvh2<T>::isLeaf(size_t i) const {
+template<typename T>
+bool Bvh2<T>::isLeaf(size_t i) const
+{
     return _nodes[i].isLeaf();
 }
 
-template <typename T>
-const BoundingBox2D& Bvh2<T>::nodeBound(size_t i) const {
+template<typename T>
+const BoundingBox2D &Bvh2<T>::nodeBound(size_t i) const
+{
     return _nodes[i].bound;
 }
 
-template <typename T>
-typename Bvh2<T>::Iterator Bvh2<T>::itemOfNode(size_t i) {
-    if (isLeaf(i)) {
+template<typename T>
+typename Bvh2<T>::Iterator Bvh2<T>::itemOfNode(size_t i)
+{
+    if (isLeaf(i))
+    {
         return _nodes[i].item + begin();
-    } else {
+    } else
+    {
         return end();
     }
 }
 
-template <typename T>
-typename Bvh2<T>::ConstIterator Bvh2<T>::itemOfNode(size_t i) const {
-    if (isLeaf(i)) {
+template<typename T>
+typename Bvh2<T>::ConstIterator Bvh2<T>::itemOfNode(size_t i) const
+{
+    if (isLeaf(i))
+    {
         return _nodes[i].item + begin();
-    } else {
+    } else
+    {
         return end();
     }
 }
 
-template <typename T>
-size_t Bvh2<T>::build(size_t nodeIndex, size_t* itemIndices, size_t nItems,
-                      size_t currentDepth) {
+template<typename T>
+size_t Bvh2<T>::build(size_t nodeIndex, size_t *itemIndices, size_t nItems, size_t currentDepth)
+{
     // add a node
     _nodes.push_back(Node());
 
     // initialize leaf node if termination criteria met
-    if (nItems == 1) {
+    if (nItems == 1)
+    {
         _nodes[nodeIndex].initLeaf(itemIndices[0], _itemBounds[itemIndices[0]]);
         return currentDepth + 1;
     }
 
     // find the mid-point of the bounding box to use as a qsplit pivot
     BoundingBox2D nodeBound;
-    for (size_t i = 0; i < nItems; ++i) {
+    for (size_t i = 0; i < nItems; ++i)
+    {
         nodeBound.merge(_itemBounds[itemIndices[i]]);
     }
 
@@ -540,14 +634,15 @@ size_t Bvh2<T>::build(size_t nodeIndex, size_t* itemIndices, size_t nItems,
 
     // choose which axis to split along
     uint8_t axis;
-    if (d.x > d.y) {
+    if (d.x > d.y)
+    {
         axis = 0;
-    } else {
+    } else
+    {
         axis = 1;
     }
 
-    double pivot =
-        0.5 * (nodeBound.upperCorner[axis] + nodeBound.lowerCorner[axis]);
+    double pivot = 0.5 * (nodeBound.upperCorner[axis] + nodeBound.lowerCorner[axis]);
 
     // classify primitives with respect to split
     size_t midPoint = qsplit(itemIndices, nItems, pivot, axis);
@@ -555,26 +650,28 @@ size_t Bvh2<T>::build(size_t nodeIndex, size_t* itemIndices, size_t nItems,
     // recursively initialize children _nodes
     size_t d0 = build(nodeIndex + 1, itemIndices, midPoint, currentDepth + 1);
     _nodes[nodeIndex].initInternal(axis, _nodes.size(), nodeBound);
-    size_t d1 = build(_nodes[nodeIndex].child, itemIndices + midPoint,
-                      nItems - midPoint, currentDepth + 1);
+    size_t d1 = build(_nodes[nodeIndex].child, itemIndices + midPoint, nItems - midPoint, currentDepth + 1);
 
     return std::max(d0, d1);
 }
 
-template <typename T>
-size_t Bvh2<T>::qsplit(size_t* itemIndices, size_t numItems, double pivot,
-                       uint8_t axis) {
+template<typename T>
+size_t Bvh2<T>::qsplit(size_t *itemIndices, size_t numItems, double pivot, uint8_t axis)
+{
     double centroid;
     size_t ret = 0;
-    for (size_t i = 0; i < numItems; ++i) {
+    for (size_t i = 0; i < numItems; ++i)
+    {
         BoundingBox2D b = _itemBounds[itemIndices[i]];
         centroid = 0.5f * (b.lowerCorner[axis] + b.upperCorner[axis]);
-        if (centroid < pivot) {
+        if (centroid < pivot)
+        {
             std::swap(itemIndices[i], itemIndices[ret]);
             ret++;
         }
     }
-    if (ret == 0 || ret == numItems) {
+    if (ret == 0 || ret == numItems)
+    {
         ret = numItems >> 1;
     }
     return ret;

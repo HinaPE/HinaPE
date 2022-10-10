@@ -9,7 +9,8 @@
 
 #include "macros.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief      Returns true if \p phi is inside the implicit surface (< 0).
@@ -20,7 +21,7 @@ namespace jet {
 //!
 //! \return     True if inside the implicit surface, false otherwise.
 //!
-template <typename T>
+template<typename T>
 bool isInsideSdf(T phi);
 
 //!
@@ -38,7 +39,7 @@ bool isInsideSdf(T phi);
 //!
 //! \return     Smeared Heaviside function.
 //!
-template <typename T>
+template<typename T>
 T smearedHeavisideSdf(T phi);
 
 //!
@@ -55,7 +56,7 @@ T smearedHeavisideSdf(T phi);
 //!
 //! \return     Smeared delta function.
 //!
-template <typename T>
+template<typename T>
 T smearedDeltaSdf(T phi);
 
 //!
@@ -77,7 +78,7 @@ T smearedDeltaSdf(T phi);
 //!
 //! \return     The fraction occupied by the implicit surface.
 //!
-template <typename T>
+template<typename T>
 T fractionInsideSdf(T phi0, T phi1);
 
 //!
@@ -97,9 +98,8 @@ T fractionInsideSdf(T phi0, T phi1);
 //!
 //! \return                 The fraction occupied by the implicit surface.
 //!
-template <typename T>
-T fractionInside(T phiBottomLeft, T phiBottomRight, T phiTopLeft,
-                 T phiTopRight);
+template<typename T>
+T fractionInside(T phiBottomLeft, T phiBottomRight, T phiTopLeft, T phiTopRight);
 
 }  // namespace jet
 

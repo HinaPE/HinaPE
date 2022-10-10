@@ -10,7 +10,8 @@
 #include "scalar_grid3.h"
 #include "triangle_mesh3.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Generates signed-distance field out of given triangle mesh.
@@ -25,8 +26,7 @@ namespace jet {
 //! \param[in,out]  sdf       The output signed-distance field.
 //! \param[in]      exactBand This parameter is no longer used.
 //!
-void triangleMeshToSdf(const TriangleMesh3& mesh, ScalarGrid3* sdf,
-                       const unsigned int exactBand = 1);
+void triangleMeshToSdf(const TriangleMesh3 &mesh, ScalarGrid3 *sdf, const unsigned int exactBand = 1);
 
 }  // namespace jet
 

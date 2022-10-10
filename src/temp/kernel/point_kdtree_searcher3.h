@@ -14,7 +14,8 @@
 
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief KdTree-based 3-D point searcher.
@@ -22,8 +23,9 @@ namespace jet {
 //! This class implements 3-D point searcher by using KdTree for its internal
 //! acceleration data structure.
 //!
-class PointKdTreeSearcher3 final : public PointNeighborSearcher3 {
- public:
+class PointKdTreeSearcher3 final : public PointNeighborSearcher3
+{
+public:
     JET_NEIGHBOR_SEARCHER3_TYPE_NAME(PointKdTreeSearcher3)
 
     class Builder;
@@ -32,10 +34,10 @@ class PointKdTreeSearcher3 final : public PointNeighborSearcher3 {
     PointKdTreeSearcher3();
 
     //! Copy constructor.
-    PointKdTreeSearcher3(const PointKdTreeSearcher3& other);
+    PointKdTreeSearcher3(const PointKdTreeSearcher3 &other);
 
     //! Builds internal acceleration structure for given points list.
-    void build(const ConstArrayAccessor1<Vector3D>& points) override;
+    void build(const ConstArrayAccessor1<Vector3D> &points) override;
 
     //!
     //! Invokes the callback function for each nearby point around the origin
@@ -45,9 +47,7 @@ class PointKdTreeSearcher3 final : public PointNeighborSearcher3 {
     //! \param[in]  radius   The search radius.
     //! \param[in]  callback The callback function.
     //!
-    void forEachNearbyPoint(
-        const Vector3D& origin, double radius,
-        const ForEachNearbyPointFunc& callback) const override;
+    void forEachNearbyPoint(const Vector3D &origin, double radius, const ForEachNearbyPointFunc &callback) const override;
 
     //!
     //! Returns true if there are any nearby points for given origin within
@@ -58,7 +58,7 @@ class PointKdTreeSearcher3 final : public PointNeighborSearcher3 {
     //!
     //! \return     True if has nearby point, false otherwise.
     //!
-    bool hasNearbyPoint(const Vector3D& origin, double radius) const override;
+    bool hasNearbyPoint(const Vector3D &origin, double radius) const override;
 
     //!
     //! \brief      Creates a new instance of the object with same properties
@@ -69,21 +69,21 @@ class PointKdTreeSearcher3 final : public PointNeighborSearcher3 {
     PointNeighborSearcher3Ptr clone() const override;
 
     //! Assignment operator.
-    PointKdTreeSearcher3& operator=(const PointKdTreeSearcher3& other);
+    PointKdTreeSearcher3 &operator=(const PointKdTreeSearcher3 &other);
 
     //! Copy from the other instance.
-    void set(const PointKdTreeSearcher3& other);
+    void set(const PointKdTreeSearcher3 &other);
 
     //! Serializes the neighbor searcher into the buffer.
-    void serialize(std::vector<uint8_t>* buffer) const override;
+    void serialize(std::vector<uint8_t> *buffer) const override;
 
     //! Deserializes the neighbor searcher from the buffer.
-    void deserialize(const std::vector<uint8_t>& buffer) override;
+    void deserialize(const std::vector<uint8_t> &buffer) override;
 
     //! Returns builder fox PointKdTreeSearcher3.
     static Builder builder();
 
- private:
+private:
     KdTree<double, 3> _tree;
 };
 
@@ -93,9 +93,9 @@ typedef std::shared_ptr<PointKdTreeSearcher3> PointKdTreeSearcher3Ptr;
 //!
 //! \brief Front-end to create PointKdTreeSearcher3 objects step by step.
 //!
-class PointKdTreeSearcher3::Builder final
-    : public PointNeighborSearcherBuilder3 {
- public:
+class PointKdTreeSearcher3::Builder final : public PointNeighborSearcherBuilder3
+{
+public:
     //! Builds PointKdTreeSearcher3 instance.
     PointKdTreeSearcher3 build() const;
 

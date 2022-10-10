@@ -7,11 +7,13 @@
 #ifndef INCLUDE_JET_TYPE_HELPERS_H_
 #define INCLUDE_JET_TYPE_HELPERS_H_
 
-namespace jet {
+namespace jet
+{
 
 //! Returns the type of the value itself.
-template <typename T>
-struct ScalarType {
+template<typename T>
+struct ScalarType
+{
     typedef T value;
 };
 

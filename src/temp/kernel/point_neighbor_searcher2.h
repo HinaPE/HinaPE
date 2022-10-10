@@ -15,7 +15,8 @@
 #include <string>
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Abstract base class for 2-D neighbor point searcher.
@@ -25,12 +26,14 @@ namespace jet {
 //! Once built, the data structure is used to search nearby points for given
 //! origin point.
 //!
-class PointNeighborSearcher2 : public Serializable {
- public:
+class PointNeighborSearcher2 : public Serializable
+{
+public:
     //! Callback function for nearby search query. The first parameter is the
     //! index of the nearby point, and the second is the position of the point.
-    typedef std::function<void(size_t, const Vector2D&)>
-        ForEachNearbyPointFunc;
+    typedef std::function<void(size_t, const Vector2D
+    &)>
+    ForEachNearbyPointFunc;
 
     //! Default constructor.
     PointNeighborSearcher2();
@@ -42,7 +45,7 @@ class PointNeighborSearcher2 : public Serializable {
     virtual std::string typeName() const = 0;
 
     //! Builds internal acceleration structure for given points list.
-    virtual void build(const ConstArrayAccessor1<Vector2D>& points) = 0;
+    virtual void build(const ConstArrayAccessor1<Vector2D> &points) = 0;
 
     //!
     //! Invokes the callback function for each nearby point around the origin
@@ -52,10 +55,7 @@ class PointNeighborSearcher2 : public Serializable {
     //! \param[in]  radius   The search radius.
     //! \param[in]  callback The callback function.
     //!
-    virtual void forEachNearbyPoint(
-        const Vector2D& origin,
-        double radius,
-        const ForEachNearbyPointFunc& callback) const = 0;
+    virtual void forEachNearbyPoint(const Vector2D &origin, double radius, const ForEachNearbyPointFunc &callback) const = 0;
 
     //!
     //! Returns true if there are any nearby points for given origin within
@@ -66,8 +66,7 @@ class PointNeighborSearcher2 : public Serializable {
     //!
     //! \return     True if has nearby point, false otherwise.
     //!
-    virtual bool hasNearbyPoint(
-        const Vector2D& origin, double radius) const = 0;
+    virtual bool hasNearbyPoint(const Vector2D &origin, double radius) const = 0;
 
     //!
     //! \brief      Creates a new instance of the object with same properties
@@ -82,15 +81,15 @@ class PointNeighborSearcher2 : public Serializable {
 typedef std::shared_ptr<PointNeighborSearcher2> PointNeighborSearcher2Ptr;
 
 //! Abstract base class for 2-D point neighbor searcher builders.
-class PointNeighborSearcherBuilder2 {
- public:
+class PointNeighborSearcherBuilder2
+{
+public:
     //! Returns shared pointer of PointNeighborSearcher2 type.
     virtual PointNeighborSearcher2Ptr buildPointNeighborSearcher() const = 0;
 };
 
 //! Shared pointer for the PointNeighborSearcherBuilder2 type.
-typedef std::shared_ptr<PointNeighborSearcherBuilder2>
-    PointNeighborSearcherBuilder2Ptr;
+typedef std::shared_ptr<PointNeighborSearcherBuilder2> PointNeighborSearcherBuilder2Ptr;
 
 #define JET_NEIGHBOR_SEARCHER2_TYPE_NAME(DerivedClassName) \
     std::string typeName() const override { \

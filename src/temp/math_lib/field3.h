@@ -9,11 +9,13 @@
 
 #include <memory>
 
-namespace jet {
+namespace jet
+{
 
 //! Abstract base class for 3-D fields.
-class Field3 {
- public:
+class Field3
+{
+public:
     Field3();
 
     virtual ~Field3();

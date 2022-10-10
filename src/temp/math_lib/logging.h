@@ -11,17 +11,14 @@
 #include <sstream>
 #include <string>
 
-namespace jet {
+namespace jet
+{
 
 //! Level of the logging.
 //! All < Debug < Info < Warn < Error < Off.
-enum class LoggingLevel : uint8_t {
-    All = 0,
-    Debug = 1,
-    Info = 2,
-    Warn = 3,
-    Error = 4,
-    Off = 5
+enum class LoggingLevel : uint8_t
+{
+    All = 0, Debug = 1, Info = 2, Warn = 3, Error = 4, Off = 5
 };
 
 //!
@@ -30,8 +27,9 @@ enum class LoggingLevel : uint8_t {
 //! This is a super simple logger implementation that has minimal logging
 //! capability. Currently, the class doesn't support multi-thread logging.
 //!
-class Logger final {
- public:
+class Logger final
+{
+public:
     //! Constructs a logger with logging level.
     explicit Logger(LoggingLevel level);
 
@@ -39,34 +37,36 @@ class Logger final {
     ~Logger();
 
     //! Writes a value to the buffer stream.
-    template <typename T>
-    const Logger& operator<<(const T& x) const {
+    template<typename T>
+    const Logger &operator<<(const T &x) const
+    {
         _buffer << x;
         return *this;
     }
 
- private:
+private:
     LoggingLevel _level;
     mutable std::stringstream _buffer;
 };
 
 //! Helper class for logging.
-class Logging {
- public:
+class Logging
+{
+public:
     //! Sets the output stream for the info level logs.
-    static void setInfoStream(std::ostream* strm);
+    static void setInfoStream(std::ostream *strm);
 
     //! Sets the output stream for the warning level logs.
-    static void setWarnStream(std::ostream* strm);
+    static void setWarnStream(std::ostream *strm);
 
     //! Sets the output stream for the error level logs.
-    static void setErrorStream(std::ostream* strm);
+    static void setErrorStream(std::ostream *strm);
 
     //! Sets the output stream for the debug level logs.
-    static void setDebugStream(std::ostream* strm);
+    static void setDebugStream(std::ostream *strm);
 
     //! Sets the output stream for all the log levelss.
-    static void setAllStream(std::ostream* strm);
+    static void setAllStream(std::ostream *strm);
 
     //! Returns the header string.
     static std::string getHeader(LoggingLevel level);

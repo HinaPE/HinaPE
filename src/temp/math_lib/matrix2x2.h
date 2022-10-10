@@ -13,7 +13,8 @@
 #include <array>
 #include <limits>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 2-D matrix class.
@@ -22,11 +23,11 @@ namespace jet {
 //! the matrix is stored in order of (0, 0), (0, 1), (1, 0) and (1, 1).
 //! \tparam T - Type of the element.
 //!
-template <typename T>
-class Matrix<T, 2, 2> {
- public:
-    static_assert(std::is_floating_point<T>::value,
-                  "Matrix only can be instantiated with floating point types");
+template<typename T>
+class Matrix<T, 2, 2>
+{
+public:
+    static_assert(std::is_floating_point<T>::value, "Matrix only can be instantiated with floating point types");
 
     // MARK: Constructors
 
@@ -57,15 +58,15 @@ class Matrix<T, 2, 2> {
     //!
     //! \param lst Initializer list that should be copy to the new matrix.
     //!
-    template <typename U>
-    Matrix(const std::initializer_list<std::initializer_list<U>>& lst);
+    template<typename U>
+    Matrix(const std::initializer_list<std::initializer_list<U>> &lst);
 
     //! Constructs a matrix with input matrix.
-    Matrix(const Matrix& m);
+    Matrix(const Matrix &m);
 
     //! Constructs a matrix with input array.
     //! \warning Ordering of the input elements is row-major.
-    explicit Matrix(const T* arr);
+    explicit Matrix(const T *arr);
 
     // MARK: Basic setters
 
@@ -94,15 +95,15 @@ class Matrix<T, 2, 2> {
     //!
     //! \param lst Initializer list that should be copy to the matrix.
     //!
-    template <typename U>
-    void set(const std::initializer_list<std::initializer_list<U>>& lst);
+    template<typename U>
+    void set(const std::initializer_list<std::initializer_list<U>> &lst);
 
     //! Copies from input matrix.
-    void set(const Matrix& m);
+    void set(const Matrix &m);
 
     //! Copies from input array.
     //! \warning Ordering of the input elements is row-major.
-    void set(const T* arr);
+    void set(const T *arr);
 
     //! Sets diagonal elements with input scalar.
     void setDiagonal(T s);
@@ -111,17 +112,16 @@ class Matrix<T, 2, 2> {
     void setOffDiagonal(T s);
 
     //! Sets i-th row with input vector.
-    void setRow(size_t i, const Vector2<T>& row);
+    void setRow(size_t i, const Vector2<T> &row);
 
     //! Sets i-th column with input vector.
-    void setColumn(size_t i, const Vector2<T>& col);
+    void setColumn(size_t i, const Vector2<T> &col);
 
     // MARK: Basic getters
 
     //! Returns true if this matrix is similar to the input matrix within the
     //! given tolerance.
-    bool isSimilar(const Matrix& m,
-                   double tol = std::numeric_limits<double>::epsilon()) const;
+    bool isSimilar(const Matrix &m, double tol = std::numeric_limits<double>::epsilon()) const;
 
     //! Returns true if this matrix is a square matrix.
     bool isSquare() const;
@@ -133,32 +133,32 @@ class Matrix<T, 2, 2> {
     size_t cols() const;
 
     //! Returns data pointer of this matrix.
-    T* data();
+    T *data();
 
     //! Returns constant pointer of this matrix.
-    const T* data() const;
+    const T *data() const;
 
     // MARK: Binary operator methods - new instance = this instance (+) input
     //! Returns this matrix + input scalar.
     Matrix add(T s) const;
 
     //! Returns this matrix + input matrix (element-wise).
-    Matrix add(const Matrix& m) const;
+    Matrix add(const Matrix &m) const;
 
     //! Returns this matrix - input scalar.
     Matrix sub(T s) const;
 
     //! Returns this matrix - input matrix (element-wise).
-    Matrix sub(const Matrix& m) const;
+    Matrix sub(const Matrix &m) const;
 
     //! Returns this matrix * input scalar.
     Matrix mul(T s) const;
 
     //! Returns this matrix * input vector.
-    Vector2<T> mul(const Vector2<T>& v) const;
+    Vector2<T> mul(const Vector2<T> &v) const;
 
     //! Returns this matrix * input matrix.
-    Matrix mul(const Matrix& m) const;
+    Matrix mul(const Matrix &m) const;
 
     //! Returns this matrix / input scalar.
     Matrix div(T s) const;
@@ -168,19 +168,19 @@ class Matrix<T, 2, 2> {
     Matrix radd(T s) const;
 
     //! Returns input matrix + this matrix (element-wise).
-    Matrix radd(const Matrix& m) const;
+    Matrix radd(const Matrix &m) const;
 
     //! Returns input scalar - this matrix.
     Matrix rsub(T s) const;
 
     //! Returns input matrix - this matrix (element-wise).
-    Matrix rsub(const Matrix& m) const;
+    Matrix rsub(const Matrix &m) const;
 
     //! Returns input scalar * this matrix.
     Matrix rmul(T s) const;
 
     //! Returns input matrix * this matrix.
-    Matrix rmul(const Matrix& m) const;
+    Matrix rmul(const Matrix &m) const;
 
     //! Returns input scalar / this matrix.
     Matrix rdiv(T s) const;
@@ -190,19 +190,19 @@ class Matrix<T, 2, 2> {
     void iadd(T s);
 
     //! Adds input matrix to this matrix (element-wise).
-    void iadd(const Matrix& m);
+    void iadd(const Matrix &m);
 
     //! Subtracts input scalar from this matrix.
     void isub(T s);
 
     //! Subtracts input matrix from this matrix (element-wise).
-    void isub(const Matrix& m);
+    void isub(const Matrix &m);
 
     //! Multiplies input scalar to this matrix.
     void imul(T s);
 
     //! Multiplies input matrix to this matrix.
-    void imul(const Matrix& m);
+    void imul(const Matrix &m);
 
     //! Divides this matrix with input scalar.
     void idiv(T s);
@@ -267,52 +267,52 @@ class Matrix<T, 2, 2> {
     //! Returns Frobenius norm.
     T frobeniusNorm() const;
 
-    template <typename U>
+    template<typename U>
     Matrix<U, 2, 2> castTo() const;
 
     // MARK: Setter operators
     //! Assigns input matrix.
-    Matrix& operator=(const Matrix& m);
+    Matrix &operator=(const Matrix &m);
 
     //! Addition assignment with input scalar.
-    Matrix& operator+=(T s);
+    Matrix &operator+=(T s);
 
     //! Addition assignment with input matrix (element-wise).
-    Matrix& operator+=(const Matrix& m);
+    Matrix &operator+=(const Matrix &m);
 
     //! Subtraction assignment with input scalar.
-    Matrix& operator-=(T s);
+    Matrix &operator-=(T s);
 
     //! Subtraction assignment with input matrix (element-wise).
-    Matrix& operator-=(const Matrix& m);
+    Matrix &operator-=(const Matrix &m);
 
     //! Multiplication assignment with input scalar.
-    Matrix& operator*=(T s);
+    Matrix &operator*=(T s);
 
     //! Multiplication assignment with input matrix.
-    Matrix& operator*=(const Matrix& m);
+    Matrix &operator*=(const Matrix &m);
 
     //! Division assignment with input scalar.
-    Matrix& operator/=(T s);
+    Matrix &operator/=(T s);
 
     // MARK: Getter operators
     //! Returns reference of i-th element.
-    T& operator[](size_t i);
+    T &operator[](size_t i);
 
     //! Returns constant reference of i-th element.
-    const T& operator[](size_t i) const;
+    const T &operator[](size_t i) const;
 
     //! Returns reference of (i,j) element.
-    T& operator()(size_t i, size_t j);
+    T &operator()(size_t i, size_t j);
 
     //! Returns constant reference of (i,j) element.
-    const T& operator()(size_t i, size_t j) const;
+    const T &operator()(size_t i, size_t j) const;
 
     //! Returns true if is equal to m.
-    bool operator==(const Matrix& m) const;
+    bool operator==(const Matrix &m) const;
 
     //! Returns true if is not equal to m.
-    bool operator!=(const Matrix& m) const;
+    bool operator!=(const Matrix &m) const;
 
     // MARK: Helpers
     //! Sets all matrix entries to zero.
@@ -325,72 +325,71 @@ class Matrix<T, 2, 2> {
     static Matrix makeScaleMatrix(T sx, T sy);
 
     //! Makes scale matrix.
-    static Matrix makeScaleMatrix(const Vector2<T>& s);
+    static Matrix makeScaleMatrix(const Vector2<T> &s);
 
     //! Makes rotation matrix.
     //! \warning Input angle should be radian.
-    static Matrix makeRotationMatrix(const T& rad);
+    static Matrix makeRotationMatrix(const T &rad);
 
- private:
+private:
     std::array<T, 4> _elements;
 };
 
 //! Type alias for 2x2 matrix.
-template <typename T>
-using Matrix2x2 = Matrix<T, 2, 2>;
+template<typename T> using Matrix2x2 = Matrix<T, 2, 2>;
 
 // MARK: Operator overloadings
 //! Returns a matrix with opposite sign.
-template <typename T>
-Matrix2x2<T> operator-(const Matrix2x2<T>& a);
+template<typename T>
+Matrix2x2<T> operator-(const Matrix2x2<T> &a);
 
 //! Returns a + b (element-size).
-template <typename T>
-Matrix2x2<T> operator+(const Matrix2x2<T>& a, const Matrix2x2<T>& b);
+template<typename T>
+Matrix2x2<T> operator+(const Matrix2x2<T> &a, const Matrix2x2<T> &b);
 
 //! Returns a + b', where every element of matrix b' is b.
-template <typename T>
-Matrix2x2<T> operator+(const Matrix2x2<T>& a, const T& b);
+template<typename T>
+Matrix2x2<T> operator+(const Matrix2x2<T> &a, const T &b);
 
 //! Returns a' + b, where every element of matrix a' is a.
-template <typename T>
-Matrix2x2<T> operator+(const T& a, const Matrix2x2<T>& b);
+template<typename T>
+Matrix2x2<T> operator+(const T &a, const Matrix2x2<T> &b);
 
 //! Returns a - b (element-size).
-template <typename T>
-Matrix2x2<T> operator-(const Matrix2x2<T>& a, const Matrix2x2<T>& b);
+template<typename T>
+Matrix2x2<T> operator-(const Matrix2x2<T> &a, const Matrix2x2<T> &b);
 
 //! Returns a - b', where every element of matrix b' is b.
-template <typename T>
-Matrix2x2<T> operator-(const Matrix2x2<T>& a, T b);
+template<typename T>
+Matrix2x2<T> operator-(const Matrix2x2<T> &a, T b);
 
 //! Returns a' - b, where every element of matrix a' is a.
-template <typename T>
-Matrix2x2<T> operator-(T a, const Matrix2x2<T>& b);
+template<typename T>
+Matrix2x2<T> operator-(T a, const Matrix2x2<T> &b);
 
 //! Returns a * b', where every element of matrix b' is b.
-template <typename T>
-Matrix2x2<T> operator*(const Matrix2x2<T>& a, T b);
+template<typename T>
+Matrix2x2<T> operator*(const Matrix2x2<T> &a, T b);
 
 //! Returns a' * b, where every element of matrix a' is a.
-template <typename T>
-Matrix2x2<T> operator*(T a, const Matrix2x2<T>& b);
+template<typename T>
+Matrix2x2<T> operator*(T a, const Matrix2x2<T> &b);
 
 //! Returns a * b.
-template <typename T>
-Vector2<T> operator*(const Matrix2x2<T>& a, const Vector2<T>& b);
+template<typename T>
+Vector2<T> operator*(const Matrix2x2<T> &a, const Vector2<T> &b);
 
 //! Returns a * b.
-template <typename T>
-Matrix2x2<T> operator*(const Matrix2x2<T>& a, const Matrix2x2<T>& b);
+template<typename T>
+Matrix2x2<T> operator*(const Matrix2x2<T> &a, const Matrix2x2<T> &b);
 
 //! Returns a' / b, where every element of matrix a' is a.
-template <typename T>
-Matrix2x2<T> operator/(const Matrix2x2<T>& a, T b);
+template<typename T>
+Matrix2x2<T> operator/(const Matrix2x2<T> &a, T b);
 
 //! Returns a / b', where every element of matrix b' is b.
-template <typename T>
-Matrix2x2<T> operator/(const T& a, const Matrix2x2<T>& b);
+template<typename T>
+Matrix2x2<T> operator/(const T &a, const Matrix2x2<T> &b);
 
 //! Float-type 2x2 matrix.
 typedef Matrix2x2<float> Matrix2x2F;

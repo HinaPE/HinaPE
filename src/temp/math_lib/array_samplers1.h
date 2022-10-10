@@ -11,7 +11,8 @@
 #include "array_accessor1.h"
 #include <functional>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 1-D nearest array sampler class.
@@ -21,12 +22,11 @@ namespace jet {
 //! \tparam T - The value type to sample.
 //! \tparam R - The real number type.
 //!
-template <typename T, typename R>
-class NearestArraySampler<T, R, 1> final {
- public:
-    static_assert(
-        std::is_floating_point<R>::value,
-        "Samplers only can be instantiated with floating point types");
+template<typename T, typename R>
+class NearestArraySampler<T, R, 1> final
+{
+public:
+    static_assert(std::is_floating_point<R>::value, "Samplers only can be instantiated with floating point types");
 
     //!
     //! \brief      Constructs a sampler using array accessor, spacing between
@@ -36,33 +36,28 @@ class NearestArraySampler<T, R, 1> final {
     //! \param[in]  gridSpacing The grid spacing.
     //! \param[in]  gridOrigin  The grid origin.
     //!
-    explicit NearestArraySampler(
-        const ConstArrayAccessor1<T>& accessor,
-        R gridSpacing,
-        R gridOrigin);
+    explicit NearestArraySampler(const ConstArrayAccessor1<T> &accessor, R gridSpacing, R gridOrigin);
 
     //! Copy constructor.
-    NearestArraySampler(const NearestArraySampler& other);
+    NearestArraySampler(const NearestArraySampler &other);
 
     //! Returns sampled value at point \p pt.
     T operator()(R pt) const;
 
     //! Returns the nearest array index for point \p x.
-    void getCoordinate(R x, size_t* i) const;
+    void getCoordinate(R x, size_t *i) const;
 
     //! Returns a funtion object that wraps this instance.
     std::function<T(R)> functor() const;
 
- private:
+private:
     R _gridSpacing;
     R _origin;
     ConstArrayAccessor1<T> _accessor;
 };
 
 //! Type alias for 1-D nearest array sampler.
-template <typename T, typename R> using NearestArraySampler1
-    = NearestArraySampler<T, R, 1>;
-
+template<typename T, typename R> using NearestArraySampler1 = NearestArraySampler<T, R, 1>;
 
 //!
 //! \brief 1-D linear array sampler class.
@@ -72,12 +67,11 @@ template <typename T, typename R> using NearestArraySampler1
 //! \tparam T - The value type to sample.
 //! \tparam R - The real number type.
 //!
-template <typename T, typename R>
-class LinearArraySampler<T, R, 1> final {
- public:
-    static_assert(
-        std::is_floating_point<R>::value,
-        "Samplers only can be instantiated with floating point types");
+template<typename T, typename R>
+class LinearArraySampler<T, R, 1> final
+{
+public:
+    static_assert(std::is_floating_point<R>::value, "Samplers only can be instantiated with floating point types");
 
     //!
     //! \brief      Constructs a sampler using array accessor, spacing between
@@ -87,34 +81,28 @@ class LinearArraySampler<T, R, 1> final {
     //! \param[in]  gridSpacing The grid spacing.
     //! \param[in]  gridOrigin  The grid origin.
     //!
-    explicit LinearArraySampler(
-        const ConstArrayAccessor1<T>& accessor,
-        R gridSpacing,
-        R gridOrigin);
+    explicit LinearArraySampler(const ConstArrayAccessor1<T> &accessor, R gridSpacing, R gridOrigin);
 
     //! Copy constructor.
-    LinearArraySampler(const LinearArraySampler& other);
+    LinearArraySampler(const LinearArraySampler &other);
 
     //! Returns sampled value at point \p pt.
     T operator()(R pt) const;
 
     //! Returns the indices of points and their sampling weight for given point.
-    void getCoordinatesAndWeights(
-        R x, size_t* i0, size_t* i1, T* weight0, T* weight1) const;
+    void getCoordinatesAndWeights(R x, size_t *i0, size_t *i1, T *weight0, T *weight1) const;
 
     //! Returns a funtion object that wraps this instance.
     std::function<T(R)> functor() const;
 
- private:
+private:
     R _gridSpacing;
     R _origin;
     ConstArrayAccessor1<T> _accessor;
 };
 
 //! Type alias for 1-D linear array sampler.
-template <typename T, typename R> using LinearArraySampler1
-    = LinearArraySampler<T, R, 1>;
-
+template<typename T, typename R> using LinearArraySampler1 = LinearArraySampler<T, R, 1>;
 
 //!
 //! \brief 1-D cubic array sampler class.
@@ -124,12 +112,11 @@ template <typename T, typename R> using LinearArraySampler1
 //! \tparam T - The value type to sample.
 //! \tparam R - The real number type.
 //!
-template <typename T, typename R>
-class CubicArraySampler<T, R, 1> final {
- public:
-    static_assert(
-        std::is_floating_point<R>::value,
-        "Samplers only can be instantiated with floating point types");
+template<typename T, typename R>
+class CubicArraySampler<T, R, 1> final
+{
+public:
+    static_assert(std::is_floating_point<R>::value, "Samplers only can be instantiated with floating point types");
 
     //!
     //! \brief      Constructs a sampler using array accessor, spacing between
@@ -139,13 +126,10 @@ class CubicArraySampler<T, R, 1> final {
     //! \param[in]  gridSpacing The grid spacing.
     //! \param[in]  gridOrigin  The grid origin.
     //!
-    explicit CubicArraySampler(
-        const ConstArrayAccessor1<T>& accessor,
-        R gridSpacing,
-        R gridOrigin);
+    explicit CubicArraySampler(const ConstArrayAccessor1<T> &accessor, R gridSpacing, R gridOrigin);
 
     //! Copy constructor.
-    CubicArraySampler(const CubicArraySampler& other);
+    CubicArraySampler(const CubicArraySampler &other);
 
     //! Returns sampled value at point \p pt.
     T operator()(R pt) const;
@@ -153,15 +137,14 @@ class CubicArraySampler<T, R, 1> final {
     //! Returns a funtion object that wraps this instance.
     std::function<T(R)> functor() const;
 
- private:
+private:
     R _gridSpacing;
     R _origin;
     ConstArrayAccessor1<T> _accessor;
 };
 
 //! Type alias for 1-D cubic array sampler.
-template <typename T, typename R> using CubicArraySampler1
-    = CubicArraySampler<T, R, 1>;
+template<typename T, typename R> using CubicArraySampler1 = CubicArraySampler<T, R, 1>;
 
 }  // namespace jet
 

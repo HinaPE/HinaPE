@@ -32,17 +32,16 @@
 
 using namespace jet;
 
-namespace {
+namespace
+{
 
 std::unordered_map<std::string, ScalarGridBuilder2Ptr> sScalarGrid2Builders;
 std::unordered_map<std::string, ScalarGridBuilder3Ptr> sScalarGrid3Builders;
 std::unordered_map<std::string, VectorGridBuilder2Ptr> sVectorGrid2Builders;
 std::unordered_map<std::string, VectorGridBuilder3Ptr> sVectorGrid3Builders;
 
-std::unordered_map<std::string, PointNeighborSearcherBuilder2Ptr>
-    sPointNeighborSearcher2Builders;
-std::unordered_map<std::string, PointNeighborSearcherBuilder3Ptr>
-    sPointNeighborSearcher3Builders;
+std::unordered_map<std::string, PointNeighborSearcherBuilder2Ptr> sPointNeighborSearcher2Builders;
+std::unordered_map<std::string, PointNeighborSearcherBuilder3Ptr> sPointNeighborSearcher3Builders;
 
 }  // namespace
 
@@ -67,9 +66,11 @@ std::unordered_map<std::string, PointNeighborSearcherBuilder3Ptr>
 #define REGISTER_POINT_NEIGHBOR_SEARCHER3_BUILDER(ClassName) \
     REGISTER_BUILDER(sPointNeighborSearcher3Builders, ClassName)
 
-class Registry {
- public:
-    Registry() {
+class Registry
+{
+public:
+    Registry()
+    {
         REGISTER_SCALAR_GRID2_BUILDER(CellCenteredScalarGrid2)
         REGISTER_SCALAR_GRID2_BUILDER(VertexCenteredScalarGrid2)
 
@@ -85,14 +86,12 @@ class Registry {
         REGISTER_VECTOR_GRID3_BUILDER(VertexCenteredVectorGrid3)
 
         REGISTER_POINT_NEIGHBOR_SEARCHER2_BUILDER(PointHashGridSearcher2)
-        REGISTER_POINT_NEIGHBOR_SEARCHER2_BUILDER(
-            PointParallelHashGridSearcher2)
+        REGISTER_POINT_NEIGHBOR_SEARCHER2_BUILDER(PointParallelHashGridSearcher2)
         REGISTER_POINT_NEIGHBOR_SEARCHER2_BUILDER(PointSimpleListSearcher2)
         REGISTER_POINT_NEIGHBOR_SEARCHER2_BUILDER(PointKdTreeSearcher2)
 
         REGISTER_POINT_NEIGHBOR_SEARCHER3_BUILDER(PointHashGridSearcher3)
-        REGISTER_POINT_NEIGHBOR_SEARCHER3_BUILDER(
-            PointParallelHashGridSearcher3)
+        REGISTER_POINT_NEIGHBOR_SEARCHER3_BUILDER(PointParallelHashGridSearcher3)
         REGISTER_POINT_NEIGHBOR_SEARCHER3_BUILDER(PointSimpleListSearcher3)
         REGISTER_POINT_NEIGHBOR_SEARCHER3_BUILDER(PointKdTreeSearcher3)
     }
@@ -100,64 +99,80 @@ class Registry {
 
 static Registry sRegistry;
 
-ScalarGrid2Ptr Factory::buildScalarGrid2(const std::string& name) {
+ScalarGrid2Ptr Factory::buildScalarGrid2(const std::string &name)
+{
     auto result = sScalarGrid2Builders.find(name);
-    if (result != sScalarGrid2Builders.end()) {
+    if (result != sScalarGrid2Builders.end())
+    {
         auto builder = result->second;
         return builder->build({0, 0}, {1, 1}, {0, 0}, 0.0);
-    } else {
+    } else
+    {
         return nullptr;
     }
 }
 
-ScalarGrid3Ptr Factory::buildScalarGrid3(const std::string& name) {
+ScalarGrid3Ptr Factory::buildScalarGrid3(const std::string &name)
+{
     auto result = sScalarGrid3Builders.find(name);
-    if (result != sScalarGrid3Builders.end()) {
+    if (result != sScalarGrid3Builders.end())
+    {
         auto builder = result->second;
         return builder->build({0, 0, 0}, {1, 1, 1}, {0, 0, 0}, 0.0);
-    } else {
+    } else
+    {
         return nullptr;
     }
 }
 
-VectorGrid2Ptr Factory::buildVectorGrid2(const std::string& name) {
+VectorGrid2Ptr Factory::buildVectorGrid2(const std::string &name)
+{
     auto result = sVectorGrid2Builders.find(name);
-    if (result != sVectorGrid2Builders.end()) {
+    if (result != sVectorGrid2Builders.end())
+    {
         auto builder = result->second;
         return builder->build({0, 0}, {1, 1}, {0, 0}, {0, 0});
-    } else {
+    } else
+    {
         return nullptr;
     }
 }
 
-VectorGrid3Ptr Factory::buildVectorGrid3(const std::string& name) {
+VectorGrid3Ptr Factory::buildVectorGrid3(const std::string &name)
+{
     auto result = sVectorGrid3Builders.find(name);
-    if (result != sVectorGrid3Builders.end()) {
+    if (result != sVectorGrid3Builders.end())
+    {
         auto builder = result->second;
         return builder->build({0, 0, 0}, {1, 1, 1}, {0, 0, 0}, {0, 0, 0});
-    } else {
+    } else
+    {
         return nullptr;
     }
 }
 
-PointNeighborSearcher2Ptr Factory::buildPointNeighborSearcher2(
-    const std::string& name) {
+PointNeighborSearcher2Ptr Factory::buildPointNeighborSearcher2(const std::string &name)
+{
     auto result = sPointNeighborSearcher2Builders.find(name);
-    if (result != sPointNeighborSearcher2Builders.end()) {
+    if (result != sPointNeighborSearcher2Builders.end())
+    {
         auto builder = result->second;
         return builder->buildPointNeighborSearcher();
-    } else {
+    } else
+    {
         return nullptr;
     }
 }
 
-PointNeighborSearcher3Ptr Factory::buildPointNeighborSearcher3(
-    const std::string& name) {
+PointNeighborSearcher3Ptr Factory::buildPointNeighborSearcher3(const std::string &name)
+{
     auto result = sPointNeighborSearcher3Builders.find(name);
-    if (result != sPointNeighborSearcher3Builders.end()) {
+    if (result != sPointNeighborSearcher3Builders.end())
+    {
         auto builder = result->second;
         return builder->buildPointNeighborSearcher();
-    } else {
+    } else
+    {
         return nullptr;
     }
 }

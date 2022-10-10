@@ -9,8 +9,10 @@
 
 using namespace jet;
 
-Field2::Field2() {
+Field2::Field2()
+{
 }
 
-Field2::~Field2() {
+Field2::~Field2()
+{
 }

@@ -13,9 +13,10 @@
 
 #include <tuple>
 
-namespace jet {
+namespace jet
+{
 
-template <typename T>
+template<typename T>
 class MatrixCsr;
 
 //!
@@ -27,12 +28,12 @@ class MatrixCsr;
 //! \tparam T   Element value type.
 //! \tparam VE  Vector expression.
 //!
-template <typename T, typename VE>
-class MatrixCsrVectorMul
-    : public VectorExpression<T, MatrixCsrVectorMul<T, VE>> {
- public:
-    MatrixCsrVectorMul(const MatrixCsr<T>& m, const VE& v);
-    MatrixCsrVectorMul(const MatrixCsrVectorMul&);
+template<typename T, typename VE>
+class MatrixCsrVectorMul : public VectorExpression<T, MatrixCsrVectorMul<T, VE>>
+{
+public:
+    MatrixCsrVectorMul(const MatrixCsr<T> &m, const VE &v);
+    MatrixCsrVectorMul(const MatrixCsrVectorMul &);
 
     //! Size of the vector.
     size_t size() const;
@@ -40,10 +41,10 @@ class MatrixCsrVectorMul
     //! Returns vector element at i.
     T operator[](size_t i) const;
 
- private:
-    const MatrixCsr<T>& _m;
-    const VE& _v;
-    const VE* _v2;
+private:
+    const MatrixCsr<T> &_m;
+    const VE &_v;
+    const VE *_v2;
 };
 
 //!
@@ -56,11 +57,11 @@ class MatrixCsrVectorMul
 //! \tparam T   Element value type.
 //! \tparam ME  Matrix expression.
 //!
-template <typename T, typename ME>
-class MatrixCsrMatrixMul
-    : public MatrixExpression<T, MatrixCsrMatrixMul<T, ME>> {
- public:
-    MatrixCsrMatrixMul(const MatrixCsr<T>& m1, const ME& m2);
+template<typename T, typename ME>
+class MatrixCsrMatrixMul : public MatrixExpression<T, MatrixCsrMatrixMul<T, ME>>
+{
+public:
+    MatrixCsrMatrixMul(const MatrixCsr<T> &m1, const ME &m2);
 
     //! Size of the matrix.
     Size2 size() const;
@@ -74,12 +75,12 @@ class MatrixCsrMatrixMul
     //! Returns matrix element at (i, j).
     T operator()(size_t i, size_t j) const;
 
- private:
-    const MatrixCsr<T>& _m1;
-    const ME& _m2;
-    const T* const _nnz;
-    const size_t* const _rp;
-    const size_t* const _ci;
+private:
+    const MatrixCsr<T> &_m1;
+    const ME &_m2;
+    const T *const _nnz;
+    const size_t *const _rp;
+    const size_t *const _ci;
 };
 
 //!
@@ -92,21 +93,21 @@ class MatrixCsrMatrixMul
 //!
 //! \tparam T Type of the element.
 //!
-template <typename T>
-class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
- public:
-    static_assert(
-        std::is_floating_point<T>::value,
-        "MatrixCsr only can be instantiated with floating point types");
+template<typename T>
+class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>>
+{
+public:
+    static_assert(std::is_floating_point<T>::value, "MatrixCsr only can be instantiated with floating point types");
 
-    struct Element {
+    struct Element
+    {
         size_t i;
         size_t j;
         T value;
 
         Element();
 
-        Element(size_t i, size_t j, const T& value);
+        Element(size_t i, size_t j, const T &value);
     };
 
     typedef std::vector<T> NonZeroContainerType;
@@ -142,8 +143,7 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     //!
     //! \param lst Initializer list that should be copy to the new matrix.
     //!
-    MatrixCsr(const std::initializer_list<std::initializer_list<T>>& lst,
-              T epsilon = std::numeric_limits<T>::epsilon());
+    MatrixCsr(const std::initializer_list<std::initializer_list<T>> &lst, T epsilon = std::numeric_limits<T>::epsilon());
 
     //!
     //! \brief Compresses input (dense) matrix expression into a sparse matrix.
@@ -152,15 +152,14 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     //! During the process, zero elements (less than \p epsilon) will not be
     //! stored.
     //!
-    template <typename E>
-    MatrixCsr(const MatrixExpression<T, E>& other,
-              T epsilon = std::numeric_limits<T>::epsilon());
+    template<typename E>
+    MatrixCsr(const MatrixExpression<T, E> &other, T epsilon = std::numeric_limits<T>::epsilon());
 
     //! Copy constructor.
-    MatrixCsr(const MatrixCsr& other);
+    MatrixCsr(const MatrixCsr &other);
 
     //! Move constructor.
-    MatrixCsr(MatrixCsr&& other);
+    MatrixCsr(MatrixCsr &&other);
 
     // MARK: Basic setters
 
@@ -168,10 +167,10 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     void clear();
 
     //! Sets whole matrix with input scalar.
-    void set(const T& s);
+    void set(const T &s);
 
     //! Copy from given sparse matrix.
-    void set(const MatrixCsr& other);
+    void set(const MatrixCsr &other);
 
     //! Reserves memory space of this matrix.
     void reserve(size_t rows, size_t cols, size_t numNonZeros);
@@ -197,8 +196,7 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     //!
     //! \param lst Initializer list that should be copy to the new matrix.
     //!
-    void compress(const std::initializer_list<std::initializer_list<T>>& lst,
-                  T epsilon = std::numeric_limits<T>::epsilon());
+    void compress(const std::initializer_list<std::initializer_list<T>> &lst, T epsilon = std::numeric_limits<T>::epsilon());
 
     //!
     //! \brief Compresses input (dense) matrix expression into a sparse matrix.
@@ -207,15 +205,14 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     //! During the process, zero elements (less than \p epsilon) will not be
     //! stored.
     //!
-    template <typename E>
-    void compress(const MatrixExpression<T, E>& other,
-                  T epsilon = std::numeric_limits<T>::epsilon());
+    template<typename E>
+    void compress(const MatrixExpression<T, E> &other, T epsilon = std::numeric_limits<T>::epsilon());
 
     //! Adds non-zero element to (i, j).
-    void addElement(size_t i, size_t j, const T& value);
+    void addElement(size_t i, size_t j, const T &value);
 
     //! Adds non-zero element.
-    void addElement(const Element& element);
+    void addElement(const Element &element);
 
     //!
     //! Adds a row to the sparse matrix.
@@ -223,22 +220,20 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     //! \param nonZeros - Array of non-zero elements for the row.
     //! \param columnIndices - Array of column indices for the row.
     //!
-    void addRow(const NonZeroContainerType& nonZeros,
-                const IndexContainerType& columnIndices);
+    void addRow(const NonZeroContainerType &nonZeros, const IndexContainerType &columnIndices);
 
     //! Sets non-zero element to (i, j).
-    void setElement(size_t i, size_t j, const T& value);
+    void setElement(size_t i, size_t j, const T &value);
 
     //! Sets non-zero element.
-    void setElement(const Element& element);
+    void setElement(const Element &element);
 
     // MARK: Basic getters
-    bool isEqual(const MatrixCsr& other) const;
+    bool isEqual(const MatrixCsr &other) const;
 
     //! Returns true if this matrix is similar to the input matrix within the
     //! given tolerance.
-    bool isSimilar(const MatrixCsr& other,
-                   double tol = std::numeric_limits<double>::epsilon()) const;
+    bool isSimilar(const MatrixCsr &other, double tol = std::numeric_limits<double>::epsilon()) const;
 
     //! Returns true if this matrix is a square matrix.
     bool isSquare() const;
@@ -256,28 +251,28 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     size_t numberOfNonZeros() const;
 
     //! Returns i-th non-zero element.
-    const T& nonZero(size_t i) const;
+    const T &nonZero(size_t i) const;
 
     //! Returns i-th non-zero element.
-    T& nonZero(size_t i);
+    T &nonZero(size_t i);
 
     //! Returns i-th row pointer.
-    const size_t& rowPointer(size_t i) const;
+    const size_t &rowPointer(size_t i) const;
 
     //! Returns i-th column index.
-    const size_t& columnIndex(size_t i) const;
+    const size_t &columnIndex(size_t i) const;
 
     //! Returns pointer of the non-zero elements data.
-    T* nonZeroData();
+    T *nonZeroData();
 
     //! Returns constant pointer of the non-zero elements data.
-    const T* const nonZeroData() const;
+    const T *const nonZeroData() const;
 
     //! Returns constant pointer of the row pointers data.
-    const size_t* const rowPointersData() const;
+    const size_t *const rowPointersData() const;
 
     //! Returns constant pointer of the column indices data.
-    const size_t* const columnIndicesData() const;
+    const size_t *const columnIndicesData() const;
 
     //! Returns the begin iterator of the non-zero elements.
     NonZeroIterator nonZeroBegin();
@@ -318,74 +313,74 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     // MARK: Binary operator methods - new instance = this instance (+) input
 
     //! Returns this matrix + input scalar.
-    MatrixCsr add(const T& s) const;
+    MatrixCsr add(const T &s) const;
 
     //! Returns this matrix + input matrix (element-wise).
-    MatrixCsr add(const MatrixCsr& m) const;
+    MatrixCsr add(const MatrixCsr &m) const;
 
     //! Returns this matrix - input scalar.
-    MatrixCsr sub(const T& s) const;
+    MatrixCsr sub(const T &s) const;
 
     //! Returns this matrix - input matrix (element-wise).
-    MatrixCsr sub(const MatrixCsr& m) const;
+    MatrixCsr sub(const MatrixCsr &m) const;
 
     //! Returns this matrix * input scalar.
-    MatrixCsr mul(const T& s) const;
+    MatrixCsr mul(const T &s) const;
 
     //! Returns this matrix * input vector.
-    template <typename VE>
-    MatrixCsrVectorMul<T, VE> mul(const VectorExpression<T, VE>& v) const;
+    template<typename VE>
+    MatrixCsrVectorMul<T, VE> mul(const VectorExpression<T, VE> &v) const;
 
     //! Returns this matrix * input matrix.
-    template <typename ME>
-    MatrixCsrMatrixMul<T, ME> mul(const MatrixExpression<T, ME>& m) const;
+    template<typename ME>
+    MatrixCsrMatrixMul<T, ME> mul(const MatrixExpression<T, ME> &m) const;
 
     //! Returns this matrix / input scalar.
-    MatrixCsr div(const T& s) const;
+    MatrixCsr div(const T &s) const;
 
     // MARK: Binary operator methods - new instance = input (+) this instance
 
     //! Returns input scalar + this matrix.
-    MatrixCsr radd(const T& s) const;
+    MatrixCsr radd(const T &s) const;
 
     //! Returns input matrix + this matrix (element-wise).
-    MatrixCsr radd(const MatrixCsr& m) const;
+    MatrixCsr radd(const MatrixCsr &m) const;
 
     //! Returns input scalar - this matrix.
-    MatrixCsr rsub(const T& s) const;
+    MatrixCsr rsub(const T &s) const;
 
     //! Returns input matrix - this matrix (element-wise).
-    MatrixCsr rsub(const MatrixCsr& m) const;
+    MatrixCsr rsub(const MatrixCsr &m) const;
 
     //! Returns input scalar * this matrix.
-    MatrixCsr rmul(const T& s) const;
+    MatrixCsr rmul(const T &s) const;
 
     //! Returns input matrix / this scalar.
-    MatrixCsr rdiv(const T& s) const;
+    MatrixCsr rdiv(const T &s) const;
 
     // MARK: Augmented operator methods - this instance (+)= input
 
     //! Adds input scalar to this matrix.
-    void iadd(const T& s);
+    void iadd(const T &s);
 
     //! Adds input matrix to this matrix (element-wise).
-    void iadd(const MatrixCsr& m);
+    void iadd(const MatrixCsr &m);
 
     //! Subtracts input scalar from this matrix.
-    void isub(const T& s);
+    void isub(const T &s);
 
     //! Subtracts input matrix from this matrix (element-wise).
-    void isub(const MatrixCsr& m);
+    void isub(const MatrixCsr &m);
 
     //! Multiplies input scalar to this matrix.
-    void imul(const T& s);
+    void imul(const T &s);
 
     //! Multiplies input matrix to this matrix.
-    template <typename ME>
-    void imul(const MatrixExpression<T, ME>& m);
+    template<typename ME>
+    void imul(const MatrixExpression<T, ME> &m);
 
     //! Divides this matrix with input scalar.
-    void idiv(const T& s);
+    void idiv(const T &s);
 
     // MARK: Complex getters
 
@@ -412,7 +407,7 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     T trace() const;
 
     //! Type-casts to different value-typed matrix.
-    template <typename U>
+    template<typename U>
     MatrixCsr<U> castTo() const;
 
     // MARK: Setter operators
@@ -424,36 +419,36 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     //! During the process, zero elements (less than \p epsilon) will not be
     //! stored.
     //!
-    template <typename E>
-    MatrixCsr& operator=(const E& m);
+    template<typename E>
+    MatrixCsr &operator=(const E &m);
 
     //! Copies to this matrix.
-    MatrixCsr& operator=(const MatrixCsr& other);
+    MatrixCsr &operator=(const MatrixCsr &other);
 
     //! Moves to this matrix.
-    MatrixCsr& operator=(MatrixCsr&& other);
+    MatrixCsr &operator=(MatrixCsr &&other);
 
     //! Addition assignment with input scalar.
-    MatrixCsr& operator+=(const T& s);
+    MatrixCsr &operator+=(const T &s);
 
     //! Addition assignment with input matrix (element-wise).
-    MatrixCsr& operator+=(const MatrixCsr& m);
+    MatrixCsr &operator+=(const MatrixCsr &m);
 
     //! Subtraction assignment with input scalar.
-    MatrixCsr& operator-=(const T& s);
+    MatrixCsr &operator-=(const T &s);
 
     //! Subtraction assignment with input matrix (element-wise).
-    MatrixCsr& operator-=(const MatrixCsr& m);
+    MatrixCsr &operator-=(const MatrixCsr &m);
 
     //! Multiplication assignment with input scalar.
-    MatrixCsr& operator*=(const T& s);
+    MatrixCsr &operator*=(const T &s);
 
     //! Multiplication assignment with input matrix.
-    template <typename ME>
-    MatrixCsr& operator*=(const MatrixExpression<T, ME>& m);
+    template<typename ME>
+    MatrixCsr &operator*=(const MatrixExpression<T, ME> &m);
 
     //! Division assignment with input scalar.
-    MatrixCsr& operator/=(const T& s);
+    MatrixCsr &operator/=(const T &s);
 
     // MARK: Getter operators
 
@@ -461,17 +456,17 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
     T operator()(size_t i, size_t j) const;
 
     //! Returns true if is equal to m.
-    bool operator==(const MatrixCsr& m) const;
+    bool operator==(const MatrixCsr &m) const;
 
     //! Returns true if is not equal to m.
-    bool operator!=(const MatrixCsr& m) const;
+    bool operator!=(const MatrixCsr &m) const;
 
     // MARK: Builders
     //! Makes a m x m matrix with all diagonal elements to 1, and other elements
     //! to 0.
     static MatrixCsr<T> makeIdentity(size_t m);
 
- private:
+private:
     Size2 _size;
     NonZeroContainerType _nonZeros;
     IndexContainerType _rowPointers;
@@ -479,8 +474,8 @@ class MatrixCsr final : public MatrixExpression<T, MatrixCsr<T>> {
 
     size_t hasElement(size_t i, size_t j) const;
 
-    template <typename Op>
-    MatrixCsr binaryOp(const MatrixCsr& m, Op op) const;
+    template<typename Op>
+    MatrixCsr binaryOp(const MatrixCsr &m, Op op) const;
 };
 
 //! Float-type CSR matrix.

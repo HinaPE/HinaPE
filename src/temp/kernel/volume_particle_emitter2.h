@@ -17,15 +17,17 @@
 #include <memory>
 #include <random>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 2-D volumetric particle emitter.
 //!
 //! This class emits particles from volumetric geometry.
 //!
-class VolumeParticleEmitter2 final : public ParticleEmitter2 {
- public:
+class VolumeParticleEmitter2 final : public ParticleEmitter2
+{
+public:
     class Builder;
 
     //! Constructs an emitter that spawns particles from given implicit surface
@@ -45,18 +47,8 @@ class VolumeParticleEmitter2 final : public ParticleEmitter2 {
     //! \param[in]  allowOverlapping        True if particles can be overlapped.
     //! \param[in]  seed                    The random seed.
     //!
-    VolumeParticleEmitter2(
-        const ImplicitSurface2Ptr& implicitSurface,
-        const BoundingBox2D& maxRegion,
-        double spacing,
-        const Vector2D& initialVel = Vector2D(),
-        const Vector2D& linearVel = Vector2D(),
-        double angularVel = 0.0,
-        size_t maxNumberOfParticles = kMaxSize,
-        double jitter = 0.0,
-        bool isOneShot = true,
-        bool allowOverlapping = false,
-        uint32_t seed = 0);
+    VolumeParticleEmitter2(const ImplicitSurface2Ptr &implicitSurface, const BoundingBox2D &maxRegion, double spacing, const Vector2D &initialVel = Vector2D(), const Vector2D &linearVel = Vector2D(), double angularVel = 0.0, size_t maxNumberOfParticles = kMaxSize,
+                           double jitter = 0.0, bool isOneShot = true, bool allowOverlapping = false, uint32_t seed = 0);
 
     //!
     //! \brief      Sets the point generator.
@@ -66,19 +58,19 @@ class VolumeParticleEmitter2 final : public ParticleEmitter2 {
     //!
     //! \param[in]  newPointsGen The new points generator.
     //!
-    void setPointGenerator(const PointGenerator2Ptr& newPointsGen);
+    void setPointGenerator(const PointGenerator2Ptr &newPointsGen);
 
     //! Returns source surface.
-    const ImplicitSurface2Ptr& surface() const;
+    const ImplicitSurface2Ptr &surface() const;
 
     //! Sets the source surface.
-    void setSurface(const ImplicitSurface2Ptr& newSurface);
+    void setSurface(const ImplicitSurface2Ptr &newSurface);
 
     //! Returns max particle gen region.
-    const BoundingBox2D& maxRegion() const;
+    const BoundingBox2D &maxRegion() const;
 
     //! Sets the max particle gen region.
-    void setMaxRegion(const BoundingBox2D& newBox);
+    void setMaxRegion(const BoundingBox2D &newBox);
 
     //! Returns jitter amount.
     double jitter() const;
@@ -130,13 +122,13 @@ class VolumeParticleEmitter2 final : public ParticleEmitter2 {
     Vector2D initialVelocity() const;
 
     //! Returns the initial velocity of the particles.
-    void setInitialVelocity(const Vector2D& newInitialVel);
+    void setInitialVelocity(const Vector2D &newInitialVel);
 
     //! Returns the linear velocity of the emitter.
     Vector2D linearVelocity() const;
 
     //! Sets the linear velocity of the emitter.
-    void setLinearVelocity(const Vector2D& newLinearVel);
+    void setLinearVelocity(const Vector2D &newLinearVel);
 
     //! Returns the angular velocity of the emitter.
     double angularVelocity() const;
@@ -147,7 +139,7 @@ class VolumeParticleEmitter2 final : public ParticleEmitter2 {
     //! Returns builder fox VolumeParticleEmitter2.
     static Builder builder();
 
- private:
+private:
     std::mt19937 _rng;
 
     ImplicitSurface2Ptr _implicitSurface;
@@ -171,64 +163,59 @@ class VolumeParticleEmitter2 final : public ParticleEmitter2 {
     //! \param[in]  currentTimeInSeconds    Current simulation time.
     //! \param[in]  timeIntervalInSeconds   The time-step interval.
     //!
-    void onUpdate(
-        double currentTimeInSeconds,
-        double timeIntervalInSeconds) override;
+    void onUpdate(double currentTimeInSeconds, double timeIntervalInSeconds) override;
 
-    void emit(
-        const ParticleSystemData2Ptr& particles,
-        Array1<Vector2D>* newPositions,
-        Array1<Vector2D>* newVelocities);
+    void emit(const ParticleSystemData2Ptr &particles, Array1<Vector2D> *newPositions, Array1<Vector2D> *newVelocities);
 
     double random();
 
-    Vector2D velocityAt(const Vector2D& point) const;
+    Vector2D velocityAt(const Vector2D &point) const;
 };
 
 //! Shared pointer for the VolumeParticleEmitter2 type.
 typedef std::shared_ptr<VolumeParticleEmitter2> VolumeParticleEmitter2Ptr;
 
-
 //!
 //! \brief Front-end to create VolumeParticleEmitter2 objects step by step.
 //!
-class VolumeParticleEmitter2::Builder final {
- public:
+class VolumeParticleEmitter2::Builder final
+{
+public:
     //! Returns builder with implicit surface defining volume shape.
-    Builder& withImplicitSurface(const ImplicitSurface2Ptr& implicitSurface);
+    Builder &withImplicitSurface(const ImplicitSurface2Ptr &implicitSurface);
 
     //! Returns builder with surface defining volume shape.
-    Builder& withSurface(const Surface2Ptr& surface);
+    Builder &withSurface(const Surface2Ptr &surface);
 
     //! Returns builder with max region.
-    Builder& withMaxRegion(const BoundingBox2D& bounds);
+    Builder &withMaxRegion(const BoundingBox2D &bounds);
 
     //! Returns builder with spacing.
-    Builder& withSpacing(double spacing);
+    Builder &withSpacing(double spacing);
 
     //! Returns builder with initial velocity.
-    Builder& withInitialVelocity(const Vector2D& initialVel);
+    Builder &withInitialVelocity(const Vector2D &initialVel);
 
     //! Returns builder with linear velocity.
-    Builder& withLinearVelocity(const Vector2D& linearVel);
+    Builder &withLinearVelocity(const Vector2D &linearVel);
 
     //! Returns builder with angular velocity.
-    Builder& withAngularVelocity(double angularVel);
+    Builder &withAngularVelocity(double angularVel);
 
     //! Returns builder with max number of particles.
-    Builder& withMaxNumberOfParticles(size_t maxNumberOfParticles);
+    Builder &withMaxNumberOfParticles(size_t maxNumberOfParticles);
 
     //! Returns builder with jitter amount.
-    Builder& withJitter(double jitter);
+    Builder &withJitter(double jitter);
 
     //! Returns builder with one-shot flag.
-    Builder& withIsOneShot(bool isOneShot);
+    Builder &withIsOneShot(bool isOneShot);
 
     //! Returns builder with overlapping flag.
-    Builder& withAllowOverlapping(bool allowOverlapping);
+    Builder &withAllowOverlapping(bool allowOverlapping);
 
     //! Returns builder with random seed.
-    Builder& withRandomSeed(uint32_t seed);
+    Builder &withRandomSeed(uint32_t seed);
 
     //! Builds VolumeParticleEmitter2.
     VolumeParticleEmitter2 build() const;
@@ -236,7 +223,7 @@ class VolumeParticleEmitter2::Builder final {
     //! Builds shared pointer of VolumeParticleEmitter2 instance.
     VolumeParticleEmitter2Ptr makeShared() const;
 
- private:
+private:
     ImplicitSurface2Ptr _implicitSurface;
     bool _isBoundSet = false;
     BoundingBox2D _bounds;

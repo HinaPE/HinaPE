@@ -10,21 +10,22 @@
 #include "animation.h"
 #include "particle_system_data3.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Abstract base class for 3-D particle emitter.
 //!
-class ParticleEmitter3 {
- public:
+class ParticleEmitter3
+{
+public:
     //!
     //! \brief Callback function type for update calls.
     //!
     //! This type of callback function will take the emitter pointer, current
     //! time, and time interval in seconds.
     //!
-    typedef std::function<void(ParticleEmitter3*, double, double)>
-        OnBeginUpdateCallback;
+    typedef std::function<void(ParticleEmitter3 *, double, double)> OnBeginUpdateCallback;
 
     //! Default constructor.
     ParticleEmitter3();
@@ -37,10 +38,10 @@ class ParticleEmitter3 {
     void update(double currentTimeInSeconds, double timeIntervalInSeconds);
 
     //! Returns the target particle system to emit.
-    const ParticleSystemData3Ptr& target() const;
+    const ParticleSystemData3Ptr &target() const;
 
     //! Sets the target particle system to emit.
-    void setTarget(const ParticleSystemData3Ptr& particles);
+    void setTarget(const ParticleSystemData3Ptr &particles);
 
     //! Returns true if the emitter is enabled.
     bool isEnabled() const;
@@ -58,18 +59,16 @@ class ParticleEmitter3 {
     //!
     //! \param[in]  callback The callback function.
     //!
-    void setOnBeginUpdateCallback(const OnBeginUpdateCallback& callback);
+    void setOnBeginUpdateCallback(const OnBeginUpdateCallback &callback);
 
- protected:
+protected:
     //! Called when ParticleEmitter3::setTarget is executed.
-    virtual void onSetTarget(const ParticleSystemData3Ptr& particles);
+    virtual void onSetTarget(const ParticleSystemData3Ptr &particles);
 
     //! Called when ParticleEmitter3::update is executed.
-    virtual void onUpdate(
-        double currentTimeInSeconds,
-        double timeIntervalInSeconds) = 0;
+    virtual void onUpdate(double currentTimeInSeconds, double timeIntervalInSeconds) = 0;
 
- private:
+private:
     bool _isEnabled = true;
     ParticleSystemData3Ptr _particles;
     OnBeginUpdateCallback _onBeginUpdateCallback;

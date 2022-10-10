@@ -15,11 +15,13 @@
 #include <memory>
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //! Abstract base class for 2-D scalar grid structure.
-class ScalarGrid2 : public ScalarField2, public Grid2 {
- public:
+class ScalarGrid2 : public ScalarField2, public Grid2
+{
+public:
     //! Read-write array accessor type.
     typedef ArrayAccessor2<double> ScalarDataAccessor;
 
@@ -56,37 +58,22 @@ class ScalarGrid2 : public ScalarField2, public Grid2 {
     void clear();
 
     //! Resizes the grid using given parameters.
-    void resize(
-        size_t resolutionX,
-        size_t resolutionY,
-        double gridSpacingX = 1.0,
-        double gridSpacingY = 1.0,
-        double originX = 0.0,
-        double originY = 0.0,
-        double initialValue = 0.0);
+    void resize(size_t resolutionX, size_t resolutionY, double gridSpacingX = 1.0, double gridSpacingY = 1.0, double originX = 0.0, double originY = 0.0, double initialValue = 0.0);
 
     //! Resizes the grid using given parameters.
-    void resize(
-        const Size2& resolution,
-        const Vector2D& gridSpacing = Vector2D(1, 1),
-        const Vector2D& origin = Vector2D(),
-        double initialValue = 0.0);
+    void resize(const Size2 &resolution, const Vector2D &gridSpacing = Vector2D(1, 1), const Vector2D &origin = Vector2D(), double initialValue = 0.0);
 
     //! Resizes the grid using given parameters.
-    void resize(
-        double gridSpacingX,
-        double gridSpacingY,
-        double originX,
-        double originY);
+    void resize(double gridSpacingX, double gridSpacingY, double originX, double originY);
 
     //! Resizes the grid using given parameters.
-    void resize(const Vector2D& gridSpacing, const Vector2D& origin);
+    void resize(const Vector2D &gridSpacing, const Vector2D &origin);
 
     //! Returns the grid data at given data point.
-    const double& operator()(size_t i, size_t j) const;
+    const double &operator()(size_t i, size_t j) const;
 
     //! Returns the grid data at given data point.
-    double& operator()(size_t i, size_t j);
+    double &operator()(size_t i, size_t j);
 
     //! Returns the gradient vector at given data point.
     Vector2D gradientAtDataPoint(size_t i, size_t j) const;
@@ -104,12 +91,10 @@ class ScalarGrid2 : public ScalarField2, public Grid2 {
     DataPositionFunc dataPosition() const;
 
     //! Fills the grid with given value.
-    void fill(double value,
-              ExecutionPolicy policy = ExecutionPolicy::kParallel);
+    void fill(double value, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
     //! Fills the grid with given position-to-value mapping function.
-    void fill(const std::function<double(const Vector2D&)>& func,
-              ExecutionPolicy policy = ExecutionPolicy::kParallel);
+    void fill(const std::function<double(const Vector2D &)> &func, ExecutionPolicy policy = ExecutionPolicy::kParallel);
 
     //!
     //! \brief Invokes the given function \p func for each data point.
@@ -118,8 +103,7 @@ class ScalarGrid2 : public ScalarField2, public Grid2 {
     //! point in serial manner. The input parameters are i and j indices of a
     //! data point. The order of execution is i-first, j-last.
     //!
-    void forEachDataPointIndex(
-        const std::function<void(size_t, size_t)>& func) const;
+    void forEachDataPointIndex(const std::function<void(size_t, size_t)> &func) const;
 
     //!
     //! \brief Invokes the given function \p func for each data point
@@ -130,8 +114,7 @@ class ScalarGrid2 : public ScalarField2, public Grid2 {
     //! data point. The order of execution can be arbitrary since it's
     //! multi-threaded.
     //!
-    void parallelForEachDataPointIndex(
-        const std::function<void(size_t, size_t)>& func) const;
+    void parallelForEachDataPointIndex(const std::function<void(size_t, size_t)> &func) const;
 
     // ScalarField2 implementations
 
@@ -141,7 +124,7 @@ class ScalarGrid2 : public ScalarField2, public Grid2 {
     //! This function returns the data sampled at arbitrary position \p x.
     //! The sampling function is linear.
     //!
-    double sample(const Vector2D& x) const override;
+    double sample(const Vector2D &x) const override;
 
     //!
     //! \brief Returns the sampler function.
@@ -149,37 +132,37 @@ class ScalarGrid2 : public ScalarField2, public Grid2 {
     //! This function returns the data sampler function object. The sampling
     //! function is linear.
     //!
-    std::function<double(const Vector2D&)> sampler() const override;
+    std::function<double(const Vector2D &)> sampler() const override;
 
     //! Returns the gradient vector at given position \p x.
-    Vector2D gradient(const Vector2D& x) const override;
+    Vector2D gradient(const Vector2D &x) const override;
 
     //! Returns the Laplacian at given position \p x.
-    double laplacian(const Vector2D& x) const override;
+    double laplacian(const Vector2D &x) const override;
 
     //! Serializes the grid instance to the output buffer.
-    void serialize(std::vector<uint8_t>* buffer) const override;
+    void serialize(std::vector<uint8_t> *buffer) const override;
 
     //! Deserializes the input buffer to the grid instance.
-    void deserialize(const std::vector<uint8_t>& buffer) override;
+    void deserialize(const std::vector<uint8_t> &buffer) override;
 
- protected:
+protected:
     //! Swaps the data storage and predefined samplers with given grid.
-    void swapScalarGrid(ScalarGrid2* other);
+    void swapScalarGrid(ScalarGrid2 *other);
 
     //! Sets the data storage and predefined samplers with given grid.
-    void setScalarGrid(const ScalarGrid2& other);
+    void setScalarGrid(const ScalarGrid2 &other);
 
     //! Fetches the data into a continuous linear array.
-    void getData(std::vector<double>* data) const override;
+    void getData(std::vector<double> *data) const override;
 
     //! Sets the data from a continuous linear array.
-    void setData(const std::vector<double>& data) override;
+    void setData(const std::vector<double> &data) override;
 
- private:
+private:
     Array2<double> _data;
     LinearArraySampler2<double, double> _linearSampler;
-    std::function<double(const Vector2D&)> _sampler;
+    std::function<double(const Vector2D &)> _sampler;
 
     void resetSampler();
 };
@@ -188,8 +171,9 @@ class ScalarGrid2 : public ScalarField2, public Grid2 {
 typedef std::shared_ptr<ScalarGrid2> ScalarGrid2Ptr;
 
 //! Abstract base class for 2-D scalar grid builder.
-class ScalarGridBuilder2 {
- public:
+class ScalarGridBuilder2
+{
+public:
     //! Creates a builder.
     ScalarGridBuilder2();
 
@@ -197,11 +181,7 @@ class ScalarGridBuilder2 {
     virtual ~ScalarGridBuilder2();
 
     //! Returns 2-D scalar grid with given parameters.
-    virtual ScalarGrid2Ptr build(
-        const Size2& resolution,
-        const Vector2D& gridSpacing,
-        const Vector2D& gridOrigin,
-        double initialVal) const = 0;
+    virtual ScalarGrid2Ptr build(const Size2 &resolution, const Vector2D &gridSpacing, const Vector2D &gridOrigin, double initialVal) const = 0;
 };
 
 //! Shared pointer for the ScalarGridBuilder2 type.

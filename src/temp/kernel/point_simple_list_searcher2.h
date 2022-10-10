@@ -10,7 +10,8 @@
 #include "point_neighbor_searcher2.h"
 #include <vector>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Simple ad-hoc 2-D point searcher.
@@ -19,8 +20,9 @@ namespace jet {
 //! the list. Thus, this class is not ideal for searches involing large number
 //! of points, but only for small set of items.
 //!
-class PointSimpleListSearcher2 final : public PointNeighborSearcher2 {
- public:
+class PointSimpleListSearcher2 final : public PointNeighborSearcher2
+{
+public:
     JET_NEIGHBOR_SEARCHER2_TYPE_NAME(PointSimpleListSearcher2)
 
     class Builder;
@@ -29,7 +31,7 @@ class PointSimpleListSearcher2 final : public PointNeighborSearcher2 {
     PointSimpleListSearcher2();
 
     //! Copy constructor.
-    PointSimpleListSearcher2(const PointSimpleListSearcher2& other);
+    PointSimpleListSearcher2(const PointSimpleListSearcher2 &other);
 
     //!
     //! \brief      Builds internal structure for given points list.
@@ -39,7 +41,7 @@ class PointSimpleListSearcher2 final : public PointNeighborSearcher2 {
     //!
     //! \param[in]  points The points to search.
     //!
-    void build(const ConstArrayAccessor1<Vector2D>& points) override;
+    void build(const ConstArrayAccessor1<Vector2D> &points) override;
 
     //!
     //! Invokes the callback function for each nearby point around the origin
@@ -49,10 +51,7 @@ class PointSimpleListSearcher2 final : public PointNeighborSearcher2 {
     //! \param[in]  radius   The search radius.
     //! \param[in]  callback The callback function.
     //!
-    void forEachNearbyPoint(
-        const Vector2D& origin,
-        double radius,
-        const ForEachNearbyPointFunc& callback) const override;
+    void forEachNearbyPoint(const Vector2D &origin, double radius, const ForEachNearbyPointFunc &callback) const override;
 
     //!
     //! Returns true if there are any nearby points for given origin within
@@ -63,8 +62,7 @@ class PointSimpleListSearcher2 final : public PointNeighborSearcher2 {
     //!
     //! \return     True if has nearby point, false otherwise.
     //!
-    bool hasNearbyPoint(
-        const Vector2D& origin, double radius) const override;
+    bool hasNearbyPoint(const Vector2D &origin, double radius) const override;
 
     //!
     //! \brief      Creates a new instance of the object with same properties
@@ -75,21 +73,21 @@ class PointSimpleListSearcher2 final : public PointNeighborSearcher2 {
     PointNeighborSearcher2Ptr clone() const override;
 
     //! Assignment operator.
-    PointSimpleListSearcher2& operator=(const PointSimpleListSearcher2& other);
+    PointSimpleListSearcher2 &operator=(const PointSimpleListSearcher2 &other);
 
     //! Copy from the other instance.
-    void set(const PointSimpleListSearcher2& other);
+    void set(const PointSimpleListSearcher2 &other);
 
     //! Serializes the neighbor searcher into the buffer.
-    void serialize(std::vector<uint8_t>* buffer) const override;
+    void serialize(std::vector<uint8_t> *buffer) const override;
 
     //! Deserializes the neighbor searcher from the buffer.
-    void deserialize(const std::vector<uint8_t>& buffer) override;
+    void deserialize(const std::vector<uint8_t> &buffer) override;
 
     //! Returns builder fox PointSimpleListSearcher2.
     static Builder builder();
 
- private:
+private:
     std::vector<Vector2D> _points;
 };
 
@@ -99,9 +97,9 @@ typedef std::shared_ptr<PointSimpleListSearcher2> PointSimpleListSearcher2Ptr;
 //!
 //! \brief Front-end to create PointSimpleListSearcher2 objects step by step.
 //!
-class PointSimpleListSearcher2::Builder final
-    : public PointNeighborSearcherBuilder2 {
- public:
+class PointSimpleListSearcher2::Builder final : public PointNeighborSearcherBuilder2
+{
+public:
     //! Builds PointSimpleListSearcher2 instance.
     PointSimpleListSearcher2 build() const;
 

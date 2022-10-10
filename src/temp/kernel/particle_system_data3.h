@@ -16,15 +16,19 @@
 
 #ifndef JET_DOXYGEN
 
-namespace flatbuffers {
+namespace flatbuffers
+{
 
 class FlatBufferBuilder;
-template<typename T> struct Offset;
+template<typename T>
+struct Offset;
 
 }
 
-namespace jet {
-namespace fbs {
+namespace jet
+{
+namespace fbs
+{
 
 struct ParticleSystemData3;
 
@@ -33,7 +37,8 @@ struct ParticleSystemData3;
 
 #endif  // JET_DOXYGEN
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief      3-D particle system data.
@@ -42,8 +47,9 @@ namespace jet {
 //! single particle has position, velocity, and force attributes by default. But
 //! it can also have additional custom scalar or vector attributes.
 //!
-class ParticleSystemData3 : public Serializable {
- public:
+class ParticleSystemData3 : public Serializable
+{
+public:
     //! Scalar data chunk.
     typedef Array1<double> ScalarData;
 
@@ -57,7 +63,7 @@ class ParticleSystemData3 : public Serializable {
     explicit ParticleSystemData3(size_t numberOfParticles);
 
     //! Copy constructor.
-    ParticleSystemData3(const ParticleSystemData3& other);
+    ParticleSystemData3(const ParticleSystemData3 &other);
 
     //! Destructor.
     virtual ~ParticleSystemData3();
@@ -96,7 +102,7 @@ class ParticleSystemData3 : public Serializable {
     //!
     //! \params[in] initialVal  Initial value of the new vector data.
     //!
-    size_t addVectorData(const Vector3D& initialVal = Vector3D());
+    size_t addVectorData(const Vector3D &initialVal = Vector3D());
 
     //! Returns the radius of the particles.
     double radius() const;
@@ -154,10 +160,7 @@ class ParticleSystemData3 : public Serializable {
     //! \param[in]  newVelocity The new velocity.
     //! \param[in]  newForce    The new force.
     //!
-    void addParticle(
-        const Vector3D& newPosition,
-        const Vector3D& newVelocity = Vector3D(),
-        const Vector3D& newForce = Vector3D());
+    void addParticle(const Vector3D &newPosition, const Vector3D &newVelocity = Vector3D(), const Vector3D &newForce = Vector3D());
 
     //!
     //! \brief      Adds particles to the data structure.
@@ -172,12 +175,7 @@ class ParticleSystemData3 : public Serializable {
     //! \param[in]  newVelocities The new velocities.
     //! \param[in]  newForces     The new forces.
     //!
-    void addParticles(
-        const ConstArrayAccessor1<Vector3D>& newPositions,
-        const ConstArrayAccessor1<Vector3D>& newVelocities
-            = ConstArrayAccessor1<Vector3D>(),
-        const ConstArrayAccessor1<Vector3D>& newForces
-            = ConstArrayAccessor1<Vector3D>());
+    void addParticles(const ConstArrayAccessor1<Vector3D> &newPositions, const ConstArrayAccessor1<Vector3D> &newVelocities = ConstArrayAccessor1<Vector3D>(), const ConstArrayAccessor1<Vector3D> &newForces = ConstArrayAccessor1<Vector3D>());
 
     //!
     //! \brief      Returns neighbor searcher.
@@ -187,11 +185,10 @@ class ParticleSystemData3 : public Serializable {
     //!
     //! \return     Current neighbor searcher.
     //!
-    const PointNeighborSearcher3Ptr& neighborSearcher() const;
+    const PointNeighborSearcher3Ptr &neighborSearcher() const;
 
     //! Sets neighbor searcher.
-    void setNeighborSearcher(
-        const PointNeighborSearcher3Ptr& newNeighborSearcher);
+    void setNeighborSearcher(const PointNeighborSearcher3Ptr &newNeighborSearcher);
 
     //!
     //! \brief      Returns neighbor lists.
@@ -202,7 +199,7 @@ class ParticleSystemData3 : public Serializable {
     //!
     //! \return     Neighbor lists.
     //!
-    const std::vector<std::vector<size_t>>& neighborLists() const;
+    const std::vector<std::vector<size_t>> &neighborLists() const;
 
     //! Builds neighbor searcher with given search radius.
     void buildNeighborSearcher(double maxSearchRadius);
@@ -211,27 +208,23 @@ class ParticleSystemData3 : public Serializable {
     void buildNeighborLists(double maxSearchRadius);
 
     //! Serializes this particle system data to the buffer.
-    void serialize(std::vector<uint8_t>* buffer) const override;
+    void serialize(std::vector<uint8_t> *buffer) const override;
 
     //! Deserializes this particle system data from the buffer.
-    void deserialize(const std::vector<uint8_t>& buffer) override;
+    void deserialize(const std::vector<uint8_t> &buffer) override;
 
     //! Copies from other particle system data.
-    void set(const ParticleSystemData3& other);
+    void set(const ParticleSystemData3 &other);
 
     //! Copies from other particle system data.
-    ParticleSystemData3& operator=(const ParticleSystemData3& other);
+    ParticleSystemData3 &operator=(const ParticleSystemData3 &other);
 
- protected:
-    void serializeParticleSystemData(
-        flatbuffers::FlatBufferBuilder* builder,
-        flatbuffers::Offset<fbs::ParticleSystemData3>* fbsParticleSystemData)
-        const;
+protected:
+    void serializeParticleSystemData(flatbuffers::FlatBufferBuilder *builder, flatbuffers::Offset<fbs::ParticleSystemData3> *fbsParticleSystemData) const;
 
-    void deserializeParticleSystemData(
-        const fbs::ParticleSystemData3* fbsParticleSystemData);
+    void deserializeParticleSystemData(const fbs::ParticleSystemData3 *fbsParticleSystemData);
 
- private:
+private:
     double _radius = 1e-3;
     double _mass = 1e-3;
     size_t _numberOfParticles = 0;
