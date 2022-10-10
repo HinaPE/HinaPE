@@ -11,7 +11,8 @@
 #include "kernel/particle_system_solver3.h"
 #include "sph_system_data3.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief 3-D SPH solver.
@@ -26,8 +27,9 @@ namespace jet {
 //! \see Adams and Wicke, Meshless approximation methods and applications in
 //!      physics based modeling and animation, Eurographics tutorials 2009.
 //!
-class SphSolver3 : public ParticleSystemSolver3 {
- public:
+class SphSolver3 : public ParticleSystemSolver3
+{
+public:
     class Builder;
 
     //! Constructs a solver with empty particle set.
@@ -35,15 +37,12 @@ class SphSolver3 : public ParticleSystemSolver3 {
 
     //! Constructs a solver with target density, spacing, and relative kernel
     //! radius.
-    SphSolver3(
-        double targetDensity,
-        double targetSpacing,
-        double relativeKernelRadius);
+    SphSolver3(double targetDensity, double targetSpacing, double relativeKernelRadius);
 
-    virtual ~SphSolver3();
+    ~SphSolver3() override;
 
     //! Returns the exponent part of the equation-of-state.
-    double eosExponent() const;
+    auto eosExponent() const -> double;
 
     //!
     //! \brief Sets the exponent part of the equation-of-state.
@@ -55,7 +54,7 @@ class SphSolver3 : public ParticleSystemSolver3 {
     void setEosExponent(double newEosExponent);
 
     //! Returns the negative pressure scale.
-    double negativePressureScale() const;
+    auto negativePressureScale() const -> double;
 
     //!
     //! \brief Sets the negative pressure scale.
@@ -68,13 +67,13 @@ class SphSolver3 : public ParticleSystemSolver3 {
     void setNegativePressureScale(double newNegativePressureScale);
 
     //! Returns the viscosity coefficient.
-    double viscosityCoefficient() const;
+    auto viscosityCoefficient() const -> double;
 
     //! Sets the viscosity coefficient.
     void setViscosityCoefficient(double newViscosityCoefficient);
 
     //! Returns the pseudo viscosity coefficient.
-    double pseudoViscosityCoefficient() const;
+    auto pseudoViscosityCoefficient() const -> double;
 
     //!
     //! \brief Sets the pseudo viscosity coefficient.
@@ -85,7 +84,7 @@ class SphSolver3 : public ParticleSystemSolver3 {
     void setPseudoViscosityCoefficient(double newPseudoViscosityCoefficient);
 
     //! Returns the speed of sound.
-    double speedOfSound() const;
+    auto speedOfSound() const -> double;
 
     //!
     //! \brief Sets the speed of sound.
@@ -103,7 +102,7 @@ class SphSolver3 : public ParticleSystemSolver3 {
     //! time-step. When the scale is 1.0, the time-step is bounded by the speed
     //! of sound and max acceleration.
     //!
-    double timeStepLimitScale() const;
+    auto timeStepLimitScale() const -> double;
 
     //!
     //! \brief Sets the multiplier that scales the max allowed time-step.
@@ -115,15 +114,14 @@ class SphSolver3 : public ParticleSystemSolver3 {
     void setTimeStepLimitScale(double newScale);
 
     //! Returns the SPH system data.
-    SphSystemData3Ptr sphSystemData() const;
+    auto sphSystemData() const -> SphSystemData3Ptr;
 
     //! Returns builder fox SphSolver3.
-    static Builder builder();
+    static auto builder() -> Builder;
 
- protected:
+protected:
     //! Returns the number of sub-time-steps.
-    unsigned int numberOfSubTimeSteps(
-        double timeIntervalInSeconds) const override;
+    auto numberOfSubTimeSteps(double timeIntervalInSeconds) const -> unsigned int override;
 
     //! Accumulates the force to the forces array in the particle system.
     void accumulateForces(double timeStepInSeconds) override;
@@ -143,23 +141,19 @@ class SphSolver3 : public ParticleSystemSolver3 {
     virtual void accumulatePressureForce(double timeStepInSeconds);
 
     //! Computes the pressure.
-    void computePressure();
+    void computePressure() const;
 
     //! Accumulates the pressure force to the given \p pressureForces array.
-    void accumulatePressureForce(
-        const ConstArrayAccessor1<Vector3D>& positions,
-        const ConstArrayAccessor1<double>& densities,
-        const ConstArrayAccessor1<double>& pressures,
-        ArrayAccessor1<Vector3D> pressureForces);
+    void accumulatePressureForce(const ConstArrayAccessor1<Vector3D> &positions, const ConstArrayAccessor1<double> &densities, const ConstArrayAccessor1<double> &pressures, ArrayAccessor1<Vector3D> pressureForces) const;
 
     //! Accumulates the viscosity force to the forces array in the particle
     //! system.
-    void accumulateViscosityForce();
+    void accumulateViscosityForce() const;
 
     //! Computes pseudo viscosity.
-    void computePseudoViscosity(double timeStepInSeconds);
+    void computePseudoViscosity(double timeStepInSeconds) const;
 
- private:
+private:
     //! Exponent component of equation-of-state (or Tait's equation).
     double _eosExponent = 7.0;
 
@@ -185,60 +179,62 @@ class SphSolver3 : public ParticleSystemSolver3 {
 };
 
 //! Shared pointer type for the SphSolver3.
-typedef std::shared_ptr<SphSolver3> SphSolver3Ptr;
-
+using SphSolver3Ptr = std::shared_ptr<SphSolver3>;
 
 //!
 //! \brief Base class for SPH-based fluid solver builder.
 //!
-template <typename DerivedBuilder>
-class SphSolverBuilderBase3 {
- public:
+template<typename DerivedBuilder>
+class SphSolverBuilderBase3
+{
+public:
     //! Returns builder with target density.
-    DerivedBuilder& withTargetDensity(double targetDensity);
+    auto withTargetDensity(double targetDensity) -> DerivedBuilder &;
 
     //! Returns builder with target spacing.
-    DerivedBuilder& withTargetSpacing(double targetSpacing);
+    auto withTargetSpacing(double targetSpacing) -> DerivedBuilder &;
 
     //! Returns builder with relative kernel radius.
-    DerivedBuilder& withRelativeKernelRadius(double relativeKernelRadius);
+    auto withRelativeKernelRadius(double relativeKernelRadius) -> DerivedBuilder &;
 
- protected:
+protected:
     double _targetDensity = kWaterDensity;
     double _targetSpacing = 0.1;
     double _relativeKernelRadius = 1.8;
 };
 
-template <typename T>
-T& SphSolverBuilderBase3<T>::withTargetDensity(double targetDensity) {
+template<typename T>
+auto SphSolverBuilderBase3<T>::withTargetDensity(double targetDensity) -> T &
+{
     _targetDensity = targetDensity;
-    return static_cast<T&>(*this);
+    return static_cast<T &>(*this);
 }
 
-template <typename T>
-T& SphSolverBuilderBase3<T>::withTargetSpacing(double targetSpacing) {
+template<typename T>
+auto SphSolverBuilderBase3<T>::withTargetSpacing(double targetSpacing) -> T &
+{
     _targetSpacing = targetSpacing;
-    return static_cast<T&>(*this);
+    return static_cast<T &>(*this);
 }
 
-template <typename T>
-T& SphSolverBuilderBase3<T>::withRelativeKernelRadius(
-    double relativeKernelRadius) {
+template<typename T>
+auto SphSolverBuilderBase3<T>::withRelativeKernelRadius(double relativeKernelRadius) -> T &
+{
     _relativeKernelRadius = relativeKernelRadius;
-    return static_cast<T&>(*this);
+    return static_cast<T &>(*this);
 }
 
 //!
 //! \brief Front-end to create SphSolver3 objects step by step.
 //!
-class SphSolver3::Builder final
-    : public SphSolverBuilderBase3<SphSolver3::Builder> {
- public:
+class SphSolver3::Builder final : public SphSolverBuilderBase3<SphSolver3::Builder>
+{
+public:
     //! Builds SphSolver3.
-    SphSolver3 build() const;
+    auto build() const -> SphSolver3;
 
     //! Builds shared pointer of SphSolver3 instance.
-    SphSolver3Ptr makeShared() const;
+    auto makeShared() const -> SphSolver3Ptr;
 };
 
 }  // namespace jet

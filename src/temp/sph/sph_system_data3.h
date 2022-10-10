@@ -10,8 +10,10 @@
 #include "math_lib/constants.h"
 #include "kernel/particle_system_data3.h"
 #include <vector>
+#include <limits>
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief      3-D SPH particle system data.
@@ -20,8 +22,9 @@ namespace jet {
 //! It includes density and pressure array as a default particle attribute, and
 //! it also contains SPH utilities such as interpolation operator.
 //!
-class SphSystemData3 : public ParticleSystemData3 {
- public:
+class SphSystemData3 : public ParticleSystemData3
+{
+public:
     //! Constructs empty SPH system.
     SphSystemData3();
 
@@ -29,7 +32,7 @@ class SphSystemData3 : public ParticleSystemData3 {
     explicit SphSystemData3(size_t numberOfParticles);
 
     //! Copy constructor.
-    SphSystemData3(const SphSystemData3& other);
+    SphSystemData3(const SphSystemData3 &other);
 
     //! Destructor.
     ~SphSystemData3() override;
@@ -115,7 +118,7 @@ class SphSystemData3 : public ParticleSystemData3 {
     auto kernelRadius() const -> double;
 
     //! Returns sum of kernel function evaluation for each nearby particle.
-    auto sumOfKernelNearby(const Vector3D& position) const -> double;
+    auto sumOfKernelNearby(const Vector3D &position) const -> double;
 
     //!
     //! \brief Returns interpolated value at given origin point.
@@ -125,8 +128,7 @@ class SphSystemData3 : public ParticleSystemData3 {
     //! particle layout. For example, density or pressure arrays can be
     //! used.
     //!
-    auto interpolate(const Vector3D& origin,
-                       const ConstArrayAccessor1<double>& values) const -> double;
+    auto interpolate(const Vector3D &origin, const ConstArrayAccessor1<double> &values) const -> double;
 
     //!
     //! \brief Returns interpolated vector value at given origin point.
@@ -136,20 +138,16 @@ class SphSystemData3 : public ParticleSystemData3 {
     //! particle layout. For example, velocity or acceleration arrays can be
     //! used.
     //!
-    auto interpolate(const Vector3D& origin,
-                         const ConstArrayAccessor1<Vector3D>& values) const -> Vector3D;
+    auto interpolate(const Vector3D &origin, const ConstArrayAccessor1<Vector3D> &values) const -> Vector3D;
 
     //! Returns the gradient of the given values at i-th particle.
-    auto gradientAt(size_t i,
-                        const ConstArrayAccessor1<double>& values) const -> Vector3D;
+    auto gradientAt(size_t i, const ConstArrayAccessor1<double> &values) const -> Vector3D;
 
     //! Returns the laplacian of the given values at i-th particle.
-    auto laplacianAt(size_t i,
-                       const ConstArrayAccessor1<double>& values) const -> double;
+    auto laplacianAt(size_t i, const ConstArrayAccessor1<double> &values) const -> double;
 
     //! Returns the laplacian of the given values at i-th particle.
-    auto laplacianAt(size_t i,
-                         const ConstArrayAccessor1<Vector3D>& values) const -> Vector3D;
+    auto laplacianAt(size_t i, const ConstArrayAccessor1<Vector3D> &values) const -> Vector3D;
 
     //! Builds neighbor searcher with kernel radius.
     void buildNeighborSearcher();
@@ -158,18 +156,18 @@ class SphSystemData3 : public ParticleSystemData3 {
     void buildNeighborLists();
 
     //! Serializes this SPH system data to the buffer.
-    void serialize(std::vector<uint8_t>* buffer) const override;
+    void serialize(std::vector<uint8_t> *buffer) const override;
 
     //! Deserializes this SPH system data from the buffer.
-    void deserialize(const std::vector<uint8_t>& buffer) override;
+    void deserialize(const std::vector<uint8_t> &buffer) override;
 
     //! Copies from other SPH system data.
-    void set(const SphSystemData3& other);
+    void set(const SphSystemData3 &other);
 
     //! Copies from other SPH system data.
-    auto operator=(const SphSystemData3& other) -> SphSystemData3&;
+    auto operator=(const SphSystemData3 &other) -> SphSystemData3 &;
 
- private:
+private:
     //! Target density of this particle system in kg/m^3.
     double _targetDensity = kWaterDensity;
 
@@ -181,18 +179,18 @@ class SphSystemData3 : public ParticleSystemData3 {
     double _kernelRadiusOverTargetSpacing = 1.8;
 
     //! SPH kernel radius in meters.
-    double _kernelRadius;
+    double _kernelRadius = std::numeric_limits<double>::min(); // to make cpplint happy
 
-    size_t _pressureIdx;
+    size_t _pressureIdx = std::numeric_limits<size_t>::max(); // to make cpplint happy
 
-    size_t _densityIdx;
+    size_t _densityIdx = std::numeric_limits<size_t>::max(); // to make cpplint happy
 
     //! Computes the mass based on the target density and spacing.
     void computeMass();
 };
 
 //! Shared pointer for the SphSystemData3 type.
-typedef std::shared_ptr<SphSystemData3> SphSystemData3Ptr;
+using SphSystemData3Ptr = std::shared_ptr<SphSystemData3>;
 
 }  // namespace jet
 

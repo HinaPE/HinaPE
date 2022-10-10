@@ -9,8 +9,6 @@
 #include "math_lib/parallel.h"
 #include "particle_emitter2.h"
 
-#include <limits>
-
 namespace jet {
 
 ParticleEmitter2::ParticleEmitter2() {}

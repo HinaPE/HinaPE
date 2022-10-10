@@ -10,15 +10,13 @@
 #include "physics_animation.h"
 #include "timer.h"
 
-#include <limits>
-
 using namespace jet;
 
 PhysicsAnimation::PhysicsAnimation() { _currentFrame.index = -1; }
 
-PhysicsAnimation::~PhysicsAnimation() {}
+PhysicsAnimation::~PhysicsAnimation() = default;
 
-bool PhysicsAnimation::isUsingFixedSubTimeSteps() const {
+auto PhysicsAnimation::isUsingFixedSubTimeSteps() const -> bool {
     return _isUsingFixedSubTimeSteps;
 }
 
@@ -26,7 +24,7 @@ void PhysicsAnimation::setIsUsingFixedSubTimeSteps(bool isUsing) {
     _isUsingFixedSubTimeSteps = isUsing;
 }
 
-unsigned int PhysicsAnimation::numberOfFixedSubTimeSteps() const {
+auto PhysicsAnimation::numberOfFixedSubTimeSteps() const -> unsigned int {
     return _numberOfFixedSubTimeSteps;
 }
 
@@ -40,16 +38,16 @@ void PhysicsAnimation::advanceSingleFrame() {
     update(++f);
 }
 
-Frame PhysicsAnimation::currentFrame() const { return _currentFrame; }
+auto PhysicsAnimation::currentFrame() const -> Frame { return _currentFrame; }
 
 void PhysicsAnimation::setCurrentFrame(const Frame& frame) {
     _currentFrame = frame;
 }
 
-double PhysicsAnimation::currentTimeInSeconds() const { return _currentTime; }
+auto PhysicsAnimation::currentTimeInSeconds() const -> double { return _currentTime; }
 
-unsigned int PhysicsAnimation::numberOfSubTimeSteps(
-    double timeIntervalInSeconds) const {
+auto PhysicsAnimation::numberOfSubTimeSteps(
+    double timeIntervalInSeconds) const -> unsigned int {
     UNUSED_VARIABLE(timeIntervalInSeconds);
 
     // Returns number of fixed sub-timesteps by default

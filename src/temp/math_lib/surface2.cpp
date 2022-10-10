@@ -8,35 +8,38 @@
 
 #include "surface2.h"
 
-#include <algorithm>
+#include <utility>
 
 using namespace jet;
 
-Surface2::Surface2(const Transform2& transform_, bool isNormalFlipped_)
-    : transform(transform_), isNormalFlipped(isNormalFlipped_) {}
+Surface2::Surface2(Transform2 transform_, bool isNormalFlipped_) : transform(std::move(transform_)), isNormalFlipped(isNormalFlipped_) {}
 
-Surface2::Surface2(const Surface2& other)
-    : transform(other.transform), isNormalFlipped(other.isNormalFlipped) {}
+Surface2::Surface2(const Surface2 &other) = default;
 
-Surface2::~Surface2() {}
+Surface2::~Surface2() = default;
 
-Vector2D Surface2::closestPoint(const Vector2D& otherPoint) const {
+auto Surface2::closestPoint(const Vector2D &otherPoint) const -> Vector2D
+{
     return transform.toWorld(closestPointLocal(transform.toLocal(otherPoint)));
 }
 
-BoundingBox2D Surface2::boundingBox() const {
+auto Surface2::boundingBox() const -> BoundingBox2D
+{
     return transform.toWorld(boundingBoxLocal());
 }
 
-bool Surface2::intersects(const Ray2D& ray) const {
+auto Surface2::intersects(const Ray2D &ray) const -> bool
+{
     return intersectsLocal(transform.toLocal(ray));
 }
 
-double Surface2::closestDistance(const Vector2D& otherPoint) const {
+auto Surface2::closestDistance(const Vector2D &otherPoint) const -> double
+{
     return closestDistanceLocal(transform.toLocal(otherPoint));
 }
 
-SurfaceRayIntersection2 Surface2::closestIntersection(const Ray2D& ray) const {
+auto Surface2::closestIntersection(const Ray2D &ray) const -> SurfaceRayIntersection2
+{
     auto result = closestIntersectionLocal(transform.toLocal(ray));
     result.point = transform.toWorld(result.point);
     result.normal = transform.toWorldDirection(result.normal);
@@ -44,35 +47,40 @@ SurfaceRayIntersection2 Surface2::closestIntersection(const Ray2D& ray) const {
     return result;
 }
 
-Vector2D Surface2::closestNormal(const Vector2D& otherPoint) const {
-    auto result = transform.toWorldDirection(
-        closestNormalLocal(transform.toLocal(otherPoint)));
+auto Surface2::closestNormal(const Vector2D &otherPoint) const -> Vector2D
+{
+    auto result = transform.toWorldDirection(closestNormalLocal(transform.toLocal(otherPoint)));
     result *= (isNormalFlipped) ? -1.0 : 1.0;
     return result;
 }
 
-void Surface2::updateQueryEngine() {
+void Surface2::updateQueryEngine()
+{
     // Do nothing
 }
 
-bool Surface2::isBounded() const { return true; }
+auto Surface2::isBounded() const -> bool { return true; }
 
-bool Surface2::isValidGeometry() const { return true; }
+auto Surface2::isValidGeometry() const -> bool { return true; }
 
-bool Surface2::isInside(const Vector2D& otherPoint) const {
+auto Surface2::isInside(const Vector2D &otherPoint) const -> bool
+{
     return isNormalFlipped == !isInsideLocal(transform.toLocal(otherPoint));
 }
 
-bool Surface2::intersectsLocal(const Ray2D& rayLocal) const {
+auto Surface2::intersectsLocal(const Ray2D &rayLocal) const -> bool
+{
     auto result = closestIntersectionLocal(rayLocal);
     return result.isIntersecting;
 }
 
-double Surface2::closestDistanceLocal(const Vector2D& otherPointLocal) const {
+auto Surface2::closestDistanceLocal(const Vector2D &otherPointLocal) const -> double
+{
     return otherPointLocal.distanceTo(closestPointLocal(otherPointLocal));
 }
 
-bool Surface2::isInsideLocal(const Vector2D& otherPointLocal) const {
+auto Surface2::isInsideLocal(const Vector2D &otherPointLocal) const -> bool
+{
     Vector2D cpLocal = closestPointLocal(otherPointLocal);
     Vector2D normalLocal = closestNormalLocal(otherPointLocal);
     return (otherPointLocal - cpLocal).dot(normalLocal) < 0.0;

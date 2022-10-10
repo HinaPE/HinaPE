@@ -12,15 +12,14 @@
 
 using namespace jet;
 
-Frame::Frame() {
-}
+Frame::Frame() = default;
 
 Frame::Frame(int newIndex, double newTimeIntervalInSeconds)
     : index(newIndex)
     , timeIntervalInSeconds(newTimeIntervalInSeconds) {
 }
 
-double Frame::timeInSeconds() const {
+auto Frame::timeInSeconds() const -> double {
     return index * timeIntervalInSeconds;
 }
 
@@ -32,12 +31,12 @@ void Frame::advance(int delta) {
     index += delta;
 }
 
-Frame& Frame::operator++() {
+auto Frame::operator++() -> Frame& {
     advance();
     return *this;
 }
 
-Frame Frame::operator++(int i) {
+auto Frame::operator++(int i) -> Frame {
     UNUSED_VARIABLE(i);
 
     Frame result = *this;
@@ -45,11 +44,9 @@ Frame Frame::operator++(int i) {
     return result;
 }
 
-Animation::Animation() {
-}
+Animation::Animation() = default;
 
-Animation::~Animation() {
-}
+Animation::~Animation() = default;
 
 void Animation::update(const Frame& frame) {
     Timer timer;

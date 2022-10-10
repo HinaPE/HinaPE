@@ -83,7 +83,7 @@ class Animation {
 };
 
 //! Shared pointer for the Animation type.
-typedef std::shared_ptr<Animation> AnimationPtr;
+using AnimationPtr = std::shared_ptr<Animation>;
 
 }  // namespace jet
 

@@ -13,10 +13,12 @@
 #include "transform3.h"
 #include <memory>
 
-namespace jet {
+namespace jet
+{
 
 //! Struct that represents ray-surface intersection point.
-struct SurfaceRayIntersection3 {
+struct SurfaceRayIntersection3
+{
     bool isIntersecting = false;
     double distance = kMaxD;
     Vector3D point;
@@ -24,8 +26,9 @@ struct SurfaceRayIntersection3 {
 };
 
 //! Abstract base class for 3-D surface.
-class Surface3 {
- public:
+class Surface3
+{
+public:
     //! Local-to-world transform.
     Transform3 transform;
 
@@ -33,126 +36,129 @@ class Surface3 {
     bool isNormalFlipped = false;
 
     //! Constructs a surface with normal direction.
-    Surface3(const Transform3& transform = Transform3(),
-             bool isNormalFlipped = false);
+    explicit Surface3(Transform3 transform = Transform3(), bool isNormalFlipped = false);
 
     //! Copy constructor.
-    Surface3(const Surface3& other);
+    Surface3(const Surface3 &other);
 
     //! Default destructor.
     virtual ~Surface3();
 
     //! Returns the closest point from the given point \p otherPoint to the
     //! surface.
-    Vector3D closestPoint(const Vector3D& otherPoint) const;
+    auto closestPoint(const Vector3D &otherPoint) const -> Vector3D;
 
     //! Returns the bounding box of this surface object.
-    BoundingBox3D boundingBox() const;
+    auto boundingBox() const -> BoundingBox3D;
 
     //! Returns true if the given \p ray intersects with this surface object.
-    bool intersects(const Ray3D& ray) const;
+    auto intersects(const Ray3D &ray) const -> bool;
 
     //! Returns the closest distance from the given point \p otherPoint to the
     //! point on the surface.
-    double closestDistance(const Vector3D& otherPoint) const;
+    auto closestDistance(const Vector3D &otherPoint) const -> double;
 
     //! Returns the closest intersection point for given \p ray.
-    SurfaceRayIntersection3 closestIntersection(const Ray3D& ray) const;
+    auto closestIntersection(const Ray3D &ray) const -> SurfaceRayIntersection3;
 
     //! Returns the normal to the closest point on the surface from the given
     //! point \p otherPoint.
-    Vector3D closestNormal(const Vector3D& otherPoint) const;
+    auto closestNormal(const Vector3D &otherPoint) const -> Vector3D;
 
     //! Updates internal spatial query engine.
     virtual void updateQueryEngine();
 
     //! Returns true if bounding box can be defined.
-    virtual bool isBounded() const;
+    virtual auto isBounded() const -> bool;
 
     //! Returns true if the surface is a valid geometry.
-    virtual bool isValidGeometry() const;
+    virtual auto isValidGeometry() const -> bool;
 
     //! Returns true if \p otherPoint is inside the volume defined by the
     //! surface.
-    bool isInside(const Vector3D& otherPoint) const;
+    auto isInside(const Vector3D &otherPoint) const -> bool;
 
- protected:
+protected:
     //! Returns the closest point from the given point \p otherPoint to the
     //! surface in local frame.
-    virtual Vector3D closestPointLocal(const Vector3D& otherPoint) const = 0;
+    virtual auto closestPointLocal(const Vector3D &otherPoint) const -> Vector3D = 0;
 
     //! Returns the bounding box of this surface object in local frame.
-    virtual BoundingBox3D boundingBoxLocal() const = 0;
+    virtual auto boundingBoxLocal() const -> BoundingBox3D = 0;
 
     //! Returns the closest intersection point for given \p ray in local frame.
-    virtual SurfaceRayIntersection3 closestIntersectionLocal(
-        const Ray3D& ray) const = 0;
+    virtual auto closestIntersectionLocal(const Ray3D &ray) const -> SurfaceRayIntersection3 = 0;
 
     //! Returns the normal to the closest point on the surface from the given
     //! point \p otherPoint in local frame.
-    virtual Vector3D closestNormalLocal(const Vector3D& otherPoint) const = 0;
+    virtual auto closestNormalLocal(const Vector3D &otherPoint) const -> Vector3D = 0;
 
     //! Returns true if the given \p ray intersects with this surface object
     //! in local frame.
-    virtual bool intersectsLocal(const Ray3D& ray) const;
+    virtual auto intersectsLocal(const Ray3D &ray) const -> bool;
 
     //! Returns the closest distance from the given point \p otherPoint to the
     //! point on the surface in local frame.
-    virtual double closestDistanceLocal(const Vector3D& otherPoint) const;
+    virtual auto closestDistanceLocal(const Vector3D &otherPoint) const -> double;
 
     //! Returns true if \p otherPoint is inside by given \p depth the volume
     //! defined by the surface in local frame.
-    virtual bool isInsideLocal(const Vector3D& otherPoint) const;
+    virtual auto isInsideLocal(const Vector3D &otherPoint) const -> bool;
 };
 
 //! Shared pointer for the Surface3 type.
-typedef std::shared_ptr<Surface3> Surface3Ptr;
+using Surface3Ptr = std::shared_ptr<Surface3>;
 
 //!
 //! \brief Base class for 3-D surface builder.
 //!
-template <typename DerivedBuilder>
-class SurfaceBuilderBase3 {
- public:
+template<typename DerivedBuilder>
+class SurfaceBuilderBase3
+{
+public:
     //! Returns builder with flipped normal flag.
-    DerivedBuilder& withIsNormalFlipped(bool isNormalFlipped);
+    auto withIsNormalFlipped(bool isNormalFlipped) -> DerivedBuilder &;
 
     //! Returns builder with translation.
-    DerivedBuilder& withTranslation(const Vector3D& translation);
+    auto withTranslation(const Vector3D &translation) -> DerivedBuilder &;
 
     //! Returns builder with orientation.
-    DerivedBuilder& withOrientation(const QuaternionD& orientation);
+    auto withOrientation(const QuaternionD &orientation) -> DerivedBuilder &;
 
     //! Returns builder with transform.
-    DerivedBuilder& withTransform(const Transform3& transform);
+    auto withTransform(const Transform3 &transform) -> DerivedBuilder &;
 
- protected:
+protected:
     bool _isNormalFlipped = false;
     Transform3 _transform;
 };
 
-template <typename T>
-T& SurfaceBuilderBase3<T>::withIsNormalFlipped(bool isNormalFlipped) {
+template<typename T>
+auto SurfaceBuilderBase3<T>::withIsNormalFlipped(bool isNormalFlipped) -> T &
+{
     _isNormalFlipped = isNormalFlipped;
-    return static_cast<T&>(*this);
+    return static_cast<T &>(*this);
 }
 
-template <typename T>
-T& SurfaceBuilderBase3<T>::withTranslation(const Vector3D& translation) {
+template<typename T>
+auto SurfaceBuilderBase3<T>::withTranslation(const Vector3D &translation) -> T &
+{
     _transform.setTranslation(translation);
-    return static_cast<T&>(*this);
+    return static_cast<T &>(*this);
 }
 
-template <typename T>
-T& SurfaceBuilderBase3<T>::withOrientation(const QuaternionD& orientation) {
+template<typename T>
+auto SurfaceBuilderBase3<T>::withOrientation(const QuaternionD &orientation) -> T &
+{
     _transform.setOrientation(orientation);
-    return static_cast<T&>(*this);
+    return static_cast<T &>(*this);
 }
 
-template <typename T>
-T& SurfaceBuilderBase3<T>::withTransform(const Transform3& transform) {
+template<typename T>
+auto SurfaceBuilderBase3<T>::withTransform(const Transform3 &transform) -> T &
+{
     _transform = transform;
-    return static_cast<T&>(*this);
+    return static_cast<T &>(*this);
 }
 
 }  // namespace jet

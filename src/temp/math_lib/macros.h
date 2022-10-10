@@ -42,7 +42,7 @@
 
 #if defined(JET_WINDOWS) && defined(_MSC_VER)
 #include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
+using ssize_t = SSIZE_T;
 #endif
 
 #define JET_DIAG_STR(s) #s

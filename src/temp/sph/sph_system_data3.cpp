@@ -166,12 +166,12 @@ auto SphSystemData3::gradientAt(
     auto p = positions();
     auto d = densities();
     const auto& neighbors = neighborLists()[i];
-    Vector3D origin = p[i];
+    const Vector3D& origin = p[i];
     SphSpikyKernel3 kernel(_kernelRadius);
     const double m = mass();
 
     for (size_t j : neighbors) {
-        Vector3D neighborPosition = p[j];
+        const Vector3D& neighborPosition = p[j];
         double dist = origin.distanceTo(neighborPosition);
         if (dist > 0.0) {
             Vector3D dir = (neighborPosition - origin) / dist;
@@ -184,18 +184,18 @@ auto SphSystemData3::gradientAt(
     return sum;
 }
 
-double SphSystemData3::laplacianAt(
-    size_t i, const ConstArrayAccessor1<double>& values) const {
+auto SphSystemData3::laplacianAt(
+    size_t i, const ConstArrayAccessor1<double>& values) const -> double {
     double sum = 0.0;
     auto p = positions();
     auto d = densities();
     const auto& neighbors = neighborLists()[i];
-    Vector3D origin = p[i];
+    const Vector3D& origin = p[i];
     SphSpikyKernel3 kernel(_kernelRadius);
     const double m = mass();
 
     for (size_t j : neighbors) {
-        Vector3D neighborPosition = p[j];
+        const Vector3D& neighborPosition = p[j];
         double dist = origin.distanceTo(neighborPosition);
         sum +=
             m * (values[j] - values[i]) / d[j] * kernel.secondDerivative(dist);
@@ -204,18 +204,18 @@ double SphSystemData3::laplacianAt(
     return sum;
 }
 
-Vector3D SphSystemData3::laplacianAt(
-    size_t i, const ConstArrayAccessor1<Vector3D>& values) const {
+auto SphSystemData3::laplacianAt(
+    size_t i, const ConstArrayAccessor1<Vector3D>& values) const -> Vector3D {
     Vector3D sum;
     auto p = positions();
     auto d = densities();
     const auto& neighbors = neighborLists()[i];
-    Vector3D origin = p[i];
+    const Vector3D& origin = p[i];
     SphSpikyKernel3 kernel(_kernelRadius);
     const double m = mass();
 
     for (size_t j : neighbors) {
-        Vector3D neighborPosition = p[j];
+        const Vector3D& neighborPosition = p[j];
         double dist = origin.distanceTo(neighborPosition);
         sum +=
             m * (values[j] - values[i]) / d[j] * kernel.secondDerivative(dist);
@@ -250,8 +250,7 @@ void SphSystemData3::computeMass() {
         const Vector3D& point = points[i];
         double sum = 0.0;
 
-        for (size_t j = 0; j < points.size(); ++j) {
-            const Vector3D& neighborPoint = points[j];
+        for (auto & neighborPoint : points) {
             sum += kernel(neighborPoint.distanceTo(point));
         }
 
@@ -312,7 +311,7 @@ void SphSystemData3::set(const SphSystemData3& other) {
     _pressureIdx = other._pressureIdx;
 }
 
-SphSystemData3& SphSystemData3::operator=(const SphSystemData3& other) {
+auto SphSystemData3::operator=(const SphSystemData3& other) -> SphSystemData3& {
     set(other);
     return *this;
 }

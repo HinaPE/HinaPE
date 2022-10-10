@@ -15,7 +15,8 @@
 #include "math_lib/constants.h"
 #include "math_lib/vector3.h"
 
-namespace jet {
+namespace jet
+{
 
 //!
 //! \brief Standard 3-D SPH kernel function object.
@@ -25,7 +26,8 @@ namespace jet {
 //!     Proceedings of the 2003 ACM SIGGRAPH/Eurographics symposium on Computer
 //!     animation. Eurographics Association, 2003.
 //!
-struct SphStdKernel3 {
+struct SphStdKernel3
+{
     //! Kernel radius.
     double h;
 
@@ -45,22 +47,22 @@ struct SphStdKernel3 {
     explicit SphStdKernel3(double kernelRadius);
 
     //! Copy constructor
-    SphStdKernel3(const SphStdKernel3& other);
+    SphStdKernel3(const SphStdKernel3 &other);
 
     //! Returns kernel function value at given distance.
-    double operator()(double distance) const;
+    auto operator()(double distance) const -> double;
 
     //! Returns the first derivative at given distance.
-    double firstDerivative(double distance) const;
+    auto firstDerivative(double distance) const -> double;
 
     //! Returns the gradient at a point.
-    Vector3D gradient(const Vector3D& point) const;
+    auto gradient(const Vector3D &point) const -> Vector3D;
 
     //! Returns the gradient at a point defined by distance and direction.
-    Vector3D gradient(double distance, const Vector3D& direction) const;
+    auto gradient(double distance, const Vector3D &direction) const -> Vector3D;
 
     //! Returns the second derivative at given distance.
-    double secondDerivative(double distance) const;
+    auto secondDerivative(double distance) const -> double;
 };
 
 //!
@@ -71,7 +73,8 @@ struct SphStdKernel3 {
 //!     Proceedings of the 2003 ACM SIGGRAPH/Eurographics symposium on Computer
 //!     animation. Eurographics Association, 2003.
 //!
-struct SphSpikyKernel3 {
+struct SphSpikyKernel3
+{
     //! Kernel radius.
     double h;
 
@@ -91,25 +94,25 @@ struct SphSpikyKernel3 {
     SphSpikyKernel3();
 
     //! Constructs a kernel object with given radius.
-    explicit SphSpikyKernel3(double kernelRadius);
+    explicit SphSpikyKernel3(double h_ /* kernelRadius */);
 
     //! Copy constructor
-    SphSpikyKernel3(const SphSpikyKernel3& other);
+    SphSpikyKernel3(const SphSpikyKernel3 &other);
 
     //! Returns kernel function value at given distance.
-    double operator()(double distance) const;
+    auto operator()(double distance) const -> double;
 
     //! Returns the first derivative at given distance.
-    double firstDerivative(double distance) const;
+    auto firstDerivative(double distance) const -> double;
 
     //! Returns the gradient at a point.
-    Vector3D gradient(const Vector3D& point) const;
+    auto gradient(const Vector3D &point) const -> Vector3D;
 
     //! Returns the gradient at a point defined by distance and direction.
-    Vector3D gradient(double distance, const Vector3D& direction) const;
+    auto gradient(double distance, const Vector3D &direction) const -> Vector3D;
 
     //! Returns the second derivative at given distance.
-    double secondDerivative(double distance) const;
+    auto secondDerivative(double distance) const -> double;
 };
 
 }  // namespace jet
