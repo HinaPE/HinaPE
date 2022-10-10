@@ -7,10 +7,10 @@
 #ifndef INCLUDE_JET_DETAIL_MATRIX_MXN_INL_H_
 #define INCLUDE_JET_DETAIL_MATRIX_MXN_INL_H_
 
-#include <jet/macros.h>
-#include <jet/math_utils.h>
-#include <jet/matrix_mxn.h>
-#include <jet/parallel.h>
+#include "macros"
+#include "math_utils"
+#include "matrix_mxn"
+#include "parallel"
 
 namespace jet {
 

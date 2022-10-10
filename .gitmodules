@@ -22,3 +22,6 @@
 [submodule "deps/libigl"]
 	path = deps/libigl
 	url = https://github.com/BFU-Graphics/libigl.git
+[submodule "deps/tinyobjloader"]
+	path = deps/tinyobjloader
+	url = https://github.com/BFU-Graphics/Hina_tinyobjloader.git

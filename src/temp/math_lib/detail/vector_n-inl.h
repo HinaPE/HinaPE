@@ -9,8 +9,8 @@
 
 #include "../macros.h"
 #include "../math_utils.h"
-#include <jet/parallel.h>
-#include <jet/vector_n.h>
+#include "parallel"
+#include "vector_n"
 
 namespace jet {
 

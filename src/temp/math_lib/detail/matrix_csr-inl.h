@@ -7,10 +7,10 @@
 #ifndef INCLUDE_JET_DETAIL_MATRIX_CSR_INL_H_
 #define INCLUDE_JET_DETAIL_MATRIX_CSR_INL_H_
 
-#include <jet/cpp_utils.h>
-#include <jet/math_utils.h>
-#include <jet/matrix_csr.h>
-#include <jet/parallel.h>
+#include "cpp_utils"
+#include "math_utils"
+#include "matrix_csr"
+#include "parallel"
 
 #include <numeric>
 
