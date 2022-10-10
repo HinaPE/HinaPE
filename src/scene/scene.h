@@ -123,9 +123,9 @@ public:
 
     auto set_env_map(std::string file) -> std::string;
 
-    [[nodiscard]] auto has_env_light() const -> bool;
-    [[nodiscard]] auto has_obj() const -> bool;
-    [[nodiscard]] auto has_sim() const -> bool;
+    auto has_env_light() const -> bool;
+    auto has_obj() const -> bool;
+    auto has_sim() const -> bool;
 
 private:
     struct Stats

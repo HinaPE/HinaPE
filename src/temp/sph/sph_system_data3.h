@@ -32,7 +32,7 @@ class SphSystemData3 : public ParticleSystemData3 {
     SphSystemData3(const SphSystemData3& other);
 
     //! Destructor.
-    virtual ~SphSystemData3();
+    ~SphSystemData3() override;
 
     //!
     //! \brief Sets the radius.
@@ -52,16 +52,16 @@ class SphSystemData3 : public ParticleSystemData3 {
     void setMass(double newMass) override;
 
     //! Returns the density array accessor (immutable).
-    ConstArrayAccessor1<double> densities() const;
+    auto densities() const -> ConstArrayAccessor1<double>;
 
     //! Returns the density array accessor (mutable).
-    ArrayAccessor1<double> densities();
+    auto densities() -> ArrayAccessor1<double>;
 
     //! Returns the pressure array accessor (immutable).
-    ConstArrayAccessor1<double> pressures() const;
+    auto pressures() const -> ConstArrayAccessor1<double>;
 
     //! Returns the pressure array accessor (mutable).
-    ArrayAccessor1<double> pressures();
+    auto pressures() -> ArrayAccessor1<double>;
 
     //! Updates the density array with the latest particle positions.
     void updateDensities();
@@ -70,7 +70,7 @@ class SphSystemData3 : public ParticleSystemData3 {
     void setTargetDensity(double targetDensity);
 
     //! Returns the target density of this particle system.
-    double targetDensity() const;
+    auto targetDensity() const -> double;
 
     //!
     //! \brief Sets the target particle spacing in meters.
@@ -81,7 +81,7 @@ class SphSystemData3 : public ParticleSystemData3 {
     void setTargetSpacing(double spacing);
 
     //! Returns the target particle spacing in meters.
-    double targetSpacing() const;
+    auto targetSpacing() const -> double;
 
     //!
     //! \brief Sets the relative kernel radius.
@@ -109,13 +109,13 @@ class SphSystemData3 : public ParticleSystemData3 {
     //! Returns the relative kernel radius compared to the target particle
     //! spacing (i.e. kernel radius / target spacing).
     //!
-    double relativeKernelRadius() const;
+    auto relativeKernelRadius() const -> double;
 
     //! Returns the kernel radius in meters unit.
-    double kernelRadius() const;
+    auto kernelRadius() const -> double;
 
     //! Returns sum of kernel function evaluation for each nearby particle.
-    double sumOfKernelNearby(const Vector3D& position) const;
+    auto sumOfKernelNearby(const Vector3D& position) const -> double;
 
     //!
     //! \brief Returns interpolated value at given origin point.
@@ -125,8 +125,8 @@ class SphSystemData3 : public ParticleSystemData3 {
     //! particle layout. For example, density or pressure arrays can be
     //! used.
     //!
-    double interpolate(const Vector3D& origin,
-                       const ConstArrayAccessor1<double>& values) const;
+    auto interpolate(const Vector3D& origin,
+                       const ConstArrayAccessor1<double>& values) const -> double;
 
     //!
     //! \brief Returns interpolated vector value at given origin point.
@@ -136,20 +136,20 @@ class SphSystemData3 : public ParticleSystemData3 {
     //! particle layout. For example, velocity or acceleration arrays can be
     //! used.
     //!
-    Vector3D interpolate(const Vector3D& origin,
-                         const ConstArrayAccessor1<Vector3D>& values) const;
+    auto interpolate(const Vector3D& origin,
+                         const ConstArrayAccessor1<Vector3D>& values) const -> Vector3D;
 
     //! Returns the gradient of the given values at i-th particle.
-    Vector3D gradientAt(size_t i,
-                        const ConstArrayAccessor1<double>& values) const;
+    auto gradientAt(size_t i,
+                        const ConstArrayAccessor1<double>& values) const -> Vector3D;
 
     //! Returns the laplacian of the given values at i-th particle.
-    double laplacianAt(size_t i,
-                       const ConstArrayAccessor1<double>& values) const;
+    auto laplacianAt(size_t i,
+                       const ConstArrayAccessor1<double>& values) const -> double;
 
     //! Returns the laplacian of the given values at i-th particle.
-    Vector3D laplacianAt(size_t i,
-                         const ConstArrayAccessor1<Vector3D>& values) const;
+    auto laplacianAt(size_t i,
+                         const ConstArrayAccessor1<Vector3D>& values) const -> Vector3D;
 
     //! Builds neighbor searcher with kernel radius.
     void buildNeighborSearcher();
@@ -167,7 +167,7 @@ class SphSystemData3 : public ParticleSystemData3 {
     void set(const SphSystemData3& other);
 
     //! Copies from other SPH system data.
-    SphSystemData3& operator=(const SphSystemData3& other);
+    auto operator=(const SphSystemData3& other) -> SphSystemData3&;
 
  private:
     //! Target density of this particle system in kg/m^3.

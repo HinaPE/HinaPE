@@ -29,7 +29,7 @@ auto operator!=(const Pose &l, const Pose &r) -> bool;
 
 struct Anim_Pose
 {
-    [[nodiscard]] auto at(float t) const -> Pose;
+    auto at(float t) const -> Pose;
     void set(float t, Pose p);
     Splines<Vec3, Quat, Vec3> splines;
 };

@@ -32,7 +32,7 @@ struct Frame final {
     Frame(int newIndex, double newTimeIntervalInSeconds);
 
     //! Returns the elapsed time in seconds.
-    double timeInSeconds() const;
+    auto timeInSeconds() const -> double;
 
     //! Advances single frame.
     void advance();
@@ -42,10 +42,10 @@ struct Frame final {
     void advance(int delta);
 
     //! Advances single frame (prefix).
-    Frame& operator++();
+    auto operator++() -> Frame&;
 
     //! Advances single frame (postfix).
-    Frame operator++(int);
+    auto operator++(int) -> Frame;
 };
 
 //!

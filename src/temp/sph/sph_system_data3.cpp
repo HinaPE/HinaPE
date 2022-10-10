@@ -34,9 +34,9 @@ SphSystemData3::SphSystemData3(size_t numberOfParticles)
     setTargetSpacing(_targetSpacing);
 }
 
-SphSystemData3::SphSystemData3(const SphSystemData3& other) { set(other); }
+SphSystemData3::SphSystemData3(const SphSystemData3& other)  : ParticleSystemData3(other) { set(other); }
 
-SphSystemData3::~SphSystemData3() {}
+SphSystemData3::~SphSystemData3() = default;
 
 void SphSystemData3::setRadius(double newRadius) {
     // Interpret it as setting target spacing
@@ -49,19 +49,19 @@ void SphSystemData3::setMass(double newMass) {
     ParticleSystemData3::setMass(newMass);
 }
 
-ConstArrayAccessor1<double> SphSystemData3::densities() const {
+auto SphSystemData3::densities() const -> ConstArrayAccessor1<double> {
     return scalarDataAt(_densityIdx);
 }
 
-ArrayAccessor1<double> SphSystemData3::densities() {
+auto SphSystemData3::densities() -> ArrayAccessor1<double> {
     return scalarDataAt(_densityIdx);
 }
 
-ConstArrayAccessor1<double> SphSystemData3::pressures() const {
+auto SphSystemData3::pressures() const -> ConstArrayAccessor1<double> {
     return scalarDataAt(_pressureIdx);
 }
 
-ArrayAccessor1<double> SphSystemData3::pressures() {
+auto SphSystemData3::pressures() -> ArrayAccessor1<double> {
     return scalarDataAt(_pressureIdx);
 }
 
@@ -82,7 +82,7 @@ void SphSystemData3::setTargetDensity(double targetDensity) {
     computeMass();
 }
 
-double SphSystemData3::targetDensity() const { return _targetDensity; }
+auto SphSystemData3::targetDensity() const -> double { return _targetDensity; }
 
 void SphSystemData3::setTargetSpacing(double spacing) {
     ParticleSystemData3::setRadius(spacing);
@@ -93,7 +93,7 @@ void SphSystemData3::setTargetSpacing(double spacing) {
     computeMass();
 }
 
-double SphSystemData3::targetSpacing() const { return _targetSpacing; }
+auto SphSystemData3::targetSpacing() const -> double { return _targetSpacing; }
 
 void SphSystemData3::setRelativeKernelRadius(double relativeRadius) {
     _kernelRadiusOverTargetSpacing = relativeRadius;
@@ -102,7 +102,7 @@ void SphSystemData3::setRelativeKernelRadius(double relativeRadius) {
     computeMass();
 }
 
-double SphSystemData3::relativeKernelRadius() const {
+auto SphSystemData3::relativeKernelRadius() const -> double {
     return _kernelRadiusOverTargetSpacing;
 }
 
@@ -113,9 +113,9 @@ void SphSystemData3::setKernelRadius(double kernelRadius) {
     computeMass();
 }
 
-double SphSystemData3::kernelRadius() const { return _kernelRadius; }
+auto SphSystemData3::kernelRadius() const -> double { return _kernelRadius; }
 
-double SphSystemData3::sumOfKernelNearby(const Vector3D& origin) const {
+auto SphSystemData3::sumOfKernelNearby(const Vector3D& origin) const -> double {
     double sum = 0.0;
     SphStdKernel3 kernel(_kernelRadius);
     neighborSearcher()->forEachNearbyPoint(
@@ -126,8 +126,8 @@ double SphSystemData3::sumOfKernelNearby(const Vector3D& origin) const {
     return sum;
 }
 
-double SphSystemData3::interpolate(
-    const Vector3D& origin, const ConstArrayAccessor1<double>& values) const {
+auto SphSystemData3::interpolate(
+    const Vector3D& origin, const ConstArrayAccessor1<double>& values) const -> double {
     double sum = 0.0;
     auto d = densities();
     SphStdKernel3 kernel(_kernelRadius);
@@ -143,8 +143,8 @@ double SphSystemData3::interpolate(
     return sum;
 }
 
-Vector3D SphSystemData3::interpolate(
-    const Vector3D& origin, const ConstArrayAccessor1<Vector3D>& values) const {
+auto SphSystemData3::interpolate(
+    const Vector3D& origin, const ConstArrayAccessor1<Vector3D>& values) const -> Vector3D {
     Vector3D sum;
     auto d = densities();
     SphStdKernel3 kernel(_kernelRadius);
@@ -160,8 +160,8 @@ Vector3D SphSystemData3::interpolate(
     return sum;
 }
 
-Vector3D SphSystemData3::gradientAt(
-    size_t i, const ConstArrayAccessor1<double>& values) const {
+auto SphSystemData3::gradientAt(
+    size_t i, const ConstArrayAccessor1<double>& values) const -> Vector3D {
     Vector3D sum;
     auto p = positions();
     auto d = densities();
