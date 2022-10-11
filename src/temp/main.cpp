@@ -5,9 +5,29 @@
 #include "math_lib/rigid_body_collider3.h"
 #include "math_lib/sphere3.h"
 #include "math_lib/implicit_surface_set3.h"
+#include "math_lib/array_utils.h"
 #include "sph/sph_solver3.h"
 #include "kernel/volume_particle_emitter3.h"
 using namespace jet;
+
+void saveParticleAsXyz(const ParticleSystemData3Ptr &particles, const std::string &rootDir, int frameCnt)
+{
+    Array1<Vector3D> positions(particles->numberOfParticles());
+    copyRange1(particles->positions(), particles->numberOfParticles(), &positions);
+    char basename[256];
+    snprintf(basename, sizeof(basename), "frame_%06d.xyz", frameCnt);
+    std::string filename = rootDir + "/" + basename;
+    std::ofstream file(filename.c_str());
+    if (file)
+    {
+        printf("Writing %s...\n", filename.c_str());
+        for (const auto &pt: positions)
+        {
+            file << pt.x << ' ' << pt.y << ' ' << pt.z << std::endl;
+        }
+        file.close();
+    }
+}
 
 auto main() -> int
 {
@@ -35,6 +55,14 @@ auto main() -> int
     auto collider = RigidBodyCollider3::builder().withSurface(box).makeShared();
 
     solver->setCollider(collider);
+
+    auto particles = solver->sphSystemData();
+
+    for (Frame frame(0, 1.0 / 60.0); frame.index < 1; ++frame)
+    {
+        solver->update(frame);
+        saveParticleAsXyz(particles, "F:/Projects/HinaPE/output", frame.index);
+    }
 
     return 0;
 }
