@@ -59,37 +59,37 @@ public:
     BoundingBox(const BoundingBox &other);
 
     //! Returns width of the box.
-    T width() const;
+    auto width() const -> T;
 
     //! Returns height of the box.
-    T height() const;
+    auto height() const -> T;
 
     //! Returns length of the box in given axis.
-    T length(size_t axis);
+    auto length(size_t axis) -> T;
 
     //! Returns true of this box and other box overlaps.
-    bool overlaps(const BoundingBox &other) const;
+    auto overlaps(const BoundingBox &other) const -> bool;
 
     //! Returns true if the input point is inside of this box.
-    bool contains(const Vector2<T> &point) const;
+    auto contains(const Vector2<T> &point) const -> bool;
 
     //! Returns true if the input ray is intersecting with this box.
-    bool intersects(const Ray2<T> &ray) const;
+    auto intersects(const Ray2<T> &ray) const -> bool;
 
     //! Returns intersection.isIntersecting = true if the input ray is
     //! intersecting with this box. If interesects, intersection.tNear is
     //! assigned with distant to the closest intersecting point, and
     //! intersection.tFar with furthest.
-    BoundingBoxRayIntersection2<T> closestIntersection(const Ray2<T> &ray) const;
+    auto closestIntersection(const Ray2<T> &ray) const -> BoundingBoxRayIntersection2<T>;
 
     //! Returns the mid-point of this box.
-    Vector2<T> midPoint() const;
+    auto midPoint() const -> Vector2<T>;
 
     //! Returns diagonal length of this box.
-    T diagonalLength() const;
+    auto diagonalLength() const -> T;
 
     //! Returns squared diagonal length of this box.
-    T diagonalLengthSquared() const;
+    auto diagonalLengthSquared() const -> T;
 
     //! Resets this box to initial state (min=infinite, max=-infinite).
     void reset();
@@ -106,29 +106,29 @@ public:
     void expand(T delta);
 
     //! Returns corner position. Index starts from x-first order.
-    Vector2<T> corner(size_t idx) const;
+    auto corner(size_t idx) const -> Vector2<T>;
 
     //! Returns the clamped point.
-    Vector2<T> clamp(const Vector2<T> &pt) const;
+    auto clamp(const Vector2<T> &pt) const -> Vector2<T>;
 
     //! Returns true if the box is empty.
-    bool isEmpty() const;
+    auto isEmpty() const -> bool;
 };
 
 //! Type alias for 2-D BoundingBox.
 template<typename T> using BoundingBox2 = BoundingBox<T, 2>;
 
 //! Float-type 2-D BoundingBox.
-typedef BoundingBox2<float> BoundingBox2F;
+using BoundingBox2F = BoundingBox2<float>;
 
 //! Double-type 2-D BoundingBox.
-typedef BoundingBox2<double> BoundingBox2D;
+using BoundingBox2D = BoundingBox2<double>;
 
 //! Float-type 2-D box-ray intersection result.
-typedef BoundingBoxRayIntersection2<float> BoundingBoxRayIntersection2F;
+using BoundingBoxRayIntersection2F = BoundingBoxRayIntersection2<float>;
 
 //! Double-type 2-D box-ray intersection result.
-typedef BoundingBoxRayIntersection2<double> BoundingBoxRayIntersection2D;
+using BoundingBoxRayIntersection2D = BoundingBoxRayIntersection2<double>;
 
 }  // namespace jet
 

@@ -37,7 +37,7 @@ BoundingBox<T, N>::BoundingBox(const BoundingBox &other) :
 }
 
 template<typename T, size_t N>
-bool BoundingBox<T, N>::overlaps(const BoundingBox &other) const
+auto BoundingBox<T, N>::overlaps(const BoundingBox &other) const -> bool
 {
     for (size_t i = 0; i < N; ++i)
     {
@@ -51,7 +51,7 @@ bool BoundingBox<T, N>::overlaps(const BoundingBox &other) const
 }
 
 template<typename T, size_t N>
-bool BoundingBox<T, N>::contains(const VectorType &point) const
+auto BoundingBox<T, N>::contains(const VectorType &point) const -> bool
 {
     for (size_t i = 0; i < N; ++i)
     {
@@ -65,7 +65,7 @@ bool BoundingBox<T, N>::contains(const VectorType &point) const
 }
 
 template<typename T, size_t N>
-Vector<T, N> BoundingBox<T, N>::midPoint() const
+auto BoundingBox<T, N>::midPoint() const -> Vector<T, N>
 {
     Vector<T, N> result;
     for (size_t i = 0; i < N; ++i)
@@ -76,7 +76,7 @@ Vector<T, N> BoundingBox<T, N>::midPoint() const
 }
 
 template<typename T, size_t N>
-T BoundingBox<T, N>::diagonalLength() const
+auto BoundingBox<T, N>::diagonalLength() const -> T
 {
     T result = 0;
     for (size_t i = 0; i < N; ++i)
@@ -87,7 +87,7 @@ T BoundingBox<T, N>::diagonalLength() const
 }
 
 template<typename T, size_t N>
-T BoundingBox<T, N>::diagonalLengthSquared() const
+auto BoundingBox<T, N>::diagonalLengthSquared() const -> T
 {
     T result = 0;
     for (size_t i = 0; i < N; ++i)

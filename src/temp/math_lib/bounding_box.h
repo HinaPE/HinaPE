@@ -24,7 +24,7 @@ class BoundingBox
 public:
     static_assert(N > 0, "Size of static-sized box should be greater than zero.");
 
-    typedef Vector<T, N> VectorType;
+    using VectorType = Vector<T, N>;
 
     //! Lower corner of the bounding box.
     VectorType lowerCorner;
@@ -42,19 +42,19 @@ public:
     BoundingBox(const BoundingBox &other);
 
     //! Returns true of this box and other box overlaps.
-    bool overlaps(const BoundingBox &other) const;
+    auto overlaps(const BoundingBox &other) const -> bool;
 
     //! Returns true if the input point is inside of this box.
-    bool contains(const VectorType &point) const;
+    auto contains(const VectorType &point) const -> bool;
 
     //! Returns the mid-point of this box.
-    VectorType midPoint() const;
+    auto midPoint() const -> VectorType;
 
     //! Returns diagonal length of this box.
-    T diagonalLength() const;
+    auto diagonalLength() const -> T;
 
     //! Returns squared diagonal length of this box.
-    T diagonalLengthSquared() const;
+    auto diagonalLengthSquared() const -> T;
 
     //! Resets this box to initial state (min=infinite, max=-infinite).
     void reset();

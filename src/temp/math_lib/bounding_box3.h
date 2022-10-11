@@ -59,40 +59,40 @@ public:
     BoundingBox(const BoundingBox &other);
 
     //! Returns width of the box.
-    T width() const;
+    auto width() const -> T;
 
     //! Returns height of the box.
-    T height() const;
+    auto height() const -> T;
 
     //! Returns depth of the box.
-    T depth() const;
+    auto depth() const -> T;
 
     //! Returns length of the box in given axis.
-    T length(size_t axis);
+    auto length(size_t axis) -> T;
 
     //! Returns true of this box and other box overlaps.
-    bool overlaps(const BoundingBox &other) const;
+    auto overlaps(const BoundingBox &other) const -> bool;
 
     //! Returns true if the input vector is inside of this box.
-    bool contains(const Vector3<T> &point) const;
+    auto contains(const Vector3<T> &point) const -> bool;
 
     //! Returns true if the input ray is intersecting with this box.
-    bool intersects(const Ray3<T> &ray) const;
+    auto intersects(const Ray3<T> &ray) const -> bool;
 
     //! Returns intersection.isIntersecting = true if the input ray is
     //! intersecting with this box. If interesects, intersection.tNear is
     //! assigned with distant to the closest intersecting point, and
     //! intersection.tFar with furthest.
-    BoundingBoxRayIntersection3<T> closestIntersection(const Ray3<T> &ray) const;
+    auto closestIntersection(const Ray3<T> &ray) const -> BoundingBoxRayIntersection3<T>;
 
     //! Returns the mid-point of this box.
-    Vector3<T> midPoint() const;
+    auto midPoint() const -> Vector3<T>;
 
     //! Returns diagonal length of this box.
-    T diagonalLength() const;
+    auto diagonalLength() const -> T;
 
     //! Returns squared diagonal length of this box.
-    T diagonalLengthSquared() const;
+    auto diagonalLengthSquared() const -> T;
 
     //! Resets this box to initial state (min=infinite, max=-infinite).
     void reset();
@@ -109,29 +109,29 @@ public:
     void expand(T delta);
 
     //! Returns corner position. Index starts from x-first order.
-    Vector3<T> corner(size_t idx) const;
+    auto corner(size_t idx) const -> Vector3<T>;
 
     //! Returns the clamped point.
-    Vector3<T> clamp(const Vector3<T> &point) const;
+    auto clamp(const Vector3<T> &point) const -> Vector3<T>;
 
     //! Returns true if the box is empty.
-    bool isEmpty() const;
+    auto isEmpty() const -> bool;
 };
 
 //! Type alias for 3-D BoundingBox.
 template<typename T> using BoundingBox3 = BoundingBox<T, 3>;
 
 //! Float-type 3-D BoundingBox.
-typedef BoundingBox3<float> BoundingBox3F;
+using BoundingBox3F = BoundingBox3<float>;
 
 //! Double-type 3-D BoundingBox.
-typedef BoundingBox3<double> BoundingBox3D;
+using BoundingBox3D = BoundingBox3<double>;
 
 //! Float-type 3-D box-ray intersection result.
-typedef BoundingBoxRayIntersection3<float> BoundingBoxRayIntersection3F;
+using BoundingBoxRayIntersection3F = BoundingBoxRayIntersection3<float>;
 
 //! Double-type 3-D box-ray intersection result.
-typedef BoundingBoxRayIntersection3<double> BoundingBoxRayIntersection3D;
+using BoundingBoxRayIntersection3D = BoundingBoxRayIntersection3<double>;
 
 }  // namespace jet
 

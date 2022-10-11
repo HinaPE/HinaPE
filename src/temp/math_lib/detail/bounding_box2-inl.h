@@ -34,25 +34,25 @@ BoundingBox<T, 2>::BoundingBox(const BoundingBox &other)
         : lowerCorner(other.lowerCorner), upperCorner(other.upperCorner) {}
 
 template<typename T>
-T BoundingBox<T, 2>::width() const
+auto BoundingBox<T, 2>::width() const -> T
 {
     return upperCorner.x - lowerCorner.x;
 }
 
 template<typename T>
-T BoundingBox<T, 2>::height() const
+auto BoundingBox<T, 2>::height() const -> T
 {
     return upperCorner.y - lowerCorner.y;
 }
 
 template<typename T>
-T BoundingBox<T, 2>::length(size_t axis)
+auto BoundingBox<T, 2>::length(size_t axis) -> T
 {
     return upperCorner[axis] - lowerCorner[axis];
 }
 
 template<typename T>
-bool BoundingBox<T, 2>::overlaps(const BoundingBox &other) const
+auto BoundingBox<T, 2>::overlaps(const BoundingBox &other) const -> bool
 {
     if (upperCorner.x < other.lowerCorner.x || lowerCorner.x > other.upperCorner.x)
     {
@@ -68,7 +68,7 @@ bool BoundingBox<T, 2>::overlaps(const BoundingBox &other) const
 }
 
 template<typename T>
-bool BoundingBox<T, 2>::contains(const Vector2<T> &point) const
+auto BoundingBox<T, 2>::contains(const Vector2<T> &point) const -> bool
 {
     if (upperCorner.x < point.x || lowerCorner.x > point.x)
     {
@@ -84,7 +84,7 @@ bool BoundingBox<T, 2>::contains(const Vector2<T> &point) const
 }
 
 template<typename T>
-bool BoundingBox<T, 2>::intersects(const Ray2<T> &ray) const
+auto BoundingBox<T, 2>::intersects(const Ray2<T> &ray) const -> bool
 {
     T tMin = 0;
     T tMax = std::numeric_limits<T>::max();
@@ -114,7 +114,7 @@ bool BoundingBox<T, 2>::intersects(const Ray2<T> &ray) const
 }
 
 template<typename T>
-BoundingBoxRayIntersection2<T> BoundingBox<T, 2>::closestIntersection(const Ray2<T> &ray) const
+auto BoundingBox<T, 2>::closestIntersection(const Ray2<T> &ray) const -> BoundingBoxRayIntersection2<T>
 {
     BoundingBoxRayIntersection2<T> intersection;
 
@@ -159,19 +159,19 @@ BoundingBoxRayIntersection2<T> BoundingBox<T, 2>::closestIntersection(const Ray2
 }
 
 template<typename T>
-Vector2<T> BoundingBox<T, 2>::midPoint() const
+auto BoundingBox<T, 2>::midPoint() const -> Vector2<T>
 {
     return (upperCorner + lowerCorner) / static_cast<T>(2);
 }
 
 template<typename T>
-T BoundingBox<T, 2>::diagonalLength() const
+auto BoundingBox<T, 2>::diagonalLength() const -> T
 {
     return (upperCorner - lowerCorner).length();
 }
 
 template<typename T>
-T BoundingBox<T, 2>::diagonalLengthSquared() const
+auto BoundingBox<T, 2>::diagonalLengthSquared() const -> T
 {
     return (upperCorner - lowerCorner).lengthSquared();
 }
@@ -211,7 +211,7 @@ void BoundingBox<T, 2>::expand(T delta)
 }
 
 template<typename T>
-Vector2<T> BoundingBox<T, 2>::corner(size_t idx) const
+auto BoundingBox<T, 2>::corner(size_t idx) const -> Vector2<T>
 {
     static const T h = static_cast<T>(1) / 2;
     static const Vector2<T> offset[4] = {{-h, -h},
@@ -223,13 +223,13 @@ Vector2<T> BoundingBox<T, 2>::corner(size_t idx) const
 }
 
 template<typename T>
-Vector2<T> BoundingBox<T, 2>::clamp(const Vector2<T> &pt) const
+auto BoundingBox<T, 2>::clamp(const Vector2<T> &pt) const -> Vector2<T>
 {
     return ::jet::clamp(pt, lowerCorner, upperCorner);
 }
 
 template<typename T>
-bool BoundingBox<T, 2>::isEmpty() const
+auto BoundingBox<T, 2>::isEmpty() const -> bool
 {
     return (lowerCorner.x >= upperCorner.x || lowerCorner.y >= upperCorner.y);
 }
