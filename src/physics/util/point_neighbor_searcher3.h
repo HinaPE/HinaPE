@@ -20,16 +20,16 @@ public:
 
     virtual auto build(const ConstArrayAccessor1<Vector3D> &points) -> void = 0;
     virtual void foreach_nearby_point(const Vector3D &origin, double radius, const ForEachNearbyPointFunc &callback) const = 0;
-    [[nodiscard]] virtual auto typeName() const -> std::string = 0;
-    [[nodiscard]] virtual auto has_nearby_point(const Vector3D &origin, double radius) const -> bool = 0;
-    [[nodiscard]] virtual auto clone() const -> std::shared_ptr<PointNeighborSearcher3> = 0;
+    virtual auto typeName() const -> std::string = 0;
+    virtual auto has_nearby_point(const Vector3D &origin, double radius) const -> bool = 0;
+    virtual auto clone() const -> std::shared_ptr<PointNeighborSearcher3> = 0;
 };
 using PointNeighborSearcher3Ptr = std::shared_ptr<PointNeighborSearcher3>;
 
 class PointNeighborSearcherBuilder3
 {
 public:
-    [[nodiscard]] virtual PointNeighborSearcher3Ptr buildPointNeighborSearcher() const = 0;
+    virtual PointNeighborSearcher3Ptr buildPointNeighborSearcher() const = 0;
 };
 }
 

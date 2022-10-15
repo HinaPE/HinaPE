@@ -16,29 +16,29 @@ class PhysicsObject
 public:
     // common methods
     template<class T>
-    [[nodiscard]] auto get_object() -> T &;
+    auto get_object() -> T &;
     template<class T>
-    [[nodiscard]] auto is() const -> bool;
+    auto is() const -> bool;
 
     // universal methods
-    [[nodiscard]] auto get_position() const -> Vec3;
-    [[nodiscard]] auto get_rotation() const -> Vec3;
-    [[nodiscard]] auto get_vertices() -> std::vector<Vec3> &;
-    [[nodiscard]] auto get_indices() -> std::vector<int> &;
+    auto get_position() const -> Vec3;
+    auto get_rotation() const -> Vec3;
+    auto get_vertices() -> std::vector<Vec3> &;
+    auto get_indices() -> std::vector<int> &;
     auto set_position(const Vec3 &) const -> void;
     auto set_rotation(const Vec3 &) const -> void;
 
     // rigidbody methods
-    [[nodiscard]] auto is_rigidbody() -> bool;
-    [[nodiscard]] auto get_rigid_body_type() const -> RigidBodyType;
+    auto is_rigidbody() -> bool;
+    auto get_rigid_body_type() const -> RigidBodyType;
     auto switch_rigidbody_type(RigidBodyType to) -> void;
 
     // deformable methods
-    [[nodiscard]] auto is_deformable() -> bool;
-    [[nodiscard]] auto get_deformable_type() const -> DeformableType;
-    [[nodiscard]] auto get_velocities() -> std::vector<Vec3> &;
-    [[nodiscard]] auto get_masses() -> std::vector<float> &;
-    [[nodiscard]] auto get_inv_masses() -> std::vector<float> &;
+    auto is_deformable() -> bool;
+    auto get_deformable_type() const -> DeformableType;
+    auto get_velocities() -> std::vector<Vec3> &;
+    auto get_masses() -> std::vector<float> &;
+    auto get_inv_masses() -> std::vector<float> &;
 
 public:
     explicit PhysicsObject(PhysicsObjectType type);

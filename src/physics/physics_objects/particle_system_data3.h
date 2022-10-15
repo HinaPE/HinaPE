@@ -30,21 +30,21 @@ private:
     std::vector<std::vector<size_t>> _neighbor_lists;
 
 public:
-    [[nodiscard]] auto positions() const -> ConstArrayAccessor1<Vector3D>;
-    [[nodiscard]] auto positions() -> ArrayAccessor1<Vector3D>;
-    [[nodiscard]] auto velocities() const -> ConstArrayAccessor1<Vector3D>;
-    [[nodiscard]] auto velocities() -> ArrayAccessor1<Vector3D>;
-    [[nodiscard]] auto forces() const -> ConstArrayAccessor1<Vector3D>;
-    [[nodiscard]] auto forces() -> ArrayAccessor1<Vector3D>;
-    [[nodiscard]] auto scalar_data_at(size_t idx) const -> ConstArrayAccessor1<double>;
-    [[nodiscard]] auto scalar_data_at(size_t idx) -> ArrayAccessor1<double>;
-    [[nodiscard]] auto vector_data_at(size_t idx) const -> ConstArrayAccessor1<Vector3D>;
-    [[nodiscard]] auto vector_data_at(size_t idx) -> ArrayAccessor1<Vector3D>;
-    [[nodiscard]] auto number_of_particles() const -> size_t;
-    [[nodiscard]] auto radius() const -> double;
-    [[nodiscard]] auto mass() const -> double;
-    [[nodiscard]] auto neighbor_searcher() const -> const PointNeighborSearcher3Ptr &;
-    [[nodiscard]] auto neighbor_lists() const -> const std::vector<std::vector<size_t>> &;
+    auto positions() const -> ConstArrayAccessor1<Vector3D>;
+    auto positions() -> ArrayAccessor1<Vector3D>;
+    auto velocities() const -> ConstArrayAccessor1<Vector3D>;
+    auto velocities() -> ArrayAccessor1<Vector3D>;
+    auto forces() const -> ConstArrayAccessor1<Vector3D>;
+    auto forces() -> ArrayAccessor1<Vector3D>;
+    auto scalar_data_at(size_t idx) const -> ConstArrayAccessor1<double>;
+    auto scalar_data_at(size_t idx) -> ArrayAccessor1<double>;
+    auto vector_data_at(size_t idx) const -> ConstArrayAccessor1<Vector3D>;
+    auto vector_data_at(size_t idx) -> ArrayAccessor1<Vector3D>;
+    auto number_of_particles() const -> size_t;
+    auto radius() const -> double;
+    auto mass() const -> double;
+    auto neighbor_searcher() const -> const PointNeighborSearcher3Ptr &;
+    auto neighbor_lists() const -> const std::vector<std::vector<size_t>> &;
 
 public:
     auto set(const ParticleSystemData3 &other) -> void;

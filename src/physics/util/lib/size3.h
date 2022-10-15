@@ -18,18 +18,18 @@ public:
     auto set(const Size2 &sz, size_t z) -> void;
     auto set(const Size3 &v) -> void;
     auto setZero() -> void;
-    [[nodiscard]] auto add(size_t v) const -> Size3;
-    [[nodiscard]] auto add(const Size3 &v) const -> Size3;
-    [[nodiscard]] auto sub(size_t v) const -> Size3;
-    [[nodiscard]] auto sub(const Size3 &v) const -> Size3;
-    [[nodiscard]] auto mul(size_t v) const -> Size3;
-    [[nodiscard]] auto mul(const Size3 &v) const -> Size3;
-    [[nodiscard]] auto div(size_t v) const -> Size3;
-    [[nodiscard]] auto div(const Size3 &v) const -> Size3;
-    [[nodiscard]] auto rsub(size_t v) const -> Size3;
-    [[nodiscard]] auto rsub(const Size3 &v) const -> Size3;
-    [[nodiscard]] auto rdiv(size_t v) const -> Size3;
-    [[nodiscard]] auto rdiv(const Size3 &v) const -> Size3;
+    auto add(size_t v) const -> Size3;
+    auto add(const Size3 &v) const -> Size3;
+    auto sub(size_t v) const -> Size3;
+    auto sub(const Size3 &v) const -> Size3;
+    auto mul(size_t v) const -> Size3;
+    auto mul(const Size3 &v) const -> Size3;
+    auto div(size_t v) const -> Size3;
+    auto div(const Size3 &v) const -> Size3;
+    auto rsub(size_t v) const -> Size3;
+    auto rsub(const Size3 &v) const -> Size3;
+    auto rdiv(size_t v) const -> Size3;
+    auto rdiv(const Size3 &v) const -> Size3;
     auto iadd(size_t v) -> void;
     auto iadd(const Size3 &v) -> void;
     auto isub(size_t v) -> void;
@@ -38,16 +38,16 @@ public:
     auto imul(const Size3 &v) -> void;
     auto idiv(size_t v) -> void;
     auto idiv(const Size3 &v) -> void;
-    [[nodiscard]] auto at(size_t i) const -> const size_t &;
+    auto at(size_t i) const -> const size_t &;
     auto at(size_t i) -> size_t &;
-    [[nodiscard]] auto sum() const -> size_t;
-    [[nodiscard]] auto min() const -> size_t;
-    [[nodiscard]] auto max() const -> size_t;
-    [[nodiscard]] auto absmin() const -> size_t;
-    [[nodiscard]] auto absmax() const -> size_t;
-    [[nodiscard]] auto dominant_axis() const -> size_t;
-    [[nodiscard]] auto subminant_axis() const -> size_t;
-    [[nodiscard]] auto is_equal(const Size3 &other) const -> bool;
+    auto sum() const -> size_t;
+    auto min() const -> size_t;
+    auto max() const -> size_t;
+    auto absmin() const -> size_t;
+    auto absmax() const -> size_t;
+    auto dominant_axis() const -> size_t;
+    auto subminant_axis() const -> size_t;
+    auto is_equal(const Size3 &other) const -> bool;
 
 public:
     template<typename U>

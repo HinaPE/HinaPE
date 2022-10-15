@@ -13,23 +13,23 @@ class RigidBodyBase
 {
 public:
 
-    [[nodiscard]] auto get_position() const -> Vec3;
-    [[nodiscard]] auto get_rotation() const -> Vec3;
+    auto get_position() const -> Vec3;
+    auto get_rotation() const -> Vec3;
     auto set_position(const Vec3 &) const -> void;
     auto set_rotation(const Vec3 &) const -> void;
 
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
-    [[nodiscard]] auto get_mass() const -> float;
+    auto get_mass() const -> float;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] auto get_force() const -> Vec3;
+    auto get_force() const -> Vec3;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] auto get_linear_velocity() const -> Vec3;
+    auto get_linear_velocity() const -> Vec3;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] auto get_angular_velocity() const -> Vec3;
+    auto get_angular_velocity() const -> Vec3;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] auto get_linear_damping() const -> float;
+    auto get_linear_damping() const -> float;
     template<RigidBodyType T = Type, typename = typename std::enable_if<T == DYNAMIC>::type>
-    [[nodiscard]] auto get_angular_damping() const -> float;
+    auto get_angular_damping() const -> float;
 
     template<RigidBodyType T = Type, typename = typename std::enable_if<(T == DYNAMIC || T == KINEMATIC)>::type>
     auto set_mass(float m) const-> void;

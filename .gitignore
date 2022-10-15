@@ -6,3 +6,4 @@ media
 .idea
 bin
 *.log
+output

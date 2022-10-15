@@ -12,8 +12,8 @@ template<DeformableType Type>
 class DeformableBase
 {
 public:
-    [[nodiscard]] auto get_position() const -> Vec3;
-    [[nodiscard]] auto get_rotation() const -> Vec3;
+    auto get_position() const -> Vec3;
+    auto get_rotation() const -> Vec3;
     auto set_position(const Vec3 &) const -> void;
     auto set_rotation(const Vec3 &) const -> void;
 

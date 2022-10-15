@@ -33,7 +33,7 @@ set(Hina_SOURCES
         ${HinaPLATFORM}
         ${HinaSCENE}
         ${HinaLIB}
-#        ${HinaPHYSICS}
+#        ${HinaPHYSICS} // separate the physics module
         ${HinaTOIMPL}
         src/app.cpp
         src/app.h
@@ -107,6 +107,7 @@ add_subdirectory("deps/glad/")
 add_subdirectory("deps/nfd/")
 add_subdirectory("deps/sf_libs/")
 add_subdirectory("deps/libigl/")
+add_subdirectory("deps/tinyobjloader/")
 
 set(ASSIMP_BUILD_COLLADA_IMPORTER TRUE)
 set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
@@ -172,3 +173,10 @@ if (HINAPE_TEST)
     target_sources(HinaPE PRIVATE ${HINA_TEST})
     target_include_directories(HinaPE PUBLIC test)
 endif ()
+
+# temporary physics test
+file(GLOB_RECURSE HINA_TEMP "src/temp/*.cpp" "src/temp/*.h" "src/temp/*.inl")
+add_executable(FluidEngineDevTest ${HINA_TEMP})
+target_include_directories(FluidEngineDevTest PRIVATE "src/temp" "deps/tinyobjloader")
+target_link_libraries(FluidEngineDevTest PRIVATE tinyobjloader)
+set_target_properties(FluidEngineDevTest PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)

@@ -17,14 +17,14 @@ private:
 public:
     auto set(const ArrayAccessor &other) -> void;
     auto reset(size_t size, T *data) -> void;
-    [[nodiscard]] auto at(size_t i) -> T &;
-    [[nodiscard]] auto at(size_t i) const -> const T &;
-    [[nodiscard]] auto begin() const -> T *;
-    [[nodiscard]] auto end() const -> T *;
-    [[nodiscard]] auto begin() -> T *;
-    [[nodiscard]] auto end() -> T *;
-    [[nodiscard]] auto size() const -> size_t;
-    [[nodiscard]] auto data() const -> T *;
+    auto at(size_t i) -> T &;
+    auto at(size_t i) const -> const T &;
+    auto begin() const -> T *;
+    auto end() const -> T *;
+    auto begin() -> T *;
+    auto end() -> T *;
+    auto size() const -> size_t;
+    auto data() const -> T *;
     auto swap(ArrayAccessor &other) -> void;
 
     template<typename Callback>
@@ -138,11 +138,11 @@ private:
     const T *_data;
 
 public:
-    [[nodiscard]] auto at(size_t i) const -> const T &;
-    [[nodiscard]] auto begin() const -> const T *;
-    [[nodiscard]] auto end() const -> const T *;
-    [[nodiscard]] auto size() const -> size_t;
-    [[nodiscard]] auto data() const -> const T *;
+    auto at(size_t i) const -> const T &;
+    auto begin() const -> const T *;
+    auto end() const -> const T *;
+    auto size() const -> size_t;
+    auto data() const -> const T *;
 
     template<typename Callback>
     void forEach(Callback func) const;
