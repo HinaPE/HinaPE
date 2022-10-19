@@ -15,7 +15,7 @@ auto HinaPE::SPHKernel::buildTable() -> void {
     Particle* p;
     for(auto & particle : particles){
         p = particle;
-
+        /// insert each particle into the hash table
         int index = getHash(getCell(p));
 
         if (particleTable[index] == nullptr) {
@@ -30,6 +30,7 @@ auto HinaPE::SPHKernel::buildTable() -> void {
 }
 
 auto HinaPE::SPHKernel::getHash(Vec3 cell) -> unsigned int {
+    /// Compact hash table
     cell.x *= 73856093;
     cell.y *= 19349663;
     cell.z *= 83492791;
@@ -37,7 +38,7 @@ auto HinaPE::SPHKernel::getHash(Vec3 cell) -> unsigned int {
 }
 
 auto HinaPE::SPHKernel::getCell(Particle *p) const -> Vec3 {
-    /// position
+    /// position of the particle in the grid
     return Vec3(p->position.x / h, p->position.y / h, p->position.z / h);
 }
 
@@ -47,36 +48,27 @@ auto HinaPE::SPHKernel::simulate(float dt) -> void
     for(auto pi : particles){
         float pDensity = 0;
         Vec3 cell = getCell(pi);
-
-        for (int x = -1; x <= 1; x++)
-        {
-            for (int y = -1; y <= 1; y++)
-            {
-                for (int z = -1; z <= 1; z++)
-                {
-                    Vec3 near_cell = cell + Vec3(x, y, z);
-                    unsigned int index = getHash(near_cell);
+        for(int i = -1; i <= 1; i++){
+            for(int j = -1; j <= 1; j++){
+                for(int k = -1; k <= 1; k++){
+                    Vec3 neighborCell = cell + Vec3(i,j,k);
+                    int index = getHash(neighborCell);
                     Particle* pj = particleTable[index];
-
-                    while (pj != nullptr) {
-                        float dist2 = (pj->position.x - pi->position.x) * (pj->position.x - pi->position.x) +
-                                (pj->position.y - pi->position.y) * (pj->position.y - pi->position.y) +
-                                (pj->position.z - pi->position.z) * (pj->position.z - pi->position.z);
-                        if (dist2 < (h * h) && pi != pj) {
-                            pDensity += MASS * (315 / (64 * PI)) * (h * h * h) * pow(1 - (dist2 / (h * h)), 3);
+                    while(pj != nullptr){
+                        float r_norm = (pi->position - pj->position).norm();
+                        if(r_norm < h){
+                            pDensity += MASS * 315.0f / (64.0f * PI * pow(h, 9)) * pow(H2 - dist2, 3);
                         }
                         pj = pj->next;
                     }
                 }
             }
         }
-
         /// Include self density
         pi->density = pDensity + self_density;
 
         ///  Calculate pressure
-        float Pressure = (eosScale / eosExponent) * pow(pi->density/targetDensity -1, eosExponent);
-        pi->pressure = Pressure;
+        pi->pressure = eosScale * pow(pi->density / targetDensity - 1, eosExponent);
     }
 
     /// calculate forces
@@ -84,26 +76,21 @@ auto HinaPE::SPHKernel::simulate(float dt) -> void
         pi->force = Vec3(0.0f, 0.0f, 0.0f);
         Vec3 cell = getCell(pi);
 
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                for (int z = -1; z <= 1; z++) {
-                    Vec3 NearCell = cell + Vec3(x, y, z);
-                    unsigned int index = getHash(NearCell);
+        for(int i = -1; i <= 1; i++){
+            for(int j = -1; j <= 1; j++){
+                for(int k = -1; k <= 1; k++){
+                    Vec3 neighborCell = cell + Vec3(i,j,k);
+                    int index = getHash(neighborCell);
                     Particle* pj = particleTable[index];
-
-                    while(pj!=NULL){
-                        float dist2 = (pj->position.x - pi->position.x) * (pj->position.x - pi->position.x) +
-                                (pj->position.y - pi->position.y) * (pj->position.y - pi->position.y) +
-                                (pj->position.z - pi->position.z) * (pj->position.z - pi->position.z);
-                        if (dist2 < (h * h) && pi != pj) {
-                            Vec3 dist = pj->position - pi->position;
-                            float distLen = sqrt(dist2);
-                            Vec3 dir = normaize(dist);
+                    while(pj != nullptr){
+                        float r_norm = (pi->position - pj->position).norm();
+                        if(r_norm < h){
+                            Vec3 r = pi->position - pj->position;
                             Vec3 pressureForce = -dir * MASS * (pi->pressure + pj->pressure) / (2 * pj->density) * (-45.0f / (PI * pow(h, 6)));
                             Vec3 viscosityForce = (viscosity * MASS / pj->density) * (pj->velocity - pi->velocity) * (h - dist) * (45.0f / (PI * pow(h, 6)));
                             pi->force += pressureForce + viscosityForce;
                         }
-                        pj = pj -> next;
+                        pj = pj->next;
                     }
                 }
             }
@@ -112,7 +99,7 @@ auto HinaPE::SPHKernel::simulate(float dt) -> void
     /// update particle positions
     for (auto pi : particles){
         Particle *p = particles[i];
-        Vec3 acceleration = p->force / p->density + Vec3(0.f, -9.8f, 0.f);
+        p->acceleration = p->force / p->density + Vec3(0.f, -9.8f, 0.f);
         p->velocity += p->force / p->density * dt;
         p->position += p->velocity * dt;
     }
