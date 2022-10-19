@@ -1,4 +1,5 @@
 #include <iostream>
+#include "math_lib/logging.h"
 #include "math_lib/bounding_box3.h"
 #include "math_lib/plane3.h"
 #include "math_lib/box3.h"
@@ -31,6 +32,11 @@ void saveParticleAsXyz(const ParticleSystemData3Ptr &particles, const std::strin
 
 auto main() -> int
 {
+
+    std::ofstream logFile("sph.log");
+    if (logFile)
+        Logging::setAllStream(&logFile);
+
     BoundingBox3D domain(Vector3D(), Vector3D(1, 2, 1));
 
     auto solver = SphSolver3::builder().withTargetDensity(1000.0).withTargetSpacing(0.02).makeShared();
