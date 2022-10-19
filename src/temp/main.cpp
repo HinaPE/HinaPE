@@ -61,7 +61,7 @@ auto main() -> int
     for (Frame frame(0, 1.0 / 60.0); frame.index < 1; ++frame)
     {
         solver->update(frame);
-        saveParticleAsXyz(particles, "F:/Projects/HinaPE/output", frame.index);
+        saveParticleAsXyz(particles, "E:/Projects/HinaPE/output", frame.index);
     }
 
     return 0;

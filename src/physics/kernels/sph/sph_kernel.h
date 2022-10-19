@@ -6,6 +6,7 @@
 #include "../../util/lib/frame.h"
 #include "../../physics_objects/particle_system_data3.h"
 #include "../../physics_objects/particle_emitter3.h"
+#include "../../physics_objects/particle_system.h"
 
 namespace HinaPE
 {
@@ -23,9 +24,21 @@ public:
         unsigned int sub_time_step = 1;
         double current_time = 0.0;
 
-        Vector3D gravity = Vector3D(0.0, -9.8, 0.0);
     };
     Opt opt;
+    float h, MASS, self_density, eosScale, eosExponent;
+    float targetDensity;
+    std::vector<Particle*> particles;
+    Particle ** particleTable;
+
+public:
+    auto init_particle_system() -> void;
+    auto buildTable() ->void;
+    static auto getHash(Vec3 cell) -> unsigned int;
+    auto getCell(Particle* p) const -> Vec3;
+//    float cubic_kernel(float r_norm);
+//    float cubic_kernel_derivative(float r_norm);
+
 
 private:
 

@@ -11,7 +11,6 @@ file(GLOB_RECURSE HinaPHYSICS "src/physics/*.cpp" "src/physics/*.h" "src/physics
 file(GLOB_RECURSE HinaTOIMPL "src/reference/*.cpp" "src/reference/*.h" "src/reference/*.inl")
 
 # decouple the physics module
-add_library(HinaPhysics STATIC ${HinaPHYSICS})
 set_target_properties(HinaPhysics PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 target_include_directories(HinaPhysics PUBLIC "deps/" "deps/assimp/include" "deps/eigen3" "deps/libigl/include")
 
@@ -39,7 +38,7 @@ set(Hina_SOURCES
         src/app.h
         src/main.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/icon.rc
-        )
+        src/physics/physics_objects/particle_system.h src/physics/physics_objects/particle_system.cpp)
 
 
 # setup OS-specific options
