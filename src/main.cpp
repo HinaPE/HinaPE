@@ -2,8 +2,6 @@
 #include "util/rand.h"
 #include <sf_libs/CLI11.hpp>
 
-std::ofstream HinaUtil::Log::o_info("../info.log", std::ios::app);
-
 int main(int argc, char **argv)
 {
     RNG::seed();

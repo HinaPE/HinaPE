@@ -56,13 +56,15 @@ void saveParticleAsXyz(const ParticleSystemData3Ptr &particles, const std::strin
 
 auto main() -> int
 {
-    std::ofstream logFile("sph.log");
-    if (logFile)
-        Logging::setAllStream(&logFile);
+//    std::ofstream logFile("sph.log");
+//    if (logFile)
+//        Logging::setAllStream(&logFile);
 
-    float spacing = 0.2;
+    Logging::mute();
 
-    BoundingBox3D domain(Vector3D(), Vector3D(10, 20, 10));
+    float spacing = 0.02;
+
+    BoundingBox3D domain(Vector3D(), Vector3D(1, 2, 1));
 
     auto solver = SphSolver3::builder().withTargetDensity(1000.0).withTargetSpacing(spacing).makeShared();
 
@@ -77,7 +79,7 @@ auto main() -> int
 
     auto surfaceSet = ImplicitSurfaceSet3::builder().withExplicitSurfaces({plane, sphere}).makeShared();
 
-    auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(spacing).withMaxRegion(sourceBound).withIsOneShot(true).makeShared();
+    auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(spacing).withMaxRegion(sourceBound).withMaxNumberOfParticles(10000).withIsOneShot(true).makeShared();
 
     solver->setEmitter(emitter);
 
@@ -93,7 +95,7 @@ auto main() -> int
     {
         solver->update(frame);
         std::cout << "Overall particles number: " << particles->numberOfParticles() << std::endl;
-        saveParticleAsXyz(particles, "F:/Projects/HinaPE/output", frame.index);
+//        saveParticleAsXyz(particles, "F:/Projects/HinaPE/output", frame.index);
     }
 
     return 0;
