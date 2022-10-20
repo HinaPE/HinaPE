@@ -11,6 +11,24 @@
 #include "kernel/volume_particle_emitter3.h"
 using namespace jet;
 
+void saveParticleAsPos(const ParticleSystemData3Ptr& particles,
+                       const std::string& rootDir, int frameCnt) {
+    Array1<Vector3D> positions(particles->numberOfParticles());
+    copyRange1(particles->positions(), particles->numberOfParticles(),
+               &positions);
+    char basename[256];
+    snprintf(basename, sizeof(basename), "frame_%06d.pos", frameCnt);
+    std::string filename = rootDir + "/" + basename;
+    std::ofstream file(filename.c_str(), std::ios::binary);
+    if (file) {
+        printf("Writing %s...\n", filename.c_str());
+        std::vector<uint8_t> buffer;
+        serialize(positions.constAccessor(), &buffer);
+        file.write(reinterpret_cast<char*>(buffer.data()), buffer.size());
+        file.close();
+    }
+}
+
 void saveParticleAsXyz(const ParticleSystemData3Ptr &particles, const std::string &rootDir, int frameCnt)
 {
     Array1<Vector3D> positions(particles->numberOfParticles());
@@ -68,6 +86,7 @@ auto main() -> int
     {
         solver->update(frame);
         saveParticleAsXyz(particles, "F:/Projects/HinaPE/output", frame.index);
+        saveParticleAsPos(particles, "F:/Projects/HinaPE/output", frame.index);
     }
 
     return 0;
