@@ -1,4 +1,3 @@
-#include <iostream>
 #include "math_lib/logging.h"
 #include "math_lib/bounding_box3.h"
 #include "math_lib/plane3.h"
@@ -9,6 +8,9 @@
 #include "math_lib/array_utils.h"
 #include "sph/sph_solver3.h"
 #include "kernel/volume_particle_emitter3.h"
+
+#include <iostream>
+#include <filesystem>
 using namespace jet;
 
 void saveParticleAsPos(const ParticleSystemData3Ptr &particles, const std::string &rootDir, int frameCnt)
@@ -18,6 +20,8 @@ void saveParticleAsPos(const ParticleSystemData3Ptr &particles, const std::strin
     char basename[256];
     snprintf(basename, sizeof(basename), "frame_%06d.pos", frameCnt);
     std::string filename = rootDir + "/" + basename;
+    if (!std::filesystem::is_directory(rootDir) || !std::filesystem::exists(rootDir))
+        std::filesystem::create_directory(rootDir);
     std::ofstream file(filename.c_str(), std::ios::binary);
     if (file)
     {
