@@ -143,6 +143,7 @@ void Simulate::update_bvh(Scene &scene, Undo &undo)
 
 auto Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt) -> Mode
 {
+    unsigned int idx = 0;
 
     Mode mode = Mode::simulate;
     if (obj_opt.has_value())
@@ -164,7 +165,7 @@ auto Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &wi
 
     if (ImGui::CollapsingHeader("Add New Emitter"))
     {
-        ImGui::PushID(0);
+        ImGui::PushID(idx++);
 
         static Scene_Particles::Options gui_opt;
         static Solid_Type gui_type;
@@ -246,6 +247,21 @@ auto Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &wi
             undo.add(std::move(particles));
         }
 
+        ImGui::PopID();
+    }
+
+    if (ImGui::CollapsingHeader("Add New Fluid Bound"))
+    {
+        ImGui::PushID(idx++);
+        static float R = 1.0f;
+        ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
+        if (ImGui::Button("Add"))
+        {
+            Halfedge_Mesh hm;
+            hm.from_mesh(Util::cube_mesh(R / 2.0f));
+            hm.flip(); // if flip
+            undo.add_obj(std::move(hm), "Cube");
+        }
         ImGui::PopID();
     }
 

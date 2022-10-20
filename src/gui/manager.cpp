@@ -78,9 +78,9 @@ bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
     if (key.sym == SDLK_BACKSPACE && key.mod & KMOD_GUI)
     {
 #else
-        Uint16 mod = KMOD_CTRL;
-        if (key.sym == SDLK_DELETE)
-        {
+    Uint16 mod = KMOD_CTRL;
+    if (key.sym == SDLK_DELETE)
+    {
 #endif
         if (layout.selected())
         {
@@ -521,68 +521,69 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
         {
             ImGui::Indent();
             static int physics_object_type = static_cast<int>(obj.get_physics_object_type());
-            switch (physics_object_type)
-            {
-                case -1: // NOT_PHYSICS_OBJECT
+            if (HinaPE::PhysicsObjectType::NOT_PHYSICS_OBJECT != physics_object_type)
+                switch (physics_object_type)
                 {
-                    if (ImGui::Button("Attach Rigid Body"))
+                    case -1: // NOT_PHYSICS_OBJECT
                     {
-                        obj.attach_physics_object(HinaPE::RigidBodyFactory::create_rigidbody(HinaPE::DYNAMIC));
-                        physics_object_type = HinaPE::PhysicsObjectType::Rigidbody;
-                    }
-                    if (ImGui::Button("Attach Deformable"))
-                    {
-                        // obj.attach_physics_object(HinaPE::ClothFactory::create_cloth());
-                        physics_object_type = HinaPE::PhysicsObjectType::Deformable;
-                    }
-                }
-                    break;
-                case 0: // Rigidbody
-                {
-                    static int rt = static_cast<int>(obj.physics_object->get_rigid_body_type());
-                    static int pre_rt = rt;
-                    ImGui::RadioButton("Dynamic", &rt, 0);
-                    ImGui::SameLine();
-                    ImGui::RadioButton("Static", &rt, 1);
-                    ImGui::SameLine();
-                    ImGui::RadioButton("Kinematic", &rt, 2);
-                    if (rt != pre_rt)
-                    {
-                        obj.physics_object->switch_rigidbody_type(static_cast<HinaPE::RigidBodyType>(rt));
-                        pre_rt = rt;
-                    }
-                    // TODO: display rigidbody info
-                }
-                    break;
-                case 1: // Deformable
-                {
-                    static int def = static_cast<int>(obj.physics_object->get_deformable_type());
-                    // TODO: display deformable info
-                    switch (def)
-                    {
-                        case 0: // CLOTH
+                        if (ImGui::Button("Attach Rigid Body"))
                         {
-                            ImGui::Text("I am a Cloth");
+                            obj.attach_physics_object(HinaPE::RigidBodyFactory::create_rigidbody(HinaPE::DYNAMIC));
+                            physics_object_type = HinaPE::PhysicsObjectType::Rigidbody;
                         }
-                            break;
-                        case 1: // MESH
+                        if (ImGui::Button("Attach Deformable"))
                         {
+                            // obj.attach_physics_object(HinaPE::ClothFactory::create_cloth());
+                            physics_object_type = HinaPE::PhysicsObjectType::Deformable;
+                        }
+                    }
+                        break;
+                    case 0: // Rigidbody
+                    {
+                        static int rt = static_cast<int>(obj.physics_object->get_rigid_body_type());
+                        static int pre_rt = rt;
+                        ImGui::RadioButton("Dynamic", &rt, 0);
+                        ImGui::SameLine();
+                        ImGui::RadioButton("Static", &rt, 1);
+                        ImGui::SameLine();
+                        ImGui::RadioButton("Kinematic", &rt, 2);
+                        if (rt != pre_rt)
+                        {
+                            obj.physics_object->switch_rigidbody_type(static_cast<HinaPE::RigidBodyType>(rt));
+                            pre_rt = rt;
+                        }
+                        // TODO: display rigidbody info
+                    }
+                        break;
+                    case 1: // Deformable
+                    {
+                        static int def = static_cast<int>(obj.physics_object->get_deformable_type());
+                        // TODO: display deformable info
+                        switch (def)
+                        {
+                            case 0: // CLOTH
+                            {
+                                ImGui::Text("I am a Cloth");
+                            }
+                                break;
+                            case 1: // MESH
+                            {
 
+                            }
+                                break;
+                            default:
+                                throw std::runtime_error("invalid deformable type");
                         }
-                            break;
-                        default:
-                            throw std::runtime_error("invalid deformable type");
                     }
+                        break;
+                    case 2: // Fluid
+                    {
+                        // TODO: display fluid info
+                    }
+                        break;
+                    default:
+                        throw std::runtime_error("Unknown physics object type");
                 }
-                    break;
-                case 2: // Fluid
-                {
-                    // TODO: display fluid info
-                }
-                    break;
-                default:
-                    throw std::runtime_error("Unknown physics object type");
-            }
             ImGui::Unindent();
         }
 
@@ -745,8 +746,7 @@ void Manager::UIsidebar(Scene &scene, Undo &undo, float menu_height, Camera &cam
         if (wrap_button("Clear"))
         {
             std::vector<Scene_ID> ids;
-            scene.for_items([&](Scene_Item &item)
-                            { ids.push_back(item.id()); });
+            scene.for_items([&](Scene_Item &item) { ids.push_back(item.id()); });
             for (auto id: ids)
                 undo.del_obj(id);
             undo.bundle_last(ids.size());
@@ -890,8 +890,7 @@ void Manager::UInew_light(Scene &scene, Undo &undo)
     unsigned int idx = 0;
 
     ImGui::SetNextWindowSizeConstraints({200.0f, 0.0f}, {FLT_MAX, FLT_MAX});
-    ImGui::Begin("New Light", &new_light_window,
-                 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("New Light", &new_light_window, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
     static Spectrum color = Spectrum(1.0f);
     static float intensity = 1.0f;
@@ -1016,7 +1015,6 @@ void Manager::UInew_light(Scene &scene, Undo &undo)
 
 void Manager::UInew_obj(Undo &undo)
 {
-
     unsigned int idx = 0;
 
     auto add_mesh = [&, this](std::string n, GL::Mesh &&mesh, bool flip = false)
@@ -1030,8 +1028,7 @@ void Manager::UInew_obj(Undo &undo)
     };
 
     ImGui::SetNextWindowSizeConstraints({200.0f, 0.0f}, {FLT_MAX, FLT_MAX});
-    ImGui::Begin("New Object", &new_obj_window,
-                 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("New Object", &new_obj_window, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
     if (ImGui::CollapsingHeader("Cube"))
     {
@@ -1155,10 +1152,10 @@ void Manager::UInew_obj(Undo &undo)
             auto cloth = HinaPE::ClothFactory::create_cloth(desc);
             auto &verts = cloth->get_vertices();
             auto &inds = cloth->get_indices();
-//            Halfedge_Mesh hm;
-//            hm.from_mesh(Util::Gen::generate(verts, inds));
+            //            Halfedge_Mesh hm;
+            //            hm.from_mesh(Util::Gen::generate(verts, inds));
             Scene_Object &obj = undo.add_obj(Util::Gen::generate(verts, inds), "Cloth");
-//            Scene_Object &obj = undo.add_obj(std::move(hm), "Cloth");
+            //            Scene_Object &obj = undo.add_obj(std::move(hm), "Cloth");
             obj.attach_physics_object(cloth);
             obj.set_mesh_dirty();
             new_obj_window = false;
