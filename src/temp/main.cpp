@@ -11,20 +11,20 @@
 #include "kernel/volume_particle_emitter3.h"
 using namespace jet;
 
-void saveParticleAsPos(const ParticleSystemData3Ptr& particles,
-                       const std::string& rootDir, int frameCnt) {
+void saveParticleAsPos(const ParticleSystemData3Ptr &particles, const std::string &rootDir, int frameCnt)
+{
     Array1<Vector3D> positions(particles->numberOfParticles());
-    copyRange1(particles->positions(), particles->numberOfParticles(),
-               &positions);
+    copyRange1(particles->positions(), particles->numberOfParticles(), &positions);
     char basename[256];
     snprintf(basename, sizeof(basename), "frame_%06d.pos", frameCnt);
     std::string filename = rootDir + "/" + basename;
     std::ofstream file(filename.c_str(), std::ios::binary);
-    if (file) {
+    if (file)
+    {
         printf("Writing %s...\n", filename.c_str());
         std::vector<uint8_t> buffer;
         serialize(positions.constAccessor(), &buffer);
-        file.write(reinterpret_cast<char*>(buffer.data()), buffer.size());
+        file.write(reinterpret_cast<char *>(buffer.data()), buffer.size());
         file.close();
     }
 }
@@ -70,7 +70,7 @@ auto main() -> int
 
     auto surfaceSet = ImplicitSurfaceSet3::builder().withExplicitSurfaces({plane, sphere}).makeShared();
 
-    auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(0.02).withMaxRegion(sourceBound).withIsOneShot(true).makeShared();
+    auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(0.02).withMaxRegion(sourceBound).withIsOneShot(true).withMaxNumberOfParticles(20000).makeShared();
 
     solver->setEmitter(emitter);
 
@@ -82,11 +82,10 @@ auto main() -> int
 
     auto particles = solver->sphSystemData();
 
-    for (Frame frame(0, 1.0 / 60.0); frame.index < 1; ++frame)
+    for (Frame frame(0, 1.0 / 60.0); frame.index < 100; ++frame)
     {
         solver->update(frame);
-        saveParticleAsXyz(particles, "F:/Projects/HinaPE/output", frame.index);
-        saveParticleAsPos(particles, "F:/Projects/HinaPE/output", frame.index);
+        saveParticleAsXyz(particles, "F:/Projects/HinaPE/output/sph", frame.index);
     }
 
     return 0;
