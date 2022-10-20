@@ -40,6 +40,8 @@ void saveParticleAsXyz(const ParticleSystemData3Ptr &particles, const std::strin
     char basename[256];
     snprintf(basename, sizeof(basename), "frame_%06d.xyz", frameCnt);
     std::string filename = rootDir + "/" + basename;
+    if (!std::filesystem::is_directory(rootDir) || !std::filesystem::exists(rootDir))
+        std::filesystem::create_directory(rootDir);
     std::ofstream file(filename.c_str());
     if (file)
     {
@@ -54,14 +56,15 @@ void saveParticleAsXyz(const ParticleSystemData3Ptr &particles, const std::strin
 
 auto main() -> int
 {
-
     std::ofstream logFile("sph.log");
     if (logFile)
         Logging::setAllStream(&logFile);
 
-    BoundingBox3D domain(Vector3D(), Vector3D(1, 2, 1));
+    float spacing = 0.2;
 
-    auto solver = SphSolver3::builder().withTargetDensity(1000.0).withTargetSpacing(0.02).makeShared();
+    BoundingBox3D domain(Vector3D(), Vector3D(10, 20, 10));
+
+    auto solver = SphSolver3::builder().withTargetDensity(1000.0).withTargetSpacing(spacing).makeShared();
 
     solver->setPseudoViscosityCoefficient(0.0);
 
@@ -74,7 +77,7 @@ auto main() -> int
 
     auto surfaceSet = ImplicitSurfaceSet3::builder().withExplicitSurfaces({plane, sphere}).makeShared();
 
-    auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(0.02).withMaxRegion(sourceBound).withIsOneShot(true).withMaxNumberOfParticles(20000).makeShared();
+    auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(spacing).withMaxRegion(sourceBound).withIsOneShot(true).makeShared();
 
     solver->setEmitter(emitter);
 
@@ -89,7 +92,8 @@ auto main() -> int
     for (Frame frame(0, 1.0 / 60.0); frame.index < 100; ++frame)
     {
         solver->update(frame);
-        saveParticleAsXyz(particles, "F:/Projects/HinaPE/output/sph", frame.index);
+        std::cout << "Overall particles number: " << particles->numberOfParticles() << std::endl;
+        saveParticleAsXyz(particles, "F:/Projects/HinaPE/output", frame.index);
     }
 
     return 0;
