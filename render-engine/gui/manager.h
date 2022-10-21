@@ -84,6 +84,9 @@ public:
 
     static bool wrap_button(std::string label);
 
+    // HinaPE 1.1.0
+//    void register_fluid_engine();
+
 private:
     void UIerror();
     void UIstudent();

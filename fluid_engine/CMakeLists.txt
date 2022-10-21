@@ -35,7 +35,7 @@ file(GLOB_RECURSE HINA_FLUID_ENGINE_SRC
 
 add_library(HinaPE_Fluid_Engine ${HINA_FLUID_ENGINE_SRC})
 set_target_properties(HinaPE_Fluid_Engine PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-target_include_directories(HinaPE_Fluid_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} "${HINAPE_DEPS_DIR}/tinyobjloader")
+target_include_directories(HinaPE_Fluid_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/util "${HINAPE_DEPS_DIR}/tinyobjloader")
 target_link_libraries(HinaPE_Fluid_Engine PUBLIC tinyobjloader)
 include_directories("util")
 
