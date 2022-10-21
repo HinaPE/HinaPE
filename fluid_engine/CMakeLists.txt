@@ -49,7 +49,24 @@ if (TBB_FOUND)
 endif ()
 
 # INSTALL
-install(TARGETS HinaPE_Fluid_Engine)
+MACRO(SUBDIRLIST result curdir)
+    FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
+    SET(dirlist "")
+    FOREACH(child ${children})
+        IF(IS_DIRECTORY ${curdir}/${child})
+            LIST(APPEND dirlist ${child})
+        ENDIF()
+    ENDFOREACH()
+    SET(${result} ${dirlist})
+ENDMACRO()
+SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
+FOREACH(subdir ${SUBDIRS})
+    INSTALL(
+            DIRECTORY ${subdir}
+            DESTINATION include/${CMAKE_PROJECT_NAME}/render-engine
+            FILES_MATCHING PATTERN "*.h*"
+    )
+ENDFOREACH()
 
 # Fluid Engine Test Part
 add_executable(HinaPE_Fluid_Engine_Test main.cpp)
