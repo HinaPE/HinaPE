@@ -1,4 +1,3 @@
-#include "logging.h"
 #include "geometry/bounding_box3.h"
 #include "geometry/plane3.h"
 #include "geometry/box3.h"
@@ -8,6 +7,8 @@
 #include "array/array_utils.h"
 #include "solver/particle/sph//sph_solver3.h"
 #include "emitter/volume_particle_emitter3.h"
+
+#include "logging.h"
 
 #include <iostream>
 #include <filesystem>
