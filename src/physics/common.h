@@ -3,7 +3,6 @@
 
 #include "lib/vec3.h"
 #include "lib/quat.h"
-#include "../util/log.h"
 
 #include "Eigen/Eigen"
 

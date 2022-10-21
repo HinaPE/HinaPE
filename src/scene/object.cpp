@@ -300,6 +300,8 @@ void Scene_Object::sync_physics_result()
 
 auto Scene_Object::get_physics_object_type() const -> HinaPE::PhysicsObjectType
 {
+    if (physics_object == nullptr)
+        return HinaPE::PhysicsObjectType::NOT_PHYSICS_OBJECT;
     if (physics_object->is<HinaPE::RigidBodyBase<HinaPE::DYNAMIC>>())
         return HinaPE::Rigidbody;
     if (physics_object->is<HinaPE::RigidBodyBase<HinaPE::STATIC>>())

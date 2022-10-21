@@ -118,6 +118,7 @@ void PhysicsAnimation::advanceTimeStep(double timeIntervalInSeconds)
 
             Timer timer;
             onAdvanceTimeStep(actualTimeInterval);
+            std::cout << ">> " << remainingTime << std::endl;
 
             JET_INFO << "End onAdvanceTimeStep (took " << timer.durationInSeconds() << " seconds)";
 

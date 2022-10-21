@@ -21,7 +21,7 @@ static double kTimeStepLimitByForceFactor = 0.25;
 SphSolver3::SphSolver3()
 {
     setParticleSystemData(std::make_shared<SphSystemData3>());
-    setIsUsingFixedSubTimeSteps(false);
+    setIsUsingFixedSubTimeSteps(true);
 }
 
 SphSolver3::SphSolver3(double targetDensity, double targetSpacing, double relativeKernelRadius)
@@ -31,7 +31,7 @@ SphSolver3::SphSolver3(double targetDensity, double targetSpacing, double relati
     sphParticles->setTargetDensity(targetDensity);
     sphParticles->setTargetSpacing(targetSpacing);
     sphParticles->setRelativeKernelRadius(relativeKernelRadius);
-    setIsUsingFixedSubTimeSteps(false);
+    setIsUsingFixedSubTimeSteps(true);
 }
 
 SphSolver3::~SphSolver3() = default;
