@@ -2,6 +2,8 @@
 #include "../rays/pathtracer.h"
 
 #include "particles.h"
+
+#include <utility>
 #include "renderer.h"
 
 Scene_Particles::Scene_Particles(Scene_ID id) : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(Util::sphere_mesh(1.0f, 1))
@@ -54,7 +56,6 @@ const GL::Mesh &Scene_Particles::mesh() const
 
 void Scene_Particles::render(const Mat4 &view, bool depth_only, bool posed, bool particles_only)
 {
-
     Renderer &renderer = Renderer::get();
 
     Mat4 T = posed ? Mat4::translate(pose.pos) * pose.rotation_mat() : Mat4::I;
@@ -112,7 +113,6 @@ const std::vector<Scene_Particles::Particle> &Scene_Particles::get_particles() c
 
 void Scene_Particles::step(const PT::Object &scene, float dt)
 {
-
     if (!opt.enabled)
     {
         clear();
@@ -123,11 +123,13 @@ void Scene_Particles::step(const PT::Object &scene, float dt)
 
     last_update += dt;
 
-    while (last_update > opt.dt)
-    {
-        step2(scene, opt.dt);
-        last_update -= opt.dt;
-    }
+//    while (last_update > opt.dt)
+//    {
+//        step2(scene, opt.dt);
+//        last_update -= opt.dt;
+//    }
+
+    step3(scene, opt.dt);
 
     gen_instances();
 }
@@ -145,7 +147,6 @@ void Scene_Particles::gen_instances()
 
 void Scene_Particles::step2(const PT::Object &scene, float dt)
 {
-
     std::vector<Particle> next;
     next.reserve(particles.size());
 
@@ -181,6 +182,28 @@ void Scene_Particles::step2(const PT::Object &scene, float dt)
         }
     }
     particles = std::move(next);
+}
+
+void Scene_Particles::step3(const PT::Object &scene, float dt)
+{
+    auto size = solver_ptr->sphSystemData()->numberOfParticles();
+    particles.resize(size);
+
+    static HinaPE::FluidEngine::Frame frame(0, 1.0 / 60.0);
+    solver_ptr->update(frame++);
+
+    // consider double buffering
+    for (int i = 0; i < size; ++i)
+    {
+        auto &p = solver_ptr->sphSystemData()->positions()[i];
+        particles[i].pos = Vec3((float) p[0], (float) p[1], (float) p[2]);
+    }
+}
+
+void Scene_Particles::load(std::shared_ptr<HinaPE::FluidEngine::SphSolver3> _solver_ptr)
+{
+    solver_ptr = std::move(_solver_ptr);
+    particles.resize(solver_ptr->sphSystemData()->numberOfParticles());
 }
 
 void Scene_Particles::Anim_Particles::at(float t, Scene_Particles::Options &o) const

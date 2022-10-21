@@ -1,6 +1,8 @@
 #ifndef HINAPE_PARTICLES_H
 #define HINAPE_PARTICLES_H
 
+#include "solver/particle/sph/sph_solver3.h"
+
 #include <vector>
 
 #include "../lib/mathlib.h"
@@ -45,6 +47,7 @@ public:
     void clear();
     void step(const PT::Object &scene, float dt);
     void step2(const PT::Object &scene, float dt);
+    void step3(const PT::Object &scene, float dt);
     void gen_instances();
 
     auto get_particles() const -> const std::vector<Particle> &;
@@ -95,6 +98,10 @@ private:
     float radius = 0.0f;
     float last_update = 0.0f;
     double particle_cooldown = 0.0f;
+
+public: // Temp
+    void load(std::shared_ptr<HinaPE::FluidEngine::SphSolver3> _solver_ptr);
+    std::shared_ptr<HinaPE::FluidEngine::SphSolver3> solver_ptr;
 };
 
 auto operator!=(const Scene_Particles::Options &l, const Scene_Particles::Options &r) -> bool;

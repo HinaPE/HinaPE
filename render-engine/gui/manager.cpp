@@ -13,26 +13,6 @@ Manager::Manager(Scene &scene, Vec2 dim) : render(scene, dim), animate(simulate,
 {
     create_axis();
     create_baseplane();
-    register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index)
-                         {
-                             if (ImGui::CollapsingHeader("My UI3"))
-                             {
-                                 ImGui::PushID(_index++);
-                                 static float R = 1.0f;
-                                 ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
-                                 if (ImGui::Button("Add"))
-                                 {
-                                     Halfedge_Mesh hm;
-                                     hm.from_mesh(Util::cube_mesh(R / 2.0f));
-                                     hm.flip(); // if flip
-                                     Scene_Object &obj = _undo.add_obj(std::move(hm), "Cube");
-                                     obj.opt.wireframe = false;
-                                     obj.opt.surface = false;
-                                     obj.opt.bbox = true;
-                                 }
-                                 ImGui::PopID();
-                             }
-                         });
 }
 
 void Manager::update_dim(Vec2 dim)

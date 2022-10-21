@@ -245,21 +245,6 @@ auto Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &wi
         ImGui::PopID();
     }
 
-    if (ImGui::CollapsingHeader("Add New Fluid Bound"))
-    {
-        ImGui::PushID(idx++);
-        static float R = 1.0f;
-        ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
-        if (ImGui::Button("Add"))
-        {
-            Halfedge_Mesh hm;
-            hm.from_mesh(Util::cube_mesh(R / 2.0f));
-            hm.flip(); // if flip
-            undo.add_obj(std::move(hm), "Cube");
-        }
-        ImGui::PopID();
-    }
-
     for (auto &&f: custom_sidebar_UI)
         f(manager, scene, undo, widgets, obj_opt, idx); // TODO: maybe enable mode change in the future
 
