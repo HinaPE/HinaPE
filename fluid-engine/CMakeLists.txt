@@ -42,6 +42,7 @@ target_link_libraries(HinaPE_Fluid_Engine PUBLIC tinyobjloader)
 include_directories("util")
 
 option(HINAPE_TBB "Enable TBB" OFF)
+set(TBB_DIR /opt/homebrew/Cellar/tbb@2020/2020_U3/lib/cmake/TBB)
 find_package(TBB CONFIG)
 if (TBB_FOUND)
     message(STATUS ">> TBB found")
@@ -73,4 +74,4 @@ ENDFOREACH()
 # Fluid Engine Test Part
 add_executable(HinaPE_Fluid_Engine_Test main.cpp)
 set_target_properties(HinaPE_Fluid_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-target_link_libraries(HinaPE_Fluid_Engine_Test PRIVATE HinaPE_Fluid_Engine)
+target_link_libraries(HinaPE_Fluid_Engine_Test PUBLIC HinaPE_Fluid_Engine)

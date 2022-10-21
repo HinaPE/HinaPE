@@ -144,4 +144,4 @@ ENDFOREACH()
 # Render Engine Test Part
 add_executable(HinaPE_Render_Engine_Test main.cpp)
 set_target_properties(HinaPE_Render_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-target_link_libraries(HinaPE_Render_Engine_Test PRIVATE HinaPE_Render_Engine)
+target_link_libraries(HinaPE_Render_Engine_Test PUBLIC HinaPE_Render_Engine)
