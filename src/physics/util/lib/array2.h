@@ -1,4 +1,0 @@
-#ifndef HINAPE_ARRAY2_H
-#define HINAPE_ARRAY2_H
-
-#endif //HINAPE_ARRAY2_H

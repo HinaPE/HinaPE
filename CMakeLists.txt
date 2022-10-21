@@ -9,12 +9,6 @@ file(GLOB_RECURSE HinaSCENE "src/scene/*.cpp" "src/scene/*.h")
 file(GLOB_RECURSE HinaLIB "src/lib/*.cpp" "src/lib/*.h")
 file(GLOB_RECURSE HinaPHYSICS "src/physics/*.cpp" "src/physics/*.h" "src/physics/*.inl")
 file(GLOB_RECURSE HinaTOIMPL "src/reference/*.cpp" "src/reference/*.h" "src/reference/*.inl")
-
-# decouple the physics module
-add_library(HinaPhysics STATIC ${HinaPHYSICS})
-set_target_properties(HinaPhysics PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-target_include_directories(HinaPhysics PUBLIC "deps/" "deps/assimp/include" "deps/eigen3" "deps/libigl/include")
-
 set(HinaPLATFORM
         "src/platform/gl.cpp"
         "src/platform/platform.cpp"
@@ -25,6 +19,11 @@ set(HinaPLATFORM
         "deps/imgui/imgui_impl_sdl.cpp"
         "deps/imgui/imgui_impl_sdl.h")
 
+# decouple the physics module
+add_library(HinaPhysics STATIC ${HinaPHYSICS})
+set_target_properties(HinaPhysics PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+target_include_directories(HinaPhysics PUBLIC "deps/" "deps/assimp/include" "deps/eigen3" "deps/libigl/include")
+
 set(Hina_SOURCES
         ${HinaGUI}
         ${HinaGEOM}
@@ -33,13 +32,12 @@ set(Hina_SOURCES
         ${HinaPLATFORM}
         ${HinaSCENE}
         ${HinaLIB}
-#        ${HinaPHYSICS} // separate the physics module
         ${HinaTOIMPL}
         src/app.cpp
         src/app.h
         src/main.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/icon.rc
-        src/physics/physics_objects/particle_system.h src/physics/physics_objects/particle_system.cpp)
+        src/platform/icon.rc
+        )
 
 
 # setup OS-specific options
@@ -107,7 +105,6 @@ add_subdirectory("deps/glad/")
 add_subdirectory("deps/nfd/")
 add_subdirectory("deps/sf_libs/")
 add_subdirectory("deps/libigl/")
-add_subdirectory("deps/tinyobjloader/")
 
 set(ASSIMP_BUILD_COLLADA_IMPORTER TRUE)
 set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
@@ -149,15 +146,6 @@ target_link_libraries(HinaPE PRIVATE sf_libs)
 target_link_libraries(HinaPE PRIVATE imgui)
 target_link_libraries(HinaPE PRIVATE glad)
 
-option(HINAPE_TBB "Enable TBB" OFF)
-find_package(TBB CONFIG)
-if (TBB_FOUND)
-    option(HINAPE_TBB ON)
-    message(STATUS ">> TBB found")
-    target_link_libraries(HinaPhysics PUBLIC TBB::tbb)
-    add_definitions(-DHINAPE_TBB_SUPPORT)
-endif ()
-
 option(HINAPE_GOOGLE_BENCHMARK "Enable Google Benchmark" OFF)
 find_package(benchmark CONFIG)
 if (benchmark_FOUND)
@@ -167,22 +155,5 @@ if (benchmark_FOUND)
     add_definitions(-DHINAPE_GOOGLE_BENCHMARK_SUPPORT)
 endif ()
 
-option(HINAPE_TEST "Enable Test" OFF)
-if (HINAPE_TEST)
-    file(GLOB_RECURSE HINA_TEST test/*.h test/*.cpp)
-    target_sources(HinaPE PRIVATE ${HINA_TEST})
-    target_include_directories(HinaPE PUBLIC test)
-endif ()
+add_subdirectory(fluid_engine)
 
-# temporary physics test
-file(GLOB_RECURSE HINA_TEMP "src/temp/*.cpp" "src/temp/*.h" "src/temp/*.inl.h")
-add_executable(FluidEngineDevTest ${HINA_TEMP})
-include_directories("src/temp/util")
-target_include_directories(FluidEngineDevTest PRIVATE "src/temp" "src/temp/util" "deps/tinyobjloader")
-target_link_libraries(FluidEngineDevTest PRIVATE tinyobjloader)
-set_target_properties(FluidEngineDevTest PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-
-if (TBB_FOUND)
-    add_definitions(-DJET_TASKING_TBB)
-    target_link_libraries(FluidEngineDevTest PRIVATE TBB::tbb)
-endif ()
