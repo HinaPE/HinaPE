@@ -26,8 +26,8 @@ public:
     auto init() -> void;
     auto simulate(float dt) -> void;
 
-    void spring_deformation_constraint(float rest_length);
-    void sphere_collision_constraint(float radius, Eigen::Vector3f center);
+    //    void spring_deformation_constraint(float rest_length);
+    //    void sphere_collision_constraint(float radius, Eigen::Vector3f center);
 
 
     struct Opt
@@ -70,25 +70,25 @@ private:
 private:
     typedef std::vector<unsigned int> IndexList;
     IndexList structI, shearI, bendI;
-    mass_spring_system* result;
+    mass_spring_system *result;
 public:
-    void uniformGrid(
-            unsigned int gird_width,          // grid width
-            float rest_length,       // spring rest length (non-diagonal)
-            float stiffness,         // spring stiffness
-            float gravity            // gravitationl force (-z axis)
-    );
-
-    IndexList getStructIndex(); // structural springs
-    IndexList getShearIndex(); // shearing springs
-    IndexList getBendIndex(); // bending springs
-
-    mass_spring_system* getResult();
+    //    void uniformGrid(
+    //            unsigned int gird_width,          // grid width
+    //            float rest_length,       // spring rest length (non-diagonal)
+    //            float stiffness,         // spring stiffness
+    //            float gravity            // gravitationl force (-z axis)
+    //    );
+    //
+    //    IndexList getStructIndex(); // structural springs
+    //    IndexList getShearIndex(); // shearing springs
+    //    IndexList getBendIndex(); // bending springs
+    //
+    //    mass_spring_system* getResult();
 protected:
     std::unordered_map<unsigned int, Eigen::Vector3f> fix_map;
-    virtual void fixPoint(unsigned int i);
-    virtual void releasePoint(unsigned int i);
-    bool is_fixed();
+    //    virtual void fixPoint(unsigned int i);
+    //    virtual void releasePoint(unsigned int i);
+    //    bool is_fixed();
 };
 }
 #endif //HINAPE_FMS_KERNEL_H

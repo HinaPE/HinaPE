@@ -57,7 +57,7 @@ auto HinaPE::SPHKernel::simulate(float dt) -> void
                     while(pj != nullptr){
                         float r_norm = (pi->position - pj->position).norm();
                         if(r_norm < h){
-                            pDensity += MASS * 315.0f / (64.0f * PI * pow(h, 9)) * pow(H2 - dist2, 3);
+//                            pDensity += MASS * 315.0f / (64.0f * PI * pow(h, 9)) * pow(H2 - dist2, 3);
                         }
                         pj = pj->next;
                     }
@@ -84,11 +84,12 @@ auto HinaPE::SPHKernel::simulate(float dt) -> void
                     Particle* pj = particleTable[index];
                     while(pj != nullptr){
                         float r_norm = (pi->position - pj->position).norm();
-                        if(r_norm < h){
+                        if(r_norm < h)
+                        {
                             Vec3 r = pi->position - pj->position;
-                            Vec3 pressureForce = -dir * MASS * (pi->pressure + pj->pressure) / (2 * pj->density) * (-45.0f / (PI * pow(h, 6)));
-                            Vec3 viscosityForce = (viscosity * MASS / pj->density) * (pj->velocity - pi->velocity) * (h - dist) * (45.0f / (PI * pow(h, 6)));
-                            pi->force += pressureForce + viscosityForce;
+                            //                            Vec3 pressureForce = -dir * MASS * (pi->pressure + pj->pressure) / (2 * pj->density) * (-45.0f / (PI * pow(h, 6)));
+                            //                            Vec3 viscosityForce = (viscosity * MASS / pj->density) * (pj->velocity - pi->velocity) * (h - dist) * (45.0f / (PI * pow(h, 6)));
+                            //                            pi->force += pressureForce + viscosityForce;
                         }
                         pj = pj->next;
                     }
@@ -97,11 +98,12 @@ auto HinaPE::SPHKernel::simulate(float dt) -> void
         }
     }
     /// update particle positions
-    for (auto pi : particles){
-        Particle *p = particles[i];
-        p->acceleration = p->force / p->density + Vec3(0.f, -9.8f, 0.f);
-        p->velocity += p->force / p->density * dt;
-        p->position += p->velocity * dt;
+    for (auto pi : particles)
+    {
+        //        Particle *p = particles[i];
+        //        p->acceleration = p->force / p->density + Vec3(0.f, -9.8f, 0.f);
+        //        p->velocity += p->force / p->density * dt;
+        //        p->position += p->velocity * dt;
     }
 }
 
