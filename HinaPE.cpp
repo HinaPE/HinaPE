@@ -41,7 +41,7 @@ auto main(int argc, char **argv) -> int
     auto particles = solver->sphSystemData();
     for (Frame frame(0, 1.0 / 60.0); frame.index < 100; ++frame)
     {
-        solver->update(frame);
+//        solver->update(frame);
         std::cout << "Advance a frame: " << frame.index << std::endl;
     }
 

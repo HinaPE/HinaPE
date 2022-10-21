@@ -22,7 +22,6 @@ class Scene_Particles
 public:
     struct Particle
     {
-
         Vec3 pos;
         Vec3 velocity;
         float age;
@@ -30,7 +29,7 @@ public:
 
         static const inline Vec3 acceleration = Vec3{0.0f, -9.8f, 0.0f};
 
-        bool update(const PT::Object &scene, float dt, float radius);
+        auto update(const PT::Object &scene, float dt, float radius) -> bool;
     };
 
     Scene_Particles(Scene_ID id);
@@ -41,21 +40,21 @@ public:
     ~Scene_Particles() = default;
 
     void operator=(const Scene_Particles &src) = delete;
-    Scene_Particles &operator=(Scene_Particles &&src) = default;
+    auto operator=(Scene_Particles &&src) -> Scene_Particles & = default;
 
     void clear();
     void step(const PT::Object &scene, float dt);
     void step2(const PT::Object &scene, float dt);
     void gen_instances();
 
-    const std::vector<Particle> &get_particles() const;
+    auto get_particles() const -> const std::vector<Particle> &;
 
-    BBox bbox() const;
+    auto bbox() const -> BBox;
     void render(const Mat4 &view, bool depth_only = false, bool posed = true, bool particles_only = false);
-    Scene_ID id() const;
+    auto id() const -> Scene_ID;
     void set_time(float time);
 
-    const GL::Mesh &mesh() const;
+    auto mesh() const -> const GL::Mesh &;
     void take_mesh(GL::Mesh &&mesh);
 
     struct Options
@@ -83,6 +82,9 @@ public:
     Anim_Pose anim;
     Anim_Particles panim;
 
+public: // HinaPE 1.1.0
+    // Prepare to accept Fluid Engine Data
+
 private:
     void get_r();
     Scene_ID _id;
@@ -95,6 +97,6 @@ private:
     double particle_cooldown = 0.0f;
 };
 
-bool operator!=(const Scene_Particles::Options &l, const Scene_Particles::Options &r);
+auto operator!=(const Scene_Particles::Options &l, const Scene_Particles::Options &r) -> bool;
 
 #endif
