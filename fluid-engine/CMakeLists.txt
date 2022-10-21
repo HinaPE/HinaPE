@@ -31,6 +31,8 @@ file(GLOB_RECURSE HINA_FLUID_ENGINE_SRC
         ${HINA_FLUID_ENGINE_SEARCHER}
         ${HINA_FLUID_ENGINE_SOLVER}
         ${HINA_FLUID_ENGINE_UTIL}
+        app.cpp
+        app.h
         )
 
 add_library(HinaPE_Fluid_Engine ${HINA_FLUID_ENGINE_SRC})
