@@ -27,7 +27,8 @@ auto Simulate::keydown(Widgets &widgets, Undo &undo, SDL_Keysym key) -> bool
 
 void Simulate::step(Scene &scene, float dt)
 {
-    scene.for_items([this, dt](Scene_Item &item) { item.step(scene_obj, dt); });
+    scene.for_items([this, dt](Scene_Item &item)
+                    { item.step(scene_obj, dt); });
 }
 
 void Simulate::update_time()
@@ -137,7 +138,7 @@ void Simulate::update_bvh(Scene &scene, Undo &undo)
 
 auto Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt) -> Mode
 {
-    unsigned int idx = 0;
+    int idx = 0;
 
     Mode mode = Mode::simulate;
     if (obj_opt.has_value())
@@ -259,7 +260,16 @@ auto Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &wi
         ImGui::PopID();
     }
 
+    for (auto &&f: custom_sidebar_UI)
+        f(manager, scene, undo, widgets, obj_opt, idx); // TODO: maybe enable mode change in the future
+
+
     return mode;
+}
+
+void Simulate::register_custom_sidebar_UI(std::function<void(Manager &, Scene &, Undo &, Widgets &, Scene_Maybe, int&)> &&func)
+{
+    custom_sidebar_UI.emplace_back(std::move(func));
 }
 
 } // namespace Gui

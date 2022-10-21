@@ -43,6 +43,8 @@ public:
     auto quit() -> bool;
     void event(SDL_Event e);
 
+    void custom_UI();
+
 private:
     void apply_window_dim(Vec2 new_dim);
     auto screen_to_world(Vec2 mouse) -> Vec3;

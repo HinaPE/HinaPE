@@ -49,6 +49,12 @@ private:
     Pose old_pose;
     size_t cur_actions = 0;
     Uint64 last_update;
+
+public: // HinaPE 1.1.0
+    void register_custom_sidebar_UI(std::function<void(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj, int &index)> &&func);
+
+private:
+    std::vector<std::function<void(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj, int &index)>> custom_sidebar_UI;
 };
 
 } // namespace Gui

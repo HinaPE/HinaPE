@@ -14,7 +14,7 @@
 using namespace HinaPE::FluidEngine;
 
 auto main(int argc, char **argv) -> int
-{
+{/*
     // Init Fluid Engine
     Logging::mute();
 
@@ -43,7 +43,7 @@ auto main(int argc, char **argv) -> int
     {
 //        solver->update(frame);
         std::cout << "Advance a frame: " << frame.index << std::endl;
-    }
+    }*/
 
     // Init Render Engine
     RNG::seed();

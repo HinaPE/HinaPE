@@ -10,7 +10,6 @@
 App::App(const Launch_Settings& set, Platform *plt) : window_dim(plt ? plt->window_draw() : Vec2{1.0f}), camera(plt ? plt->window_draw() : Vec2{1.0f}), plt(plt),
                                                scene(Gui::n_Widget_IDs), gui(scene, plt ? plt->window_size() : Vec2{1.0f}), undo(scene, gui)
 {
-
     if (!set.headless)
         assert(plt);
 
@@ -59,6 +58,8 @@ App::App(const Launch_Settings& set, Platform *plt) : window_dim(plt ? plt->wind
             Hina_info("Built scene in %.2fs, rendered in %.2fs", build, render);
         }
     }
+
+    custom_UI();
 }
 
 App::~App()
@@ -73,7 +74,6 @@ auto App::quit() -> bool
 
 void App::event(SDL_Event e)
 {
-
     ImGuiIO &IO = ImGui::GetIO();
     IO.DisplayFramebufferScale = plt->scale(Vec2{1.0f, 1.0f});
 
@@ -243,7 +243,6 @@ void App::event(SDL_Event e)
 
 void App::render()
 {
-
     proj = camera.get_proj();
     view = camera.get_view();
     iviewproj = (proj * view).inverse();
@@ -261,7 +260,6 @@ void App::render()
 
 auto App::screen_to_world(Vec2 mouse) -> Vec3
 {
-
     Vec2 t(2.0f * mouse.x / window_dim.x - 1.0f, 1.0f - 2.0f * mouse.y / window_dim.y);
     Vec3 p = iviewproj * Vec3(t.x, t.y, 0.1f);
     return (p - camera.pos()).unit();
@@ -273,4 +271,59 @@ void App::apply_window_dim(Vec2 new_dim)
     camera.set_ar(window_dim);
     gui.update_dim(plt->window_size());
     Renderer::get().update_dim(window_dim);
+}
+
+void App::custom_UI()
+{
+    gui.register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) -> Gui::Mode
+    {
+        if (ImGui::CollapsingHeader("My UI"))
+        {
+            ImGui::PushID(_index++);
+            static float R = 1.0f;
+            ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
+            if (ImGui::Button("Add"))
+            {
+                Halfedge_Mesh hm;
+                hm.from_mesh(Util::cube_mesh(R / 2.0f));
+                hm.flip(); // if flip
+                _undo.add_obj(std::move(hm), "Cube");
+            }
+            ImGui::PopID();
+        }
+    });
+    gui.register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) -> Gui::Mode
+                             {
+                                 if (ImGui::CollapsingHeader("My UI2"))
+                                 {
+                                     ImGui::PushID(_index++);
+                                     static float R = 1.0f;
+                                     ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
+                                     if (ImGui::Button("Add"))
+                                     {
+                                         Halfedge_Mesh hm;
+                                         hm.from_mesh(Util::cube_mesh(R / 2.0f));
+                                         hm.flip(); // if flip
+                                         _undo.add_obj(std::move(hm), "Cube");
+                                     }
+                                     ImGui::PopID();
+                                 }
+                             });
+    gui.register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) -> Gui::Mode
+                             {
+                                 if (ImGui::CollapsingHeader("My UI3"))
+                                 {
+                                     ImGui::PushID(_index++);
+                                     static float R = 1.0f;
+                                     ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
+                                     if (ImGui::Button("Add"))
+                                     {
+                                         Halfedge_Mesh hm;
+                                         hm.from_mesh(Util::cube_mesh(R / 2.0f));
+                                         hm.flip(); // if flip
+                                         _undo.add_obj(std::move(hm), "Cube");
+                                     }
+                                     ImGui::PopID();
+                                 }
+                             });
 }

@@ -77,9 +77,9 @@ bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
     if (key.sym == SDLK_BACKSPACE && key.mod & KMOD_GUI)
     {
 #else
-    Uint16 mod = KMOD_CTRL;
-    if (key.sym == SDLK_DELETE)
-    {
+        Uint16 mod = KMOD_CTRL;
+        if (key.sym == SDLK_DELETE)
+        {
 #endif
         if (layout.selected())
         {
@@ -748,7 +748,8 @@ void Manager::UIsidebar(Scene &scene, Undo &undo, float menu_height, Camera &cam
         if (wrap_button("Clear"))
         {
             std::vector<Scene_ID> ids;
-            scene.for_items([&](Scene_Item &item) { ids.push_back(item.id()); });
+            scene.for_items([&](Scene_Item &item)
+                            { ids.push_back(item.id()); });
             for (auto id: ids)
                 undo.del_obj(id);
             undo.bundle_last(ids.size());
@@ -1694,6 +1695,11 @@ void Manager::hover(Vec2 pixel, Vec3 cam, Vec2 spos, Vec3 dir)
     {
         rig.hover(cam, spos, dir);
     }
+}
+
+void Manager::register_simulate_UI(std::function<void(Manager &, Scene &, Undo &, Widgets &, Scene_Maybe, int&)> &&func)
+{
+    simulate.register_custom_sidebar_UI(std::move(func));
 }
 
 } // namespace Gui

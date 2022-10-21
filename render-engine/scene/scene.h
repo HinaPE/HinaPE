@@ -28,7 +28,7 @@ public:
     Scene_Item() = default;
 
     template<typename T>
-    Scene_Item(T &&obj) : data(std::forward<T &&>(obj)) {}
+    explicit Scene_Item(T &&obj) : data(std::forward<T &&>(obj)) {}
 
     Scene_Item(Scene_Item &&src)  noexcept : data(std::move(src.data)) {}
 
