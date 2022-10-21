@@ -285,7 +285,6 @@ void Undo::update_material(Scene_ID id, Material::Options old)
 
 void Undo::update_object(Scene_ID id, Scene_Object::Options old)
 {
-
     Scene_Object &obj = scene.get<Scene_Object>(id);
 
     if (obj.opt.shape_type != PT::Shape_Type::none && old.shape_type == PT::Shape_Type::none)

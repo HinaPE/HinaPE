@@ -83,6 +83,7 @@ public:
         char name[MAX_NAME_LEN] = {};
         bool surface = true;
         bool wireframe = false;
+        bool bbox = false;
         bool smooth_normals = false;
         bool render = true;
         PT::Shape_Type shape_type = PT::Shape_Type::none;

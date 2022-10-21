@@ -45,7 +45,6 @@ public:
 
     // HinaPE 1.1.0
     void register_custom_simulation_sidebarUI(std::function<void(Gui::Manager &manager, Scene &scene, Undo &undo, Gui::Widgets &widgets, Scene_Maybe obj, int &index)> &&func);
-    void register_particle_system_data(void *, size_t);
 
 private:
     void apply_window_dim(Vec2 new_dim);

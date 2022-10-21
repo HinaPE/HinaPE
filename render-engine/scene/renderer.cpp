@@ -205,7 +205,6 @@ void Renderer::capsule(MeshOpt opt, float height, float rad)
 
 void Renderer::mesh(GL::Mesh &mesh, Renderer::MeshOpt opt)
 {
-
     mesh_shader.bind();
     mesh_shader.uniform("use_v_id", opt.per_vert_id);
     mesh_shader.uniform("id", opt.id);
@@ -239,6 +238,28 @@ void Renderer::mesh(GL::Mesh &mesh, Renderer::MeshOpt opt)
 
     if (opt.depth_only)
         GL::color_mask(true);
+
+    if (opt.bbox)
+    {
+        auto bb = mesh.bbox();
+        auto ll = bb.corners();
+        std::vector<GL::Lines::Vert> lines;
+        std::vector<size_t> indices({0, 1, 1, 4, 4, 2, 2, 0, 3, 5, 5, 7, 7, 6, 6, 3, 0, 3, 2, 5, 1, 6, 4, 7});
+        Vec3 color = Vec3{1.0f, 1.0f, 1.0f};
+        for (int i = 0; i < 12; ++i)
+        {
+            lines.clear();
+            GL::Lines::Vert vert1, vert2;
+            vert1.pos = ll[indices[2 * i]];
+            vert2.pos = ll[indices[2 * i + 1]];
+            vert1.color = color;
+            vert2.color = color;
+            lines.emplace_back(vert1);
+            lines.emplace_back(vert2);
+            GL::Lines l(std::move(lines), 1.f);
+            l.render(false);
+        }
+    }
 }
 
 void Renderer::set_samples(int s)

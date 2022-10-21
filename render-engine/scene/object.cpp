@@ -227,6 +227,7 @@ void Scene_Object::render(const Mat4 &view, bool solid, bool depth_only, bool po
     opts.sel_color = material.layout_color();
     opts.modelview = posed ? view * pose.transform() : view;
     opts.surface = opt.surface;
+    opts.bbox = opt.bbox;
 
     switch (opt.shape_type)
     {

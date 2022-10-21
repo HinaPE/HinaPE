@@ -39,6 +39,7 @@ public:
         float alpha = 1.0f;
         bool surface = true;
         bool wireframe = false;
+        bool bbox = false;
         bool solid_color = false;
         bool depth_only = false;
         bool per_vert_id = false;

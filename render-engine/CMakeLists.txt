@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(HinaPE_Render_Engine VERSION 1.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
+option(FluidEngineOption "Enable Fluid Engine(Default: ON)" ON)
+
 set(HINAPE_DEPS_DIR "../deps")
 
 file(GLOB_RECURSE HINA_RENDER_ENGINE_GUI "gui/*.cpp" "gui/*.h")
@@ -140,6 +142,17 @@ FOREACH(subdir ${SUBDIRS})
             FILES_MATCHING PATTERN "*.h*"
     )
 ENDFOREACH()
+
+# Load Fluid Engine
+if (FluidEngineOption)
+    add_subdirectory(../fluid-engine ${CMAKE_BINARY_DIR}/fluid-engine)
+    target_include_directories(HinaPE_Render_Engine PUBLIC "../fluid-engine" "../fluid-engine/util")
+    target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
+    if (RenderEngineOption)
+        target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
+    endif ()
+    add_definitions(-DHinaFluidEngine)
+endif ()
 
 # Render Engine Test Part
 add_executable(HinaPE_Render_Engine_Test main.cpp)

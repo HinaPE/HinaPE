@@ -333,9 +333,3 @@ void App::register_custom_simulation_sidebarUI(std::function<void(Gui::Manager &
 {
     gui.register_simulate_UI(std::move(func));
 }
-
-//template<typename AnyParticleSystemPtr>
-void App::register_particle_system_data(void *_data_ptr, size_t)
-{
-
-}

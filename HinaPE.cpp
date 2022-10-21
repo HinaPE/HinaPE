@@ -1,6 +1,9 @@
+#ifdef HinaRenderEngine
 #include "render-engine/platform/platform.h"
 #include "render-engine/util/rand.h"
+#endif
 
+#ifdef HinaFluidEngine
 #include "fluid-engine/geometry/bounding_box3.h"
 #include "fluid-engine/geometry/plane3.h"
 #include "fluid-engine/geometry/box3.h"
@@ -10,11 +13,12 @@
 #include "fluid-engine/solver/particle/sph/sph_solver3.h"
 #include "fluid-engine/emitter/volume_particle_emitter3.h"
 #include "fluid-engine/util/logging.h"
-
 using namespace HinaPE::FluidEngine;
+#endif
 
 auto main(int argc, char **argv) -> int
 {
+#ifdef HinaFluidEngine
     // Init Fluid Engine
     Logging::mute();
 
@@ -41,16 +45,19 @@ auto main(int argc, char **argv) -> int
     auto particles = solver->sphSystemData();
     for (Frame frame(0, 1.0 / 60.0); frame.index < 100; ++frame)
     {
-//        solver->update(frame);
+        solver->update(frame);
+        std::cout << "Frame Update" << std::endl;
     }
+#endif
 
+#ifdef HinaRenderEngine
     // Init Render Engine
     RNG::seed();
     Launch_Settings set;
     Platform platform;
     App app(set, &platform);
-    app.register_particle_system_data(particles->positions().data(), particles->numberOfParticles());
+//    app.register_particle_system_data(particles->positions().data(), particles->numberOfParticles());
     platform.loop(app);
-
+#endif
     return 0;
 }

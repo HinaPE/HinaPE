@@ -13,21 +13,14 @@
 
 namespace flatbuffers
 {
-
 class FlatBufferBuilder;
 template<typename T>
 struct Offset;
-
 }
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::FluidEngine::fbs
 {
-namespace fbs
-{
-
 struct ParticleSystemData3;
-
-}
 }
 
 #endif  // JET_DOXYGEN
@@ -46,10 +39,10 @@ class ParticleSystemData3 : public Serializable
 {
 public:
     //! Scalar data chunk.
-    typedef Array1<double> ScalarData;
+    using ScalarData = Array1<double>;
 
     //! Vector data chunk.
-    typedef Array1<Vector3D> VectorData;
+    using VectorData = Array1<Vector3D>;
 
     //! Default constructor.
     ParticleSystemData3();
@@ -61,7 +54,7 @@ public:
     ParticleSystemData3(const ParticleSystemData3 &other);
 
     //! Destructor.
-    virtual ~ParticleSystemData3();
+    ~ParticleSystemData3() override;
 
     //!
     //! \brief      Resizes the number of particles of the container.
@@ -77,7 +70,7 @@ public:
     void resize(size_t newNumberOfParticles);
 
     //! Returns the number of particles.
-    size_t numberOfParticles() const;
+    auto numberOfParticles() const -> size_t;
 
     //!
     //! \brief      Adds a scalar data layer and returns its index.
@@ -87,7 +80,7 @@ public:
     //!
     //! \params[in] initialVal  Initial value of the new scalar data.
     //!
-    size_t addScalarData(double initialVal = 0.0);
+    auto addScalarData(double initialVal = 0.0) -> size_t;
 
     //!
     //! \brief      Adds a vector data layer and returns its index.
@@ -97,49 +90,49 @@ public:
     //!
     //! \params[in] initialVal  Initial value of the new vector data.
     //!
-    size_t addVectorData(const Vector3D &initialVal = Vector3D());
+    auto addVectorData(const Vector3D &initialVal = Vector3D()) -> size_t;
 
     //! Returns the radius of the particles.
-    double radius() const;
+    auto radius() const -> double;
 
     //! Sets the radius of the particles.
     virtual void setRadius(double newRadius);
 
     //! Returns the mass of the particles.
-    double mass() const;
+    auto mass() const -> double;
 
     //! Sets the mass of the particles.
     virtual void setMass(double newMass);
 
     //! Returns the position array (immutable).
-    ConstArrayAccessor1<Vector3D> positions() const;
+    auto positions() const -> ConstArrayAccessor1<Vector3D>;
 
     //! Returns the position array (mutable).
-    ArrayAccessor1<Vector3D> positions();
+    auto positions() -> ArrayAccessor1<Vector3D>;
 
     //! Returns the velocity array (immutable).
-    ConstArrayAccessor1<Vector3D> velocities() const;
+    auto velocities() const -> ConstArrayAccessor1<Vector3D>;
 
     //! Returns the velocity array (mutable).
-    ArrayAccessor1<Vector3D> velocities();
+    auto velocities() -> ArrayAccessor1<Vector3D>;
 
     //! Returns the force array (immutable).
-    ConstArrayAccessor1<Vector3D> forces() const;
+    auto forces() const -> ConstArrayAccessor1<Vector3D>;
 
     //! Returns the force array (mutable).
-    ArrayAccessor1<Vector3D> forces();
+    auto forces() -> ArrayAccessor1<Vector3D>;
 
     //! Returns custom scalar data layer at given index (immutable).
-    ConstArrayAccessor1<double> scalarDataAt(size_t idx) const;
+    auto scalarDataAt(size_t idx) const -> ConstArrayAccessor1<double>;
 
     //! Returns custom scalar data layer at given index (mutable).
-    ArrayAccessor1<double> scalarDataAt(size_t idx);
+    auto scalarDataAt(size_t idx) -> ArrayAccessor1<double>;
 
     //! Returns custom vector data layer at given index (immutable).
-    ConstArrayAccessor1<Vector3D> vectorDataAt(size_t idx) const;
+    auto vectorDataAt(size_t idx) const -> ConstArrayAccessor1<Vector3D>;
 
     //! Returns custom vector data layer at given index (mutable).
-    ArrayAccessor1<Vector3D> vectorDataAt(size_t idx);
+    auto vectorDataAt(size_t idx) -> ArrayAccessor1<Vector3D>;
 
     //!
     //! \brief      Adds a particle to the data structure.
@@ -180,7 +173,7 @@ public:
     //!
     //! \return     Current neighbor searcher.
     //!
-    const PointNeighborSearcher3Ptr &neighborSearcher() const;
+    auto neighborSearcher() const -> const PointNeighborSearcher3Ptr &;
 
     //! Sets neighbor searcher.
     void setNeighborSearcher(const PointNeighborSearcher3Ptr &newNeighborSearcher);
@@ -194,7 +187,7 @@ public:
     //!
     //! \return     Neighbor lists.
     //!
-    const std::vector<std::vector<size_t>> &neighborLists() const;
+    auto neighborLists() const -> const std::vector<std::vector<size_t>> &;
 
     //! Builds neighbor searcher with given search radius.
     void buildNeighborSearcher(double maxSearchRadius);
@@ -212,7 +205,7 @@ public:
     void set(const ParticleSystemData3 &other);
 
     //! Copies from other particle system data.
-    ParticleSystemData3 &operator=(const ParticleSystemData3 &other);
+    auto operator=(const ParticleSystemData3 &other) -> ParticleSystemData3 &;
 
 protected:
     void serializeParticleSystemData(flatbuffers::FlatBufferBuilder *builder, flatbuffers::Offset<fbs::ParticleSystemData3> *fbsParticleSystemData) const;
@@ -235,7 +228,7 @@ private:
 };
 
 //! Shared pointer type of ParticleSystemData3.
-typedef std::shared_ptr<ParticleSystemData3> ParticleSystemData3Ptr;
+using ParticleSystemData3Ptr = std::shared_ptr<ParticleSystemData3>;
 
 }  // namespace HinaPE::FluidEngine
 

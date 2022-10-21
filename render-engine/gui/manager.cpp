@@ -13,6 +13,26 @@ Manager::Manager(Scene &scene, Vec2 dim) : render(scene, dim), animate(simulate,
 {
     create_axis();
     create_baseplane();
+    register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) -> Gui::Mode
+                         {
+                             if (ImGui::CollapsingHeader("My UI3"))
+                             {
+                                 ImGui::PushID(_index++);
+                                 static float R = 1.0f;
+                                 ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
+                                 if (ImGui::Button("Add"))
+                                 {
+                                     Halfedge_Mesh hm;
+                                     hm.from_mesh(Util::cube_mesh(R / 2.0f));
+                                     hm.flip(); // if flip
+                                     Scene_Object &obj = _undo.add_obj(std::move(hm), "Cube");
+                                     obj.opt.wireframe = false;
+                                     obj.opt.surface = false;
+                                     obj.opt.bbox = true;
+                                 }
+                                 ImGui::PopID();
+                             }
+                         });
 }
 
 void Manager::update_dim(Vec2 dim)
@@ -407,7 +427,6 @@ void Manager::material_edit_gui(Undo &undo, Scene_ID obj_id, Material &material)
 
 Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &old_pose)
 {
-
     Pose &pose = item.pose();
 
     auto sliders = [&](Widget_Type act, std::string label, Vec3 &data, float sens)
@@ -469,6 +488,8 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
         if (ImGui::Checkbox("Show Surface", &obj.opt.surface))
             update();
         if (ImGui::Checkbox("Show Wireframe", &obj.opt.wireframe))
+            update();
+        if (ImGui::Checkbox("Show Bounding Box", &obj.opt.bbox))
             update();
         if (ImGui::Checkbox("Render", &obj.opt.render))
             update();
@@ -1697,7 +1718,7 @@ void Manager::hover(Vec2 pixel, Vec3 cam, Vec2 spos, Vec3 dir)
     }
 }
 
-void Manager::register_simulate_UI(std::function<void(Manager &, Scene &, Undo &, Widgets &, Scene_Maybe, int&)> &&func)
+void Manager::register_simulate_UI(std::function<void(Manager &, Scene &, Undo &, Widgets &, Scene_Maybe, int &)> &&func)
 {
     simulate.register_custom_sidebar_UI(std::move(func));
 }

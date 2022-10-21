@@ -108,7 +108,7 @@ private:
     bool write_scene(Scene &scene);
     bool save_scene(Scene &scene, Undo &undo);
 
-    Mode mode = Mode::layout;
+    Mode mode = Mode::simulate; // Default Mode
     Layout layout;
     Model model;
     Render render;
