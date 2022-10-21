@@ -1,15 +1,15 @@
 #include "render-engine/platform/platform.h"
 #include "render-engine/util/rand.h"
 
-#include "fluid_engine/geometry/bounding_box3.h"
-#include "fluid_engine/geometry/plane3.h"
-#include "fluid_engine/geometry/box3.h"
-#include "fluid_engine/geometry/rigid_body_collider3.h"
-#include "fluid_engine/geometry/sphere3.h"
-#include "fluid_engine/geometry/implicit_surface_set3.h"
-#include "fluid_engine/solver/particle/sph/sph_solver3.h"
-#include "fluid_engine/emitter/volume_particle_emitter3.h"
-#include "fluid_engine/util/logging.h"
+#include "fluid-engine/geometry/bounding_box3.h"
+#include "fluid-engine/geometry/plane3.h"
+#include "fluid-engine/geometry/box3.h"
+#include "fluid-engine/geometry/rigid_body_collider3.h"
+#include "fluid-engine/geometry/sphere3.h"
+#include "fluid-engine/geometry/implicit_surface_set3.h"
+#include "fluid-engine/solver/particle/sph/sph_solver3.h"
+#include "fluid-engine/emitter/volume_particle_emitter3.h"
+#include "fluid-engine/util/logging.h"
 
 using namespace jet;
 

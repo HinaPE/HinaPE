@@ -63,7 +63,7 @@ SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
 FOREACH(subdir ${SUBDIRS})
     INSTALL(
             DIRECTORY ${subdir}
-            DESTINATION include/${CMAKE_PROJECT_NAME}/render-engine
+            DESTINATION include/${CMAKE_PROJECT_NAME}/fluid-engine
             FILES_MATCHING PATTERN "*.h*"
     )
 ENDFOREACH()
