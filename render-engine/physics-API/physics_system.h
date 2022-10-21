@@ -1,10 +1,6 @@
 #ifndef HINAPE_PHYSICS_SYSTEM_H
 #define HINAPE_PHYSICS_SYSTEM_H
 
-#include "kernels/pbd/pbd_kernel.h"
-#include "kernels/xpbd/xpbd_kernel.h"
-#include "kernels/fast-mass-spring/fms_kernel.h"
-#include "kernels/sph/sph_kernel.h"
 #include "physics_object.h"
 
 #include <vector>
@@ -35,18 +31,13 @@ public:
     auto operator=(const PhysicsSystem &) -> PhysicsSystem & = delete;
     auto operator=(PhysicsSystem &&) -> PhysicsSystem & = delete;
 private: // disable any instantiation outside
-    PhysicsSystem() : kernel(FastMassSpringKernel(*this)) {}
+    PhysicsSystem() = default;
     ~PhysicsSystem() = default;
 
 private:
-    friend PBDKernel;
-    friend XPBDKernel;
-    friend FastMassSpringKernel;
-    friend SPHKernel;
-    std::variant<PBDKernel, XPBDKernel, FastMassSpringKernel, SPHKernel> kernel;
+//    std::variant<PBDKernel, XPBDKernel, FastMassSpringKernel, SPHKernel> kernel;
     std::map<const unsigned int, std::shared_ptr<PhysicsObject>> physics_objects;
     std::map<const unsigned int, std::shared_ptr<PhysicsObject>> erased_physics_objects; // don't delete object instantly, in case UNDO operation.
-    std::vector<Constraint> constraints;
 };
 }
 

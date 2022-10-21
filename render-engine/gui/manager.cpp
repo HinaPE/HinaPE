@@ -5,7 +5,7 @@
 
 #include "../geometry/util.h"
 #include "../scene/renderer.h"
-#include "../physics/factory/physics_objects_factory.h"
+#include "../physics-API/factory/physics_objects_factory.h"
 
 namespace Gui
 {

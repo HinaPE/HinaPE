@@ -4,7 +4,7 @@
 #include "../geometry/halfedge.h"
 #include "../platform/gl.h"
 #include "../rays/shapes.h"
-#include "../physics/physics_system.h"
+#include "../physics-API/physics_system.h"
 
 #include "material.h"
 #include "pose.h"

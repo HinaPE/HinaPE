@@ -3,7 +3,6 @@
 
 #include "physics_objects/deformable.h"
 #include "physics_objects/rigidbody.h"
-#include "kernels/pbd/constraints.h"
 
 #include <vector>
 #include <variant>
@@ -59,7 +58,6 @@ public:
 
 private:
     std::optional<std::variant<RigidBodyBase<HinaPE::DYNAMIC>, RigidBodyBase<HinaPE::STATIC>, RigidBodyBase<HinaPE::KINEMATIC>, DeformableBase<CLOTH>, DeformableBase<MESH>>> physics_object_opt;
-    std::vector<Constraint> inner_constraints;
 };
 
 template<HinaPE::RigidBodyType T>
