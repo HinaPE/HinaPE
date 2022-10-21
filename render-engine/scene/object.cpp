@@ -261,6 +261,8 @@ auto operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r) 
     return std::string(l.name) != std::string(r.name) || l.shape_type != r.shape_type || l.smooth_normals != r.smooth_normals || l.wireframe != r.wireframe || l.shape != r.shape || l.render != r.render;
 }
 
+// TODO: temporary disable physics module
+/*
 void Scene_Object::attach_physics_object(std::shared_ptr<HinaPE::PhysicsObject> o)
 {
     this->physics_object = std::move(o);
@@ -314,3 +316,4 @@ auto Scene_Object::get_physics_object_type() const -> HinaPE::PhysicsObjectType
         return HinaPE::Deformable;
     return HinaPE::PhysicsObjectType::NOT_PHYSICS_OBJECT;
 }
+*/

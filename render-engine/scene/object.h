@@ -4,7 +4,6 @@
 #include "../geometry/halfedge.h"
 #include "../platform/gl.h"
 #include "../rays/shapes.h"
-#include "../physics-API/physics_system.h"
 
 #include "material.h"
 #include "pose.h"
@@ -53,7 +52,8 @@ public:
 
     void step(const PT::Object &scene, float dt)
     {
-        sync_physics_result();
+        // TODO: temporary disable physics module
+//        sync_physics_result();
     }
 
 public:
@@ -67,11 +67,14 @@ public:
     auto operator=(Scene_Object &&src) -> Scene_Object & = default;
 
 public:
+    // TODO: temporary disable physics module
+    /*
     void attach_physics_object(std::shared_ptr<HinaPE::PhysicsObject> o);
     void remove_physics_object();
     void sync_physics_result();
     auto get_physics_object_type() const -> HinaPE::PhysicsObjectType;
     std::shared_ptr<HinaPE::PhysicsObject> physics_object;
+    */
 
 public:
 

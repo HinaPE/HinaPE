@@ -27,9 +27,10 @@ auto Simulate::keydown(Widgets &widgets, Undo &undo, SDL_Keysym key) -> bool
 
 void Simulate::step(Scene &scene, float dt)
 {
-    if (HinaPE::PhysicsSystem::instance().running)
-        for (int i = 0; i < HinaPE::PhysicsSystem::instance().sub_step; ++i)
-            HinaPE::PhysicsSystem::instance()._tick_(dt / (float) 5); // TODO: move this to separate physics thread;
+    // TODO: temporary disable physics module
+//    if (HinaPE::PhysicsSystem::instance().running)
+//        for (int i = 0; i < HinaPE::PhysicsSystem::instance().sub_step; ++i)
+//            HinaPE::PhysicsSystem::instance()._tick_(dt / (float) 5); // TODO: move this to separate physics thread;
     scene.for_items([this, dt](Scene_Item &item) { item.step(scene_obj, dt); });
 }
 
@@ -40,7 +41,6 @@ void Simulate::update_time()
 
 void Simulate::update(Scene &scene, Undo &undo)
 {
-
     update_bvh(scene, undo);
 
     static Uint64 ufreq = SDL_GetPerformanceFrequency();
@@ -57,7 +57,6 @@ void Simulate::update(Scene &scene, Undo &undo)
 
 void Simulate::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
 {
-
     if (!obj_opt.has_value())
         return;
     Scene_Item &item = obj_opt.value();
@@ -80,7 +79,6 @@ void Simulate::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
 
 void Simulate::build_scene(Scene &scene)
 {
-
     if (!scene.has_sim())
         return;
 

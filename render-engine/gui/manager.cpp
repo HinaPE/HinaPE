@@ -5,7 +5,6 @@
 
 #include "../geometry/util.h"
 #include "../scene/renderer.h"
-#include "../physics-API/factory/physics_objects_factory.h"
 
 namespace Gui
 {
@@ -520,6 +519,8 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
         if (ImGui::CollapsingHeader("Edit Physics", ImGuiTreeNodeFlags_DefaultOpen))
         {
             ImGui::Indent();
+            // TODO: temporary disable physics module
+            /*
             static int physics_object_type = static_cast<int>(obj.get_physics_object_type());
             if (HinaPE::PhysicsObjectType::NOT_PHYSICS_OBJECT != physics_object_type)
                 switch (physics_object_type)
@@ -584,6 +585,7 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
                     default:
                         throw std::runtime_error("Unknown physics object type");
                 }
+                */
             ImGui::Unindent();
         }
 
@@ -1132,6 +1134,8 @@ void Manager::UInew_obj(Undo &undo)
     if (ImGui::CollapsingHeader("Cloth"))
     {
         ImGui::PushID(idx++);
+        // TODO: temporary disable physics module
+        /*
         static float width_height[2] = {2.f, 2.f};
         static int row_col[2] = {30, 30};
         static float mass = 1.f;
@@ -1160,6 +1164,7 @@ void Manager::UInew_obj(Undo &undo)
             obj.set_mesh_dirty();
             new_obj_window = false;
         }
+         */
         ImGui::PopID();
     }
     ImGui::End();
