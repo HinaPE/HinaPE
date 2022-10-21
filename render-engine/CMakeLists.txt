@@ -122,8 +122,6 @@ target_link_libraries(HinaPE_Render_Engine PUBLIC imgui)
 target_link_libraries(HinaPE_Render_Engine PUBLIC glad)
 
 # INSTALL
-
-# INSTALL
 MACRO(SUBDIRLIST result curdir)
     FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
     SET(dirlist "")
