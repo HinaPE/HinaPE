@@ -65,6 +65,9 @@ public:
     ParticleSystemData3(const ParticleSystemData3 &other);
     virtual ~ParticleSystemData3();
     auto operator=(const ParticleSystemData3 &other) -> ParticleSystemData3 &;
+
+    ///
+    ParticleSystemData3 *next;
 };
 using ParticleSystemData3Ptr = std::shared_ptr<ParticleSystemData3>;
 }

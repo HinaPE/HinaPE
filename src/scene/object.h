@@ -104,6 +104,10 @@ private:
 
     mutable GL::Mesh _mesh, _anim_mesh;
     mutable std::vector<std::vector<Joint *>> vertex_joints;
+private:
+    Vec3 v;
+    Vec3 a;
+    Vec3 p;
 };
 
 auto operator!=(const Scene_Object::Options &l, const Scene_Object::Options &r) -> bool;
