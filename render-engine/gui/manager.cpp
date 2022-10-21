@@ -13,7 +13,7 @@ Manager::Manager(Scene &scene, Vec2 dim) : render(scene, dim), animate(simulate,
 {
     create_axis();
     create_baseplane();
-    register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) -> Gui::Mode
+    register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index)
                          {
                              if (ImGui::CollapsingHeader("My UI3"))
                              {
