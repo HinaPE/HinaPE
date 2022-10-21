@@ -48,6 +48,9 @@ if (TBB_FOUND)
     target_link_libraries(HinaPE_Fluid_Engine PUBLIC TBB::tbb)
 endif ()
 
+# INSTALL
+install(TARGETS HinaPE_Fluid_Engine)
+
 # Fluid Engine Test Part
 add_executable(HinaPE_Fluid_Engine_Test main.cpp)
 set_target_properties(HinaPE_Fluid_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
