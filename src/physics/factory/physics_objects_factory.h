@@ -34,6 +34,14 @@ public:
 public:
     static auto create_cloth(const ClothDesc &desc) -> std::shared_ptr<PhysicsObject>;
 };
+
+class SphFluidFactory
+{
+public:
+    struct SphFluidDesc
+    {
+    };
+};
 }
 
 #endif //HINAPE_PHYSICS_OBJECTS_FACTORY_H

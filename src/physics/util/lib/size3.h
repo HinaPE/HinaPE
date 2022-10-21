@@ -1,7 +1,7 @@
 #ifndef HINAPE_SIZE3_H
 #define HINAPE_SIZE3_H
 
-#include "size2.h"
+#include "array/size2.h"
 
 namespace HinaPE
 {

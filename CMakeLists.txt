@@ -175,9 +175,10 @@ if (HINAPE_TEST)
 endif ()
 
 # temporary physics test
-file(GLOB_RECURSE HINA_TEMP "src/temp/*.cpp" "src/temp/*.h" "src/temp/*.inl")
+file(GLOB_RECURSE HINA_TEMP "src/temp/*.cpp" "src/temp/*.h" "src/temp/*.inl.h")
 add_executable(FluidEngineDevTest ${HINA_TEMP})
-target_include_directories(FluidEngineDevTest PRIVATE "src/temp" "deps/tinyobjloader")
+include_directories("src/temp/util")
+target_include_directories(FluidEngineDevTest PRIVATE "src/temp" "src/temp/util" "deps/tinyobjloader")
 target_link_libraries(FluidEngineDevTest PRIVATE tinyobjloader)
 set_target_properties(FluidEngineDevTest PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 
