@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_INTERSECTION_QUERY_ENGINE3_H_
-#define INCLUDE_JET_INTERSECTION_QUERY_ENGINE3_H_
+#ifndef HINAPE_FLUID_ENGINE_INTERSECTION_QUERY_ENGINE3_H_
+#define HINAPE_FLUID_ENGINE_INTERSECTION_QUERY_ENGINE3_H_
 
 #include "geometry/bounding_box3.h"
 
@@ -7,7 +7,7 @@
 
 #include <functional>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Closest intersection query result.
@@ -54,6 +54,6 @@ public:
     virtual ClosestIntersectionQueryResult3<T> closestIntersection(const Ray3D &ray, const GetRayIntersectionFunc3<T> &testFunc) const = 0;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_INTERSECTION_QUERY_ENGINE3_H_
+#endif  // HINAPE_FLUID_ENGINE_INTERSECTION_QUERY_ENGINE3_H_

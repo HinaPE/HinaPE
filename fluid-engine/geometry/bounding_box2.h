@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_BOUNDING_BOX2_H_
-#define INCLUDE_JET_BOUNDING_BOX2_H_
+#ifndef HINAPE_FLUID_ENGINE_BOUNDING_BOX2_H_
+#define HINAPE_FLUID_ENGINE_BOUNDING_BOX2_H_
 
 #include "bounding_box.h"
 
@@ -8,7 +8,7 @@
 
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -126,8 +126,8 @@ using BoundingBoxRayIntersection2F = BoundingBoxRayIntersection2<float>;
 //! Double-type 2-D box-ray intersection result.
 using BoundingBoxRayIntersection2D = BoundingBoxRayIntersection2<double>;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "bounding_box2-inl.h"
 
-#endif  // INCLUDE_JET_BOUNDING_BOX2_H_
+#endif  // HINAPE_FLUID_ENGINE_BOUNDING_BOX2_H_

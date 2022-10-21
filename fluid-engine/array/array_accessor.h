@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_ARRAY_ACCESSOR_H_
-#define INCLUDE_JET_ARRAY_ACCESSOR_H_
+#ifndef HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR_H_
+#define HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR_H_
 
 #include <cstddef>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -45,6 +45,6 @@ public:
     static_assert(N < 1 || N > 3, "Not implemented - N should be either 1, 2 or 3.");
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_ARRAY_ACCESSOR_H_
+#endif  // HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR_H_

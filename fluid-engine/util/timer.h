@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_TIMER_H_
-#define INCLUDE_JET_TIMER_H_
+#ifndef HINAPE_FLUID_ENGINE_TIMER_H_
+#define HINAPE_FLUID_ENGINE_TIMER_H_
 
 #include <chrono>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Simple timer class.
@@ -24,6 +24,6 @@ private:
     std::chrono::steady_clock::time_point _startingPoint;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_TIMER_H_
+#endif  // HINAPE_FLUID_ENGINE_TIMER_H_

@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_DETAIL_QUATERNION_INL_H_
-#define INCLUDE_JET_DETAIL_QUATERNION_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_QUATERNION_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_QUATERNION_INL_H_
 
 #include "quaternion.h"
 
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // Constructors
@@ -472,6 +472,6 @@ inline Quaternion<T> operator*(const Quaternion<T> &a, const Quaternion<T> &b)
     return a.mul(b);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_QUATERNION_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_QUATERNION_INL_H_

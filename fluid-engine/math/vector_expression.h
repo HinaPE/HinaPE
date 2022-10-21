@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_VECTOR_EXPRESSION_H_
-#define INCLUDE_JET_VECTOR_EXPRESSION_H_
+#ifndef HINAPE_FLUID_ENGINE_VECTOR_EXPRESSION_H_
+#define HINAPE_FLUID_ENGINE_VECTOR_EXPRESSION_H_
 
 #include "functors.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // MARK: VectorExpression
@@ -206,8 +206,8 @@ VectorScalarDiv<T, E> operator/(const VectorExpression<T, E> &a, const T &b);
 template<typename T, typename E1, typename E2>
 VectorDiv<T, E1, E2> operator/(const VectorExpression<T, E1> &a, const VectorExpression<T, E2> &b);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "vector_expression-inl.h"
 
-#endif  // INCLUDE_JET_VECTOR_EXPRESSION_H_
+#endif  // HINAPE_FLUID_ENGINE_VECTOR_EXPRESSION_H_

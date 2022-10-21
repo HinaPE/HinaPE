@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_MATRIX_MXN_INL_H_
-#define INCLUDE_JET_DETAIL_MATRIX_MXN_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATRIX_MXN_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_MATRIX_MXN_INL_H_
 
 #include "matrix_mxn.h"
 
@@ -7,7 +7,7 @@
 #include "math_utils.h"
 #include "parallel.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // MARK: MatrixMxN
@@ -521,10 +521,10 @@ T MatrixMxN<T>::absmin() const
         T result = init;
         for (size_t i = start; i < end; ++i)
         {
-            result = jet::absmin(result, _elements[i]);
+            result = HinaPE::FluidEngine::absmin(result, _elements[i]);
         }
         return result;
-    }, jet::absmin<T>);
+    }, HinaPE::FluidEngine::absmin<T>);
 }
 
 template<typename T>
@@ -535,10 +535,10 @@ T MatrixMxN<T>::absmax() const
         T result = init;
         for (size_t i = start; i < end; ++i)
         {
-            result = jet::absmax(result, _elements[i]);
+            result = HinaPE::FluidEngine::absmax(result, _elements[i]);
         }
         return result;
-    }, jet::absmax<T>);
+    }, HinaPE::FluidEngine::absmax<T>);
 }
 
 template<typename T>
@@ -840,6 +840,6 @@ MatrixIdentity <T> MatrixMxN<T>::makeIdentity(size_t m)
     return MatrixIdentity<T>(m);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_MATRIX_MXN_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX_MXN_INL_H_

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_VECTOR_N_H_
-#define INCLUDE_JET_VECTOR_N_H_
+#ifndef HINAPE_FLUID_ENGINE_VECTOR_N_H_
+#define HINAPE_FLUID_ENGINE_VECTOR_N_H_
 
 #include "array/array_accessor1.h"
 
@@ -9,7 +9,7 @@
 #include <limits>
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // MARK: VectorN
@@ -398,8 +398,8 @@ typedef VectorN<float> VectorNF;
 //! Double-type N-D vector.
 typedef VectorN<double> VectorND;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "vector_n-inl.h"
 
-#endif  // INCLUDE_JET_VECTOR_N_H_
+#endif  // HINAPE_FLUID_ENGINE_VECTOR_N_H_

@@ -1,7 +1,7 @@
-#ifndef INCLUDE_JET_TYPE_HELPERS_H_
-#define INCLUDE_JET_TYPE_HELPERS_H_
+#ifndef HINAPE_FLUID_ENGINE_TYPE_HELPERS_H_
+#define HINAPE_FLUID_ENGINE_TYPE_HELPERS_H_
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Returns the type of the value itself.
@@ -11,6 +11,6 @@ struct ScalarType
     typedef T value;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_TYPE_HELPERS_H_
+#endif  // HINAPE_FLUID_ENGINE_TYPE_HELPERS_H_

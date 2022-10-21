@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_MATRIX3X3_H_
-#define INCLUDE_JET_MATRIX3X3_H_
+#ifndef HINAPE_FLUID_ENGINE_MATRIX3X3_H_
+#define HINAPE_FLUID_ENGINE_MATRIX3X3_H_
 
 #include "matrix.h"
 #include "vector3.h"
@@ -7,7 +7,7 @@
 #include <array>
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -394,8 +394,8 @@ typedef Matrix3x3<float> Matrix3x3F;
 //! Double-type 3x3 matrix.
 typedef Matrix3x3<double> Matrix3x3D;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "matrix3x3-inl.h"
 
-#endif  // INCLUDE_JET_MATRIX3X3_H_
+#endif  // HINAPE_FLUID_ENGINE_MATRIX3X3_H_

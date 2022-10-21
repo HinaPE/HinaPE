@@ -5,7 +5,7 @@
 #include "timer.h"
 #include "private_helpers.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 Frame::Frame() = default;
 

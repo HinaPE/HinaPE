@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_ARRAY_UTILS_H_
-#define INCLUDE_JET_ARRAY_UTILS_H_
+#ifndef HINAPE_FLUID_ENGINE_ARRAY_UTILS_H_
+#define HINAPE_FLUID_ENGINE_ARRAY_UTILS_H_
 
 #include "array_accessor2.h"
 #include "array_accessor3.h"
@@ -7,7 +7,7 @@
 #include "array2.h"
 #include "array3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -133,8 +133,8 @@ void extrapolateToRegion(const ConstArrayAccessor3<T> &input, const ConstArrayAc
 template<typename ArrayType>
 void convertToCsv(const ArrayType &data, std::ostream *strm);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "array_utils-inl.h"
 
-#endif  // INCLUDE_JET_ARRAY_UTILS_H_
+#endif  // HINAPE_FLUID_ENGINE_ARRAY_UTILS_H_

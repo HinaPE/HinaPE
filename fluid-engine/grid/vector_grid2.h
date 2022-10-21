@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_VECTOR_GRID2_H_
-#define INCLUDE_JET_VECTOR_GRID2_H_
+#ifndef HINAPE_FLUID_ENGINE_VECTOR_GRID2_H_
+#define HINAPE_FLUID_ENGINE_VECTOR_GRID2_H_
 
 #include "grid2.h"
 
@@ -11,7 +11,7 @@
 #include <memory>
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Abstract base class for 2-D vector grid structure.
@@ -91,6 +91,6 @@ public:
 //! Shared pointer for the VectorGridBuilder2 type.
 typedef std::shared_ptr<VectorGridBuilder2> VectorGridBuilder2Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_VECTOR_GRID2_H_
+#endif  // HINAPE_FLUID_ENGINE_VECTOR_GRID2_H_

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_VECTOR_H_
-#define INCLUDE_JET_VECTOR_H_
+#ifndef HINAPE_FLUID_ENGINE_VECTOR_H_
+#define HINAPE_FLUID_ENGINE_VECTOR_H_
 
 #include "vector_expression.h"
 
@@ -11,7 +11,7 @@
 #include <array>
 #include <type_traits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -344,8 +344,8 @@ struct ScalarType<Vector<T, N>>
     typedef T value;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "vector-inl.h"
 
-#endif  // INCLUDE_JET_VECTOR_H_
+#endif  // HINAPE_FLUID_ENGINE_VECTOR_H_

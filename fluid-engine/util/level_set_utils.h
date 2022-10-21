@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_LEVEL_SET_UTILS_H_
-#define INCLUDE_JET_LEVEL_SET_UTILS_H_
+#ifndef HINAPE_FLUID_ENGINE_LEVEL_SET_UTILS_H_
+#define HINAPE_FLUID_ENGINE_LEVEL_SET_UTILS_H_
 
 #include "macros.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -95,8 +95,8 @@ T fractionInsideSdf(T phi0, T phi1);
 template<typename T>
 T fractionInside(T phiBottomLeft, T phiBottomRight, T phiTopLeft, T phiTopRight);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "level_set_utils-inl.h"
 
-#endif  // INCLUDE_JET_LEVEL_SET_UTILS_H_
+#endif  // HINAPE_FLUID_ENGINE_LEVEL_SET_UTILS_H_

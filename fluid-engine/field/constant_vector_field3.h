@@ -1,10 +1,10 @@
-#ifndef INCLUDE_JET_CONSTANT_VECTOR_FIELD3_H_
-#define INCLUDE_JET_CONSTANT_VECTOR_FIELD3_H_
+#ifndef HINAPE_FLUID_ENGINE_CONSTANT_VECTOR_FIELD3_H_
+#define HINAPE_FLUID_ENGINE_CONSTANT_VECTOR_FIELD3_H_
 
 #include "vector_field3.h"
 #include <memory>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! 3-D constant vector field.
@@ -51,6 +51,6 @@ private:
     Vector3D _value{0, 0, 0};
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_CONSTANT_VECTOR_FIELD3_H_
+#endif  // HINAPE_FLUID_ENGINE_CONSTANT_VECTOR_FIELD3_H_

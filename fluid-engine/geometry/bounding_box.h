@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_BOUNDING_BOX_H_
-#define INCLUDE_JET_BOUNDING_BOX_H_
+#ifndef HINAPE_FLUID_ENGINE_BOUNDING_BOX_H_
+#define HINAPE_FLUID_ENGINE_BOUNDING_BOX_H_
 
 #include "math/vector.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -65,8 +65,8 @@ public:
     void expand(T delta);
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "bounding_box-inl.h"
 
-#endif  // INCLUDE_JET_BOUNDING_BOX_H_
+#endif  // HINAPE_FLUID_ENGINE_BOUNDING_BOX_H_

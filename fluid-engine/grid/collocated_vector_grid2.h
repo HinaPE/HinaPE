@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_COLLOCATED_VECTOR_GRID2_H_
-#define INCLUDE_JET_COLLOCATED_VECTOR_GRID2_H_
+#ifndef HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID2_H_
+#define HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID2_H_
 
 #include "vector_grid2.h"
 
@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! \brief Abstract base class for 2-D collocated vector grid structure.
@@ -118,6 +118,6 @@ private:
 //! Shared pointer for the CollocatedVectorGrid2 type.
 typedef std::shared_ptr<CollocatedVectorGrid2> CollocatedVectorGrid2Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_COLLOCATED_VECTOR_GRID2_H_
+#endif  // HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID2_H_

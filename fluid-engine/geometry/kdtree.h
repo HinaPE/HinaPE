@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_KDTREE_H
-#define INCLUDE_JET_KDTREE_H
+#ifndef HINAPE_FLUID_ENGINE_KDTREE_H
+#define HINAPE_FLUID_ENGINE_KDTREE_H
 
 #include "bounding_box2.h"
 #include "bounding_box3.h"
@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Generic k-d tree structure.
@@ -123,8 +123,8 @@ private:
     size_t build(size_t nodeIndex, size_t *itemIndices, size_t nItems, size_t currentDepth);
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "kdtree-inl.h"
 
-#endif  // INCLUDE_JET_KDTREE_H
+#endif  // HINAPE_FLUID_ENGINE_KDTREE_H

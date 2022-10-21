@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 PointGenerator3::PointGenerator3()
@@ -22,4 +22,4 @@ void PointGenerator3::generate(const BoundingBox3D &boundingBox, double spacing,
     });
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine

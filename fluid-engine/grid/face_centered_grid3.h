@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_FACE_CENTERED_GRID3_H_
-#define INCLUDE_JET_FACE_CENTERED_GRID3_H_
+#ifndef HINAPE_FLUID_ENGINE_FACE_CENTERED_GRID3_H_
+#define HINAPE_FLUID_ENGINE_FACE_CENTERED_GRID3_H_
 
 #include "vector_grid3.h"
 
@@ -10,7 +10,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -316,6 +316,6 @@ private:
     Vector3D _initialVal{0, 0, 0};
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_FACE_CENTERED_GRID3_H_
+#endif  // HINAPE_FLUID_ENGINE_FACE_CENTERED_GRID3_H_

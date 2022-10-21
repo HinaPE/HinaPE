@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_DETAIL_VECTOR_EXPRESSION_INL_H
-#define INCLUDE_JET_DETAIL_VECTOR_EXPRESSION_INL_H
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_VECTOR_EXPRESSION_INL_H
+#define HINAPE_FLUID_ENGINE_DETAIL_VECTOR_EXPRESSION_INL_H
 
 #include "vector_expression.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // MARK: VectorExpression
@@ -148,6 +148,6 @@ VectorDiv<T, E1, E2> operator/(const VectorExpression<T, E1> &a, const VectorExp
     return VectorDiv<T, E1, E2>(a(), b());
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_VECTOR_EXPRESSION_INL_H
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_VECTOR_EXPRESSION_INL_H

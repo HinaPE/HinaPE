@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_VECTOR4_H_
-#define INCLUDE_JET_VECTOR4_H_
+#ifndef HINAPE_FLUID_ENGINE_VECTOR4_H_
+#define HINAPE_FLUID_ENGINE_VECTOR4_H_
 
 #include "vector3.h"
 
 #include <algorithm>  // just make cpplint happy..
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -360,8 +360,8 @@ struct ScalarType<Vector4<T>>
 template<typename T>
 Vector4<T> monotonicCatmullRom(const Vector4<T> &v0, const Vector4<T> &v1, const Vector4<T> &v2, const Vector4<T> &v3, T f);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "vector4-inl.h"
 
-#endif  // INCLUDE_JET_VECTOR4_H_
+#endif  // HINAPE_FLUID_ENGINE_VECTOR4_H_

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_VECTOR3_H_
-#define INCLUDE_JET_VECTOR3_H_
+#ifndef HINAPE_FLUID_ENGINE_VECTOR3_H_
+#define HINAPE_FLUID_ENGINE_VECTOR3_H_
 
 #include "vector2.h"
 
@@ -7,7 +7,7 @@
 #include <limits>
 #include <tuple>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -369,8 +369,8 @@ struct ScalarType<Vector3<T>>
 template<typename T>
 Vector3<T> monotonicCatmullRom(const Vector3<T> &v0, const Vector3<T> &v1, const Vector3<T> &v2, const Vector3<T> &v3, T f);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "vector3-inl.h"
 
-#endif  // INCLUDE_JET_VECTOR3_H_
+#endif  // HINAPE_FLUID_ENGINE_VECTOR3_H_

@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_DETAIL_TRANSFORM2_INL_H_
-#define INCLUDE_JET_DETAIL_TRANSFORM2_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_TRANSFORM2_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_TRANSFORM2_INL_H_
 
 #include "transform2.h"
 
 #include <algorithm>
 #include <cmath>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 inline Transform2::Transform2()
@@ -100,6 +100,6 @@ inline BoundingBox2D Transform2::toWorld(const BoundingBox2D &bboxInLocal) const
     return bboxInWorld;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_TRANSFORM2_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_TRANSFORM2_INL_H_

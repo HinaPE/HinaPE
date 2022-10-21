@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_DETAIL_RAY2_INL_H_
-#define INCLUDE_JET_DETAIL_RAY2_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_RAY2_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_RAY2_INL_H_
 
 #include "ray2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T>
@@ -29,6 +29,6 @@ Vector2<T> Ray<T, 2>::pointAt(T t) const
     return origin + t * direction;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_RAY2_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_RAY2_INL_H_

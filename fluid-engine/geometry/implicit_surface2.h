@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_IMPLICIT_SURFACE2_H_
-#define INCLUDE_JET_IMPLICIT_SURFACE2_H_
+#ifndef HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE2_H_
+#define HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE2_H_
 
 #include "surface2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Abstract base class for 2-D implicit surface.
@@ -36,6 +36,6 @@ private:
 //! Shared pointer type for the ImplicitSurface2.
 typedef std::shared_ptr<ImplicitSurface2> ImplicitSurface2Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_IMPLICIT_SURFACE2_H_
+#endif  // HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE2_H_

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_MATRIX_CSR_H_
-#define INCLUDE_JET_MATRIX_CSR_H_
+#ifndef HINAPE_FLUID_ENGINE_MATRIX_CSR_H_
+#define HINAPE_FLUID_ENGINE_MATRIX_CSR_H_
 
 #include "matrix_expression.h"
 #include "vector_n.h"
@@ -8,7 +8,7 @@
 
 #include <tuple>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T>
@@ -479,8 +479,8 @@ typedef MatrixCsr<float> MatrixCsrF;
 //! Double-type CSR matrix.
 typedef MatrixCsr<double> MatrixCsrD;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "matrix_csr-inl.h"
 
-#endif  // INCLUDE_JET_MATRIX_CSR_H_
+#endif  // HINAPE_FLUID_ENGINE_MATRIX_CSR_H_

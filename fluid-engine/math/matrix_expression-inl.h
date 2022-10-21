@@ -1,9 +1,9 @@
-#ifndef INCLUDE_DETAIL_JET_MATRIX_EXPRESSION_INL_H_
-#define INCLUDE_DETAIL_JET_MATRIX_EXPRESSION_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_MATRIX_EXPRESSION_INL_H_
+#define HINAPE_FLUID_ENGINE_MATRIX_EXPRESSION_INL_H_
 
 #include "matrix_expression.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // MARK: MatrixExpression
@@ -404,6 +404,6 @@ MatrixScalarRDiv<T, E> operator/(T a, const MatrixExpression<T, E> &b)
     return MatrixScalarRDiv<T, E>(a(), b);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_DETAIL_JET_MATRIX_EXPRESSION_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_MATRIX_EXPRESSION_INL_H_

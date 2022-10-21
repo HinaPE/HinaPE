@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_BOUNDING_BOX2_INL_H_
-#define INCLUDE_JET_DETAIL_BOUNDING_BOX2_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX2_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX2_INL_H_
 
 #include "bounding_box2.h"
 
@@ -7,7 +7,7 @@
 #include <limits>
 #include <utility>  // just make cpplint happy..
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T>
@@ -221,7 +221,7 @@ auto BoundingBox<T, 2>::corner(size_t idx) const -> Vector2<T>
 template<typename T>
 auto BoundingBox<T, 2>::clamp(const Vector2<T> &pt) const -> Vector2<T>
 {
-    return ::jet::clamp(pt, lowerCorner, upperCorner);
+    return ::HinaPE::FluidEngine::clamp(pt, lowerCorner, upperCorner);
 }
 
 template<typename T>
@@ -230,6 +230,6 @@ auto BoundingBox<T, 2>::isEmpty() const -> bool
     return (lowerCorner.x >= upperCorner.x || lowerCorner.y >= upperCorner.y);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_BOUNDING_BOX2_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX2_INL_H_

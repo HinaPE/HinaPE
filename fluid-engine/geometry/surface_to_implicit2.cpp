@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 SurfaceToImplicit2::SurfaceToImplicit2(const Surface2Ptr &surface, const Transform2 &transform, bool isNormalFlipped) : ImplicitSurface2(transform, isNormalFlipped), _surface(surface) {}
 

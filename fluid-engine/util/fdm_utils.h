@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_FDM_UTILS_H_
-#define INCLUDE_JET_FDM_UTILS_H_
+#ifndef HINAPE_FLUID_ENGINE_FDM_UTILS_H_
+#define HINAPE_FLUID_ENGINE_FDM_UTILS_H_
 
 #include "array/array_accessor2.h"
 #include "array/array_accessor3.h"
@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! \brief Returns 2-D gradient vector from given 2-D scalar grid-like array
@@ -43,6 +43,6 @@ double laplacian3(const ConstArrayAccessor3<double> &data, const Vector3D &gridS
 //!        \p data, \p gridSpacing, and array index (\p i, \p j, \p k).
 Vector3D laplacian3(const ConstArrayAccessor3<Vector3D> &data, const Vector3D &gridSpacing, size_t i, size_t j, size_t k);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_FDM_UTILS_H_
+#endif  // HINAPE_FLUID_ENGINE_FDM_UTILS_H_

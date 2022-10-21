@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_IMPLICIT_SURFACE_SET2_H_
-#define INCLUDE_JET_IMPLICIT_SURFACE_SET2_H_
+#ifndef HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE_SET2_H_
+#define HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE_SET2_H_
 
 #include "implicit_surface2.h"
 
@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -115,6 +115,6 @@ private:
     std::vector<ImplicitSurface2Ptr> _surfaces;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_IMPLICIT_SURFACE_SET2_H_
+#endif  // HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE_SET2_H_

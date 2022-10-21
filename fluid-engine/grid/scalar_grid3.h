@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_SCALAR_GRID3_H_
-#define INCLUDE_JET_SCALAR_GRID3_H_
+#ifndef HINAPE_FLUID_ENGINE_SCALAR_GRID3_H_
+#define HINAPE_FLUID_ENGINE_SCALAR_GRID3_H_
 
 #include "grid3.h"
 
@@ -11,7 +11,7 @@
 #include <memory>
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Abstract base class for 3-D scalar grid structure.
@@ -183,6 +183,6 @@ public:
 //! Shared pointer for the ScalarGridBuilder3 type.
 typedef std::shared_ptr<ScalarGridBuilder3> ScalarGridBuilder3Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_SCALAR_GRID3_H_
+#endif  // HINAPE_FLUID_ENGINE_SCALAR_GRID3_H_

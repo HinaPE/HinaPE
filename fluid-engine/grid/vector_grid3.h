@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_VECTOR_GRID3_H_
-#define INCLUDE_JET_VECTOR_GRID3_H_
+#ifndef HINAPE_FLUID_ENGINE_VECTOR_GRID3_H_
+#define HINAPE_FLUID_ENGINE_VECTOR_GRID3_H_
 
 #include "grid3.h"
 
@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Abstract base class for 3-D vector grid structure.
@@ -90,6 +90,6 @@ public:
 //! Shared pointer for the VectorGridBuilder3 type.
 typedef std::shared_ptr<VectorGridBuilder3> VectorGridBuilder3Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_VECTOR_GRID3_H_
+#endif  // HINAPE_FLUID_ENGINE_VECTOR_GRID3_H_

@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_PHYSICS_ANIMATION_H_
-#define INCLUDE_JET_PHYSICS_ANIMATION_H_
+#ifndef HINAPE_FLUID_ENGINE_PHYSICS_ANIMATION_H_
+#define HINAPE_FLUID_ENGINE_PHYSICS_ANIMATION_H_
 
 #include "animation.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -142,6 +142,6 @@ private:
 
 typedef std::shared_ptr<PhysicsAnimation> PhysicsAnimationPtr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_PHYSICS_ANIMATION_H_
+#endif  // HINAPE_FLUID_ENGINE_PHYSICS_ANIMATION_H_

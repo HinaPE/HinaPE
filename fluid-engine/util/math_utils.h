@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_MATH_UTILS_H_
-#define INCLUDE_JET_MATH_UTILS_H_
+#ifndef HINAPE_FLUID_ENGINE_MATH_UTILS_H_
+#define HINAPE_FLUID_ENGINE_MATH_UTILS_H_
 
 #include "macros.h"
 
 #include <cstddef>
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -224,8 +224,8 @@ inline S catmullRom(const S &f0, const S &f1, const S &f2, const S &f3, T t);
 template<typename T>
 inline T monotonicCatmullRom(const T &f0, const T &f1, const T &f2, const T &f3, T t);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "math_utils-inl.h"
 
-#endif  // INCLUDE_JET_MATH_UTILS_H_
+#endif  // HINAPE_FLUID_ENGINE_MATH_UTILS_H_

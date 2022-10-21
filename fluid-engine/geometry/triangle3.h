@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_TRIANGLE3_H_
-#define INCLUDE_JET_TRIANGLE3_H_
+#ifndef HINAPE_FLUID_ENGINE_TRIANGLE3_H_
+#define HINAPE_FLUID_ENGINE_TRIANGLE3_H_
 
 #include "surface3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -92,6 +92,6 @@ private:
     std::array<Vector2D, 3> _uvs;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_TRIANGLE3_H_
+#endif  // HINAPE_FLUID_ENGINE_TRIANGLE3_H_

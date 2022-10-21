@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_CUSTOM_IMPLICIT_SURFACE3_H_
-#define INCLUDE_JET_CUSTOM_IMPLICIT_SURFACE3_H_
+#ifndef HINAPE_FLUID_ENGINE_CUSTOM_IMPLICIT_SURFACE3_H_
+#define HINAPE_FLUID_ENGINE_CUSTOM_IMPLICIT_SURFACE3_H_
 
 #include "implicit_surface3.h"
 
 #include "field/scalar_field3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Custom 3-D implicit surface using arbitrary function.
@@ -96,6 +96,6 @@ private:
     unsigned int _maxNumOfIterations = 5;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_CUSTOM_IMPLICIT_SURFACE3_H_
+#endif  // HINAPE_FLUID_ENGINE_CUSTOM_IMPLICIT_SURFACE3_H_

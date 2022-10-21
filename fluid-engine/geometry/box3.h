@@ -1,10 +1,10 @@
-#ifndef INCLUDE_JET_BOX3_H_
-#define INCLUDE_JET_BOX3_H_
+#ifndef HINAPE_FLUID_ENGINE_BOX3_H_
+#define HINAPE_FLUID_ENGINE_BOX3_H_
 
 #include "surface3.h"
 #include "bounding_box3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -80,7 +80,7 @@ private:
     Vector3D _upperCorner{1, 1, 1};
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 
-#endif  // INCLUDE_JET_BOX3_H_
+#endif  // HINAPE_FLUID_ENGINE_BOX3_H_

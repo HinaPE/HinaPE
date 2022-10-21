@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_DETAIL_SERIALIZATION_INL_H_
-#define INCLUDE_JET_DETAIL_SERIALIZATION_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_SERIALIZATION_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_SERIALIZATION_INL_H_
 
 #include "serialization.h"
 
 #include <cstring>
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T>
@@ -25,6 +25,6 @@ void deserialize(const std::vector<uint8_t> &buffer, Array1<T> *array)
     memcpy(reinterpret_cast<uint8_t *>(array->data()), data.data(), data.size());
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_SERIALIZATION_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_SERIALIZATION_INL_H_

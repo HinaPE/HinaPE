@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_RAY_H_
-#define INCLUDE_JET_RAY_H_
+#ifndef HINAPE_FLUID_ENGINE_RAY_H_
+#define HINAPE_FLUID_ENGINE_RAY_H_
 
 #include "math/vector.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -19,6 +19,6 @@ class Ray
     static_assert(std::is_floating_point<T>::value, "Ray only can be instantiated with floating point types");
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_RAY_H_
+#endif  // HINAPE_FLUID_ENGINE_RAY_H_

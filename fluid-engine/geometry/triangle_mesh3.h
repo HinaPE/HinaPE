@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_TRIANGLE_MESH3_H_
-#define INCLUDE_JET_TRIANGLE_MESH3_H_
+#ifndef HINAPE_FLUID_ENGINE_TRIANGLE_MESH3_H_
+#define HINAPE_FLUID_ENGINE_TRIANGLE_MESH3_H_
 
 #include "array/array1.h"
 #include "bvh3.h"
@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -269,6 +269,6 @@ private:
     IndexArray _uvIndices;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_TRIANGLE_MESH3_H_
+#endif  // HINAPE_FLUID_ENGINE_TRIANGLE_MESH3_H_

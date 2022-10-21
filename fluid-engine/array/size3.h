@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_SIZE3_H_
-#define INCLUDE_JET_SIZE3_H_
+#ifndef HINAPE_FLUID_ENGINE_SIZE3_H_
+#define HINAPE_FLUID_ENGINE_SIZE3_H_
 
 #include "size2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -259,8 +259,8 @@ Size3 ceil(const Size3 &a);
 //! Returns element-wise floored size.
 Size3 floor(const Size3 &a);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "size3-inl.h"
 
-#endif  // INCLUDE_JET_SIZE3_H_
+#endif  // HINAPE_FLUID_ENGINE_SIZE3_H_

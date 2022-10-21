@@ -3,7 +3,7 @@
 #include "level_set_utils.h"
 #include "pch.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 ImplicitSurface3::ImplicitSurface3(const Transform3 &transform_, bool isNormalFlipped_) : Surface3(transform_, isNormalFlipped_)
 {

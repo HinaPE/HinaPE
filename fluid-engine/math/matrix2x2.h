@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_MATRIX2X2_H_
-#define INCLUDE_JET_MATRIX2X2_H_
+#ifndef HINAPE_FLUID_ENGINE_MATRIX2X2_H_
+#define HINAPE_FLUID_ENGINE_MATRIX2X2_H_
 
 #include "matrix.h"
 #include "vector2.h"
@@ -7,7 +7,7 @@
 #include <array>
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -391,8 +391,8 @@ typedef Matrix2x2<float> Matrix2x2F;
 //! Double-type 2x2 matrix.
 typedef Matrix2x2<double> Matrix2x2D;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "matrix2x2-inl.h"
 
-#endif  // INCLUDE_JET_MATRIX2X2_H_
+#endif  // HINAPE_FLUID_ENGINE_MATRIX2X2_H_

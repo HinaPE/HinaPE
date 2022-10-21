@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_ARRAY1_H_
-#define INCLUDE_JET_ARRAY1_H_
+#ifndef HINAPE_FLUID_ENGINE_ARRAY1_H_
+#define HINAPE_FLUID_ENGINE_ARRAY1_H_
 
 #include "array.h"
 #include "array_accessor1.h"
@@ -10,7 +10,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -225,8 +225,8 @@ private:
 //! Type alias for 1-D array.
 template<typename T> using Array1 = Array<T, 1>;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "array1-inl.h"
 
-#endif  // INCLUDE_JET_ARRAY1_H_
+#endif  // HINAPE_FLUID_ENGINE_ARRAY1_H_

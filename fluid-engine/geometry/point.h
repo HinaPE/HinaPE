@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_POINT_H_
-#define INCLUDE_JET_POINT_H_
+#ifndef HINAPE_FLUID_ENGINE_POINT_H_
+#define HINAPE_FLUID_ENGINE_POINT_H_
 
 #include "macros.h"
 
 #include <array>
 #include <type_traits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -65,9 +65,9 @@ private:
     void setAt(size_t i, T v);
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "point-inl.h"
 
-#endif  // INCLUDE_JET_POINT_H_
+#endif  // HINAPE_FLUID_ENGINE_POINT_H_
 

@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_CUSTOM_IMPLICIT_SURFACE2_H_
-#define INCLUDE_JET_CUSTOM_IMPLICIT_SURFACE2_H_
+#ifndef HINAPE_FLUID_ENGINE_CUSTOM_IMPLICIT_SURFACE2_H_
+#define HINAPE_FLUID_ENGINE_CUSTOM_IMPLICIT_SURFACE2_H_
 
 #include "implicit_surface2.h"
 
 #include "field/scalar_field2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Custom 2-D implicit surface using arbitrary function.
@@ -96,6 +96,6 @@ private:
     unsigned int _maxNumOfIterations = 5;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_CUSTOM_IMPLICIT_SURFACE2_H_
+#endif  // HINAPE_FLUID_ENGINE_CUSTOM_IMPLICIT_SURFACE2_H_

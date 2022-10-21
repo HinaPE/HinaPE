@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_SURFACE_TO_IMPLICIT3_H_
-#define INCLUDE_JET_SURFACE_TO_IMPLICIT3_H_
+#ifndef HINAPE_FLUID_ENGINE_SURFACE_TO_IMPLICIT3_H_
+#define HINAPE_FLUID_ENGINE_SURFACE_TO_IMPLICIT3_H_
 
 #include "implicit_surface3.h"
 
 #include <memory>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -88,6 +88,6 @@ private:
     Surface3Ptr _surface;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_SURFACE_TO_IMPLICIT3_H_
+#endif  // HINAPE_FLUID_ENGINE_SURFACE_TO_IMPLICIT3_H_

@@ -24,7 +24,7 @@
 #include <string>
 #include <unordered_map>
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 namespace
 {

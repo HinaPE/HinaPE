@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "fdm_utils.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 Vector2D gradient2(const ConstArrayAccessor2<double> &data, const Vector2D &gridSpacing, size_t i, size_t j)
@@ -225,4 +225,4 @@ Vector3D laplacian3(const ConstArrayAccessor3<Vector3D> &data, const Vector3D &g
     return (dright - dleft) / square(gridSpacing.x) + (dup - ddown) / square(gridSpacing.y) + (dfront - dback) / square(gridSpacing.z);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine

@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_PLANE3_H_
-#define INCLUDE_JET_PLANE3_H_
+#ifndef HINAPE_FLUID_ENGINE_PLANE3_H_
+#define HINAPE_FLUID_ENGINE_PLANE3_H_
 
 #include "surface3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -80,6 +80,6 @@ private:
     Vector3D _point{0, 0, 0};
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_PLANE3_H_
+#endif  // HINAPE_FLUID_ENGINE_PLANE3_H_

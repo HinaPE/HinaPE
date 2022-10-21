@@ -8,7 +8,7 @@
 
 #include "basic_types_generated.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 namespace fbs
 {
@@ -25,13 +25,13 @@ struct PointParallelHashGridSearcher2 FLATBUFFERS_FINAL_CLASS : private flatbuff
     {
         return GetField<double>(VT_GRIDSPACING, 0.0);
     }
-    const jet::fbs::Size2 *resolution() const
+    const HinaPE::FluidEngine::fbs::Size2 *resolution() const
     {
-        return GetStruct<const jet::fbs::Size2 *>(VT_RESOLUTION);
+        return GetStruct<const HinaPE::FluidEngine::fbs::Size2 *>(VT_RESOLUTION);
     }
-    const flatbuffers::Vector<const jet::fbs::Vector2D *> *points() const
+    const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *> *points() const
     {
-        return GetPointer<const flatbuffers::Vector<const jet::fbs::Vector2D *> *>(VT_POINTS);
+        return GetPointer<const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *> *>(VT_POINTS);
     }
     const flatbuffers::Vector<uint64_t> *keys() const
     {
@@ -51,7 +51,7 @@ struct PointParallelHashGridSearcher2 FLATBUFFERS_FINAL_CLASS : private flatbuff
     }
     bool Verify(flatbuffers::Verifier &verifier) const
     {
-        return VerifyTableStart(verifier) && VerifyField<double>(verifier, VT_GRIDSPACING) && VerifyField<jet::fbs::Size2>(verifier, VT_RESOLUTION) && VerifyOffset(verifier, VT_POINTS) && verifier.Verify(points()) && VerifyOffset(verifier, VT_KEYS) &&
+        return VerifyTableStart(verifier) && VerifyField<double>(verifier, VT_GRIDSPACING) && VerifyField<HinaPE::FluidEngine::fbs::Size2>(verifier, VT_RESOLUTION) && VerifyOffset(verifier, VT_POINTS) && verifier.Verify(points()) && VerifyOffset(verifier, VT_KEYS) &&
                verifier.Verify(keys()) && VerifyOffset(verifier, VT_STARTINDEXTABLE) && verifier.Verify(startIndexTable()) && VerifyOffset(verifier, VT_ENDINDEXTABLE) && verifier.Verify(endIndexTable()) && VerifyOffset(verifier, VT_SORTEDINDICES) &&
                verifier.Verify(sortedIndices()) && verifier.EndTable();
     }
@@ -65,11 +65,11 @@ struct PointParallelHashGridSearcher2Builder
     {
         fbb_.AddElement<double>(PointParallelHashGridSearcher2::VT_GRIDSPACING, gridSpacing, 0.0);
     }
-    void add_resolution(const jet::fbs::Size2 *resolution)
+    void add_resolution(const HinaPE::FluidEngine::fbs::Size2 *resolution)
     {
         fbb_.AddStruct(PointParallelHashGridSearcher2::VT_RESOLUTION, resolution);
     }
-    void add_points(flatbuffers::Offset<flatbuffers::Vector<const jet::fbs::Vector2D *>> points)
+    void add_points(flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *>> points)
     {
         fbb_.AddOffset(PointParallelHashGridSearcher2::VT_POINTS, points);
     }
@@ -103,7 +103,7 @@ struct PointParallelHashGridSearcher2Builder
 };
 
 inline flatbuffers::Offset<PointParallelHashGridSearcher2>
-CreatePointParallelHashGridSearcher2(flatbuffers::FlatBufferBuilder &_fbb, double gridSpacing = 0.0, const jet::fbs::Size2 *resolution = 0, flatbuffers::Offset<flatbuffers::Vector<const jet::fbs::Vector2D *>> points = 0,
+CreatePointParallelHashGridSearcher2(flatbuffers::FlatBufferBuilder &_fbb, double gridSpacing = 0.0, const HinaPE::FluidEngine::fbs::Size2 *resolution = 0, flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *>> points = 0,
                                      flatbuffers::Offset<flatbuffers::Vector<uint64_t>> keys = 0, flatbuffers::Offset<flatbuffers::Vector<uint64_t>> startIndexTable = 0, flatbuffers::Offset<flatbuffers::Vector<uint64_t>> endIndexTable = 0,
                                      flatbuffers::Offset<flatbuffers::Vector<uint64_t>> sortedIndices = 0)
 {
@@ -119,29 +119,29 @@ CreatePointParallelHashGridSearcher2(flatbuffers::FlatBufferBuilder &_fbb, doubl
 }
 
 inline flatbuffers::Offset<PointParallelHashGridSearcher2>
-CreatePointParallelHashGridSearcher2Direct(flatbuffers::FlatBufferBuilder &_fbb, double gridSpacing = 0.0, const jet::fbs::Size2 *resolution = 0, const std::vector<const jet::fbs::Vector2D *> *points = nullptr, const std::vector<uint64_t> *keys = nullptr,
+CreatePointParallelHashGridSearcher2Direct(flatbuffers::FlatBufferBuilder &_fbb, double gridSpacing = 0.0, const HinaPE::FluidEngine::fbs::Size2 *resolution = 0, const std::vector<const HinaPE::FluidEngine::fbs::Vector2D *> *points = nullptr, const std::vector<uint64_t> *keys = nullptr,
                                            const std::vector<uint64_t> *startIndexTable = nullptr, const std::vector<uint64_t> *endIndexTable = nullptr, const std::vector<uint64_t> *sortedIndices = nullptr)
 {
-    return jet::fbs::CreatePointParallelHashGridSearcher2(_fbb, gridSpacing, resolution, points ? _fbb.CreateVector<const jet::fbs::Vector2D *>(*points) : 0, keys ? _fbb.CreateVector<uint64_t>(*keys) : 0,
+    return HinaPE::FluidEngine::fbs::CreatePointParallelHashGridSearcher2(_fbb, gridSpacing, resolution, points ? _fbb.CreateVector<const HinaPE::FluidEngine::fbs::Vector2D *>(*points) : 0, keys ? _fbb.CreateVector<uint64_t>(*keys) : 0,
                                                           startIndexTable ? _fbb.CreateVector<uint64_t>(*startIndexTable) : 0, endIndexTable ? _fbb.CreateVector<uint64_t>(*endIndexTable) : 0, sortedIndices ? _fbb.CreateVector<uint64_t>(*sortedIndices) : 0);
 }
 
-inline const jet::fbs::PointParallelHashGridSearcher2 *GetPointParallelHashGridSearcher2(const void *buf)
+inline const HinaPE::FluidEngine::fbs::PointParallelHashGridSearcher2 *GetPointParallelHashGridSearcher2(const void *buf)
 {
-    return flatbuffers::GetRoot<jet::fbs::PointParallelHashGridSearcher2>(buf);
+    return flatbuffers::GetRoot<HinaPE::FluidEngine::fbs::PointParallelHashGridSearcher2>(buf);
 }
 
 inline bool VerifyPointParallelHashGridSearcher2Buffer(flatbuffers::Verifier &verifier)
 {
-    return verifier.VerifyBuffer<jet::fbs::PointParallelHashGridSearcher2>(nullptr);
+    return verifier.VerifyBuffer<HinaPE::FluidEngine::fbs::PointParallelHashGridSearcher2>(nullptr);
 }
 
-inline void FinishPointParallelHashGridSearcher2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<jet::fbs::PointParallelHashGridSearcher2> root)
+inline void FinishPointParallelHashGridSearcher2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::PointParallelHashGridSearcher2> root)
 {
     fbb.Finish(root);
 }
 
 }  // namespace fbs
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #endif  // FLATBUFFERS_GENERATED_POINTPARALLELHASHGRIDSEARCHER2_JET_FBS_H_

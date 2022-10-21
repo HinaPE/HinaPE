@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_IMPLICIT_SURFACE3_H_
-#define INCLUDE_JET_IMPLICIT_SURFACE3_H_
+#ifndef HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE3_H_
+#define HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE3_H_
 
 #include "surface3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Abstract base class for 3-D implicit surface.
@@ -36,6 +36,6 @@ private:
 //! Shared pointer type for the ImplicitSurface3.
 typedef std::shared_ptr<ImplicitSurface3> ImplicitSurface3Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_IMPLICIT_SURFACE3_H_
+#endif  // HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE3_H_

@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 Sphere3::Sphere3(const Transform3 &transform_, bool isNormalFlipped_) : Surface3(transform_, isNormalFlipped_) {}
 

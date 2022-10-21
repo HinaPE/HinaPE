@@ -3,7 +3,7 @@
 
 #include "pch.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 ImplicitSurfaceSet3::ImplicitSurfaceSet3() {}
 

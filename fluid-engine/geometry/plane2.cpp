@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 Plane2::Plane2(const Transform2 &transform_, bool isNormalFlipped_) : Surface2(transform_, isNormalFlipped_) {}
 

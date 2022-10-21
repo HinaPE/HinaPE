@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_MATRIX2X2_INL_H_
-#define INCLUDE_JET_DETAIL_MATRIX2X2_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATRIX2X2_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_MATRIX2X2_INL_H_
 
 #include "matrix2x2.h"
 
@@ -9,7 +9,7 @@
 #include <cstring>
 #include <utility>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // MARK: CTOR/DTOR
@@ -371,13 +371,13 @@ T Matrix<T, 2, 2>::max() const
 template<typename T>
 T Matrix<T, 2, 2>::absmin() const
 {
-    return ::jet::absmin(::jet::absmin(_elements[0], _elements[1]), ::jet::absmin(_elements[2], _elements[3]));
+    return ::HinaPE::FluidEngine::absmin(::HinaPE::FluidEngine::absmin(_elements[0], _elements[1]), ::HinaPE::FluidEngine::absmin(_elements[2], _elements[3]));
 }
 
 template<typename T>
 T Matrix<T, 2, 2>::absmax() const
 {
-    return ::jet::absmax(::jet::absmax(_elements[0], _elements[1]), ::jet::absmax(_elements[2], _elements[3]));
+    return ::HinaPE::FluidEngine::absmax(::HinaPE::FluidEngine::absmax(_elements[0], _elements[1]), ::HinaPE::FluidEngine::absmax(_elements[2], _elements[3]));
 }
 
 template<typename T>
@@ -665,6 +665,6 @@ Matrix<T, 2, 2> operator/(T a, const Matrix<T, 2, 2> &b)
     return b.rdiv(a);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_MATRIX2X2_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX2X2_INL_H_

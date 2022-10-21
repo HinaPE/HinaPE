@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_DETAIL_FUNCTORS_INL_H_
-#define INCLUDE_JET_DETAIL_FUNCTORS_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_FUNCTORS_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_FUNCTORS_INL_H_
 
 #include "functors.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T, typename U>
@@ -25,4 +25,4 @@ constexpr T RDivides<T>::operator()(const T &a, const T &b) const
 }
 }
 
-#endif  // INCLUDE_JET_DETAIL_FUNCTORS_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_FUNCTORS_INL_H_

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_PARALLEL_INL_H_
-#define INCLUDE_JET_DETAIL_PARALLEL_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_PARALLEL_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_PARALLEL_INL_H_
 
 #include "parallel.h"
 
@@ -20,7 +20,7 @@
 #include <thread>
 #endif
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 namespace internal
@@ -468,6 +468,6 @@ void parallelSort(RandomIterator begin, RandomIterator end, ExecutionPolicy poli
     parallelSort(begin, end, std::less<typename std::iterator_traits<RandomIterator>::value_type>(), policy);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_PARALLEL_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_PARALLEL_INL_H_

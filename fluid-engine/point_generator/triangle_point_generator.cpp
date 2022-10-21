@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 void TrianglePointGenerator::forEachPoint(const BoundingBox2D &boundingBox, double spacing, const std::function<bool(const Vector2D &)> &callback) const
 {

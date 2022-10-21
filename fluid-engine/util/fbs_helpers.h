@@ -1,5 +1,5 @@
-#ifndef SRC_JET_FBS_HELPERS_H_
-#define SRC_JET_FBS_HELPERS_H_
+#ifndef HINAPE_FLUID_ENGINE_FBS_HELPERS_H_
+#define HINAPE_FLUID_ENGINE_FBS_HELPERS_H_
 
 #include "generated/basic_types_generated.h"
 
@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 inline fbs::Size2 jetToFbs(const Size2 &vec)
@@ -84,6 +84,6 @@ void deserializeGrid(FbsGridList *fbsGridList, FactoryFunc factoryFunc, std::vec
     }
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // SRC_JET_FBS_HELPERS_H_
+#endif  // HINAPE_FLUID_ENGINE_FBS_HELPERS_H_

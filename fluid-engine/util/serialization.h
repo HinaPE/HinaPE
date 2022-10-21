@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_SERIALIZATION_H_
-#define INCLUDE_JET_SERIALIZATION_H_
+#ifndef HINAPE_FLUID_ENGINE_SERIALIZATION_H_
+#define HINAPE_FLUID_ENGINE_SERIALIZATION_H_
 
 #include "array/array1.h"
 
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Abstract base class for any serializable class.
@@ -43,8 +43,8 @@ void deserialize(const std::vector<uint8_t> &buffer, std::vector<uint8_t> *data)
 template<typename T>
 void deserialize(const std::vector<uint8_t> &buffer, Array1<T> *array);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "serialization-inl.h"
 
-#endif  // INCLUDE_JET_SERIALIZATION_H_
+#endif  // HINAPE_FLUID_ENGINE_SERIALIZATION_H_

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_SURFACE3_H_
-#define INCLUDE_JET_SURFACE3_H_
+#ifndef HINAPE_FLUID_ENGINE_SURFACE3_H_
+#define HINAPE_FLUID_ENGINE_SURFACE3_H_
 
 #include "bounding_box3.h"
 #include "ray3.h"
@@ -9,7 +9,7 @@
 
 #include <memory>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Struct that represents ray-surface intersection point.
@@ -157,6 +157,6 @@ auto SurfaceBuilderBase3<T>::withTransform(const Transform3 &transform) -> T &
     return static_cast<T &>(*this);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_SURFACE3_H_
+#endif  // HINAPE_FLUID_ENGINE_SURFACE3_H_

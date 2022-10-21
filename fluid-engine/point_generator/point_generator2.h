@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_POINT_GENERATOR2_H_
-#define INCLUDE_JET_POINT_GENERATOR2_H_
+#ifndef HINAPE_FLUID_ENGINE_POINT_GENERATOR2_H_
+#define HINAPE_FLUID_ENGINE_POINT_GENERATOR2_H_
 
 #include "array/array1.h"
 #include "geometry/bounding_box2.h"
@@ -7,7 +7,7 @@
 #include <functional>
 #include <memory>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -45,6 +45,6 @@ public:
 //! Shared pointer for the PointGenerator2 type.
 typedef std::shared_ptr<PointGenerator2> PointGenerator2Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_POINT_GENERATOR2_H_
+#endif  // HINAPE_FLUID_ENGINE_POINT_GENERATOR2_H_

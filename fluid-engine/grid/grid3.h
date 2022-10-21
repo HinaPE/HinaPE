@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_GRID3_H_
-#define INCLUDE_JET_GRID3_H_
+#ifndef HINAPE_FLUID_ENGINE_GRID3_H_
+#define HINAPE_FLUID_ENGINE_GRID3_H_
 
 #include "geometry/bounding_box3.h"
 #include "array/size3.h"
@@ -12,7 +12,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -113,6 +113,6 @@ typedef std::shared_ptr<Grid3> Grid3Ptr;
 #define JET_GRID3_TYPE_NAME(DerivedClassName) \
     std::string typeName() const override { return #DerivedClassName; }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_GRID3_H_
+#endif  // HINAPE_FLUID_ENGINE_GRID3_H_

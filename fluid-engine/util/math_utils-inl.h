@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_MATH_UTILS_INL_H_
-#define INCLUDE_JET_DETAIL_MATH_UTILS_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATH_UTILS_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_MATH_UTILS_INL_H_
 
 #include "constants.h"
 
@@ -7,7 +7,7 @@
 #include <cmath>
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T>
@@ -264,6 +264,6 @@ inline T monotonicCatmullRom(const T &f0, const T &f1, const T &f2, const T &f3,
     return a3 * cubic(f) + a2 * square(f) + a1 * f + a0;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_MATH_UTILS_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATH_UTILS_INL_H_

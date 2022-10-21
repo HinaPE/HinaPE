@@ -6,7 +6,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 namespace fbs
 {
@@ -59,25 +59,25 @@ inline flatbuffers::Offset<FlatData> CreateFlatData(flatbuffers::FlatBufferBuild
 
 inline flatbuffers::Offset<FlatData> CreateFlatDataDirect(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<uint8_t> *data = nullptr)
 {
-    return jet::fbs::CreateFlatData(_fbb, data ? _fbb.CreateVector<uint8_t>(*data) : 0);
+    return HinaPE::FluidEngine::fbs::CreateFlatData(_fbb, data ? _fbb.CreateVector<uint8_t>(*data) : 0);
 }
 
-inline const jet::fbs::FlatData *GetFlatData(const void *buf)
+inline const HinaPE::FluidEngine::fbs::FlatData *GetFlatData(const void *buf)
 {
-    return flatbuffers::GetRoot<jet::fbs::FlatData>(buf);
+    return flatbuffers::GetRoot<HinaPE::FluidEngine::fbs::FlatData>(buf);
 }
 
 inline bool VerifyFlatDataBuffer(flatbuffers::Verifier &verifier)
 {
-    return verifier.VerifyBuffer<jet::fbs::FlatData>(nullptr);
+    return verifier.VerifyBuffer<HinaPE::FluidEngine::fbs::FlatData>(nullptr);
 }
 
-inline void FinishFlatDataBuffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<jet::fbs::FlatData> root)
+inline void FinishFlatDataBuffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::FlatData> root)
 {
     fbb.Finish(root);
 }
 
 }  // namespace fbs
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #endif  // FLATBUFFERS_GENERATED_FLATDATA_JET_FBS_H_

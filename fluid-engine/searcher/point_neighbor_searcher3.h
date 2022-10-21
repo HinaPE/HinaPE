@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_POINT_NEIGHBOR_SEARCHER3_H_
-#define INCLUDE_JET_POINT_NEIGHBOR_SEARCHER3_H_
+#ifndef HINAPE_FLUID_ENGINE_POINT_NEIGHBOR_SEARCHER3_H_
+#define HINAPE_FLUID_ENGINE_POINT_NEIGHBOR_SEARCHER3_H_
 
 #include "array/array_accessor1.h"
 #include "math/vector3.h"
@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -92,7 +92,7 @@ typedef std::shared_ptr<PointNeighborSearcherBuilder3> PointNeighborSearcherBuil
         return #DerivedClassName; \
     }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_POINT_NEIGHBOR_SEARCHER3_H_
+#endif  // HINAPE_FLUID_ENGINE_POINT_NEIGHBOR_SEARCHER3_H_
 

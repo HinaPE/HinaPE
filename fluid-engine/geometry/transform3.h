@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_TRANSFORM3_H_
-#define INCLUDE_JET_TRANSFORM3_H_
+#ifndef HINAPE_FLUID_ENGINE_TRANSFORM3_H_
+#define HINAPE_FLUID_ENGINE_TRANSFORM3_H_
 
 #include "bounding_box3.h"
 #include "ray3.h"
@@ -7,7 +7,7 @@
 #include "math/quaternion.h"
 #include "math/vector3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -65,8 +65,8 @@ private:
     Matrix3x3D _inverseOrientationMat3;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "transform3-inl.h"
 
-#endif  // INCLUDE_JET_TRANSFORM3_H_
+#endif  // HINAPE_FLUID_ENGINE_TRANSFORM3_H_

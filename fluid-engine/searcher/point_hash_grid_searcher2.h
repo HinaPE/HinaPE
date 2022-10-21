@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_POINT_HASH_GRID_SEARCHER2_H_
-#define INCLUDE_JET_POINT_HASH_GRID_SEARCHER2_H_
+#ifndef HINAPE_FLUID_ENGINE_POINT_HASH_GRID_SEARCHER2_H_
+#define HINAPE_FLUID_ENGINE_POINT_HASH_GRID_SEARCHER2_H_
 
 #include "point_neighbor_searcher2.h"
 
@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -179,6 +179,6 @@ private:
     double _gridSpacing = 1.0;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_POINT_HASH_GRID_SEARCHER2_H_
+#endif  // HINAPE_FLUID_ENGINE_POINT_HASH_GRID_SEARCHER2_H_

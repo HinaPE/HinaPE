@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_PLANE2_H_
-#define INCLUDE_JET_PLANE2_H_
+#ifndef HINAPE_FLUID_ENGINE_PLANE2_H_
+#define HINAPE_FLUID_ENGINE_PLANE2_H_
 
 #include "surface2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -76,6 +76,6 @@ private:
     Vector2D _point{0, 0};
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_PLANE2_H_
+#endif  // HINAPE_FLUID_ENGINE_PLANE2_H_

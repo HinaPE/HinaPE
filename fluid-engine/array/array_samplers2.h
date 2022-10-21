@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_ARRAY_SAMPLERS2_H_
-#define INCLUDE_JET_ARRAY_SAMPLERS2_H_
+#ifndef HINAPE_FLUID_ENGINE_ARRAY_SAMPLERS2_H_
+#define HINAPE_FLUID_ENGINE_ARRAY_SAMPLERS2_H_
 
 #include "array_samplers.h"
 #include "array_accessor2.h"
@@ -8,7 +8,7 @@
 
 #include <functional>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -148,8 +148,8 @@ private:
 //! Type alias for 2-D cubic array sampler.
 template<typename T, typename R> using CubicArraySampler2 = CubicArraySampler<T, R, 2>;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "array_samplers2-inl.h"
 
-#endif  // INCLUDE_JET_ARRAY_SAMPLERS2_H_
+#endif  // HINAPE_FLUID_ENGINE_ARRAY_SAMPLERS2_H_

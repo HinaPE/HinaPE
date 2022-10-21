@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_QUATERNION_H_
-#define INCLUDE_JET_QUATERNION_H_
+#ifndef HINAPE_FLUID_ENGINE_QUATERNION_H_
+#define HINAPE_FLUID_ENGINE_QUATERNION_H_
 
 #include "matrix4x4.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -195,8 +195,8 @@ typedef Quaternion<float> QuaternionF;
 //! Double-type quaternion.
 typedef Quaternion<double> QuaternionD;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "quaternion-inl.h"
 
-#endif  // INCLUDE_JET_QUATERNION_H_
+#endif  // HINAPE_FLUID_ENGINE_QUATERNION_H_

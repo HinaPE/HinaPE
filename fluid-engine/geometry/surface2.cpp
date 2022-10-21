@@ -4,7 +4,7 @@
 
 #include <utility>
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 Surface2::Surface2(Transform2 transform_, bool isNormalFlipped_) : transform(std::move(transform_)), isNormalFlipped(isNormalFlipped_) {}
 

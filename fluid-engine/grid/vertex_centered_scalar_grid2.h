@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_VERTEX_CENTERED_SCALAR_GRID2_H_
-#define INCLUDE_JET_VERTEX_CENTERED_SCALAR_GRID2_H_
+#ifndef HINAPE_FLUID_ENGINE_VERTEX_CENTERED_SCALAR_GRID2_H_
+#define HINAPE_FLUID_ENGINE_VERTEX_CENTERED_SCALAR_GRID2_H_
 
 #include "scalar_grid2.h"
 
@@ -7,7 +7,7 @@
 
 #include <utility>  // just make cpplint happy..
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -118,6 +118,6 @@ private:
     double _initialVal = 0.0;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_VERTEX_CENTERED_SCALAR_GRID2_H_
+#endif  // HINAPE_FLUID_ENGINE_VERTEX_CENTERED_SCALAR_GRID2_H_

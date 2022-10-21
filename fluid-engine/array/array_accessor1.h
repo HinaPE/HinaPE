@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_ARRAY_ACCESSOR1_H_
-#define INCLUDE_JET_ARRAY_ACCESSOR1_H_
+#ifndef HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR1_H_
+#define HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR1_H_
 
 #include "array_accessor.h"
 
 #include <utility>  // just make cpplint happy..
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -277,8 +277,8 @@ private:
 //! Type alias for 1-D const array accessor.
 template<typename T> using ConstArrayAccessor1 = ConstArrayAccessor<T, 1>;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "array_accessor1-inl.h"
 
-#endif  // INCLUDE_JET_ARRAY_ACCESSOR1_H_
+#endif  // HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR1_H_

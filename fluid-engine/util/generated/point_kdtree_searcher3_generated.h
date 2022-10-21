@@ -8,7 +8,7 @@
 
 #include "basic_types_generated.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 namespace fbs
 {
@@ -46,9 +46,9 @@ struct PointKdTreeSearcher3 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
     {
         VT_POINTS = 4, VT_NODES = 6
     };
-    const flatbuffers::Vector<const jet::fbs::Vector3D *> *points() const
+    const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector3D *> *points() const
     {
-        return GetPointer<const flatbuffers::Vector<const jet::fbs::Vector3D *> *>(VT_POINTS);
+        return GetPointer<const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector3D *> *>(VT_POINTS);
     }
     const flatbuffers::Vector<const PointKdTreeSearcherNode3 *> *nodes() const
     {
@@ -64,7 +64,7 @@ struct PointKdTreeSearcher3Builder
 {
     flatbuffers::FlatBufferBuilder &fbb_;
     flatbuffers::uoffset_t start_;
-    void add_points(flatbuffers::Offset<flatbuffers::Vector<const jet::fbs::Vector3D *>> points)
+    void add_points(flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector3D *>> points)
     {
         fbb_.AddOffset(PointKdTreeSearcher3::VT_POINTS, points);
     }
@@ -86,7 +86,7 @@ struct PointKdTreeSearcher3Builder
 };
 
 inline flatbuffers::Offset<PointKdTreeSearcher3>
-CreatePointKdTreeSearcher3(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<flatbuffers::Vector<const jet::fbs::Vector3D *>> points = 0, flatbuffers::Offset<flatbuffers::Vector<const PointKdTreeSearcherNode3 *>> nodes = 0)
+CreatePointKdTreeSearcher3(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector3D *>> points = 0, flatbuffers::Offset<flatbuffers::Vector<const PointKdTreeSearcherNode3 *>> nodes = 0)
 {
     PointKdTreeSearcher3Builder builder_(_fbb);
     builder_.add_nodes(nodes);
@@ -94,27 +94,27 @@ CreatePointKdTreeSearcher3(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Of
     return builder_.Finish();
 }
 
-inline flatbuffers::Offset<PointKdTreeSearcher3> CreatePointKdTreeSearcher3Direct(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<const jet::fbs::Vector3D *> *points = nullptr, const std::vector<const PointKdTreeSearcherNode3 *> *nodes = nullptr)
+inline flatbuffers::Offset<PointKdTreeSearcher3> CreatePointKdTreeSearcher3Direct(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<const HinaPE::FluidEngine::fbs::Vector3D *> *points = nullptr, const std::vector<const PointKdTreeSearcherNode3 *> *nodes = nullptr)
 {
-    return jet::fbs::CreatePointKdTreeSearcher3(_fbb, points ? _fbb.CreateVector<const jet::fbs::Vector3D *>(*points) : 0, nodes ? _fbb.CreateVector<const PointKdTreeSearcherNode3 *>(*nodes) : 0);
+    return HinaPE::FluidEngine::fbs::CreatePointKdTreeSearcher3(_fbb, points ? _fbb.CreateVector<const HinaPE::FluidEngine::fbs::Vector3D *>(*points) : 0, nodes ? _fbb.CreateVector<const PointKdTreeSearcherNode3 *>(*nodes) : 0);
 }
 
-inline const jet::fbs::PointKdTreeSearcher3 *GetPointKdTreeSearcher3(const void *buf)
+inline const HinaPE::FluidEngine::fbs::PointKdTreeSearcher3 *GetPointKdTreeSearcher3(const void *buf)
 {
-    return flatbuffers::GetRoot<jet::fbs::PointKdTreeSearcher3>(buf);
+    return flatbuffers::GetRoot<HinaPE::FluidEngine::fbs::PointKdTreeSearcher3>(buf);
 }
 
 inline bool VerifyPointKdTreeSearcher3Buffer(flatbuffers::Verifier &verifier)
 {
-    return verifier.VerifyBuffer<jet::fbs::PointKdTreeSearcher3>(nullptr);
+    return verifier.VerifyBuffer<HinaPE::FluidEngine::fbs::PointKdTreeSearcher3>(nullptr);
 }
 
-inline void FinishPointKdTreeSearcher3Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<jet::fbs::PointKdTreeSearcher3> root)
+inline void FinishPointKdTreeSearcher3Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::PointKdTreeSearcher3> root)
 {
     fbb.Finish(root);
 }
 
 }  // namespace fbs
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #endif  // FLATBUFFERS_GENERATED_POINTKDTREESEARCHER3_JET_FBS_H_

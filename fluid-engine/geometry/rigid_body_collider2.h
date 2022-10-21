@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_RIGID_BODY_COLLIDER2_H_
-#define INCLUDE_JET_RIGID_BODY_COLLIDER2_H_
+#ifndef HINAPE_FLUID_ENGINE_RIGID_BODY_COLLIDER2_H_
+#define HINAPE_FLUID_ENGINE_RIGID_BODY_COLLIDER2_H_
 
 #include "collider2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -66,6 +66,6 @@ private:
     double _angularVelocity = 0.0;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_RIGID_BODY_COLLIDER2_H_
+#endif  // HINAPE_FLUID_ENGINE_RIGID_BODY_COLLIDER2_H_

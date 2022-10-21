@@ -5,7 +5,7 @@
 
 #include <utility>  // just make cpplint happy..
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 CellCenteredVectorGrid2::CellCenteredVectorGrid2() {}
 

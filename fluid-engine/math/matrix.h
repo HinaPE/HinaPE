@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_MATRIX_H_
-#define INCLUDE_JET_MATRIX_H_
+#ifndef HINAPE_FLUID_ENGINE_MATRIX_H_
+#define HINAPE_FLUID_ENGINE_MATRIX_H_
 
 #include "macros.h"
 #include "matrix_expression.h"
@@ -7,7 +7,7 @@
 #include <array>
 #include <type_traits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -429,8 +429,8 @@ private:
     void setRowAt(size_t i, T v);
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "matrix-inl.h"
 
-#endif  // INCLUDE_JET_MATRIX_H_
+#endif  // HINAPE_FLUID_ENGINE_MATRIX_H_

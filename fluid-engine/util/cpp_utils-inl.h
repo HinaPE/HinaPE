@@ -4,12 +4,12 @@
 // personal capacity and am not conveying any rights to any intellectual
 // property of any third parties.
 
-#ifndef INCLUDE_JET_DETAIL_CPP_UTILS_INL_H_
-#define INCLUDE_JET_DETAIL_CPP_UTILS_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_CPP_UTILS_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_CPP_UTILS_INL_H_
 
 #include "cpp_utils.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // Source code from:
@@ -24,6 +24,6 @@ ForwardIt binaryFind(ForwardIt first, ForwardIt last, const T &value, Compare co
     first = std::lower_bound(first, last, value, comp);
     return first != last && !comp(value, *first) ? first : last;
 }
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_CPP_UTILS_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_CPP_UTILS_INL_H_

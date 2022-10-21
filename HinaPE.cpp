@@ -11,7 +11,7 @@
 #include "fluid-engine/emitter/volume_particle_emitter3.h"
 #include "fluid-engine/util/logging.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 auto main(int argc, char **argv) -> int
 {

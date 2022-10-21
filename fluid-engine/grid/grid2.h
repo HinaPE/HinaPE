@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_GRID2_H_
-#define INCLUDE_JET_GRID2_H_
+#ifndef HINAPE_FLUID_ENGINE_GRID2_H_
+#define HINAPE_FLUID_ENGINE_GRID2_H_
 
 #include "geometry/bounding_box2.h"
 #include "serialization.h"
@@ -11,7 +11,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -106,6 +106,6 @@ typedef std::shared_ptr<Grid2> Grid2Ptr;
 #define JET_GRID2_TYPE_NAME(DerivedClassName) \
     std::string typeName() const override { return #DerivedClassName; }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_GRID2_H_
+#endif  // HINAPE_FLUID_ENGINE_GRID2_H_

@@ -17,7 +17,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 ScalarGrid2::ScalarGrid2() : _linearSampler(LinearArraySampler2<double, double>(_data.constAccessor(), Vector2D(1, 1), Vector2D())) {}
 

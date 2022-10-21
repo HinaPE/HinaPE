@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <vector>
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 PointHashGridSearcher3::PointHashGridSearcher3(const Size3 &resolution, double gridSpacing) : PointHashGridSearcher3(resolution.x, resolution.y, resolution.z, gridSpacing)
 {

@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_DETAIL_SAMPLERS_INL_H_
-#define INCLUDE_JET_DETAIL_SAMPLERS_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_SAMPLERS_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_SAMPLERS_INL_H_
 
 #include "constants.h"
 #include "math_utils.h"
 #include <algorithm>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T>
@@ -66,6 +66,6 @@ inline Vector2<T> uniformSampleDisk(T u1, T u2)
     return Vector2<T>(r * std::cos(theta), r * std::sin(theta));
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_SAMPLERS_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_SAMPLERS_INL_H_

@@ -1,10 +1,10 @@
-#ifndef INCLUDE_JET_SAMPLERS_H_
-#define INCLUDE_JET_SAMPLERS_H_
+#ifndef HINAPE_FLUID_ENGINE_SAMPLERS_H_
+#define HINAPE_FLUID_ENGINE_SAMPLERS_H_
 
 #include "math/vector2.h"
 #include "math/vector3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -93,8 +93,8 @@ inline Vector3<T> uniformSampleSphere(T u1, T u2);
 template<typename T>
 inline Vector2<T> uniformSampleDisk(T u1, T u2);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "samplers-inl.h"
 
-#endif  // INCLUDE_JET_SAMPLERS_H_
+#endif  // HINAPE_FLUID_ENGINE_SAMPLERS_H_

@@ -9,7 +9,7 @@
 #include "basic_types_generated.h"
 #include "particle_system_data3_generated.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 namespace fbs
 {
@@ -22,9 +22,9 @@ struct SphSystemData3 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
     {
         VT_BASE = 4, VT_TARGETDENSITY = 6, VT_TARGETSPACING = 8, VT_KERNELRADIUSOVERTARGETSPACING = 10, VT_KERNELRADIUS = 12, VT_PRESSUREIDX = 14, VT_DENSITYIDX = 16
     };
-    const jet::fbs::ParticleSystemData3 *base() const
+    const HinaPE::FluidEngine::fbs::ParticleSystemData3 *base() const
     {
-        return GetPointer<const jet::fbs::ParticleSystemData3 *>(VT_BASE);
+        return GetPointer<const HinaPE::FluidEngine::fbs::ParticleSystemData3 *>(VT_BASE);
     }
     double targetDensity() const
     {
@@ -61,7 +61,7 @@ struct SphSystemData3Builder
 {
     flatbuffers::FlatBufferBuilder &fbb_;
     flatbuffers::uoffset_t start_;
-    void add_base(flatbuffers::Offset<jet::fbs::ParticleSystemData3> base)
+    void add_base(flatbuffers::Offset<HinaPE::FluidEngine::fbs::ParticleSystemData3> base)
     {
         fbb_.AddOffset(SphSystemData3::VT_BASE, base);
     }
@@ -103,7 +103,7 @@ struct SphSystemData3Builder
 };
 
 inline flatbuffers::Offset<SphSystemData3>
-CreateSphSystemData3(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<jet::fbs::ParticleSystemData3> base = 0, double targetDensity = 0.0, double targetSpacing = 0.0, double kernelRadiusOverTargetSpacing = 0.0, double kernelRadius = 0.0,
+CreateSphSystemData3(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::ParticleSystemData3> base = 0, double targetDensity = 0.0, double targetSpacing = 0.0, double kernelRadiusOverTargetSpacing = 0.0, double kernelRadius = 0.0,
                      uint64_t pressureIdx = 0, uint64_t densityIdx = 0)
 {
     SphSystemData3Builder builder_(_fbb);
@@ -117,22 +117,22 @@ CreateSphSystemData3(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<j
     return builder_.Finish();
 }
 
-inline const jet::fbs::SphSystemData3 *GetSphSystemData3(const void *buf)
+inline const HinaPE::FluidEngine::fbs::SphSystemData3 *GetSphSystemData3(const void *buf)
 {
-    return flatbuffers::GetRoot<jet::fbs::SphSystemData3>(buf);
+    return flatbuffers::GetRoot<HinaPE::FluidEngine::fbs::SphSystemData3>(buf);
 }
 
 inline bool VerifySphSystemData3Buffer(flatbuffers::Verifier &verifier)
 {
-    return verifier.VerifyBuffer<jet::fbs::SphSystemData3>(nullptr);
+    return verifier.VerifyBuffer<HinaPE::FluidEngine::fbs::SphSystemData3>(nullptr);
 }
 
-inline void FinishSphSystemData3Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<jet::fbs::SphSystemData3> root)
+inline void FinishSphSystemData3Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::SphSystemData3> root)
 {
     fbb.Finish(root);
 }
 
 }  // namespace fbs
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #endif  // FLATBUFFERS_GENERATED_SPHSYSTEMDATA3_JET_FBS_H_

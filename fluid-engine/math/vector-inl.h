@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_DETAIL_VECTOR_INL_H_
-#define INCLUDE_JET_DETAIL_VECTOR_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_VECTOR_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_VECTOR_INL_H_
 
 #include "vector.h"
 
 #include "macros.h"
 #include "math_utils.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T, size_t N>
@@ -204,7 +204,7 @@ T Vector<T, N>::absmin() const
     T ret = _elements.front();
     for (T val: _elements)
     {
-        ret = jet::absmin(ret, val);
+        ret = HinaPE::FluidEngine::absmin(ret, val);
     }
     return ret;
 }
@@ -215,7 +215,7 @@ T Vector<T, N>::absmax() const
     T ret = _elements.front();
     for (T val: _elements)
     {
-        ret = jet::absmax(ret, val);
+        ret = HinaPE::FluidEngine::absmax(ret, val);
     }
     return ret;
 }
@@ -603,6 +603,6 @@ void Vector<T, N>::setAt(size_t i, T v)
     _elements[i] = v;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_VECTOR_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_VECTOR_INL_H_

@@ -3,7 +3,7 @@
 
 #include "pch.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 SurfaceToImplicit3::SurfaceToImplicit3(const Surface3Ptr &surface, const Transform3 &transform, bool isNormalFlipped) : ImplicitSurface3(transform, isNormalFlipped), _surface(surface)
 {

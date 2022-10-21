@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_BOUNDING_BOX_INL_H_
-#define INCLUDE_JET_DETAIL_BOUNDING_BOX_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX_INL_H_
 
 #include "bounding_box.h"
 
@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T, size_t N>
@@ -134,6 +134,6 @@ void BoundingBox<T, N>::expand(T delta)
     }
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_BOUNDING_BOX_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX_INL_H_

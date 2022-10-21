@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_ANIMATION_H_
-#define INCLUDE_JET_ANIMATION_H_
+#ifndef HINAPE_FLUID_ENGINE_ANIMATION_H_
+#define HINAPE_FLUID_ENGINE_ANIMATION_H_
 
 #include "macros.h"
 
 #include <memory>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -83,6 +83,6 @@ protected:
 //! Shared pointer for the Animation type.
 using AnimationPtr = std::shared_ptr<Animation>;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_ANIMATION_H_
+#endif  // HINAPE_FLUID_ENGINE_ANIMATION_H_

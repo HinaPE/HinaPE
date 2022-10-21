@@ -1,11 +1,11 @@
-#ifndef SRC_JET_PHYSICS_HELPERS_H_
-#define SRC_JET_PHYSICS_HELPERS_H_
+#ifndef HINAPE_FLUID_ENGINE_PHYSICS_HELPERS_H_
+#define HINAPE_FLUID_ENGINE_PHYSICS_HELPERS_H_
 
 #include "math/vector3.h"
 
 #include <algorithm>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 inline Vector2D computeDragForce(double dragCoefficient, double radius, const Vector2D &velocity)
@@ -50,6 +50,6 @@ inline double computePressureFromEos(double density, double targetDensity, doubl
     return p;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // SRC_JET_PHYSICS_HELPERS_H_
+#endif  // HINAPE_FLUID_ENGINE_PHYSICS_HELPERS_H_

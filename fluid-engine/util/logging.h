@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_LOGGING_H_
-#define INCLUDE_JET_LOGGING_H_
+#ifndef HINAPE_FLUID_ENGINE_LOGGING_H_
+#define HINAPE_FLUID_ENGINE_LOGGING_H_
 
 #include <iostream>
 #include <sstream>
 #include <string>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Level of the logging.
@@ -100,6 +100,6 @@ extern Logger debugLogger;
     (Logger(LoggingLevel::Debug) << Logging::getHeader(LoggingLevel::Debug) \
      << "[" << __FILE__ << ":" << __LINE__ << " (" << __func__ << ")] ")
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_LOGGING_H_
+#endif  // HINAPE_FLUID_ENGINE_LOGGING_H_

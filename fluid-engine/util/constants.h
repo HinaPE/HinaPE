@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_CONSTANTS_H_
-#define INCLUDE_JET_CONSTANTS_H_
+#ifndef HINAPE_FLUID_ENGINE_CONSTANTS_H_
+#define HINAPE_FLUID_ENGINE_CONSTANTS_H_
 
 #include "macros.h"
 
 #include <cmath>
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // MARK: Zero
@@ -358,6 +358,6 @@ constexpr int kDirectionFront = 1 << 5;
 //! All direction.
 constexpr int kDirectionAll = kDirectionLeft | kDirectionRight | kDirectionDown | kDirectionUp | kDirectionBack | kDirectionFront;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_CONSTANTS_H_
+#endif  // HINAPE_FLUID_ENGINE_CONSTANTS_H_

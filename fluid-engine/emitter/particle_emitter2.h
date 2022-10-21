@@ -4,13 +4,13 @@
 // personal capacity and am not conveying any rights to any intellectual
 // property of any third parties.
 
-#ifndef INCLUDE_JET_PARTICLE_EMITTER2_H_
-#define INCLUDE_JET_PARTICLE_EMITTER2_H_
+#ifndef HINAPE_FLUID_ENGINE_PARTICLE_EMITTER2_H_
+#define HINAPE_FLUID_ENGINE_PARTICLE_EMITTER2_H_
 
 #include "animation/animation.h"
 #include "solver/particle/particle_system_data2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -77,6 +77,6 @@ private:
 //! Shared pointer for the ParticleEmitter2 type.
 typedef std::shared_ptr<ParticleEmitter2> ParticleEmitter2Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_PARTICLE_EMITTER2_H_
+#endif  // HINAPE_FLUID_ENGINE_PARTICLE_EMITTER2_H_

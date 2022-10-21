@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_NEAREST_NEIGHBOR_QUERY_ENGINE3_H_
-#define INCLUDE_JET_NEAREST_NEIGHBOR_QUERY_ENGINE3_H_
+#ifndef HINAPE_FLUID_ENGINE_NEAREST_NEIGHBOR_QUERY_ENGINE3_H_
+#define HINAPE_FLUID_ENGINE_NEAREST_NEIGHBOR_QUERY_ENGINE3_H_
 
 #include "math/vector3.h"
 
@@ -7,7 +7,7 @@
 
 #include <functional>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Nearest neighbor query result.
@@ -31,6 +31,6 @@ public:
     virtual NearestNeighborQueryResult3<T> nearest(const Vector3D &pt, const NearestNeighborDistanceFunc3<T> &distanceFunc) const = 0;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_NEAREST_NEIGHBOR_QUERY_ENGINE3_H_
+#endif  // HINAPE_FLUID_ENGINE_NEAREST_NEIGHBOR_QUERY_ENGINE3_H_

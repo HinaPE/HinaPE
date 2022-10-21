@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_IMPLICIT_TRIANGLE_MESH3_H_
-#define INCLUDE_JET_IMPLICIT_TRIANGLE_MESH3_H_
+#ifndef HINAPE_FLUID_ENGINE_IMPLICIT_TRIANGLE_MESH3_H_
+#define HINAPE_FLUID_ENGINE_IMPLICIT_TRIANGLE_MESH3_H_
 
 #include "custom_implicit_surface3.h"
 #include "implicit_surface3.h"
@@ -7,7 +7,7 @@
 
 #include "grid/vertex_centered_scalar_grid3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -85,6 +85,6 @@ private:
     double _margin = 0.2;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_IMPLICIT_TRIANGLE_MESH3_H_
+#endif  // HINAPE_FLUID_ENGINE_IMPLICIT_TRIANGLE_MESH3_H_

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_VOLUME_PARTICLE_EMITTER2_H_
-#define INCLUDE_JET_VOLUME_PARTICLE_EMITTER2_H_
+#ifndef HINAPE_FLUID_ENGINE_VOLUME_PARTICLE_EMITTER2_H_
+#define HINAPE_FLUID_ENGINE_VOLUME_PARTICLE_EMITTER2_H_
 
 #include "particle_emitter2.h"
 
@@ -14,7 +14,7 @@
 #include <memory>
 #include <random>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -235,6 +235,6 @@ private:
     uint32_t _seed = 0;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_VOLUME_PARTICLE_EMITTER2_H_
+#endif  // HINAPE_FLUID_ENGINE_VOLUME_PARTICLE_EMITTER2_H_

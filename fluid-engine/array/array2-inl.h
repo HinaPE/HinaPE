@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_ARRAY2_INL_H_
-#define INCLUDE_JET_DETAIL_ARRAY2_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_ARRAY2_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_ARRAY2_INL_H_
 
 #include "array2.h"
 
@@ -11,7 +11,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T>
@@ -339,6 +339,6 @@ Array<T, 2>::operator ConstArrayAccessor2<T>() const
     return constAccessor();
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_ARRAY2_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_ARRAY2_INL_H_

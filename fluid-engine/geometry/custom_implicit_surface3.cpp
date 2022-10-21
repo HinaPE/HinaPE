@@ -4,7 +4,7 @@
 #include "constants.h"
 #include "level_set_utils.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 CustomImplicitSurface3::CustomImplicitSurface3(const std::function<double(const Vector3D &)> &func, const BoundingBox3D &domain, double resolution, double rayMarchingResolution, unsigned int maxNumOfIterations, const Transform3 &transform, bool isNormalFlipped)
         : ImplicitSurface3(transform, isNormalFlipped), _func(func), _domain(domain), _resolution(resolution), _rayMarchingResolution(rayMarchingResolution), _maxNumOfIterations(maxNumOfIterations) {}

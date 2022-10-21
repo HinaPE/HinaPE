@@ -3,7 +3,7 @@
 
 #include "pch.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 ImplicitTriangleMesh3::ImplicitTriangleMesh3(const TriangleMesh3Ptr &mesh, size_t resolutionX, double margin, const Transform3 &transform, bool isNormalFlipped) : ImplicitSurface3(transform, isNormalFlipped), _mesh(mesh)
 {

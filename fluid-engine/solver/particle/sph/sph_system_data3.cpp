@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 SphSystemData3::SphSystemData3() : SphSystemData3(0) {}
@@ -321,4 +321,4 @@ auto SphSystemData3::operator=(const SphSystemData3 &other) -> SphSystemData3 &
     return *this;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine

@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_FIELD3_H_
-#define INCLUDE_JET_FIELD3_H_
+#ifndef HINAPE_FLUID_ENGINE_FIELD3_H_
+#define HINAPE_FLUID_ENGINE_FIELD3_H_
 
 #include <memory>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Abstract base class for 3-D fields.
@@ -17,6 +17,6 @@ public:
 
 typedef std::shared_ptr<Field3> Field3Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_FIELD3_H_
+#endif  // HINAPE_FLUID_ENGINE_FIELD3_H_

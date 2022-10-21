@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_POINT3_H_
-#define INCLUDE_JET_POINT3_H_
+#ifndef HINAPE_FLUID_ENGINE_POINT3_H_
+#define HINAPE_FLUID_ENGINE_POINT3_H_
 
 #include "point2.h"
 
 #include <algorithm>  // just make cpplint happy..
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -302,8 +302,8 @@ typedef Point3<ssize_t> Point3I;
 //! Unsigned integer-type 3D point.
 typedef Point3<size_t> Point3UI;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "point3-inl.h"
 
-#endif  // INCLUDE_JET_POINT3_H_
+#endif  // HINAPE_FLUID_ENGINE_POINT3_H_

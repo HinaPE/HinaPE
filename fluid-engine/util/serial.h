@@ -1,7 +1,7 @@
-#ifndef INCLUDE_JET_SERIAL_H_
-#define INCLUDE_JET_SERIAL_H_
+#ifndef HINAPE_FLUID_ENGINE_SERIAL_H_
+#define HINAPE_FLUID_ENGINE_SERIAL_H_
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -106,8 +106,8 @@ void serialSort(RandomIterator begin, RandomIterator end);
 template<typename RandomIterator, typename SortingFunction>
 void serialSort(RandomIterator begin, RandomIterator end, const SortingFunction &sortingFunction);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "serial-inl.h"
 
-#endif  // INCLUDE_JET_SERIAL_H_
+#endif  // HINAPE_FLUID_ENGINE_SERIAL_H_

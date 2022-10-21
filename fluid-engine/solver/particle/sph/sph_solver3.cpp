@@ -8,7 +8,7 @@
 
 #include <algorithm>
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 static double kTimeStepLimitBySpeedFactor = 0.4;
 static double kTimeStepLimitByForceFactor = 0.25;

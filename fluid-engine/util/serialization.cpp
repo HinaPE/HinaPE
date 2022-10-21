@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 void serialize(const Serializable *serializable, std::vector<uint8_t> *buffer)
@@ -43,4 +43,4 @@ void deserialize(const std::vector<uint8_t> &buffer, std::vector<uint8_t> *data)
     std::copy(fbsData->data()->begin(), fbsData->data()->end(), data->begin());
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine

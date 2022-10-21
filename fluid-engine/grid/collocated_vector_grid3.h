@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_COLLOCATED_VECTOR_GRID3_H_
-#define INCLUDE_JET_COLLOCATED_VECTOR_GRID3_H_
+#ifndef HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID3_H_
+#define HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID3_H_
 
 #include "vector_grid3.h"
 
@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! \brief Abstract base class for 3-D collocated vector grid structure.
@@ -118,6 +118,6 @@ private:
 //! Shared pointer for the CollocatedVectorGrid3 type.
 typedef std::shared_ptr<CollocatedVectorGrid3> CollocatedVectorGrid3Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_COLLOCATED_VECTOR_GRID3_H_
+#endif  // HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID3_H_

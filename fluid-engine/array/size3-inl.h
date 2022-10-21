@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_SIZE3_INL_H_
-#define INCLUDE_JET_DETAIL_SIZE3_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_SIZE3_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_SIZE3_INL_H_
 
 #include "size3.h"
 
@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <cassert>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // Constructors
@@ -301,6 +301,6 @@ inline Size3 clamp(const Size3 &v, const Size3 &low, const Size3 &high)
     return Size3(clamp(v.x, low.x, high.x), clamp(v.y, low.y, high.y), clamp(v.z, low.z, high.z));
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_SIZE3_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_SIZE3_INL_H_

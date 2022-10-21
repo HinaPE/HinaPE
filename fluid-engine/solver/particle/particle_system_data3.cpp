@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <vector>
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 static const size_t kDefaultHashGridResolution = 64;
 

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_POINT3_INL_H_
-#define INCLUDE_JET_DETAIL_POINT3_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_POINT3_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_POINT3_INL_H_
 
 #include "point3.h"
 
@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <cassert>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // Constructors
@@ -246,13 +246,13 @@ T Point<T, 3>::max() const
 template<typename T>
 T Point<T, 3>::absmin() const
 {
-    return jet::absmin(jet::absmin(x, y), z);
+    return HinaPE::FluidEngine::absmin(HinaPE::FluidEngine::absmin(x, y), z);
 }
 
 template<typename T>
 T Point<T, 3>::absmax() const
 {
-    return jet::absmax(jet::absmax(x, y), z);
+    return HinaPE::FluidEngine::absmax(HinaPE::FluidEngine::absmax(x, y), z);
 }
 
 template<typename T>
@@ -491,6 +491,6 @@ Point<T, 3> floor(const Point<T, 3> &a)
     return Point<T, 3>(std::floor(a.x), std::floor(a.y), std::floor(a.z));
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_POINT3_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_POINT3_INL_H_

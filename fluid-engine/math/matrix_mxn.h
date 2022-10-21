@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_MATRIX_MXN_H_
-#define INCLUDE_JET_MATRIX_MXN_H_
+#ifndef HINAPE_FLUID_ENGINE_MATRIX_MXN_H_
+#define HINAPE_FLUID_ENGINE_MATRIX_MXN_H_
 
 #include "matrix_expression.h"
 #include "vector_n.h"
 
 #include "array/array2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // MARK: MatrixMxN
@@ -486,8 +486,8 @@ typedef MatrixMxN<float> MatrixMxNF;
 //! Double-type M x N matrix.
 typedef MatrixMxN<double> MatrixMxND;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "matrix_mxn-inl.h"
 
-#endif  // INCLUDE_JET_MATRIX_MXN_H_
+#endif  // HINAPE_FLUID_ENGINE_MATRIX_MXN_H_

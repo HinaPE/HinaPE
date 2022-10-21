@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_MATRIX4X4_INL_H_
-#define INCLUDE_JET_DETAIL_MATRIX4X4_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATRIX4X4_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_MATRIX4X4_INL_H_
 
 #include "matrix4x4.h"
 
@@ -9,7 +9,7 @@
 #include <cstring>
 #include <utility>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // MARK: CTOR/DTOR
@@ -880,6 +880,6 @@ Matrix<T, 4, 4> operator/(T a, const Matrix<T, 4, 4> &b)
     return b.rdiv(a);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_MATRIX4X4_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX4X4_INL_H_

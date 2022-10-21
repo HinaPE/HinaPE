@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_BVH2_H_
-#define INCLUDE_JET_BVH2_H_
+#ifndef HINAPE_FLUID_ENGINE_BVH2_H_
+#define HINAPE_FLUID_ENGINE_BVH2_H_
 
 #include "query_engine/intersection_query_engine2.h"
 #include "query_engine/nearest_neighbor_query_engine2.h"
 
 #include <vector>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -118,8 +118,8 @@ private:
 
     size_t qsplit(size_t *itemIndices, size_t numItems, double pivot, uint8_t axis);
 };
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "bvh2-inl.h"
 
-#endif  // INCLUDE_JET_BVH2_H_
+#endif  // HINAPE_FLUID_ENGINE_BVH2_H_

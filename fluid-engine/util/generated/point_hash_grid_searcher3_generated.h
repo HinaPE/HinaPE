@@ -8,7 +8,7 @@
 
 #include "basic_types_generated.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 namespace fbs
 {
@@ -63,7 +63,7 @@ inline flatbuffers::Offset<PointHashGridSearcherBucket3> CreatePointHashGridSear
 
 inline flatbuffers::Offset<PointHashGridSearcherBucket3> CreatePointHashGridSearcherBucket3Direct(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<uint64_t> *data = nullptr)
 {
-    return jet::fbs::CreatePointHashGridSearcherBucket3(_fbb, data ? _fbb.CreateVector<uint64_t>(*data) : 0);
+    return HinaPE::FluidEngine::fbs::CreatePointHashGridSearcherBucket3(_fbb, data ? _fbb.CreateVector<uint64_t>(*data) : 0);
 }
 
 struct PointHashGridSearcher3 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
@@ -76,13 +76,13 @@ struct PointHashGridSearcher3 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Tab
     {
         return GetField<double>(VT_GRIDSPACING, 0.0);
     }
-    const jet::fbs::Size3 *resolution() const
+    const HinaPE::FluidEngine::fbs::Size3 *resolution() const
     {
-        return GetStruct<const jet::fbs::Size3 *>(VT_RESOLUTION);
+        return GetStruct<const HinaPE::FluidEngine::fbs::Size3 *>(VT_RESOLUTION);
     }
-    const flatbuffers::Vector<const jet::fbs::Vector3D *> *points() const
+    const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector3D *> *points() const
     {
-        return GetPointer<const flatbuffers::Vector<const jet::fbs::Vector3D *> *>(VT_POINTS);
+        return GetPointer<const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector3D *> *>(VT_POINTS);
     }
     const flatbuffers::Vector<flatbuffers::Offset<PointHashGridSearcherBucket3>> *buckets() const
     {
@@ -90,7 +90,7 @@ struct PointHashGridSearcher3 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Tab
     }
     bool Verify(flatbuffers::Verifier &verifier) const
     {
-        return VerifyTableStart(verifier) && VerifyField<double>(verifier, VT_GRIDSPACING) && VerifyField<jet::fbs::Size3>(verifier, VT_RESOLUTION) && VerifyOffset(verifier, VT_POINTS) && verifier.Verify(points()) && VerifyOffset(verifier, VT_BUCKETS) &&
+        return VerifyTableStart(verifier) && VerifyField<double>(verifier, VT_GRIDSPACING) && VerifyField<HinaPE::FluidEngine::fbs::Size3>(verifier, VT_RESOLUTION) && VerifyOffset(verifier, VT_POINTS) && verifier.Verify(points()) && VerifyOffset(verifier, VT_BUCKETS) &&
                verifier.Verify(buckets()) && verifier.VerifyVectorOfTables(buckets()) && verifier.EndTable();
     }
 };
@@ -103,11 +103,11 @@ struct PointHashGridSearcher3Builder
     {
         fbb_.AddElement<double>(PointHashGridSearcher3::VT_GRIDSPACING, gridSpacing, 0.0);
     }
-    void add_resolution(const jet::fbs::Size3 *resolution)
+    void add_resolution(const HinaPE::FluidEngine::fbs::Size3 *resolution)
     {
         fbb_.AddStruct(PointHashGridSearcher3::VT_RESOLUTION, resolution);
     }
-    void add_points(flatbuffers::Offset<flatbuffers::Vector<const jet::fbs::Vector3D *>> points)
+    void add_points(flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector3D *>> points)
     {
         fbb_.AddOffset(PointHashGridSearcher3::VT_POINTS, points);
     }
@@ -128,7 +128,7 @@ struct PointHashGridSearcher3Builder
     }
 };
 
-inline flatbuffers::Offset<PointHashGridSearcher3> CreatePointHashGridSearcher3(flatbuffers::FlatBufferBuilder &_fbb, double gridSpacing = 0.0, const jet::fbs::Size3 *resolution = 0, flatbuffers::Offset<flatbuffers::Vector<const jet::fbs::Vector3D *>> points = 0,
+inline flatbuffers::Offset<PointHashGridSearcher3> CreatePointHashGridSearcher3(flatbuffers::FlatBufferBuilder &_fbb, double gridSpacing = 0.0, const HinaPE::FluidEngine::fbs::Size3 *resolution = 0, flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector3D *>> points = 0,
                                                                                 flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<PointHashGridSearcherBucket3>>> buckets = 0)
 {
     PointHashGridSearcher3Builder builder_(_fbb);
@@ -139,28 +139,28 @@ inline flatbuffers::Offset<PointHashGridSearcher3> CreatePointHashGridSearcher3(
     return builder_.Finish();
 }
 
-inline flatbuffers::Offset<PointHashGridSearcher3> CreatePointHashGridSearcher3Direct(flatbuffers::FlatBufferBuilder &_fbb, double gridSpacing = 0.0, const jet::fbs::Size3 *resolution = 0, const std::vector<const jet::fbs::Vector3D *> *points = nullptr,
+inline flatbuffers::Offset<PointHashGridSearcher3> CreatePointHashGridSearcher3Direct(flatbuffers::FlatBufferBuilder &_fbb, double gridSpacing = 0.0, const HinaPE::FluidEngine::fbs::Size3 *resolution = 0, const std::vector<const HinaPE::FluidEngine::fbs::Vector3D *> *points = nullptr,
                                                                                       const std::vector<flatbuffers::Offset<PointHashGridSearcherBucket3>> *buckets = nullptr)
 {
-    return jet::fbs::CreatePointHashGridSearcher3(_fbb, gridSpacing, resolution, points ? _fbb.CreateVector<const jet::fbs::Vector3D *>(*points) : 0, buckets ? _fbb.CreateVector<flatbuffers::Offset<PointHashGridSearcherBucket3>>(*buckets) : 0);
+    return HinaPE::FluidEngine::fbs::CreatePointHashGridSearcher3(_fbb, gridSpacing, resolution, points ? _fbb.CreateVector<const HinaPE::FluidEngine::fbs::Vector3D *>(*points) : 0, buckets ? _fbb.CreateVector<flatbuffers::Offset<PointHashGridSearcherBucket3>>(*buckets) : 0);
 }
 
-inline const jet::fbs::PointHashGridSearcher3 *GetPointHashGridSearcher3(const void *buf)
+inline const HinaPE::FluidEngine::fbs::PointHashGridSearcher3 *GetPointHashGridSearcher3(const void *buf)
 {
-    return flatbuffers::GetRoot<jet::fbs::PointHashGridSearcher3>(buf);
+    return flatbuffers::GetRoot<HinaPE::FluidEngine::fbs::PointHashGridSearcher3>(buf);
 }
 
 inline bool VerifyPointHashGridSearcher3Buffer(flatbuffers::Verifier &verifier)
 {
-    return verifier.VerifyBuffer<jet::fbs::PointHashGridSearcher3>(nullptr);
+    return verifier.VerifyBuffer<HinaPE::FluidEngine::fbs::PointHashGridSearcher3>(nullptr);
 }
 
-inline void FinishPointHashGridSearcher3Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<jet::fbs::PointHashGridSearcher3> root)
+inline void FinishPointHashGridSearcher3Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::PointHashGridSearcher3> root)
 {
     fbb.Finish(root);
 }
 
 }  // namespace fbs
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #endif  // FLATBUFFERS_GENERATED_POINTHASHGRIDSEARCHER3_JET_FBS_H_

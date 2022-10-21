@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_VECTOR_FIELD2_H_
-#define INCLUDE_JET_VECTOR_FIELD2_H_
+#ifndef HINAPE_FLUID_ENGINE_VECTOR_FIELD2_H_
+#define HINAPE_FLUID_ENGINE_VECTOR_FIELD2_H_
 
 #include "field2.h"
 
@@ -8,7 +8,7 @@
 #include <functional>
 #include <memory>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Abstract base class for 2-D vector field.
@@ -37,6 +37,6 @@ public:
 //! Shared pointer for the VectorField2 type.
 typedef std::shared_ptr<VectorField2> VectorField2Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_VECTOR_FIELD2_H_
+#endif  // HINAPE_FLUID_ENGINE_VECTOR_FIELD2_H_

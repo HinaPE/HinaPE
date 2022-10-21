@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_TRIANGLE_MESH_TO_SDF_H_
-#define INCLUDE_JET_TRIANGLE_MESH_TO_SDF_H_
+#ifndef HINAPE_FLUID_ENGINE_TRIANGLE_MESH_TO_SDF_H_
+#define HINAPE_FLUID_ENGINE_TRIANGLE_MESH_TO_SDF_H_
 
 #include "triangle_mesh3.h"
 
 #include "grid/scalar_grid3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -23,6 +23,6 @@ namespace jet
 //!
 void triangleMeshToSdf(const TriangleMesh3 &mesh, ScalarGrid3 *sdf, const unsigned int exactBand = 1);
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_TRIANGLE_MESH_TO_SDF_H_
+#endif  // HINAPE_FLUID_ENGINE_TRIANGLE_MESH_TO_SDF_H_

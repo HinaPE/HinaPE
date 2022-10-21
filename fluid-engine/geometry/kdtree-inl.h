@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_DETAIL_KDTREE_INL_H_
-#define INCLUDE_JET_DETAIL_KDTREE_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_KDTREE_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_KDTREE_INL_H_
 
 #include "kdtree.h"
 
 #include <numeric>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T, size_t K>
@@ -340,6 +340,6 @@ size_t KdTree<T, K>::build(size_t nodeIndex, size_t *itemIndices, size_t nItems,
     return std::max(d0, d1);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_KDTREE_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_KDTREE_INL_H_

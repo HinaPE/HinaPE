@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_DETAIL_MATRIX_INL_H_
-#define INCLUDE_JET_DETAIL_MATRIX_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATRIX_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_MATRIX_INL_H_
 
 #include "matrix.h"
 
 #include "macros.h"
 #include "math_utils.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T, size_t M, size_t N>
@@ -507,7 +507,7 @@ T Matrix<T, M, N>::absmin() const
     T ret = _elements.front();
     for (auto v: _elements)
     {
-        ret = jet::absmin(ret, v);
+        ret = HinaPE::FluidEngine::absmin(ret, v);
     }
     return ret;
 }
@@ -518,7 +518,7 @@ T Matrix<T, M, N>::absmax() const
     T ret = _elements.front();
     for (auto v: _elements)
     {
-        ret = jet::absmax(ret, v);
+        ret = HinaPE::FluidEngine::absmax(ret, v);
     }
     return ret;
 }
@@ -811,6 +811,6 @@ void Matrix<T, M, N>::setRowAt(size_t i, T v)
     _elements[i] = v;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_MATRIX_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX_INL_H_

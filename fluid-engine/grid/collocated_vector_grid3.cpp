@@ -8,7 +8,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 CollocatedVectorGrid3::CollocatedVectorGrid3() : _linearSampler(_data.constAccessor(), Vector3D(1, 1, 1), Vector3D())
 {

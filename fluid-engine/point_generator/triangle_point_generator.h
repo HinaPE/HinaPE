@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_TRIANGLE_POINT_GENERATOR_H_
-#define INCLUDE_JET_TRIANGLE_POINT_GENERATOR_H_
+#ifndef HINAPE_FLUID_ENGINE_TRIANGLE_POINT_GENERATOR_H_
+#define HINAPE_FLUID_ENGINE_TRIANGLE_POINT_GENERATOR_H_
 
 #include "point_generator2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -24,6 +24,6 @@ public:
 
 typedef std::shared_ptr<TrianglePointGenerator> TrianglePointGeneratorPtr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_TRIANGLE_POINT_GENERATOR_H_
+#endif  // HINAPE_FLUID_ENGINE_TRIANGLE_POINT_GENERATOR_H_

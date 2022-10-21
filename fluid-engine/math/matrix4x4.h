@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_MATRIX4X4_H_
-#define INCLUDE_JET_MATRIX4X4_H_
+#ifndef HINAPE_FLUID_ENGINE_MATRIX4X4_H_
+#define HINAPE_FLUID_ENGINE_MATRIX4X4_H_
 
 #include "matrix3x3.h"
 #include "vector4.h"
@@ -7,7 +7,7 @@
 #include <array>
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -442,8 +442,8 @@ typedef Matrix4x4<float> Matrix4x4F;
 //! Double-type 4x4 matrix.
 typedef Matrix4x4<double> Matrix4x4D;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "matrix4x4-inl.h"
 
-#endif  // INCLUDE_JET_MATRIX4X4_H_
+#endif  // HINAPE_FLUID_ENGINE_MATRIX4X4_H_

@@ -1,7 +1,7 @@
-#ifndef INCLUDE_JET_PARALLEL_H_
-#define INCLUDE_JET_PARALLEL_H_
+#ifndef HINAPE_FLUID_ENGINE_PARALLEL_H_
+#define HINAPE_FLUID_ENGINE_PARALLEL_H_
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Execution policy tag.
@@ -211,8 +211,8 @@ void setMaxNumberOfThreads(unsigned int numThreads);
 //! Returns maximum number of threads to use.
 unsigned int maxNumberOfThreads();
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "parallel-inl.h"
 
-#endif  // INCLUDE_JET_PARALLEL_H_
+#endif  // HINAPE_FLUID_ENGINE_PARALLEL_H_

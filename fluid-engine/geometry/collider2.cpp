@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 Collider2::Collider2() {}
 

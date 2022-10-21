@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_BCC_LATTICE_POINT_GENERATOR_H_
-#define INCLUDE_JET_BCC_LATTICE_POINT_GENERATOR_H_
+#ifndef HINAPE_FLUID_ENGINE_BCC_LATTICE_POINT_GENERATOR_H_
+#define HINAPE_FLUID_ENGINE_BCC_LATTICE_POINT_GENERATOR_H_
 
 #include "point_generator3.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -28,6 +28,6 @@ public:
 //! Shared pointer type for the BccLatticePointGenerator.
 typedef std::shared_ptr<BccLatticePointGenerator> BccLatticePointGeneratorPtr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_BCC_LATTICE_POINT_GENERATOR_H_
+#endif  // HINAPE_FLUID_ENGINE_BCC_LATTICE_POINT_GENERATOR_H_

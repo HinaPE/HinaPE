@@ -8,7 +8,7 @@
 
 #include "basic_types_generated.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 namespace fbs
 {
@@ -69,7 +69,7 @@ inline flatbuffers::Offset<ScalarParticleData2> CreateScalarParticleData2(flatbu
 
 inline flatbuffers::Offset<ScalarParticleData2> CreateScalarParticleData2Direct(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<double> *data = nullptr)
 {
-    return jet::fbs::CreateScalarParticleData2(_fbb, data ? _fbb.CreateVector<double>(*data) : 0);
+    return HinaPE::FluidEngine::fbs::CreateScalarParticleData2(_fbb, data ? _fbb.CreateVector<double>(*data) : 0);
 }
 
 struct VectorParticleData2 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
@@ -78,9 +78,9 @@ struct VectorParticleData2 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
     {
         VT_DATA = 4
     };
-    const flatbuffers::Vector<const jet::fbs::Vector2D *> *data() const
+    const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *> *data() const
     {
-        return GetPointer<const flatbuffers::Vector<const jet::fbs::Vector2D *> *>(VT_DATA);
+        return GetPointer<const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *> *>(VT_DATA);
     }
     bool Verify(flatbuffers::Verifier &verifier) const
     {
@@ -92,7 +92,7 @@ struct VectorParticleData2Builder
 {
     flatbuffers::FlatBufferBuilder &fbb_;
     flatbuffers::uoffset_t start_;
-    void add_data(flatbuffers::Offset<flatbuffers::Vector<const jet::fbs::Vector2D *>> data)
+    void add_data(flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *>> data)
     {
         fbb_.AddOffset(VectorParticleData2::VT_DATA, data);
     }
@@ -109,16 +109,16 @@ struct VectorParticleData2Builder
     }
 };
 
-inline flatbuffers::Offset<VectorParticleData2> CreateVectorParticleData2(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<flatbuffers::Vector<const jet::fbs::Vector2D *>> data = 0)
+inline flatbuffers::Offset<VectorParticleData2> CreateVectorParticleData2(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *>> data = 0)
 {
     VectorParticleData2Builder builder_(_fbb);
     builder_.add_data(data);
     return builder_.Finish();
 }
 
-inline flatbuffers::Offset<VectorParticleData2> CreateVectorParticleData2Direct(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<const jet::fbs::Vector2D *> *data = nullptr)
+inline flatbuffers::Offset<VectorParticleData2> CreateVectorParticleData2Direct(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<const HinaPE::FluidEngine::fbs::Vector2D *> *data = nullptr)
 {
-    return jet::fbs::CreateVectorParticleData2(_fbb, data ? _fbb.CreateVector<const jet::fbs::Vector2D *>(*data) : 0);
+    return HinaPE::FluidEngine::fbs::CreateVectorParticleData2(_fbb, data ? _fbb.CreateVector<const HinaPE::FluidEngine::fbs::Vector2D *>(*data) : 0);
 }
 
 struct PointNeighborSearcherSerialized2 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
@@ -176,7 +176,7 @@ inline flatbuffers::Offset<PointNeighborSearcherSerialized2> CreatePointNeighbor
 
 inline flatbuffers::Offset<PointNeighborSearcherSerialized2> CreatePointNeighborSearcherSerialized2Direct(flatbuffers::FlatBufferBuilder &_fbb, const char *type = nullptr, const std::vector<uint8_t> *data = nullptr)
 {
-    return jet::fbs::CreatePointNeighborSearcherSerialized2(_fbb, type ? _fbb.CreateString(type) : 0, data ? _fbb.CreateVector<uint8_t>(*data) : 0);
+    return HinaPE::FluidEngine::fbs::CreatePointNeighborSearcherSerialized2(_fbb, type ? _fbb.CreateString(type) : 0, data ? _fbb.CreateVector<uint8_t>(*data) : 0);
 }
 
 struct ParticleNeighborList2 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
@@ -225,7 +225,7 @@ inline flatbuffers::Offset<ParticleNeighborList2> CreateParticleNeighborList2(fl
 
 inline flatbuffers::Offset<ParticleNeighborList2> CreateParticleNeighborList2Direct(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<uint64_t> *data = nullptr)
 {
-    return jet::fbs::CreateParticleNeighborList2(_fbb, data ? _fbb.CreateVector<uint64_t>(*data) : 0);
+    return HinaPE::FluidEngine::fbs::CreateParticleNeighborList2(_fbb, data ? _fbb.CreateVector<uint64_t>(*data) : 0);
 }
 
 struct ParticleSystemData2 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
@@ -354,26 +354,26 @@ inline flatbuffers::Offset<ParticleSystemData2> CreateParticleSystemData2Direct(
                                                                                 const std::vector<flatbuffers::Offset<ScalarParticleData2>> *scalarDataList = nullptr, const std::vector<flatbuffers::Offset<VectorParticleData2>> *vectorDataList = nullptr,
                                                                                 flatbuffers::Offset<PointNeighborSearcherSerialized2> neighborSearcher = 0, const std::vector<flatbuffers::Offset<ParticleNeighborList2>> *neighborLists = nullptr)
 {
-    return jet::fbs::CreateParticleSystemData2(_fbb, radius, mass, positionIdx, velocityIdx, forceIdx, scalarDataList ? _fbb.CreateVector<flatbuffers::Offset<ScalarParticleData2>>(*scalarDataList) : 0,
+    return HinaPE::FluidEngine::fbs::CreateParticleSystemData2(_fbb, radius, mass, positionIdx, velocityIdx, forceIdx, scalarDataList ? _fbb.CreateVector<flatbuffers::Offset<ScalarParticleData2>>(*scalarDataList) : 0,
                                                vectorDataList ? _fbb.CreateVector<flatbuffers::Offset<VectorParticleData2>>(*vectorDataList) : 0, neighborSearcher, neighborLists ? _fbb.CreateVector<flatbuffers::Offset<ParticleNeighborList2>>(*neighborLists) : 0);
 }
 
-inline const jet::fbs::ParticleSystemData2 *GetParticleSystemData2(const void *buf)
+inline const HinaPE::FluidEngine::fbs::ParticleSystemData2 *GetParticleSystemData2(const void *buf)
 {
-    return flatbuffers::GetRoot<jet::fbs::ParticleSystemData2>(buf);
+    return flatbuffers::GetRoot<HinaPE::FluidEngine::fbs::ParticleSystemData2>(buf);
 }
 
 inline bool VerifyParticleSystemData2Buffer(flatbuffers::Verifier &verifier)
 {
-    return verifier.VerifyBuffer<jet::fbs::ParticleSystemData2>(nullptr);
+    return verifier.VerifyBuffer<HinaPE::FluidEngine::fbs::ParticleSystemData2>(nullptr);
 }
 
-inline void FinishParticleSystemData2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<jet::fbs::ParticleSystemData2> root)
+inline void FinishParticleSystemData2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::ParticleSystemData2> root)
 {
     fbb.Finish(root);
 }
 
 }  // namespace fbs
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #endif  // FLATBUFFERS_GENERATED_PARTICLESYSTEMDATA2_JET_FBS_H_

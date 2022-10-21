@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_RIGID_BODY_COLLIDER3_H_
-#define INCLUDE_JET_RIGID_BODY_COLLIDER3_H_
+#ifndef HINAPE_FLUID_ENGINE_RIGID_BODY_COLLIDER3_H_
+#define HINAPE_FLUID_ENGINE_RIGID_BODY_COLLIDER3_H_
 
 #include "collider3.h"
 
 #include "math/quaternion.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -68,6 +68,6 @@ private:
     Vector3D _angularVelocity{0, 0, 0};
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_RIGID_BODY_COLLIDER3_H_
+#endif  // HINAPE_FLUID_ENGINE_RIGID_BODY_COLLIDER3_H_

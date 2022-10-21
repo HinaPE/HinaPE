@@ -5,7 +5,7 @@
 
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 ParticleEmitter3::ParticleEmitter3() {}
@@ -48,4 +48,4 @@ void ParticleEmitter3::setOnBeginUpdateCallback(const OnBeginUpdateCallback &cal
     _onBeginUpdateCallback = callback;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine

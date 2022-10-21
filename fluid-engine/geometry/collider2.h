@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_COLLIDER2_H_
-#define INCLUDE_JET_COLLIDER2_H_
+#ifndef HINAPE_FLUID_ENGINE_COLLIDER2_H_
+#define HINAPE_FLUID_ENGINE_COLLIDER2_H_
 
 #include "surface2.h"
 
 #include <functional>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -104,6 +104,6 @@ private:
 //! Shared pointer type for the Collider2.
 typedef std::shared_ptr<Collider2> Collider2Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_COLLIDER2_H_
+#endif  // HINAPE_FLUID_ENGINE_COLLIDER2_H_

@@ -12,7 +12,7 @@
 #include <iostream>
 #include <filesystem>
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 void saveParticleAsPos(const ParticleSystemData3Ptr &particles, const std::string &rootDir, int frameCnt)
 {

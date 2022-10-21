@@ -9,7 +9,7 @@
 #include <iostream>
 #include <utility>  // just make cpplint happy..
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 Grid2::Grid2() {}
 

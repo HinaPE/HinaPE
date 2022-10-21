@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_SCALAR_FIELD3_H_
-#define INCLUDE_JET_SCALAR_FIELD3_H_
+#ifndef HINAPE_FLUID_ENGINE_SCALAR_FIELD3_H_
+#define HINAPE_FLUID_ENGINE_SCALAR_FIELD3_H_
 
 #include "field3.h"
 
@@ -8,7 +8,7 @@
 #include <functional>
 #include <memory>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! Abstract base class for 3-D scalar field.
@@ -37,6 +37,6 @@ public:
 //! Shared pointer for the ScalarField3 type.
 typedef std::shared_ptr<ScalarField3> ScalarField3Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_SCALAR_FIELD3_H_
+#endif  // HINAPE_FLUID_ENGINE_SCALAR_FIELD3_H_

@@ -1,11 +1,11 @@
-#ifndef INCLUDE_JET_RAY2_H_
-#define INCLUDE_JET_RAY2_H_
+#ifndef HINAPE_FLUID_ENGINE_RAY2_H_
+#define HINAPE_FLUID_ENGINE_RAY2_H_
 
 #include "ray.h"
 
 #include "math/vector2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -47,8 +47,8 @@ typedef Ray2<float> Ray2F;
 //! Double-type 2-D ray.
 typedef Ray2<double> Ray2D;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "ray2-inl.h"
 
-#endif  // INCLUDE_JET_RAY2_H_
+#endif  // HINAPE_FLUID_ENGINE_RAY2_H_

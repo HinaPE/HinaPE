@@ -1,9 +1,9 @@
-#ifndef INCLUDE_JET_CONSTANT_SCALAR_FIELD2_H_
-#define INCLUDE_JET_CONSTANT_SCALAR_FIELD2_H_
+#ifndef HINAPE_FLUID_ENGINE_CONSTANT_SCALAR_FIELD2_H_
+#define HINAPE_FLUID_ENGINE_CONSTANT_SCALAR_FIELD2_H_
 
 #include "scalar_field2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //! 2-D constant scalar field.
@@ -50,6 +50,6 @@ private:
     double _value = 0.0;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_CONSTANT_SCALAR_FIELD2_H_
+#endif  // HINAPE_FLUID_ENGINE_CONSTANT_SCALAR_FIELD2_H_

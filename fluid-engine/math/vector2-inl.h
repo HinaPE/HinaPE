@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_VECTOR2_INL_H_
-#define INCLUDE_JET_DETAIL_VECTOR2_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_VECTOR2_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_VECTOR2_INL_H_
 
 #include "vector2.h"
 
@@ -9,7 +9,7 @@
 #include <algorithm>  // just make cpplint happy..
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 // Constructors
@@ -258,13 +258,13 @@ T Vector<T, 2>::max() const
 template<typename T>
 T Vector<T, 2>::absmin() const
 {
-    return jet::absmin(x, y);
+    return HinaPE::FluidEngine::absmin(x, y);
 }
 
 template<typename T>
 T Vector<T, 2>::absmax() const
 {
-    return jet::absmax(x, y);
+    return HinaPE::FluidEngine::absmax(x, y);
 }
 
 template<typename T>
@@ -592,6 +592,6 @@ Vector<T, 2> monotonicCatmullRom(const Vector<T, 2> &v0, const Vector<T, 2> &v1,
     return a3 * cubic(f) + a2 * square(f) + a1 * f + a0;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_VECTOR2_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_VECTOR2_INL_H_

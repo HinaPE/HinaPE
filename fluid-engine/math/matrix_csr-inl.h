@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_MATRIX_CSR_INL_H_
-#define INCLUDE_JET_DETAIL_MATRIX_CSR_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATRIX_CSR_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_MATRIX_CSR_INL_H_
 
 #include "matrix_csr.h"
 
@@ -9,7 +9,7 @@
 
 #include <numeric>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T, typename VE>
@@ -734,10 +734,10 @@ T MatrixCsr<T>::absmin() const
         T result = init;
         for (size_t i = start; i < end; ++i)
         {
-            result = jet::absmin(result, _nonZeros[i]);
+            result = HinaPE::FluidEngine::absmin(result, _nonZeros[i]);
         }
         return result;
-    }, jet::absmin<T>);
+    }, HinaPE::FluidEngine::absmin<T>);
 }
 
 template<typename T>
@@ -748,10 +748,10 @@ T MatrixCsr<T>::absmax() const
         T result = init;
         for (size_t i = start; i < end; ++i)
         {
-            result = jet::absmax(result, _nonZeros[i]);
+            result = HinaPE::FluidEngine::absmax(result, _nonZeros[i]);
         }
         return result;
-    }, jet::absmax<T>);
+    }, HinaPE::FluidEngine::absmax<T>);
 }
 
 template<typename T>
@@ -1058,6 +1058,6 @@ MatrixCsr <T> operator/(T a, const MatrixCsr <T> &b)
     return b.rdiv(a);
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_MATRIX_CSR_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX_CSR_INL_H_

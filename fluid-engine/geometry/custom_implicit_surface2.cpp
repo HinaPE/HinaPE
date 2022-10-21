@@ -4,7 +4,7 @@
 #include "level_set_utils.h"
 #include "pch.h"
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 CustomImplicitSurface2::CustomImplicitSurface2(const std::function<double(const Vector2D &)> &func, const BoundingBox2D &domain, double resolution, double rayMarchingResolution, unsigned int maxNumOfIterations, const Transform2 &transform, bool isNormalFlipped)
         : ImplicitSurface2(transform, isNormalFlipped), _func(func), _domain(domain), _resolution(resolution), _rayMarchingResolution(rayMarchingResolution), _maxNumOfIterations(maxNumOfIterations) {}

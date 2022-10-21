@@ -9,7 +9,7 @@
 #include "basic_types_generated.h"
 #include "particle_system_data2_generated.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 namespace fbs
 {
@@ -22,9 +22,9 @@ struct SphSystemData2 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
     {
         VT_BASE = 4, VT_TARGETDENSITY = 6, VT_TARGETSPACING = 8, VT_KERNELRADIUSOVERTARGETSPACING = 10, VT_KERNELRADIUS = 12, VT_PRESSUREIDX = 14, VT_DENSITYIDX = 16
     };
-    const jet::fbs::ParticleSystemData2 *base() const
+    const HinaPE::FluidEngine::fbs::ParticleSystemData2 *base() const
     {
-        return GetPointer<const jet::fbs::ParticleSystemData2 *>(VT_BASE);
+        return GetPointer<const HinaPE::FluidEngine::fbs::ParticleSystemData2 *>(VT_BASE);
     }
     double targetDensity() const
     {
@@ -61,7 +61,7 @@ struct SphSystemData2Builder
 {
     flatbuffers::FlatBufferBuilder &fbb_;
     flatbuffers::uoffset_t start_;
-    void add_base(flatbuffers::Offset<jet::fbs::ParticleSystemData2> base)
+    void add_base(flatbuffers::Offset<HinaPE::FluidEngine::fbs::ParticleSystemData2> base)
     {
         fbb_.AddOffset(SphSystemData2::VT_BASE, base);
     }
@@ -103,7 +103,7 @@ struct SphSystemData2Builder
 };
 
 inline flatbuffers::Offset<SphSystemData2>
-CreateSphSystemData2(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<jet::fbs::ParticleSystemData2> base = 0, double targetDensity = 0.0, double targetSpacing = 0.0, double kernelRadiusOverTargetSpacing = 0.0, double kernelRadius = 0.0,
+CreateSphSystemData2(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::ParticleSystemData2> base = 0, double targetDensity = 0.0, double targetSpacing = 0.0, double kernelRadiusOverTargetSpacing = 0.0, double kernelRadius = 0.0,
                      uint64_t pressureIdx = 0, uint64_t densityIdx = 0)
 {
     SphSystemData2Builder builder_(_fbb);
@@ -117,22 +117,22 @@ CreateSphSystemData2(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<j
     return builder_.Finish();
 }
 
-inline const jet::fbs::SphSystemData2 *GetSphSystemData2(const void *buf)
+inline const HinaPE::FluidEngine::fbs::SphSystemData2 *GetSphSystemData2(const void *buf)
 {
-    return flatbuffers::GetRoot<jet::fbs::SphSystemData2>(buf);
+    return flatbuffers::GetRoot<HinaPE::FluidEngine::fbs::SphSystemData2>(buf);
 }
 
 inline bool VerifySphSystemData2Buffer(flatbuffers::Verifier &verifier)
 {
-    return verifier.VerifyBuffer<jet::fbs::SphSystemData2>(nullptr);
+    return verifier.VerifyBuffer<HinaPE::FluidEngine::fbs::SphSystemData2>(nullptr);
 }
 
-inline void FinishSphSystemData2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<jet::fbs::SphSystemData2> root)
+inline void FinishSphSystemData2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::SphSystemData2> root)
 {
     fbb.Finish(root);
 }
 
 }  // namespace fbs
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #endif  // FLATBUFFERS_GENERATED_SPHSYSTEMDATA2_JET_FBS_H_

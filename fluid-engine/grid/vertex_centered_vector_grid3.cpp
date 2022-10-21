@@ -7,7 +7,7 @@
 
 #include <utility>  // just make cpplint happy..
 
-using namespace jet;
+using namespace HinaPE::FluidEngine;
 
 VertexCenteredVectorGrid3::VertexCenteredVectorGrid3() {}
 

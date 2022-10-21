@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_MACROS_H_
-#define INCLUDE_JET_MACROS_H_
+#ifndef HINAPE_FLUID_ENGINE_MACROS_H_
+#define HINAPE_FLUID_ENGINE_MACROS_H_
 
 #if defined(_WIN32) || defined(_WIN64)
 #   define JET_WINDOWS
@@ -88,4 +88,4 @@ using ssize_t = SSIZE_T;
 #endif
 #endif
 
-#endif  // INCLUDE_JET_MACROS_H_
+#endif  // HINAPE_FLUID_ENGINE_MACROS_H_

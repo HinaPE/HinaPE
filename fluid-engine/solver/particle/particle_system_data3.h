@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_PARTICLE_SYSTEM_DATA3_H_
-#define INCLUDE_JET_PARTICLE_SYSTEM_DATA3_H_
+#ifndef HINAPE_FLUID_ENGINE_PARTICLE_SYSTEM_DATA3_H_
+#define HINAPE_FLUID_ENGINE_PARTICLE_SYSTEM_DATA3_H_
 
 #include "searcher/point_neighbor_searcher3.h"
 #include "array/array1.h"
@@ -20,7 +20,7 @@ struct Offset;
 
 }
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 namespace fbs
 {
@@ -32,7 +32,7 @@ struct ParticleSystemData3;
 
 #endif  // JET_DOXYGEN
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -237,6 +237,6 @@ private:
 //! Shared pointer type of ParticleSystemData3.
 typedef std::shared_ptr<ParticleSystemData3> ParticleSystemData3Ptr;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_PARTICLE_SYSTEM_DATA3_H_
+#endif  // HINAPE_FLUID_ENGINE_PARTICLE_SYSTEM_DATA3_H_

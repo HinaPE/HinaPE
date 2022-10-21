@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_SPH_SYSTEM_DATA3_H_
-#define INCLUDE_JET_SPH_SYSTEM_DATA3_H_
+#ifndef HINAPE_FLUID_ENGINE_SPH_SYSTEM_DATA3_H_
+#define HINAPE_FLUID_ENGINE_SPH_SYSTEM_DATA3_H_
 
 #include "../particle_system_data3.h"
 
@@ -8,7 +8,7 @@
 #include <vector>
 #include <limits>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -188,6 +188,6 @@ private:
 //! Shared pointer for the SphSystemData3 type.
 using SphSystemData3Ptr = std::shared_ptr<SphSystemData3>;
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_SPH_SYSTEM_DATA3_H_
+#endif  // HINAPE_FLUID_ENGINE_SPH_SYSTEM_DATA3_H_

@@ -12,7 +12,7 @@
 
 static unsigned int sMaxNumberOfThreads = std::thread::hardware_concurrency();
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 void setMaxNumberOfThreads(unsigned int numThreads)
@@ -33,4 +33,4 @@ void setMaxNumberOfThreads(unsigned int numThreads)
 
 unsigned int maxNumberOfThreads() { return sMaxNumberOfThreads; }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine

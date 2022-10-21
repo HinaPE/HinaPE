@@ -1,5 +1,5 @@
-#ifndef INCLUDE_JET_DETAIL_BVH2_INL_H_
-#define INCLUDE_JET_DETAIL_BVH2_INL_H_
+#ifndef HINAPE_FLUID_ENGINE_DETAIL_BVH2_INL_H_
+#define HINAPE_FLUID_ENGINE_DETAIL_BVH2_INL_H_
 
 #include "bvh2.h"
 
@@ -8,7 +8,7 @@
 
 #include <numeric>
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 template<typename T>
@@ -672,6 +672,6 @@ size_t Bvh2<T>::qsplit(size_t *itemIndices, size_t numItems, double pivot, uint8
     return ret;
 }
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
-#endif  // INCLUDE_JET_DETAIL_BVH2_INL_H_
+#endif  // HINAPE_FLUID_ENGINE_DETAIL_BVH2_INL_H_

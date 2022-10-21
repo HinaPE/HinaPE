@@ -1,12 +1,12 @@
-#ifndef INCLUDE_JET_TRANSFORM2_H_
-#define INCLUDE_JET_TRANSFORM2_H_
+#ifndef HINAPE_FLUID_ENGINE_TRANSFORM2_H_
+#define HINAPE_FLUID_ENGINE_TRANSFORM2_H_
 
 #include "bounding_box2.h"
 #include "ray2.h"
 
 #include "math/vector2.h"
 
-namespace jet
+namespace HinaPE::FluidEngine
 {
 
 //!
@@ -64,8 +64,8 @@ private:
     double _sinAngle = 0.0;
 };
 
-}  // namespace jet
+}  // namespace HinaPE::FluidEngine
 
 #include "transform2-inl.h"
 
-#endif  // INCLUDE_JET_TRANSFORM2_H_
+#endif  // HINAPE_FLUID_ENGINE_TRANSFORM2_H_
