@@ -7,8 +7,10 @@
 #include "platform/platform.h"
 #include "scene/renderer.h"
 
-App::App(const Launch_Settings& set, Platform *plt) : window_dim(plt ? plt->window_draw() : Vec2{1.0f}), camera(plt ? plt->window_draw() : Vec2{1.0f}), plt(plt),
-                                               scene(Gui::n_Widget_IDs), gui(scene, plt ? plt->window_size() : Vec2{1.0f}), undo(scene, gui)
+#include <iostream>
+
+App::App(const Launch_Settings &set, Platform *plt) : window_dim(plt ? plt->window_draw() : Vec2{1.0f}), camera(plt ? plt->window_draw() : Vec2{1.0f}), plt(plt),
+                                                      scene(Gui::n_Widget_IDs), gui(scene, plt ? plt->window_size() : Vec2{1.0f}), undo(scene, gui)
 {
     if (!set.headless)
         assert(plt);
@@ -58,8 +60,6 @@ App::App(const Launch_Settings& set, Platform *plt) : window_dim(plt ? plt->wind
             Hina_info("Built scene in %.2fs, rendered in %.2fs", build, render);
         }
     }
-
-    custom_UI();
 }
 
 App::~App()
@@ -273,6 +273,7 @@ void App::apply_window_dim(Vec2 new_dim)
     Renderer::get().update_dim(window_dim);
 }
 
+/*
 void App::custom_UI()
 {
     gui.register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) -> Gui::Mode
@@ -326,4 +327,15 @@ void App::custom_UI()
                                      ImGui::PopID();
                                  }
                              });
+}*/
+
+void App::register_custom_simulation_sidebarUI(std::function<void(Gui::Manager &, Scene &, Undo &, Gui::Widgets &, Scene_Maybe, int &)> &&func)
+{
+    gui.register_simulate_UI(std::move(func));
+}
+
+//template<typename AnyParticleSystemPtr>
+void App::register_particle_system_data(void *_data_ptr, size_t)
+{
+
 }

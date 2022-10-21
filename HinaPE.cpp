@@ -14,7 +14,7 @@
 using namespace HinaPE::FluidEngine;
 
 auto main(int argc, char **argv) -> int
-{/*
+{
     // Init Fluid Engine
     Logging::mute();
 
@@ -42,14 +42,14 @@ auto main(int argc, char **argv) -> int
     for (Frame frame(0, 1.0 / 60.0); frame.index < 100; ++frame)
     {
 //        solver->update(frame);
-        std::cout << "Advance a frame: " << frame.index << std::endl;
-    }*/
+    }
 
     // Init Render Engine
     RNG::seed();
     Launch_Settings set;
     Platform platform;
     App app(set, &platform);
+    app.register_particle_system_data(particles->positions().data(), particles->numberOfParticles());
     platform.loop(app);
 
     return 0;
