@@ -144,15 +144,14 @@ FOREACH(subdir ${SUBDIRS})
 ENDFOREACH()
 
 # Load Fluid Engine
-if (FluidEngineOption)
+#if (FluidEngineOption)
     add_subdirectory(../fluid-engine ${CMAKE_BINARY_DIR}/fluid-engine)
     target_include_directories(HinaPE_Render_Engine PUBLIC "../fluid-engine" "../fluid-engine/util")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
     if (RenderEngineOption)
         target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
     endif ()
-    add_definitions(-DHinaFluidEngine)
-endif ()
+#endif ()
 
 # Render Engine Test Part
 add_executable(HinaPE_Render_Engine_Test main.cpp)

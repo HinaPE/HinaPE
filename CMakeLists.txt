@@ -8,7 +8,6 @@ set_target_properties(HinaPE PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 option(RenderEngineOption "Enable Render Engine(Default: ON)" ON)
 option(FluidEngineOption ON)
 add_subdirectory(render-engine)
-add_definitions(-DHinaFluidEngine)
 target_link_libraries(HinaPE PUBLIC HinaPE_Render_Engine)
 
 if (APPLE)
