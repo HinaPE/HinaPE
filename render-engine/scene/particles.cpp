@@ -186,7 +186,7 @@ void Scene_Particles::step2(const PT::Object &scene, float dt)
 
 void Scene_Particles::step3(const PT::Object &scene, float dt)
 {
-    auto size = solver_ptr->sphSystemData()->numberOfParticles();
+    auto size = solver_ptr->particleSystemData()->numberOfParticles();
     particles.resize(size);
 
     static HinaPE::FluidEngine::Frame frame(0, 1.0 / 60.0);
@@ -195,15 +195,39 @@ void Scene_Particles::step3(const PT::Object &scene, float dt)
     // consider double buffering
     for (int i = 0; i < size; ++i)
     {
-        auto &p = solver_ptr->sphSystemData()->positions()[i];
+        auto const &data = std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(solver_ptr)->sphSystemData();
+        auto &p = data->positions()[i];
         particles[i].pos = Vec3((float) p[0], (float) p[1], (float) p[2]);
     }
 }
 
-void Scene_Particles::load(std::shared_ptr<HinaPE::FluidEngine::SphSolver3> _solver_ptr)
+void Scene_Particles::load_solver()
 {
-    solver_ptr = std::move(_solver_ptr);
-    particles.resize(solver_ptr->sphSystemData()->numberOfParticles());
+    if (!emitter_ptr_list.empty() && !collider_ptr_list.empty() && !particles_domain.isEmpty() && !solver_prepared)
+    {
+        solver_ptr = HinaPE::FluidEngine::SphSolver3::builder().withTargetDensity(fluid_opt.target_density).withTargetSpacing(fluid_opt.target_spacing).makeShared();
+        solver_ptr->setEmitter(emitter_ptr_list.back()); // TODO: to support more emitter
+        solver_ptr->setCollider(collider_ptr_list.back()); // TODO: to support more collider
+        if (fluid_opt.type == SPH){
+            std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(solver_ptr)->setPseudoViscosityCoefficient(fluid_opt.pseudo_viscosity_coefficient);
+        }
+        solver_prepared = true;
+    }
+}
+
+void Scene_Particles::add_emitter(std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3> _emitter_ptr)
+{
+    emitter_ptr_list.emplace_back(_emitter_ptr); // use copy for shared ptr
+}
+
+void Scene_Particles::add_collider(std::shared_ptr<HinaPE::FluidEngine::Collider3> _collider_ptr)
+{
+    collider_ptr_list.emplace_back(_collider_ptr); // use copy for shared ptr
+}
+
+void Scene_Particles::assign_particles_domain(const HinaPE::FluidEngine::BoundingBox3D &_domain)
+{
+    particles_domain = _domain;
 }
 
 void Scene_Particles::Anim_Particles::at(float t, Scene_Particles::Options &o) const

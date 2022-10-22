@@ -5,8 +5,6 @@ add_executable(HinaPE HinaPE.cpp)
 set_target_properties(HinaPE PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 
 # Load render-engine
-option(RenderEngineOption "Enable Render Engine(Default: ON)" ON)
-option(FluidEngineOption ON)
 add_subdirectory(render-engine)
 target_link_libraries(HinaPE PUBLIC HinaPE_Render_Engine)
 

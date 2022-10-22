@@ -2,6 +2,8 @@
 #define HINAPE_PARTICLES_H
 
 #include "solver/particle/sph/sph_solver3.h"
+#include "emitter/particle_emitter3.h"
+#include "geometry/collider3.h"
 
 #include <vector>
 
@@ -99,9 +101,30 @@ private:
     float last_update = 0.0f;
     double particle_cooldown = 0.0f;
 
-public: // Temp
-    void load(std::shared_ptr<HinaPE::FluidEngine::SphSolver3> _solver_ptr);
-    std::shared_ptr<HinaPE::FluidEngine::SphSolver3> solver_ptr;
+public: // Particle System
+    void load_solver();
+    void add_emitter(std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3>);
+    void add_collider(std::shared_ptr<HinaPE::FluidEngine::Collider3>);
+    void assign_particles_domain(const HinaPE::FluidEngine::BoundingBox3D &box);
+    enum FluidType
+    {
+        SPH
+    };
+    struct FluidOpt
+    {
+        float target_density = 1000.f;
+        float target_spacing = 0.02f;
+
+        FluidType type = SPH;
+        // SPH Field
+        float pseudo_viscosity_coefficient = 0.f;
+    };
+    FluidOpt fluid_opt;
+    bool solver_prepared = false;
+    std::shared_ptr<HinaPE::FluidEngine::ParticleSystemSolver3> solver_ptr;
+    std::vector<std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3>> emitter_ptr_list;
+    std::vector<std::shared_ptr<HinaPE::FluidEngine::Collider3>> collider_ptr_list;
+    HinaPE::FluidEngine::BoundingBox3D particles_domain;
 };
 
 auto operator!=(const Scene_Particles::Options &l, const Scene_Particles::Options &r) -> bool;
