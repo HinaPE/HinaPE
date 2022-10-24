@@ -11,7 +11,7 @@ file(GLOB_RECURSE HINA_CLOTH_ENGINE_SRC
 
 add_library(HinaPE_Cloth_Engine ${HINA_CLOTH_ENGINE_SRC})
 set_target_properties(HinaPE_Cloth_Engine PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-target_include_directories(HinaPE_Fluid_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/util)
+target_include_directories(HinaPE_Cloth_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories("util")
 
 get_directory_property(HINA_CLOTH_ENGINE_PARENT_DIR PARENT_DIRECTORY)
