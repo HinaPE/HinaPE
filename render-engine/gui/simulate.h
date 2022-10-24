@@ -40,6 +40,7 @@ public:
     auto UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj) -> Mode;
 
     bool running = false;
+    bool running_one_frame = false;
 
 private:
     PT::Object scene_obj;

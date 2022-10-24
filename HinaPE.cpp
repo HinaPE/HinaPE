@@ -70,7 +70,7 @@ auto main(int argc, char **argv) -> int
                                  auto plane = Plane3::builder().withNormal({0, 1, 0}).withPoint({0, 0.25 * sp->particles_domain.height(), 0}).makeShared();
                                  auto sphere = Sphere3::builder().withCenter(sp->particles_domain.midPoint()).withRadius(0.15 * sp->particles_domain.width()).makeShared();
                                  auto surfaceSet = ImplicitSurfaceSet3::builder().withExplicitSurfaces({plane, sphere}).makeShared();
-                                 auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(sp->fluid_opt.target_spacing).withMaxRegion(sp->particles_domain).withMaxNumberOfParticles(10000).withIsOneShot(
+                                 auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(sp->fluid_opt.target_spacing).withMaxRegion(sp->particles_domain).withMaxNumberOfParticles(100000).withIsOneShot(
                                          false).makeShared();
                                  sp->add_emitter(emitter);
 

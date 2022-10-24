@@ -77,9 +77,9 @@ bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
     if (key.sym == SDLK_BACKSPACE && key.mod & KMOD_GUI)
     {
 #else
-        Uint16 mod = KMOD_CTRL;
-        if (key.sym == SDLK_DELETE)
-        {
+    Uint16 mod = KMOD_CTRL;
+    if (key.sym == SDLK_DELETE)
+    {
 #endif
         if (layout.selected())
         {
@@ -749,8 +749,7 @@ void Manager::UIsidebar(Scene &scene, Undo &undo, float menu_height, Camera &cam
         if (wrap_button("Clear"))
         {
             std::vector<Scene_ID> ids;
-            scene.for_items([&](Scene_Item &item)
-                            { ids.push_back(item.id()); });
+            scene.for_items([&](Scene_Item &item) { ids.push_back(item.id()); });
             for (auto id: ids)
                 undo.del_obj(id);
             undo.bundle_last(ids.size());
@@ -1382,13 +1381,14 @@ void Manager::UIbig_sim_button(Scene &scene, Undo &undo)
     ImGui::Begin("Sim", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
     static std::string Sim = "Simulate";
+    static std::string SimOneFrame = "1 Frame";
     static std::string Stop = "Stop";
 
-    //    static const ImVec4 pressColor { 0.5f, 0, 0, 1.0f };
-    //    ImGui::PushStyleColor(ImGuiCol_Button, pressColor);
     if (ImGui::Button(simulate.running ? Stop.c_str() : Sim.c_str(), ImVec2(70, 30)))
         simulate.running = !simulate.running;
-    //    ImGui::PopStyleColor(1);
+
+    if (ImGui::Button(SimOneFrame.c_str(), ImVec2(70, 30)))
+        simulate.running_one_frame = true;
 
     ImGui::End();
 }
@@ -1612,10 +1612,18 @@ void Manager::render_3d(Scene &scene, Undo &undo, Camera &camera)
     if (mode != Mode::model && mode != Mode::rig)
     {
 
-        if (mode != Mode::animate && !animate.playing_or_rendering() && simulate.running)
-            simulate.update(scene, undo);
-        else
-            simulate.update_time();
+        if (mode != Mode::animate && !animate.playing_or_rendering())
+        {
+            if (simulate.running)
+                simulate.update(scene, undo);
+            else if (simulate.running_one_frame)
+            {
+                simulate.update(scene, undo);
+                simulate.running_one_frame = false;
+                simulate.running = false;
+            } else
+                simulate.update_time();
+        }
 
         scene.for_items([&, this](Scene_Item &item)
                         {
