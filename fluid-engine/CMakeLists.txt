@@ -72,6 +72,9 @@ FOREACH(subdir ${SUBDIRS})
 ENDFOREACH()
 
 # Fluid Engine Test Part
-add_executable(HinaPE_Fluid_Engine_Test main.cpp)
-set_target_properties(HinaPE_Fluid_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-target_link_libraries(HinaPE_Fluid_Engine_Test PUBLIC HinaPE_Fluid_Engine)
+get_directory_property(HINA_FLUID_ENGINE_PARENT_DIR PARENT_DIRECTORY)
+if (NOT HINA_FLUID_ENGINE_PARENT_DIR)
+    add_executable(HinaPE_Fluid_Engine_Test main.cpp)
+    set_target_properties(HinaPE_Fluid_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+    target_link_libraries(HinaPE_Fluid_Engine_Test PUBLIC HinaPE_Fluid_Engine)
+endif ()

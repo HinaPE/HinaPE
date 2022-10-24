@@ -2,17 +2,7 @@
 #include "render-engine/util/rand.h"
 #include "render-engine/scene/particles.h"
 
-#include "fluid-engine/geometry/bounding_box3.h"
-#include "fluid-engine/geometry/plane3.h"
-#include "fluid-engine/geometry/box3.h"
-#include "fluid-engine/geometry/rigid_body_collider3.h"
-#include "fluid-engine/geometry/sphere3.h"
-#include "fluid-engine/geometry/implicit_surface_set3.h"
-#include "fluid-engine/solver/particle/sph/sph_solver3.h"
-#include "fluid-engine/emitter/volume_particle_emitter3.h"
-#include "fluid-engine/util/logging.h"
-
-#include "util/fluid_api.h"
+#include "fluid_api.h"
 
 using namespace HinaPE::FluidEngine;
 
