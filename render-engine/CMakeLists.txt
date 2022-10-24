@@ -151,8 +151,10 @@ ENDFOREACH()
     if (RenderEngineOption)
         target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
     endif ()
+    if (TBB_FOUND)
+        add_definitions(-DJET_TASKING_TBB)
+    endif ()
 #endif ()
-
 # Render Engine Test Part
 add_executable(HinaPE_Render_Engine_Test main.cpp)
 set_target_properties(HinaPE_Render_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)

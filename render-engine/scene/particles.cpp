@@ -3,6 +3,8 @@
 
 #include "particles.h"
 
+#include "util/parallel.h"
+
 #include <utility>
 #include "renderer.h"
 
@@ -192,13 +194,11 @@ void Scene_Particles::step3(const PT::Object &scene, float dt)
     static HinaPE::FluidEngine::Frame frame(0, 1.0 / 60.0);
     solver_ptr->update(frame++);
 
-    // consider double buffering
-    for (int i = 0; i < size; ++i)
-    {
-        auto const &data = std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(solver_ptr)->sphSystemData();
+    auto const &data = std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(solver_ptr)->sphSystemData();
+    HinaPE::FluidEngine::parallelFor((size_t)0, (size_t)size, [&](size_t i) {
         auto &p = data->positions()[i];
         particles[i].pos = Vec3((float) p[0], (float) p[1], (float) p[2]);
-    }
+    });
 }
 
 void Scene_Particles::load_solver()
