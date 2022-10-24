@@ -40,7 +40,7 @@ brew install sdl2
 cmake -S . -B build
 ```
 
-### Linux
+### Ubuntu
 
 ```shell
 apt-get install libgtk-3-dev libsdl2-dev
