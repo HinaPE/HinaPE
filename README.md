@@ -37,18 +37,24 @@ git clone --recursive https://github.com/Xayah-Hina/HinaPE.git
 
 ```shell
 brew install sdl2
-cmake -S . -B build
+cmake -S . -B Build
+cmake --build Build
+./Build/HinaPE
 ```
 
 ### Ubuntu
 
 ```shell
 apt-get install libgtk-3-dev libsdl2-dev
-cmake -S . -B build
+cmake -S . -B Build
+cmake --build Build
+./Build/HinaPE
 ```
 
 ### Windows
 
 ```shell
-cmake -S . -B build
+cmake -S . -B Build
+cmake --build Build
+.\Build\HinaPE.exe
 ```
