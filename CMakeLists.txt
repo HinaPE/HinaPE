@@ -3,7 +3,7 @@ project(HinaPE VERSION 1.0.1 DESCRIPTION "HinaPE is not a Physics Engine" LANGUA
 
 # load SPH examples
 file(GLOB_RECURSE HINAPE_EXAMPLE_SPH_SRC examples/sph_fluid/*.cpp examples/sph_fluid/*.h)
-add_executable(HinaPE ${HINAPE_EXAMPLE_SPH_SRC})
+add_executable(HinaPE ${HINAPE_EXAMPLE_SPH_SRC} render-engine/platform/icon.rc)
 set_target_properties(HinaPE PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 
 # Load render-engine
@@ -20,4 +20,3 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang") # fixed by: https://github.com/libMes
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
     set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
 endif ()
-
