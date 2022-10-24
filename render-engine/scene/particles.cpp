@@ -199,6 +199,8 @@ void Scene_Particles::step3(const PT::Object &scene, float dt)
         auto &p = data->positions()[i];
         particles[i].pos = Vec3((float) p[0], (float) p[1], (float) p[2]);
     });
+
+    std::cout << "Particles Size: " << particles.size() << std::endl;
 }
 
 void Scene_Particles::load_solver()

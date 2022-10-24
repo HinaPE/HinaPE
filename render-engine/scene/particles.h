@@ -113,7 +113,7 @@ public: // Particle System
     struct FluidOpt
     {
         float target_density = 1000.f;
-        float target_spacing = 0.02f;
+        float target_spacing = 0.1f;
 
         FluidType type = SPH;
         // SPH Field
