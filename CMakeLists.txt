@@ -6,6 +6,7 @@ set_target_properties(HinaPE PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 
 # Load render-engine
 add_subdirectory(render-engine)
+target_include_directories(HinaPE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(HinaPE PUBLIC HinaPE_Render_Engine)
 
 if (APPLE)

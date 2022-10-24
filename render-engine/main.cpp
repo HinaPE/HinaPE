@@ -2,19 +2,6 @@
 #include "util/rand.h"
 #include <sf_libs/CLI11.hpp>
 
-#include "geometry/bounding_box3.h"
-#include "geometry/plane3.h"
-#include "geometry/box3.h"
-#include "geometry/rigid_body_collider3.h"
-#include "geometry/sphere3.h"
-#include "geometry/implicit_surface_set3.h"
-#include "array/array_utils.h"
-#include "solver/particle/sph//sph_solver3.h"
-#include "emitter/volume_particle_emitter3.h"
-#include "logging.h"
-
-using namespace HinaPE::FluidEngine;
-
 int main(int argc, char **argv)
 {
     RNG::seed();

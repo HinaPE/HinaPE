@@ -1,17 +1,17 @@
 #ifndef HINAPE_FLUID_API_H
 #define HINAPE_FLUID_API_H
 
-#include "../fluid-engine/geometry/bounding_box3.h"
-#include "../fluid-engine/geometry/plane3.h"
-#include "../fluid-engine/geometry/box3.h"
-#include "../fluid-engine/geometry/rigid_body_collider3.h"
-#include "../fluid-engine/geometry/sphere3.h"
-#include "../fluid-engine/geometry/implicit_surface_set3.h"
-#include "../fluid-engine/solver/particle/sph/sph_solver3.h"
-#include "../fluid-engine/emitter/volume_particle_emitter3.h"
-#include "../fluid-engine/util/logging.h"
-#include "../render-engine/scene/particles.h"
-#include "../render-engine/physics-API/particle_system_api.h"
+#include "fluid-engine/geometry/bounding_box3.h"
+#include "fluid-engine/geometry/plane3.h"
+#include "fluid-engine/geometry/box3.h"
+#include "fluid-engine/geometry/rigid_body_collider3.h"
+#include "fluid-engine/geometry/sphere3.h"
+#include "fluid-engine/geometry/implicit_surface_set3.h"
+#include "fluid-engine/solver/particle/sph/sph_solver3.h"
+#include "fluid-engine/emitter/volume_particle_emitter3.h"
+#include "fluid-engine/util/logging.h"
+#include "render-engine/scene/particles.h"
+#include "render-engine/physics-API/particle_system_api.h"
 
 class FluidAPI : public HinaPE::ParticleSystemAPI
 {
