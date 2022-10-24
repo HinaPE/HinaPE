@@ -3,8 +3,6 @@
 
 #include "particles.h"
 
-#include "util/parallel.h"
-
 #include <utility>
 #include "renderer.h"
 
@@ -24,9 +22,8 @@ Scene_Particles::Scene_Particles(Scene_ID id, GL::Mesh &&mesh) : arrow(Util::arr
     get_r();
 }
 
-Scene_Particles::Scene_Particles(Scene_ID id, Pose p, std::string name) : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(Util::sphere_mesh(1.0f, 1))
+Scene_Particles::Scene_Particles(Scene_ID id, Pose p, const std::string& name) : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(Util::sphere_mesh(1.0f, 1))
 {
-
     _id = id;
     pose = p;
     snprintf(opt.name, MAX_NAME_LEN, "%s", name.c_str());
@@ -39,7 +36,7 @@ void Scene_Particles::get_r()
     radius = (box.max - box.min).norm() / 2.0f;
 }
 
-BBox Scene_Particles::bbox() const
+auto Scene_Particles::bbox() const -> BBox
 {
     BBox box = arrow.bbox();
     box.transform(pose.transform());
@@ -51,7 +48,7 @@ void Scene_Particles::take_mesh(GL::Mesh &&mesh)
     particle_instances = GL::Instances(std::move(mesh));
 }
 
-const GL::Mesh &Scene_Particles::mesh() const
+auto Scene_Particles::mesh() const -> const GL::Mesh &
 {
     return particle_instances.mesh();
 }
@@ -83,7 +80,7 @@ void Scene_Particles::render(const Mat4 &view, bool depth_only, bool posed, bool
     }
 }
 
-Scene_ID Scene_Particles::id() const
+auto Scene_Particles::id() const -> Scene_ID
 {
     return _id;
 }
@@ -108,8 +105,7 @@ void Scene_Particles::set_time(float time)
     }
 }
 
-const std::vector<Scene_Particles::Particle> &Scene_Particles::get_particles() const
-{
+auto Scene_Particles::get_particles() const -> const std::vector<Scene_Particles::Particle> & {
     return particles;
 }
 
@@ -125,13 +121,13 @@ void Scene_Particles::step(const PT::Object &scene, float dt)
 
     last_update += dt;
 
-//    while (last_update > opt.dt)
-//    {
-//        step2(scene, opt.dt);
-//        last_update -= opt.dt;
-//    }
+    //    while (last_update > opt.dt)
+    //    {
+    //        step2(scene, opt.dt);
+    //        last_update -= opt.dt;
+    //    }
 
-    step3(scene, opt.dt);
+    particle_system_api->step(this, dt);
 
     gen_instances();
 }
@@ -186,52 +182,6 @@ void Scene_Particles::step2(const PT::Object &scene, float dt)
     particles = std::move(next);
 }
 
-void Scene_Particles::step3(const PT::Object &scene, float dt)
-{
-    auto size = solver_ptr->particleSystemData()->numberOfParticles();
-    particles.resize(size);
-
-    static HinaPE::FluidEngine::Frame frame(0, 1.0 / 60.0);
-    solver_ptr->update(frame++);
-
-    auto const &data = std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(solver_ptr)->sphSystemData();
-    HinaPE::FluidEngine::parallelFor((size_t)0, (size_t)size, [&](size_t i) {
-        auto &p = data->positions()[i];
-        particles[i].pos = Vec3((float) p[0], (float) p[1], (float) p[2]);
-    });
-
-    std::cout << "Particles Size: " << particles.size() << std::endl;
-}
-
-void Scene_Particles::load_solver()
-{
-    if (!emitter_ptr_list.empty() && !collider_ptr_list.empty() && !particles_domain.isEmpty() && !solver_prepared)
-    {
-        solver_ptr = HinaPE::FluidEngine::SphSolver3::builder().withTargetDensity(fluid_opt.target_density).withTargetSpacing(fluid_opt.target_spacing).makeShared();
-        solver_ptr->setEmitter(emitter_ptr_list.back()); // TODO: to support more emitter
-        solver_ptr->setCollider(collider_ptr_list.back()); // TODO: to support more collider
-        if (fluid_opt.type == SPH){
-            std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(solver_ptr)->setPseudoViscosityCoefficient(fluid_opt.pseudo_viscosity_coefficient);
-        }
-        solver_prepared = true;
-    }
-}
-
-void Scene_Particles::add_emitter(std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3> _emitter_ptr)
-{
-    emitter_ptr_list.emplace_back(_emitter_ptr); // use copy for shared ptr
-}
-
-void Scene_Particles::add_collider(std::shared_ptr<HinaPE::FluidEngine::Collider3> _collider_ptr)
-{
-    collider_ptr_list.emplace_back(_collider_ptr); // use copy for shared ptr
-}
-
-void Scene_Particles::assign_particles_domain(const HinaPE::FluidEngine::BoundingBox3D &_domain)
-{
-    particles_domain = _domain;
-}
-
 void Scene_Particles::Anim_Particles::at(float t, Scene_Particles::Options &o) const
 {
     auto [c, v, a, s, l, p, e] = splines.at(t);
@@ -249,8 +199,7 @@ void Scene_Particles::Anim_Particles::set(float t, Scene_Particles::Options o)
     splines.set(t, o.color, o.velocity, o.angle, o.scale, o.lifetime, o.pps, o.enabled);
 }
 
-bool operator!=(const Scene_Particles::Options &l, const Scene_Particles::Options &r)
+auto operator!=(const Scene_Particles::Options &l, const Scene_Particles::Options &r) -> bool
 {
-    return l.color != r.color || l.velocity != r.velocity || l.angle != r.angle || l.scale != r.scale || l.lifetime != r.lifetime || l.pps != r.pps ||
-           l.enabled != r.enabled || l.dt != r.dt;
+    return l.color != r.color || l.velocity != r.velocity || l.angle != r.angle || l.scale != r.scale || l.lifetime != r.lifetime || l.pps != r.pps || l.enabled != r.enabled || l.dt != r.dt;
 }

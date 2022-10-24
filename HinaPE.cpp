@@ -1,5 +1,6 @@
 #include "render-engine/platform/platform.h"
 #include "render-engine/util/rand.h"
+#include "render-engine/scene/particles.h"
 
 #include "fluid-engine/geometry/bounding_box3.h"
 #include "fluid-engine/geometry/plane3.h"
@@ -10,6 +11,8 @@
 #include "fluid-engine/solver/particle/sph/sph_solver3.h"
 #include "fluid-engine/emitter/volume_particle_emitter3.h"
 #include "fluid-engine/util/logging.h"
+
+#include "util/fluid_api.h"
 
 using namespace HinaPE::FluidEngine;
 
@@ -22,12 +25,11 @@ auto main(int argc, char **argv) -> int
     App app(set, &platform);
 
     // Register Fluid Engine
-
+    Logging::mute();
     int phase = 0;
 
-    Logging::mute();
-
     std::shared_ptr<Scene_Particles> sp = nullptr;
+    std::shared_ptr<FluidAPI> fluid_api = nullptr;
     app.register_custom_simulation_sidebarUI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index)
                                              {
                                                  switch (phase)
@@ -48,13 +50,15 @@ auto main(int argc, char **argv) -> int
                                                                  obj.opt.wireframe = false;
                                                                  obj.opt.surface = false;
                                                                  obj.opt.bbox = true;
-                                                                 //                                 _manager.set_select(obj.id());
+                                                                 //_manager.set_select(obj.id());
                                                                  ++phase;
 
                                                                  GL::Mesh sphere_mesh = Util::sphere_mesh(1.0f, 1);
                                                                  sp = std::make_shared<Scene_Particles>(_scene.reserve_id(), std::move(sphere_mesh));
                                                                  sp->opt.enabled = true;
-                                                                 sp->assign_particles_domain(BoundingBox3D(Vector3D(-R / 2.0f, -R / 2.0f, -R / 2.0f), Vector3D(R / 2.0f, R / 2.0f, R / 2.0f)));
+                                                                 fluid_api = std::make_shared<FluidAPI>();
+                                                                 fluid_api->assign_particles_domain(BoundingBox3D(Vector3D(-R / 2.0f, -R / 2.0f, -R / 2.0f), Vector3D(R / 2.0f, R / 2.0f, R / 2.0f)));
+                                                                 sp->load_particle_system<FluidAPI>(fluid_api);
                                                              }
                                                              ImGui::PopID();
                                                          }
@@ -65,18 +69,18 @@ auto main(int argc, char **argv) -> int
                                                              ImGui::PushID(_index++);
                                                              if (ImGui::Button("Add"))
                                                              {
-                                                                 auto plane = Plane3::builder().withNormal({0, 1, 0}).withPoint({0, 0.25 * sp->particles_domain.height(), 0}).makeShared();
-                                                                 auto sphere = Sphere3::builder().withCenter(sp->particles_domain.midPoint()).withRadius(0.15 * sp->particles_domain.width()).makeShared();
+                                                                 auto plane = Plane3::builder().withNormal({0, 1, 0}).withPoint({0, 0.25 * fluid_api->particles_domain.height(), 0}).makeShared();
+                                                                 auto sphere = Sphere3::builder().withCenter(fluid_api->particles_domain.midPoint()).withRadius(0.15 * fluid_api->particles_domain.width()).makeShared();
                                                                  auto surfaceSet = ImplicitSurfaceSet3::builder().withExplicitSurfaces({plane, sphere}).makeShared();
-                                                                 auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(sp->fluid_opt.target_spacing).withMaxNumberOfParticles(10000).withMaxRegion(
+                                                                 auto emitter = VolumeParticleEmitter3::builder().withImplicitSurface(surfaceSet).withSpacing(fluid_api->fluid_opt.target_spacing).withMaxRegion(
                                                                          BoundingBox3D(Vector3D(-1.f, -0.5f, -1.f), Vector3D(1.f, 0.5f, 1.f))).withIsOneShot(false).makeShared();
-                                                                 sp->add_emitter(emitter);
+                                                                 fluid_api->add_emitter(emitter);
 
-                                                                 auto box = Box3::builder().withIsNormalFlipped(true).withBoundingBox(sp->particles_domain).makeShared();
+                                                                 auto box = Box3::builder().withIsNormalFlipped(true).withBoundingBox(fluid_api->particles_domain).makeShared();
                                                                  auto box_collider = RigidBodyCollider3::builder().withSurface(box).makeShared();
-                                                                 sp->add_collider(box_collider);
-                                                                 sp->load_solver();
-                                                                 sp->opt.scale = sp->fluid_opt.target_spacing / 1.5f;
+                                                                 fluid_api->add_collider(box_collider);
+                                                                 fluid_api->load_solver();
+                                                                 sp->opt.scale = fluid_api->fluid_opt.target_spacing / 1.5f;
                                                                  _undo.add(std::move(*sp));
                                                              }
                                                              ImGui::PopID();

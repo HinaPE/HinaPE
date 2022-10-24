@@ -1,12 +1,7 @@
 #ifndef HINAPE_PARTICLES_H
 #define HINAPE_PARTICLES_H
 
-#include "solver/particle/sph/sph_solver3.h"
-#include "emitter/particle_emitter3.h"
-#include "geometry/collider3.h"
-
-#include <vector>
-
+#include "../physics-API/particle_system_api.h"
 #include "../lib/mathlib.h"
 #include "../platform/gl.h"
 #include "../util/rand.h"
@@ -37,7 +32,7 @@ public:
     };
 
     Scene_Particles(Scene_ID id);
-    Scene_Particles(Scene_ID id, Pose p, std::string name);
+    Scene_Particles(Scene_ID id, Pose p, const std::string& name);
     Scene_Particles(Scene_ID id, GL::Mesh &&mesh);
     Scene_Particles(Scene_Particles &&src) = default;
     Scene_Particles(const Scene_Particles &src) = delete;
@@ -49,7 +44,6 @@ public:
     void clear();
     void step(const PT::Object &scene, float dt);
     void step2(const PT::Object &scene, float dt);
-    void step3(const PT::Object &scene, float dt);
     void gen_instances();
 
     auto get_particles() const -> const std::vector<Particle> &;
@@ -88,43 +82,24 @@ public:
     Anim_Particles panim;
 
 public: // HinaPE 1.1.0
-    // Prepare to accept Fluid Engine Data
+    template<typename T>
+    void load_particle_system(std::shared_ptr<T> _particle_system_api)
+    {
+        static_assert(std::is_base_of<HinaPE::ParticleSystemAPI, T>::value, "Class doesn't inherit from HinaPE::ParticleSystemAPI!");
+        this->particle_system_api = std::static_pointer_cast<HinaPE::ParticleSystemAPI>(_particle_system_api);
+    }
+    std::shared_ptr<HinaPE::ParticleSystemAPI> particle_system_api = nullptr;
+    std::vector<Particle> particles;
 
 private:
     void get_r();
     Scene_ID _id;
-    std::vector<Particle> particles;
     GL::Instances particle_instances;
     GL::Mesh arrow;
 
     float radius = 0.0f;
     float last_update = 0.0f;
     double particle_cooldown = 0.0f;
-
-public: // Particle System
-    void load_solver();
-    void add_emitter(std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3>);
-    void add_collider(std::shared_ptr<HinaPE::FluidEngine::Collider3>);
-    void assign_particles_domain(const HinaPE::FluidEngine::BoundingBox3D &box);
-    enum FluidType
-    {
-        SPH
-    };
-    struct FluidOpt
-    {
-        float target_density = 1000.f;
-        float target_spacing = 0.1f;
-
-        FluidType type = SPH;
-        // SPH Field
-        float pseudo_viscosity_coefficient = 0.f;
-    };
-    FluidOpt fluid_opt;
-    bool solver_prepared = false;
-    std::shared_ptr<HinaPE::FluidEngine::ParticleSystemSolver3> solver_ptr;
-    std::vector<std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3>> emitter_ptr_list;
-    std::vector<std::shared_ptr<HinaPE::FluidEngine::Collider3>> collider_ptr_list;
-    HinaPE::FluidEngine::BoundingBox3D particles_domain;
 };
 
 auto operator!=(const Scene_Particles::Options &l, const Scene_Particles::Options &r) -> bool;

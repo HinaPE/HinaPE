@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(HinaPE VERSION 1.0.1 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
-add_executable(HinaPE HinaPE.cpp)
+add_executable(HinaPE HinaPE.cpp util/fluid_api.h util/fluid_api.cpp)
 set_target_properties(HinaPE PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 
 # Load render-engine
