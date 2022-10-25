@@ -1,5 +1,5 @@
 @echo off
-title This is your first batch script!
+title Particles XYZ to OBJ
 
 rem For each file in your folder
 for %%f in ("..\output\*") do (

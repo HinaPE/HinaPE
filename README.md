@@ -58,3 +58,7 @@ cmake -S . -B Build
 cmake --build Build --config Release
 .\Build\Release\HinaPE.exe
 ```
+
+## Fluid Rendering
+
+https://hamelot.io/visualization/using-ffmpeg-to-convert-a-set-of-images-into-a-video/
