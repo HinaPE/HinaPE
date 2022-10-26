@@ -77,51 +77,51 @@ public:
     // MARK: Binary operations: new instance = this (+) v
 
     //! Computes this + (v, v, v).
-    Vector add(T v) const;
+    auto add(T v) const -> Vector;
 
     //! Computes this + (v.x, v.y, v.z).
-    Vector add(const Vector &v) const;
+    auto add(const Vector &v) const -> Vector;
 
     //! Computes this - (v, v, v).
-    Vector sub(T v) const;
+    auto sub(T v) const -> Vector;
 
     //! Computes this - (v.x, v.y, v.z).
-    Vector sub(const Vector &v) const;
+    auto sub(const Vector &v) const -> Vector;
 
     //! Computes this * (v, v, v).
-    Vector mul(T v) const;
+    auto mul(T v) const -> Vector;
 
     //! Computes this * (v.x, v.y, v.z).
-    Vector mul(const Vector &v) const;
+    auto mul(const Vector &v) const -> Vector;
 
     //! Computes this / (v, v, v).
-    Vector div(T v) const;
+    auto div(T v) const -> Vector;
 
     //! Computes this / (v.x, v.y, v.z).
-    Vector div(const Vector &v) const;
+    auto div(const Vector &v) const -> Vector;
 
     //! Computes dot product.
-    T dot(const Vector &v) const;
+    auto dot(const Vector &v) const -> T;
 
     //! Computes cross product.
-    Vector cross(const Vector &v) const;
+    auto cross(const Vector &v) const -> Vector;
 
     // MARK: Binary operations: new instance = v (+) this
 
     //! Computes (v, v, v) - this.
-    Vector rsub(T v) const;
+    auto rsub(T v) const -> Vector;
 
     //! Computes (v.x, v.y, v.z) - this.
-    Vector rsub(const Vector &v) const;
+    auto rsub(const Vector &v) const -> Vector;
 
     //! Computes (v, v, v) / this.
-    Vector rdiv(T v) const;
+    auto rdiv(T v) const -> Vector;
 
     //! Computes (v.x, v.y, v.z) / this.
-    Vector rdiv(const Vector &v) const;
+    auto rdiv(const Vector &v) const -> Vector;
 
     //! Computes \p v cross this.
-    Vector rcross(const Vector &v) const;
+    auto rcross(const Vector &v) const -> Vector;
 
     // MARK: Augmented operations: this (+)= v
 
@@ -152,113 +152,113 @@ public:
     // MARK: Basic getters
 
     //! Returns const reference to the \p i -th element of the vector.
-    const T &at(size_t i) const;
+    auto at(size_t i) const -> const T &;
 
     //! Returns reference to the \p i -th element of the vector.
-    T &at(size_t i);
+    auto at(size_t i) -> T &;
 
     //! Returns the sum of all the components (i.e. x + y + z).
-    T sum() const;
+    auto sum() const -> T;
 
     //! Returns the average of all the components.
-    T avg() const;
+    auto avg() const -> T;
 
     //! Returns the minimum value among x, y, and z.
-    T min() const;
+    auto min() const -> T;
 
     //! Returns the maximum value among x, y, and z.
-    T max() const;
+    auto max() const -> T;
 
     //! Returns the absolute minimum value among x, y, and z.
-    T absmin() const;
+    auto absmin() const -> T;
 
     //! Returns the absolute maximum value among x, y, and z.
-    T absmax() const;
+    auto absmax() const -> T;
 
     //! Returns the index of the dominant axis.
-    size_t dominantAxis() const;
+    auto dominantAxis() const -> size_t;
 
     //! Returns the index of the subminant axis.
-    size_t subminantAxis() const;
+    auto subminantAxis() const -> size_t;
 
     //! Returns normalized vector.
-    Vector normalized() const;
+    auto normalized() const -> Vector;
 
     //! Returns the length of the vector.
-    T length() const;
+    auto length() const -> T;
 
     //! Returns the squared length of the vector.
-    T lengthSquared() const;
+    auto lengthSquared() const -> T;
 
     //! Returns the distance to the other vector.
-    T distanceTo(const Vector &other) const;
+    auto distanceTo(const Vector &other) const -> T;
 
     //! Returns the squared distance to the other vector.
-    T distanceSquaredTo(const Vector &other) const;
+    auto distanceSquaredTo(const Vector &other) const -> T;
 
     //! Returns the reflection vector to the surface with given surface normal.
-    Vector reflected(const Vector &normal) const;
+    auto reflected(const Vector &normal) const -> Vector;
 
     //! Returns the projected vector to the surface with given surface normal.
-    Vector projected(const Vector &normal) const;
+    auto projected(const Vector &normal) const -> Vector;
 
     //! Returns the tangential vector for this vector.
-    std::tuple<Vector, Vector> tangential() const;
+    auto tangential() const -> std::tuple<Vector, Vector>;
 
     //! Returns a vector with different value type.
     template<typename U>
-    Vector<U, 3> castTo() const;
+    auto castTo() const -> Vector<U, 3>;
 
     //! Returns true if \p other is the same as this vector.
-    bool isEqual(const Vector &other) const;
+    auto isEqual(const Vector &other) const -> bool;
 
     //! Returns true if \p other is similar to this vector.
-    bool isSimilar(const Vector &other, T epsilon = std::numeric_limits<T>::epsilon()) const;
+    auto isSimilar(const Vector &other, T epsilon = std::numeric_limits<T>::epsilon()) const -> bool;
 
     // MARK: Operators
 
     //! Returns reference to the \p i -th element of the vector.
-    T &operator[](size_t i);
+    auto operator[](size_t i) -> T &;
 
     //! Returns const reference to the \p i -th element of the vector.
-    const T &operator[](size_t i) const;
+    auto operator[](size_t i) const -> const T &;
 
     //! Set x and y components with given initializer list.
     template<typename U>
-    Vector &operator=(const std::initializer_list<U> &lst);
+    auto operator=(const std::initializer_list<U> &lst) -> Vector &;
 
     //! Set x and y with other vector \p pt.
-    Vector &operator=(const Vector &v);
+    auto operator=(const Vector &v) -> Vector &;
 
     //! Computes this += (v, v, v)
-    Vector &operator+=(T v);
+    auto operator+=(T v) -> Vector &;
 
     //! Computes this += (v.x, v.y, v.z)
-    Vector &operator+=(const Vector &v);
+    auto operator+=(const Vector &v) -> Vector &;
 
     //! Computes this -= (v, v, v)
-    Vector &operator-=(T v);
+    auto operator-=(T v) -> Vector &;
 
     //! Computes this -= (v.x, v.y, v.z)
-    Vector &operator-=(const Vector &v);
+    auto operator-=(const Vector &v) -> Vector &;
 
     //! Computes this *= (v, v, v)
-    Vector &operator*=(T v);
+    auto operator*=(T v) -> Vector &;
 
     //! Computes this *= (v.x, v.y, v.z)
-    Vector &operator*=(const Vector &v);
+    auto operator*=(const Vector &v) -> Vector &;
 
     //! Computes this /= (v, v, v)
-    Vector &operator/=(T v);
+    auto operator/=(T v) -> Vector &;
 
     //! Computes this /= (v.x, v.y, v.z)
-    Vector &operator/=(const Vector &v);
+    auto operator/=(const Vector &v) -> Vector &;
 
     //! Returns true if \p other is the same as this vector.
-    bool operator==(const Vector &v) const;
+    auto operator==(const Vector &v) const -> bool;
 
     //! Returns true if \p other is the not same as this vector.
-    bool operator!=(const Vector &v) const;
+    auto operator!=(const Vector &v) const -> bool;
 };
 
 //! Type alias for three dimensional vector.
@@ -266,94 +266,94 @@ template<typename T> using Vector3 = Vector<T, 3>;
 
 //! Positive sign operator.
 template<typename T>
-Vector3<T> operator+(const Vector3<T> &a);
+auto operator+(const Vector3<T> &a) -> Vector3<T>;
 
 //! Negative sign operator.
 template<typename T>
-Vector3<T> operator-(const Vector3<T> &a);
+auto operator-(const Vector3<T> &a) -> Vector3<T>;
 
 //! Computes (a, a, a) + (b.x, b.y, b.z).
 template<typename T>
-Vector3<T> operator+(T a, const Vector3<T> &b);
+auto operator+(T a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Computes (a.x, a.y, a.z) + (b.x, b.y, b.z).
 template<typename T>
-Vector3<T> operator+(const Vector3<T> &a, const Vector3<T> &b);
+auto operator+(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Computes (a.x, a.y, a.z) - (b, b, b).
 template<typename T>
-Vector3<T> operator-(const Vector3<T> &a, T b);
+auto operator-(const Vector3<T> &a, T b) -> Vector3<T>;
 
 //! Computes (a, a, a) - (b.x, b.y, b.z).
 template<typename T>
-Vector3<T> operator-(T a, const Vector3<T> &b);
+auto operator-(T a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Computes (a.x, a.y, a.z) - (b.x, b.y, b.z).
 template<typename T>
-Vector3<T> operator-(const Vector3<T> &a, const Vector3<T> &b);
+auto operator-(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Computes (a.x, a.y, a.z) * (b, b, b).
 template<typename T>
-Vector3<T> operator*(const Vector3<T> &a, T b);
+auto operator*(const Vector3<T> &a, T b) -> Vector3<T>;
 
 //! Computes (a, a, a) * (b.x, b.y, b.z).
 template<typename T>
-Vector3<T> operator*(T a, const Vector3<T> &b);
+auto operator*(T a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Computes (a.x, a.y, a.z) * (b.x, b.y, b.z).
 template<typename T>
-Vector3<T> operator*(const Vector3<T> &a, const Vector3<T> &b);
+auto operator*(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Computes (a.x, a.y, a.z) / (b, b, b).
 template<typename T>
-Vector3<T> operator/(const Vector3<T> &a, T b);
+auto operator/(const Vector3<T> &a, T b) -> Vector3<T>;
 
 //! Computes (a, a, a) / (b.x, b.y, b.z).
 template<typename T>
-Vector3<T> operator/(T a, const Vector3<T> &b);
+auto operator/(T a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Computes (a.x, a.y, a.z) / (b.x, b.y, b.z).
 template<typename T>
-Vector3<T> operator/(const Vector3<T> &a, const Vector3<T> &b);
+auto operator/(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Returns element-wise min vector.
 template<typename T>
-Vector3<T> min(const Vector3<T> &a, const Vector3<T> &b);
+auto min(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Returns element-wise max vector.
 template<typename T>
-Vector3<T> max(const Vector3<T> &a, const Vector3<T> &b);
+auto max(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T>;
 
 //! Returns element-wise clamped vector.
 template<typename T>
-Vector3<T> clamp(const Vector3<T> &v, const Vector3<T> &low, const Vector3<T> &high);
+auto clamp(const Vector3<T> &v, const Vector3<T> &low, const Vector3<T> &high) -> Vector3<T>;
 
 //! Returns element-wise ceiled vector.
 template<typename T>
-Vector3<T> ceil(const Vector3<T> &a);
+auto ceil(const Vector3<T> &a) -> Vector3<T>;
 
 //! Returns element-wise floored vector.
 template<typename T>
-Vector3<T> floor(const Vector3<T> &a);
+auto floor(const Vector3<T> &a) -> Vector3<T>;
 
 //! Float-type 3D vector.
-typedef Vector3<float> Vector3F;
+using Vector3F = Vector3<float>;
 
 //! Double-type 3D vector.
-typedef Vector3<double> Vector3D;
+using Vector3D = Vector3<double>;
 
 // MARK: Extensions
 
 //! Returns float-type zero vector.
 template<>
-constexpr Vector3F zero<Vector3F>()
+constexpr auto zero<Vector3F>() -> Vector3F
 {
     return Vector3F(0.f, 0.f, 0.f);
 }
 
 //! Returns double-type zero vector.
 template<>
-constexpr Vector3D zero<Vector3D>()
+constexpr auto zero<Vector3D>() -> Vector3D
 {
     return Vector3D(0.0, 0.0, 0.0);
 }
@@ -362,12 +362,12 @@ constexpr Vector3D zero<Vector3D>()
 template<typename T>
 struct ScalarType<Vector3<T>>
 {
-    typedef T value;
+    using value = T;
 };
 
 //! Computes monotonic Catmull-Rom interpolation.
 template<typename T>
-Vector3<T> monotonicCatmullRom(const Vector3<T> &v0, const Vector3<T> &v1, const Vector3<T> &v2, const Vector3<T> &v3, T f);
+auto monotonicCatmullRom(const Vector3<T> &v0, const Vector3<T> &v1, const Vector3<T> &v2, const Vector3<T> &v3, T f) -> Vector3<T>;
 
 }  // namespace HinaPE::FluidEngine
 

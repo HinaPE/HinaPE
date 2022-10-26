@@ -82,7 +82,6 @@ add_subdirectory("${HINAPE_DEPS_DIR}/imgui/" "${CMAKE_CURRENT_BINARY_DIR}/imgui"
 add_subdirectory("${HINAPE_DEPS_DIR}/glad/" "${CMAKE_CURRENT_BINARY_DIR}/glad")
 add_subdirectory("${HINAPE_DEPS_DIR}/nfd/" "${CMAKE_CURRENT_BINARY_DIR}/nfd")
 add_subdirectory("${HINAPE_DEPS_DIR}/sf_libs/" "${CMAKE_CURRENT_BINARY_DIR}/sf_libs")
-add_subdirectory("${HINAPE_DEPS_DIR}/libigl/" "${CMAKE_CURRENT_BINARY_DIR}/libigl")
 set(ASSIMP_BUILD_COLLADA_IMPORTER TRUE)
 set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
 set(ASSIMP_BUILD_PLY_IMPORTER TRUE)
@@ -98,7 +97,7 @@ target_include_directories(glad PUBLIC ${HINAPE_DEPS_DIR})
 target_include_directories(imgui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # define include paths
-target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_DEPS_DIR}" "${HINAPE_DEPS_DIR}/assimp/include" "${HINAPE_DEPS_DIR}/eigen3" "${HINAPE_DEPS_DIR}/libigl/include")
+target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_DEPS_DIR}" "${HINAPE_DEPS_DIR}/assimp/include" "${HINAPE_DEPS_DIR}/eigen3")
 target_include_directories(HinaPE_Render_Engine PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # link libraries
