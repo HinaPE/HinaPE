@@ -3,10 +3,12 @@ project(HinaPE_Cloth_Engine VERSION 1.0.0 DESCRIPTION "HinaPE is not a Physics E
 
 set(HINAPE_DEPS_DIR "../deps")
 
+file(GLOB_RECURSE HINA_CLOTH_ENGINE_FACTORY "factory/*.cpp" "factory/*.h" "factory/*.inl.h")
 file(GLOB_RECURSE HINA_CLOTH_ENGINE_SOLVER "solver/*.cpp" "solver/*.h" "solver/*.inl.h")
 
 file(GLOB_RECURSE HINA_CLOTH_ENGINE_SRC
         ${HINA_CLOTH_ENGINE_SOLVER}
+        ${HINA_CLOTH_ENGINE_FACTORY}
         )
 
 add_library(HinaPE_Cloth_Engine ${HINA_CLOTH_ENGINE_SRC})

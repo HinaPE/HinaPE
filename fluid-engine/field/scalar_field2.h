@@ -19,23 +19,23 @@ public:
     ScalarField2();
 
     //! Default destructor.
-    virtual ~ScalarField2();
+    ~ScalarField2() override;
 
     //! Returns sampled value at given position \p x.
-    virtual double sample(const Vector2D &x) const = 0;
+    virtual auto sample(const Vector2D &x) const -> double = 0;
 
     //! Returns gradient vector at given position \p x.
-    virtual Vector2D gradient(const Vector2D &x) const;
+    virtual auto gradient(const Vector2D &x) const -> Vector2D;
 
     //! Returns Laplacian at given position \p x.
-    virtual double laplacian(const Vector2D &x) const;
+    virtual auto laplacian(const Vector2D &x) const -> double;
 
     //! Returns sampler function object.
-    virtual std::function<double(const Vector2D &)> sampler() const;
+    virtual auto sampler() const -> std::function<double(const Vector2D &)>;
 };
 
 //! Shared pointer for the ScalarField2 type.
-typedef std::shared_ptr<ScalarField2> ScalarField2Ptr;
+using ScalarField2Ptr = std::shared_ptr<ScalarField2>;
 
 }  // namespace HinaPE::FluidEngine
 

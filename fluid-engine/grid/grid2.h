@@ -26,31 +26,31 @@ class Grid2 : public Serializable
 {
 public:
     //! Function type for mapping data index to actual position.
-    typedef std::function<Vector2D(size_t, size_t)> DataPositionFunc;
+    using DataPositionFunc = std::function<Vector2D (size_t, size_t)>;
 
     //! Constructs an empty grid.
     Grid2();
 
     //! Default destructor.
-    virtual ~Grid2();
+    ~Grid2() override;
 
     //! Returns the type name of derived grid.
-    virtual std::string typeName() const = 0;
+    virtual auto typeName() const -> std::string = 0;
 
     //! Returns the grid resolution.
-    const Size2 &resolution() const;
+    auto resolution() const -> const Size2 &;
 
     //! Returns the grid origin.
-    const Vector2D &origin() const;
+    auto origin() const -> const Vector2D &;
 
     //! Returns the grid spacing.
-    const Vector2D &gridSpacing() const;
+    auto gridSpacing() const -> const Vector2D &;
 
     //! Returns the bounding box of the grid.
-    const BoundingBox2D &boundingBox() const;
+    auto boundingBox() const -> const BoundingBox2D &;
 
     //! Returns the function that maps grid index to the cell-center position.
-    DataPositionFunc cellCenterPosition() const;
+    auto cellCenterPosition() const -> DataPositionFunc;
 
     //!
     //! \brief Invokes the given function \p func for each grid cell.
@@ -72,7 +72,7 @@ public:
     void parallelForEachCellIndex(const std::function<void(size_t, size_t)> &func) const;
 
     //! Returns true if resolution, grid-spacing and origin are same.
-    bool hasSameShape(const Grid2 &other) const;
+    auto hasSameShape(const Grid2 &other) const -> bool;
 
     //! Swaps the data with other grid.
     virtual void swap(Grid2 *other) = 0;
@@ -101,7 +101,7 @@ private:
     BoundingBox2D _boundingBox = BoundingBox2D(Vector2D(), Vector2D());
 };
 
-typedef std::shared_ptr<Grid2> Grid2Ptr;
+using Grid2Ptr = std::shared_ptr<Grid2>;
 
 #define JET_GRID2_TYPE_NAME(DerivedClassName) \
     std::string typeName() const override { return #DerivedClassName; }
