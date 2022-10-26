@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(HinaPE_Render_Engine VERSION 1.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 option(FluidEngineOption "Enable Fluid Engine(Default: ON)" ON)
+option(ClothEngineOption "Enable Cloth Engine(Default: ON)" ON)
 
 set(HINAPE_DEPS_DIR "../deps")
 
@@ -148,9 +149,16 @@ if (FluidEngineOption)
     add_subdirectory(../fluid-engine ${CMAKE_BINARY_DIR}/fluid-engine)
     target_include_directories(HinaPE_Render_Engine PUBLIC "../fluid-engine" "../fluid-engine/util")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
-    if (RenderEngineOption)
-        target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
+    if (TBB_FOUND)
+        add_definitions(-DJET_TASKING_TBB)
     endif ()
+endif ()
+
+# Load Cloth Engine
+if (ClothEngineOption)
+    add_subdirectory(../cloth-engine ${CMAKE_BINARY_DIR}/cloth-engine)
+    target_include_directories(HinaPE_Render_Engine PUBLIC "../cloth-engine" "../cloth-engine/util")
+    target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Cloth_Engine)
     if (TBB_FOUND)
         add_definitions(-DJET_TASKING_TBB)
     endif ()
