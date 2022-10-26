@@ -2,6 +2,7 @@
 #define HINAPE_GRID_FACTORY_H
 
 #include "util/math_api.h"
+#include "util/parallel_api.h"
 
 namespace HinaPE::ClothEngine
 {
