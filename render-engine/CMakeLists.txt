@@ -123,34 +123,11 @@ target_link_libraries(HinaPE_Render_Engine PUBLIC sf_libs)
 target_link_libraries(HinaPE_Render_Engine PUBLIC imgui)
 target_link_libraries(HinaPE_Render_Engine PUBLIC glad)
 
-# INSTALL
-MACRO(SUBDIRLIST result curdir)
-    FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
-    SET(dirlist "")
-    FOREACH(child ${children})
-        IF(IS_DIRECTORY ${curdir}/${child})
-            LIST(APPEND dirlist ${child})
-        ENDIF()
-    ENDFOREACH()
-    SET(${result} ${dirlist})
-ENDMACRO()
-SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
-FOREACH(subdir ${SUBDIRS})
-    INSTALL(
-            DIRECTORY ${subdir}
-            DESTINATION include/${CMAKE_PROJECT_NAME}/render-engine
-            FILES_MATCHING PATTERN "*.h*"
-    )
-ENDFOREACH()
-
 # Load Fluid Engine
 if (FluidEngineOption)
     add_subdirectory(../fluid-engine ${CMAKE_BINARY_DIR}/fluid-engine)
     target_include_directories(HinaPE_Render_Engine PUBLIC "../fluid-engine" "../fluid-engine/util")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
-    if (TBB_FOUND)
-        add_definitions(-DJET_TASKING_TBB)
-    endif ()
 endif ()
 
 # Load Cloth Engine
@@ -158,9 +135,6 @@ if (ClothEngineOption)
     add_subdirectory(../cloth-engine ${CMAKE_BINARY_DIR}/cloth-engine)
     target_include_directories(HinaPE_Render_Engine PUBLIC "../cloth-engine" "../cloth-engine/util")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Cloth_Engine)
-    if (TBB_FOUND)
-        add_definitions(-DJET_TASKING_TBB)
-    endif ()
 endif ()
 
 # Render Engine Test Part

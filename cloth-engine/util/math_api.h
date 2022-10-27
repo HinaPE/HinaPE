@@ -1,7 +1,7 @@
 #ifndef HINAPE_MATH_API_H
 #define HINAPE_MATH_API_H
 
-#include "../fluid-engine/math/vector3.h"
+#include "math/vector3.h"
 
 namespace HinaPE::ClothEngine
 {
