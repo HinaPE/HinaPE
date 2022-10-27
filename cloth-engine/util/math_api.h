@@ -2,6 +2,7 @@
 #define HINAPE_MATH_API_H
 
 #include "math/vector3.h"
+#include "math/quaternion.h"
 
 namespace HinaPE::ClothEngine
 {
@@ -9,6 +10,9 @@ using real = double;
 using Vector3F = HinaPE::FluidEngine::Vector3F;
 using Vector3D = HinaPE::FluidEngine::Vector3D;
 using Vector3 = Vector3D;
+using QuaternionF = HinaPE::FluidEngine::QuaternionF;
+using QuaternionD = HinaPE::FluidEngine::QuaternionD;
+using Quaternion = QuaternionD;
 
 constexpr auto as_real(auto n) -> real { return static_cast<real>(n); }
 constexpr auto as_real_vector3(auto v) -> Vector3 { return Vector3(static_cast<real>(v[0]), static_cast<real>(v[1]), static_cast<real>(v[2])); }

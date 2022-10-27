@@ -126,14 +126,14 @@ target_link_libraries(HinaPE_Render_Engine PUBLIC glad)
 # Load Fluid Engine
 if (FluidEngineOption)
     add_subdirectory(../fluid-engine ${CMAKE_BINARY_DIR}/fluid-engine)
-    target_include_directories(HinaPE_Render_Engine PUBLIC "../fluid-engine" "../fluid-engine/util")
+    target_include_directories(HinaPE_Render_Engine PUBLIC "../fluid-engine")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
 endif ()
 
 # Load Cloth Engine
 if (ClothEngineOption)
     add_subdirectory(../cloth-engine ${CMAKE_BINARY_DIR}/cloth-engine)
-    target_include_directories(HinaPE_Render_Engine PUBLIC "../cloth-engine" "../cloth-engine/util")
+    target_include_directories(HinaPE_Render_Engine PUBLIC "../cloth-engine")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Cloth_Engine)
 endif ()
 

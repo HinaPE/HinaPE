@@ -18,7 +18,13 @@ void HinaPE::ClothEngine::GridFactory::create_grid(const HinaPE::ClothEngine::Ve
         auto index = i * cols + j;
         real elem1 = as_real(j) / (as_real(cols - 1)) * width - width / 2.0f;
         real elem2 = as_real(i) / (as_real(rows - 1)) * height - height / 2.0f;
-        Vector3 res;
+
+        Vector3 v1(0, 0, as_real(1));
+        Vector3 v2 = orientation.normalized();
+        auto axis = v1.cross(v2);
+        auto radians = std::acos(v1.dot(v2));
+        Quaternion q(axis, radians);
+        Vector3 res = q.mul(Vector3(elem1, elem2, 0));
 
         _nodes[index] = res;
     });
