@@ -8,7 +8,7 @@ namespace HinaPE
 class ClothSystemAPI
 {
 public:
-    virtual void step(Scene_Object *_scene_particles, float dt) = 0;
+    virtual void step(Scene_Object *_scene_object, float dt) = 0;
 };
 }
 
