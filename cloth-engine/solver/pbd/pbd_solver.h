@@ -1,35 +1,36 @@
 #ifndef HINAPE_PBD_SOLVER_H
 #define HINAPE_PBD_SOLVER_H
 
+#include "../cloth_solver.h"
 #include <memory>
 
 namespace HinaPE::ClothEngine
 {
-class PBDSolver
+class PBDSolver : public ClothSolver
 {
-private:
-    class Builder;
-
 public:
-    void update(double dt);
-
+    class Builder;
     static auto builder() -> Builder;
+    void print_hello();
 
+protected:
+    PBDSolver();
+    void on_begin_advance_time_step(double time_interval_in_seconds) override;
+    void on_end_advance_time_step(double time_interval_in_seconds) override;
 };
 using PBDSolverPtr = std::shared_ptr<PBDSolver>;
 
-// ==================== Builder ====================
 template<typename DerivedBuilder>
-class PBDSolverBuilderBase
+class PBDSolverBuilderBase : public ClothSolverBuilderBase<DerivedBuilder>
 {
 public:
-    auto withStiffness(double _stiffness) -> DerivedBuilder &;
+    auto with_stiffness(double _stiffness) -> DerivedBuilder &;
+
 protected:
     double stiffness = 1.0;
 };
-
 template<typename DerivedBuilder>
-auto PBDSolverBuilderBase<DerivedBuilder>::withStiffness(double _stiffness) -> DerivedBuilder &
+auto PBDSolverBuilderBase<DerivedBuilder>::with_stiffness(double _stiffness) -> DerivedBuilder &
 {
     stiffness = _stiffness;
     return static_cast<DerivedBuilder &>(*this);

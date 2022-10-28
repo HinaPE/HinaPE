@@ -37,10 +37,10 @@ public:
     ParticleSystemSolver3(double radius, double mass);
 
     //! Destructor.
-    virtual ~ParticleSystemSolver3();
+    ~ParticleSystemSolver3() override;
 
     //! Returns the drag coefficient.
-    double dragCoefficient() const;
+    auto dragCoefficient() const -> double;
 
     //!
     //! \brief      Sets the drag coefficient.
@@ -53,7 +53,7 @@ public:
     void setDragCoefficient(double newDragCoefficient);
 
     //! Sets the restitution coefficient.
-    double restitutionCoefficient() const;
+    auto restitutionCoefficient() const -> double;
 
     //!
     //! \brief      Sets the restitution coefficient.
@@ -67,7 +67,7 @@ public:
     void setRestitutionCoefficient(double newRestitutionCoefficient);
 
     //! Returns the gravity.
-    const Vector3D &gravity() const;
+    auto gravity() const -> const Vector3D &;
 
     //! Sets the gravity.
     void setGravity(const Vector3D &newGravity);
@@ -80,22 +80,22 @@ public:
     //!
     //! \return     The particle system data.
     //!
-    const ParticleSystemData3Ptr &particleSystemData() const;
+    auto particleSystemData() const -> const ParticleSystemData3Ptr &;
 
     //! Returns the collider.
-    const Collider3Ptr &collider() const;
+    auto collider() const -> const Collider3Ptr &;
 
     //! Sets the collider.
     void setCollider(const Collider3Ptr &newCollider);
 
     //! Returns the emitter.
-    const ParticleEmitter3Ptr &emitter() const;
+    auto emitter() const -> const ParticleEmitter3Ptr &;
 
     //! Sets the emitter.
     void setEmitter(const ParticleEmitter3Ptr &newEmitter);
 
     //! Returns the wind field.
-    const VectorField3Ptr &wind() const;
+    auto wind() const -> const VectorField3Ptr &;
 
     //!
     //! \brief      Sets the wind.
@@ -108,7 +108,7 @@ public:
     void setWind(const VectorField3Ptr &newWind);
 
     //! Returns builder fox ParticleSystemSolver3.
-    static Builder builder();
+    static auto builder() -> Builder;
 
 protected:
     //! Initializes the simulator.
@@ -162,7 +162,7 @@ private:
 };
 
 //! Shared pointer type for the ParticleSystemSolver3.
-typedef std::shared_ptr<ParticleSystemSolver3> ParticleSystemSolver3Ptr;
+using ParticleSystemSolver3Ptr = std::shared_ptr<ParticleSystemSolver3>;
 
 //!
 //! \brief Base class for particle-based solver builder.
@@ -172,10 +172,10 @@ class ParticleSystemSolverBuilderBase3
 {
 public:
     //! Returns builder with particle radius.
-    DerivedBuilder &withRadius(double radius);
+    auto withRadius(double radius) -> DerivedBuilder &;
 
     //! Returns builder with mass per particle.
-    DerivedBuilder &withMass(double mass);
+    auto withMass(double mass) -> DerivedBuilder &;
 
 protected:
     double _radius = 1e-3;
@@ -183,14 +183,14 @@ protected:
 };
 
 template<typename T>
-T &ParticleSystemSolverBuilderBase3<T>::withRadius(double radius)
+auto ParticleSystemSolverBuilderBase3<T>::withRadius(double radius) -> T &
 {
     _radius = radius;
     return static_cast<T &>(*this);
 }
 
 template<typename T>
-T &ParticleSystemSolverBuilderBase3<T>::withMass(double mass)
+auto ParticleSystemSolverBuilderBase3<T>::withMass(double mass) -> T &
 {
     _mass = mass;
     return static_cast<T &>(*this);
@@ -203,10 +203,10 @@ class ParticleSystemSolver3::Builder final : public ParticleSystemSolverBuilderB
 {
 public:
     //! Builds ParticleSystemSolver3.
-    ParticleSystemSolver3 build() const;
+    auto build() const -> ParticleSystemSolver3;
 
     //! Builds shared pointer of ParticleSystemSolver3 instance.
-    ParticleSystemSolver3Ptr makeShared() const;
+    auto makeShared() const -> ParticleSystemSolver3Ptr;
 };
 
 }  // namespace HinaPE::FluidEngine
