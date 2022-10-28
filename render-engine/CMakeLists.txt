@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE_Render_Engine VERSION 1.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE_Render_Engine VERSION 1.1.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 option(FluidEngineOption "Enable Fluid Engine(Default: ON)" ON)
 option(ClothEngineOption "Enable Cloth Engine(Default: ON)" ON)
+option(RigidBodyEngineOption "Enable RigidBody Engine(Default: ON)" ON)
 
 set(HINAPE_DEPS_DIR "../deps")
 
@@ -125,16 +126,23 @@ target_link_libraries(HinaPE_Render_Engine PUBLIC glad)
 
 # Load Fluid Engine
 if (FluidEngineOption)
-    add_subdirectory(../fluid-engine ${CMAKE_BINARY_DIR}/fluid-engine)
-    target_include_directories(HinaPE_Render_Engine PUBLIC "../fluid-engine")
+    add_subdirectory(../physics-engine/fluid-engine ${CMAKE_BINARY_DIR}/physics-engine/fluid-engine)
+    target_include_directories(HinaPE_Render_Engine PUBLIC "../physics-engine/fluid-engine")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
 endif ()
 
 # Load Cloth Engine
 if (ClothEngineOption)
-    add_subdirectory(../cloth-engine ${CMAKE_BINARY_DIR}/cloth-engine)
-    target_include_directories(HinaPE_Render_Engine PUBLIC "../cloth-engine")
+    add_subdirectory(../physics-engine/cloth-engine ${CMAKE_BINARY_DIR}/physics-engine/cloth-engine)
+    target_include_directories(HinaPE_Render_Engine PUBLIC "../physics-engine/cloth-engine")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Cloth_Engine)
+endif ()
+
+# Load RigidBody Engine
+if (RigidBodyEngineOption)
+    add_subdirectory(../physics-engine/rigidbody-engine ${CMAKE_BINARY_DIR}/physics-engine/rigidbody-engine)
+    target_include_directories(HinaPE_Render_Engine PUBLIC "../physics-engine/rigidbody-engine")
+    target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_RigidBody_Engine)
 endif ()
 
 # Render Engine Test Part
