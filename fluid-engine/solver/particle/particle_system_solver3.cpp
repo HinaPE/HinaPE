@@ -25,10 +25,9 @@ ParticleSystemSolver3::ParticleSystemSolver3(double radius, double mass)
 }
 
 ParticleSystemSolver3::~ParticleSystemSolver3()
-{
-}
+= default;
 
-double ParticleSystemSolver3::dragCoefficient() const
+auto ParticleSystemSolver3::dragCoefficient() const -> double
 {
     return _dragCoefficient;
 }
@@ -38,7 +37,7 @@ void ParticleSystemSolver3::setDragCoefficient(double newDragCoefficient)
     _dragCoefficient = std::max(newDragCoefficient, 0.0);
 }
 
-double ParticleSystemSolver3::restitutionCoefficient() const
+auto ParticleSystemSolver3::restitutionCoefficient() const -> double
 {
     return _restitutionCoefficient;
 }
@@ -48,7 +47,7 @@ void ParticleSystemSolver3::setRestitutionCoefficient(double newRestitutionCoeff
     _restitutionCoefficient = clamp(newRestitutionCoefficient, 0.0, 1.0);
 }
 
-const Vector3D &ParticleSystemSolver3::gravity() const
+auto ParticleSystemSolver3::gravity() const -> const Vector3D &
 {
     return _gravity;
 }
@@ -58,12 +57,12 @@ void ParticleSystemSolver3::setGravity(const Vector3D &newGravity)
     _gravity = newGravity;
 }
 
-const ParticleSystemData3Ptr &ParticleSystemSolver3::particleSystemData() const
+auto ParticleSystemSolver3::particleSystemData() const -> const ParticleSystemData3Ptr &
 {
     return _particleSystemData;
 }
 
-const Collider3Ptr &ParticleSystemSolver3::collider() const
+auto ParticleSystemSolver3::collider() const -> const Collider3Ptr &
 {
     return _collider;
 }
@@ -73,7 +72,7 @@ void ParticleSystemSolver3::setCollider(const Collider3Ptr &newCollider)
     _collider = newCollider;
 }
 
-const ParticleEmitter3Ptr &ParticleSystemSolver3::emitter() const
+auto ParticleSystemSolver3::emitter() const -> const ParticleEmitter3Ptr &
 {
     return _emitter;
 }
@@ -84,7 +83,7 @@ void ParticleSystemSolver3::setEmitter(const ParticleEmitter3Ptr &newEmitter)
     newEmitter->setTarget(_particleSystemData);
 }
 
-const VectorField3Ptr &ParticleSystemSolver3::wind() const
+auto ParticleSystemSolver3::wind() const -> const VectorField3Ptr &
 {
     return _wind;
 }
@@ -263,17 +262,17 @@ void ParticleSystemSolver3::updateEmitter(double timeStepInSeconds)
     }
 }
 
-ParticleSystemSolver3::Builder ParticleSystemSolver3::builder()
+auto ParticleSystemSolver3::builder() -> ParticleSystemSolver3::Builder
 {
     return Builder();
 }
 
-ParticleSystemSolver3 ParticleSystemSolver3::Builder::build() const
+auto ParticleSystemSolver3::Builder::build() const -> ParticleSystemSolver3
 {
     return ParticleSystemSolver3(_radius, _mass);
 }
 
-ParticleSystemSolver3Ptr ParticleSystemSolver3::Builder::makeShared() const
+auto ParticleSystemSolver3::Builder::makeShared() const -> ParticleSystemSolver3Ptr
 {
     return std::shared_ptr<ParticleSystemSolver3>(new ParticleSystemSolver3(_radius, _mass), [](ParticleSystemSolver3 *obj)
     {

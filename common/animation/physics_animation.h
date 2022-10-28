@@ -19,7 +19,7 @@ public:
     PhysicsAnimation();
 
     //! Destructor.
-    virtual ~PhysicsAnimation();
+    ~PhysicsAnimation() override;
 
     //!
     //! \brief      Returns true if fixed sub-timestepping is used.
@@ -31,7 +31,7 @@ public:
     //!
     //! \return     True if using fixed sub time steps, false otherwise.
     //!
-    bool isUsingFixedSubTimeSteps() const;
+    auto isUsingFixedSubTimeSteps() const -> bool;
 
     //!
     //! \brief      Sets true if fixed sub-timestepping is used.
@@ -55,7 +55,7 @@ public:
     //!
     //! \return     The number of fixed sub-timesteps.
     //!
-    unsigned int numberOfFixedSubTimeSteps() const;
+    auto numberOfFixedSubTimeSteps() const -> unsigned int;
 
     //!
     //! \brief      Sets the number of fixed sub-timesteps.
@@ -75,7 +75,7 @@ public:
     //!
     //! \brief      Returns current frame.
     //!
-    Frame currentFrame() const;
+    auto currentFrame() const -> Frame;
 
     //!
     //! \brief      Sets current frame cursor (but do not invoke update()).
@@ -88,7 +88,7 @@ public:
     //! This function returns the current time which is calculated by adding
     //! current frame + sub-timesteps it passed.
     //!
-    double currentTimeInSeconds() const;
+    auto currentTimeInSeconds() const -> double;
 
 protected:
     //!
@@ -117,7 +117,7 @@ protected:
     //!
     //! \return     The required number of sub-timesteps.
     //!
-    virtual unsigned int numberOfSubTimeSteps(double timeIntervalInSeconds) const;
+    virtual auto numberOfSubTimeSteps(double timeIntervalInSeconds) const -> unsigned int;
 
     //!
     //! \brief      Called at frame 0 to initialize the physics state.
@@ -140,7 +140,7 @@ private:
     void initialize();
 };
 
-typedef std::shared_ptr<PhysicsAnimation> PhysicsAnimationPtr;
+using PhysicsAnimationPtr = std::shared_ptr<PhysicsAnimation>;
 
 }  // namespace HinaPE
 
