@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE VERSION 1.1.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE VERSION 1.1.1 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 # Load render-engine
 add_subdirectory(render-engine)

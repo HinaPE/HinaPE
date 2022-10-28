@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE_Render_Engine VERSION 1.1.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE_Render_Engine VERSION 1.1.1 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 option(FluidEngineOption "Enable Fluid Engine(Default: ON)" ON)
 option(ClothEngineOption "Enable Cloth Engine(Default: ON)" ON)
 option(RigidBodyEngineOption "Enable RigidBody Engine(Default: ON)" ON)
 
 set(HINAPE_DEPS_DIR "../deps")
+set(HINAPE_PHYSICS_DIR "../physics-engine")
 
 file(GLOB_RECURSE HINA_RENDER_ENGINE_GUI "gui/*.cpp" "gui/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_GEOM "geometry/*.cpp" "geometry/*.h" "geometry/*.inl")
@@ -126,22 +127,22 @@ target_link_libraries(HinaPE_Render_Engine PUBLIC glad)
 
 # Load Fluid Engine
 if (FluidEngineOption)
-    add_subdirectory(../physics-engine/fluid-engine ${CMAKE_BINARY_DIR}/physics-engine/fluid-engine)
-    target_include_directories(HinaPE_Render_Engine PUBLIC "../physics-engine/fluid-engine")
+    add_subdirectory(${HINAPE_PHYSICS_DIR}/fluid-engine ${CMAKE_BINARY_DIR}/physics-engine/fluid-engine)
+    target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_PHYSICS_DIR}/fluid-engine")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Fluid_Engine)
 endif ()
 
 # Load Cloth Engine
 if (ClothEngineOption)
-    add_subdirectory(../physics-engine/cloth-engine ${CMAKE_BINARY_DIR}/physics-engine/cloth-engine)
-    target_include_directories(HinaPE_Render_Engine PUBLIC "../physics-engine/cloth-engine")
+    add_subdirectory(${HINAPE_PHYSICS_DIR}/cloth-engine ${CMAKE_BINARY_DIR}/physics-engine/cloth-engine)
+    target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_PHYSICS_DIR}/cloth-engine")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Cloth_Engine)
 endif ()
 
 # Load RigidBody Engine
 if (RigidBodyEngineOption)
-    add_subdirectory(../physics-engine/rigidbody-engine ${CMAKE_BINARY_DIR}/physics-engine/rigidbody-engine)
-    target_include_directories(HinaPE_Render_Engine PUBLIC "../physics-engine/rigidbody-engine")
+    add_subdirectory(${HINAPE_PHYSICS_DIR}/rigidbody-engine ${CMAKE_BINARY_DIR}/physics-engine/rigidbody-engine)
+    target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_PHYSICS_DIR}/rigidbody-engine")
     target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_RigidBody_Engine)
 endif ()
 

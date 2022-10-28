@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE_Fluid_Engine VERSION 1.1.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE_Fluid_Engine VERSION 1.1.1 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 set(HINAPE_COMMON_DIR "../../common")
 set(HINAPE_DEPS_DIR "../../deps")
@@ -30,9 +30,9 @@ target_include_directories(HinaPE_Fluid_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR
 target_link_libraries(HinaPE_Fluid_Engine PUBLIC HinaPE_Common)
 
 # Fluid Engine Test Part
-get_directory_property(HINA_FLUID_ENGINE_PARENT_DIR PARENT_DIRECTORY)
-if (NOT HINA_FLUID_ENGINE_PARENT_DIR)
-    add_executable(HinaPE_Fluid_Engine_Test main.cpp)
-    set_target_properties(HinaPE_Fluid_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-    target_link_libraries(HinaPE_Fluid_Engine_Test PUBLIC HinaPE_Fluid_Engine)
-endif ()
+#get_directory_property(HINA_FLUID_ENGINE_PARENT_DIR PARENT_DIRECTORY)
+#if (NOT HINA_FLUID_ENGINE_PARENT_DIR)
+#    add_executable(HinaPE_Fluid_Engine_Test main.cpp)
+#    set_target_properties(HinaPE_Fluid_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+#    target_link_libraries(HinaPE_Fluid_Engine_Test PUBLIC HinaPE_Fluid_Engine)
+#endif ()
