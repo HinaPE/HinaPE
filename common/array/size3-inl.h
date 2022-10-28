@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_SIZE3_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_SIZE3_INL_H_
+#ifndef HINAPE_DETAIL_SIZE3_INL_H_
+#define HINAPE_DETAIL_SIZE3_INL_H_
 
 #include "size3.h"
 
@@ -303,4 +303,4 @@ inline Size3 clamp(const Size3 &v, const Size3 &low, const Size3 &high)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_SIZE3_INL_H_
+#endif  // HINAPE_DETAIL_SIZE3_INL_H_

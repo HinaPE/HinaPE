@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_VECTOR_EXPRESSION_INL_H
-#define HINAPE_FLUID_ENGINE_DETAIL_VECTOR_EXPRESSION_INL_H
+#ifndef HINAPE_DETAIL_VECTOR_EXPRESSION_INL_H
+#define HINAPE_DETAIL_VECTOR_EXPRESSION_INL_H
 
 #include "vector_expression.h"
 
@@ -150,4 +150,4 @@ VectorDiv<T, E1, E2> operator/(const VectorExpression<T, E1> &a, const VectorExp
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_VECTOR_EXPRESSION_INL_H
+#endif  // HINAPE_DETAIL_VECTOR_EXPRESSION_INL_H

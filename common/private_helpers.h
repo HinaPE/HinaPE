@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_PRIVATE_HELPERS_H_
-#define HINAPE_FLUID_ENGINE_PRIVATE_HELPERS_H_
+#ifndef HINAPE_PRIVATE_HELPERS_H_
+#define HINAPE_PRIVATE_HELPERS_H_
 
 #include "macros.h"
 
@@ -55,4 +55,4 @@ inline void throwIfFailed(HRESULT hr)
 
 #endif  // JET_WINDOWS
 
-#endif  // HINAPE_FLUID_ENGINE_PRIVATE_HELPERS_H_
+#endif  // HINAPE_PRIVATE_HELPERS_H_

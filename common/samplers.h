@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_SAMPLERS_H_
-#define HINAPE_FLUID_ENGINE_SAMPLERS_H_
+#ifndef HINAPE_SAMPLERS_H_
+#define HINAPE_SAMPLERS_H_
 
 #include "math/vector2.h"
 #include "math/vector3.h"
@@ -97,4 +97,4 @@ inline Vector2<T> uniformSampleDisk(T u1, T u2);
 
 #include "samplers-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_SAMPLERS_H_
+#endif  // HINAPE_SAMPLERS_H_

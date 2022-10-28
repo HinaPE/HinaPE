@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_RAY2_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_RAY2_INL_H_
+#ifndef HINAPE_DETAIL_RAY2_INL_H_
+#define HINAPE_DETAIL_RAY2_INL_H_
 
 #include "ray2.h"
 
@@ -31,4 +31,4 @@ Vector2<T> Ray<T, 2>::pointAt(T t) const
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_RAY2_INL_H_
+#endif  // HINAPE_DETAIL_RAY2_INL_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_BVH2_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_BVH2_INL_H_
+#ifndef HINAPE_DETAIL_BVH2_INL_H_
+#define HINAPE_DETAIL_BVH2_INL_H_
 
 #include "bvh2.h"
 
@@ -674,4 +674,4 @@ size_t Bvh2<T>::qsplit(size_t *itemIndices, size_t numItems, double pivot, uint8
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_BVH2_INL_H_
+#endif  // HINAPE_DETAIL_BVH2_INL_H_

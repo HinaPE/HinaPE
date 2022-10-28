@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_KDTREE_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_KDTREE_INL_H_
+#ifndef HINAPE_DETAIL_KDTREE_INL_H_
+#define HINAPE_DETAIL_KDTREE_INL_H_
 
 #include "kdtree.h"
 
@@ -342,4 +342,4 @@ size_t KdTree<T, K>::build(size_t nodeIndex, size_t *itemIndices, size_t nItems,
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_KDTREE_INL_H_
+#endif  // HINAPE_DETAIL_KDTREE_INL_H_

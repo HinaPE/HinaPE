@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX3_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX3_INL_H_
+#ifndef HINAPE_DETAIL_BOUNDING_BOX3_INL_H_
+#define HINAPE_DETAIL_BOUNDING_BOX3_INL_H_
 
 #include "bounding_box3.h"
 
@@ -250,4 +250,4 @@ auto BoundingBox<T, 3>::isEmpty() const -> bool
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX3_INL_H_
+#endif  // HINAPE_DETAIL_BOUNDING_BOX3_INL_H_

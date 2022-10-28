@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_COLLIDER2_H_
-#define HINAPE_FLUID_ENGINE_COLLIDER2_H_
+#ifndef HINAPE_COLLIDER2_H_
+#define HINAPE_COLLIDER2_H_
 
 #include "surface2.h"
 
@@ -106,4 +106,4 @@ typedef std::shared_ptr<Collider2> Collider2Ptr;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_COLLIDER2_H_
+#endif  // HINAPE_COLLIDER2_H_

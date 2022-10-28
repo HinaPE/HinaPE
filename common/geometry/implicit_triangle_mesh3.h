@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_IMPLICIT_TRIANGLE_MESH3_H_
-#define HINAPE_FLUID_ENGINE_IMPLICIT_TRIANGLE_MESH3_H_
+#ifndef HINAPE_IMPLICIT_TRIANGLE_MESH3_H_
+#define HINAPE_IMPLICIT_TRIANGLE_MESH3_H_
 
 #include "custom_implicit_surface3.h"
 #include "implicit_surface3.h"
@@ -87,4 +87,4 @@ private:
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_IMPLICIT_TRIANGLE_MESH3_H_
+#endif  // HINAPE_IMPLICIT_TRIANGLE_MESH3_H_

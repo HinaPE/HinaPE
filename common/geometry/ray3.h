@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_RAY3_H_
-#define HINAPE_FLUID_ENGINE_RAY3_H_
+#ifndef HINAPE_RAY3_H_
+#define HINAPE_RAY3_H_
 
 #include "ray.h"
 
@@ -51,4 +51,4 @@ typedef Ray3<double> Ray3D;
 
 #include "ray3-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_RAY3_H_
+#endif  // HINAPE_RAY3_H_

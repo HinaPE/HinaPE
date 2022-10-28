@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_BVH3_H_
-#define HINAPE_FLUID_ENGINE_BVH3_H_
+#ifndef HINAPE_BVH3_H_
+#define HINAPE_BVH3_H_
 
 #include "query_engine/intersection_query_engine3.h"
 #include "query_engine/nearest_neighbor_query_engine3.h"
@@ -122,4 +122,4 @@ private:
 
 #include "bvh3-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_BVH3_H_
+#endif  // HINAPE_BVH3_H_

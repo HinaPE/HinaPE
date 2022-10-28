@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATH_UTILS_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_MATH_UTILS_INL_H_
+#ifndef HINAPE_DETAIL_MATH_UTILS_INL_H_
+#define HINAPE_DETAIL_MATH_UTILS_INL_H_
 
 #include "constants.h"
 
@@ -266,4 +266,4 @@ inline T monotonicCatmullRom(const T &f0, const T &f1, const T &f2, const T &f3,
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATH_UTILS_INL_H_
+#endif  // HINAPE_DETAIL_MATH_UTILS_INL_H_

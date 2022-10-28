@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_TRANSFORM2_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_TRANSFORM2_INL_H_
+#ifndef HINAPE_DETAIL_TRANSFORM2_INL_H_
+#define HINAPE_DETAIL_TRANSFORM2_INL_H_
 
 #include "transform2.h"
 
@@ -102,4 +102,4 @@ inline BoundingBox2D Transform2::toWorld(const BoundingBox2D &bboxInLocal) const
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_TRANSFORM2_INL_H_
+#endif  // HINAPE_DETAIL_TRANSFORM2_INL_H_

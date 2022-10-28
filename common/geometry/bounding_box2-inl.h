@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX2_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX2_INL_H_
+#ifndef HINAPE_DETAIL_BOUNDING_BOX2_INL_H_
+#define HINAPE_DETAIL_BOUNDING_BOX2_INL_H_
 
 #include "bounding_box2.h"
 
@@ -232,4 +232,4 @@ auto BoundingBox<T, 2>::isEmpty() const -> bool
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX2_INL_H_
+#endif  // HINAPE_DETAIL_BOUNDING_BOX2_INL_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATRIX2X2_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_MATRIX2X2_INL_H_
+#ifndef HINAPE_DETAIL_MATRIX2X2_INL_H_
+#define HINAPE_DETAIL_MATRIX2X2_INL_H_
 
 #include "matrix2x2.h"
 
@@ -667,4 +667,4 @@ Matrix<T, 2, 2> operator/(T a, const Matrix<T, 2, 2> &b)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX2X2_INL_H_
+#endif  // HINAPE_DETAIL_MATRIX2X2_INL_H_

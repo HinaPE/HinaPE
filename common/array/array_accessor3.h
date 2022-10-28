@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR3_H_
-#define HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR3_H_
+#ifndef HINAPE_ARRAY_ACCESSOR3_H_
+#define HINAPE_ARRAY_ACCESSOR3_H_
 
 #include "array_accessor.h"
 #include "size3.h"
@@ -431,4 +431,4 @@ template<typename T> using ConstArrayAccessor3 = ConstArrayAccessor<T, 3>;
 
 #include "array_accessor3-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR3_H_
+#endif  // HINAPE_ARRAY_ACCESSOR3_H_

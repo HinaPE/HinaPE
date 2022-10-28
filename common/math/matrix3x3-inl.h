@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATRIX3X3_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_MATRIX3X3_INL_H_
+#ifndef HINAPE_DETAIL_MATRIX3X3_INL_H_
+#define HINAPE_DETAIL_MATRIX3X3_INL_H_
 
 #include "math_utils.h"
 
@@ -725,4 +725,4 @@ Matrix<T, 3, 3> operator/(T a, const Matrix<T, 3, 3> &b)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX3X3_INL_H_
+#endif  // HINAPE_DETAIL_MATRIX3X3_INL_H_

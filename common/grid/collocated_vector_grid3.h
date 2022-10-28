@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID3_H_
-#define HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID3_H_
+#ifndef HINAPE_COLLOCATED_VECTOR_GRID3_H_
+#define HINAPE_COLLOCATED_VECTOR_GRID3_H_
 
 #include "vector_grid3.h"
 
@@ -120,4 +120,4 @@ typedef std::shared_ptr<CollocatedVectorGrid3> CollocatedVectorGrid3Ptr;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID3_H_
+#endif  // HINAPE_COLLOCATED_VECTOR_GRID3_H_

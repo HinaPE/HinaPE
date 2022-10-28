@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_MATRIX_CSR_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_MATRIX_CSR_INL_H_
+#ifndef HINAPE_DETAIL_MATRIX_CSR_INL_H_
+#define HINAPE_DETAIL_MATRIX_CSR_INL_H_
 
 #include "matrix_csr.h"
 
@@ -1060,4 +1060,4 @@ MatrixCsr <T> operator/(T a, const MatrixCsr <T> &b)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX_CSR_INL_H_
+#endif  // HINAPE_DETAIL_MATRIX_CSR_INL_H_

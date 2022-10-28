@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_VECTOR_N_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_VECTOR_N_INL_H_
+#ifndef HINAPE_DETAIL_VECTOR_N_INL_H_
+#define HINAPE_DETAIL_VECTOR_N_INL_H_
 
 #include "vector_n.h"
 
@@ -648,4 +648,4 @@ bool VectorN<T>::operator!=(const E &v) const
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_VECTOR_N_INL_H_
+#endif  // HINAPE_DETAIL_VECTOR_N_INL_H_

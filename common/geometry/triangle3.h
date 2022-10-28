@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_TRIANGLE3_H_
-#define HINAPE_FLUID_ENGINE_TRIANGLE3_H_
+#ifndef HINAPE_TRIANGLE3_H_
+#define HINAPE_TRIANGLE3_H_
 
 #include "surface3.h"
 
@@ -94,4 +94,4 @@ private:
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_TRIANGLE3_H_
+#endif  // HINAPE_TRIANGLE3_H_

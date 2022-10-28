@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_MATRIX2X2_H_
-#define HINAPE_FLUID_ENGINE_MATRIX2X2_H_
+#ifndef HINAPE_MATRIX2X2_H_
+#define HINAPE_MATRIX2X2_H_
 
 #include "matrix.h"
 #include "vector2.h"
@@ -395,4 +395,4 @@ typedef Matrix2x2<double> Matrix2x2D;
 
 #include "matrix2x2-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_MATRIX2X2_H_
+#endif  // HINAPE_MATRIX2X2_H_

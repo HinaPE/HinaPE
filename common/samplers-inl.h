@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_SAMPLERS_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_SAMPLERS_INL_H_
+#ifndef HINAPE_DETAIL_SAMPLERS_INL_H_
+#define HINAPE_DETAIL_SAMPLERS_INL_H_
 
 #include "constants.h"
 #include "math_utils.h"
@@ -68,4 +68,4 @@ inline Vector2<T> uniformSampleDisk(T u1, T u2)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_SAMPLERS_INL_H_
+#endif  // HINAPE_DETAIL_SAMPLERS_INL_H_

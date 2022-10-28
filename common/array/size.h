@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_SIZE_H_
-#define HINAPE_FLUID_ENGINE_SIZE_H_
+#ifndef HINAPE_SIZE_H_
+#define HINAPE_SIZE_H_
 
 #include "geometry/point.h"
 
@@ -13,5 +13,5 @@ template<size_t N> using Size = Point<size_t, N>;
 
 // #include "size-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_SIZE_H_
+#endif  // HINAPE_SIZE_H_
 

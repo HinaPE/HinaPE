@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_POINT3_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_POINT3_INL_H_
+#ifndef HINAPE_DETAIL_POINT3_INL_H_
+#define HINAPE_DETAIL_POINT3_INL_H_
 
 #include "point3.h"
 
@@ -493,4 +493,4 @@ Point<T, 3> floor(const Point<T, 3> &a)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_POINT3_INL_H_
+#endif  // HINAPE_DETAIL_POINT3_INL_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_SIZE3_H_
-#define HINAPE_FLUID_ENGINE_SIZE3_H_
+#ifndef HINAPE_SIZE3_H_
+#define HINAPE_SIZE3_H_
 
 #include "size2.h"
 
@@ -263,4 +263,4 @@ Size3 floor(const Size3 &a);
 
 #include "size3-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_SIZE3_H_
+#endif  // HINAPE_SIZE3_H_

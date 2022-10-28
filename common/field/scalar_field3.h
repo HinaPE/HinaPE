@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_SCALAR_FIELD3_H_
-#define HINAPE_FLUID_ENGINE_SCALAR_FIELD3_H_
+#ifndef HINAPE_SCALAR_FIELD3_H_
+#define HINAPE_SCALAR_FIELD3_H_
 
 #include "field3.h"
 
@@ -39,4 +39,4 @@ typedef std::shared_ptr<ScalarField3> ScalarField3Ptr;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_SCALAR_FIELD3_H_
+#endif  // HINAPE_SCALAR_FIELD3_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_GRID3_H_
-#define HINAPE_FLUID_ENGINE_GRID3_H_
+#ifndef HINAPE_GRID3_H_
+#define HINAPE_GRID3_H_
 
 #include "geometry/bounding_box3.h"
 #include "array/size3.h"
@@ -115,4 +115,4 @@ typedef std::shared_ptr<Grid3> Grid3Ptr;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_GRID3_H_
+#endif  // HINAPE_GRID3_H_

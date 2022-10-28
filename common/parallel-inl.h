@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_PARALLEL_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_PARALLEL_INL_H_
+#ifndef HINAPE_DETAIL_PARALLEL_INL_H_
+#define HINAPE_DETAIL_PARALLEL_INL_H_
 
 #include "parallel.h"
 
@@ -470,4 +470,4 @@ void parallelSort(RandomIterator begin, RandomIterator end, ExecutionPolicy poli
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_PARALLEL_INL_H_
+#endif  // HINAPE_DETAIL_PARALLEL_INL_H_

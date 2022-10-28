@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_CONSTANTS_H_
-#define HINAPE_FLUID_ENGINE_CONSTANTS_H_
+#ifndef HINAPE_CONSTANTS_H_
+#define HINAPE_CONSTANTS_H_
 
 #include "macros.h"
 
@@ -360,4 +360,4 @@ constexpr int kDirectionAll = kDirectionLeft | kDirectionRight | kDirectionDown 
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_CONSTANTS_H_
+#endif  // HINAPE_CONSTANTS_H_

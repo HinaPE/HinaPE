@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_ANIMATION_H_
-#define HINAPE_FLUID_ENGINE_ANIMATION_H_
+#ifndef HINAPE_ANIMATION_H_
+#define HINAPE_ANIMATION_H_
 
 #include "macros.h"
 
@@ -85,4 +85,4 @@ using AnimationPtr = std::shared_ptr<Animation>;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_ANIMATION_H_
+#endif  // HINAPE_ANIMATION_H_

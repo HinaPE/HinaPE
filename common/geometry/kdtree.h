@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_KDTREE_H
-#define HINAPE_FLUID_ENGINE_KDTREE_H
+#ifndef HINAPE_KDTREE_H
+#define HINAPE_KDTREE_H
 
 #include "bounding_box2.h"
 #include "bounding_box3.h"
@@ -127,4 +127,4 @@ private:
 
 #include "kdtree-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_KDTREE_H
+#endif  // HINAPE_KDTREE_H

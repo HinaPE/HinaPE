@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_MATRIX_H_
-#define HINAPE_FLUID_ENGINE_MATRIX_H_
+#ifndef HINAPE_MATRIX_H_
+#define HINAPE_MATRIX_H_
 
 #include "macros.h"
 #include "matrix_expression.h"
@@ -433,4 +433,4 @@ private:
 
 #include "matrix-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_MATRIX_H_
+#endif  // HINAPE_MATRIX_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_QUATERNION_H_
-#define HINAPE_FLUID_ENGINE_QUATERNION_H_
+#ifndef HINAPE_QUATERNION_H_
+#define HINAPE_QUATERNION_H_
 
 #include "matrix4x4.h"
 
@@ -199,4 +199,4 @@ typedef Quaternion<double> QuaternionD;
 
 #include "quaternion-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_QUATERNION_H_
+#endif  // HINAPE_QUATERNION_H_

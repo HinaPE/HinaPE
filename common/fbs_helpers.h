@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_FBS_HELPERS_H_
-#define HINAPE_FLUID_ENGINE_FBS_HELPERS_H_
+#ifndef HINAPE_FBS_HELPERS_H_
+#define HINAPE_FBS_HELPERS_H_
 
 #include "generated/basic_types_generated.h"
 
@@ -86,4 +86,4 @@ void deserializeGrid(FbsGridList *fbsGridList, FactoryFunc factoryFunc, std::vec
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_FBS_HELPERS_H_
+#endif  // HINAPE_FBS_HELPERS_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_RAY2_H_
-#define HINAPE_FLUID_ENGINE_RAY2_H_
+#ifndef HINAPE_RAY2_H_
+#define HINAPE_RAY2_H_
 
 #include "ray.h"
 
@@ -51,4 +51,4 @@ typedef Ray2<double> Ray2D;
 
 #include "ray2-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_RAY2_H_
+#endif  // HINAPE_RAY2_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_SERIALIZATION_H_
-#define HINAPE_FLUID_ENGINE_SERIALIZATION_H_
+#ifndef HINAPE_SERIALIZATION_H_
+#define HINAPE_SERIALIZATION_H_
 
 #include "array/array1.h"
 
@@ -47,4 +47,4 @@ void deserialize(const std::vector<uint8_t> &buffer, Array1<T> *array);
 
 #include "serialization-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_SERIALIZATION_H_
+#endif  // HINAPE_SERIALIZATION_H_

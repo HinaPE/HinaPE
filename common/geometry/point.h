@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_POINT_H_
-#define HINAPE_FLUID_ENGINE_POINT_H_
+#ifndef HINAPE_POINT_H_
+#define HINAPE_POINT_H_
 
 #include "macros.h"
 
@@ -69,5 +69,5 @@ private:
 
 #include "point-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_POINT_H_
+#endif  // HINAPE_POINT_H_
 

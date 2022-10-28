@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_VECTOR_GRID2_H_
-#define HINAPE_FLUID_ENGINE_VECTOR_GRID2_H_
+#ifndef HINAPE_VECTOR_GRID2_H_
+#define HINAPE_VECTOR_GRID2_H_
 
 #include "grid2.h"
 
@@ -93,4 +93,4 @@ typedef std::shared_ptr<VectorGridBuilder2> VectorGridBuilder2Ptr;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_VECTOR_GRID2_H_
+#endif  // HINAPE_VECTOR_GRID2_H_

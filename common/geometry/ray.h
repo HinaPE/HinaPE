@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_RAY_H_
-#define HINAPE_FLUID_ENGINE_RAY_H_
+#ifndef HINAPE_RAY_H_
+#define HINAPE_RAY_H_
 
 #include "math/vector.h"
 
@@ -21,4 +21,4 @@ class Ray
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_RAY_H_
+#endif  // HINAPE_RAY_H_

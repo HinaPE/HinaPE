@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_MATH_UTILS_H_
-#define HINAPE_FLUID_ENGINE_MATH_UTILS_H_
+#ifndef HINAPE_MATH_UTILS_H_
+#define HINAPE_MATH_UTILS_H_
 
 #include "macros.h"
 
@@ -228,4 +228,4 @@ inline T monotonicCatmullRom(const T &f0, const T &f1, const T &f2, const T &f3,
 
 #include "math_utils-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_MATH_UTILS_H_
+#endif  // HINAPE_MATH_UTILS_H_

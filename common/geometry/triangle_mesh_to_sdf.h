@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_TRIANGLE_MESH_TO_SDF_H_
-#define HINAPE_FLUID_ENGINE_TRIANGLE_MESH_TO_SDF_H_
+#ifndef HINAPE_TRIANGLE_MESH_TO_SDF_H_
+#define HINAPE_TRIANGLE_MESH_TO_SDF_H_
 
 #include "triangle_mesh3.h"
 
@@ -25,4 +25,4 @@ void triangleMeshToSdf(const TriangleMesh3 &mesh, ScalarGrid3 *sdf, const unsign
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_TRIANGLE_MESH_TO_SDF_H_
+#endif  // HINAPE_TRIANGLE_MESH_TO_SDF_H_

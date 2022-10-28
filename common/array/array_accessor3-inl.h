@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_ARRAY_ACCESSOR3_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_ARRAY_ACCESSOR3_INL_H_
+#ifndef HINAPE_DETAIL_ARRAY_ACCESSOR3_INL_H_
+#define HINAPE_DETAIL_ARRAY_ACCESSOR3_INL_H_
 
 #include "array_accessor3.h"
 
@@ -441,4 +441,4 @@ const T &ConstArrayAccessor<T, 3>::operator()(const Point3UI &pt) const
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_ARRAY_ACCESSOR3_INL_H_
+#endif  // HINAPE_DETAIL_ARRAY_ACCESSOR3_INL_H_

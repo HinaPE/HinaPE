@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_GRID2_H_
-#define HINAPE_FLUID_ENGINE_GRID2_H_
+#ifndef HINAPE_GRID2_H_
+#define HINAPE_GRID2_H_
 
 #include "geometry/bounding_box2.h"
 #include "serialization.h"
@@ -108,4 +108,4 @@ using Grid2Ptr = std::shared_ptr<Grid2>;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_GRID2_H_
+#endif  // HINAPE_GRID2_H_

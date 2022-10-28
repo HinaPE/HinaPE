@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_FUNCTORS_H_
-#define HINAPE_FLUID_ENGINE_FUNCTORS_H_
+#ifndef HINAPE_FUNCTORS_H_
+#define HINAPE_FUNCTORS_H_
 
 #include <functional>
 
@@ -30,4 +30,4 @@ struct RDivides
 
 #include "functors-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_FUNCTORS_H_
+#endif  // HINAPE_FUNCTORS_H_

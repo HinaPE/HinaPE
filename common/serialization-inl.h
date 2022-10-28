@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_SERIALIZATION_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_SERIALIZATION_INL_H_
+#ifndef HINAPE_DETAIL_SERIALIZATION_INL_H_
+#define HINAPE_DETAIL_SERIALIZATION_INL_H_
 
 #include "serialization.h"
 
@@ -27,4 +27,4 @@ void deserialize(const std::vector<uint8_t> &buffer, Array1<T> *array)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_SERIALIZATION_INL_H_
+#endif  // HINAPE_DETAIL_SERIALIZATION_INL_H_

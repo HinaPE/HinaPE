@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_VECTOR_H_
-#define HINAPE_FLUID_ENGINE_VECTOR_H_
+#ifndef HINAPE_VECTOR_H_
+#define HINAPE_VECTOR_H_
 
 #include "vector_expression.h"
 
@@ -348,4 +348,4 @@ struct ScalarType<Vector<T, N>>
 
 #include "vector-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_VECTOR_H_
+#endif  // HINAPE_VECTOR_H_

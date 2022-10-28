@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_MATRIX_MXN_H_
-#define HINAPE_FLUID_ENGINE_MATRIX_MXN_H_
+#ifndef HINAPE_MATRIX_MXN_H_
+#define HINAPE_MATRIX_MXN_H_
 
 #include "matrix_expression.h"
 #include "vector_n.h"
@@ -490,4 +490,4 @@ typedef MatrixMxN<double> MatrixMxND;
 
 #include "matrix_mxn-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_MATRIX_MXN_H_
+#endif  // HINAPE_MATRIX_MXN_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_PLANE2_H_
-#define HINAPE_FLUID_ENGINE_PLANE2_H_
+#ifndef HINAPE_PLANE2_H_
+#define HINAPE_PLANE2_H_
 
 #include "surface2.h"
 
@@ -78,4 +78,4 @@ private:
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_PLANE2_H_
+#endif  // HINAPE_PLANE2_H_

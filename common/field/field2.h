@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_FIELD2_H_
-#define HINAPE_FLUID_ENGINE_FIELD2_H_
+#ifndef HINAPE_FIELD2_H_
+#define HINAPE_FIELD2_H_
 
 #include <memory>
 
@@ -19,4 +19,4 @@ typedef std::shared_ptr<Field2> Field2Ptr;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_FIELD2_H_
+#endif  // HINAPE_FIELD2_H_

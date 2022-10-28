@@ -1,5 +1,5 @@
-#ifndef HINAPE_CLOTH_SOLVER_H
-#define HINAPE_CLOTH_SOLVER_H
+#ifndef HINAPE_CLOTH_ENGINE_CLOTH_SOLVER_H
+#define HINAPE_CLOTH_ENGINE_CLOTH_SOLVER_H
 
 #include "animation/physics_animation.h"
 #include "cloth_data.h"
@@ -77,4 +77,4 @@ public:
 };
 }
 
-#endif //HINAPE_CLOTH_SOLVER_H
+#endif //HINAPE_CLOTH_ENGINE_CLOTH_SOLVER_H

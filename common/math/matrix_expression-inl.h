@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_MATRIX_EXPRESSION_INL_H_
-#define HINAPE_FLUID_ENGINE_MATRIX_EXPRESSION_INL_H_
+#ifndef HINAPE_MATRIX_EXPRESSION_INL_H_
+#define HINAPE_MATRIX_EXPRESSION_INL_H_
 
 #include "matrix_expression.h"
 
@@ -406,4 +406,4 @@ MatrixScalarRDiv<T, E> operator/(T a, const MatrixExpression<T, E> &b)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_MATRIX_EXPRESSION_INL_H_
+#endif  // HINAPE_MATRIX_EXPRESSION_INL_H_

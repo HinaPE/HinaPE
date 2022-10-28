@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_VECTOR_FIELD2_H_
-#define HINAPE_FLUID_ENGINE_VECTOR_FIELD2_H_
+#ifndef HINAPE_VECTOR_FIELD2_H_
+#define HINAPE_VECTOR_FIELD2_H_
 
 #include "field2.h"
 
@@ -39,4 +39,4 @@ typedef std::shared_ptr<VectorField2> VectorField2Ptr;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_VECTOR_FIELD2_H_
+#endif  // HINAPE_VECTOR_FIELD2_H_

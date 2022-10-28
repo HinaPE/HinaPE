@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_ARRAY2_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_ARRAY2_INL_H_
+#ifndef HINAPE_DETAIL_ARRAY2_INL_H_
+#define HINAPE_DETAIL_ARRAY2_INL_H_
 
 #include "array2.h"
 
@@ -341,4 +341,4 @@ Array<T, 2>::operator ConstArrayAccessor2<T>() const
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_ARRAY2_INL_H_
+#endif  // HINAPE_DETAIL_ARRAY2_INL_H_

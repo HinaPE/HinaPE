@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_ARRAY_SAMPLERS3_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_ARRAY_SAMPLERS3_INL_H_
+#ifndef HINAPE_DETAIL_ARRAY_SAMPLERS3_INL_H_
+#define HINAPE_DETAIL_ARRAY_SAMPLERS3_INL_H_
 
 #include "array_samplers3.h"
 
@@ -278,4 +278,4 @@ std::function<T(const Vector3<R> &)> CubicArraySampler3<T, R>::functor() const
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_ARRAY_SAMPLERS3_INL_H_
+#endif  // HINAPE_DETAIL_ARRAY_SAMPLERS3_INL_H_

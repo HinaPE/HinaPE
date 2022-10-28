@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_TRANSFORM2_H_
-#define HINAPE_FLUID_ENGINE_TRANSFORM2_H_
+#ifndef HINAPE_TRANSFORM2_H_
+#define HINAPE_TRANSFORM2_H_
 
 #include "bounding_box2.h"
 #include "ray2.h"
@@ -68,4 +68,4 @@ private:
 
 #include "transform2-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_TRANSFORM2_H_
+#endif  // HINAPE_TRANSFORM2_H_

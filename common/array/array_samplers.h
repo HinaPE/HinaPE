@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_ARRAY_SAMPLERS_H_
-#define HINAPE_FLUID_ENGINE_ARRAY_SAMPLERS_H_
+#ifndef HINAPE_ARRAY_SAMPLERS_H_
+#define HINAPE_ARRAY_SAMPLERS_H_
 
 #include "array.h"
 
@@ -50,4 +50,4 @@ public:
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_ARRAY_SAMPLERS_H_
+#endif  // HINAPE_ARRAY_SAMPLERS_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_BOUNDING_BOX2_H_
-#define HINAPE_FLUID_ENGINE_BOUNDING_BOX2_H_
+#ifndef HINAPE_BOUNDING_BOX2_H_
+#define HINAPE_BOUNDING_BOX2_H_
 
 #include "bounding_box.h"
 
@@ -130,4 +130,4 @@ using BoundingBoxRayIntersection2D = BoundingBoxRayIntersection2<double>;
 
 #include "bounding_box2-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_BOUNDING_BOX2_H_
+#endif  // HINAPE_BOUNDING_BOX2_H_

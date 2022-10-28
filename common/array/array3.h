@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_ARRAY3_H_
-#define HINAPE_FLUID_ENGINE_ARRAY3_H_
+#ifndef HINAPE_ARRAY3_H_
+#define HINAPE_ARRAY3_H_
 
 #include "array.h"
 #include "array_accessor3.h"
@@ -387,4 +387,4 @@ template<typename T> using Array3 = Array<T, 3>;
 
 #include "array3-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_ARRAY3_H_
+#endif  // HINAPE_ARRAY3_H_

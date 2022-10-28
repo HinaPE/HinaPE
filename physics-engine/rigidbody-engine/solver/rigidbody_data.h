@@ -1,5 +1,5 @@
-#ifndef HINAPE_RIGIDBODY_DATA_H
-#define HINAPE_RIGIDBODY_DATA_H
+#ifndef HINAPE_RIGIDBODY_ENGINE_DATA_H
+#define HINAPE_RIGIDBODY_ENGINE_DATA_H
 
 #include <memory>
 #include <vector>
@@ -13,4 +13,4 @@ class RigidBodyData
 using RigidBodyDataPtr = std::shared_ptr<RigidBodyData>;
 }
 
-#endif //HINAPE_RIGIDBODY_DATA_H
+#endif //HINAPE_RIGIDBODY_ENGINE_DATA_H

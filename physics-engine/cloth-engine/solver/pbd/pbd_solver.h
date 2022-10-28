@@ -1,5 +1,5 @@
-#ifndef HINAPE_PBD_SOLVER_H
-#define HINAPE_PBD_SOLVER_H
+#ifndef HINAPE_CLOTH_ENGINE_PBD_SOLVER_H
+#define HINAPE_CLOTH_ENGINE_PBD_SOLVER_H
 
 #include "../cloth_solver.h"
 #include <memory>
@@ -44,4 +44,4 @@ public:
 };
 }
 
-#endif //HINAPE_PBD_SOLVER_H
+#endif //HINAPE_CLOTH_ENGINE_PBD_SOLVER_H

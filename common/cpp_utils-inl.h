@@ -4,8 +4,8 @@
 // personal capacity and am not conveying any rights to any intellectual
 // property of any third parties.
 
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_CPP_UTILS_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_CPP_UTILS_INL_H_
+#ifndef HINAPE_DETAIL_CPP_UTILS_INL_H_
+#define HINAPE_DETAIL_CPP_UTILS_INL_H_
 
 #include "cpp_utils.h"
 
@@ -26,4 +26,4 @@ ForwardIt binaryFind(ForwardIt first, ForwardIt last, const T &value, Compare co
 }
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_CPP_UTILS_INL_H_
+#endif  // HINAPE_DETAIL_CPP_UTILS_INL_H_

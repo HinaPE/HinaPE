@@ -1,5 +1,5 @@
-#ifndef HINAPE_CLOTH_RENDER_DATA_H
-#define HINAPE_CLOTH_RENDER_DATA_H
+#ifndef HINAPE_CLOTH_ENGINE_CLOTH_RENDER_DATA_H
+#define HINAPE_CLOTH_ENGINE_CLOTH_RENDER_DATA_H
 
 #include "array/array1.h"
 #include "math/vector3.h"
@@ -25,4 +25,4 @@ private:
 using ClothRenderDataPtr = std::shared_ptr<ClothRenderData>;
 }
 
-#endif //HINAPE_CLOTH_RENDER_DATA_H
+#endif //HINAPE_CLOTH_ENGINE_CLOTH_RENDER_DATA_H

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR_H_
-#define HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR_H_
+#ifndef HINAPE_ARRAY_ACCESSOR_H_
+#define HINAPE_ARRAY_ACCESSOR_H_
 
 #include <cstddef>
 
@@ -47,4 +47,4 @@ public:
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_ARRAY_ACCESSOR_H_
+#endif  // HINAPE_ARRAY_ACCESSOR_H_

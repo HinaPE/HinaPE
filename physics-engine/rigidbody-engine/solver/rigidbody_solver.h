@@ -1,5 +1,5 @@
-#ifndef HINAPE_RIGIDBODY_SOLVER_H
-#define HINAPE_RIGIDBODY_SOLVER_H
+#ifndef HINAPE_RIGIDBODY_ENGINE_SOLVER_H
+#define HINAPE_RIGIDBODY_ENGINE_SOLVER_H
 
 #include "rigidbody_data.h"
 
@@ -12,4 +12,4 @@ class RigidBodySolver
 using RigidBodySolverPtr = std::shared_ptr<RigidBodySolver>;
 }
 
-#endif //HINAPE_RIGIDBODY_SOLVER_H
+#endif //HINAPE_RIGIDBODY_ENGINE_SOLVER_H

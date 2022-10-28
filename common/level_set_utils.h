@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_LEVEL_SET_UTILS_H_
-#define HINAPE_FLUID_ENGINE_LEVEL_SET_UTILS_H_
+#ifndef HINAPE_LEVEL_SET_UTILS_H_
+#define HINAPE_LEVEL_SET_UTILS_H_
 
 #include "macros.h"
 
@@ -99,4 +99,4 @@ T fractionInside(T phiBottomLeft, T phiBottomRight, T phiTopLeft, T phiTopRight)
 
 #include "level_set_utils-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_LEVEL_SET_UTILS_H_
+#endif  // HINAPE_LEVEL_SET_UTILS_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_SIZE_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_SIZE_INL_H_
+#ifndef HINAPE_DETAIL_SIZE_INL_H_
+#define HINAPE_DETAIL_SIZE_INL_H_
 
 #include <cassert>
 
@@ -72,4 +72,4 @@ void Size<N>::setAt(size_t i, size_t v)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_SIZE_INL_H_
+#endif  // HINAPE_DETAIL_SIZE_INL_H_

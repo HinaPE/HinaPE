@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_ARRAY_SAMPLERS1_H_
-#define HINAPE_FLUID_ENGINE_ARRAY_SAMPLERS1_H_
+#ifndef HINAPE_ARRAY_SAMPLERS1_H_
+#define HINAPE_ARRAY_SAMPLERS1_H_
 
 #include "array_samplers.h"
 #include "array_accessor1.h"
@@ -145,4 +145,4 @@ template<typename T, typename R> using CubicArraySampler1 = CubicArraySampler<T,
 
 #include "array_samplers1-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_ARRAY_SAMPLERS1_H_
+#endif  // HINAPE_ARRAY_SAMPLERS1_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_SCALAR_GRID2_H_
-#define HINAPE_FLUID_ENGINE_SCALAR_GRID2_H_
+#ifndef HINAPE_SCALAR_GRID2_H_
+#define HINAPE_SCALAR_GRID2_H_
 
 #include "grid2.h"
 
@@ -185,4 +185,4 @@ using ScalarGridBuilder2Ptr = std::shared_ptr<ScalarGridBuilder2>;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_SCALAR_GRID2_H_
+#endif  // HINAPE_SCALAR_GRID2_H_

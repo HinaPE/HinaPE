@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_TYPE_HELPERS_H_
-#define HINAPE_FLUID_ENGINE_TYPE_HELPERS_H_
+#ifndef HINAPE_TYPE_HELPERS_H_
+#define HINAPE_TYPE_HELPERS_H_
 
 namespace HinaPE
 {
@@ -13,4 +13,4 @@ struct ScalarType
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_TYPE_HELPERS_H_
+#endif  // HINAPE_TYPE_HELPERS_H_

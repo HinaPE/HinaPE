@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_MATRIX3X3_H_
-#define HINAPE_FLUID_ENGINE_MATRIX3X3_H_
+#ifndef HINAPE_MATRIX3X3_H_
+#define HINAPE_MATRIX3X3_H_
 
 #include "matrix.h"
 #include "vector3.h"
@@ -398,4 +398,4 @@ typedef Matrix3x3<double> Matrix3x3D;
 
 #include "matrix3x3-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_MATRIX3X3_H_
+#endif  // HINAPE_MATRIX3X3_H_

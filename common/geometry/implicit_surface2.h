@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE2_H_
-#define HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE2_H_
+#ifndef HINAPE_IMPLICIT_SURFACE2_H_
+#define HINAPE_IMPLICIT_SURFACE2_H_
 
 #include "surface2.h"
 
@@ -38,4 +38,4 @@ typedef std::shared_ptr<ImplicitSurface2> ImplicitSurface2Ptr;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE2_H_
+#endif  // HINAPE_IMPLICIT_SURFACE2_H_

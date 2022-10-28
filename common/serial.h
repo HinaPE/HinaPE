@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_SERIAL_H_
-#define HINAPE_FLUID_ENGINE_SERIAL_H_
+#ifndef HINAPE_SERIAL_H_
+#define HINAPE_SERIAL_H_
 
 namespace HinaPE
 {
@@ -110,4 +110,4 @@ void serialSort(RandomIterator begin, RandomIterator end, const SortingFunction 
 
 #include "serial-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_SERIAL_H_
+#endif  // HINAPE_SERIAL_H_

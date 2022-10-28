@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_PARALLEL_H_
-#define HINAPE_FLUID_ENGINE_PARALLEL_H_
+#ifndef HINAPE_PARALLEL_H_
+#define HINAPE_PARALLEL_H_
 
 namespace HinaPE
 {
@@ -215,4 +215,4 @@ unsigned int maxNumberOfThreads();
 
 #include "parallel-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_PARALLEL_H_
+#endif  // HINAPE_PARALLEL_H_

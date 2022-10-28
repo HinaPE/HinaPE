@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_QUATERNION_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_QUATERNION_INL_H_
+#ifndef HINAPE_DETAIL_QUATERNION_INL_H_
+#define HINAPE_DETAIL_QUATERNION_INL_H_
 
 #include "quaternion.h"
 
@@ -474,4 +474,4 @@ inline Quaternion<T> operator*(const Quaternion<T> &a, const Quaternion<T> &b)
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_QUATERNION_INL_H_
+#endif  // HINAPE_DETAIL_QUATERNION_INL_H_

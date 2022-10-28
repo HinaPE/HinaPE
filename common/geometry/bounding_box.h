@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_BOUNDING_BOX_H_
-#define HINAPE_FLUID_ENGINE_BOUNDING_BOX_H_
+#ifndef HINAPE_BOUNDING_BOX_H_
+#define HINAPE_BOUNDING_BOX_H_
 
 #include "math/vector.h"
 
@@ -69,4 +69,4 @@ public:
 
 #include "bounding_box-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_BOUNDING_BOX_H_
+#endif  // HINAPE_BOUNDING_BOX_H_

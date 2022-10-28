@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_ARRAY_H_
-#define HINAPE_FLUID_ENGINE_ARRAY_H_
+#ifndef HINAPE_ARRAY_H_
+#define HINAPE_ARRAY_H_
 
 #include "size.h"
 
@@ -26,4 +26,4 @@ public:
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_ARRAY_H_
+#endif  // HINAPE_ARRAY_H_

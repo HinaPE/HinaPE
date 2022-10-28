@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_MATRIX_CSR_H_
-#define HINAPE_FLUID_ENGINE_MATRIX_CSR_H_
+#ifndef HINAPE_MATRIX_CSR_H_
+#define HINAPE_MATRIX_CSR_H_
 
 #include "matrix_expression.h"
 #include "vector_n.h"
@@ -483,4 +483,4 @@ typedef MatrixCsr<double> MatrixCsrD;
 
 #include "matrix_csr-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_MATRIX_CSR_H_
+#endif  // HINAPE_MATRIX_CSR_H_

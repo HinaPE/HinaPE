@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_FDM_UTILS_H_
-#define HINAPE_FLUID_ENGINE_FDM_UTILS_H_
+#ifndef HINAPE_FDM_UTILS_H_
+#define HINAPE_FDM_UTILS_H_
 
 #include "array/array_accessor2.h"
 #include "array/array_accessor3.h"
@@ -45,4 +45,4 @@ Vector3D laplacian3(const ConstArrayAccessor3<Vector3D> &data, const Vector3D &g
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_FDM_UTILS_H_
+#endif  // HINAPE_FDM_UTILS_H_

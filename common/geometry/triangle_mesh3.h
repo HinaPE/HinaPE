@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_TRIANGLE_MESH3_H_
-#define HINAPE_FLUID_ENGINE_TRIANGLE_MESH3_H_
+#ifndef HINAPE_TRIANGLE_MESH3_H_
+#define HINAPE_TRIANGLE_MESH3_H_
 
 #include "array/array1.h"
 #include "bvh3.h"
@@ -271,4 +271,4 @@ private:
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_TRIANGLE_MESH3_H_
+#endif  // HINAPE_TRIANGLE_MESH3_H_

@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_PHYSICS_HELPERS_H_
-#define HINAPE_FLUID_ENGINE_PHYSICS_HELPERS_H_
+#ifndef HINAPE_PHYSICS_HELPERS_H_
+#define HINAPE_PHYSICS_HELPERS_H_
 
 #include "math/vector3.h"
 
@@ -52,4 +52,4 @@ inline double computePressureFromEos(double density, double targetDensity, doubl
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_PHYSICS_HELPERS_H_
+#endif  // HINAPE_PHYSICS_HELPERS_H_

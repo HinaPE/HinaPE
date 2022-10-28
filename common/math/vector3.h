@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_VECTOR3_H_
-#define HINAPE_FLUID_ENGINE_VECTOR3_H_
+#ifndef HINAPE_VECTOR3_H_
+#define HINAPE_VECTOR3_H_
 
 #include "vector2.h"
 
@@ -373,4 +373,4 @@ auto monotonicCatmullRom(const Vector3<T> &v0, const Vector3<T> &v1, const Vecto
 
 #include "vector3-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_VECTOR3_H_
+#endif  // HINAPE_VECTOR3_H_

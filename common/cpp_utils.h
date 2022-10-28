@@ -4,8 +4,8 @@
 // personal capacity and am not conveying any rights to any intellectual
 // property of any third parties.
 
-#ifndef HINAPE_FLUID_ENGINE_CPP_UTILS_H_
-#define HINAPE_FLUID_ENGINE_CPP_UTILS_H_
+#ifndef HINAPE_CPP_UTILS_H_
+#define HINAPE_CPP_UTILS_H_
 
 #include <algorithm>
 
@@ -18,4 +18,4 @@ ForwardIt binaryFind(ForwardIt first, ForwardIt last, const T &value, Compare co
 
 #include "cpp_utils-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_CPP_UTILS_H_
+#endif  // HINAPE_CPP_UTILS_H_

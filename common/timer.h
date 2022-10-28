@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_TIMER_H_
-#define HINAPE_FLUID_ENGINE_TIMER_H_
+#ifndef HINAPE_TIMER_H_
+#define HINAPE_TIMER_H_
 
 #include <chrono>
 
@@ -26,4 +26,4 @@ private:
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_TIMER_H_
+#endif  // HINAPE_TIMER_H_

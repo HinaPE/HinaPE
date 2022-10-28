@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_POINT2_H_
-#define HINAPE_FLUID_ENGINE_POINT2_H_
+#ifndef HINAPE_POINT2_H_
+#define HINAPE_POINT2_H_
 
 #include "point.h"
 
@@ -298,4 +298,4 @@ typedef Point2<size_t> Point2UI;
 
 #include "point2-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_POINT2_H_
+#endif  // HINAPE_POINT2_H_

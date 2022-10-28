@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_LOGGING_H_
-#define HINAPE_FLUID_ENGINE_LOGGING_H_
+#ifndef HINAPE_LOGGING_H_
+#define HINAPE_LOGGING_H_
 
 #include <iostream>
 #include <sstream>
@@ -102,4 +102,4 @@ extern Logger debugLogger;
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_LOGGING_H_
+#endif  // HINAPE_LOGGING_H_

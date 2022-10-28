@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_DETAIL_ARRAY_SAMPLERS2_INL_H_
-#define HINAPE_FLUID_ENGINE_DETAIL_ARRAY_SAMPLERS2_INL_H_
+#ifndef HINAPE_DETAIL_ARRAY_SAMPLERS2_INL_H_
+#define HINAPE_DETAIL_ARRAY_SAMPLERS2_INL_H_
 
 #include "array_samplers2.h"
 
@@ -234,4 +234,4 @@ std::function<T(const Vector2<R> &)> CubicArraySampler2<T, R>::functor() const
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_DETAIL_ARRAY_SAMPLERS2_INL_H_
+#endif  // HINAPE_DETAIL_ARRAY_SAMPLERS2_INL_H_

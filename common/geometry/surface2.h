@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_SURFACE2_H_
-#define HINAPE_FLUID_ENGINE_SURFACE2_H_
+#ifndef HINAPE_SURFACE2_H_
+#define HINAPE_SURFACE2_H_
 
 #include "bounding_box2.h"
 #include "ray2.h"
@@ -159,4 +159,4 @@ auto SurfaceBuilderBase2<T>::withTransform(const Transform2 &transform) -> T &
 
 }  // namespace HinaPE
 
-#endif  // HINAPE_FLUID_ENGINE_SURFACE2_H_
+#endif  // HINAPE_SURFACE2_H_

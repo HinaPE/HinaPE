@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_BOX3_H_
-#define HINAPE_FLUID_ENGINE_BOX3_H_
+#ifndef HINAPE_BOX3_H_
+#define HINAPE_BOX3_H_
 
 #include "surface3.h"
 #include "bounding_box3.h"
@@ -83,4 +83,4 @@ private:
 }  // namespace HinaPE
 
 
-#endif  // HINAPE_FLUID_ENGINE_BOX3_H_
+#endif  // HINAPE_BOX3_H_

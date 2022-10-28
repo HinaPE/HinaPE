@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_ARRAY_UTILS_H_
-#define HINAPE_FLUID_ENGINE_ARRAY_UTILS_H_
+#ifndef HINAPE_ARRAY_UTILS_H_
+#define HINAPE_ARRAY_UTILS_H_
 
 #include "array_accessor2.h"
 #include "array_accessor3.h"
@@ -137,4 +137,4 @@ void convertToCsv(const ArrayType &data, std::ostream *strm);
 
 #include "array_utils-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_ARRAY_UTILS_H_
+#endif  // HINAPE_ARRAY_UTILS_H_

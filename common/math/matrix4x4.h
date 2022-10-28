@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_MATRIX4X4_H_
-#define HINAPE_FLUID_ENGINE_MATRIX4X4_H_
+#ifndef HINAPE_MATRIX4X4_H_
+#define HINAPE_MATRIX4X4_H_
 
 #include "matrix3x3.h"
 #include "vector4.h"
@@ -446,4 +446,4 @@ typedef Matrix4x4<double> Matrix4x4D;
 
 #include "matrix4x4-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_MATRIX4X4_H_
+#endif  // HINAPE_MATRIX4X4_H_
