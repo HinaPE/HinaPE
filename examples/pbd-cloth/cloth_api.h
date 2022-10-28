@@ -10,6 +10,10 @@ class ClothAPI : public HinaPE::ClothSystemAPI
 {
 public:
     void step(Scene_Object *_scene_object, float dt) override;
+
+public:
+    bool solver_prepared = false;
+    std::shared_ptr<HinaPE::ClothEngine::ClothSolver> solver_ptr;
 };
 
 #endif //HINAPE_CLOTH_API_H

@@ -1,5 +1,5 @@
-#ifndef HINAPE_CLOTH_ENGINE_CLOTH_RENDER_DATA_H
-#define HINAPE_CLOTH_ENGINE_CLOTH_RENDER_DATA_H
+#ifndef HINAPE_CLOTH_GEOMETRY_DATA_H
+#define HINAPE_CLOTH_GEOMETRY_DATA_H
 
 #include "array/array1.h"
 #include "math/vector3.h"
@@ -9,10 +9,8 @@
 
 namespace HinaPE::ClothEngine
 {
-class ClothRenderData
+class ClothGeometryData
 {
-public:
-
 private:
     std::vector<Vector3D> _vertices;
     std::vector<Vector3D> _normals;
@@ -22,7 +20,7 @@ private:
     std::vector<Vector3D> _bi_tangents;
     std::vector<unsigned int> _indices;
 };
-using ClothRenderDataPtr = std::shared_ptr<ClothRenderData>;
+using ClothGeometryDataPtr = std::shared_ptr<ClothGeometryData>;
 }
 
-#endif //HINAPE_CLOTH_ENGINE_CLOTH_RENDER_DATA_H
+#endif //HINAPE_CLOTH_GEOMETRY_DATA_H

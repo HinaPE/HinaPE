@@ -3,6 +3,7 @@
 
 #include "animation/physics_animation.h"
 #include "cloth_data.h"
+#include "cloth_geometry_data.h"
 
 namespace HinaPE::ClothEngine
 {
@@ -13,8 +14,7 @@ public:
     static auto builder() -> Builder;
 
 protected:
-    ClothSolver();
-//    ClothSolver(double width, double height, int rows, int cols, const Vector3D& center_point, const Vector3D &orientation);
+    explicit ClothSolver(const ClothGeometryDataPtr& cloth_geometry_data_ptr);
     void onInitialize() override;
     void onAdvanceTimeStep(double timeIntervalInSeconds) final;
     virtual void on_begin_advance_time_step(double time_interval_in_seconds); // Empty, to be overridden
@@ -22,6 +22,7 @@ protected:
 
 private:
     ClothDataPtr _cloth_data;
+    ClothGeometryDataPtr _cloth_geometry_data;
     ClothData::VectorData _new_positions;
     ClothData::VectorData _new_velocities;
 };
