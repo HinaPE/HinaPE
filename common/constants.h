@@ -6,7 +6,7 @@
 #include <cmath>
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // MARK: Zero
@@ -358,6 +358,6 @@ constexpr int kDirectionFront = 1 << 5;
 //! All direction.
 constexpr int kDirectionAll = kDirectionLeft | kDirectionRight | kDirectionDown | kDirectionUp | kDirectionBack | kDirectionFront;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_CONSTANTS_H_

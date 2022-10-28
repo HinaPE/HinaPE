@@ -6,7 +6,7 @@
 #include <cstring>
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T>
@@ -25,6 +25,6 @@ void deserialize(const std::vector<uint8_t> &buffer, Array1<T> *array)
     memcpy(reinterpret_cast<uint8_t *>(array->data()), data.data(), data.size());
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_SERIALIZATION_INL_H_

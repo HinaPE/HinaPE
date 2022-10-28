@@ -5,7 +5,7 @@
 
 #include <algorithm>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 inline Vector2D computeDragForce(double dragCoefficient, double radius, const Vector2D &velocity)
@@ -50,6 +50,6 @@ inline double computePressureFromEos(double density, double targetDensity, doubl
     return p;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_PHYSICS_HELPERS_H_

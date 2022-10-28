@@ -3,7 +3,7 @@
 
 #include "surface2.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -76,6 +76,6 @@ private:
     Vector2D _point{0, 0};
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_PLANE2_H_

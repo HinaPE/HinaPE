@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T>
@@ -172,6 +172,6 @@ T distanceToZeroLevelSet(T phi0, T phi1)
     }
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_LEVEL_SET_UTILS_INL_H_

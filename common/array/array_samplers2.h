@@ -8,7 +8,7 @@
 
 #include <functional>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -148,7 +148,7 @@ private:
 //! Type alias for 2-D cubic array sampler.
 template<typename T, typename R> using CubicArraySampler2 = CubicArraySampler<T, R, 2>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "array_samplers2-inl.h"
 

@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! \brief Returns 2-D gradient vector from given 2-D scalar grid-like array
@@ -43,6 +43,6 @@ double laplacian3(const ConstArrayAccessor3<double> &data, const Vector3D &gridS
 //!        \p data, \p gridSpacing, and array index (\p i, \p j, \p k).
 Vector3D laplacian3(const ConstArrayAccessor3<Vector3D> &data, const Vector3D &gridSpacing, size_t i, size_t j, size_t k);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_FDM_UTILS_H_

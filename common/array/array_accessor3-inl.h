@@ -9,7 +9,7 @@
 
 #include <utility>  // just make cpplint happy..
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T>
@@ -439,6 +439,6 @@ const T &ConstArrayAccessor<T, 3>::operator()(const Point3UI &pt) const
     return _data[pt.x + _size.x * (pt.y + _size.y * pt.z)];
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_ARRAY_ACCESSOR3_INL_H_

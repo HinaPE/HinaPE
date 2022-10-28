@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! \brief Abstract base class for 2-D collocated vector grid structure.
@@ -118,6 +118,6 @@ private:
 //! Shared pointer for the CollocatedVectorGrid2 type.
 typedef std::shared_ptr<CollocatedVectorGrid2> CollocatedVectorGrid2Ptr;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_COLLOCATED_VECTOR_GRID2_H_

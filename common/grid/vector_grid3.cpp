@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 VectorGrid3::VectorGrid3() {}
 

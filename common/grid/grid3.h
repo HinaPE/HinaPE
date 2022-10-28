@@ -12,7 +12,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -113,6 +113,6 @@ typedef std::shared_ptr<Grid3> Grid3Ptr;
 #define JET_GRID3_TYPE_NAME(DerivedClassName) \
     std::string typeName() const override { return #DerivedClassName; }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_GRID3_H_

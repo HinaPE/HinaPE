@@ -3,7 +3,7 @@
 
 #include "size.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -24,6 +24,6 @@ public:
     static_assert(N < 1 || N > 3, "Not implemented - N should be either 1, 2 or 3.");
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_ARRAY_H_

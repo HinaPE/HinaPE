@@ -7,7 +7,7 @@
 #include <array>
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -394,7 +394,7 @@ typedef Matrix3x3<float> Matrix3x3F;
 //! Double-type 3x3 matrix.
 typedef Matrix3x3<double> Matrix3x3D;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "matrix3x3-inl.h"
 

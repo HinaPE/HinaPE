@@ -3,7 +3,7 @@
 
 #include <memory>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Abstract base class for 2-D fields.
@@ -17,6 +17,6 @@ public:
 
 typedef std::shared_ptr<Field2> Field2Ptr;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_FIELD2_H_

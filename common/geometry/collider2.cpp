@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 Collider2::Collider2() {}
 

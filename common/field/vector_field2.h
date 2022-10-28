@@ -8,7 +8,7 @@
 #include <functional>
 #include <memory>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Abstract base class for 2-D vector field.
@@ -37,6 +37,6 @@ public:
 //! Shared pointer for the VectorField2 type.
 typedef std::shared_ptr<VectorField2> VectorField2Ptr;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_VECTOR_FIELD2_H_

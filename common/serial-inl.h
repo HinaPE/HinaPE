@@ -7,7 +7,7 @@
 #include <functional>
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename RandomIterator, typename T>
@@ -68,6 +68,6 @@ void serialSort(RandomIterator begin, RandomIterator end)
     serialSort(begin, end, std::less<typename RandomIterator::value_type>());
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  //  HINAPE_FLUID_ENGINE_DETAIL_SERIAL_INL_H_

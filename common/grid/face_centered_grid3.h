@@ -10,7 +10,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -316,6 +316,6 @@ private:
     Vector3D _initialVal{0, 0, 0};
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_FACE_CENTERED_GRID3_H_

@@ -7,7 +7,7 @@
 #include <cmath>
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T>
@@ -264,6 +264,6 @@ inline T monotonicCatmullRom(const T &f0, const T &f1, const T &f2, const T &f3,
     return a3 * cubic(f) + a2 * square(f) + a1 * f + a0;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_MATH_UTILS_INL_H_

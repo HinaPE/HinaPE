@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <cassert>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // Constructors
@@ -285,6 +285,6 @@ inline Size2 clamp(const Size2 &v, const Size2 &low, const Size2 &high)
     return Size2(clamp(v.x, low.x, high.x), clamp(v.y, low.y, high.y));
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_SIZE2_INL_H_

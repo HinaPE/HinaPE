@@ -7,7 +7,7 @@
 
 #include <utility>  // just make cpplint happy..
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -118,6 +118,6 @@ private:
     double _initialVal = 0.0;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_VERTEX_CENTERED_SCALAR_GRID2_H_

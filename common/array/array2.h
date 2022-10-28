@@ -11,7 +11,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -361,7 +361,7 @@ private:
 //! Type alias for 2-D array.
 template<typename T> using Array2 = Array<T, 2>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "array2-inl.h"
 

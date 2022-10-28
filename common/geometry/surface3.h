@@ -9,7 +9,7 @@
 
 #include <memory>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Struct that represents ray-surface intersection point.
@@ -157,6 +157,6 @@ auto SurfaceBuilderBase3<T>::withTransform(const Transform3 &transform) -> T &
     return static_cast<T &>(*this);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_SURFACE3_H_

@@ -4,7 +4,7 @@
 #include "surface2.h"
 #include "bounding_box2.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -80,7 +80,7 @@ private:
     Vector2D _upperCorner{1, 1};
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 
 #endif  // HINAPE_FLUID_ENGINE_BOX2_H_

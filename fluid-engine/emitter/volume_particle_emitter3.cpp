@@ -7,6 +7,7 @@
 #include "pch.h"
 #include "samplers.h"
 
+using namespace HinaPE;
 using namespace HinaPE::FluidEngine;
 
 static const size_t kDefaultHashGridResolution = 64;
@@ -139,7 +140,7 @@ void VolumeParticleEmitter3::setPointGenerator(const PointGenerator3Ptr &newPoin
     _pointsGen = newPointsGen;
 }
 
-const ImplicitSurface3Ptr &VolumeParticleEmitter3::surface() const
+auto VolumeParticleEmitter3::surface() const -> const ImplicitSurface3Ptr &
 {
     return _implicitSurface;
 }
@@ -149,7 +150,7 @@ void VolumeParticleEmitter3::setSurface(const ImplicitSurface3Ptr &newSurface)
     _implicitSurface = newSurface;
 }
 
-const BoundingBox3D &VolumeParticleEmitter3::maxRegion() const
+auto VolumeParticleEmitter3::maxRegion() const -> const BoundingBox3D &
 {
     return _bounds;
 }
@@ -159,21 +160,21 @@ void VolumeParticleEmitter3::setMaxRegion(const BoundingBox3D &newMaxRegion)
     _bounds = newMaxRegion;
 }
 
-double VolumeParticleEmitter3::jitter() const { return _jitter; }
+auto VolumeParticleEmitter3::jitter() const -> double { return _jitter; }
 
 void VolumeParticleEmitter3::setJitter(double newJitter)
 {
     _jitter = clamp(newJitter, 0.0, 1.0);
 }
 
-bool VolumeParticleEmitter3::isOneShot() const { return _isOneShot; }
+auto VolumeParticleEmitter3::isOneShot() const -> bool { return _isOneShot; }
 
 void VolumeParticleEmitter3::setIsOneShot(bool newValue)
 {
     _isOneShot = newValue;
 }
 
-bool VolumeParticleEmitter3::allowOverlapping() const
+auto VolumeParticleEmitter3::allowOverlapping() const -> bool
 {
     return _allowOverlapping;
 }
@@ -183,7 +184,7 @@ void VolumeParticleEmitter3::setAllowOverlapping(bool newValue)
     _allowOverlapping = newValue;
 }
 
-size_t VolumeParticleEmitter3::maxNumberOfParticles() const
+auto VolumeParticleEmitter3::maxNumberOfParticles() const -> size_t
 {
     return _maxNumberOfParticles;
 }
@@ -193,52 +194,52 @@ void VolumeParticleEmitter3::setMaxNumberOfParticles(size_t newMaxNumberOfPartic
     _maxNumberOfParticles = newMaxNumberOfParticles;
 }
 
-double VolumeParticleEmitter3::spacing() const { return _spacing; }
+auto VolumeParticleEmitter3::spacing() const -> double { return _spacing; }
 
 void VolumeParticleEmitter3::setSpacing(double newSpacing)
 {
     _spacing = newSpacing;
 }
 
-Vector3D VolumeParticleEmitter3::initialVelocity() const { return _initialVel; }
+auto VolumeParticleEmitter3::initialVelocity() const -> Vector3D { return _initialVel; }
 
 void VolumeParticleEmitter3::setInitialVelocity(const Vector3D &newInitialVel)
 {
     _initialVel = newInitialVel;
 }
 
-Vector3D VolumeParticleEmitter3::linearVelocity() const { return _linearVel; }
+auto VolumeParticleEmitter3::linearVelocity() const -> Vector3D { return _linearVel; }
 
 void VolumeParticleEmitter3::setLinearVelocity(const Vector3D &newLinearVel)
 {
     _linearVel = newLinearVel;
 }
 
-Vector3D VolumeParticleEmitter3::angularVelocity() const { return _angularVel; }
+auto VolumeParticleEmitter3::angularVelocity() const -> Vector3D { return _angularVel; }
 
 void VolumeParticleEmitter3::setAngularVelocity(const Vector3D &newAngularVel)
 {
     _angularVel = newAngularVel;
 }
 
-double VolumeParticleEmitter3::random()
+auto VolumeParticleEmitter3::random() -> double
 {
     std::uniform_real_distribution<> d(0.0, 1.0);
     return d(_rng);
 }
 
-Vector3D VolumeParticleEmitter3::velocityAt(const Vector3D &point) const
+auto VolumeParticleEmitter3::velocityAt(const Vector3D &point) const -> Vector3D
 {
     Vector3D r = point - _implicitSurface->transform.translation();
     return _linearVel + _angularVel.cross(r) + _initialVel;
 }
 
-VolumeParticleEmitter3::Builder VolumeParticleEmitter3::builder()
+auto VolumeParticleEmitter3::builder() -> VolumeParticleEmitter3::Builder
 {
-    return Builder();
+    return {};
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withImplicitSurface(const ImplicitSurface3Ptr &implicitSurface)
+auto VolumeParticleEmitter3::Builder::withImplicitSurface(const ImplicitSurface3Ptr &implicitSurface) -> VolumeParticleEmitter3::Builder &
 {
     _implicitSurface = implicitSurface;
     if (!_isBoundSet)
@@ -248,7 +249,7 @@ VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withImplicitSu
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withSurface(const Surface3Ptr &surface)
+auto VolumeParticleEmitter3::Builder::withSurface(const Surface3Ptr &surface) -> VolumeParticleEmitter3::Builder &
 {
     _implicitSurface = std::make_shared<SurfaceToImplicit3>(surface);
     if (!_isBoundSet)
@@ -258,73 +259,73 @@ VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withSurface(co
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withMaxRegion(const BoundingBox3D &bounds)
+auto VolumeParticleEmitter3::Builder::withMaxRegion(const BoundingBox3D &bounds) -> VolumeParticleEmitter3::Builder &
 {
     _bounds = bounds;
     _isBoundSet = true;
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withSpacing(double spacing)
+auto VolumeParticleEmitter3::Builder::withSpacing(double spacing) -> VolumeParticleEmitter3::Builder &
 {
     _spacing = spacing;
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withInitialVelocity(const Vector3D &initialVel)
+auto VolumeParticleEmitter3::Builder::withInitialVelocity(const Vector3D &initialVel) -> VolumeParticleEmitter3::Builder &
 {
     _initialVel = initialVel;
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withLinearVelocity(const Vector3D &linearVel)
+auto VolumeParticleEmitter3::Builder::withLinearVelocity(const Vector3D &linearVel) -> VolumeParticleEmitter3::Builder &
 {
     _linearVel = linearVel;
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withAngularVelocity(const Vector3D &angularVel)
+auto VolumeParticleEmitter3::Builder::withAngularVelocity(const Vector3D &angularVel) -> VolumeParticleEmitter3::Builder &
 {
     _angularVel = angularVel;
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withMaxNumberOfParticles(size_t maxNumberOfParticles)
+auto VolumeParticleEmitter3::Builder::withMaxNumberOfParticles(size_t maxNumberOfParticles) -> VolumeParticleEmitter3::Builder &
 {
     _maxNumberOfParticles = maxNumberOfParticles;
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withJitter(double jitter)
+auto VolumeParticleEmitter3::Builder::withJitter(double jitter) -> VolumeParticleEmitter3::Builder &
 {
     _jitter = jitter;
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withIsOneShot(bool isOneShot)
+auto VolumeParticleEmitter3::Builder::withIsOneShot(bool isOneShot) -> VolumeParticleEmitter3::Builder &
 {
     _isOneShot = isOneShot;
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withAllowOverlapping(bool allowOverlapping)
+auto VolumeParticleEmitter3::Builder::withAllowOverlapping(bool allowOverlapping) -> VolumeParticleEmitter3::Builder &
 {
     _allowOverlapping = allowOverlapping;
     return *this;
 }
 
-VolumeParticleEmitter3::Builder &VolumeParticleEmitter3::Builder::withRandomSeed(uint32_t seed)
+auto VolumeParticleEmitter3::Builder::withRandomSeed(uint32_t seed) -> VolumeParticleEmitter3::Builder &
 {
     _seed = seed;
     return *this;
 }
 
-VolumeParticleEmitter3 VolumeParticleEmitter3::Builder::build() const
+auto VolumeParticleEmitter3::Builder::build() const -> VolumeParticleEmitter3
 {
     return VolumeParticleEmitter3(_implicitSurface, _bounds, _spacing, _initialVel, _linearVel, _angularVel, _maxNumberOfParticles, _jitter, _isOneShot, _allowOverlapping, _seed);
 }
 
-VolumeParticleEmitter3Ptr VolumeParticleEmitter3::Builder::makeShared() const
+auto VolumeParticleEmitter3::Builder::makeShared() const -> VolumeParticleEmitter3Ptr
 {
     return std::shared_ptr<VolumeParticleEmitter3>(new VolumeParticleEmitter3(_implicitSurface, _bounds, _spacing, _initialVel, _linearVel, _angularVel, _maxNumberOfParticles, _jitter, _isOneShot, _allowOverlapping), [](VolumeParticleEmitter3 *obj) { delete obj; });
 }

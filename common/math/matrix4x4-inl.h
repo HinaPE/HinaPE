@@ -9,7 +9,7 @@
 #include <cstring>
 #include <utility>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // MARK: CTOR/DTOR
@@ -880,6 +880,6 @@ Matrix<T, 4, 4> operator/(T a, const Matrix<T, 4, 4> &b)
     return b.rdiv(a);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX4X4_INL_H_

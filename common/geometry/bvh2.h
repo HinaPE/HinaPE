@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -118,7 +118,7 @@ private:
 
     size_t qsplit(size_t *itemIndices, size_t numItems, double pivot, uint8_t axis);
 };
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "bvh2-inl.h"
 

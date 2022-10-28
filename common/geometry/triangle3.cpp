@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 inline Vector3D closestPointOnLine(const Vector3D &v0, const Vector3D &v1, const Vector3D &pt)
 {

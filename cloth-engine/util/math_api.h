@@ -7,11 +7,11 @@
 namespace HinaPE::ClothEngine
 {
 using real = double;
-using Vector3F = HinaPE::FluidEngine::Vector3F;
-using Vector3D = HinaPE::FluidEngine::Vector3D;
+using Vector3F = HinaPE::Vector3F;
+using Vector3D = HinaPE::Vector3D;
 using Vector3 = Vector3D;
-using QuaternionF = HinaPE::FluidEngine::QuaternionF;
-using QuaternionD = HinaPE::FluidEngine::QuaternionD;
+using QuaternionF = HinaPE::QuaternionF;
+using QuaternionD = HinaPE::QuaternionD;
 using Quaternion = QuaternionD;
 
 constexpr auto as_real(auto n) -> real { return static_cast<real>(n); }

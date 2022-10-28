@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -88,6 +88,6 @@ private:
     Surface3Ptr _surface;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_SURFACE_TO_IMPLICIT3_H_

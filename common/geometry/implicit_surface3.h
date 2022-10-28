@@ -3,7 +3,7 @@
 
 #include "surface3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Abstract base class for 3-D implicit surface.
@@ -36,6 +36,6 @@ private:
 //! Shared pointer type for the ImplicitSurface3.
 typedef std::shared_ptr<ImplicitSurface3> ImplicitSurface3Ptr;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE3_H_

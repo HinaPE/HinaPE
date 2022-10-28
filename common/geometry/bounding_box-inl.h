@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T, size_t N>
@@ -134,6 +134,6 @@ void BoundingBox<T, N>::expand(T delta)
     }
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_BOUNDING_BOX_INL_H_

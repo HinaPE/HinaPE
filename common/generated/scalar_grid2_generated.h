@@ -8,7 +8,7 @@
 
 #include "basic_types_generated.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 namespace fbs
 {
@@ -21,17 +21,17 @@ struct ScalarGrid2 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
     {
         VT_RESOLUTION = 4, VT_GRIDSPACING = 6, VT_ORIGIN = 8, VT_DATA = 10
     };
-    const HinaPE::FluidEngine::fbs::Size2 *resolution() const
+    const HinaPE::fbs::Size2 *resolution() const
     {
-        return GetStruct<const HinaPE::FluidEngine::fbs::Size2 *>(VT_RESOLUTION);
+        return GetStruct<const HinaPE::fbs::Size2 *>(VT_RESOLUTION);
     }
-    const HinaPE::FluidEngine::fbs::Vector2D *gridSpacing() const
+    const HinaPE::fbs::Vector2D *gridSpacing() const
     {
-        return GetStruct<const HinaPE::FluidEngine::fbs::Vector2D *>(VT_GRIDSPACING);
+        return GetStruct<const HinaPE::fbs::Vector2D *>(VT_GRIDSPACING);
     }
-    const HinaPE::FluidEngine::fbs::Vector2D *origin() const
+    const HinaPE::fbs::Vector2D *origin() const
     {
-        return GetStruct<const HinaPE::FluidEngine::fbs::Vector2D *>(VT_ORIGIN);
+        return GetStruct<const HinaPE::fbs::Vector2D *>(VT_ORIGIN);
     }
     const flatbuffers::Vector<double> *data() const
     {
@@ -39,7 +39,7 @@ struct ScalarGrid2 FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table
     }
     bool Verify(flatbuffers::Verifier &verifier) const
     {
-        return VerifyTableStart(verifier) && VerifyField<HinaPE::FluidEngine::fbs::Size2>(verifier, VT_RESOLUTION) && VerifyField<HinaPE::FluidEngine::fbs::Vector2D>(verifier, VT_GRIDSPACING) && VerifyField<HinaPE::FluidEngine::fbs::Vector2D>(verifier, VT_ORIGIN) && VerifyOffset(verifier, VT_DATA) &&
+        return VerifyTableStart(verifier) && VerifyField<HinaPE::fbs::Size2>(verifier, VT_RESOLUTION) && VerifyField<HinaPE::fbs::Vector2D>(verifier, VT_GRIDSPACING) && VerifyField<HinaPE::fbs::Vector2D>(verifier, VT_ORIGIN) && VerifyOffset(verifier, VT_DATA) &&
                verifier.Verify(data()) && verifier.EndTable();
     }
 };
@@ -48,15 +48,15 @@ struct ScalarGrid2Builder
 {
     flatbuffers::FlatBufferBuilder &fbb_;
     flatbuffers::uoffset_t start_;
-    void add_resolution(const HinaPE::FluidEngine::fbs::Size2 *resolution)
+    void add_resolution(const HinaPE::fbs::Size2 *resolution)
     {
         fbb_.AddStruct(ScalarGrid2::VT_RESOLUTION, resolution);
     }
-    void add_gridSpacing(const HinaPE::FluidEngine::fbs::Vector2D *gridSpacing)
+    void add_gridSpacing(const HinaPE::fbs::Vector2D *gridSpacing)
     {
         fbb_.AddStruct(ScalarGrid2::VT_GRIDSPACING, gridSpacing);
     }
-    void add_origin(const HinaPE::FluidEngine::fbs::Vector2D *origin)
+    void add_origin(const HinaPE::fbs::Vector2D *origin)
     {
         fbb_.AddStruct(ScalarGrid2::VT_ORIGIN, origin);
     }
@@ -78,7 +78,7 @@ struct ScalarGrid2Builder
 };
 
 inline flatbuffers::Offset<ScalarGrid2>
-CreateScalarGrid2(flatbuffers::FlatBufferBuilder &_fbb, const HinaPE::FluidEngine::fbs::Size2 *resolution = 0, const HinaPE::FluidEngine::fbs::Vector2D *gridSpacing = 0, const HinaPE::FluidEngine::fbs::Vector2D *origin = 0, flatbuffers::Offset<flatbuffers::Vector<double>> data = 0)
+CreateScalarGrid2(flatbuffers::FlatBufferBuilder &_fbb, const HinaPE::fbs::Size2 *resolution = 0, const HinaPE::fbs::Vector2D *gridSpacing = 0, const HinaPE::fbs::Vector2D *origin = 0, flatbuffers::Offset<flatbuffers::Vector<double>> data = 0)
 {
     ScalarGrid2Builder builder_(_fbb);
     builder_.add_data(data);
@@ -88,27 +88,27 @@ CreateScalarGrid2(flatbuffers::FlatBufferBuilder &_fbb, const HinaPE::FluidEngin
     return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ScalarGrid2> CreateScalarGrid2Direct(flatbuffers::FlatBufferBuilder &_fbb, const HinaPE::FluidEngine::fbs::Size2 *resolution = 0, const HinaPE::FluidEngine::fbs::Vector2D *gridSpacing = 0, const HinaPE::FluidEngine::fbs::Vector2D *origin = 0, const std::vector<double> *data = nullptr)
+inline flatbuffers::Offset<ScalarGrid2> CreateScalarGrid2Direct(flatbuffers::FlatBufferBuilder &_fbb, const HinaPE::fbs::Size2 *resolution = 0, const HinaPE::fbs::Vector2D *gridSpacing = 0, const HinaPE::fbs::Vector2D *origin = 0, const std::vector<double> *data = nullptr)
 {
-    return HinaPE::FluidEngine::fbs::CreateScalarGrid2(_fbb, resolution, gridSpacing, origin, data ? _fbb.CreateVector<double>(*data) : 0);
+    return HinaPE::fbs::CreateScalarGrid2(_fbb, resolution, gridSpacing, origin, data ? _fbb.CreateVector<double>(*data) : 0);
 }
 
-inline const HinaPE::FluidEngine::fbs::ScalarGrid2 *GetScalarGrid2(const void *buf)
+inline const HinaPE::fbs::ScalarGrid2 *GetScalarGrid2(const void *buf)
 {
-    return flatbuffers::GetRoot<HinaPE::FluidEngine::fbs::ScalarGrid2>(buf);
+    return flatbuffers::GetRoot<HinaPE::fbs::ScalarGrid2>(buf);
 }
 
 inline bool VerifyScalarGrid2Buffer(flatbuffers::Verifier &verifier)
 {
-    return verifier.VerifyBuffer<HinaPE::FluidEngine::fbs::ScalarGrid2>(nullptr);
+    return verifier.VerifyBuffer<HinaPE::fbs::ScalarGrid2>(nullptr);
 }
 
-inline void FinishScalarGrid2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::ScalarGrid2> root)
+inline void FinishScalarGrid2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::fbs::ScalarGrid2> root)
 {
     fbb.Finish(root);
 }
 
 }  // namespace fbs
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // FLATBUFFERS_GENERATED_SCALARGRID2_JET_FBS_H_

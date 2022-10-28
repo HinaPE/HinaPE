@@ -8,6 +8,7 @@
 #include "pch.h"
 #include "samplers.h"
 
+using namespace HinaPE;
 using namespace HinaPE::FluidEngine;
 
 static const size_t kDefaultHashGridResolution = 64;

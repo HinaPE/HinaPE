@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 ConstantVectorField3::ConstantVectorField3(const Vector3D &value) : _value(value)
 {

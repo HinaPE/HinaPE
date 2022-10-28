@@ -3,7 +3,7 @@
 
 #include "functors.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T, typename U>

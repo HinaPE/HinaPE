@@ -8,7 +8,7 @@
 
 #include <tuple>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T>
@@ -479,7 +479,7 @@ typedef MatrixCsr<float> MatrixCsrF;
 //! Double-type CSR matrix.
 typedef MatrixCsr<double> MatrixCsrD;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "matrix_csr-inl.h"
 

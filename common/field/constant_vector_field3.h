@@ -4,7 +4,7 @@
 #include "vector_field3.h"
 #include <memory>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! 3-D constant vector field.
@@ -51,6 +51,6 @@ private:
     Vector3D _value{0, 0, 0};
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_CONSTANT_VECTOR_FIELD3_H_

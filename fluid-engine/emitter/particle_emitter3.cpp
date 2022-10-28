@@ -8,11 +8,11 @@
 namespace HinaPE::FluidEngine
 {
 
-ParticleEmitter3::ParticleEmitter3() {}
+ParticleEmitter3::ParticleEmitter3() = default;
 
-ParticleEmitter3::~ParticleEmitter3() {}
+ParticleEmitter3::~ParticleEmitter3() = default;
 
-const ParticleSystemData3Ptr &ParticleEmitter3::target() const
+auto ParticleEmitter3::target() const -> const ParticleSystemData3Ptr &
 {
     return _particles;
 }
@@ -24,7 +24,7 @@ void ParticleEmitter3::setTarget(const ParticleSystemData3Ptr &particles)
     onSetTarget(particles);
 }
 
-bool ParticleEmitter3::isEnabled() const { return _isEnabled; }
+auto ParticleEmitter3::isEnabled() const -> bool { return _isEnabled; }
 
 void ParticleEmitter3::setIsEnabled(bool enabled) { _isEnabled = enabled; }
 

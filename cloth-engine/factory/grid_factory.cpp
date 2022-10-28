@@ -13,7 +13,7 @@ void HinaPE::ClothEngine::GridFactory::create_grid(const HinaPE::ClothEngine::Ve
     std::vector<int> _indices;
 
     _nodes.resize(rows * cols);
-    HinaPE::FluidEngine::parallelFor(0, rows, 0, cols, [&](size_t i, size_t j)
+    HinaPE::parallelFor(0, rows, 0, cols, [&](size_t i, size_t j)
     {
         auto index = i * cols + j;
         real elem1 = as_real(j) / (as_real(cols - 1)) * width - width / 2.0f;

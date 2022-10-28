@@ -3,7 +3,7 @@
 
 #include <functional>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Type casting operator.

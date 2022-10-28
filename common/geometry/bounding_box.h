@@ -3,7 +3,7 @@
 
 #include "math/vector.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -65,7 +65,7 @@ public:
     void expand(T delta);
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "bounding_box-inl.h"
 

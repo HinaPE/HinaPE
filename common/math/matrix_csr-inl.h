@@ -9,7 +9,7 @@
 
 #include <numeric>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T, typename VE>
@@ -734,10 +734,10 @@ T MatrixCsr<T>::absmin() const
         T result = init;
         for (size_t i = start; i < end; ++i)
         {
-            result = HinaPE::FluidEngine::absmin(result, _nonZeros[i]);
+            result = HinaPE::absmin(result, _nonZeros[i]);
         }
         return result;
-    }, HinaPE::FluidEngine::absmin<T>);
+    }, HinaPE::absmin<T>);
 }
 
 template<typename T>
@@ -748,10 +748,10 @@ T MatrixCsr<T>::absmax() const
         T result = init;
         for (size_t i = start; i < end; ++i)
         {
-            result = HinaPE::FluidEngine::absmax(result, _nonZeros[i]);
+            result = HinaPE::absmax(result, _nonZeros[i]);
         }
         return result;
-    }, HinaPE::FluidEngine::absmax<T>);
+    }, HinaPE::absmax<T>);
 }
 
 template<typename T>
@@ -1058,6 +1058,6 @@ MatrixCsr <T> operator/(T a, const MatrixCsr <T> &b)
     return b.rdiv(a);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX_CSR_INL_H_

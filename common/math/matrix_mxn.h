@@ -6,7 +6,7 @@
 
 #include "array/array2.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // MARK: MatrixMxN
@@ -486,7 +486,7 @@ typedef MatrixMxN<float> MatrixMxNF;
 //! Double-type M x N matrix.
 typedef MatrixMxN<double> MatrixMxND;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "matrix_mxn-inl.h"
 

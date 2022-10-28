@@ -11,7 +11,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T>
@@ -339,6 +339,6 @@ Array<T, 2>::operator ConstArrayAccessor2<T>() const
     return constAccessor();
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_ARRAY2_INL_H_

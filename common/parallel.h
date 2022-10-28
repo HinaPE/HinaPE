@@ -1,7 +1,7 @@
 #ifndef HINAPE_FLUID_ENGINE_PARALLEL_H_
 #define HINAPE_FLUID_ENGINE_PARALLEL_H_
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Execution policy tag.
@@ -211,7 +211,7 @@ void setMaxNumberOfThreads(unsigned int numThreads);
 //! Returns maximum number of threads to use.
 unsigned int maxNumberOfThreads();
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "parallel-inl.h"
 

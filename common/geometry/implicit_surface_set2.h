@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -115,6 +115,6 @@ private:
     std::vector<ImplicitSurface2Ptr> _surfaces;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_IMPLICIT_SURFACE_SET2_H_

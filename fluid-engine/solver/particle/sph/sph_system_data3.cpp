@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <vector>
 
+using namespace HinaPE;
+
 namespace HinaPE::FluidEngine
 {
 

@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 RigidBodyCollider3::RigidBodyCollider3(const Surface3Ptr &surface)
 {

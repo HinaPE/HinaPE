@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -83,6 +83,6 @@ protected:
 //! Shared pointer for the Animation type.
 using AnimationPtr = std::shared_ptr<Animation>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_ANIMATION_H_

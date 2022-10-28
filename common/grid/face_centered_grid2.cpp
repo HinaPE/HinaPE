@@ -10,7 +10,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 FaceCenteredGrid2::FaceCenteredGrid2() : _dataOriginU(0.0, 0.5), _dataOriginV(0.5, 0.0), _uLinearSampler(LinearArraySampler2<double, double>(_dataU.constAccessor(), Vector2D(1, 1), _dataOriginU)),
                                          _vLinearSampler(LinearArraySampler2<double, double>(_dataV.constAccessor(), Vector2D(1, 1), _dataOriginV)) {}

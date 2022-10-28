@@ -4,7 +4,7 @@
 #include "surface3.h"
 #include "bounding_box3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -80,7 +80,7 @@ private:
     Vector3D _upperCorner{1, 1, 1};
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 
 #endif  // HINAPE_FLUID_ENGINE_BOX3_H_

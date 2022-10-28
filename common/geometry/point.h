@@ -6,7 +6,7 @@
 #include <array>
 #include <type_traits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -65,7 +65,7 @@ private:
     void setAt(size_t i, T v);
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "point-inl.h"
 

@@ -3,7 +3,7 @@
 
 #include <cassert>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<size_t N>
@@ -70,6 +70,6 @@ void Size<N>::setAt(size_t i, size_t v)
     elements[i] = v;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_SIZE_INL_H_

@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 Plane3::Plane3(const Transform3 &transform_, bool isNormalFlipped_) : Surface3(transform_, isNormalFlipped_) {}
 

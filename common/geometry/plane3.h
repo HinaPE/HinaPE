@@ -3,7 +3,7 @@
 
 #include "surface3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -80,6 +80,6 @@ private:
     Vector3D _point{0, 0, 0};
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_PLANE3_H_

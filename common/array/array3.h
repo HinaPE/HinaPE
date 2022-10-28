@@ -10,7 +10,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -383,7 +383,7 @@ private:
 //! Type alias for 3-D array.
 template<typename T> using Array3 = Array<T, 3>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "array3-inl.h"
 

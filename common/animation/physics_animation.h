@@ -3,7 +3,7 @@
 
 #include "animation.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -142,6 +142,6 @@ private:
 
 typedef std::shared_ptr<PhysicsAnimation> PhysicsAnimationPtr;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_PHYSICS_ANIMATION_H_

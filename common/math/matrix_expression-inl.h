@@ -3,7 +3,7 @@
 
 #include "matrix_expression.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // MARK: MatrixExpression
@@ -404,6 +404,6 @@ MatrixScalarRDiv<T, E> operator/(T a, const MatrixExpression<T, E> &b)
     return MatrixScalarRDiv<T, E>(a(), b);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_MATRIX_EXPRESSION_INL_H_

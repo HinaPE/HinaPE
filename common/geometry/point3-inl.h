@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <cassert>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // Constructors
@@ -246,13 +246,13 @@ T Point<T, 3>::max() const
 template<typename T>
 T Point<T, 3>::absmin() const
 {
-    return HinaPE::FluidEngine::absmin(HinaPE::FluidEngine::absmin(x, y), z);
+    return HinaPE::absmin(HinaPE::absmin(x, y), z);
 }
 
 template<typename T>
 T Point<T, 3>::absmax() const
 {
-    return HinaPE::FluidEngine::absmax(HinaPE::FluidEngine::absmax(x, y), z);
+    return HinaPE::absmax(HinaPE::absmax(x, y), z);
 }
 
 template<typename T>
@@ -491,6 +491,6 @@ Point<T, 3> floor(const Point<T, 3> &a)
     return Point<T, 3>(std::floor(a.x), std::floor(a.y), std::floor(a.z));
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_POINT3_INL_H_

@@ -9,7 +9,7 @@
 #include <cstring>
 #include <utility>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // MARK: CTOR/DTOR
@@ -371,13 +371,13 @@ T Matrix<T, 2, 2>::max() const
 template<typename T>
 T Matrix<T, 2, 2>::absmin() const
 {
-    return ::HinaPE::FluidEngine::absmin(::HinaPE::FluidEngine::absmin(_elements[0], _elements[1]), ::HinaPE::FluidEngine::absmin(_elements[2], _elements[3]));
+    return ::HinaPE::absmin(::HinaPE::absmin(_elements[0], _elements[1]), ::HinaPE::absmin(_elements[2], _elements[3]));
 }
 
 template<typename T>
 T Matrix<T, 2, 2>::absmax() const
 {
-    return ::HinaPE::FluidEngine::absmax(::HinaPE::FluidEngine::absmax(_elements[0], _elements[1]), ::HinaPE::FluidEngine::absmax(_elements[2], _elements[3]));
+    return ::HinaPE::absmax(::HinaPE::absmax(_elements[0], _elements[1]), ::HinaPE::absmax(_elements[2], _elements[3]));
 }
 
 template<typename T>
@@ -665,6 +665,6 @@ Matrix<T, 2, 2> operator/(T a, const Matrix<T, 2, 2> &b)
     return b.rdiv(a);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_MATRIX2X2_INL_H_

@@ -4,7 +4,7 @@
 
 #include <utility>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 Surface3::Surface3(Transform3 transform_, bool isNormalFlipped_) : transform(std::move(transform_)), isNormalFlipped(isNormalFlipped_) {}
 

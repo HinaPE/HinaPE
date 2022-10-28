@@ -6,11 +6,11 @@
 namespace HinaPE::FluidEngine
 {
 
-ParticleEmitter2::ParticleEmitter2() {}
+ParticleEmitter2::ParticleEmitter2() = default;
 
-ParticleEmitter2::~ParticleEmitter2() {}
+ParticleEmitter2::~ParticleEmitter2() = default;
 
-const ParticleSystemData2Ptr &ParticleEmitter2::target() const
+auto ParticleEmitter2::target() const -> const ParticleSystemData2Ptr &
 {
     return _particles;
 }
@@ -22,7 +22,7 @@ void ParticleEmitter2::setTarget(const ParticleSystemData2Ptr &particles)
     onSetTarget(particles);
 }
 
-bool ParticleEmitter2::isEnabled() const { return _isEnabled; }
+auto ParticleEmitter2::isEnabled() const -> bool { return _isEnabled; }
 
 void ParticleEmitter2::setIsEnabled(bool enabled) { _isEnabled = enabled; }
 

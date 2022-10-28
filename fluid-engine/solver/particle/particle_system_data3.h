@@ -18,7 +18,7 @@ template<typename T>
 struct Offset;
 }
 
-namespace HinaPE::FluidEngine::fbs
+namespace HinaPE::fbs
 {
 struct ParticleSystemData3;
 }

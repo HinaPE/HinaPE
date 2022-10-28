@@ -3,7 +3,7 @@
 
 #include "macros.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -95,7 +95,7 @@ T fractionInsideSdf(T phi0, T phi1);
 template<typename T>
 T fractionInside(T phiBottomLeft, T phiBottomRight, T phiTopLeft, T phiTopRight);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "level_set_utils-inl.h"
 

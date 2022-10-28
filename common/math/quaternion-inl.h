@@ -5,7 +5,7 @@
 
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // Constructors
@@ -472,6 +472,6 @@ inline Quaternion<T> operator*(const Quaternion<T> &a, const Quaternion<T> &b)
     return a.mul(b);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_QUATERNION_INL_H_

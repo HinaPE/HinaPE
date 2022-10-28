@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Abstract base class for 3-D vector grid structure.
@@ -90,6 +90,6 @@ public:
 //! Shared pointer for the VectorGridBuilder3 type.
 typedef std::shared_ptr<VectorGridBuilder3> VectorGridBuilder3Ptr;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_VECTOR_GRID3_H_

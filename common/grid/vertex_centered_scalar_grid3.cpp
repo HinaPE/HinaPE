@@ -4,7 +4,7 @@
 
 #include <utility>  // just make cpplint happy..
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 VertexCenteredScalarGrid3::VertexCenteredScalarGrid3()
 {

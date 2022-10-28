@@ -8,7 +8,7 @@
 #include <limits>
 #include <tuple>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // Constructors
@@ -278,13 +278,13 @@ T Vector<T, 3>::max() const
 template<typename T>
 T Vector<T, 3>::absmin() const
 {
-    return HinaPE::FluidEngine::absmin(HinaPE::FluidEngine::absmin(x, y), z);
+    return HinaPE::absmin(HinaPE::absmin(x, y), z);
 }
 
 template<typename T>
 T Vector<T, 3>::absmax() const
 {
-    return HinaPE::FluidEngine::absmax(HinaPE::FluidEngine::absmax(x, y), z);
+    return HinaPE::absmax(HinaPE::absmax(x, y), z);
 }
 
 template<typename T>
@@ -617,6 +617,6 @@ Vector<T, 3> monotonicCatmullRom(const Vector<T, 3> &v0, const Vector<T, 3> &v1,
     return a3 * cubic(f) + a2 * square(f) + a1 * f + a0;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_VECTOR3_INL_H_

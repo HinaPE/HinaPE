@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename ArrayType, typename T>
@@ -218,6 +218,6 @@ void extrapolateToRegion(const ConstArrayAccessor3<T> &input, const ConstArrayAc
     }
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_ARRAY_UTILS_INL_H_

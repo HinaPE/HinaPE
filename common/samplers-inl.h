@@ -5,7 +5,7 @@
 #include "math_utils.h"
 #include <algorithm>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T>
@@ -66,6 +66,6 @@ inline Vector2<T> uniformSampleDisk(T u1, T u2)
     return Vector2<T>(r * std::cos(theta), r * std::sin(theta));
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_SAMPLERS_INL_H_

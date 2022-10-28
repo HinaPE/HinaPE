@@ -5,7 +5,7 @@
 
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Abstract base class for any serializable class.
@@ -43,7 +43,7 @@ void deserialize(const std::vector<uint8_t> &buffer, std::vector<uint8_t> *data)
 template<typename T>
 void deserialize(const std::vector<uint8_t> &buffer, Array1<T> *array);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "serialization-inl.h"
 

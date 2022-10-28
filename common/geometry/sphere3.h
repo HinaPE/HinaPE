@@ -4,7 +4,7 @@
 #include "surface3.h"
 #include "bounding_box3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -76,7 +76,7 @@ private:
     double _radius = 0.0;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 
 #endif  // HINAPE_FLUID_ENGINE_SPHERE3_H_

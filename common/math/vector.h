@@ -11,7 +11,7 @@
 #include <array>
 #include <type_traits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -344,7 +344,7 @@ struct ScalarType<Vector<T, N>>
     typedef T value;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "vector-inl.h"
 

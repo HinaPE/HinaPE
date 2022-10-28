@@ -8,7 +8,7 @@
 
 #include "basic_types_generated.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 namespace fbs
 {
@@ -21,9 +21,9 @@ struct PointSimpleListSearcher2 FLATBUFFERS_FINAL_CLASS : private flatbuffers::T
     {
         VT_POINTS = 4
     };
-    const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *> *points() const
+    const flatbuffers::Vector<const HinaPE::fbs::Vector2D *> *points() const
     {
-        return GetPointer<const flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *> *>(VT_POINTS);
+        return GetPointer<const flatbuffers::Vector<const HinaPE::fbs::Vector2D *> *>(VT_POINTS);
     }
     bool Verify(flatbuffers::Verifier &verifier) const
     {
@@ -35,7 +35,7 @@ struct PointSimpleListSearcher2Builder
 {
     flatbuffers::FlatBufferBuilder &fbb_;
     flatbuffers::uoffset_t start_;
-    void add_points(flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *>> points)
+    void add_points(flatbuffers::Offset<flatbuffers::Vector<const HinaPE::fbs::Vector2D *>> points)
     {
         fbb_.AddOffset(PointSimpleListSearcher2::VT_POINTS, points);
     }
@@ -52,34 +52,34 @@ struct PointSimpleListSearcher2Builder
     }
 };
 
-inline flatbuffers::Offset<PointSimpleListSearcher2> CreatePointSimpleListSearcher2(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<flatbuffers::Vector<const HinaPE::FluidEngine::fbs::Vector2D *>> points = 0)
+inline flatbuffers::Offset<PointSimpleListSearcher2> CreatePointSimpleListSearcher2(flatbuffers::FlatBufferBuilder &_fbb, flatbuffers::Offset<flatbuffers::Vector<const HinaPE::fbs::Vector2D *>> points = 0)
 {
     PointSimpleListSearcher2Builder builder_(_fbb);
     builder_.add_points(points);
     return builder_.Finish();
 }
 
-inline flatbuffers::Offset<PointSimpleListSearcher2> CreatePointSimpleListSearcher2Direct(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<const HinaPE::FluidEngine::fbs::Vector2D *> *points = nullptr)
+inline flatbuffers::Offset<PointSimpleListSearcher2> CreatePointSimpleListSearcher2Direct(flatbuffers::FlatBufferBuilder &_fbb, const std::vector<const HinaPE::fbs::Vector2D *> *points = nullptr)
 {
-    return HinaPE::FluidEngine::fbs::CreatePointSimpleListSearcher2(_fbb, points ? _fbb.CreateVector<const HinaPE::FluidEngine::fbs::Vector2D *>(*points) : 0);
+    return HinaPE::fbs::CreatePointSimpleListSearcher2(_fbb, points ? _fbb.CreateVector<const HinaPE::fbs::Vector2D *>(*points) : 0);
 }
 
-inline const HinaPE::FluidEngine::fbs::PointSimpleListSearcher2 *GetPointSimpleListSearcher2(const void *buf)
+inline const HinaPE::fbs::PointSimpleListSearcher2 *GetPointSimpleListSearcher2(const void *buf)
 {
-    return flatbuffers::GetRoot<HinaPE::FluidEngine::fbs::PointSimpleListSearcher2>(buf);
+    return flatbuffers::GetRoot<HinaPE::fbs::PointSimpleListSearcher2>(buf);
 }
 
 inline bool VerifyPointSimpleListSearcher2Buffer(flatbuffers::Verifier &verifier)
 {
-    return verifier.VerifyBuffer<HinaPE::FluidEngine::fbs::PointSimpleListSearcher2>(nullptr);
+    return verifier.VerifyBuffer<HinaPE::fbs::PointSimpleListSearcher2>(nullptr);
 }
 
-inline void FinishPointSimpleListSearcher2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::FluidEngine::fbs::PointSimpleListSearcher2> root)
+inline void FinishPointSimpleListSearcher2Buffer(flatbuffers::FlatBufferBuilder &fbb, flatbuffers::Offset<HinaPE::fbs::PointSimpleListSearcher2> root)
 {
     fbb.Finish(root);
 }
 
 }  // namespace fbs
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // FLATBUFFERS_GENERATED_POINTSIMPLELISTSEARCHER2_JET_FBS_H_

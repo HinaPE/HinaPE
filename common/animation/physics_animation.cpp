@@ -5,7 +5,7 @@
 #include "constants.h"
 #include "timer.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 PhysicsAnimation::PhysicsAnimation() { _currentFrame.index = -1; }
 

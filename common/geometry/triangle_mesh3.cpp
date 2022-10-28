@@ -9,7 +9,7 @@
 
 #include <fstream>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 namespace
 {
@@ -776,7 +776,7 @@ double TriangleMesh3::fastWindingNumber(const Vector3D &q, size_t rootNodeIndex,
 
     const Vector3D &treeN = _wnAreaWeightedNormalSums[rootNodeIndex];
     const BoundingBox3D &treeBound = _bvh.nodeBound(rootNodeIndex);
-    const Vector3D treeRVec = HinaPE::FluidEngine::max(treeP - treeBound.lowerCorner, treeBound.upperCorner - treeP);
+    const Vector3D treeRVec = HinaPE::max(treeP - treeBound.lowerCorner, treeBound.upperCorner - treeP);
     const double treeR = treeRVec.length();
 
     if (qToP2 > square(accuracy * treeR))

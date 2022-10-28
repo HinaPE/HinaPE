@@ -7,7 +7,7 @@
 #include <array>
 #include <type_traits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -429,7 +429,7 @@ private:
     void setRowAt(size_t i, T v);
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "matrix-inl.h"
 

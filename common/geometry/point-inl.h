@@ -6,7 +6,7 @@
 #include "macros.h"
 #include <cassert>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T, size_t N>
@@ -109,6 +109,6 @@ void Point<T, N>::setAt(size_t i, T v)
     _elements[i] = v;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_POINT_INL_H_

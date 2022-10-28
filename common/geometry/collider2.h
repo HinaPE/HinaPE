@@ -5,7 +5,7 @@
 
 #include <functional>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -104,6 +104,6 @@ private:
 //! Shared pointer type for the Collider2.
 typedef std::shared_ptr<Collider2> Collider2Ptr;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_COLLIDER2_H_

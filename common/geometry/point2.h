@@ -5,7 +5,7 @@
 
 #include <algorithm>  // just make cpplint happy..
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -294,7 +294,7 @@ typedef Point2<ssize_t> Point2I;
 //! Unsigned integer-type 2D point.
 typedef Point2<size_t> Point2UI;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "point2-inl.h"
 

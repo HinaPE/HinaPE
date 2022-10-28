@@ -1,7 +1,7 @@
 #ifndef HINAPE_FLUID_ENGINE_SERIAL_H_
 #define HINAPE_FLUID_ENGINE_SERIAL_H_
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -106,7 +106,7 @@ void serialSort(RandomIterator begin, RandomIterator end);
 template<typename RandomIterator, typename SortingFunction>
 void serialSort(RandomIterator begin, RandomIterator end, const SortingFunction &sortingFunction);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "serial-inl.h"
 

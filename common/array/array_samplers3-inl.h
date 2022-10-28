@@ -11,7 +11,7 @@
 #include <functional>
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T, typename R>
@@ -276,6 +276,6 @@ std::function<T(const Vector3<R> &)> CubicArraySampler3<T, R>::functor() const
     return std::bind(&CubicArraySampler::operator(), sampler, std::placeholders::_1);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_ARRAY_SAMPLERS3_INL_H_

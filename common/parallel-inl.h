@@ -20,7 +20,7 @@
 #include <thread>
 #endif
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 namespace internal
@@ -468,6 +468,6 @@ void parallelSort(RandomIterator begin, RandomIterator end, ExecutionPolicy poli
     parallelSort(begin, end, std::less<typename std::iterator_traits<RandomIterator>::value_type>(), policy);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_PARALLEL_INL_H_

@@ -11,7 +11,7 @@
 #include <memory>
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Abstract base class for 2-D vector grid structure.
@@ -91,6 +91,6 @@ public:
 //! Shared pointer for the VectorGridBuilder2 type.
 typedef std::shared_ptr<VectorGridBuilder2> VectorGridBuilder2Ptr;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_VECTOR_GRID2_H_

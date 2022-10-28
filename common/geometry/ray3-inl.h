@@ -3,7 +3,7 @@
 
 #include "ray3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T>
@@ -29,6 +29,6 @@ Vector3<T> Ray<T, 3>::pointAt(T t) const
     return origin + t * direction;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_RAY3_INL_H_

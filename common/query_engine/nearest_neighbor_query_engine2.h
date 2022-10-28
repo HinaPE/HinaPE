@@ -7,7 +7,7 @@
 
 #include <functional>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Nearest neighbor query result.
@@ -31,6 +31,6 @@ public:
     virtual NearestNeighborQueryResult2<T> nearest(const Vector2D &pt, const NearestNeighborDistanceFunc2<T> &distanceFunc) const = 0;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_NEAREST_NEIGHBOR_QUERY_ENGINE2_H_

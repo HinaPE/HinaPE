@@ -7,7 +7,7 @@
 
 #include "grid/vertex_centered_scalar_grid3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -85,6 +85,6 @@ private:
     double _margin = 0.2;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_IMPLICIT_TRIANGLE_MESH3_H_

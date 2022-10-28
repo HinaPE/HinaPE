@@ -25,7 +25,7 @@ public:
     //! This type of callback function will take the emitter pointer, current
     //! time, and time interval in seconds.
     //!
-    typedef std::function<void(ParticleEmitter2 *, double, double)> OnBeginUpdateCallback;
+    using OnBeginUpdateCallback = std::function<void (ParticleEmitter2 *, double, double)>;
 
     //! Default constructor.
     ParticleEmitter2();
@@ -38,13 +38,13 @@ public:
     void update(double currentTimeInSeconds, double timeIntervalInSeconds);
 
     //! Returns the target particle system to emit.
-    const ParticleSystemData2Ptr &target() const;
+    auto target() const -> const ParticleSystemData2Ptr &;
 
     //! Sets the target particle system to emit.
     void setTarget(const ParticleSystemData2Ptr &particles);
 
     //! Returns true if the emitter is enabled.
-    bool isEnabled() const;
+    auto isEnabled() const -> bool;
 
     //! Sets true/false to enable/disable the emitter.
     void setIsEnabled(bool enabled);
@@ -75,7 +75,7 @@ private:
 };
 
 //! Shared pointer for the ParticleEmitter2 type.
-typedef std::shared_ptr<ParticleEmitter2> ParticleEmitter2Ptr;
+using ParticleEmitter2Ptr = std::shared_ptr<ParticleEmitter2>;
 
 }  // namespace HinaPE::FluidEngine
 

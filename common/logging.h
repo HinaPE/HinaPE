@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Level of the logging.
@@ -100,6 +100,6 @@ extern Logger debugLogger;
     (Logger(LoggingLevel::Debug) << Logging::getHeader(LoggingLevel::Debug) \
      << "[" << __FILE__ << ":" << __LINE__ << " (" << __func__ << ")] ")
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_LOGGING_H_

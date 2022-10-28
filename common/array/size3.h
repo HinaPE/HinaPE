@@ -3,7 +3,7 @@
 
 #include "size2.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -259,7 +259,7 @@ Size3 ceil(const Size3 &a);
 //! Returns element-wise floored size.
 Size3 floor(const Size3 &a);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "size3-inl.h"
 

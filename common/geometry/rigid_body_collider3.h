@@ -5,7 +5,7 @@
 
 #include "math/quaternion.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -68,6 +68,6 @@ private:
     Vector3D _angularVelocity{0, 0, 0};
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_RIGID_BODY_COLLIDER3_H_

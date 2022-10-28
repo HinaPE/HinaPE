@@ -7,7 +7,7 @@
 
 #include <utility>  // just make cpplint happy..
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -127,6 +127,6 @@ private:
     Vector2D _initialVal{0, 0};
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_CELL_CENTERED_VECTOR_GRID2_H_

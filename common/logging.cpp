@@ -10,7 +10,7 @@
 #include <mutex>
 #include <string>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 static std::mutex critical;
@@ -136,4 +136,4 @@ void Logging::mute() { setLevel(LoggingLevel::Off); }
 
 void Logging::unmute() { setLevel(LoggingLevel::All); }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE

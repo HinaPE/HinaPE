@@ -3,7 +3,7 @@
 
 #include "surface3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -92,6 +92,6 @@ private:
     std::array<Vector2D, 3> _uvs;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_TRIANGLE3_H_

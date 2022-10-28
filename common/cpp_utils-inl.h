@@ -9,7 +9,7 @@
 
 #include "cpp_utils.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // Source code from:
@@ -24,6 +24,6 @@ ForwardIt binaryFind(ForwardIt first, ForwardIt last, const T &value, Compare co
     first = std::lower_bound(first, last, value, comp);
     return first != last && !comp(value, *first) ? first : last;
 }
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_CPP_UTILS_INL_H_

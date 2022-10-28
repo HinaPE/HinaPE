@@ -6,7 +6,7 @@
 #include <cstddef>
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -224,7 +224,7 @@ inline S catmullRom(const S &f0, const S &f1, const S &f2, const S &f3, T t);
 template<typename T>
 inline T monotonicCatmullRom(const T &f0, const T &f1, const T &f2, const T &f3, T t);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "math_utils-inl.h"
 

@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -269,6 +269,6 @@ private:
     IndexArray _uvIndices;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_TRIANGLE_MESH3_H_

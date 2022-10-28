@@ -6,7 +6,7 @@
 
 #include "math/vector2.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -64,7 +64,7 @@ private:
     double _sinAngle = 0.0;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "transform2-inl.h"
 

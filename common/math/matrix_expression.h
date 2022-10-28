@@ -5,7 +5,7 @@
 
 #include "array/size2.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // MARK: MatrixExpression
@@ -424,7 +424,7 @@ MatrixScalarDiv<T, E> operator/(const MatrixExpression<T, E> &a, T b);
 template<typename T, typename E>
 MatrixScalarRDiv<T, E> operator/(T a, const MatrixExpression<T, E> &b);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "matrix_expression-inl.h"
 

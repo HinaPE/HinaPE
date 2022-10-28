@@ -26,7 +26,7 @@ public:
 };
 
 //! Shared pointer type for the BccLatticePointGenerator.
-typedef std::shared_ptr<BccLatticePointGenerator> BccLatticePointGeneratorPtr;
+using BccLatticePointGeneratorPtr = std::shared_ptr<BccLatticePointGenerator>;
 
 }  // namespace HinaPE::FluidEngine
 

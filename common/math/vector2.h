@@ -6,7 +6,7 @@
 #include <algorithm>  // just make cpplint happy..
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -359,7 +359,7 @@ struct ScalarType<Vector2<T>>
 template<typename T>
 Vector2<T> monotonicCatmullRom(const Vector2<T> &v0, const Vector2<T> &v1, const Vector2<T> &v2, const Vector2<T> &v3, T f);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "vector2-inl.h"
 

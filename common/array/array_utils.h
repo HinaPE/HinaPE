@@ -7,7 +7,7 @@
 #include "array2.h"
 #include "array3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -133,7 +133,7 @@ void extrapolateToRegion(const ConstArrayAccessor3<T> &input, const ConstArrayAc
 template<typename ArrayType>
 void convertToCsv(const ArrayType &data, std::ostream *strm);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "array_utils-inl.h"
 

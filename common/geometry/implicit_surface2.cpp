@@ -3,7 +3,7 @@
 #include "level_set_utils.h"
 #include "pch.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 ImplicitSurface2::ImplicitSurface2(const Transform2 &transform, bool isNormalFlipped) : Surface2(transform, isNormalFlipped)
 {

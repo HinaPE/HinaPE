@@ -8,7 +8,7 @@
 #include <functional>
 #include <memory>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Abstract base class for 3-D scalar field.
@@ -37,6 +37,6 @@ public:
 //! Shared pointer for the ScalarField3 type.
 typedef std::shared_ptr<ScalarField3> ScalarField3Ptr;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_SCALAR_FIELD3_H_

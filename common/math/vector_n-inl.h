@@ -7,7 +7,7 @@
 #include "math_utils.h"
 #include "parallel.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // MARK: VectorN
@@ -228,10 +228,10 @@ T VectorN<T>::absmin() const
         T result = init;
         for (size_t i = start; i < end; ++i)
         {
-            result = HinaPE::FluidEngine::absmin(result, _elements[i]);
+            result = HinaPE::absmin(result, _elements[i]);
         }
         return result;
-    }, HinaPE::FluidEngine::absmin<T>);
+    }, HinaPE::absmin<T>);
 }
 
 template<typename T>
@@ -242,10 +242,10 @@ T VectorN<T>::absmax() const
         T result = init;
         for (size_t i = start; i < end; ++i)
         {
-            result = HinaPE::FluidEngine::absmax(result, _elements[i]);
+            result = HinaPE::absmax(result, _elements[i]);
         }
         return result;
-    }, HinaPE::FluidEngine::absmax<T>);
+    }, HinaPE::absmax<T>);
 }
 
 template<typename T>
@@ -646,6 +646,6 @@ bool VectorN<T>::operator!=(const E &v) const
     return !isEqual(v);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_VECTOR_N_INL_H_

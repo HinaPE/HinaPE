@@ -7,7 +7,7 @@
 #include "math/quaternion.h"
 #include "math/vector3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -65,7 +65,7 @@ private:
     Matrix3x3D _inverseOrientationMat3;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "transform3-inl.h"
 

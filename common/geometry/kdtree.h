@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Generic k-d tree structure.
@@ -123,7 +123,7 @@ private:
     size_t build(size_t nodeIndex, size_t *itemIndices, size_t nItems, size_t currentDepth);
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "kdtree-inl.h"
 

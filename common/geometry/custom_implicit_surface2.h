@@ -5,7 +5,7 @@
 
 #include "field/scalar_field2.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Custom 2-D implicit surface using arbitrary function.
@@ -96,6 +96,6 @@ private:
     unsigned int _maxNumOfIterations = 5;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_CUSTOM_IMPLICIT_SURFACE2_H_

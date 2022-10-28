@@ -6,7 +6,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 namespace fbs
 {
@@ -106,6 +106,6 @@ public:Vector3D()
 STRUCT_END(Vector3D, 24);
 
 }  // namespace fbs
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // FLATBUFFERS_GENERATED_BASICTYPES_JET_FBS_H_

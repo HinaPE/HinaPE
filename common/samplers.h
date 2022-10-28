@@ -4,7 +4,7 @@
 #include "math/vector2.h"
 #include "math/vector3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -93,7 +93,7 @@ inline Vector3<T> uniformSampleSphere(T u1, T u2);
 template<typename T>
 inline Vector2<T> uniformSampleDisk(T u1, T u2);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "samplers-inl.h"
 

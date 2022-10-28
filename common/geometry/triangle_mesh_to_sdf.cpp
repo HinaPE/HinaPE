@@ -8,9 +8,9 @@
 #include <algorithm>
 #include <vector>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 void triangleMeshToSdf(const TriangleMesh3 &mesh, ScalarGrid3 *sdf, const unsigned int)
@@ -32,4 +32,4 @@ void triangleMeshToSdf(const TriangleMesh3 &mesh, ScalarGrid3 *sdf, const unsign
                                        });
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE

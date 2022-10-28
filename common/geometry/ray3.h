@@ -5,7 +5,7 @@
 
 #include "math/vector3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -47,7 +47,7 @@ typedef Ray3<float> Ray3F;
 //! Double-type 3-D ray.
 typedef Ray3<double> Ray3D;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "ray3-inl.h"
 

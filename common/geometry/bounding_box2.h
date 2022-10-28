@@ -8,7 +8,7 @@
 
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -126,7 +126,7 @@ using BoundingBoxRayIntersection2F = BoundingBoxRayIntersection2<float>;
 //! Double-type 2-D box-ray intersection result.
 using BoundingBoxRayIntersection2D = BoundingBoxRayIntersection2<double>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "bounding_box2-inl.h"
 

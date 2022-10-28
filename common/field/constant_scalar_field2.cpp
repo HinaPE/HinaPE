@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 ConstantScalarField2::ConstantScalarField2(double value) : _value(value)
 {

@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 inline fbs::Size2 jetToFbs(const Size2 &vec)
@@ -84,6 +84,6 @@ void deserializeGrid(FbsGridList *fbsGridList, FactoryFunc factoryFunc, std::vec
     }
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_FBS_HELPERS_H_

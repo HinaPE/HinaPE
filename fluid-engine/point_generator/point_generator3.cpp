@@ -6,12 +6,10 @@ namespace HinaPE::FluidEngine
 {
 
 PointGenerator3::PointGenerator3()
-{
-}
+= default;
 
 PointGenerator3::~PointGenerator3()
-{
-}
+= default;
 
 void PointGenerator3::generate(const BoundingBox3D &boundingBox, double spacing, Array1<Vector3D> *points) const
 {

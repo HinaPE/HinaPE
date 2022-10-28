@@ -3,7 +3,7 @@
 
 #include "math/vector.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -19,6 +19,6 @@ class Ray
     static_assert(std::is_floating_point<T>::value, "Ray only can be instantiated with floating point types");
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_RAY_H_

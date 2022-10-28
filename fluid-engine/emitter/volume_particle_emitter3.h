@@ -56,25 +56,25 @@ public:
     void setPointGenerator(const PointGenerator3Ptr &newPointsGen);
 
     //! Returns source surface.
-    const ImplicitSurface3Ptr &surface() const;
+    auto surface() const -> const ImplicitSurface3Ptr &;
 
     //! Sets the source surface.
     void setSurface(const ImplicitSurface3Ptr &newSurface);
 
     //! Returns max particle gen region.
-    const BoundingBox3D &maxRegion() const;
+    auto maxRegion() const -> const BoundingBox3D &;
 
     //! Sets the max particle gen region.
     void setMaxRegion(const BoundingBox3D &newBox);
 
     //! Returns jitter amount.
-    double jitter() const;
+    auto jitter() const -> double;
 
     //! Sets jitter amount between 0 and 1.
     void setJitter(double newJitter);
 
     //! Returns true if particles should be emitted just once.
-    bool isOneShot() const;
+    auto isOneShot() const -> bool;
 
     //!
     //! \brief      Sets the flag to true if particles are emitted just once.
@@ -88,7 +88,7 @@ public:
     void setIsOneShot(bool newValue);
 
     //! Returns true if particles can be overlapped.
-    bool allowOverlapping() const;
+    auto allowOverlapping() const -> bool;
 
     //!
     //! \brief      Sets the flag to true if particles can overlap each other.
@@ -102,37 +102,37 @@ public:
     void setAllowOverlapping(bool newValue);
 
     //! Returns max number of particles to be emitted.
-    size_t maxNumberOfParticles() const;
+    auto maxNumberOfParticles() const -> size_t;
 
     //! Sets the max number of particles to be emitted.
     void setMaxNumberOfParticles(size_t newMaxNumberOfParticles);
 
     //! Returns the spacing between particles.
-    double spacing() const;
+    auto spacing() const -> double;
 
     //! Sets the spacing between particles.
     void setSpacing(double newSpacing);
 
     //! Sets the initial velocity of the particles.
-    Vector3D initialVelocity() const;
+    auto initialVelocity() const -> Vector3D;
 
     //! Returns the initial velocity of the particles.
     void setInitialVelocity(const Vector3D &newInitialVel);
 
     //! Returns the linear velocity of the emitter.
-    Vector3D linearVelocity() const;
+    auto linearVelocity() const -> Vector3D;
 
     //! Sets the linear velocity of the emitter.
     void setLinearVelocity(const Vector3D &newLinearVel);
 
     //! Returns the angular velocity of the emitter.
-    Vector3D angularVelocity() const;
+    auto angularVelocity() const -> Vector3D;
 
     //! Sets the linear velocity of the emitter.
     void setAngularVelocity(const Vector3D &newAngularVel);
 
     //! Returns builder fox VolumeParticleEmitter3.
-    static Builder builder();
+    static auto builder() -> Builder;
 
 private:
     std::mt19937 _rng;
@@ -162,13 +162,13 @@ private:
 
     void emit(const ParticleSystemData3Ptr &particles, Array1<Vector3D> *newPositions, Array1<Vector3D> *newVelocities);
 
-    double random();
+    auto random() -> double;
 
-    Vector3D velocityAt(const Vector3D &point) const;
+    auto velocityAt(const Vector3D &point) const -> Vector3D;
 };
 
 //! Shared pointer for the VolumeParticleEmitter3 type.
-typedef std::shared_ptr<VolumeParticleEmitter3> VolumeParticleEmitter3Ptr;
+using VolumeParticleEmitter3Ptr = std::shared_ptr<VolumeParticleEmitter3>;
 
 //!
 //! \brief Front-end to create VolumeParticleEmitter3 objects step by step.
@@ -177,46 +177,46 @@ class VolumeParticleEmitter3::Builder final
 {
 public:
     //! Returns builder with implicit surface defining volume shape.
-    Builder &withImplicitSurface(const ImplicitSurface3Ptr &implicitSurface);
+    auto withImplicitSurface(const ImplicitSurface3Ptr &implicitSurface) -> Builder &;
 
     //! Returns builder with surface defining volume shape.
-    Builder &withSurface(const Surface3Ptr &surface);
+    auto withSurface(const Surface3Ptr &surface) -> Builder &;
 
     //! Returns builder with max region.
-    Builder &withMaxRegion(const BoundingBox3D &bounds);
+    auto withMaxRegion(const BoundingBox3D &bounds) -> Builder &;
 
     //! Returns builder with spacing.
-    Builder &withSpacing(double spacing);
+    auto withSpacing(double spacing) -> Builder &;
 
     //! Returns builder with initial velocity.
-    Builder &withInitialVelocity(const Vector3D &initialVel);
+    auto withInitialVelocity(const Vector3D &initialVel) -> Builder &;
 
     //! Returns builder with linear velocity.
-    Builder &withLinearVelocity(const Vector3D &linearVel);
+    auto withLinearVelocity(const Vector3D &linearVel) -> Builder &;
 
     //! Returns builder with angular velocity.
-    Builder &withAngularVelocity(const Vector3D &angularVel);
+    auto withAngularVelocity(const Vector3D &angularVel) -> Builder &;
 
     //! Returns builder with max number of particles.
-    Builder &withMaxNumberOfParticles(size_t maxNumberOfParticles);
+    auto withMaxNumberOfParticles(size_t maxNumberOfParticles) -> Builder &;
 
     //! Returns builder with jitter amount.
-    Builder &withJitter(double jitter);
+    auto withJitter(double jitter) -> Builder &;
 
     //! Returns builder with one-shot flag.
-    Builder &withIsOneShot(bool isOneShot);
+    auto withIsOneShot(bool isOneShot) -> Builder &;
 
     //! Returns builder with overlapping flag.
-    Builder &withAllowOverlapping(bool allowOverlapping);
+    auto withAllowOverlapping(bool allowOverlapping) -> Builder &;
 
     //! Returns builder with random seed.
-    Builder &withRandomSeed(uint32_t seed);
+    auto withRandomSeed(uint32_t seed) -> Builder &;
 
     //! Builds VolumeParticleEmitter3.
-    VolumeParticleEmitter3 build() const;
+    auto build() const -> VolumeParticleEmitter3;
 
     //! Builds shared pointer of VolumeParticleEmitter3 instance.
-    VolumeParticleEmitter3Ptr makeShared() const;
+    auto makeShared() const -> VolumeParticleEmitter3Ptr;
 
 private:
     ImplicitSurface3Ptr _implicitSurface;

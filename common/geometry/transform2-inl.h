@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <cmath>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 inline Transform2::Transform2()
@@ -100,6 +100,6 @@ inline BoundingBox2D Transform2::toWorld(const BoundingBox2D &bboxInLocal) const
     return bboxInWorld;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_TRANSFORM2_INL_H_

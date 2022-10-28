@@ -8,7 +8,7 @@
 
 #include <numeric>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T>
@@ -672,6 +672,6 @@ size_t Bvh2<T>::qsplit(size_t *itemIndices, size_t numItems, double pivot, uint8
     return ret;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_BVH2_INL_H_

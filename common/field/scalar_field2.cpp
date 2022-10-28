@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "scalar_field2.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 ScalarField2::ScalarField2()
 {

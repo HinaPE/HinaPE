@@ -3,7 +3,7 @@
 
 #include "collider2.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -66,6 +66,6 @@ private:
     double _angularVelocity = 0.0;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_RIGID_BODY_COLLIDER2_H_

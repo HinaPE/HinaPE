@@ -9,7 +9,7 @@
 #include <algorithm>  // just make cpplint happy..
 #include <limits>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // Constructors
@@ -258,13 +258,13 @@ T Vector<T, 2>::max() const
 template<typename T>
 T Vector<T, 2>::absmin() const
 {
-    return HinaPE::FluidEngine::absmin(x, y);
+    return HinaPE::absmin(x, y);
 }
 
 template<typename T>
 T Vector<T, 2>::absmax() const
 {
-    return HinaPE::FluidEngine::absmax(x, y);
+    return HinaPE::absmax(x, y);
 }
 
 template<typename T>
@@ -592,6 +592,6 @@ Vector<T, 2> monotonicCatmullRom(const Vector<T, 2> &v0, const Vector<T, 2> &v1,
     return a3 * cubic(f) + a2 * square(f) + a1 * f + a0;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_VECTOR2_INL_H_

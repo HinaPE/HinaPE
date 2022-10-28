@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Simple timer class.
@@ -24,6 +24,6 @@ private:
     std::chrono::steady_clock::time_point _startingPoint;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_TIMER_H_

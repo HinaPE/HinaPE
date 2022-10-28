@@ -5,7 +5,7 @@
 
 #include "grid/scalar_grid3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -23,6 +23,6 @@ namespace HinaPE::FluidEngine
 //!
 void triangleMeshToSdf(const TriangleMesh3 &mesh, ScalarGrid3 *sdf, const unsigned int exactBand = 1);
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_TRIANGLE_MESH_TO_SDF_H_

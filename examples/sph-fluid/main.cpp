@@ -4,6 +4,7 @@
 
 #include "fluid_api.h"
 
+using namespace HinaPE;
 using namespace HinaPE::FluidEngine;
 
 auto main(int argc, char **argv) -> int

@@ -9,12 +9,12 @@
 
 #include <algorithm>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<class ForwardIt, class T, class Compare = std::less<T>>
 ForwardIt binaryFind(ForwardIt first, ForwardIt last, const T &value, Compare comp = {});
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "cpp_utils-inl.h"
 

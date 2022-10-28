@@ -9,7 +9,7 @@
 
 #include "pch.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 Box2::Box2(const Transform2 &transform, bool isNormalFlipped) : Surface2(transform, isNormalFlipped) {}
 

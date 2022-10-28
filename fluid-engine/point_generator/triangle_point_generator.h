@@ -22,7 +22,7 @@ public:
     void forEachPoint(const BoundingBox2D &boundingBox, double spacing, const std::function<bool(const Vector2D &)> &callback) const override;
 };
 
-typedef std::shared_ptr<TrianglePointGenerator> TrianglePointGeneratorPtr;
+using TrianglePointGeneratorPtr = std::shared_ptr<TrianglePointGenerator>;
 
 }  // namespace HinaPE::FluidEngine
 

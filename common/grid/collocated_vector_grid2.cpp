@@ -8,7 +8,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE;
 
 CollocatedVectorGrid2::CollocatedVectorGrid2() : _linearSampler(_data.constAccessor(), Vector2D(1, 1), Vector2D())
 {

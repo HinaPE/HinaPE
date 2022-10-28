@@ -1,7 +1,7 @@
 #ifndef HINAPE_FLUID_ENGINE_TYPE_HELPERS_H_
 #define HINAPE_FLUID_ENGINE_TYPE_HELPERS_H_
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Returns the type of the value itself.
@@ -11,6 +11,6 @@ struct ScalarType
     typedef T value;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_TYPE_HELPERS_H_

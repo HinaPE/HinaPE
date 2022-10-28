@@ -7,7 +7,7 @@
 
 #include <functional>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Closest intersection query result.
@@ -54,6 +54,6 @@ public:
     virtual ClosestIntersectionQueryResult3<T> closestIntersection(const Ray3D &ray, const GetRayIntersectionFunc3<T> &testFunc) const = 0;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_INTERSECTION_QUERY_ENGINE3_H_

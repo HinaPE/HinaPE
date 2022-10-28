@@ -7,7 +7,7 @@
 #include <limits>
 #include <tuple>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -369,7 +369,7 @@ struct ScalarType<Vector3<T>>
 template<typename T>
 auto monotonicCatmullRom(const Vector3<T> &v0, const Vector3<T> &v1, const Vector3<T> &v2, const Vector3<T> &v3, T f) -> Vector3<T>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "vector3-inl.h"
 

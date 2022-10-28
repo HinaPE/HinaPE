@@ -3,7 +3,7 @@
 
 #include "matrix4x4.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -195,7 +195,7 @@ typedef Quaternion<float> QuaternionF;
 //! Double-type quaternion.
 typedef Quaternion<double> QuaternionD;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "quaternion-inl.h"
 

@@ -9,7 +9,7 @@
 #include <limits>
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // MARK: VectorN
@@ -398,7 +398,7 @@ typedef VectorN<float> VectorNF;
 //! Double-type N-D vector.
 typedef VectorN<double> VectorND;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "vector_n-inl.h"
 

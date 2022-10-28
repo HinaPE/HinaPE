@@ -3,13 +3,13 @@
 
 #include "geometry/point.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! \brief N-D size type.
 template<size_t N> using Size = Point<size_t, N>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 // #include "size-inl.h"
 

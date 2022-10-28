@@ -43,7 +43,7 @@ public:
 };
 
 //! Shared pointer for the PointGenerator3 type.
-typedef std::shared_ptr<PointGenerator3> PointGenerator3Ptr;
+using PointGenerator3Ptr = std::shared_ptr<PointGenerator3>;
 
 }  // namespace HinaPE::FluidEngine
 

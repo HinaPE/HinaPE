@@ -3,7 +3,7 @@
 
 #include "vector_expression.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 // MARK: VectorExpression
@@ -148,6 +148,6 @@ VectorDiv<T, E1, E2> operator/(const VectorExpression<T, E1> &a, const VectorExp
     return VectorDiv<T, E1, E2>(a(), b());
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_VECTOR_EXPRESSION_INL_H

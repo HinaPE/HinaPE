@@ -8,7 +8,7 @@
 
 #include <utility>  // just make cpplint happy..
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -427,7 +427,7 @@ private:
 //! Type alias for 3-D const array accessor.
 template<typename T> using ConstArrayAccessor3 = ConstArrayAccessor<T, 3>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #include "array_accessor3-inl.h"
 

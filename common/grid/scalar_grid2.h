@@ -11,7 +11,7 @@
 #include <memory>
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! Abstract base class for 2-D scalar grid structure.
@@ -183,6 +183,6 @@ public:
 //! Shared pointer for the ScalarGridBuilder2 type.
 using ScalarGridBuilder2Ptr = std::shared_ptr<ScalarGridBuilder2>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_SCALAR_GRID2_H_

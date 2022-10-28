@@ -3,7 +3,7 @@
 
 #include "scalar_field3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //! 3-D constant scalar field.
@@ -50,6 +50,6 @@ private:
     double _value = 0.0;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_CONSTANT_SCALAR_FIELD3_H_

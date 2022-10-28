@@ -11,7 +11,7 @@
 #include <utility>  // just make cpplint happy..
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 //!
@@ -106,6 +106,6 @@ using Grid2Ptr = std::shared_ptr<Grid2>;
 #define JET_GRID2_TYPE_NAME(DerivedClassName) \
     std::string typeName() const override { return #DerivedClassName; }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_GRID2_H_

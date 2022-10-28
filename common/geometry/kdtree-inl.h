@@ -5,7 +5,7 @@
 
 #include <numeric>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE
 {
 
 template<typename T, size_t K>
@@ -340,6 +340,6 @@ size_t KdTree<T, K>::build(size_t nodeIndex, size_t *itemIndices, size_t nItems,
     return std::max(d0, d1);
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE
 
 #endif  // HINAPE_FLUID_ENGINE_DETAIL_KDTREE_INL_H_
