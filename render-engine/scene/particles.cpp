@@ -22,7 +22,7 @@ Scene_Particles::Scene_Particles(Scene_ID id, GL::Mesh &&mesh) : arrow(Util::arr
     get_r();
 }
 
-Scene_Particles::Scene_Particles(Scene_ID id, Pose p, const std::string& name) : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(Util::sphere_mesh(1.0f, 1))
+Scene_Particles::Scene_Particles(Scene_ID id, Pose p, const std::string &name) : arrow(Util::arrow_mesh(0.03f, 0.075f, 1.0f)), particle_instances(Util::sphere_mesh(1.0f, 1))
 {
     _id = id;
     pose = p;
@@ -105,7 +105,8 @@ void Scene_Particles::set_time(float time)
     }
 }
 
-auto Scene_Particles::get_particles() const -> const std::vector<Scene_Particles::Particle> & {
+auto Scene_Particles::get_particles() const -> const std::vector<Scene_Particles::Particle> &
+{
     return particles;
 }
 
@@ -121,13 +122,14 @@ void Scene_Particles::step(const PT::Object &scene, float dt)
 
     last_update += dt;
 
-    //    while (last_update > opt.dt)
-    //    {
-    //        step2(scene, opt.dt);
-    //        last_update -= opt.dt;
-    //    }
-
-    particle_system_api->step(this, dt);
+    if (_physics_system_api == nullptr)
+        while (last_update > opt.dt)
+        {
+            step2(scene, opt.dt);
+            last_update -= opt.dt;
+        }
+    else
+        _physics_system_api->step(this, dt);
 
     gen_instances();
 }

@@ -5,7 +5,6 @@
 #include "cloth_api.h"
 
 using namespace HinaPE;
-using namespace HinaPE::ClothEngine;
 
 auto main(int argc, char **argv) -> int
 {
@@ -17,11 +16,7 @@ auto main(int argc, char **argv) -> int
 
     // Register Cloth Engine
     Logging::mute();
-    int phase = 0;
-
-    std::shared_ptr<Scene_Object> so = nullptr;
-    std::shared_ptr<ClothAPI> cloth_api = nullptr;
-    app.register_custom_simulation_sidebarUI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) {});
+    app.register_physics_API(std::make_shared<ClothAPI>());
     platform.loop(app);
     return 0;
 }

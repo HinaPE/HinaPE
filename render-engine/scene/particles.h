@@ -1,7 +1,7 @@
 #ifndef HINAPE_PARTICLES_H
 #define HINAPE_PARTICLES_H
 
-#include "../physics-API/particle_system_api.h"
+#include "../physics-system-api.h"
 #include "../lib/mathlib.h"
 #include "../platform/gl.h"
 #include "../util/rand.h"
@@ -83,12 +83,12 @@ public:
 
 public: // HinaPE 1.1.0
     template<typename T>
-    void load_particle_system(std::shared_ptr<T> _particle_system_api)
+    void load_particle_system(std::shared_ptr<T> physics_system_api)
     {
-        static_assert(std::is_base_of<HinaPE::ParticleSystemAPI, T>::value, "Class doesn't inherit from HinaPE::ParticleSystemAPI!");
-        this->particle_system_api = std::static_pointer_cast<HinaPE::ParticleSystemAPI>(_particle_system_api);
+        static_assert(std::is_base_of<HinaPE::PhysicsSystemAPI, T>::value, "Class doesn't inherit from HinaPE::PhysicsSystemAPI!");
+        this->_physics_system_api = std::static_pointer_cast<HinaPE::ParticleSystemAPI>(physics_system_api);
     }
-    std::shared_ptr<HinaPE::ParticleSystemAPI> particle_system_api = nullptr;
+    std::shared_ptr<HinaPE::PhysicsSystemAPI> _physics_system_api = nullptr;
     std::vector<Particle> particles;
 
 private:

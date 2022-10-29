@@ -15,7 +15,6 @@ file(GLOB_RECURSE HINA_RENDER_ENGINE_UTIL "util/*.cpp" "util/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_SCENE "scene/*.cpp" "scene/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_LIB "lib/*.cpp" "lib/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_TO_IMPL "reference/*.cpp" "reference/*.h" "reference/*.inl")
-file(GLOB_RECURSE HINA_RENDER_ENGINE_PHYSICS_API "physics-API/*.cpp" "physics-API/*.h" "physics-API/*.inl")
 set(HINA_RENDER_ENGINE_PLATFORM
         "platform/gl.cpp"
         "platform/platform.cpp"
@@ -36,6 +35,7 @@ set(HINA_RENDER_ENGINE_SRC
         ${HINA_RENDER_ENGINE_TO_IMPL}
         ${HINA_RENDER_ENGINE_PLATFORM}
         ${HINA_RENDER_ENGINE_PHYSICS_API}
+        physics-system-api.h
         app.cpp
         app.h
         platform/icon.rc

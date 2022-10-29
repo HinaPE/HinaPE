@@ -10,13 +10,15 @@
 #include "common/logging.h"
 #include "fluid-engine/solver/particle/sph/sph_solver3.h"
 #include "fluid-engine/emitter/volume_particle_emitter3.h"
-#include "render-engine/scene/particles.h"
-#include "render-engine/physics-API/particle_system_api.h"
+#include "render-engine/scene/scene.h"
+#include "render-engine/gui/manager.h"
+#include "render-engine/physics-system-api.h"
 
-class FluidAPI : public HinaPE::ParticleSystemAPI
+class FluidAPI : public HinaPE::ParticleSystemAPI, public std::enable_shared_from_this<FluidAPI>
 {
 public:
     void step(Scene_Particles *, float dt) final;
+    void gui(Gui::Manager &manager, Scene &scene, Undo &undo, Gui::Widgets &widgets, Scene_Maybe obj, int &index) override;
 
 public:
     void load_solver();
@@ -36,12 +38,12 @@ public:
         // SPH Field
         float pseudo_viscosity_coefficient = 0.f;
     };
-    FluidOpt fluid_opt;
-    bool solver_prepared = false;
-    std::shared_ptr<HinaPE::FluidEngine::ParticleSystemSolver3> solver_ptr;
-    std::vector<std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3>> emitter_ptr_list;
-    std::vector<std::shared_ptr<HinaPE::Collider3>> collider_ptr_list;
-    HinaPE::BoundingBox3D particles_domain;
+    FluidOpt _fluid_opt;
+    bool _solver_prepared = false;
+    std::shared_ptr<HinaPE::FluidEngine::ParticleSystemSolver3> _solver_ptr;
+    std::vector<std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3>> _emitter_ptr_list;
+    std::vector<std::shared_ptr<HinaPE::Collider3>> _collider_ptr_list;
+    HinaPE::BoundingBox3D _particles_domain;
 };
 
 #endif //HINAPE_FLUID_API_H

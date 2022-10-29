@@ -12,6 +12,8 @@
 #include "scene/scene.h"
 #include "scene/undo.h"
 
+#include "physics-system-api.h"
+
 class Platform;
 
 struct Launch_Settings
@@ -43,8 +45,8 @@ public:
     auto quit() -> bool;
     void event(SDL_Event e);
 
-    // HinaPE 1.1.0
-    void register_custom_simulation_sidebarUI(std::function<void(Gui::Manager &manager, Scene &scene, Undo &undo, Gui::Widgets &widgets, Scene_Maybe obj, int &index)> &&func);
+    // HinaPE 1.1.2
+    void register_physics_API(const std::shared_ptr<HinaPE::PhysicsSystemAPI> &);
 
 private:
     void apply_window_dim(Vec2 new_dim);
@@ -66,6 +68,7 @@ private:
     Scene scene;
     Gui::Manager gui;
     Undo undo;
+    std::shared_ptr<HinaPE::PhysicsSystemAPI> _physics_system_api = nullptr;
 
     bool gui_capture = false;
 };

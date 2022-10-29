@@ -273,63 +273,8 @@ void App::apply_window_dim(Vec2 new_dim)
     Renderer::get().update_dim(window_dim);
 }
 
-/*
-void App::custom_UI()
+void App::register_physics_API(const std::shared_ptr<HinaPE::PhysicsSystemAPI> &ps)
 {
-    gui.register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) -> Gui::Mode
-    {
-        if (ImGui::CollapsingHeader("My UI"))
-        {
-            ImGui::PushID(_index++);
-            static float R = 1.0f;
-            ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
-            if (ImGui::Button("Add"))
-            {
-                Halfedge_Mesh hm;
-                hm.from_mesh(Util::cube_mesh(R / 2.0f));
-                hm.flip(); // if flip
-                _undo.add_obj(std::move(hm), "Cube");
-            }
-            ImGui::PopID();
-        }
-    });
-    gui.register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) -> Gui::Mode
-                             {
-                                 if (ImGui::CollapsingHeader("My UI2"))
-                                 {
-                                     ImGui::PushID(_index++);
-                                     static float R = 1.0f;
-                                     ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
-                                     if (ImGui::Button("Add"))
-                                     {
-                                         Halfedge_Mesh hm;
-                                         hm.from_mesh(Util::cube_mesh(R / 2.0f));
-                                         hm.flip(); // if flip
-                                         _undo.add_obj(std::move(hm), "Cube");
-                                     }
-                                     ImGui::PopID();
-                                 }
-                             });
-    gui.register_simulate_UI([&](Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index) -> Gui::Mode
-                             {
-                                 if (ImGui::CollapsingHeader("My UI3"))
-                                 {
-                                     ImGui::PushID(_index++);
-                                     static float R = 1.0f;
-                                     ImGui::SliderFloat("Side Length", &R, 0.01f, 10.0f, "%.2f");
-                                     if (ImGui::Button("Add"))
-                                     {
-                                         Halfedge_Mesh hm;
-                                         hm.from_mesh(Util::cube_mesh(R / 2.0f));
-                                         hm.flip(); // if flip
-                                         _undo.add_obj(std::move(hm), "Cube");
-                                     }
-                                     ImGui::PopID();
-                                 }
-                             });
-}*/
-
-void App::register_custom_simulation_sidebarUI(std::function<void(Gui::Manager &, Scene &, Undo &, Gui::Widgets &, Scene_Maybe, int &)> &&func)
-{
-    gui.register_simulate_UI(std::move(func));
+    _physics_system_api = ps;
+    gui.register_physics_system_api(ps);
 }

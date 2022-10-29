@@ -245,16 +245,15 @@ auto Simulate::UIsidebar(Manager &manager, Scene &scene, Undo &undo, Widgets &wi
         ImGui::PopID();
     }
 
-    for (auto &&f: custom_sidebar_UI)
-        f(manager, scene, undo, widgets, obj_opt, idx); // TODO: maybe enable mode change in the future
-
+    if (_physics_system_api != nullptr)
+        _physics_system_api->gui(manager, scene, undo, widgets, obj_opt, idx);
 
     return mode;
 }
 
-void Simulate::register_custom_sidebar_UI(std::function<void(Manager &, Scene &, Undo &, Widgets &, Scene_Maybe, int&)> &&func)
+void Simulate::register_physics_system_api(const std::shared_ptr<HinaPE::PhysicsSystemAPI> &api)
 {
-    custom_sidebar_UI.emplace_back(std::move(func));
+    _physics_system_api = api;
 }
 
 } // namespace Gui

@@ -84,8 +84,8 @@ public:
 
     static bool wrap_button(std::string label);
 
-    // HinaPE 1.1.0
-    void register_simulate_UI(std::function<void(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj, int &index)> &&func);;
+    // HinaPE 1.1.2
+    void register_physics_system_api(const std::shared_ptr<HinaPE::PhysicsSystemAPI>& api);
 
 private:
     void UIerror();

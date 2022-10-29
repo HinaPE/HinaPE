@@ -4,6 +4,7 @@
 #include "../rays/pathtracer.h"
 #include "../scene/particles.h"
 #include "../util/thread_pool.h"
+#include "../physics-system-api.h"
 
 #include "widgets.h"
 #include <SDL2/SDL.h>
@@ -51,11 +52,11 @@ private:
     size_t cur_actions = 0;
     Uint64 last_update;
 
-public: // HinaPE 1.1.0
-    void register_custom_sidebar_UI(std::function<void(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj, int &index)> &&func);
+public: // HinaPE 1.1.2
+    void register_physics_system_api(const std::shared_ptr<HinaPE::PhysicsSystemAPI>& api);
 
 private:
-    std::vector<std::function<void(Manager &manager, Scene &scene, Undo &undo, Widgets &widgets, Scene_Maybe obj, int &index)>> custom_sidebar_UI;
+    std::shared_ptr<HinaPE::PhysicsSystemAPI> _physics_system_api;
 };
 
 } // namespace Gui
