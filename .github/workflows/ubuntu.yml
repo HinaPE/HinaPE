@@ -21,9 +21,12 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: recursive
+
+    - name: Prepare
+      run: sudo apt update
     
     - name: Install SDL2
-      run: sudo apt-get install libgtk-3-dev libsdl2-dev
+      run: sudo apt-get install build-essential libgtk-3-dev libsdl2
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
