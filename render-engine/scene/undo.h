@@ -55,8 +55,8 @@ class Action_Bundle : public Action_Base
 
     void redo() override
     {
-        for (auto & i : std::ranges::reverse_view(list))
-            i->redo();
+        for (auto i = list.rbegin(); i != list.rend(); i++)
+            (*i)->redo();
     }
 
     std::vector<std::unique_ptr<Action_Base>> list;
