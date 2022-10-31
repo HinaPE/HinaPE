@@ -1,8 +1,8 @@
 # HinaPE is not a Physics Engine
 
-[![Cmake Build](https://github.com/Xayah-Hina/HinaPE/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/Xayah-Hina/HinaPE/actions/workflows/ubuntu.yml)
-[![Cmake Build](https://github.com/Xayah-Hina/HinaPE/actions/workflows/macos.yml/badge.svg)](https://github.com/Xayah-Hina/HinaPE/actions/workflows/macos.yml)
-[![Cmake Build](https://github.com/Xayah-Hina/HinaPE/actions/workflows/windows.yml/badge.svg)](https://github.com/Xayah-Hina/HinaPE/actions/workflows/windows.yml)
+[![Cmake Build](https://github.com/HinaPE/HinaPE/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/HinaPE/HinaPE/actions/workflows/ubuntu.yml)
+[![Cmake Build](https://github.com/HinaPE/HinaPE/actions/workflows/macos.yml/badge.svg)](https://github.com/HinaPE/HinaPE/actions/workflows/macos.yml)
+[![Cmake Build](https://github.com/HinaPE/HinaPE/actions/workflows/windows.yml/badge.svg)](https://github.com/HinaPE/HinaPE/actions/workflows/windows.yml)
 
 ## Introduction
 
