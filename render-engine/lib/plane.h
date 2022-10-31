@@ -28,12 +28,12 @@ struct Plane
     }
 
     Plane(const Plane &) = default;
-    Plane &operator=(const Plane &) = default;
+    auto operator=(const Plane &) -> Plane & = default;
     ~Plane() = default;
 
     /// Calculate intersection point between plane and line.
     /// Returns false if the hit point is 'backward' along the line relative to pt.dir
-    bool hit(Line line, Vec3 &pt) const
+    auto hit(Line line, Vec3 &pt) const -> bool
     {
         Vec3 n = p.xyz();
         float t = (p.w - dot(line.point, n)) / dot(line.dir, n);
@@ -44,7 +44,7 @@ struct Plane
     Vec4 p;
 };
 
-inline std::ostream &operator<<(std::ostream &out, Plane v)
+inline auto operator<<(std::ostream &out, Plane v) -> std::ostream &
 {
     out << "Plane" << v.p;
     return out;

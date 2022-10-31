@@ -11,9 +11,9 @@ struct Mat3
     /// Zero matrix
     static const Mat3 Zero;
 
-    static Mat3 transpose(const Mat3 &m);
+    static auto transpose(const Mat3 &m) -> Mat3;
 
-    static Mat3 inverse(const Mat3 &m);
+    static auto inverse(const Mat3 &m) -> Mat3;
 
     Mat3() { *this = I; }
 
@@ -25,64 +25,64 @@ struct Mat3
     }
 
     Mat3(const Mat3 &) = default;
-    Mat3 &operator=(const Mat3 &) = default;
+    auto operator=(const Mat3 &) -> Mat3 & = default;
     ~Mat3() = default;
 
-    Vec3 &operator[](int idx)
+    auto operator[](int idx) -> Vec3 &
     {
         assert(idx >= 0 && idx <= 2);
         return cols[idx];
     }
 
-    Vec3 operator[](int idx) const
+    auto operator[](int idx) const -> Vec3
     {
         assert(idx >= 0 && idx <= 2);
         return cols[idx];
     }
 
-    Mat3 operator+=(const Mat3 &m)
+    auto operator+=(const Mat3 &m) -> Mat3
     {
         for (int i = 0; i < 3; i++)
             cols[i] += m.cols[i];
         return *this;
     }
 
-    Mat3 operator-=(const Mat3 &m)
+    auto operator-=(const Mat3 &m) -> Mat3
     {
         for (int i = 0; i < 3; i++)
             cols[i] -= m.cols[i];
         return *this;
     }
 
-    Mat3 operator+=(float s)
+    auto operator+=(float s) -> Mat3
     {
         for (auto &col: cols)
             col += s;
         return *this;
     }
 
-    Mat3 operator-=(float s)
+    auto operator-=(float s) -> Mat3
     {
         for (auto &col: cols)
             col -= s;
         return *this;
     }
 
-    Mat3 operator*=(float s)
+    auto operator*=(float s) -> Mat3
     {
         for (auto &col: cols)
             col *= s;
         return *this;
     }
 
-    Mat3 operator/=(float s)
+    auto operator/=(float s) -> Mat3
     {
         for (auto &col: cols)
             col /= s;
         return *this;
     }
 
-    Mat3 operator+(const Mat3 &m) const
+    auto operator+(const Mat3 &m) const -> Mat3
     {
         Mat3 r;
         for (int i = 0; i < 3; i++)
@@ -90,7 +90,7 @@ struct Mat3
         return r;
     }
 
-    Mat3 operator-(const Mat3 &m) const
+    auto operator-(const Mat3 &m) const -> Mat3
     {
         Mat3 r;
         for (int i = 0; i < 3; i++)
@@ -98,7 +98,7 @@ struct Mat3
         return r;
     }
 
-    Mat3 operator+(float s) const
+    auto operator+(float s) const -> Mat3
     {
         Mat3 r;
         for (int i = 0; i < 3; i++)
@@ -106,7 +106,7 @@ struct Mat3
         return r;
     }
 
-    Mat3 operator-(float s) const
+    auto operator-(float s) const -> Mat3
     {
         Mat3 r;
         for (int i = 0; i < 3; i++)
@@ -114,7 +114,7 @@ struct Mat3
         return r;
     }
 
-    Mat3 operator*(float s) const
+    auto operator*(float s) const -> Mat3
     {
         Mat3 r;
         for (int i = 0; i < 3; i++)
@@ -122,7 +122,7 @@ struct Mat3
         return r;
     }
 
-    Mat3 operator/(float s) const
+    auto operator/(float s) const -> Mat3
     {
         Mat3 r;
         for (int i = 0; i < 3; i++)
@@ -130,13 +130,13 @@ struct Mat3
         return r;
     }
 
-    Mat3 operator*=(const Mat3 &m)
+    auto operator*=(const Mat3 &m) -> Mat3
     {
         *this = *this * m;
         return *this;
     }
 
-    Mat3 operator*(const Mat3 &m) const
+    auto operator*(const Mat3 &m) const -> Mat3
     {
         Mat3 ret;
         for (int i = 0; i < 3; i++)
@@ -153,22 +153,22 @@ struct Mat3
         return ret;
     }
 
-    Vec3 operator*(Vec3 v) const
+    auto operator*(Vec3 v) const -> Vec3
     {
         return v[0] * cols[0] + v[1] * cols[1] + v[2] * cols[2];
     }
 
-    Mat3 T() const
+    auto T() const -> Mat3
     {
         return transpose(*this);
     }
 
-    Mat3 inverse() const
+    auto inverse() const -> Mat3
     {
         return inverse(*this);
     }
 
-    float det() const
+    auto det() const -> float
     {
         // TODO:
         assert(false);
@@ -181,7 +181,7 @@ struct Mat3
     };
 };
 
-inline bool operator==(const Mat3 &l, const Mat3 &r)
+inline auto operator==(const Mat3 &l, const Mat3 &r) -> bool
 {
     for (int i = 0; i < 9; i++)
         if (l.data[i] != r.data[i])
@@ -189,7 +189,7 @@ inline bool operator==(const Mat3 &l, const Mat3 &r)
     return true;
 }
 
-inline bool operator!=(const Mat3 &l, const Mat3 &r)
+inline auto operator!=(const Mat3 &l, const Mat3 &r) -> bool
 {
     for (int i = 0; i < 9; i++)
         if (l.data[i] != r.data[i])
@@ -197,7 +197,7 @@ inline bool operator!=(const Mat3 &l, const Mat3 &r)
     return false;
 }
 
-inline Mat3 operator+(float s, const Mat3 &m)
+inline auto operator+(float s, const Mat3 &m) -> Mat3
 {
     Mat3 r;
     for (int i = 0; i < 3; i++)
@@ -205,7 +205,7 @@ inline Mat3 operator+(float s, const Mat3 &m)
     return r;
 }
 
-inline Mat3 operator-(float s, const Mat3 &m)
+inline auto operator-(float s, const Mat3 &m) -> Mat3
 {
     Mat3 r;
     for (int i = 0; i < 3; i++)
@@ -213,7 +213,7 @@ inline Mat3 operator-(float s, const Mat3 &m)
     return r;
 }
 
-inline Mat3 operator*(float s, const Mat3 &m)
+inline auto operator*(float s, const Mat3 &m) -> Mat3
 {
     Mat3 r;
     for (int i = 0; i < 3; i++)
@@ -221,7 +221,7 @@ inline Mat3 operator*(float s, const Mat3 &m)
     return r;
 }
 
-inline Mat3 operator/(float s, const Mat3 &m)
+inline auto operator/(float s, const Mat3 &m) -> Mat3
 {
     Mat3 r;
     for (int i = 0; i < 3; i++)
@@ -232,7 +232,7 @@ inline Mat3 operator/(float s, const Mat3 &m)
 const inline Mat3 Mat3::I = Mat3{Vec3{1.0f, 0.0f, 0.0f}, Vec3{0.0f, 1.0f, 0.0f}, Vec3{0.0f, 0.0f, 1.0f}};
 const inline Mat3 Mat3::Zero = Mat3{Vec3{0.0f, 0.0f, 0.0f}, Vec3{0.0f, 0.0f, 0.0f}, Vec3{0.0f, 0.0f, 0.0f}};
 
-inline Mat3 Mat3::transpose(const Mat3 &m)
+inline auto Mat3::transpose(const Mat3 &m) -> Mat3
 {
     Mat3 r;
     for (int i = 0; i < 3; i++)
@@ -245,14 +245,14 @@ inline Mat3 Mat3::transpose(const Mat3 &m)
     return r;
 }
 
-inline Mat3 Mat3::inverse(const Mat3 &m)
+inline auto Mat3::inverse(const Mat3 &m) -> Mat3
 {
     // TODO:
     assert(false);
     return Mat3();
 }
 
-inline std::ostream &operator<<(std::ostream &out, Mat3 m)
+inline auto operator<<(std::ostream &out, Mat3 m) -> std::ostream &
 {
     out << "{" << m[0] << "," << m[1] << "," << m[2] << "}";
     return out;

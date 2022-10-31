@@ -26,7 +26,7 @@ struct BBox
     }
 
     BBox(const BBox &) = default;
-    BBox &operator=(const BBox &) = default;
+    auto operator=(const BBox &) -> BBox & = default;
     ~BBox() = default;
 
     /// Rest min to max float, max to negative max float
@@ -50,19 +50,19 @@ struct BBox
     }
 
     /// Get center point of box
-    Vec3 center() const
+    auto center() const -> Vec3
     {
         return (min + max) * 0.5f;
     }
 
     // Check whether box has no volume
-    bool empty() const
+    auto empty() const -> bool
     {
         return min.x > max.x || min.y > max.y || min.z > max.z;
     }
 
     /// Get surface area of the box
-    float surface_area() const
+    auto surface_area() const -> float
     {
         if (empty())
             return 0.0f;
@@ -95,10 +95,10 @@ struct BBox
     }
 
     // TODO (PathTracer): see student/bbox.cpp
-    bool hit(const Ray &ray, Vec2 &times) const;
+    auto hit(const Ray &ray, Vec2 &times) const -> bool;
 
     /// Get the eight corner points of the bounding box
-    std::vector<Vec3> corners() const
+    auto corners() const -> std::vector<Vec3>
     {
         std::vector<Vec3> ret(8);
         ret[0] = Vec3(min.x, min.y, min.z);
@@ -149,7 +149,7 @@ struct BBox
     Vec3 min, max;
 };
 
-inline std::ostream &operator<<(std::ostream &out, BBox b)
+inline auto operator<<(std::ostream &out, BBox b) -> std::ostream &
 {
     out << "BBox{" << b.min << "," << b.max << "}";
     return out;

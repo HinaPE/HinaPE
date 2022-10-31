@@ -14,20 +14,20 @@ public:
 
     void loop(App &app);
 
-    Vec2 window_draw();
-    Vec2 window_size();
-    Vec2 scale(Vec2 pt);
+    auto window_draw() -> Vec2;
+    auto window_size() -> Vec2;
+    auto scale(Vec2 pt) -> Vec2;
 
     void capture_mouse();
     void release_mouse();
     void set_mouse(Vec2 pos);
-    Vec2 get_mouse();
+    auto get_mouse() -> Vec2;
     void grab_mouse();
     void ungrab_mouse();
-    bool is_down(SDL_Scancode key);
+    auto is_down(SDL_Scancode key) -> bool;
 
     static void remove_console();
-    static int console_width();
+    static auto console_width() -> int;
     static void strcpy(char *dest, const char *src, size_t limit);
 
 private:

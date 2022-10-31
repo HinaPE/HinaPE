@@ -20,7 +20,7 @@ __declspec(dllexport) bool AmdPowerXpressRequestHighPerformance = true;
 #include <sys/ioctl.h>
 #endif
 
-int Platform::console_width()
+auto Platform::console_width() -> int
 {
     int cols = 0;
 #ifdef _WIN32
@@ -164,7 +164,7 @@ void Platform::set_dpi()
     prev_scale = scale;
 }
 
-bool Platform::is_down(SDL_Scancode key)
+auto Platform::is_down(SDL_Scancode key) -> bool
 {
     return keybuf[key];
 }
@@ -244,19 +244,19 @@ void Platform::loop(App &app)
     }
 }
 
-Vec2 Platform::scale(Vec2 pt)
+auto Platform::scale(Vec2 pt) -> Vec2
 {
     return pt * window_draw() / window_size();
 }
 
-Vec2 Platform::window_size()
+auto Platform::window_size() -> Vec2
 {
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
     return Vec2((float) w, (float) h);
 }
 
-Vec2 Platform::window_draw()
+auto Platform::window_draw() -> Vec2
 {
     int w, h;
     SDL_GL_GetDrawableSize(window, &w, &h);
@@ -273,7 +273,7 @@ void Platform::ungrab_mouse()
     SDL_SetWindowGrab(window, SDL_FALSE);
 }
 
-Vec2 Platform::get_mouse()
+auto Platform::get_mouse() -> Vec2
 {
     int x, y;
     SDL_GetMouseState(&x, &y);

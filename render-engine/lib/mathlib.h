@@ -23,46 +23,46 @@ template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 #define Degrees(v) ((v) * (180.0f / PI_F))
 
 template<typename T>
-inline T clamp(T x, T min, T max)
+inline auto clamp(T x, T min, T max) -> T
 {
     return std::min(std::max(x, min), max);
 }
 
 template<>
-inline Vec2 clamp(Vec2 v, Vec2 min, Vec2 max)
+inline auto clamp(Vec2 v, Vec2 min, Vec2 max) -> Vec2
 {
     return Vec2(clamp(v.x, min.x, max.x), clamp(v.y, min.y, max.y));
 }
 
 template<>
-inline Vec3 clamp(Vec3 v, Vec3 min, Vec3 max)
+inline auto clamp(Vec3 v, Vec3 min, Vec3 max) -> Vec3
 {
     return Vec3(clamp(v.x, min.x, max.x), clamp(v.y, min.y, max.y), clamp(v.z, min.z, max.z));
 }
 
 template<>
-inline Vec4 clamp(Vec4 v, Vec4 min, Vec4 max)
+inline auto clamp(Vec4 v, Vec4 min, Vec4 max) -> Vec4
 {
     return Vec4(clamp(v.x, min.x, max.x), clamp(v.y, min.y, max.y), clamp(v.z, min.z, max.z), clamp(v.w, min.w, max.w));
 }
 
 template<typename T>
-T lerp(T start, T end, float t)
+auto lerp(T start, T end, float t) -> T
 {
     return start + (end - start) * t;
 }
 
-inline float sign(float x)
+inline auto sign(float x) -> float
 {
     return x > 0.0f ? 1.0f : x < 0.0f ? -1.0f : 0.0f;
 }
 
-inline float frac(float x)
+inline auto frac(float x) -> float
 {
     return x - (long long) x;
 }
 
-inline float smoothstep(float e0, float e1, float x)
+inline auto smoothstep(float e0, float e1, float x) -> float
 {
     float t = clamp((x - e0) / (e1 - e0), 0.0f, 1.0f);
     return t * t * (3.0f - 2.0f * t);

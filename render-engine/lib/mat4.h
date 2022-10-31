@@ -22,37 +22,37 @@ struct Mat4
     static const Mat4 Zero;
 
     /// Return transposed matrix
-    static Mat4 transpose(const Mat4 &m);
+    static auto transpose(const Mat4 &m) -> Mat4;
     /// Return inverse matrix (will be NaN if m is not invertible)
-    static Mat4 inverse(const Mat4 &m);
+    static auto inverse(const Mat4 &m) -> Mat4;
     /// Return transformation matrix for given translation vector
-    static Mat4 translate(Vec3 t);
+    static auto translate(Vec3 t) -> Mat4;
     /// Return transformation matrix for given angle (degrees) and axis
-    static Mat4 rotate(float t, Vec3 axis);
+    static auto rotate(float t, Vec3 axis) -> Mat4;
     /// Return transformation matrix for given XYZ Euler angle rotation
-    static Mat4 euler(Vec3 angles);
+    static auto euler(Vec3 angles) -> Mat4;
     /// Return transformation matrix that rotates the Y axis to dir
-    static Mat4 rotate_to(Vec3 dir);
+    static auto rotate_to(Vec3 dir) -> Mat4;
     /// Return transformation matrix that rotates the -Z axis to dir
-    static Mat4 rotate_z_to(Vec3 dir);
+    static auto rotate_z_to(Vec3 dir) -> Mat4;
     /// Return transformation matrix for given scale factors
-    static Mat4 scale(Vec3 s);
+    static auto scale(Vec3 s) -> Mat4;
     /// Return transformation matrix with given axes
-    static Mat4 axes(Vec3 x, Vec3 y, Vec3 z);
+    static auto axes(Vec3 x, Vec3 y, Vec3 z) -> Mat4;
 
     /// Return transformation matrix for viewing a scene from $pos looking at $at,
     /// where straight up is defined as $up
-    static Mat4 look_at(Vec3 pos, Vec3 at, Vec3 up = Vec3{0.0f, 1.0f, 0.0f});
+    static auto look_at(Vec3 pos, Vec3 at, Vec3 up = Vec3{0.0f, 1.0f, 0.0f}) -> Mat4;
     /// Return orthogonal projection matrix with given left, right, bottom, top,
     /// near, and far planes.
-    static Mat4 ortho(float l, float r, float b, float t, float n, float f);
+    static auto ortho(float l, float r, float b, float t, float n, float f) -> Mat4;
 
     /// Return perspective projection matrix with given field of view, aspect ratio,
     /// and near plane. The far plane is assumed to be at infinity. This projection
     /// also outputs n/z for better precision with floating point depth buffers, so we use
     /// a depth mapping where 0 is the far plane (infinity) and 1 is the near plane, and
     /// an object is closer if is depth is greater.
-    static Mat4 project(float fov, float ar, float n);
+    static auto project(float fov, float ar, float n) -> Mat4;
 
     Mat4()
     {
@@ -68,64 +68,64 @@ struct Mat4
     }
 
     Mat4(const Mat4 &) = default;
-    Mat4 &operator=(const Mat4 &) = default;
+    auto operator=(const Mat4 &) -> Mat4 & = default;
     ~Mat4() = default;
 
-    Vec4 &operator[](int idx)
+    auto operator[](int idx) -> Vec4 &
     {
         assert(idx >= 0 && idx <= 3);
         return cols[idx];
     }
 
-    Vec4 operator[](int idx) const
+    auto operator[](int idx) const -> Vec4
     {
         assert(idx >= 0 && idx <= 3);
         return cols[idx];
     }
 
-    Mat4 operator+=(const Mat4 &m)
+    auto operator+=(const Mat4 &m) -> Mat4
     {
         for (int i = 0; i < 4; i++)
             cols[i] += m.cols[i];
         return *this;
     }
 
-    Mat4 operator-=(const Mat4 &m)
+    auto operator-=(const Mat4 &m) -> Mat4
     {
         for (int i = 0; i < 4; i++)
             cols[i] -= m.cols[i];
         return *this;
     }
 
-    Mat4 operator+=(float s)
+    auto operator+=(float s) -> Mat4
     {
-        for (int i = 0; i < 4; i++)
-            cols[i] += s;
+        for (auto & col : cols)
+            col += s;
         return *this;
     }
 
-    Mat4 operator-=(float s)
+    auto operator-=(float s) -> Mat4
     {
-        for (int i = 0; i < 4; i++)
-            cols[i] -= s;
+        for (auto & col : cols)
+            col -= s;
         return *this;
     }
 
-    Mat4 operator*=(float s)
+    auto operator*=(float s) -> Mat4
     {
-        for (int i = 0; i < 4; i++)
-            cols[i] *= s;
+        for (auto & col : cols)
+            col *= s;
         return *this;
     }
 
-    Mat4 operator/=(float s)
+    auto operator/=(float s) -> Mat4
     {
-        for (int i = 0; i < 4; i++)
-            cols[i] /= s;
+        for (auto & col : cols)
+            col /= s;
         return *this;
     }
 
-    Mat4 operator+(const Mat4 &m) const
+    auto operator+(const Mat4 &m) const -> Mat4
     {
         Mat4 r;
         for (int i = 0; i < 4; i++)
@@ -133,7 +133,7 @@ struct Mat4
         return r;
     }
 
-    Mat4 operator-(const Mat4 &m) const
+    auto operator-(const Mat4 &m) const -> Mat4
     {
         Mat4 r;
         for (int i = 0; i < 4; i++)
@@ -141,7 +141,7 @@ struct Mat4
         return r;
     }
 
-    Mat4 operator+(float s) const
+    auto operator+(float s) const -> Mat4
     {
         Mat4 r;
         for (int i = 0; i < 4; i++)
@@ -149,7 +149,7 @@ struct Mat4
         return r;
     }
 
-    Mat4 operator-(float s) const
+    auto operator-(float s) const -> Mat4
     {
         Mat4 r;
         for (int i = 0; i < 4; i++)
@@ -157,7 +157,7 @@ struct Mat4
         return r;
     }
 
-    Mat4 operator*(float s) const
+    auto operator*(float s) const -> Mat4
     {
         Mat4 r;
         for (int i = 0; i < 4; i++)
@@ -165,7 +165,7 @@ struct Mat4
         return r;
     }
 
-    Mat4 operator/(float s) const
+    auto operator/(float s) const -> Mat4
     {
         Mat4 r;
         for (int i = 0; i < 4; i++)
@@ -173,13 +173,13 @@ struct Mat4
         return r;
     }
 
-    Mat4 operator*=(const Mat4 &v)
+    auto operator*=(const Mat4 &v) -> Mat4
     {
         *this = *this * v;
         return *this;
     }
 
-    Mat4 operator*(const Mat4 &m) const
+    auto operator*(const Mat4 &m) const -> Mat4
     {
         Mat4 ret;
         for (int i = 0; i < 4; i++)
@@ -196,25 +196,25 @@ struct Mat4
         return ret;
     }
 
-    Vec4 operator*(Vec4 v) const
+    auto operator*(Vec4 v) const -> Vec4
     {
         return v[0] * cols[0] + v[1] * cols[1] + v[2] * cols[2] + v[3] * cols[3];
     }
 
     /// Expands v to Vec4(v, 1.0), multiplies, and projects back to 3D
-    Vec3 operator*(Vec3 v) const
+    auto operator*(Vec3 v) const -> Vec3
     {
         return operator*(Vec4(v, 1.0f)).project();
     }
 
     /// Expands v to Vec4(v, 0.0), multiplies, and projects back to 3D
-    Vec3 rotate(Vec3 v) const
+    auto rotate(Vec3 v) const -> Vec3
     {
         return operator*(Vec4(v, 0.0f)).xyz();
     }
 
     /// Converts rotation (orthonormal 3x3) matrix to equivalent Euler angles
-    Vec3 to_euler() const
+    auto to_euler() const -> Vec3
     {
 
         bool single = true;
@@ -258,19 +258,19 @@ struct Mat4
     }
 
     /// Returns matrix transpose
-    Mat4 T() const
+    auto T() const -> Mat4
     {
         return transpose(*this);
     }
 
     /// Returns matrix inverse (will be NaN if m is not invertible)
-    Mat4 inverse() const
+    auto inverse() const -> Mat4
     {
         return inverse(*this);
     }
 
     /// Returns determinant (brute force).
-    float det() const
+    auto det() const -> float
     {
         return cols[0][3] * cols[1][2] * cols[2][1] * cols[3][0] - cols[0][2] * cols[1][3] * cols[2][1] * cols[3][0] - cols[0][3] * cols[1][1] * cols[2][2] * cols[3][0] +
                cols[0][1] * cols[1][3] * cols[2][2] * cols[3][0] + cols[0][2] * cols[1][1] * cols[2][3] * cols[3][0] - cols[0][1] * cols[1][2] * cols[2][3] * cols[3][0] -
@@ -289,7 +289,7 @@ struct Mat4
     };
 };
 
-inline bool operator==(const Mat4 &l, const Mat4 &r)
+inline auto operator==(const Mat4 &l, const Mat4 &r) -> bool
 {
     for (int i = 0; i < 16; i++)
         if (l.data[i] != r.data[i])
@@ -297,7 +297,7 @@ inline bool operator==(const Mat4 &l, const Mat4 &r)
     return true;
 }
 
-inline bool operator!=(const Mat4 &l, const Mat4 &r)
+inline auto operator!=(const Mat4 &l, const Mat4 &r) -> bool
 {
     for (int i = 0; i < 16; i++)
         if (l.data[i] != r.data[i])
@@ -305,7 +305,7 @@ inline bool operator!=(const Mat4 &l, const Mat4 &r)
     return false;
 }
 
-inline Mat4 operator+(float s, const Mat4 &m)
+inline auto operator+(float s, const Mat4 &m) -> Mat4
 {
     Mat4 r;
     for (int i = 0; i < 4; i++)
@@ -313,7 +313,7 @@ inline Mat4 operator+(float s, const Mat4 &m)
     return r;
 }
 
-inline Mat4 operator-(float s, const Mat4 &m)
+inline auto operator-(float s, const Mat4 &m) -> Mat4
 {
     Mat4 r;
     for (int i = 0; i < 4; i++)
@@ -321,7 +321,7 @@ inline Mat4 operator-(float s, const Mat4 &m)
     return r;
 }
 
-inline Mat4 operator*(float s, const Mat4 &m)
+inline auto operator*(float s, const Mat4 &m) -> Mat4
 {
     Mat4 r;
     for (int i = 0; i < 4; i++)
@@ -329,7 +329,7 @@ inline Mat4 operator*(float s, const Mat4 &m)
     return r;
 }
 
-inline Mat4 operator/(float s, const Mat4 &m)
+inline auto operator/(float s, const Mat4 &m) -> Mat4
 {
     Mat4 r;
     for (int i = 0; i < 4; i++)
@@ -340,7 +340,7 @@ inline Mat4 operator/(float s, const Mat4 &m)
 const inline Mat4 Mat4::I = Mat4{Vec4{1.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 1.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 1.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 1.0f}};
 const inline Mat4 Mat4::Zero = Mat4{Vec4{0.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 0.0f}};
 
-inline Mat4 outer(Vec4 u, Vec4 v)
+inline auto outer(Vec4 u, Vec4 v) -> Mat4
 {
     Mat4 B;
     for (int i = 0; i < 4; i++)
@@ -349,7 +349,7 @@ inline Mat4 outer(Vec4 u, Vec4 v)
     return B;
 }
 
-inline Mat4 Mat4::transpose(const Mat4 &m)
+inline auto Mat4::transpose(const Mat4 &m) -> Mat4
 {
     Mat4 r;
     for (int i = 0; i < 4; i++)
@@ -362,7 +362,7 @@ inline Mat4 Mat4::transpose(const Mat4 &m)
     return r;
 }
 
-inline Mat4 Mat4::inverse(const Mat4 &m)
+inline auto Mat4::inverse(const Mat4 &m) -> Mat4
 {
     Mat4 r;
     r[0][0] = m[1][2] * m[2][3] * m[3][1] - m[1][3] * m[2][2] * m[3][1] + m[1][3] * m[2][1] * m[3][2] - m[1][1] * m[2][3] * m[3][2] - m[1][2] * m[2][1] * m[3][3] +
@@ -401,7 +401,7 @@ inline Mat4 Mat4::inverse(const Mat4 &m)
     return r;
 }
 
-inline Mat4 Mat4::rotate_to(Vec3 dir)
+inline auto Mat4::rotate_to(Vec3 dir) -> Mat4
 {
 
     dir.normalize();
@@ -418,7 +418,7 @@ inline Mat4 Mat4::rotate_to(Vec3 dir)
     }
 }
 
-inline Mat4 Mat4::rotate_z_to(Vec3 dir)
+inline auto Mat4::rotate_z_to(Vec3 dir) -> Mat4
 {
     Mat4 y = rotate_to(dir);
     Vec4 _y = y[1];
@@ -428,24 +428,24 @@ inline Mat4 Mat4::rotate_z_to(Vec3 dir)
     return y;
 }
 
-inline Mat4 Mat4::axes(Vec3 x, Vec3 y, Vec3 z)
+inline auto Mat4::axes(Vec3 x, Vec3 y, Vec3 z) -> Mat4
 {
     return Mat4{Vec4{x, 0.0f}, Vec4{y, 0.0f}, Vec4{z, 0.0f}, Vec4{0.0f, 0.0f, 0.0f, 1.0f}};
 }
 
-inline Mat4 Mat4::translate(Vec3 t)
+inline auto Mat4::translate(Vec3 t) -> Mat4
 {
     Mat4 r;
     r[3] = Vec4(t, 1.0f);
     return r;
 }
 
-inline Mat4 Mat4::euler(Vec3 angles)
+inline auto Mat4::euler(Vec3 angles) -> Mat4
 {
     return Mat4::rotate(angles.z, Vec3{0.0f, 0.0f, 1.0f}) * Mat4::rotate(angles.y, Vec3{0.0f, 1.0f, 0.0f}) * Mat4::rotate(angles.x, Vec3{1.0f, 0.0f, 0.0f});
 }
 
-inline Mat4 Mat4::rotate(float t, Vec3 axis)
+inline auto Mat4::rotate(float t, Vec3 axis) -> Mat4
 {
     Mat4 ret;
     float c = std::cos(Radians(t));
@@ -464,7 +464,7 @@ inline Mat4 Mat4::rotate(float t, Vec3 axis)
     return ret;
 }
 
-inline Mat4 Mat4::scale(Vec3 s)
+inline auto Mat4::scale(Vec3 s) -> Mat4
 {
     Mat4 r;
     r[0][0] = s.x;
@@ -473,7 +473,7 @@ inline Mat4 Mat4::scale(Vec3 s)
     return r;
 }
 
-inline Mat4 Mat4::ortho(float l, float r, float b, float t, float n, float f)
+inline auto Mat4::ortho(float l, float r, float b, float t, float n, float f) -> Mat4
 {
     Mat4 rs;
     rs[0][0] = 2.0f / (r - l);
@@ -485,7 +485,7 @@ inline Mat4 Mat4::ortho(float l, float r, float b, float t, float n, float f)
     return rs;
 }
 
-inline Mat4 Mat4::project(float fov, float ar, float n)
+inline auto Mat4::project(float fov, float ar, float n) -> Mat4
 {
     float f = 1.0f / std::tan(Radians(fov) / 2.0f);
     Mat4 r;
@@ -498,7 +498,7 @@ inline Mat4 Mat4::project(float fov, float ar, float n)
     return r;
 }
 
-inline Mat4 Mat4::look_at(Vec3 pos, Vec3 at, Vec3 up)
+inline auto Mat4::look_at(Vec3 pos, Vec3 at, Vec3 up) -> Mat4
 {
     Mat4 r = Mat4::Zero;
     Vec3 F = (at - pos).unit();
@@ -520,7 +520,7 @@ inline Mat4 Mat4::look_at(Vec3 pos, Vec3 at, Vec3 up)
     return r;
 }
 
-inline std::ostream &operator<<(std::ostream &out, Mat4 m)
+inline auto operator<<(std::ostream &out, Mat4 m) -> std::ostream &
 {
     out << "{" << m[0] << "," << m[1] << "," << m[2] << "," << m[3] << "}";
     return out;

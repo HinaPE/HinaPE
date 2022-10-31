@@ -34,147 +34,147 @@ struct Vec2
     }
 
     Vec2(const Vec2 &) = default;
-    Vec2 &operator=(const Vec2 &) = default;
+    auto operator=(const Vec2 &) -> Vec2 & = default;
     ~Vec2() = default;
 
-    float &operator[](int idx)
+    auto operator[](int idx) -> float &
     {
         assert(idx >= 0 && idx <= 1);
         return data[idx];
     }
 
-    float operator[](int idx) const
+    auto operator[](int idx) const -> float
     {
         assert(idx >= 0 && idx <= 1);
         return data[idx];
     }
 
-    Vec2 operator+=(Vec2 v)
+    auto operator+=(Vec2 v) -> Vec2
     {
         x += v.x;
         y += v.y;
         return *this;
     }
 
-    Vec2 operator-=(Vec2 v)
+    auto operator-=(Vec2 v) -> Vec2
     {
         x -= v.x;
         y -= v.y;
         return *this;
     }
 
-    Vec2 operator*=(Vec2 v)
+    auto operator*=(Vec2 v) -> Vec2
     {
         x *= v.x;
         y *= v.y;
         return *this;
     }
 
-    Vec2 operator/=(Vec2 v)
+    auto operator/=(Vec2 v) -> Vec2
     {
         x /= v.x;
         y /= v.y;
         return *this;
     }
 
-    Vec2 operator+=(float s)
+    auto operator+=(float s) -> Vec2
     {
         x += s;
         y += s;
         return *this;
     }
 
-    Vec2 operator-=(float s)
+    auto operator-=(float s) -> Vec2
     {
         x -= s;
         y -= s;
         return *this;
     }
 
-    Vec2 operator*=(float s)
+    auto operator*=(float s) -> Vec2
     {
         x *= s;
         y *= s;
         return *this;
     }
 
-    Vec2 operator/=(float s)
+    auto operator/=(float s) -> Vec2
     {
         x /= s;
         y /= s;
         return *this;
     }
 
-    Vec2 operator+(Vec2 v) const
+    auto operator+(Vec2 v) const -> Vec2
     {
         return Vec2(x + v.x, y + v.y);
     }
 
-    Vec2 operator-(Vec2 v) const
+    auto operator-(Vec2 v) const -> Vec2
     {
         return Vec2(x - v.x, y - v.y);
     }
 
-    Vec2 operator*(Vec2 v) const
+    auto operator*(Vec2 v) const -> Vec2
     {
         return Vec2(x * v.x, y * v.y);
     }
 
-    Vec2 operator/(Vec2 v) const
+    auto operator/(Vec2 v) const -> Vec2
     {
         return Vec2(x / v.x, y / v.y);
     }
 
-    Vec2 operator+(float s) const
+    auto operator+(float s) const -> Vec2
     {
         return Vec2(x + s, y + s);
     }
 
-    Vec2 operator-(float s) const
+    auto operator-(float s) const -> Vec2
     {
         return Vec2(x - s, y - s);
     }
 
-    Vec2 operator*(float s) const
+    auto operator*(float s) const -> Vec2
     {
         return Vec2(x * s, y * s);
     }
 
-    Vec2 operator/(float s) const
+    auto operator/(float s) const -> Vec2
     {
         return Vec2(x / s, y / s);
     }
 
-    bool operator==(Vec2 v) const
+    auto operator==(Vec2 v) const -> bool
     {
         return x == v.x && y == v.y;
     }
 
-    bool operator!=(Vec2 v) const
+    auto operator!=(Vec2 v) const -> bool
     {
         return x != v.x || y != v.y;
     }
 
     /// Absolute value
-    Vec2 abs() const
+    auto abs() const -> Vec2
     {
         return Vec2(std::abs(x), std::abs(y));
     }
 
     /// Negation
-    Vec2 operator-() const
+    auto operator-() const -> Vec2
     {
         return Vec2(-x, -y);
     }
 
     /// Are all members real numbers?
-    bool valid() const
+    auto valid() const -> bool
     {
         return std::isfinite(x) && std::isfinite(y);
     }
 
     /// Modify vec to have unit length
-    Vec2 normalize()
+    auto normalize() -> Vec2
     {
         float n = norm();
         x /= n;
@@ -183,23 +183,23 @@ struct Vec2
     }
 
     /// Return unit length vec in the same direction
-    Vec2 unit() const
+    auto unit() const -> Vec2
     {
         float n = norm();
         return Vec2(x / n, y / n);
     }
 
-    float norm_squared() const
+    auto norm_squared() const -> float
     {
         return x * x + y * y;
     }
 
-    float norm() const
+    auto norm() const -> float
     {
         return std::sqrt(norm_squared());
     }
 
-    Vec2 range(float min, float max) const
+    auto range(float min, float max) const -> Vec2
     {
         if (!valid())
             return Vec2();
@@ -227,45 +227,45 @@ struct Vec2
     };
 };
 
-inline Vec2 operator+(float s, Vec2 v)
+inline auto operator+(float s, Vec2 v) -> Vec2
 {
     return Vec2(v.x + s, v.y + s);
 }
 
-inline Vec2 operator-(float s, Vec2 v)
+inline auto operator-(float s, Vec2 v) -> Vec2
 {
     return Vec2(v.x - s, v.y - s);
 }
 
-inline Vec2 operator*(float s, Vec2 v)
+inline auto operator*(float s, Vec2 v) -> Vec2
 {
     return Vec2(v.x * s, v.y * s);
 }
 
-inline Vec2 operator/(float s, Vec2 v)
+inline auto operator/(float s, Vec2 v) -> Vec2
 {
     return Vec2(s / v.x, s / v.y);
 }
 
 /// Take minimum of each component
-inline Vec2 hmin(Vec2 l, Vec2 r)
+inline auto hmin(Vec2 l, Vec2 r) -> Vec2
 {
     return Vec2(std::min(l.x, r.x), std::min(l.y, r.y));
 }
 
 /// Take maximum of each component
-inline Vec2 hmax(Vec2 l, Vec2 r)
+inline auto hmax(Vec2 l, Vec2 r) -> Vec2
 {
     return Vec2(std::max(l.x, r.x), std::max(l.y, r.y));
 }
 
 /// 2D dot product
-inline float dot(Vec2 l, Vec2 r)
+inline auto dot(Vec2 l, Vec2 r) -> float
 {
     return l.x * r.x + l.y * r.y;
 }
 
-inline std::ostream &operator<<(std::ostream &out, Vec2 v)
+inline auto operator<<(std::ostream &out, Vec2 v) -> std::ostream &
 {
     out << "{" << v.x << "," << v.y << "}";
     return out;

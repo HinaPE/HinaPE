@@ -28,10 +28,10 @@ struct Spectrum
     }
 
     Spectrum(const Spectrum &) = default;
-    Spectrum &operator=(const Spectrum &) = default;
+    auto operator=(const Spectrum &) -> Spectrum & = default;
     ~Spectrum() = default;
 
-    Spectrum operator+=(Spectrum v)
+    auto operator+=(Spectrum v) -> Spectrum
     {
         r += v.r;
         g += v.g;
@@ -39,7 +39,7 @@ struct Spectrum
         return *this;
     }
 
-    Spectrum operator*=(Spectrum v)
+    auto operator*=(Spectrum v) -> Spectrum
     {
         r *= v.r;
         g *= v.g;
@@ -47,7 +47,7 @@ struct Spectrum
         return *this;
     }
 
-    Spectrum operator*=(float s)
+    auto operator*=(float s) -> Spectrum
     {
         r *= s;
         g *= s;
@@ -55,7 +55,7 @@ struct Spectrum
         return *this;
     }
 
-    static Spectrum direction(Vec3 v)
+    static auto direction(Vec3 v) -> Spectrum
     {
         v.normalize();
         Spectrum s(std::abs(v.x), std::abs(v.y), std::abs(v.z));
@@ -63,7 +63,7 @@ struct Spectrum
         return s;
     }
 
-    static float to_linear(float f)
+    static auto to_linear(float f) -> float
     {
         if (f > 0.04045f)
         {
@@ -74,7 +74,7 @@ struct Spectrum
         }
     }
 
-    static float to_srgb(float f)
+    static auto to_srgb(float f) -> float
     {
         if (f > 0.0031308f)
         {
@@ -85,7 +85,7 @@ struct Spectrum
         }
     }
 
-    Spectrum to_srgb() const
+    auto to_srgb() const -> Spectrum
     {
         Spectrum ret;
         ret.r = to_srgb(r);
@@ -94,7 +94,7 @@ struct Spectrum
         return ret;
     }
 
-    Spectrum to_linear() const
+    auto to_linear() const -> Spectrum
     {
         Spectrum ret;
         ret.r = to_linear(r);
@@ -103,57 +103,57 @@ struct Spectrum
         return ret;
     }
 
-    Spectrum operator+(Spectrum v) const
+    auto operator+(Spectrum v) const -> Spectrum
     {
         return Spectrum(r + v.r, g + v.g, b + v.b);
     }
 
-    Spectrum operator-(Spectrum v) const
+    auto operator-(Spectrum v) const -> Spectrum
     {
         return Spectrum(r - v.r, g - v.g, b - v.b);
     }
 
-    Spectrum operator*(Spectrum v) const
+    auto operator*(Spectrum v) const -> Spectrum
     {
         return Spectrum(r * v.r, g * v.g, b * v.b);
     }
 
-    Spectrum operator+(float s) const
+    auto operator+(float s) const -> Spectrum
     {
         return Spectrum(r + s, g + s, b + s);
     }
 
-    Spectrum operator*(float s) const
+    auto operator*(float s) const -> Spectrum
     {
         return Spectrum(r * s, g * s, b * s);
     }
 
-    Spectrum operator/(float s) const
+    auto operator/(float s) const -> Spectrum
     {
         return Spectrum(r / s, g / s, b / s);
     }
 
-    bool operator==(Spectrum v) const
+    auto operator==(Spectrum v) const -> bool
     {
         return r == v.r && g == v.g && b == v.b;
     }
 
-    bool operator!=(Spectrum v) const
+    auto operator!=(Spectrum v) const -> bool
     {
         return r != v.r || g != v.g || b != v.b;
     }
 
-    float luma() const
+    auto luma() const -> float
     {
         return 0.2126f * r + 0.7152f * g + 0.0722f * b;
     }
 
-    bool valid() const
+    auto valid() const -> bool
     {
         return std::isfinite(r) && std::isfinite(g) && std::isfinite(b);
     }
 
-    Vec3 to_vec() const
+    auto to_vec() const -> Vec3
     {
         return Vec3(r, g, b);
     }
@@ -170,17 +170,17 @@ struct Spectrum
     };
 };
 
-inline Spectrum operator+(float s, Spectrum v)
+inline auto operator+(float s, Spectrum v) -> Spectrum
 {
     return Spectrum(v.r + s, v.g + s, v.b + s);
 }
 
-inline Spectrum operator*(float s, Spectrum v)
+inline auto operator*(float s, Spectrum v) -> Spectrum
 {
     return Spectrum(v.r * s, v.g * s, v.b * s);
 }
 
-inline std::ostream &operator<<(std::ostream &out, Spectrum v)
+inline auto operator<<(std::ostream &out, Spectrum v) -> std::ostream &
 {
     out << "Spectrum{" << v.r << "," << v.g << "," << v.b << "}";
     return out;

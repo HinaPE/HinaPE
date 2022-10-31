@@ -20,19 +20,19 @@ extern const char *Sample_Count_Names[(int) Sample_Count::count];
 struct MSAA
 {
     Sample_Count samples = Sample_Count::_4;
-    int n_options();
-    int n_samples();
+    auto n_options() -> int;
+    auto n_samples() -> int;
 };
 
 void setup();
 void shutdown();
-std::string version();
-std::string renderer();
+auto version() -> std::string;
+auto renderer() -> std::string;
 
 void global_params();
 void clear_screen(Vec4 col);
 void viewport(Vec2 dim);
-int max_msaa();
+auto max_msaa() -> int;
 
 enum class Opt
 {
@@ -58,7 +58,7 @@ public:
     void operator=(Tex2D &&src);
 
     void image(int w, int h, unsigned char *img);
-    TexID get_id() const;
+    auto get_id() const -> TexID;
     void bind(int idx = 0) const;
 
 private:
@@ -68,7 +68,7 @@ private:
 class Mesh
 {
 public:
-    typedef GLuint Index;
+    using Index = GLuint;
     struct Vert
     {
         Vec3 pos;
@@ -89,14 +89,14 @@ public:
     void render();
 
     void recreate(std::vector<Vert> &&vertices, std::vector<Index> &&indices);
-    std::vector<Vert> &edit_verts();
-    std::vector<Index> &edit_indices();
-    Mesh copy() const;
+    auto edit_verts() -> std::vector<Vert> &;
+    auto edit_indices() -> std::vector<Index> &;
+    auto copy() const -> Mesh;
 
-    BBox bbox() const;
-    const std::vector<Vert> &verts() const;
-    const std::vector<Index> &indices() const;
-    GLuint tris() const;
+    auto bbox() const -> BBox;
+    auto verts() const -> const std::vector<Vert> &;
+    auto indices() const -> const std::vector<Index> &;
+    auto tris() const -> GLuint;
 
 private:
     void update();
@@ -132,10 +132,10 @@ public:
     };
 
     void render();
-    size_t add(const Mat4 &transform, GLuint id = 0);
-    Info &get(size_t idx);
+    auto add(const Mat4 &transform, GLuint id = 0) -> size_t;
+    auto get(size_t idx) -> Info &;
     void clear(size_t n = 0);
-    const Mesh &mesh() const;
+    auto mesh() const -> const Mesh &;
 
 private:
     void create();
@@ -211,8 +211,8 @@ public:
     void uniform_block(std::string name, GLuint i) const;
 
 private:
-    GLuint loc(std::string name) const;
-    static bool validate(GLuint program);
+    auto loc(std::string name) const -> GLuint;
+    static auto validate(GLuint program) -> bool;
 
     GLuint program = 0;
     GLuint v = 0, f = 0;
@@ -239,15 +239,15 @@ public:
     void setup(int outputs, Vec2 dim, int samples, bool d);
     void resize(Vec2 dim, int samples = 1);
     void bind() const;
-    bool is_multisampled() const;
+    auto is_multisampled() const -> bool;
 
-    GLuint get_output(int buf) const;
-    GLuint get_depth() const;
+    auto get_output(int buf) const -> GLuint;
+    auto get_depth() const -> GLuint;
     void flush() const;
-    int samples() const;
-    int bytes() const;
+    auto samples() const -> int;
+    auto bytes() const -> int;
 
-    bool can_read_at() const;
+    auto can_read_at() const -> bool;
     void read_at(int buf, int x, int y, GLubyte *data) const;
     void read(int buf, GLubyte *data) const;
 

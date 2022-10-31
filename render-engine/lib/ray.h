@@ -20,11 +20,11 @@ struct Ray
     }
 
     Ray(const Ray &) = default;
-    Ray &operator=(const Ray &) = default;
+    auto operator=(const Ray &) -> Ray & = default;
     ~Ray() = default;
 
     /// Get point on Ray at time t
-    Vec3 at(float t) const
+    auto at(float t) const -> Vec3
     {
         return point + t * dir;
     }
@@ -53,7 +53,7 @@ struct Ray
     mutable Vec2 dist_bounds = Vec2(0.0f, std::numeric_limits<float>::infinity());
 };
 
-inline std::ostream &operator<<(std::ostream &out, Ray r)
+inline auto operator<<(std::ostream &out, Ray r) -> std::ostream &
 {
     out << "Ray{" << r.point << "," << r.dir << "}";
     return out;

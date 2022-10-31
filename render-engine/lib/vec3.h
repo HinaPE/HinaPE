@@ -37,22 +37,22 @@ struct Vec3
     }
 
     Vec3(const Vec3 &) = default;
-    Vec3 &operator=(const Vec3 &) = default;
+    auto operator=(const Vec3 &) -> Vec3 & = default;
     ~Vec3() = default;
 
-    float &operator[](int idx)
+    auto operator[](int idx) -> float &
     {
         assert(idx >= 0 && idx <= 2);
         return data[idx];
     }
 
-    float operator[](int idx) const
+    auto operator[](int idx) const -> float
     {
         assert(idx >= 0 && idx <= 2);
         return data[idx];
     }
 
-    Vec3 operator+=(Vec3 v)
+    auto operator+=(Vec3 v) -> Vec3
     {
         x += v.x;
         y += v.y;
@@ -60,7 +60,7 @@ struct Vec3
         return *this;
     }
 
-    Vec3 operator-=(Vec3 v)
+    auto operator-=(Vec3 v) -> Vec3
     {
         x -= v.x;
         y -= v.y;
@@ -68,7 +68,7 @@ struct Vec3
         return *this;
     }
 
-    Vec3 operator*=(Vec3 v)
+    auto operator*=(Vec3 v) -> Vec3
     {
         x *= v.x;
         y *= v.y;
@@ -76,7 +76,7 @@ struct Vec3
         return *this;
     }
 
-    Vec3 operator/=(Vec3 v)
+    auto operator/=(Vec3 v) -> Vec3
     {
         x /= v.x;
         y /= v.y;
@@ -84,7 +84,7 @@ struct Vec3
         return *this;
     }
 
-    Vec3 operator+=(float s)
+    auto operator+=(float s) -> Vec3
     {
         x += s;
         y += s;
@@ -92,7 +92,7 @@ struct Vec3
         return *this;
     }
 
-    Vec3 operator-=(float s)
+    auto operator-=(float s) -> Vec3
     {
         x -= s;
         y -= s;
@@ -100,7 +100,7 @@ struct Vec3
         return *this;
     }
 
-    Vec3 operator*=(float s)
+    auto operator*=(float s) -> Vec3
     {
         x *= s;
         y *= s;
@@ -108,7 +108,7 @@ struct Vec3
         return *this;
     }
 
-    Vec3 operator/=(float s)
+    auto operator/=(float s) -> Vec3
     {
         x /= s;
         y /= s;
@@ -116,76 +116,76 @@ struct Vec3
         return *this;
     }
 
-    Vec3 operator+(Vec3 v) const
+    auto operator+(Vec3 v) const -> Vec3
     {
         return Vec3(x + v.x, y + v.y, z + v.z);
     }
 
-    Vec3 operator-(Vec3 v) const
+    auto operator-(Vec3 v) const -> Vec3
     {
         return Vec3(x - v.x, y - v.y, z - v.z);
     }
 
-    Vec3 operator*(Vec3 v) const
+    auto operator*(Vec3 v) const -> Vec3
     {
         return Vec3(x * v.x, y * v.y, z * v.z);
     }
 
-    Vec3 operator/(Vec3 v) const
+    auto operator/(Vec3 v) const -> Vec3
     {
         return Vec3(x / v.x, y / v.y, z / v.z);
     }
 
-    Vec3 operator+(float s) const
+    auto operator+(float s) const -> Vec3
     {
         return Vec3(x + s, y + s, z + s);
     }
 
-    Vec3 operator-(float s) const
+    auto operator-(float s) const -> Vec3
     {
         return Vec3(x - s, y - s, z - s);
     }
 
-    Vec3 operator*(float s) const
+    auto operator*(float s) const -> Vec3
     {
         return Vec3(x * s, y * s, z * s);
     }
 
-    Vec3 operator/(float s) const
+    auto operator/(float s) const -> Vec3
     {
         return Vec3(x / s, y / s, z / s);
     }
 
-    bool operator==(Vec3 v) const
+    auto operator==(Vec3 v) const -> bool
     {
         return x == v.x && y == v.y && z == v.z;
     }
 
-    bool operator!=(Vec3 v) const
+    auto operator!=(Vec3 v) const -> bool
     {
         return x != v.x || y != v.y || z != v.z;
     }
 
     /// Absolute value
-    Vec3 abs() const
+    auto abs() const -> Vec3
     {
         return Vec3(std::abs(x), std::abs(y), std::abs(z));
     }
 
     /// Negation
-    Vec3 operator-() const
+    auto operator-() const -> Vec3
     {
         return Vec3(-x, -y, -z);
     }
 
     /// Are all members real numbers?
-    bool valid() const
+    auto valid() const -> bool
     {
         return std::isfinite(x) && std::isfinite(y) && std::isfinite(z);
     }
 
     /// Modify vec to have unit length
-    Vec3 normalize()
+    auto normalize() -> Vec3
     {
         float n = norm();
         x /= n;
@@ -195,24 +195,24 @@ struct Vec3
     }
 
     /// Return unit length vec in the same direction
-    Vec3 unit() const
+    auto unit() const -> Vec3
     {
         float n = norm();
         return Vec3(x / n, y / n, z / n);
     }
 
-    float norm_squared() const
+    auto norm_squared() const -> float
     {
         return x * x + y * y + z * z;
     }
 
-    float norm() const
+    auto norm() const -> float
     {
         return std::sqrt(norm_squared());
     }
 
     /// Make sure all components are in the range [min,max) with floating point mod logic
-    Vec3 range(float min, float max) const
+    auto range(float min, float max) const -> Vec3
     {
         if (!valid())
             return Vec3();
@@ -245,57 +245,57 @@ struct Vec3
     };
 };
 
-inline Vec3 operator+(float s, Vec3 v)
+inline auto operator+(float s, Vec3 v) -> Vec3
 {
     return Vec3(v.x + s, v.y + s, v.z + s);
 }
 
-inline Vec3 operator-(float s, Vec3 v)
+inline auto operator-(float s, Vec3 v) -> Vec3
 {
     return Vec3(v.x - s, v.y - s, v.z - s);
 }
 
-inline Vec3 operator*(float s, Vec3 v)
+inline auto operator*(float s, Vec3 v) -> Vec3
 {
     return Vec3(v.x * s, v.y * s, v.z * s);
 }
 
-inline Vec3 operator/(float s, Vec3 v)
+inline auto operator/(float s, Vec3 v) -> Vec3
 {
     return Vec3(s / v.x, s / v.y, s / v.z);
 }
 
 /// Take minimum of each component
-inline Vec3 hmin(Vec3 l, Vec3 r)
+inline auto hmin(Vec3 l, Vec3 r) -> Vec3
 {
     return Vec3(std::min(l.x, r.x), std::min(l.y, r.y), std::min(l.z, r.z));
 }
 
 /// Take maximum of each component
-inline Vec3 hmax(Vec3 l, Vec3 r)
+inline auto hmax(Vec3 l, Vec3 r) -> Vec3
 {
     return Vec3(std::max(l.x, r.x), std::max(l.y, r.y), std::max(l.z, r.z));
 }
 
 /// 3D dot product
-inline float dot(Vec3 l, Vec3 r)
+inline auto dot(Vec3 l, Vec3 r) -> float
 {
     return l.x * r.x + l.y * r.y + l.z * r.z;
 }
 
 /// 3D cross product
-inline Vec3 cross(Vec3 l, Vec3 r)
+inline auto cross(Vec3 l, Vec3 r) -> Vec3
 {
     return Vec3(l.y * r.z - l.z * r.y, l.z * r.x - l.x * r.z, l.x * r.y - l.y * r.x);
 }
 
-inline std::ostream &operator<<(std::ostream &out, Vec3 v)
+inline auto operator<<(std::ostream &out, Vec3 v) -> std::ostream &
 {
     out << "{" << v.x << "," << v.y << "," << v.z << "}";
     return out;
 }
 
-inline bool operator<(Vec3 l, Vec3 r)
+inline auto operator<(Vec3 l, Vec3 r) -> bool
 {
     if (l.x == r.x)
     {
