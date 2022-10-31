@@ -8,27 +8,27 @@ Camera::Camera(Vec2 dim)
     set_ar(dim);
 }
 
-Mat4 Camera::get_view() const
+auto Camera::get_view() const -> Mat4
 {
     return view;
 }
 
-Mat4 Camera::get_proj() const
+auto Camera::get_proj() const -> Mat4
 {
     return Mat4::project(vert_fov, aspect_ratio, near_plane);
 }
 
-Vec3 Camera::pos() const
+auto Camera::pos() const -> Vec3
 {
     return position;
 }
 
-Vec3 Camera::front() const
+auto Camera::front() const -> Vec3
 {
     return (looking_at - position).unit();
 }
 
-float Camera::dist() const
+auto Camera::dist() const -> float
 {
     return (position - looking_at).norm();
 }
@@ -101,29 +101,29 @@ void Camera::set_fov(float f)
     vert_fov = f;
 }
 
-float Camera::get_h_fov() const
+auto Camera::get_h_fov() const -> float
 {
     float vfov = Radians(vert_fov);
     float hfov = 2.0f * std::atan(aspect_ratio * std::tan(vfov / 2.0f));
     return Degrees(hfov);
 }
 
-float Camera::get_fov() const
+auto Camera::get_fov() const -> float
 {
     return vert_fov;
 }
 
-float Camera::get_ar() const
+auto Camera::get_ar() const -> float
 {
     return aspect_ratio;
 }
 
-float Camera::get_near() const
+auto Camera::get_near() const -> float
 {
     return near_plane;
 }
 
-Vec3 Camera::center() const
+auto Camera::center() const -> Vec3
 {
     return looking_at;
 }
@@ -143,7 +143,7 @@ void Camera::set_ap(float ap)
     aperture = ap;
 }
 
-float Camera::get_ap() const
+auto Camera::get_ap() const -> float
 {
     return aperture;
 }
@@ -153,7 +153,7 @@ void Camera::set_dist(float dist)
     focal_dist = dist;
 }
 
-float Camera::get_dist() const
+auto Camera::get_dist() const -> float
 {
     return focal_dist;
 }

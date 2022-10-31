@@ -14,7 +14,7 @@ HDR_Image::HDR_Image(size_t w, size_t h) : w(w), h(h)
     pixels.resize(w * h);
 }
 
-HDR_Image HDR_Image::copy() const
+auto HDR_Image::copy() const -> HDR_Image
 {
     HDR_Image ret;
     ret.resize(w, h);
@@ -25,7 +25,7 @@ HDR_Image HDR_Image::copy() const
     return ret;
 }
 
-std::pair<size_t, size_t> HDR_Image::dimension() const
+auto HDR_Image::dimension() const -> std::pair<size_t, size_t>
 {
     return {w, h};
 }
@@ -46,20 +46,20 @@ void HDR_Image::clear(Spectrum color)
     dirty = true;
 }
 
-Spectrum &HDR_Image::at(size_t i)
+auto HDR_Image::at(size_t i) -> Spectrum &
 {
     assert(i < w * h);
     dirty = true;
     return pixels[i];
 }
 
-Spectrum HDR_Image::at(size_t i) const
+auto HDR_Image::at(size_t i) const -> Spectrum
 {
     assert(i < w * h);
     return pixels[i];
 }
 
-Spectrum &HDR_Image::at(size_t x, size_t y)
+auto HDR_Image::at(size_t x, size_t y) -> Spectrum &
 {
     assert(x < w && y < h);
     size_t idx = y * w + x;
@@ -67,14 +67,14 @@ Spectrum &HDR_Image::at(size_t x, size_t y)
     return pixels[idx];
 }
 
-Spectrum HDR_Image::at(size_t x, size_t y) const
+auto HDR_Image::at(size_t x, size_t y) const -> Spectrum
 {
     assert(x < w && y < h);
     size_t idx = y * w + x;
     return pixels[idx];
 }
 
-std::string HDR_Image::load_from(std::string file)
+auto HDR_Image::load_from(std::string file) -> std::string
 {
 
     if (IsEXR(file.c_str()) == TINYEXR_SUCCESS)
@@ -142,11 +142,11 @@ std::string HDR_Image::load_from(std::string file)
 
         stbi_image_free(data);
 
-        for (size_t i = 0; i < pixels.size(); i++)
+        for (auto & pixel : pixels)
         {
-            if (!pixels[i].valid())
-                pixels[i] = {};
-            pixels[i] = pixels[i].to_linear();
+            if (!pixel.valid())
+                pixel = {};
+            pixel = pixel.to_linear();
         }
     }
 
@@ -155,7 +155,7 @@ std::string HDR_Image::load_from(std::string file)
     return {};
 }
 
-std::string HDR_Image::loaded_from() const
+auto HDR_Image::loaded_from() const -> std::string
 {
     return last_path;
 }
@@ -182,7 +182,7 @@ void HDR_Image::tonemap(float e) const
     dirty = false;
 }
 
-const GL::Tex2D &HDR_Image::get_texture(float e) const
+auto HDR_Image::get_texture(float e) const -> const GL::Tex2D &
 {
     tonemap(e);
     return render_tex;

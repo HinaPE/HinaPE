@@ -15,25 +15,25 @@ public:
     HDR_Image(HDR_Image &&src) = default;
     ~HDR_Image() = default;
 
-    HDR_Image copy() const;
+    auto copy() const -> HDR_Image;
 
-    HDR_Image &operator=(const HDR_Image &src) = delete;
-    HDR_Image &operator=(HDR_Image &&src) = default;
+    auto operator=(const HDR_Image &src) -> HDR_Image & = delete;
+    auto operator=(HDR_Image &&src) -> HDR_Image & = default;
 
-    Spectrum &at(size_t x, size_t y);
-    Spectrum at(size_t x, size_t y) const;
-    Spectrum &at(size_t i);
-    Spectrum at(size_t i) const;
+    auto at(size_t x, size_t y) -> Spectrum &;
+    auto at(size_t x, size_t y) const -> Spectrum;
+    auto at(size_t i) -> Spectrum &;
+    auto at(size_t i) const -> Spectrum;
 
     void clear(Spectrum color);
     void resize(size_t w, size_t h);
-    std::pair<size_t, size_t> dimension() const;
+    auto dimension() const -> std::pair<size_t, size_t>;
 
-    std::string load_from(std::string file);
-    std::string loaded_from() const;
+    auto load_from(std::string file) -> std::string;
+    auto loaded_from() const -> std::string;
 
     void tonemap_to(std::vector<unsigned char> &data, float exposure = 0.0f) const;
-    const GL::Tex2D &get_texture(float exposure = 0.0f) const;
+    auto get_texture(float exposure = 0.0f) const -> const GL::Tex2D &;
 
 private:
     void tonemap(float exposure = 0.0f) const;

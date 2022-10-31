@@ -15,22 +15,22 @@ public:
             coordinate space of the sensor. For example (0.5, 0.5)
             corresponds to the middle of the screen.
     */
-    Ray generate_ray(Vec2 screen_coord) const;
+    auto generate_ray(Vec2 screen_coord) const -> Ray;
 
     /// View transformation matrix
-    Mat4 get_view() const;
+    auto get_view() const -> Mat4;
     /// Perspective projection transformation matrix
-    Mat4 get_proj() const;
+    auto get_proj() const -> Mat4;
 
     /// Camera position
-    Vec3 pos() const;
+    auto pos() const -> Vec3;
     /// Camera look position
-    Vec3 center() const;
+    auto center() const -> Vec3;
     /// Camera look direction
-    Vec3 front() const;
+    auto front() const -> Vec3;
 
     /// Get distance from the current position to the viewpoint
-    float dist() const;
+    auto dist() const -> float;
 
     /// Set camera at a position and a center to look at
     void look_at(Vec3 cent, Vec3 pos);
@@ -48,15 +48,15 @@ public:
     /// Unecessary helpers
     void set_ar(float ar);
     void set_ar(Vec2 dim);
-    float get_ar() const;
+    auto get_ar() const -> float;
     void set_ap(float ap);
-    float get_ap() const;
+    auto get_ap() const -> float;
     void set_dist(float dist);
-    float get_dist() const;
+    auto get_dist() const -> float;
     void set_fov(float fov);
-    float get_fov() const;
-    float get_h_fov() const;
-    float get_near() const;
+    auto get_fov() const -> float;
+    auto get_h_fov() const -> float;
+    auto get_near() const -> float;
 
     // swap orbit behavior for vertical mouse motion
     bool orbit_flip_vertical = false;
