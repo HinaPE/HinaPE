@@ -1,4 +1,6 @@
 #include "undo.h"
+
+#include <utility>
 #include "../gui/animate.h"
 #include "../gui/manager.h"
 #include "../gui/rig.h"
@@ -13,9 +15,9 @@ void Undo::reset()
     redos = {};
 }
 
-Scene_Object &Undo::add_obj(Halfedge_Mesh &&mesh, std::string name)
+auto Undo::add_obj(Halfedge_Mesh &&mesh, std::string name) -> Scene_Object &
 {
-    Scene_ID id = scene.add({}, std::move(mesh), name, 0);
+    Scene_ID id = scene.add({}, std::move(mesh), std::move(name), 0);
     scene.restore(id);
     action([id, this]() { scene.restore(id); }, [id, this]()
     {
@@ -28,17 +30,17 @@ Scene_Object &Undo::add_obj(Halfedge_Mesh &&mesh, std::string name)
 void Undo::update_mesh_full(Scene_ID id, Halfedge_Mesh &&old_mesh)
 {
 
-    Scene_Object &obj = scene.get<Scene_Object>(id);
+    auto &obj = scene.get<Scene_Object>(id);
     Halfedge_Mesh new_mesh;
     obj.copy_mesh(new_mesh);
 
     action([id, this, nm = std::move(new_mesh)]() mutable
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.set_mesh(nm);
            }, [id, this, om = std::move(old_mesh)]() mutable
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.set_mesh(om);
            });
 }
@@ -46,17 +48,17 @@ void Undo::update_mesh_full(Scene_ID id, Halfedge_Mesh &&old_mesh)
 void Undo::move_root(Scene_ID id, Vec3 old)
 {
 
-    Scene_Object &obj = scene.get<Scene_Object>(id);
+    auto &obj = scene.get<Scene_Object>(id);
     Vec3 np = obj.armature.base();
 
     action([this, id, np]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.base() = np;
                obj.set_skel_dirty();
            }, [this, id, op = old]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.base() = op;
                obj.set_skel_dirty();
            });
@@ -65,7 +67,7 @@ void Undo::move_root(Scene_ID id, Vec3 old)
 void Undo::del_bone(Scene_ID id, Joint *j)
 {
 
-    Scene_Object &obj = scene.get<Scene_Object>(id);
+    auto &obj = scene.get<Scene_Object>(id);
     obj.armature.erase(j);
     gui.get_rig().invalidate(j);
     gui.get_animate().invalidate(j);
@@ -73,14 +75,14 @@ void Undo::del_bone(Scene_ID id, Joint *j)
 
     action([this, id, j]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.erase(j);
                gui.get_rig().invalidate(j);
                gui.get_animate().invalidate(j);
                obj.set_skel_dirty();
            }, [this, id, j]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.restore(j);
                obj.set_skel_dirty();
            });
@@ -89,7 +91,7 @@ void Undo::del_bone(Scene_ID id, Joint *j)
 void Undo::del_handle(Scene_ID id, Skeleton::IK_Handle *j)
 {
 
-    Scene_Object &obj = scene.get<Scene_Object>(id);
+    auto &obj = scene.get<Scene_Object>(id);
     obj.armature.erase(j);
     gui.get_rig().invalidate(j);
     gui.get_animate().invalidate(j);
@@ -97,14 +99,14 @@ void Undo::del_handle(Scene_ID id, Skeleton::IK_Handle *j)
 
     action([this, id, j]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.erase(j);
                gui.get_animate().invalidate(j);
                gui.get_rig().invalidate(j);
                obj.set_skel_dirty();
            }, [this, id, j]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.restore(j);
                obj.set_skel_dirty();
            });
@@ -114,12 +116,12 @@ void Undo::move_bone(Scene_ID id, Joint *j, Vec3 old)
 {
     action([this, id, j, ne = j->extent]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                j->extent = ne;
                obj.set_skel_dirty();
            }, [this, id, j, oe = old]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                j->extent = oe;
                obj.set_skel_dirty();
            });
@@ -129,12 +131,12 @@ void Undo::rad_bone(Scene_ID id, Joint *j, float old)
 {
     action([this, id, j, nr = j->radius]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                j->radius = nr;
                obj.set_skel_dirty();
            }, [this, id, j, oldr = old]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                j->radius = oldr;
                obj.set_skel_dirty();
            });
@@ -144,12 +146,12 @@ void Undo::move_handle(Scene_ID id, Skeleton::IK_Handle *j, Vec3 old)
 {
     action([this, id, j, ne = j->target]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                j->target = ne;
                obj.set_skel_dirty();
            }, [this, id, j, oe = old]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                j->target = oe;
                obj.set_skel_dirty();
            });
@@ -159,12 +161,12 @@ void Undo::pose_bone(Scene_ID id, Joint *j, Vec3 old)
 {
     action([this, id, j, ne = j->pose]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                j->pose = ne;
                obj.set_pose_dirty();
            }, [this, id, j, oe = old]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                j->pose = oe;
                obj.set_pose_dirty();
            });
@@ -174,12 +176,12 @@ void Undo::add_handle(Scene_ID id, Skeleton::IK_Handle *j)
 {
     action([this, id, j]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.restore(j);
                obj.set_skel_dirty();
            }, [this, id, j]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.erase(j);
                gui.get_rig().invalidate(j);
                gui.get_animate().invalidate(j);
@@ -192,12 +194,12 @@ void Undo::add_bone(Scene_ID id, Joint *j)
 
     action([this, id, j]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.restore(j);
                obj.set_skel_dirty();
            }, [this, id, j]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.armature.erase(j);
                gui.get_rig().invalidate(j);
                gui.get_animate().invalidate(j);
@@ -221,7 +223,7 @@ void Undo::del_obj(Scene_ID id)
            }, [id, this]() { scene.restore(id); });
 }
 
-Scene_Object &Undo::add_obj(GL::Mesh &&mesh, std::string name)
+auto Undo::add_obj(GL::Mesh &&mesh, std::string name) -> Scene_Object &
 {
     Scene_ID id = scene.add({}, std::move(mesh), name, 0);
     scene.restore(id);
@@ -236,16 +238,16 @@ Scene_Object &Undo::add_obj(GL::Mesh &&mesh, std::string name)
 void Undo::update_light(Scene_ID id, Scene_Light::Options old)
 {
 
-    Scene_Light &light = scene.get<Scene_Light>(id);
+    auto &light = scene.get<Scene_Light>(id);
 
     action([id, this, no = light.opt]()
            {
-               Scene_Light &light = scene.get<Scene_Light>(id);
+               auto &light = scene.get<Scene_Light>(id);
                light.opt = no;
                light.dirty();
            }, [id, this, oo = old]()
            {
-               Scene_Light &light = scene.get<Scene_Light>(id);
+               auto &light = scene.get<Scene_Light>(id);
                light.opt = oo;
                light.dirty();
            });
@@ -254,15 +256,15 @@ void Undo::update_light(Scene_ID id, Scene_Light::Options old)
 void Undo::update_particles(Scene_ID id, Scene_Particles::Options old)
 {
 
-    Scene_Particles &obj = scene.get<Scene_Particles>(id);
+    auto &obj = scene.get<Scene_Particles>(id);
 
     action([id, this, nm = obj.opt]()
            {
-               Scene_Particles &obj = scene.get<Scene_Particles>(id);
+               auto &obj = scene.get<Scene_Particles>(id);
                obj.opt = nm;
            }, [id, this, om = old]()
            {
-               Scene_Particles &obj = scene.get<Scene_Particles>(id);
+               auto &obj = scene.get<Scene_Particles>(id);
                obj.opt = om;
            });
 }
@@ -270,22 +272,22 @@ void Undo::update_particles(Scene_ID id, Scene_Particles::Options old)
 void Undo::update_material(Scene_ID id, Material::Options old)
 {
 
-    Scene_Object &obj = scene.get<Scene_Object>(id);
+    auto &obj = scene.get<Scene_Object>(id);
 
     action([id, this, nm = obj.material.opt]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.material.opt = nm;
            }, [id, this, om = old]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.material.opt = om;
            });
 }
 
 void Undo::update_object(Scene_ID id, Scene_Object::Options old)
 {
-    Scene_Object &obj = scene.get<Scene_Object>(id);
+    auto &obj = scene.get<Scene_Object>(id);
 
     if (obj.opt.shape_type != PT::Shape_Type::none && old.shape_type == PT::Shape_Type::none)
     {
@@ -295,12 +297,12 @@ void Undo::update_object(Scene_ID id, Scene_Object::Options old)
 
         action([id, this, no = obj.opt]()
                {
-                   Scene_Object &obj = scene.get<Scene_Object>(id);
+                   auto &obj = scene.get<Scene_Object>(id);
                    obj.opt = no;
                    obj.set_mesh_dirty();
                }, [id, this, oo = old, om = std::move(old_mesh)]() mutable
                {
-                   Scene_Object &obj = scene.get<Scene_Object>(id);
+                   auto &obj = scene.get<Scene_Object>(id);
                    obj.opt = oo;
                    obj.set_mesh(om);
                });
@@ -313,12 +315,12 @@ void Undo::update_object(Scene_ID id, Scene_Object::Options old)
 
         action([id, this, no = obj.opt, ot = old.shape_type]()
                {
-                   Scene_Object &obj = scene.get<Scene_Object>(id);
+                   auto &obj = scene.get<Scene_Object>(id);
                    obj.opt = no;
                    obj.try_make_editable(ot);
                }, [id, this, oo = old]()
                {
-                   Scene_Object &obj = scene.get<Scene_Object>(id);
+                   auto &obj = scene.get<Scene_Object>(id);
                    obj.opt = oo;
                    obj.set_mesh_dirty();
                });
@@ -328,12 +330,12 @@ void Undo::update_object(Scene_ID id, Scene_Object::Options old)
 
     action([id, this, no = obj.opt]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.opt = no;
                obj.set_mesh_dirty();
            }, [id, this, oo = old]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.opt = oo;
                obj.set_mesh_dirty();
            });
@@ -365,7 +367,7 @@ void Undo::update_camera(Gui::Widget_Camera &widget, Camera old)
 void Undo::anim_object(Scene_ID id, float t)
 {
 
-    Scene_Object &obj = scene.get<Scene_Object>(id);
+    auto &obj = scene.get<Scene_Object>(id);
 
     bool had = obj.anim.splines.has(t) || obj.armature.has(t) || obj.material.anim.splines.has(t);
 
@@ -383,14 +385,14 @@ void Undo::anim_object(Scene_ID id, float t)
 
     action([=]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.anim.set(t, new_pose);
                obj.armature.set(t, new_joints);
                obj.material.anim.set(t, new_mat);
                gui.refresh_anim(scene, *this);
            }, [=]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                if (had)
                {
                    obj.anim.set(t, old_pose);
@@ -409,7 +411,7 @@ void Undo::anim_object(Scene_ID id, float t)
 void Undo::anim_clear_object(Scene_ID id, float t)
 {
 
-    Scene_Object &obj = scene.get<Scene_Object>(id);
+    auto &obj = scene.get<Scene_Object>(id);
 
     bool has = obj.anim.splines.has(t) || obj.armature.has(t) || obj.material.anim.splines.has(t);
     if (!has)
@@ -426,14 +428,14 @@ void Undo::anim_clear_object(Scene_ID id, float t)
 
     action([=]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.anim.splines.erase(t);
                obj.armature.erase(t);
                obj.material.anim.splines.erase(t);
                gui.refresh_anim(scene, *this);
            }, [=]()
            {
-               Scene_Object &obj = scene.get<Scene_Object>(id);
+               auto &obj = scene.get<Scene_Object>(id);
                obj.anim.set(t, old_pose);
                obj.armature.set(t, old_joints);
                obj.material.anim.set(t, old_mat);
@@ -461,7 +463,7 @@ void Undo::anim_crop_camera(Gui::Anim_Camera &anim, float t)
 void Undo::anim_clear_particles(Scene_ID id, float t)
 {
 
-    Scene_Particles &item = scene.get<Scene_Particles>(id);
+    auto &item = scene.get<Scene_Particles>(id);
     bool had_l = item.panim.splines.has(t);
     bool had_p = item.anim.splines.has(t);
 
@@ -477,13 +479,13 @@ void Undo::anim_clear_particles(Scene_ID id, float t)
 
     action([=]()
            {
-               Scene_Particles &item = scene.get<Scene_Particles>(id);
+               auto &item = scene.get<Scene_Particles>(id);
                item.panim.splines.erase(t);
                item.anim.splines.erase(t);
                gui.refresh_anim(scene, *this);
            }, [=]()
            {
-               Scene_Particles &item = scene.get<Scene_Particles>(id);
+               auto &item = scene.get<Scene_Particles>(id);
                item.panim.set(t, old_l);
                item.anim.set(t, old_pose);
                gui.refresh_anim(scene, *this);
@@ -536,7 +538,7 @@ void Undo::anim_camera(Gui::Anim_Camera &anim, float t, const Camera &cam)
 void Undo::anim_clear_light(Scene_ID id, float t)
 {
 
-    Scene_Light &item = scene.get<Scene_Light>(id);
+    auto &item = scene.get<Scene_Light>(id);
     bool had_l = item.lanim.splines.has(t);
     bool had_p = item.anim.splines.has(t);
 
@@ -552,13 +554,13 @@ void Undo::anim_clear_light(Scene_ID id, float t)
 
     action([=]()
            {
-               Scene_Light &item = scene.get<Scene_Light>(id);
+               auto &item = scene.get<Scene_Light>(id);
                item.lanim.splines.erase(t);
                item.anim.splines.erase(t);
                gui.refresh_anim(scene, *this);
            }, [=]()
            {
-               Scene_Light &item = scene.get<Scene_Light>(id);
+               auto &item = scene.get<Scene_Light>(id);
                item.lanim.set(t, old_l);
                item.anim.set(t, old_pose);
                item.dirty();
@@ -569,7 +571,7 @@ void Undo::anim_clear_light(Scene_ID id, float t)
 void Undo::anim_particles(Scene_ID id, float t)
 {
 
-    Scene_Particles &item = scene.get<Scene_Particles>(id);
+    auto &item = scene.get<Scene_Particles>(id);
 
     bool had_l = item.panim.splines.has(t);
     bool had_p = item.anim.splines.has(t);
@@ -586,13 +588,13 @@ void Undo::anim_particles(Scene_ID id, float t)
 
     action([=]()
            {
-               Scene_Particles &item = scene.get<Scene_Particles>(id);
+               auto &item = scene.get<Scene_Particles>(id);
                item.panim.set(t, new_l);
                item.anim.set(t, new_pose);
                gui.refresh_anim(scene, *this);
            }, [=]()
            {
-               Scene_Particles &item = scene.get<Scene_Particles>(id);
+               auto &item = scene.get<Scene_Particles>(id);
                if (had_l)
                    item.panim.set(t, old_l);
                else
@@ -608,7 +610,7 @@ void Undo::anim_particles(Scene_ID id, float t)
 void Undo::anim_light(Scene_ID id, float t)
 {
 
-    Scene_Light &item = scene.get<Scene_Light>(id);
+    auto &item = scene.get<Scene_Light>(id);
 
     bool had_l = item.lanim.splines.has(t);
     bool had_p = item.anim.splines.has(t);
@@ -625,13 +627,13 @@ void Undo::anim_light(Scene_ID id, float t)
 
     action([=]()
            {
-               Scene_Light &item = scene.get<Scene_Light>(id);
+               auto &item = scene.get<Scene_Light>(id);
                item.lanim.set(t, new_l);
                item.anim.set(t, new_pose);
                gui.refresh_anim(scene, *this);
            }, [=]()
            {
-               Scene_Light &item = scene.get<Scene_Light>(id);
+               auto &item = scene.get<Scene_Light>(id);
                if (had_l)
                    item.lanim.set(t, old_l);
                else
@@ -652,7 +654,7 @@ void Undo::anim_crop(Scene_ID id, float t)
     if (item.is<Scene_Object>())
     {
 
-        Scene_Object &obj = item.get<Scene_Object>();
+        auto &obj = item.get<Scene_Object>();
         auto banim = obj.armature.splines();
         auto anim = obj.anim;
         auto manim = obj.material.anim;
@@ -664,7 +666,7 @@ void Undo::anim_crop(Scene_ID id, float t)
 
         action([id, t, this]()
                {
-                   Scene_Object &obj = scene.get<Scene_Object>(id);
+                   auto &obj = scene.get<Scene_Object>(id);
                    obj.armature.crop(t);
                    obj.anim.splines.crop(t);
                    obj.material.anim.splines.crop(t);
@@ -672,7 +674,7 @@ void Undo::anim_crop(Scene_ID id, float t)
                    gui.refresh_anim(scene, *this);
                }, [id, this, ba = std::move(banim), a = std::move(anim), mt = std::move(manim)]()
                {
-                   Scene_Object &obj = scene.get<Scene_Object>(id);
+                   auto &obj = scene.get<Scene_Object>(id);
                    obj.armature.restore_splines(ba);
                    obj.anim = a;
                    obj.material.anim = mt;
@@ -683,7 +685,7 @@ void Undo::anim_crop(Scene_ID id, float t)
     } else if (item.is<Scene_Light>())
     {
 
-        Scene_Light &light = item.get<Scene_Light>();
+        auto &light = item.get<Scene_Light>();
         auto lanim = light.lanim;
         auto anim = light.anim;
 
@@ -692,13 +694,13 @@ void Undo::anim_crop(Scene_ID id, float t)
 
         action([id, t, this]()
                {
-                   Scene_Light &item = scene.get<Scene_Light>(id);
+                   auto &item = scene.get<Scene_Light>(id);
                    item.lanim.splines.crop(t);
                    item.anim.splines.crop(t);
                    gui.refresh_anim(scene, *this);
                }, [id, this, la = std::move(lanim), a = std::move(anim)]()
                {
-                   Scene_Light &item = scene.get<Scene_Light>(id);
+                   auto &item = scene.get<Scene_Light>(id);
                    item.lanim = la;
                    item.anim = a;
                    item.dirty();
@@ -759,7 +761,7 @@ void Undo::bundle_last(size_t n)
     undos.push(std::make_unique<Action_Bundle>(std::move(undo_pack)));
 }
 
-size_t Undo::n_actions()
+auto Undo::n_actions() -> size_t
 {
     return total_actions;
 }
