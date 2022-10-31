@@ -25,14 +25,14 @@ public:
     ~Material() = default;
 
     void operator=(const Material &src) = delete;
-    Material &operator=(Material &&src) = default;
+    auto operator=(Material &&src) -> Material & = default;
 
     // TODO: decide how to handle texture resources. should probably use a texture repository
     // and also integrate that into the envmaps
-    Material copy() const;
+    auto copy() const -> Material;
 
-    Spectrum emissive() const;
-    Vec3 layout_color() const;
+    auto emissive() const -> Spectrum;
+    auto layout_color() const -> Vec3;
 
     struct Options
     {
@@ -56,6 +56,6 @@ public:
     Anim_Material anim;
 };
 
-bool operator!=(const Material::Options &l, const Material::Options &r);
+auto operator!=(const Material::Options &l, const Material::Options &r) -> bool;
 
 #endif

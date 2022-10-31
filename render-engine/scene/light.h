@@ -26,24 +26,24 @@ public:
     ~Scene_Light() = default;
 
     void operator=(const Scene_Light &src) = delete;
-    Scene_Light &operator=(Scene_Light &&src) = default;
+    auto operator=(Scene_Light &&src) -> Scene_Light & = default;
 
-    Scene_ID id() const;
-    BBox bbox() const;
+    auto id() const -> Scene_ID;
+    auto bbox() const -> BBox;
 
     void render(const Mat4 &view, bool depth_only = false, bool posed = true);
     void dirty();
 
-    Spectrum radiance() const;
+    auto radiance() const -> Spectrum;
     void set_time(float time);
 
-    std::string emissive_load(std::string file);
-    std::string emissive_loaded() const;
-    HDR_Image emissive_copy() const;
+    auto emissive_load(std::string file) -> std::string;
+    auto emissive_loaded() const -> std::string;
+    auto emissive_copy() const -> HDR_Image;
 
-    const GL::Tex2D &emissive_texture() const;
+    auto emissive_texture() const -> const GL::Tex2D &;
     void emissive_clear();
-    bool is_env() const;
+    auto is_env() const -> bool;
 
     struct Options
     {
@@ -81,6 +81,6 @@ private:
     HDR_Image _emissive;
 };
 
-bool operator!=(const Scene_Light::Options &l, const Scene_Light::Options &r);
+auto operator!=(const Scene_Light::Options &l, const Scene_Light::Options &r) -> bool;
 
 #endif

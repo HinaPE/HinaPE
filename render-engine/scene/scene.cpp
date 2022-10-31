@@ -904,7 +904,7 @@ auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::st
 
         for (unsigned int k = 0; k < keys; k++)
         {
-            float t = (float) node->mPositionKeys[k].mTime;
+            auto t = (float) node->mPositionKeys[k].mTime;
             Vec3 pos = aiVec(node->mPositionKeys[k].mValue);
             Quat rot = aiQuat(node->mRotationKeys[k].mValue);
             Vec3 scl = aiVec(node->mScalingKeys[k].mValue);
@@ -1268,8 +1268,8 @@ static void write_cam(aiCamera *ai_cam, const Camera &cam, std::string name)
 
 static void add_fake_mesh(aiScene *scene)
 {
-    aiMesh *ai_mesh = new aiMesh();
-    aiNode *ai_node = new aiNode();
+    auto *ai_mesh = new aiMesh();
+    auto *ai_node = new aiNode();
     scene->mMeshes[0] = ai_mesh;
     scene->mRootNode->mChildren[0] = ai_node;
     ai_node->mNumMeshes = 1;
@@ -1306,7 +1306,7 @@ auto Scene::get_stats(const Gui::Animate &animation) -> Scene::Stats
                   if (item.is<Scene_Object>())
                   {
 
-                      Scene_Object &obj = item.get<Scene_Object>();
+                      auto &obj = item.get<Scene_Object>();
 
                       s.objs++;
                       s.meshes++;
@@ -1341,7 +1341,7 @@ auto Scene::get_stats(const Gui::Animate &animation) -> Scene::Stats
                   } else if (item.is<Scene_Light>())
                   {
 
-                      Scene_Light &light = item.get<Scene_Light>();
+                      auto &light = item.get<Scene_Light>();
                       s.lights++;
                       s.nodes++;
 
@@ -1358,7 +1358,7 @@ auto Scene::get_stats(const Gui::Animate &animation) -> Scene::Stats
                   } else if (item.is<Scene_Particles>())
                   {
 
-                      Scene_Particles &particles = item.get<Scene_Particles>();
+                      auto &particles = item.get<Scene_Particles>();
 
                       s.emitters++;
                       s.meshes++;
@@ -1436,8 +1436,8 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
 
     { // Cameras
         scene.mCameras = new aiCamera *[2]();
-        aiCamera *ar_cam = new aiCamera();
-        aiCamera *aa_cam = new aiCamera();
+        auto *ar_cam = new aiCamera();
+        auto *aa_cam = new aiCamera();
         scene.mCameras[0] = ar_cam;
         scene.mCameras[1] = aa_cam;
         write_cam(ar_cam, render_cam, RENDER_CAM_NODE);
@@ -1462,7 +1462,7 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
 
     auto add_node = [&](std::string name)
     {
-        aiNode *ai_node = new aiNode();
+        auto *ai_node = new aiNode();
         scene.mRootNode->mChildren[node_idx++] = ai_node;
         ai_node->mName = aiString(name);
         ai_node->mNumMeshes = 0;
@@ -1479,16 +1479,16 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
         if (entry.second.is<Scene_Object>())
         {
 
-            Scene_Object &obj = entry.second.get<Scene_Object>();
+            auto &obj = entry.second.get<Scene_Object>();
 
             if (obj.is_shape())
             {
                 obj.try_make_editable(obj.opt.shape_type);
             }
 
-            aiMesh *ai_mesh = new aiMesh();
-            aiNode *ai_node = new aiNode();
-            aiMaterial *ai_mat = new aiMaterial();
+            auto *ai_mesh = new aiMesh();
+            auto *ai_node = new aiNode();
+            auto *ai_mat = new aiMaterial();
 
             size_t idx = mesh_idx++;
             scene.mMaterials[idx] = ai_mat;
@@ -1541,7 +1541,7 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
                 std::string jprefix = "S3D-" + JOINT_TAG + "-" + std::to_string(obj.id()) + "-";
                 std::string ikprefix = "S3D-" + IK_TAG + "-" + std::to_string(obj.id()) + "-";
 
-                aiNode *arm_node = new aiNode();
+                auto *arm_node = new aiNode();
                 scene.mRootNode->mChildren[node_idx++] = arm_node;
                 arm_node->mName = aiString(jprefix + ARMATURE_TAG);
                 arm_node->mTransformation = matMat(Mat4::translate(obj.armature.base_pos));
@@ -1581,7 +1581,7 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
                     {
                         if (h->joint == j)
                         {
-                            aiNode *iknode = new aiNode();
+                            auto *iknode = new aiNode();
                             std::string ikname = ikprefix + std::to_string(h->_id);
                             iknode->mName = aiString(ikname);
                             node->mChildren[i] = iknode;
@@ -1594,7 +1594,7 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
                 size_t i = 0;
                 for (Joint *j: obj.armature.roots)
                 {
-                    aiNode *root_node = new aiNode();
+                    auto *root_node = new aiNode();
                     arm_node->mChildren[i] = root_node;
                     j_to_node[j] = root_node;
                     joint_tree(root_node, j);
@@ -1612,7 +1612,7 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
 
                 obj.armature.for_joints([&](Joint *j)
                                         {
-                                            aiBone *bone = new aiBone();
+                                            auto *bone = new aiBone();
                                             ai_mesh->mBones[bone_idx++] = bone;
                                             bone->mOffsetMatrix = matMat(Mat4::translate(j->extent) * Mat4::euler(j->pose));
                                             bone->mNode = j_to_node[j];
@@ -1624,7 +1624,7 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
                                         });
                 for (Skeleton::IK_Handle *h: obj.armature.handles)
                 {
-                    aiBone *bone = new aiBone();
+                    auto *bone = new aiBone();
                     ai_mesh->mBones[bone_idx++] = bone;
                     bone->mOffsetMatrix = matMat(Mat4::translate(h->target + obj.armature.base()));
                     bone->mNode = ik_to_node[h];
@@ -1653,9 +1653,9 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
                 name += "-S3D-" + EMITTER_TAG + "-" + std::to_string(particles.id());
             }
 
-            aiLight *ai_light = new aiLight();
-            aiNode *ai_node = new aiNode();
-            aiNode *ai_mesh_node = new aiNode();
+            auto *ai_light = new aiLight();
+            auto *ai_node = new aiNode();
+            auto *ai_mesh_node = new aiNode();
 
             scene.mLights[light_idx++] = ai_light;
             scene.mRootNode->mChildren[node_idx++] = ai_node;
@@ -1670,8 +1670,8 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
             ai_node->mNumMeshes = 0;
             ai_node->mMeshes = nullptr;
 
-            aiMesh *ai_mesh = new aiMesh();
-            aiMaterial *ai_mat = new aiMaterial();
+            auto *ai_mesh = new aiMesh();
+            auto *ai_mat = new aiMaterial();
             size_t m_idx = mesh_idx++;
             scene.mMaterials[m_idx] = ai_mat;
             scene.mMeshes[m_idx] = ai_mesh;
@@ -1696,8 +1696,8 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
             std::string name(light.opt.name);
             std::replace(name.begin(), name.end(), ' ', '_');
 
-            aiLight *ai_light = new aiLight();
-            aiNode *ai_node = new aiNode();
+            auto *ai_light = new aiLight();
+            auto *ai_node = new aiNode();
 
             scene.mLights[light_idx++] = ai_light;
             scene.mRootNode->mChildren[node_idx++] = ai_node;
@@ -1713,7 +1713,7 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
 
             if (light.lanim.splines.any())
             {
-                aiNode *ai_node_light = new aiNode();
+                auto *ai_node_light = new aiNode();
                 scene.mRootNode->mChildren[node_idx++] = ai_node_light;
                 ai_node_light->mName = aiString(name + "-" + LIGHT_ANIM);
                 ai_node_light->mNumMeshes = 0;
@@ -1730,9 +1730,9 @@ auto Scene::write(std::string file, const Camera &render_cam, const Gui::Animate
                 return;
 
             std::set<float> keys = splines.keys();
-            unsigned int n_keys = (unsigned int) keys.size();
+            auto n_keys = (unsigned int) keys.size();
 
-            aiNodeAnim *node = new aiNodeAnim();
+            auto *node = new aiNodeAnim();
             node->mNodeName = aiString(name);
             node->mNumPositionKeys = n_keys;
             node->mNumRotationKeys = n_keys;

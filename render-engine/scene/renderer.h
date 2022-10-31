@@ -18,7 +18,7 @@ class Renderer
 public:
     static void setup(Vec2 dim);
     static void shutdown();
-    static Renderer &get();
+    static auto get() -> Renderer &;
 
     void begin();
     void complete();
@@ -28,7 +28,7 @@ public:
     void update_dim(Vec2 dim);
     void settings_gui(bool *open);
     void set_samples(int samples);
-    unsigned int read_id(Vec2 pos);
+    auto read_id(Vec2 pos) -> unsigned int;
 
     struct MeshOpt
     {
@@ -78,7 +78,7 @@ public:
     void capsule(MeshOpt opt, float height, float rad);
     void capsule(MeshOpt opt, const Mat4 &mdl, float height, float rad, BBox &box);
 
-    GLuint saved() const;
+    auto saved() const -> GLuint;
     void saved(std::vector<unsigned char> &data) const;
     void save(Scene &scene, const Camera &cam, int w, int h, int samples);
 

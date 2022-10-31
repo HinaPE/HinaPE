@@ -23,7 +23,7 @@ Renderer::~Renderer()
     id_buffer = nullptr;
 }
 
-Renderer &Renderer::get()
+auto Renderer::get() -> Renderer &
 {
     assert(data);
     return *data;
@@ -97,7 +97,7 @@ void Renderer::save(Scene &scene, const Camera &cam, int w, int h, int s)
                     {
                         if (item.is<Scene_Light>())
                         {
-                            Scene_Light &light = item.get<Scene_Light>();
+                            auto &light = item.get<Scene_Light>();
                             if (!light.is_env())
                                 return;
                         }
@@ -126,7 +126,7 @@ void Renderer::saved(std::vector<unsigned char> &out) const
     save_output.read(0, out.data());
 }
 
-GLuint Renderer::saved() const
+auto Renderer::saved() const -> GLuint
 {
     save_output.flush();
     return save_output.get_output(0);
@@ -268,7 +268,7 @@ void Renderer::set_samples(int s)
     framebuffer.resize(window_dim, samples);
 }
 
-Scene_ID Renderer::read_id(Vec2 pos)
+auto Renderer::read_id(Vec2 pos) -> Scene_ID
 {
 
     int x = (int) pos.x;

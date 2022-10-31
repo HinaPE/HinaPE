@@ -2,6 +2,7 @@
 #define HINAPE_UNDO_H
 
 #include <memory>
+#include <ranges>
 #include <stack>
 
 #include "../gui/animate.h"
@@ -26,20 +27,19 @@ class Action : public Action_Base
 public:
     Action(R &&r, U &&u) : _undo(std::forward<U &&>(u)), _redo(std::forward<R &&>(r)) {};
 
-    ~Action()
-    {
-    }
+    ~Action() override
+    = default;
 
 private:
     U _undo;
     R _redo;
 
-    void undo()
+    void undo() override
     {
         _undo();
     }
 
-    void redo()
+    void redo() override
     {
         _redo();
     }
@@ -47,37 +47,37 @@ private:
 
 class Action_Bundle : public Action_Base
 {
-    void undo()
+    void undo() override
     {
         for (auto &a: list)
             a->undo();
     }
 
-    void redo()
+    void redo() override
     {
-        for (auto i = list.rbegin(); i != list.rend(); i++)
-            (*i)->redo();
+        for (auto & i : std::ranges::reverse_view(list))
+            i->redo();
     }
 
     std::vector<std::unique_ptr<Action_Base>> list;
 
 public:
     Action_Bundle(std::vector<std::unique_ptr<Action_Base>> &&bundle) : list(std::move(bundle)) {};
-    ~Action_Bundle() = default;
+    ~Action_Bundle() override = default;
 };
 
 template<typename T>
 class MeshOp : public Action_Base
 {
-    void undo()
+    void undo() override
     {
-        Scene_Object &obj = scene.get<Scene_Object>(id);
+        auto &obj = scene.get<Scene_Object>(id);
         obj.set_mesh(mesh);
     }
 
-    void redo()
+    void redo() override
     {
-        Scene_Object &obj = scene.get<Scene_Object>(id);
+        auto &obj = scene.get<Scene_Object>(id);
         auto sel = obj.set_mesh(mesh, eid);
         op(obj.get_mesh(), sel);
         obj.get_mesh().do_erase();
@@ -94,7 +94,7 @@ public:
     {
     }
 
-    ~MeshOp() = default;
+    ~MeshOp() override = default;
 };
 
 class Undo
@@ -114,8 +114,8 @@ public:
         });
     }
 
-    Scene_Object &add_obj(GL::Mesh &&mesh, std::string name);
-    Scene_Object &add_obj(Halfedge_Mesh &&mesh, std::string name);
+    auto add_obj(GL::Mesh &&mesh, std::string name) -> Scene_Object &;
+    auto add_obj(Halfedge_Mesh &&mesh, std::string name) -> Scene_Object &;
 
     void del_obj(Scene_ID id);
     void update_pose(Scene_ID id, Pose old);
@@ -143,7 +143,7 @@ public:
     {
         std::stack<std::unique_ptr<Action_Base>> empty;
         redos.swap(empty);
-        undos.push(std::make_unique<MeshOp<T>>(scene, id, e_id, std::move(old), std::move(op)));
+        undos.push(std::make_unique<MeshOp<T>>(scene, id, e_id, std::move(old), std::forward<T>(op)));
         total_actions++;
     }
 
@@ -167,7 +167,7 @@ public:
     void undo();
     void redo();
     void reset();
-    size_t n_actions();
+    auto n_actions() -> size_t;
     void inc_actions();
     void bundle_last(size_t n);
 
@@ -178,7 +178,7 @@ private:
     template<typename R, typename U>
     void action(R &&redo, U &&undo)
     {
-        action(std::make_unique<Action<R, U>>(std::move(redo), std::move(undo)));
+        action(std::make_unique<Action<R, U>>(std::forward<R>(redo), std::forward<U>(undo)));
     }
 
     void action(std::unique_ptr<Action_Base> &&action);

@@ -23,12 +23,12 @@ public:
     Joint(Joint &&src) = default;
 
     void operator=(const Joint &src) = delete;
-    Joint &operator=(Joint &&src) = default;
+    auto operator=(Joint &&src) -> Joint & = default;
 
-    unsigned int id() const;
+    auto id() const -> unsigned int;
 
     // Checks if this joint is a root node
-    bool is_root() const;
+    auto is_root() const -> bool;
 
     // Current joint rotation Euler angles in degrees
     Vec3 pose;
@@ -45,12 +45,12 @@ private:
     // space (in bind position). "Bind" position implies that the rotation of all joints
     // should be zero. Also note that this does not include the Skeleton's base_pos,
     // but it should include the transformations of the joint heirachy up to this point.
-    Mat4 joint_to_bind() const;
+    auto joint_to_bind() const -> Mat4;
 
     // Similarly, builds the transformation that takes a point in the space of this joint
     // into skeleton space - taking into account the poses of the joint heirarchy. This also does
     // not include the Skeleton's base_pos.
-    Mat4 joint_to_posed() const;
+    auto joint_to_posed() const -> Mat4;
 
     // Pointer to parent joint in the joint heirarchy
     Joint *parent = nullptr;
@@ -65,7 +65,7 @@ private:
     // the joint corresponding to that call.
     void compute_gradient(Vec3 target, Vec3 current);
 
-    void for_joints(std::function<void(Joint *)> func);
+    void for_joints(const std::function<void(Joint *)>& func);
 
     unsigned int _id = 0;
     Spline<Quat> anim;
@@ -99,69 +99,69 @@ public:
     Skeleton(Skeleton &&src) = default;
 
     void operator=(const Skeleton &src) = delete;
-    Skeleton &operator=(Skeleton &&src) = default;
+    auto operator=(Skeleton &&src) -> Skeleton & = default;
 
     ////////////////////////////////////////////
     // You will implement these functions
 
-    Vec3 end_of(Joint *j);
-    Vec3 posed_end_of(Joint *j);
+    auto end_of(Joint *j) -> Vec3;
+    auto posed_end_of(Joint *j) -> Vec3;
 
     void step_ik(std::vector<IK_Handle *> active_handles);
 
-    Mat4 joint_to_bind(const Joint *j) const;
-    Mat4 joint_to_posed(const Joint *j) const;
+    auto joint_to_bind(const Joint *j) const -> Mat4;
+    auto joint_to_posed(const Joint *j) const -> Mat4;
 
     void find_joints(const GL::Mesh &src, std::vector<std::vector<Joint *>> &map);
     void skin(const GL::Mesh &input, GL::Mesh &output, const std::vector<std::vector<Joint *>> &map);
 
     ////////////////////////////////////////////
 
-    Vec3 &base();
-    bool has_bones() const;
-    unsigned int n_bones();
-    unsigned int n_handles();
+    auto base() -> Vec3 &;
+    auto has_bones() const -> bool;
+    auto n_bones() -> unsigned int;
+    auto n_handles() -> unsigned int;
 
-    Joint *parent(Joint *j);
-    Joint *get_joint(unsigned int id);
+    auto parent(Joint *j) -> Joint *;
+    auto get_joint(unsigned int id) -> Joint *;
     void erase(Joint *j);
     void restore(Joint *j);
-    Vec3 base_of(Joint *j);
-    Vec3 posed_base_of(Joint *j);
+    auto base_of(Joint *j) -> Vec3;
+    auto posed_base_of(Joint *j) -> Vec3;
 
-    void for_joints(std::function<void(Joint *)> func);
-    void for_handles(std::function<void(IK_Handle *)> func);
+    void for_joints(const std::function<void(Joint *)>& func);
+    void for_handles(const std::function<void(IK_Handle *)>& func);
 
     void erase(IK_Handle *handle);
     void restore(IK_Handle *handle);
-    IK_Handle *get_handle(unsigned int id);
-    IK_Handle *add_handle(Vec3 pos, Joint *j);
-    bool do_ik();
+    auto get_handle(unsigned int id) -> IK_Handle *;
+    auto add_handle(Vec3 pos, Joint *j) -> IK_Handle *;
+    auto do_ik() -> bool;
 
-    Joint *add_root(Vec3 extent);
-    Joint *add_child(Joint *j, Vec3 extent);
-    bool is_root_id(unsigned int id);
+    auto add_root(Vec3 extent) -> Joint *;
+    auto add_child(Joint *j, Vec3 extent) -> Joint *;
+    auto is_root_id(unsigned int id) -> bool;
 
-    bool set_time(float time);
+    auto set_time(float time) -> bool;
     void render(const Mat4 &view, Joint *jselect, IK_Handle *hselect, bool root, bool posed, unsigned int offset = 0);
     void outline(const Mat4 &view, const Mat4 &model, bool root, bool posed, BBox &box, unsigned int offset = 0);
 
     void set(float t);
     void crop(float t);
     void erase(float t);
-    bool has_keyframes();
-    bool has(float t);
-    std::set<float> keys();
+    auto has_keyframes() -> bool;
+    auto has(float t) -> bool;
+    auto keys() -> std::set<float>;
 
     using J_IK_Spline = std::variant<Spline<Quat>, Splines<Vec3, bool>>;
     using J_IK_Val = std::variant<Vec3, std::pair<Vec3, bool>>;
     using VSave = std::unordered_map<unsigned int, J_IK_Val>;
     using SSave = std::unordered_map<unsigned int, J_IK_Spline>;
 
-    VSave now();
-    VSave at(float t);
+    auto now() -> VSave;
+    auto at(float t) -> VSave;
     void set(float t, const VSave &data);
-    SSave splines();
+    auto splines() -> SSave;
     void restore_splines(const SSave &data);
 
 private:

@@ -19,12 +19,12 @@ Scene_Light::Scene_Light(Light_Type type, Scene_ID id, Pose p, std::string n) : 
     }
 }
 
-bool Scene_Light::is_env() const
+auto Scene_Light::is_env() const -> bool
 {
     return opt.type == Light_Type::sphere || opt.type == Light_Type::hemisphere;
 }
 
-Scene_ID Scene_Light::id() const
+auto Scene_Light::id() const -> Scene_ID
 {
     return _id;
 }
@@ -47,12 +47,12 @@ void Scene_Light::emissive_clear()
     opt.has_emissive_map = false;
 }
 
-HDR_Image Scene_Light::emissive_copy() const
+auto Scene_Light::emissive_copy() const -> HDR_Image
 {
     return _emissive.copy();
 }
 
-std::string Scene_Light::emissive_load(std::string file)
+auto Scene_Light::emissive_load(std::string file) -> std::string
 {
     std::string err = _emissive.load_from(file);
     if (err.empty())
@@ -62,17 +62,17 @@ std::string Scene_Light::emissive_load(std::string file)
     return err;
 }
 
-std::string Scene_Light::emissive_loaded() const
+auto Scene_Light::emissive_loaded() const -> std::string
 {
     return _emissive.loaded_from();
 }
 
-const GL::Tex2D &Scene_Light::emissive_texture() const
+auto Scene_Light::emissive_texture() const -> const GL::Tex2D &
 {
     return _emissive.get_texture();
 }
 
-BBox Scene_Light::bbox() const
+auto Scene_Light::bbox() const -> BBox
 {
     BBox box = _mesh.bbox();
     box.transform(pose.transform());
@@ -118,7 +118,7 @@ void Scene_Light::dirty()
     _dirty = true;
 }
 
-Spectrum Scene_Light::radiance() const
+auto Scene_Light::radiance() const -> Spectrum
 {
     return opt.spectrum * opt.intensity;
 }
@@ -160,7 +160,7 @@ void Scene_Light::render(const Mat4 &view, bool depth_only, bool posed)
     }
 }
 
-bool operator!=(const Scene_Light::Options &l, const Scene_Light::Options &r)
+auto operator!=(const Scene_Light::Options &l, const Scene_Light::Options &r) -> bool
 {
     return l.type != r.type || std::string(l.name) != std::string(r.name) || l.spectrum != r.spectrum || l.intensity != r.intensity || l.angle_bounds != r.angle_bounds ||
            l.has_emissive_map != r.has_emissive_map;

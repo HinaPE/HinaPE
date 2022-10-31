@@ -2,13 +2,13 @@
 
 const char *Material_Type_Names[(int) Material_Type::count] = {"Lambertian", "Mirror", "Refract", "Glass", "Diffuse Light"};
 
-bool operator!=(const Material::Options &l, const Material::Options &r)
+auto operator!=(const Material::Options &l, const Material::Options &r) -> bool
 {
     return l.albedo != r.albedo || l.emissive != r.emissive || l.ior != r.ior || l.reflectance != r.reflectance || l.transmittance != r.transmittance ||
            l.type != r.type || l.intensity != r.intensity;
 }
 
-Vec3 Material::layout_color() const
+auto Material::layout_color() const -> Vec3
 {
     Vec3 color;
     switch (opt.type)
@@ -40,12 +40,12 @@ Vec3 Material::layout_color() const
     return color;
 }
 
-Spectrum Material::emissive() const
+auto Material::emissive() const -> Spectrum
 {
     return opt.emissive * opt.intensity;
 }
 
-Material Material::copy() const
+auto Material::copy() const -> Material
 {
     Material ret;
     ret.opt = opt;

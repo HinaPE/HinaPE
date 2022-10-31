@@ -16,17 +16,17 @@ Joint::~Joint()
         delete j;
 }
 
-unsigned int Joint::id() const
+auto Joint::id() const -> unsigned int
 {
     return _id;
 }
 
-bool Joint::is_root() const
+auto Joint::is_root() const -> bool
 {
     return !parent;
 }
 
-void Joint::for_joints(std::function<void(Joint *)> func)
+void Joint::for_joints(const std::function<void(Joint *)>& func)
 {
     func(this);
     for (Joint *j: children)
@@ -57,7 +57,7 @@ Skeleton::~Skeleton()
         delete h;
 }
 
-bool Skeleton::set_time(float time)
+auto Skeleton::set_time(float time) -> bool
 {
     bool ret = false;
     for_joints([&ret, time](Joint *j)
@@ -80,21 +80,21 @@ bool Skeleton::set_time(float time)
     return ret;
 }
 
-void Skeleton::for_joints(std::function<void(Joint *)> func)
+void Skeleton::for_joints(const std::function<void(Joint *)>& func)
 {
     for (Joint *r: roots)
         r->for_joints(func);
 }
 
-void Skeleton::for_handles(std::function<void(Skeleton::IK_Handle *)> func)
+void Skeleton::for_handles(const std::function<void(Skeleton::IK_Handle *)>& func)
 {
     for (IK_Handle *h: handles)
         func(h);
 }
 
-Joint *Skeleton::add_root(Vec3 extent)
+auto Skeleton::add_root(Vec3 extent) -> Joint *
 {
-    Joint *j = new Joint(next_id++, nullptr, extent);
+    auto *j = new Joint(next_id++, nullptr, extent);
     for (float f: keys())
     {
         j->anim.set(f, Quat{});
@@ -112,7 +112,7 @@ void Skeleton::crop(float t)
     }
 }
 
-Skeleton::IK_Handle *Skeleton::get_handle(unsigned int id)
+auto Skeleton::get_handle(unsigned int id) -> Skeleton::IK_Handle *
 {
     IK_Handle *j = nullptr;
     for (IK_Handle *h: handles)
@@ -123,7 +123,7 @@ Skeleton::IK_Handle *Skeleton::get_handle(unsigned int id)
     return j;
 }
 
-Joint *Skeleton::get_joint(unsigned int id)
+auto Skeleton::get_joint(unsigned int id) -> Joint *
 {
     Joint *j = nullptr;
     for_joints([&](Joint *jt)
@@ -216,41 +216,41 @@ void Skeleton::outline(const Mat4 &view, const Mat4 &model, bool root, bool pose
                });
 }
 
-bool Skeleton::is_root_id(unsigned int id)
+auto Skeleton::is_root_id(unsigned int id) -> bool
 {
     return id == root_id;
 }
 
-Joint *Skeleton::parent(Joint *j)
+auto Skeleton::parent(Joint *j) -> Joint *
 {
     return j->parent;
 }
 
-bool Skeleton::has_bones() const
+auto Skeleton::has_bones() const -> bool
 {
     return !roots.empty();
 }
 
-unsigned int Skeleton::n_bones()
+auto Skeleton::n_bones() -> unsigned int
 {
     unsigned int n = 0;
     for_joints([&n](Joint *) { n++; });
     return n;
 }
 
-unsigned int Skeleton::n_handles()
+auto Skeleton::n_handles() -> unsigned int
 {
     return (unsigned int) handles.size();
 }
 
-Vec3 &Skeleton::base()
+auto Skeleton::base() -> Vec3 &
 {
     return base_pos;
 }
 
-Joint *Skeleton::add_child(Joint *j, Vec3 e)
+auto Skeleton::add_child(Joint *j, Vec3 e) -> Joint *
 {
-    Joint *c = new Joint(next_id++, j, e);
+    auto *c = new Joint(next_id++, j, e);
     for (float f: keys())
     {
         c->anim.set(f, Quat{});
@@ -303,12 +303,12 @@ void Skeleton::erase(Joint *j)
     erased.insert({j, std::move(herase)});
 }
 
-Vec3 Skeleton::posed_base_of(Joint *j)
+auto Skeleton::posed_base_of(Joint *j) -> Vec3
 {
     return j->is_root() ? base() : posed_end_of(parent(j));
 }
 
-Vec3 Skeleton::base_of(Joint *j)
+auto Skeleton::base_of(Joint *j) -> Vec3
 {
     return j->is_root() ? base() : end_of(parent(j));
 }
@@ -322,7 +322,7 @@ void Skeleton::set(float t)
     }
 }
 
-bool Skeleton::has(float t)
+auto Skeleton::has(float t) -> bool
 {
     bool had = false;
     for_joints([t, &had](Joint *j) { had = had || j->anim.has(t); });
@@ -342,7 +342,7 @@ void Skeleton::erase(float t)
     }
 }
 
-bool Skeleton::has_keyframes()
+auto Skeleton::has_keyframes() -> bool
 {
     bool frame = false;
     for_joints([&frame](Joint *j) { frame = frame || j->anim.any(); });
@@ -353,7 +353,7 @@ bool Skeleton::has_keyframes()
     return frame;
 }
 
-Skeleton::VSave Skeleton::now()
+auto Skeleton::now() -> Skeleton::VSave
 {
     VSave ret;
     for_joints([&ret](Joint *j) { ret[j->_id] = {j->pose}; });
@@ -364,7 +364,7 @@ Skeleton::VSave Skeleton::now()
     return ret;
 }
 
-Skeleton::SSave Skeleton::splines()
+auto Skeleton::splines() -> Skeleton::SSave
 {
     SSave ret;
     for_joints([&ret](Joint *j) { ret[j->_id] = {j->anim}; });
@@ -384,7 +384,7 @@ void Skeleton::restore_splines(const Skeleton::SSave &data)
     }
 }
 
-std::set<float> Skeleton::keys()
+auto Skeleton::keys() -> std::set<float>
 {
     std::set<float> ret;
     for_joints([&ret](Joint *j)
@@ -400,7 +400,7 @@ std::set<float> Skeleton::keys()
     return ret;
 }
 
-Skeleton::VSave Skeleton::at(float t)
+auto Skeleton::at(float t) -> Skeleton::VSave
 {
     VSave ret;
     for_joints([&ret, t](Joint *j) { ret[j->_id] = {j->anim.at(t).to_euler()}; });
@@ -434,14 +434,14 @@ void Skeleton::erase(IK_Handle *h)
     erased_handles.insert(h);
 }
 
-Skeleton::IK_Handle *Skeleton::add_handle(Vec3 pos, Joint *j)
+auto Skeleton::add_handle(Vec3 pos, Joint *j) -> Skeleton::IK_Handle *
 {
-    IK_Handle *handle = new IK_Handle{pos - base_pos, j, {}, false, next_id++};
+    auto *handle = new IK_Handle{pos - base_pos, j, {}, false, next_id++};
     handles.insert(handle);
     return handle;
 }
 
-bool Skeleton::do_ik()
+auto Skeleton::do_ik() -> bool
 {
     std::vector<IK_Handle *> enabled;
     for (IK_Handle *h: handles)
