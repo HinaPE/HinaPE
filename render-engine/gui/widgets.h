@@ -38,24 +38,24 @@ public:
         generate_cage();
     }
 
-    bool UI(Undo &undo, Camera &user_cam);
+    auto UI(Undo &undo, Camera &user_cam) -> bool;
     void render(const Mat4 &view);
 
     void load(Camera c);
 
-    const Camera &get() const
+    auto get() const -> const Camera &
     {
         return render_cam;
     }
 
     void ar(Camera &user_cam, float _ar);
 
-    float get_ar() const
+    auto get_ar() const -> float
     {
         return cam_ar;
     }
 
-    bool moving() const
+    auto moving() const -> bool
     {
         return moving_camera;
     }
@@ -85,25 +85,25 @@ public:
     Widget_Render(Vec2 dim);
     void open();
 
-    bool UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::string &err);
+    auto UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::string &err) -> bool;
 
     void animate(Scene &scene, Widget_Camera &cam, Camera &user_cam, int max_frame);
-    std::string step(Animate &animate, Scene &scene);
+    auto step(Animate &animate, Scene &scene) -> std::string;
 
-    std::string headless(Animate &animate, Scene &scene, const Camera &cam, const Launch_Settings &set);
+    auto headless(Animate &animate, Scene &scene, const Camera &cam, const Launch_Settings &set) -> std::string;
 
     void log_ray(const Ray &ray, float t, Spectrum color = Spectrum{1.0f});
     void render_log(const Mat4 &view) const;
 
-    PT::Pathtracer &tracer() { return pathtracer; }
+    auto tracer() -> PT::Pathtracer & { return pathtracer; }
 
-    bool rendered() const { return has_rendered; }
+    auto rendered() const -> bool { return has_rendered; }
 
-    std::pair<float, float> completion_time() const { return pathtracer.completion_time(); }
+    auto completion_time() const -> std::pair<float, float> { return pathtracer.completion_time(); }
 
-    bool in_progress() const { return pathtracer.in_progress() || animating; }
+    auto in_progress() const -> bool { return pathtracer.in_progress() || animating; }
 
-    float wh_ar() const { return (float) out_w / (float) out_h; }
+    auto wh_ar() const -> float { return (float) out_w / (float) out_h; }
 
 private:
     void begin(Scene &scene, Widget_Camera &cam, Camera &user_cam);
@@ -136,22 +136,22 @@ public:
     Widget_Type active = Widget_Type::move;
 
     void end_drag();
-    Pose apply_action(const Pose &pose);
+    auto apply_action(const Pose &pose) -> Pose;
     void start_drag(Vec3 pos, Vec3 cam, Vec2 spos, Vec3 dir);
     void drag_to(Vec3 pos, Vec3 cam, Vec2 spos, Vec3 dir, bool scale_invert);
 
     void select(Scene_ID id);
     void render(const Mat4 &view, Vec3 pos, float scl);
-    bool action_button(Widget_Type act, std::string name, bool wrap = true);
+    auto action_button(Widget_Type act, std::string name, bool wrap = true) -> bool;
 
-    bool want_drag();
-    bool is_dragging();
+    auto want_drag() -> bool;
+    auto is_dragging() -> bool;
 
 private:
     void generate_lines(Vec3 pos);
-    bool to_axis(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit);
-    bool to_plane(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 norm, Vec3 &hit);
-    bool to_axis3(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit);
+    auto to_axis(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit) -> bool;
+    auto to_plane(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 norm, Vec3 &hit) -> bool;
+    auto to_axis3(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit) -> bool;
     // interface data
     Axis axis = Axis::X;
     Vec3 drag_start, drag_end;

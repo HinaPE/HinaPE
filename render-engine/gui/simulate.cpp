@@ -41,7 +41,7 @@ void Simulate::update(Scene &scene, Undo &undo)
     update_bvh(scene, undo);
 
     static Uint64 ufreq = SDL_GetPerformanceFrequency();
-    static double freq = (double) ufreq;
+    static auto freq = (double) ufreq;
 
     Uint64 time = SDL_GetPerformanceCounter();
     Uint64 udt = time - last_update;
@@ -60,7 +60,7 @@ void Simulate::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
 
     if (item.is<Scene_Light>())
     {
-        Scene_Light &light = item.get<Scene_Light>();
+        auto &light = item.get<Scene_Light>();
         if (light.is_env())
             return;
     }
@@ -86,7 +86,7 @@ void Simulate::build_scene(Scene &scene)
                     {
                         if (item.is<Scene_Object>())
                         {
-                            Scene_Object &obj = item.get<Scene_Object>();
+                            auto &obj = item.get<Scene_Object>();
                             futures.push_back(thread_pool.enqueue([&]()
                                                                   {
                                                                       if (obj.is_shape())

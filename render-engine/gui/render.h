@@ -24,16 +24,16 @@ class Render
 public:
     Render(Scene &scene, Vec2 dim);
 
-    std::string headless_render(Animate &animate, Scene &scene, const Launch_Settings &set);
-    std::pair<float, float> completion_time() const;
+    auto headless_render(Animate &animate, Scene &scene, const Launch_Settings &set) -> std::string;
+    auto completion_time() const -> std::pair<float, float>;
 
-    bool keydown(Widgets &widgets, SDL_Keysym key);
-    Mode UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe selected, Camera &user_cam);
+    auto keydown(Widgets &widgets, SDL_Keysym key) -> bool;
+    auto UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe selected, Camera &user_cam) -> Mode;
     void render(Scene_Maybe obj, Widgets &widgets, Camera &user_cam);
 
     void update_dim(Vec2 dim);
     void load_cam(Vec3 pos, Vec3 front, float ar, float fov, float ap, float dist);
-    const Camera &get_cam() const;
+    auto get_cam() const -> const Camera &;
 
 private:
     GL::Lines bvh_viz, bvh_active;

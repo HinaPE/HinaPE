@@ -7,7 +7,7 @@
 namespace Gui
 {
 
-Camera Anim_Camera::at(float t) const
+auto Anim_Camera::at(float t) const -> Camera
 {
     Camera ret(dim);
     auto [p, r, f, a, ap, d] = splines.at(t);
@@ -30,7 +30,7 @@ void Animate::update_dim(Vec2 dim)
     ui_camera.dim(dim);
 }
 
-bool Animate::keydown(Widgets &widgets, Undo &undo, Scene_ID sel, SDL_Keysym key)
+auto Animate::keydown(Widgets &widgets, Undo &undo, Scene_ID sel, SDL_Keysym key) -> bool
 {
 
     if (key.sym == SDLK_SPACE)
@@ -43,7 +43,7 @@ bool Animate::keydown(Widgets &widgets, Undo &undo, Scene_ID sel, SDL_Keysym key
     return false;
 }
 
-Camera Animate::current_camera() const
+auto Animate::current_camera() const -> Camera
 {
     return ui_camera.get();
 }
@@ -84,7 +84,7 @@ void Animate::render(Scene &scene, Scene_Maybe obj_opt, Widgets &widgets, Camera
 
     if (item.is<Scene_Light>())
     {
-        Scene_Light &light = item.get<Scene_Light>();
+        auto &light = item.get<Scene_Light>();
         if (light.is_env())
             return;
     }
@@ -95,7 +95,7 @@ void Animate::render(Scene &scene, Scene_Maybe obj_opt, Widgets &widgets, Camera
     if (item.is<Scene_Object>() && item.get<Scene_Object>().armature.has_bones())
     {
 
-        Scene_Object &obj = item.get<Scene_Object>();
+        auto &obj = item.get<Scene_Object>();
         joint_id_offset = scene.used_ids();
         obj.armature.render(view * obj.pose.transform(), joint_select, handle_select, false, true, joint_id_offset);
 
@@ -122,7 +122,7 @@ void Animate::render(Scene &scene, Scene_Maybe obj_opt, Widgets &widgets, Camera
     if (handle_select)
     {
 
-        Scene_Object &obj = item.get<Scene_Object>();
+        auto &obj = item.get<Scene_Object>();
         Vec3 wpos = pose.transform() * (handle_select->target + obj.armature.base());
         float scale = std::min((user_cam.pos() - wpos).norm() / 5.5f, 10.0f);
         widgets.render(view, wpos, scale);
@@ -130,7 +130,7 @@ void Animate::render(Scene &scene, Scene_Maybe obj_opt, Widgets &widgets, Camera
     } else if (joint_select)
     {
 
-        Scene_Object &obj = item.get<Scene_Object>();
+        auto &obj = item.get<Scene_Object>();
         Vec3 wpos = pose.transform() * obj.armature.posed_base_of(joint_select);
         float scale = std::min((user_cam.pos() - wpos).norm() / 5.5f, 10.0f);
         widgets.render(view, wpos, scale);
@@ -162,7 +162,7 @@ void Animate::make_spline(Scene_ID id, const Anim_Pose &pose)
     for (int i = 1; i < max_frame; i++)
     {
 
-        float f = (float) i;
+        auto f = (float) i;
         float c = (float) (i % 20) / 19.0f;
         Vec3 cur = pose.at(f).pos;
         lines.add(prev, cur, Vec3{c, c, 1.0f});
@@ -185,7 +185,7 @@ void Animate::camera_spline()
     Vec3 prev = anim_camera.at(0.0f).pos();
     for (int i = 1; i < max_frame; i++)
     {
-        float f = (float) i;
+        auto f = (float) i;
         float c = (float) (i % 20) / 19.0f;
         Vec3 cur = anim_camera.at(f).pos();
         lines.add(prev, cur, Vec3{c, c, 1.0f});
@@ -243,7 +243,7 @@ void Animate::UIsidebar(Manager &manager, Undo &undo, Scene_Maybe obj_opt, Camer
         Scene_Item &item = obj_opt.value().get();
         if (item.is<Scene_Object>())
         {
-            Scene_Object &obj = item.get<Scene_Object>();
+            auto &obj = item.get<Scene_Object>();
             if (obj.armature.has_bones())
             {
                 if (obj.armature.do_ik())
@@ -277,7 +277,7 @@ void Animate::end_transform(Undo &undo, Scene_Item &obj)
     old_T = Mat4::I;
 }
 
-Vec3 Animate::selected_pos(Scene_Item &item)
+auto Animate::selected_pos(Scene_Item &item) -> Vec3
 {
     if (handle_select)
     {
@@ -294,13 +294,13 @@ void Animate::apply_transform(Widgets &widgets, Scene_Item &item)
     if (handle_select)
     {
 
-        Scene_Object &obj = item.get<Scene_Object>();
+        auto &obj = item.get<Scene_Object>();
         Vec3 p = old_T * widgets.apply_action(old_pose).pos;
         handle_select->target = p - obj.armature.base();
 
     } else if (joint_select)
     {
-        Scene_Object &obj = item.get<Scene_Object>();
+        auto &obj = item.get<Scene_Object>();
         Vec3 euler = widgets.apply_action(old_pose).euler;
         joint_select->pose = (old_T * Mat4::euler(euler)).to_euler();
         obj.set_pose_dirty();
@@ -310,7 +310,7 @@ void Animate::apply_transform(Widgets &widgets, Scene_Item &item)
     }
 }
 
-bool Animate::select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir)
+auto Animate::select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir) -> bool
 {
 
     if (widgets.want_drag())
@@ -319,7 +319,7 @@ bool Animate::select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID
         if (handle_select)
         {
 
-            Scene_Object &obj = scene.get<Scene_Object>(selected);
+            auto &obj = scene.get<Scene_Object>(selected);
             Vec3 base = obj.pose.transform() * (handle_select->target + obj.armature.base());
             widgets.start_drag(base, cam, spos, dir);
             old_pose = {};
@@ -330,7 +330,7 @@ bool Animate::select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID
         } else if (joint_select)
         {
 
-            Scene_Object &obj = scene.get<Scene_Object>(selected);
+            auto &obj = scene.get<Scene_Object>(selected);
             Vec3 base = obj.pose.transform() * obj.armature.posed_base_of(joint_select);
             widgets.start_drag(base, cam, spos, dir);
 
@@ -360,7 +360,7 @@ bool Animate::select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID
         if (item.is<Scene_Object>())
         {
 
-            Scene_Object &obj = item.get<Scene_Object>();
+            auto &obj = item.get<Scene_Object>();
             if (id >= joint_id_offset && obj.armature.has_bones())
             {
 
@@ -793,7 +793,7 @@ void Animate::step_sim(Scene &scene)
     simulate.step(scene, 1.0f / frame_rate);
 }
 
-Camera Animate::set_time(Scene &scene, float time)
+auto Animate::set_time(Scene &scene, float time) -> Camera
 {
 
     current_frame = (int) time;
@@ -833,27 +833,27 @@ void Animate::set(int n_frames, int fps, bool replace)
     current_frame = std::min(current_frame, max_frame - 1);
 }
 
-Anim_Camera &Animate::camera()
+auto Animate::camera() -> Anim_Camera &
 {
     return anim_camera;
 }
 
-const Anim_Camera &Animate::camera() const
+auto Animate::camera() const -> const Anim_Camera &
 {
     return anim_camera;
 }
 
-float Animate::fps() const
+auto Animate::fps() const -> float
 {
     return (float) frame_rate;
 }
 
-int Animate::n_frames() const
+auto Animate::n_frames() const -> int
 {
     return max_frame;
 }
 
-std::string Animate::pump_output(Scene &scene)
+auto Animate::pump_output(Scene &scene) -> std::string
 {
     return ui_render.step(*this, scene);
 }
@@ -882,7 +882,7 @@ void Animate::invalidate(Joint *j)
         joint_select = nullptr;
 }
 
-bool Animate::playing_or_rendering()
+auto Animate::playing_or_rendering() -> bool
 {
     return playing || ui_render.in_progress();
 }

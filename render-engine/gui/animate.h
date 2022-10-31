@@ -19,7 +19,7 @@ public:
     {
     }
 
-    Camera at(float t) const;
+    auto at(float t) const -> Camera;
     void set(float t, const Camera &cam);
 
     Splines<Vec3, Quat, float, float, float, float> splines;
@@ -36,31 +36,31 @@ public:
     }
 
     void update_dim(Vec2 dim);
-    bool keydown(Widgets &widgets, Undo &undo, Scene_ID sel, SDL_Keysym key);
+    auto keydown(Widgets &widgets, Undo &undo, Scene_ID sel, SDL_Keysym key) -> bool;
 
-    Vec3 selected_pos(Scene_Item &item);
+    auto selected_pos(Scene_Item &item) -> Vec3;
     void end_transform(Undo &undo, Scene_Item &obj);
     void apply_transform(Widgets &widgets, Scene_Item &obj);
-    bool select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir);
+    auto select(Scene &scene, Widgets &widgets, Scene_ID selected, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir) -> bool;
 
     void render(Scene &scene, Scene_Maybe obj_opt, Widgets &widgets, Camera &cam);
     void timeline(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe obj, Camera &user_cam);
     void UIsidebar(Manager &manager, Undo &undo, Scene_Maybe obj_opt, Camera &user_cam);
 
-    bool playing_or_rendering();
+    auto playing_or_rendering() -> bool;
     void clear();
     void update(Scene &scene);
     void refresh(Scene &scene);
     void load_cam(Vec3 pos, Vec3 front, float ar, float fov, float ap, float dist);
     void step_sim(Scene &scene);
 
-    std::string pump_output(Scene &scene);
-    Camera set_time(Scene &scene, float time);
-    float fps() const;
-    int n_frames() const;
-    const Anim_Camera &camera() const;
-    Anim_Camera &camera();
-    Camera current_camera() const;
+    auto pump_output(Scene &scene) -> std::string;
+    auto set_time(Scene &scene, float time) -> Camera;
+    auto fps() const -> float;
+    auto n_frames() const -> int;
+    auto camera() const -> const Anim_Camera &;
+    auto camera() -> Anim_Camera &;
+    auto current_camera() const -> Camera;
     void set(int n_frames, int fps, bool replace);
     void set_max(int frames);
     void invalidate(Skeleton::IK_Handle *handle);

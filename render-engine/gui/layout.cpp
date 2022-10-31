@@ -9,7 +9,7 @@
 namespace Gui
 {
 
-bool Layout::keydown(Widgets &widgets, SDL_Keysym key)
+auto Layout::keydown(Widgets &widgets, SDL_Keysym key) -> bool
 {
     return false;
 }
@@ -23,7 +23,7 @@ void Layout::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
 
     if (item.is<Scene_Light>())
     {
-        Scene_Light &light = item.get<Scene_Light>();
+        auto &light = item.get<Scene_Light>();
         if (light.is_env())
             return;
     }
@@ -37,7 +37,7 @@ void Layout::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
     widgets.render(view, pose.pos, scale);
 }
 
-Scene_ID Layout::selected() const
+auto Layout::selected() const -> Scene_ID
 {
     return selected_mesh;
 }
@@ -52,7 +52,7 @@ void Layout::set_selected(Scene_ID id)
     selected_mesh = id;
 }
 
-Vec3 Layout::selected_pos(Scene &scene)
+auto Layout::selected_pos(Scene &scene) -> Vec3
 {
 
     auto obj = scene.get(selected_mesh);
@@ -84,7 +84,7 @@ void Layout::end_transform(Undo &undo, Scene_Item &obj)
     old_pose = {};
 }
 
-Mode Layout::UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt)
+auto Layout::UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt) -> Mode
 {
 
     if (!obj_opt.has_value())

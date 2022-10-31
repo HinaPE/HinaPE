@@ -21,7 +21,7 @@ void Render::update_dim(Vec2 dim)
     ui_camera.dim(dim);
 }
 
-bool Render::keydown(Widgets &widgets, SDL_Keysym key)
+auto Render::keydown(Widgets &widgets, SDL_Keysym key) -> bool
 {
     return false;
 }
@@ -59,7 +59,7 @@ void Render::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &user_cam)
 
         if (item.is<Scene_Light>())
         {
-            Scene_Light &light = item.get<Scene_Light>();
+            auto &light = item.get<Scene_Light>();
             if (light.is_env())
                 return;
         }
@@ -70,7 +70,7 @@ void Render::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &user_cam)
     }
 }
 
-const Camera &Render::get_cam() const
+auto Render::get_cam() const -> const Camera &
 {
     return ui_camera.get();
 }
@@ -93,7 +93,7 @@ void Render::load_cam(Vec3 pos, Vec3 center, float ar, float hfov, float ap, flo
     ui_camera.load(c);
 }
 
-Mode Render::UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe obj_opt, Camera &user_cam)
+auto Render::UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe obj_opt, Camera &user_cam) -> Mode
 {
 
     Mode mode = Mode::render;
@@ -143,12 +143,12 @@ Mode Render::UIsidebar(Manager &manager, Undo &undo, Scene &scene, Scene_Maybe o
     return mode;
 }
 
-std::pair<float, float> Render::completion_time() const
+auto Render::completion_time() const -> std::pair<float, float>
 {
     return ui_render.completion_time();
 }
 
-std::string Render::headless_render(Animate &animate, Scene &scene, const Launch_Settings &s0)
+auto Render::headless_render(Animate &animate, Scene &scene, const Launch_Settings &s0) -> std::string
 {
     Launch_Settings set = s0;
     if (set.w_from_ar)

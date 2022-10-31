@@ -50,7 +50,7 @@ void Rig::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
         return;
     }
 
-    Scene_Object &obj = item.get<Scene_Object>();
+    auto &obj = item.get<Scene_Object>();
     if (obj.opt.shape_type != PT::Shape_Type::none)
     {
         selected = nullptr;
@@ -136,7 +136,7 @@ void Rig::apply_transform(Widgets &widgets)
     }
 }
 
-Vec3 Rig::selected_pos()
+auto Rig::selected_pos() -> Vec3
 {
     if (root_selected)
     {
@@ -149,7 +149,7 @@ Vec3 Rig::selected_pos()
         return handle->target + my_obj->armature.base();
     }
     assert(false);
-    return Vec3();
+    return {};
 }
 
 void Rig::select(Scene &scene, Widgets &widgets, Undo &undo, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir)
@@ -235,7 +235,7 @@ void Rig::hover(Vec3 cam, Vec2 spos, Vec3 dir)
     }
 }
 
-Mode Rig::UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt)
+auto Rig::UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe obj_opt) -> Mode
 {
 
     if (!my_obj)
@@ -248,7 +248,7 @@ Mode Rig::UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe 
     if (!item.is<Scene_Object>())
         return Mode::rig;
 
-    Scene_Object &obj = item.get<Scene_Object>();
+    auto &obj = item.get<Scene_Object>();
     if (obj.opt.shape_type != PT::Shape_Type::none)
         return Mode::rig;
 

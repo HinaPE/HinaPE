@@ -80,7 +80,7 @@ void Widgets::generate_lines(Vec3 pos)
     }
 }
 
-bool Widgets::action_button(Widget_Type act, std::string name, bool wrap)
+auto Widgets::action_button(Widget_Type act, std::string name, bool wrap) -> bool
 {
     bool is_active = act == active;
     if (is_active)
@@ -175,7 +175,7 @@ void Widgets::render(const Mat4 &view, Vec3 pos, float scl)
     }
 }
 
-Pose Widgets::apply_action(const Pose &pose)
+auto Widgets::apply_action(const Pose &pose) -> Pose
 {
 
     Pose result = pose;
@@ -231,7 +231,7 @@ Pose Widgets::apply_action(const Pose &pose)
     return result;
 }
 
-bool Widgets::to_axis(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit)
+auto Widgets::to_axis(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit) -> bool
 {
 
     Vec3 axis1;
@@ -262,7 +262,7 @@ bool Widgets::to_axis(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit)
     return hit.valid();
 }
 
-bool Widgets::to_axis3(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit)
+auto Widgets::to_axis3(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit) -> bool
 {
 
     Vec3 axis1{1.0f, 0.0f, 0.0f};
@@ -296,7 +296,7 @@ bool Widgets::to_axis3(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 &hit)
     return hit.valid();
 }
 
-bool Widgets::to_plane(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 norm, Vec3 &hit)
+auto Widgets::to_plane(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 norm, Vec3 &hit) -> bool
 {
 
     Line look(cam_pos, dir);
@@ -304,12 +304,12 @@ bool Widgets::to_plane(Vec3 obj_pos, Vec3 cam_pos, Vec3 dir, Vec3 norm, Vec3 &hi
     return p.hit(look, hit);
 }
 
-bool Widgets::is_dragging()
+auto Widgets::is_dragging() -> bool
 {
     return dragging;
 }
 
-bool Widgets::want_drag()
+auto Widgets::want_drag() -> bool
 {
     return start_dragging;
 }
@@ -539,7 +539,7 @@ void Widget_Camera::ar(Camera &user_cam, float _ar)
     update_cameras(user_cam);
 }
 
-bool Widget_Camera::UI(Undo &undo, Camera &user_cam)
+auto Widget_Camera::UI(Undo &undo, Camera &user_cam) -> bool
 {
 
     bool update_cam = false;
@@ -784,7 +784,7 @@ void Widget_Render::begin(Scene &scene, Widget_Camera &cam, Camera &user_cam)
     ImGui::Checkbox("Use BVH", &use_bvh);
 }
 
-std::string Widget_Render::step(Animate &animate, Scene &scene)
+auto Widget_Render::step(Animate &animate, Scene &scene) -> std::string
 {
 
     if (animating)
@@ -941,14 +941,14 @@ void Widget_Render::animate(Scene &scene, Widget_Camera &cam, Camera &user_cam, 
     ImGui::End();
 }
 
-static bool postfix(const std::string &path, const std::string &type)
+static auto postfix(const std::string &path, const std::string &type) -> bool
 {
     if (path.length() >= type.length())
         return path.compare(path.length() - type.length(), type.length(), type) == 0;
     return false;
 }
 
-bool Widget_Render::UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::string &err)
+auto Widget_Render::UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::string &err) -> bool
 {
 
     bool ret = false;
@@ -1057,7 +1057,7 @@ bool Widget_Render::UI(Scene &scene, Widget_Camera &cam, Camera &user_cam, std::
     return ret;
 }
 
-std::string Widget_Render::headless(Animate &animate, Scene &scene, const Camera &cam, const Launch_Settings &set)
+auto Widget_Render::headless(Animate &animate, Scene &scene, const Camera &cam, const Launch_Settings &set) -> std::string
 {
 
     Hina_info("Render settings:");

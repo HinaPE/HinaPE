@@ -17,16 +17,16 @@ class Manager;
 class Layout
 {
 public:
-    bool keydown(Widgets &widgets, SDL_Keysym key);
+    auto keydown(Widgets &widgets, SDL_Keysym key) -> bool;
     void render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam);
     void select(Scene &scene, Widgets &widgets, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir);
-    Vec3 selected_pos(Scene &scene);
+    auto selected_pos(Scene &scene) -> Vec3;
 
     void apply_transform(Scene_Item &obj, Widgets &widgets);
     void end_transform(Undo &undo, Scene_Item &obj);
-    Mode UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe obj);
+    auto UIsidebar(Manager &manager, Undo &undo, Widgets &widgets, Scene_Maybe obj) -> Mode;
 
-    Scene_ID selected() const;
+    auto selected() const -> Scene_ID;
     void clear_select();
     void set_selected(Scene_ID id);
 

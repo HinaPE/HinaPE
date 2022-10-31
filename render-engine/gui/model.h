@@ -21,37 +21,37 @@ public:
     Model();
 
     // Gui view API
-    bool keydown(Widgets &widgets, SDL_Keysym key, Camera &cam);
+    auto keydown(Widgets &widgets, SDL_Keysym key, Camera &cam) -> bool;
     void unset_mesh();
 
-    std::string UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj, Camera &cam);
+    auto UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj, Camera &cam) -> std::string;
     void render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam);
 
-    Vec3 selected_pos();
+    auto selected_pos() -> Vec3;
     void clear_select();
     void erase_selected(Undo &undo, Scene_Maybe obj_opt);
-    std::string end_transform(Widgets &widgets, Undo &undo, Scene_Object &obj);
+    auto end_transform(Widgets &widgets, Undo &undo, Scene_Object &obj) -> std::string;
     void apply_transform(Widgets &widgets);
-    std::string select(Widgets &widgets, Scene_ID click, Vec3 cam, Vec2 spos, Vec3 dir);
+    auto select(Widgets &widgets, Scene_ID click, Vec3 cam, Vec2 spos, Vec3 dir) -> std::string;
 
-    std::tuple<GL::Mesh &, GL::Instances &, GL::Instances &, GL::Instances &> shapes();
-    unsigned int select_id() const;
-    unsigned int hover_id() const;
+    auto shapes() -> std::tuple<GL::Mesh &, GL::Instances &, GL::Instances &, GL::Instances &>;
+    auto select_id() const -> unsigned int;
+    auto hover_id() const -> unsigned int;
     void hover(unsigned int id);
 
 private:
     template<typename T>
-    std::string update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, Halfedge_Mesh::ElementRef ref, T &&op);
+    auto update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, Halfedge_Mesh::ElementRef ref, T &&op) -> std::string;
     template<typename T>
-    std::string update_mesh_global(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, T &&op);
+    auto update_mesh_global(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, T &&op) -> std::string;
 
     void zoom_to(Halfedge_Mesh::ElementRef ref, Camera &cam);
     void begin_transform();
-    bool begin_bevel(std::string &err);
-    bool begin_extrude(std::string &err);
+    auto begin_bevel(std::string &err) -> bool;
+    auto begin_extrude(std::string &err) -> bool;
     void set_selected(Halfedge_Mesh::ElementRef elem);
-    std::optional<std::reference_wrapper<Scene_Object>> set_my_obj(Scene_Maybe obj_opt);
-    std::optional<Halfedge_Mesh::ElementRef> selected_element();
+    auto set_my_obj(Scene_Maybe obj_opt) -> std::optional<std::reference_wrapper<Scene_Object>>;
+    auto selected_element() -> std::optional<Halfedge_Mesh::ElementRef>;
     void rebuild();
 
     void update_vertex(Halfedge_Mesh::VertexRef vert);
@@ -60,7 +60,7 @@ private:
     void halfedge_viz(Halfedge_Mesh::HalfedgeRef h, Mat4 &transform);
     void face_viz(Halfedge_Mesh::FaceRef face, std::vector<GL::Mesh::Vert> &verts, std::vector<GL::Mesh::Index> &idxs, size_t insert_at);
 
-    std::string validate();
+    auto validate() -> std::string;
     std::string warn_msg, err_msg;
 
     // This all needs to be updated when the mesh connectivity changes

@@ -54,12 +54,12 @@ void Model::update_vertex(Halfedge_Mesh::VertexRef vert)
         vert_sizes[vert->id()] = d;
     }
 
-    Halfedge_Mesh::HalfedgeRef h = vert->halfedge();
+    auto h = vert->halfedge();
 
     // Update surrounding vertices & faces
     do
     {
-        Halfedge_Mesh::VertexRef v = h->twin()->vertex();
+        auto v = h->twin()->vertex();
         GL::Instances::Info &vi = spheres.get(id_to_info[v->id()].instance);
         vertex_viz(v, d, vi.transform);
         vert_sizes[v->id()] = d;
@@ -69,7 +69,7 @@ void Model::update_vertex(Halfedge_Mesh::VertexRef vert)
             size_t idx = id_to_info[h->face()->id()].instance;
             face_viz(h->face(), face_mesh.edit_verts(), face_mesh.edit_indices(), idx);
 
-            Halfedge_Mesh::HalfedgeRef fh = h->face()->halfedge();
+            auto fh = h->face()->halfedge();
             do
             {
                 halfedge_viz(fh, arrows.get(id_to_info[fh->id()].instance).transform);
@@ -231,12 +231,12 @@ void Model::set_selected(Halfedge_Mesh::ElementRef elem)
                           }}, elem);
 }
 
-std::tuple<GL::Mesh &, GL::Instances &, GL::Instances &, GL::Instances &> Model::shapes()
+auto Model::shapes() -> std::tuple<GL::Mesh &, GL::Instances &, GL::Instances &, GL::Instances &>
 {
     return {face_mesh, spheres, cylinders, arrows};
 }
 
-std::optional<Halfedge_Mesh::ElementRef> Model::selected_element()
+auto Model::selected_element() -> std::optional<Halfedge_Mesh::ElementRef>
 {
 
     if (!my_mesh)
@@ -333,7 +333,7 @@ void Model::halfedge_viz(Halfedge_Mesh::HalfedgeRef h, Mat4 &transform)
         base = h->next()->next();
     } else if (base->vertex() == v_1)
     {
-        Halfedge_Mesh::HalfedgeRef hf = h;
+        auto hf = h;
         do
         {
             hf = hf->next();
@@ -370,10 +370,10 @@ void Model::face_viz(Halfedge_Mesh::FaceRef face, std::vector<GL::Mesh::Vert> &v
     std::vector<GL::Mesh::Vert> face_verts;
     unsigned int id = face->id();
 
-    Halfedge_Mesh::HalfedgeRef h = face->halfedge();
+    auto h = face->halfedge();
     do
     {
-        Halfedge_Mesh::VertexRef v = h->vertex();
+        auto v = h->vertex();
         face_verts.push_back({v->pos, {}, 0});
         h = h->next();
     } while (h != face->halfedge());
@@ -480,7 +480,7 @@ void Model::rebuild()
     validate();
 }
 
-bool Model::begin_bevel(std::string &err)
+auto Model::begin_bevel(std::string &err) -> bool
 {
 
     auto sel = selected_element();
@@ -510,7 +510,7 @@ bool Model::begin_bevel(std::string &err)
         return false;
     }
 
-    Halfedge_Mesh::FaceRef face = new_face.value();
+    auto face = new_face.value();
 
     my_mesh->render_dirty_flag = true;
     set_selected(face);
@@ -527,7 +527,7 @@ bool Model::begin_bevel(std::string &err)
     return true;
 }
 
-bool Model::begin_extrude(std::string &err)
+auto Model::begin_extrude(std::string &err) -> bool
 {
 
     auto sel = selected_element();
@@ -579,7 +579,7 @@ bool Model::begin_extrude(std::string &err)
                                  }, [](auto) -> bool { return false; }}, elem);
 }
 
-bool Model::keydown(Widgets &widgets, SDL_Keysym key, Camera &cam)
+auto Model::keydown(Widgets &widgets, SDL_Keysym key, Camera &cam) -> bool
 {
 
     auto sel = selected_element();
@@ -641,7 +641,7 @@ bool Model::keydown(Widgets &widgets, SDL_Keysym key, Camera &cam)
 }
 
 template<typename T>
-std::string Model::update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, Halfedge_Mesh::ElementRef ref, T &&op)
+auto Model::update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, Halfedge_Mesh::ElementRef ref, T &&op) -> std::string
 {
 
     unsigned int id = Halfedge_Mesh::id_of(ref);
@@ -663,7 +663,7 @@ std::string Model::update_mesh(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&be
 }
 
 template<typename T>
-std::string Model::update_mesh_global(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, T &&op)
+auto Model::update_mesh_global(Undo &undo, Scene_Object &obj, Halfedge_Mesh &&before, T &&op) -> std::string
 {
 
     bool success = op(*my_mesh);
@@ -683,7 +683,7 @@ std::string Model::update_mesh_global(Undo &undo, Scene_Object &obj, Halfedge_Me
     return err;
 }
 
-std::string Model::validate()
+auto Model::validate() -> std::string
 {
 
     auto valid = my_mesh->validate();
@@ -719,7 +719,7 @@ void Model::zoom_to(Halfedge_Mesh::ElementRef ref, Camera &cam)
     cam.look_at(center, pos);
 }
 
-std::optional<std::reference_wrapper<Scene_Object>> Model::set_my_obj(Scene_Maybe obj_opt)
+auto Model::set_my_obj(Scene_Maybe obj_opt) -> std::optional<std::reference_wrapper<Scene_Object>>
 {
 
     if (!obj_opt.has_value())
@@ -735,7 +735,7 @@ std::optional<std::reference_wrapper<Scene_Object>> Model::set_my_obj(Scene_Mayb
         return std::nullopt;
     }
 
-    Scene_Object &obj = item.get<Scene_Object>();
+    auto &obj = item.get<Scene_Object>();
     if (obj.opt.shape_type != PT::Shape_Type::none)
     {
         my_mesh = nullptr;
@@ -765,7 +765,7 @@ std::optional<std::reference_wrapper<Scene_Object>> Model::set_my_obj(Scene_Mayb
     return obj;
 }
 
-std::string Model::UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj_opt, Camera &camera)
+auto Model::UIsidebar(Undo &undo, Widgets &widgets, Scene_Maybe obj_opt, Camera &camera) -> std::string
 {
 
     if (ImGui::CollapsingHeader("Edit Colors"))
@@ -1107,7 +1107,7 @@ void Model::render(Scene_Maybe obj_opt, Widgets &widgets, Camera &cam)
     }
 }
 
-std::string Model::end_transform(Widgets &widgets, Undo &undo, Scene_Object &obj)
+auto Model::end_transform(Widgets &widgets, Undo &undo, Scene_Object &obj) -> std::string
 {
 
     obj.set_mesh_dirty();
@@ -1124,14 +1124,14 @@ std::string Model::end_transform(Widgets &widgets, Undo &undo, Scene_Object &obj
     return err;
 }
 
-Vec3 Model::selected_pos()
+auto Model::selected_pos() -> Vec3
 {
     auto elem = selected_element();
     assert(elem.has_value());
     return Halfedge_Mesh::center_of(*elem);
 }
 
-std::string Model::select(Widgets &widgets, Scene_ID click, Vec3 cam, Vec2 spos, Vec3 dir)
+auto Model::select(Widgets &widgets, Scene_ID click, Vec3 cam, Vec2 spos, Vec3 dir) -> std::string
 {
 
     if (click && widgets.active == Widget_Type::bevel && click == selected_elem_id)
@@ -1189,12 +1189,12 @@ std::string Model::select(Widgets &widgets, Scene_ID click, Vec3 cam, Vec2 spos,
     return {};
 }
 
-unsigned int Model::select_id() const
+auto Model::select_id() const -> unsigned int
 {
     return selected_elem_id;
 }
 
-unsigned int Model::hover_id() const
+auto Model::hover_id() const -> unsigned int
 {
     return hovered_elem_id;
 }

@@ -1,6 +1,8 @@
 #include <imgui/imgui.h>
 #include <nfd/nfd.h>
 
+#include <utility>
+
 #include "manager.h"
 
 #include "../geometry/util.h"
@@ -22,7 +24,7 @@ void Manager::update_dim(Vec2 dim)
     animate.update_dim(dim);
 }
 
-Vec3 Color::axis(Axis a)
+auto Color::axis(Axis a) -> Vec3
 {
     switch (a)
     {
@@ -35,10 +37,10 @@ Vec3 Color::axis(Axis a)
         default:
             assert(false);
     }
-    return Vec3();
+    return {};
 }
 
-bool Manager::quit(Undo &undo)
+auto Manager::quit(Undo &undo) -> bool
 {
     if (!already_denied_save && n_actions_at_last_save != undo.n_actions())
     {
@@ -66,7 +68,7 @@ void Manager::invalidate_obj(Scene_ID id)
     }
 }
 
-bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
+auto Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam) -> bool
 {
 
     if (widgets.is_dragging())
@@ -164,14 +166,14 @@ bool Manager::keydown(Undo &undo, SDL_Keysym key, Scene &scene, Camera &cam)
     return false;
 }
 
-static bool postfix(const std::string &path, const std::string &type)
+static auto postfix(const std::string &path, const std::string &type) -> bool
 {
     if (path.length() >= type.length())
         return path.compare(path.length() - type.length(), type.length(), type) == 0;
     return false;
 }
 
-bool Manager::save_scene(Scene &scene, Undo &undo)
+auto Manager::save_scene(Scene &scene, Undo &undo) -> bool
 {
     if (save_file.empty())
     {
@@ -197,7 +199,7 @@ bool Manager::save_scene(Scene &scene, Undo &undo)
     return error.empty();
 }
 
-bool Manager::write_scene(Scene &scene)
+auto Manager::write_scene(Scene &scene) -> bool
 {
 
     char *path = nullptr;
@@ -219,7 +221,7 @@ bool Manager::write_scene(Scene &scene)
 
 void Manager::set_file(std::string save)
 {
-    save_file = save;
+    save_file = std::move(save);
 }
 
 void Manager::load_scene(Scene &scene, Undo &undo, bool clear)
@@ -405,7 +407,7 @@ void Manager::material_edit_gui(Undo &undo, Scene_ID obj_id, Material &material)
     }
 }
 
-Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &old_pose)
+auto Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &old_pose) -> Mode
 {
     Pose &pose = item.pose();
 
@@ -445,7 +447,7 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
     if (item.is<Scene_Object>())
     {
 
-        Scene_Object &obj = item.get<Scene_Object>();
+        auto &obj = item.get<Scene_Object>();
         static Scene_Object::Options old_opt;
         Scene_Object::Options start_opt = obj.opt;
 
@@ -593,7 +595,7 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
     } else if (item.is<Scene_Light>())
     {
 
-        Scene_Light &light = item.get<Scene_Light>();
+        auto &light = item.get<Scene_Light>();
         if (ImGui::CollapsingHeader("Edit Light"))
         {
             ImGui::Indent();
@@ -604,7 +606,7 @@ Mode Manager::item_options(Undo &undo, Mode cur_mode, Scene_Item &item, Pose &ol
     } else if (item.is<Scene_Particles>())
     {
 
-        Scene_Particles &particles = item.get<Scene_Particles>();
+        auto &particles = item.get<Scene_Particles>();
         if (ImGui::CollapsingHeader("Edit Emitter"))
         {
             ImGui::Indent();
@@ -705,7 +707,7 @@ void Manager::light_edit_gui(Undo &undo, Scene_Light &light)
         undo.update_light(light.id(), old_opt);
 }
 
-bool Manager::wrap_button(std::string label)
+auto Manager::wrap_button(std::string label) -> bool
 {
     ImGuiStyle &style = ImGui::GetStyle();
     float available_w = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
@@ -896,7 +898,7 @@ void Manager::UInew_light(Scene &scene, Undo &undo)
     ImGui::SetNextWindowSizeConstraints({200.0f, 0.0f}, {FLT_MAX, FLT_MAX});
     ImGui::Begin("New Light", &new_light_window, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-    static Spectrum color = Spectrum(1.0f);
+    static auto color = Spectrum(1.0f);
     static float intensity = 1.0f;
 
     ImGui::Text("Radiance");
@@ -1193,17 +1195,17 @@ void Manager::render_ui(Scene &scene, Undo &undo, Camera &cam)
     set_error(animate.pump_output(scene));
 }
 
-Rig &Manager::get_rig()
+auto Manager::get_rig() -> Rig &
 {
     return rig;
 }
 
-Render &Manager::get_render()
+auto Manager::get_render() -> Render &
 {
     return render;
 }
 
-Animate &Manager::get_animate()
+auto Manager::get_animate() -> Animate &
 {
     return animate;
 }
@@ -1301,7 +1303,7 @@ void Manager::UIerror()
     ImGui::End();
 }
 
-float Manager::UImenu(Scene &scene, Undo &undo)
+auto Manager::UImenu(Scene &scene, Undo &undo) -> float
 {
 
     auto mode_button = [this](Gui::Mode m, std::string name) -> bool
@@ -1528,7 +1530,7 @@ void Manager::drag_to(Scene &scene, Vec3 cam, Vec2 spos, Vec3 dir)
     }
 }
 
-bool Manager::select(Scene &scene, Undo &undo, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir)
+auto Manager::select(Scene &scene, Undo &undo, Scene_ID id, Vec3 cam, Vec2 spos, Vec3 dir) -> bool
 {
 
     widgets.select(id);
