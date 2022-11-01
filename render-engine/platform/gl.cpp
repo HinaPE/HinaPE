@@ -8,7 +8,7 @@ namespace GL
 
 const char *Sample_Count_Names[(int) Sample_Count::count] = {"1", "2", "4", "8", "16", "32"};
 
-int MSAA::n_options()
+auto MSAA::n_options() -> int
 {
     int max = max_msaa();
     if (max >= 32)
@@ -24,7 +24,7 @@ int MSAA::n_options()
     return 1;
 }
 
-int MSAA::n_samples()
+auto MSAA::n_samples() -> int
 {
     switch (samples)
     {
@@ -73,12 +73,12 @@ void color_mask(bool enable)
     glColorMask(enable, enable, enable, enable);
 }
 
-std::string version()
+auto version() -> std::string
 {
     return std::string((char *) glGetString(GL_VERSION));
 }
 
-std::string renderer()
+auto renderer() -> std::string
 {
     return std::string((char *) glGetString(GL_RENDERER));
 }
@@ -164,7 +164,7 @@ void viewport(Vec2 dim)
     glViewport(0, 0, (GLsizei) dim.x, (GLsizei) dim.y);
 }
 
-int max_msaa()
+auto max_msaa() -> int
 {
     int samples;
     glGetIntegerv(GL_MAX_SAMPLES, &samples);
@@ -177,7 +177,7 @@ Tex2D::Tex2D()
 }
 
 Tex2D::Tex2D(Tex2D &&src)
-{
+ noexcept {
     id = src.id;
     src.id = 0;
 }
@@ -190,7 +190,7 @@ Tex2D::~Tex2D()
 }
 
 void Tex2D::operator=(Tex2D &&src)
-{
+ noexcept {
     if (id)
         glDeleteTextures(1, &id);
     id = src.id;
@@ -216,7 +216,7 @@ void Tex2D::image(int w, int h, unsigned char *img)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-TexID Tex2D::get_id() const
+auto Tex2D::get_id() const -> TexID
 {
     return id;
 }
@@ -233,7 +233,7 @@ Mesh::Mesh(std::vector<Vert> &&vertices, std::vector<Index> &&indices)
 }
 
 Mesh::Mesh(Mesh &&src)
-{
+ noexcept {
     vao = src.vao;
     src.vao = 0;
     ebo = src.ebo;
@@ -251,7 +251,7 @@ Mesh::Mesh(Mesh &&src)
 }
 
 void Mesh::operator=(Mesh &&src)
-{
+ noexcept {
     destroy();
     vao = src.vao;
     src.vao = 0;
@@ -343,41 +343,41 @@ void Mesh::recreate(std::vector<Vert> &&vertices, std::vector<Index> &&indices)
     n_elem = (GLuint) _idxs.size();
 }
 
-GLuint Mesh::tris() const
+auto Mesh::tris() const -> GLuint
 {
     return n_elem / 3;
 }
 
-Mesh Mesh::copy() const
+auto Mesh::copy() const -> Mesh
 {
     std::vector<Vert> verts = _verts;
     std::vector<Index> idxs = _idxs;
     return Mesh(std::move(verts), std::move(idxs));
 }
 
-std::vector<Mesh::Vert> &Mesh::edit_verts()
+auto Mesh::edit_verts() -> std::vector<Mesh::Vert> &
 {
     dirty = true;
     return _verts;
 }
 
-std::vector<Mesh::Index> &Mesh::edit_indices()
+auto Mesh::edit_indices() -> std::vector<Mesh::Index> &
 {
     dirty = true;
     return _idxs;
 }
 
-const std::vector<Mesh::Vert> &Mesh::verts() const
+auto Mesh::verts() const -> const std::vector<Mesh::Vert> &
 {
     return _verts;
 }
 
-const std::vector<Mesh::Index> &Mesh::indices() const
+auto Mesh::indices() const -> const std::vector<Mesh::Index> &
 {
     return _idxs;
 }
 
-BBox Mesh::bbox() const
+auto Mesh::bbox() const -> BBox
 {
     return _bbox;
 }
@@ -396,7 +396,7 @@ Instances::Instances(Mesh &&mesh) : _mesh(std::move(mesh))
     create();
 }
 
-Instances::Instances(Instances &&src)
+Instances::Instances(Instances &&src) noexcept
 {
     _mesh = std::move(src._mesh);
     data = std::move(src.data);
@@ -411,13 +411,13 @@ Instances::~Instances()
     destroy();
 }
 
-const Mesh &Instances::mesh() const
+auto Instances::mesh() const -> const Mesh &
 {
     return _mesh;
 }
 
 void Instances::operator=(Instances &&src)
-{
+ noexcept {
     destroy();
     _mesh = std::move(src._mesh);
     data = std::move(src.data);
@@ -464,13 +464,13 @@ void Instances::render()
     glBindVertexArray(0);
 }
 
-Instances::Info &Instances::get(size_t idx)
+auto Instances::get(size_t idx) -> Instances::Info &
 {
     dirty = true;
     return data[idx];
 }
 
-size_t Instances::add(const Mat4 &transform, GLuint id)
+auto Instances::add(const Mat4 &transform, GLuint id) -> size_t
 {
     data.emplace_back(Info{id, transform});
     dirty = true;
@@ -519,7 +519,7 @@ Lines::Lines(float thickness) : thickness(thickness)
 }
 
 Lines::Lines(Lines &&src)
-{
+ noexcept {
     dirty = src.dirty;
     src.dirty = true;
     thickness = src.thickness;
@@ -633,16 +633,14 @@ void Lines::destroy()
     dirty = false;
 }
 
-Shader::Shader()
-{
-}
+Shader::Shader() = default;
 
 Shader::Shader(std::string vertex, std::string fragment)
 {
     load(vertex, fragment);
 }
 
-Shader::Shader(Shader &&src)
+Shader::Shader(Shader &&src) noexcept
 {
     program = src.program;
     src.program = 0;
@@ -652,7 +650,7 @@ Shader::Shader(Shader &&src)
     src.f = 0;
 }
 
-void Shader::operator=(Shader &&src)
+void Shader::operator=(Shader &&src) noexcept
 {
     destroy();
     program = src.program;
@@ -732,14 +730,13 @@ void Shader::uniform(std::string name, bool b) const
     glUniform1i(loc(name), b);
 }
 
-GLuint Shader::loc(std::string name) const
+auto Shader::loc(std::string name) const -> GLuint
 {
     return glGetUniformLocation(program, name.c_str());
 }
 
 void Shader::load(std::string vertex, std::string fragment)
 {
-
     v = glCreateShader(GL_VERTEX_SHADER);
     f = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar *vs_c = vertex.c_str();
@@ -766,7 +763,7 @@ void Shader::load(std::string vertex, std::string fragment)
     glLinkProgram(program);
 }
 
-bool Shader::validate(GLuint program)
+auto Shader::validate(GLuint program) -> bool
 {
 
     GLint compiled = 0;
@@ -806,7 +803,7 @@ void Framebuffer::setup(int outputs, Vec2 dim, int samples, bool d)
     resize(dim, samples);
 }
 
-Framebuffer::Framebuffer(Framebuffer &&src)
+Framebuffer::Framebuffer(Framebuffer &&src) noexcept
 {
     output_textures = std::move(src.output_textures);
     depth_tex = src.depth_tex;
@@ -821,7 +818,7 @@ Framebuffer::Framebuffer(Framebuffer &&src)
     src.s = 0;
 }
 
-void Framebuffer::operator=(Framebuffer &&src)
+void Framebuffer::operator=(Framebuffer &&src) noexcept
 {
     destroy();
     output_textures = std::move(src.output_textures);
@@ -949,18 +946,18 @@ void Framebuffer::bind() const
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 }
 
-GLuint Framebuffer::get_output(int buf) const
+auto Framebuffer::get_output(int buf) const -> GLuint
 {
     assert(buf >= 0 && buf < (int) output_textures.size());
     return output_textures[buf];
 }
 
-int Framebuffer::bytes() const
+auto Framebuffer::bytes() const -> int
 {
     return w * h * 4;
 }
 
-int Framebuffer::samples() const
+auto Framebuffer::samples() const -> int
 {
     return s;
 }
@@ -970,13 +967,13 @@ void Framebuffer::flush() const
     glFlush();
 }
 
-GLuint Framebuffer::get_depth() const
+auto Framebuffer::get_depth() const -> GLuint
 {
     assert(depth_tex);
     return depth_tex;
 }
 
-bool Framebuffer::can_read_at() const
+auto Framebuffer::can_read_at() const -> bool
 {
     return is_gl45 && s == 1;
 }
@@ -1034,7 +1031,7 @@ void Framebuffer::blit_to_screen(int buf, Vec2 dim) const
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-bool Framebuffer::is_multisampled() const
+auto Framebuffer::is_multisampled() const -> bool
 {
     return s > 1;
 }

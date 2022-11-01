@@ -18,7 +18,6 @@ Model::Model() : spheres(Util::sphere_mesh(0.05f, 1)), cylinders(Util::cyl_mesh_
 
 void Model::begin_transform()
 {
-
     my_mesh->copy_to(old_mesh);
 
     auto elem = *selected_element();

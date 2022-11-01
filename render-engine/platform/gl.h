@@ -51,11 +51,11 @@ class Tex2D
 public:
     Tex2D();
     Tex2D(const Tex2D &src) = delete;
-    Tex2D(Tex2D &&src);
+    Tex2D(Tex2D &&src) noexcept ;
     ~Tex2D();
 
     void operator=(const Tex2D &src) = delete;
-    void operator=(Tex2D &&src);
+    void operator=(Tex2D &&src) noexcept ;
 
     void image(int w, int h, unsigned char *img);
     auto get_id() const -> TexID;
@@ -79,11 +79,11 @@ public:
     Mesh();
     Mesh(std::vector<Vert> &&vertices, std::vector<Index> &&indices);
     Mesh(const Mesh &src) = delete;
-    Mesh(Mesh &&src);
+    Mesh(Mesh &&src) noexcept ;
     ~Mesh();
 
     void operator=(const Mesh &src) = delete;
-    void operator=(Mesh &&src);
+    void operator=(Mesh &&src) noexcept ;
 
     /// Assumes proper shader is already bound
     void render();
@@ -119,11 +119,12 @@ class Instances
 public:
     Instances(GL::Mesh &&mesh);
     Instances(const Instances &src) = delete;
-    Instances(Instances &&src);
+    Instances(Instances &&src) noexcept ;
     ~Instances();
 
     void operator=(const Instances &src) = delete;
-    void operator=(Instances &&src);
+    void operator=(Instances &&src) noexcept ;
+
 
     struct Info
     {
@@ -161,7 +162,7 @@ public:
     Lines(float thickness = 1.0f);
     Lines(std::vector<Vert> &&verts, float thickness = 1.0f);
     Lines(const Lines &src) = delete;
-    Lines(Lines &&src);
+    Lines(Lines &&src) noexcept ;
     ~Lines();
 
     void operator=(const Lines &src) = delete;
@@ -191,15 +192,17 @@ public:
     Shader();
     Shader(std::string vertex_file, std::string fragment_file);
     Shader(const Shader &src) = delete;
-    Shader(Shader &&src);
+    Shader(Shader &&src) noexcept ;
     ~Shader();
 
     void operator=(const Shader &src) = delete;
-    void operator=(Shader &&src);
+    void operator=(Shader &&src) noexcept ;
 
+public:
     void bind() const;
     void load(std::string vertex, std::string fragment);
 
+public:
     void uniform(std::string name, const Mat4 &mat) const;
     void uniform(std::string name, Vec3 vec3) const;
     void uniform(std::string name, Vec2 vec2) const;
@@ -228,11 +231,11 @@ public:
     Framebuffer();
     Framebuffer(int outputs, Vec2 dim, int samples = 1, bool depth = true);
     Framebuffer(const Framebuffer &src) = delete;
-    Framebuffer(Framebuffer &&src);
+    Framebuffer(Framebuffer &&src) noexcept ;
     ~Framebuffer();
 
     void operator=(const Framebuffer &src) = delete;
-    void operator=(Framebuffer &&src);
+    void operator=(Framebuffer &&src) noexcept ;
 
     static void bind_screen();
 
