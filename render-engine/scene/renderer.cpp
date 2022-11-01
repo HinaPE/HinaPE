@@ -12,10 +12,7 @@ static const int DEFAULT_SAMPLES = 4;
 Renderer::Renderer(Vec2 dim) : framebuffer(2, dim, DEFAULT_SAMPLES, true), id_resolve(1, dim, 1, false), save_buffer(1, dim, DEFAULT_SAMPLES, true), save_output(1, dim, 1, false), mesh_shader(GL::Shaders::mesh_v, GL::Shaders::mesh_f),
                                line_shader(GL::Shaders::line_v, GL::Shaders::line_f), inst_shader(GL::Shaders::inst_v, GL::Shaders::mesh_f), dome_shader(GL::Shaders::dome_v, GL::Shaders::dome_f),
                                texture_mesh_shader(GL::Shader("vertex_shader_texture.glsl", "fragment_shader_texture.glsl", "")), _sphere(Util::sphere_mesh(1.0f, 3)), _cyl(Util::cyl_mesh(1.0f, 1.0f, 64, false)), _hemi(Util::hemi_mesh(1.0f)), samples(DEFAULT_SAMPLES),
-                               window_dim(dim), id_buffer(new GLubyte[(int) dim.x * (int) dim.y * 4])
-{
-
-}
+                               window_dim(dim), id_buffer(new GLubyte[(int) dim.x * (int) dim.y * 4]) {}
 
 Renderer::~Renderer()
 {
@@ -36,7 +33,6 @@ void Renderer::setup(Vec2 dim)
 
 void Renderer::update_dim(Vec2 dim)
 {
-
     window_dim = dim;
     delete[] id_buffer;
     id_buffer = new GLubyte[(int) dim.x * (int) dim.y * 4]();
@@ -59,7 +55,6 @@ void Renderer::proj(const Mat4 &proj)
 
 void Renderer::complete()
 {
-
     framebuffer.blit_to(1, id_resolve, false);
 
     if (!id_resolve.can_read_at())
@@ -70,7 +65,6 @@ void Renderer::complete()
 
 void Renderer::begin()
 {
-
     framebuffer.clear(0, Vec4(Gui::Color::background, 1.0f));
     framebuffer.clear(1, Vec4{0.0f, 0.0f, 0.0f, 1.0f});
     framebuffer.clear_d();

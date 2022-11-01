@@ -334,7 +334,6 @@ void Mesh::update()
 
 void Mesh::recreate(std::vector<Vert> &&vertices, std::vector<Index> &&indices)
 {
-
     dirty = true;
     _verts = std::move(vertices);
     _idxs = std::move(indices);
@@ -1546,4 +1545,5 @@ void main() {
 })";
 
 } // namespace Shaders
+
 } // namespace GL

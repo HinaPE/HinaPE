@@ -363,7 +363,6 @@ using vp_pair = std::pair<std::vector<Vec3>, std::vector<std::vector<Halfedge_Me
 
 static auto load_mesh(const aiMesh *mesh) -> vp_pair
 {
-
     std::vector<Vec3> verts;
 
     for (unsigned int j = 0; j < mesh->mNumVertices; j++)
@@ -467,7 +466,6 @@ static auto load_light(aiLight *ai_light, bool hemi, bool sphere) -> Scene_Light
 
 static auto load_material(aiMaterial *ai_mat, float &was_sphere) -> Material::Options
 {
-
     Material::Options mat;
 
     aiColor3D albedo;
@@ -529,12 +527,10 @@ static void
 load_node(Scene &scobj, std::vector<std::string> &errors, std::unordered_map<aiNode *, Scene_ID> &node_to_obj, std::unordered_map<aiNode *, Joint *> &node_to_bone,
           std::unordered_map<aiNode *, Skeleton::IK_Handle *> &node_to_ik, const aiScene *scene, aiNode *node, aiMatrix4x4 transform)
 {
-
     transform = transform * node->mTransformation;
 
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
-
         const aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
 
         std::string name;
@@ -577,7 +573,6 @@ load_node(Scene &scobj, std::vector<std::string> &errors, std::unordered_map<aiN
 
         if (was_sphere > 0.0f)
         {
-
             Scene_Object obj(scobj.reserve_id(), p, GL::Mesh(), name);
             obj.opt.shape_type = PT::Shape_Type::sphere;
             obj.opt.shape = PT::Shape(PT::Sphere(was_sphere));
@@ -585,7 +580,6 @@ load_node(Scene &scobj, std::vector<std::string> &errors, std::unordered_map<aiN
 
         } else
         {
-
             Halfedge_Mesh hemesh;
             std::string err = hemesh.from_poly(polys, verts);
             if (!err.empty())
@@ -612,7 +606,6 @@ load_node(Scene &scobj, std::vector<std::string> &errors, std::unordered_map<aiN
 
         if (mesh->mNumBones)
         {
-
             Skeleton &skeleton = new_obj.armature;
             aiNode *arm_node = mesh->mBones[0]->mArmature;
             if (arm_node)
@@ -806,7 +799,6 @@ auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::st
         size_t special = name.find("-S3D-");
         if (special != std::string::npos)
         {
-
             was_exported_from_s3d = true;
             export_power = ai_light->mAttenuationQuadratic;
 
@@ -824,7 +816,6 @@ auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::st
 
         if (is_emitter)
         {
-
             Scene_Particles particles(reserve_id(), p, name);
             node_to_obj[node] = particles.id();
 
@@ -849,7 +840,6 @@ auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::st
 
         } else
         {
-
             aiColor3D color;
             Scene_Light light(Light_Type::point, reserve_id(), p, name);
 

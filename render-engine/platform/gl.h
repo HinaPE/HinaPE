@@ -198,7 +198,7 @@ public:
 
 public:
     void bind() const;
-    void load(const std::string& vertex, const std::string& fragment);
+    void load(const std::string &vertex, const std::string &fragment);
 
 public:
     void uniform(std::string name, const Mat4 &mat) const;

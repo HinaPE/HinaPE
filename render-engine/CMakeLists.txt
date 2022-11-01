@@ -17,9 +17,11 @@ file(GLOB_RECURSE HINA_RENDER_ENGINE_LIB "lib/*.cpp" "lib/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_TO_IMPL "reference/*.cpp" "reference/*.h" "reference/*.inl")
 set(HINA_RENDER_ENGINE_PLATFORM
         "platform/gl.cpp"
-        "platform/platform.cpp"
         "platform/gl.h"
+        "platform/platform.cpp"
         "platform/platform.h"
+        "platform/mesh.cpp"
+        "platform/mesh.h"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_opengl3.cpp"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_opengl3.h"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_sdl.cpp"
