@@ -26,7 +26,7 @@ public:
 
     void proj(const Mat4 &proj);
     void update_dim(Vec2 dim);
-    void settings_gui(bool *open);
+//    void settings_gui(bool *open);
     void set_samples(int samples);
     auto read_id(Vec2 pos) -> unsigned int;
 
@@ -88,7 +88,7 @@ private:
     static inline Renderer *data = nullptr;
 
     GL::Framebuffer framebuffer, id_resolve, save_buffer, save_output;
-    GL::Shader mesh_shader, line_shader, inst_shader, dome_shader;
+    GL::Shader mesh_shader, line_shader, inst_shader, dome_shader, texture_mesh_shader;
     GL::Mesh _sphere, _cyl, _hemi;
 
     int samples;

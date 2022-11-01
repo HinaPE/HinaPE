@@ -9,12 +9,12 @@
 
 static const int DEFAULT_SAMPLES = 4;
 
-Renderer::Renderer(Vec2 dim) : framebuffer(2, dim, DEFAULT_SAMPLES, true), id_resolve(1, dim, 1, false), save_buffer(1, dim, DEFAULT_SAMPLES, true),
-                               save_output(1, dim, 1, false), mesh_shader(GL::Shaders::mesh_v, GL::Shaders::mesh_f),
-                               line_shader(GL::Shaders::line_v, GL::Shaders::line_f), inst_shader(GL::Shaders::inst_v, GL::Shaders::mesh_f),
-                               dome_shader(GL::Shaders::dome_v, GL::Shaders::dome_f), _sphere(Util::sphere_mesh(1.0f, 3)), _cyl(Util::cyl_mesh(1.0f, 1.0f, 64, false)),
-                               _hemi(Util::hemi_mesh(1.0f)), samples(DEFAULT_SAMPLES), window_dim(dim), id_buffer(new GLubyte[(int) dim.x * (int) dim.y * 4])
+Renderer::Renderer(Vec2 dim) : framebuffer(2, dim, DEFAULT_SAMPLES, true), id_resolve(1, dim, 1, false), save_buffer(1, dim, DEFAULT_SAMPLES, true), save_output(1, dim, 1, false), mesh_shader(GL::Shaders::mesh_v, GL::Shaders::mesh_f),
+                               line_shader(GL::Shaders::line_v, GL::Shaders::line_f), inst_shader(GL::Shaders::inst_v, GL::Shaders::mesh_f), dome_shader(GL::Shaders::dome_v, GL::Shaders::dome_f),
+                               texture_mesh_shader(GL::Shader("vertex_shader_texture.glsl", "fragment_shader_texture.glsl", "")), _sphere(Util::sphere_mesh(1.0f, 3)), _cyl(Util::cyl_mesh(1.0f, 1.0f, 64, false)), _hemi(Util::hemi_mesh(1.0f)), samples(DEFAULT_SAMPLES),
+                               window_dim(dim), id_buffer(new GLubyte[(int) dim.x * (int) dim.y * 4])
 {
+
 }
 
 Renderer::~Renderer()
@@ -144,7 +144,6 @@ void Renderer::lines(const GL::Lines &lines, const Mat4 &view, const Mat4 &model
 
 void Renderer::skydome(const Mat4 &rotation, Vec3 color, float cosine, const GL::Tex2D &tex)
 {
-
     tex.bind();
     dome_shader.bind();
     dome_shader.uniform("tex", 0);
@@ -157,7 +156,6 @@ void Renderer::skydome(const Mat4 &rotation, Vec3 color, float cosine, const GL:
 
 void Renderer::skydome(const Mat4 &rotation, Vec3 color, float cosine)
 {
-
     dome_shader.bind();
     dome_shader.uniform("use_texture", false);
     dome_shader.uniform("color", color);

@@ -560,7 +560,6 @@ Lines::~Lines()
 
 void Lines::update() const
 {
-
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vert) * vertices.size(), vertices.data(), GL_DYNAMIC_DRAW);
@@ -571,7 +570,6 @@ void Lines::update() const
 
 void Lines::render(bool smooth) const
 {
-
     if (dirty)
         update();
 
@@ -643,9 +641,24 @@ void Lines::destroy()
 
 Shader::Shader() = default;
 
-Shader::Shader(std::string vertex, std::string fragment)
+Shader::Shader(const std::string &vertex_src, const std::string &fragment_src)
 {
-    load(vertex, fragment);
+    load(vertex_src, fragment_src);
+}
+
+Shader::Shader(const std::string &vertex_path, const std::string &fragment_path, const std::string &geometry_path)
+{
+    std::ifstream vertex_shader_stream(HINAPE_SHADER_DIR + vertex_path);
+    std::string vertex_shader_src((std::istreambuf_iterator<char>(vertex_shader_stream)), std::istreambuf_iterator<char>());
+
+    std::ifstream fragment_shader_stream(HINAPE_SHADER_DIR + fragment_path);
+    std::string fragment_shader_src((std::istreambuf_iterator<char>(fragment_shader_stream)), std::istreambuf_iterator<char>());
+
+    // TODO: Geometry shader
+    //    std::ifstream geometry_shader_stream(HINAPE_SHADER_DIR + geometry_path);
+    //    std::string geometry_shader_src((std::istreambuf_iterator<char>(geometry_shader_stream)), std::istreambuf_iterator<char>());
+
+    load(vertex_shader_src, fragment_shader_src);
 }
 
 Shader::Shader(Shader &&src) noexcept
@@ -745,7 +758,7 @@ auto Shader::loc(std::string name) const -> GLuint
     return glGetUniformLocation(program, name.c_str());
 }
 
-void Shader::load(std::string vertex, std::string fragment)
+void Shader::load(const std::string &vertex, const std::string &fragment)
 {
     v = glCreateShader(GL_VERTEX_SHADER);
     f = glCreateShader(GL_FRAGMENT_SHADER);
@@ -795,9 +808,7 @@ auto Shader::validate(GLuint program) -> bool
     return true;
 }
 
-Framebuffer::Framebuffer()
-{
-}
+Framebuffer::Framebuffer() = default;
 
 Framebuffer::Framebuffer(int outputs, Vec2 dim, int samples, bool d)
 {

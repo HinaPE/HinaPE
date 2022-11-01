@@ -11,10 +11,7 @@
 namespace GL
 {
 
-enum class Sample_Count
-{
-    _1, _2, _4, _8, _16, _32, count
-};
+enum class Sample_Count { _1, _2, _4, _8, _16, _32, count };
 extern const char *Sample_Count_Names[(int) Sample_Count::count];
 
 struct MSAA
@@ -190,7 +187,8 @@ class Shader
 {
 public:
     Shader();
-    Shader(std::string vertex_file, std::string fragment_file);
+    Shader(const std::string &vertex_src, const std::string &fragment_src); // legacy, to be removed soon
+    Shader(const std::string &vertex_path, const std::string &fragment_path, const std::string &geometry_path);
     Shader(const Shader &src) = delete;
     Shader(Shader &&src) noexcept;
     ~Shader();
@@ -200,7 +198,7 @@ public:
 
 public:
     void bind() const;
-    void load(std::string vertex, std::string fragment);
+    void load(const std::string& vertex, const std::string& fragment);
 
 public:
     void uniform(std::string name, const Mat4 &mat) const;

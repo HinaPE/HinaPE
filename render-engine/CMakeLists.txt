@@ -42,6 +42,7 @@ set(HINA_RENDER_ENGINE_SRC
         )
 
 add_library(HinaPE_Render_Engine ${HINA_RENDER_ENGINE_SRC})
+target_compile_definitions(HinaPE_Render_Engine PUBLIC HINAPE_SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/shader/")
 set_target_properties(HinaPE_Render_Engine PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 
 # setup OS-specific options
