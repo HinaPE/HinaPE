@@ -176,8 +176,8 @@ Tex2D::Tex2D()
     id = 0;
 }
 
-Tex2D::Tex2D(Tex2D &&src)
- noexcept {
+Tex2D::Tex2D(Tex2D &&src) noexcept
+{
     id = src.id;
     src.id = 0;
 }
@@ -189,12 +189,14 @@ Tex2D::~Tex2D()
     id = 0;
 }
 
-void Tex2D::operator=(Tex2D &&src)
- noexcept {
+auto Tex2D::operator=(Tex2D &&src) noexcept -> Tex2D &
+{
     if (id)
         glDeleteTextures(1, &id);
     id = src.id;
     src.id = 0;
+
+    return *this;
 }
 
 void Tex2D::bind(int idx) const
@@ -232,8 +234,8 @@ Mesh::Mesh(std::vector<Vert> &&vertices, std::vector<Index> &&indices)
     recreate(std::move(vertices), std::move(indices));
 }
 
-Mesh::Mesh(Mesh &&src)
- noexcept {
+Mesh::Mesh(Mesh &&src) noexcept
+{
     vao = src.vao;
     src.vao = 0;
     ebo = src.ebo;
@@ -250,8 +252,8 @@ Mesh::Mesh(Mesh &&src)
     _idxs = std::move(src._idxs);
 }
 
-void Mesh::operator=(Mesh &&src)
- noexcept {
+auto Mesh::operator=(Mesh &&src) noexcept -> Mesh &
+{
     destroy();
     vao = src.vao;
     src.vao = 0;
@@ -267,6 +269,8 @@ void Mesh::operator=(Mesh &&src)
     src._bbox.reset();
     _verts = std::move(src._verts);
     _idxs = std::move(src._idxs);
+
+    return *this;
 }
 
 Mesh::~Mesh()
@@ -416,8 +420,8 @@ auto Instances::mesh() const -> const Mesh &
     return _mesh;
 }
 
-void Instances::operator=(Instances &&src)
- noexcept {
+auto Instances::operator=(Instances &&src) noexcept -> Instances &
+{
     destroy();
     _mesh = std::move(src._mesh);
     data = std::move(src.data);
@@ -425,6 +429,8 @@ void Instances::operator=(Instances &&src)
     src.vbo = 0;
     dirty = src.dirty;
     src.dirty = true;
+
+    return *this;
 }
 
 void Instances::create()
@@ -518,8 +524,8 @@ Lines::Lines(float thickness) : thickness(thickness)
     create();
 }
 
-Lines::Lines(Lines &&src)
- noexcept {
+Lines::Lines(Lines &&src) noexcept
+{
     dirty = src.dirty;
     src.dirty = true;
     thickness = src.thickness;
@@ -531,7 +537,7 @@ Lines::Lines(Lines &&src)
     vertices = std::move(src.vertices);
 }
 
-void Lines::operator=(Lines &&src)
+auto Lines::operator=(Lines &&src) noexcept -> Lines &
 {
     destroy();
     dirty = src.dirty;
@@ -543,6 +549,8 @@ void Lines::operator=(Lines &&src)
     vbo = src.vbo;
     src.vbo = 0;
     vertices = std::move(src.vertices);
+
+    return *this;
 }
 
 Lines::~Lines()
@@ -650,7 +658,7 @@ Shader::Shader(Shader &&src) noexcept
     src.f = 0;
 }
 
-void Shader::operator=(Shader &&src) noexcept
+auto Shader::operator=(Shader &&src) noexcept -> Shader &
 {
     destroy();
     program = src.program;
@@ -659,6 +667,8 @@ void Shader::operator=(Shader &&src) noexcept
     src.v = 0;
     f = src.f;
     src.f = 0;
+
+    return *this;
 }
 
 Shader::~Shader()
@@ -818,7 +828,7 @@ Framebuffer::Framebuffer(Framebuffer &&src) noexcept
     src.s = 0;
 }
 
-void Framebuffer::operator=(Framebuffer &&src) noexcept
+auto Framebuffer::operator=(Framebuffer &&src) noexcept -> Framebuffer &
 {
     destroy();
     output_textures = std::move(src.output_textures);
@@ -832,6 +842,8 @@ void Framebuffer::operator=(Framebuffer &&src) noexcept
     src.h = 0;
     s = src.s;
     src.s = 0;
+
+    return *this;
 }
 
 Framebuffer::~Framebuffer()

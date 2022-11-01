@@ -696,7 +696,6 @@ load_node(Scene &scobj, std::vector<std::string> &errors, std::unordered_map<aiN
 
 static auto load_flags(Scene::Load_Opts opt) -> unsigned int
 {
-
     unsigned int flags = aiProcess_OptimizeMeshes | aiProcess_FindInvalidData | aiProcess_FindInstances | aiProcess_FindDegenerates;
 
     if (opt.drop_normals)
@@ -735,7 +734,6 @@ static auto load_flags(Scene::Load_Opts opt) -> unsigned int
 
 auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::string file) -> std::string
 {
-
     if (loader.new_scene)
     {
         clear(undo);
@@ -763,7 +761,6 @@ auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::st
     // Load cameras
     if (loader.new_scene && scene->mNumCameras > 0)
     {
-
         auto load_cam = [&](unsigned int i)
         {
             const aiCamera &aiCam = *scene->mCameras[i];
@@ -790,7 +787,6 @@ auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::st
     // Load lights and particle emitters
     for (unsigned int i = 0; i < scene->mNumLights; i++)
     {
-
         aiLight *ai_light = scene->mLights[i];
         aiNode *node = scene->mRootNode->FindNode(ai_light->mName);
 
@@ -945,7 +941,6 @@ auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::st
     // Load animation data
     for (unsigned int i = 0; i < scene->mNumAnimations; i++)
     {
-
         aiAnimation *anim = scene->mAnimations[i];
         for (unsigned int j = 0; j < anim->mNumChannels; j++)
         {

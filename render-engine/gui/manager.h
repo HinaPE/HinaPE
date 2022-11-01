@@ -85,7 +85,7 @@ public:
     static bool wrap_button(std::string label);
 
     // HinaPE 1.1.2
-    void register_physics_system_api(const std::shared_ptr<HinaPE::PhysicsSystemAPI>& api);
+    void register_physics_system_api(const std::shared_ptr<HinaPE::PhysicsSystemAPI> &api);
 
 private:
     void UIerror();
@@ -103,7 +103,7 @@ private:
     static inline const char *scene_file_types = "dae,obj,fbx,glb,gltf,3ds,blend,stl,ply";
     static inline const char *image_file_types = "exr,hdr,hdri,jpg,jpeg,png,tga,bmp,psd,gif";
 
-//    void render_selected(Scene_Object &obj);
+    //    void render_selected(Scene_Object &obj);
     void load_scene(Scene &scene, Undo &undo, bool clear);
     bool write_scene(Scene &scene);
     bool save_scene(Scene &scene, Undo &undo);

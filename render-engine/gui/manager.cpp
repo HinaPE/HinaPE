@@ -201,7 +201,6 @@ auto Manager::save_scene(Scene &scene, Undo &undo) -> bool
 
 auto Manager::write_scene(Scene &scene) -> bool
 {
-
     char *path = nullptr;
     NFD_SaveDialog("dae", nullptr, &path);
     if (path)
@@ -226,7 +225,6 @@ void Manager::set_file(std::string save)
 
 void Manager::load_scene(Scene &scene, Undo &undo, bool clear)
 {
-
     after_save = [this, &scene, &undo, clear](bool success)
     {
         if (!success)
