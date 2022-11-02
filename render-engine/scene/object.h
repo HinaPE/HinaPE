@@ -50,11 +50,7 @@ public:
     void try_make_editable(PT::Shape_Type prev = PT::Shape_Type::none);
     void flip_normals();
 
-    void step(const PT::Object &scene, float dt)
-    {
-        // TODO: temporary disable physics module
-//        sync_physics_result();
-    }
+    void step(const PT::Object &scene, float dt) {}
 
 public:
     Scene_Object() = default;
@@ -65,16 +61,6 @@ public:
     void operator=(const Scene_Object &src) = delete;
     Scene_Object(Scene_Object &&src) = default;
     auto operator=(Scene_Object &&src) -> Scene_Object & = default;
-
-public:
-    // TODO: temporary disable physics module
-    /*
-    void attach_physics_object(std::shared_ptr<HinaPE::PhysicsObject> o);
-    void remove_physics_object();
-    void sync_physics_result();
-    auto get_physics_object_type() const -> HinaPE::PhysicsObjectType;
-    std::shared_ptr<HinaPE::PhysicsObject> physics_object;
-    */
 
 public:
 

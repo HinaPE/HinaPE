@@ -44,8 +44,7 @@ auto Scene_Item::bbox() -> BBox
 
 void Scene_Item::render(const Mat4 &view, bool solid, bool depth_only, bool posed)
 {
-    std::visit(overloaded{[&](Scene_Object &obj) { obj.render(view, solid, depth_only, posed); }, [&](Scene_Light &light) { light.render(view, depth_only, posed); },
-                          [&](Scene_Particles &particles) { particles.render(view, depth_only, posed); }}, data);
+    std::visit(overloaded{[&](Scene_Object &obj) { obj.render(view, solid, depth_only, posed); }, [&](Scene_Light &light) { light.render(view, depth_only, posed); }, [&](Scene_Particles &particles) { particles.render(view, depth_only, posed); }}, data);
 }
 
 auto Scene_Item::id() const -> Scene_ID
@@ -190,7 +189,7 @@ void Scene::erase(Scene_ID id)
     objs.erase(id);
 }
 
-void Scene::for_items(const std::function<void(const Scene_Item &)>& func) const
+void Scene::for_items(const std::function<void(const Scene_Item &)> &func) const
 {
     for (const auto &obj: objs)
     {
@@ -198,7 +197,7 @@ void Scene::for_items(const std::function<void(const Scene_Item &)>& func) const
     }
 }
 
-void Scene::for_items(const std::function<void(Scene_Item &)>& func)
+void Scene::for_items(const std::function<void(Scene_Item &)> &func)
 {
     for (auto &obj: objs)
     {
@@ -287,8 +286,7 @@ static auto matMat(const Mat4 &T) -> aiMatrix4x4
 
 static auto aiMat(aiMatrix4x4 T) -> Mat4
 {
-    return Mat4{Vec4{T[0][0], T[1][0], T[2][0], T[3][0]}, Vec4{T[0][1], T[1][1], T[2][1], T[3][1]}, Vec4{T[0][2], T[1][2], T[2][2], T[3][2]},
-                Vec4{T[0][3], T[1][3], T[2][3], T[3][3]}};
+    return Mat4{Vec4{T[0][0], T[1][0], T[2][0], T[3][0]}, Vec4{T[0][1], T[1][1], T[2][1], T[3][1]}, Vec4{T[0][2], T[1][2], T[2][2], T[3][2]}, Vec4{T[0][3], T[1][3], T[2][3], T[3][3]}};
 }
 
 static auto node_transform(const aiNode *node) -> aiMatrix4x4
@@ -524,8 +522,8 @@ static auto load_material(aiMaterial *ai_mat, float &was_sphere) -> Material::Op
 }
 
 static void
-load_node(Scene &scobj, std::vector<std::string> &errors, std::unordered_map<aiNode *, Scene_ID> &node_to_obj, std::unordered_map<aiNode *, Joint *> &node_to_bone,
-          std::unordered_map<aiNode *, Skeleton::IK_Handle *> &node_to_ik, const aiScene *scene, aiNode *node, aiMatrix4x4 transform)
+load_node(Scene &scobj, std::vector<std::string> &errors, std::unordered_map<aiNode *, Scene_ID> &node_to_obj, std::unordered_map<aiNode *, Joint *> &node_to_bone, std::unordered_map<aiNode *, Skeleton::IK_Handle *> &node_to_ik, const aiScene *scene, aiNode *node,
+          aiMatrix4x4 transform)
 {
     transform = transform * node->mTransformation;
 
@@ -1035,7 +1033,7 @@ auto Scene::load(Scene::Load_Opts loader, Undo &undo, Gui::Manager &gui, std::st
     return stream.str();
 }
 
-static void write_particles(aiLight *ai_light, const Scene_Particles::Options &opt, const std::string& name)
+static void write_particles(aiLight *ai_light, const Scene_Particles::Options &opt, const std::string &name)
 {
 
     Spectrum r = opt.color;

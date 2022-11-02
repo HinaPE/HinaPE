@@ -1605,7 +1605,6 @@ void Manager::refresh_anim(Scene &scene, Undo &undo)
 
 void Manager::render_3d(Scene &scene, Undo &undo, Camera &camera)
 {
-
     Mat4 view = camera.get_view();
 
     animate.update(scene);
