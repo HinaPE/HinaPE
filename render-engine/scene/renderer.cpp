@@ -74,7 +74,6 @@ void Renderer::begin()
 
 void Renderer::save(Scene &scene, const Camera &cam, int w, int h, int s)
 {
-
     Vec2 dim((float) w, (float) h);
 
     save_buffer.resize(dim, s);
@@ -128,7 +127,6 @@ auto Renderer::saved() const -> GLuint
 
 void Renderer::lines(const GL::Lines &lines, const Mat4 &view, const Mat4 &model, float alpha)
 {
-
     Mat4 mvp = _proj * view * model;
     line_shader.bind();
     line_shader.uniform("mvp", mvp);
@@ -165,7 +163,6 @@ void Renderer::sphere(MeshOpt opt)
 
 void Renderer::capsule(MeshOpt opt, const Mat4 &mdl, float height, float rad, BBox &box)
 {
-
     Mat4 T = opt.modelview;
     Mat4 cyl = mdl * Mat4::scale(Vec3{rad, height, rad});
     Mat4 bot = mdl * Mat4::scale(Vec3{rad});
@@ -299,7 +296,6 @@ void Renderer::begin_outline()
 
 void Renderer::end_outline(const Mat4 &view, BBox box)
 {
-
     Mat4 viewproj = _proj * view;
     Vec2 min, max;
     box.screen_rect(viewproj, min, max);
@@ -310,7 +306,6 @@ void Renderer::end_outline(const Mat4 &view, BBox box)
 
 void Renderer::outline(const Mat4 &view, Scene_Item &obj)
 {
-
     Mat4 viewproj = _proj * view;
 
     framebuffer.clear_d();
@@ -325,7 +320,6 @@ void Renderer::outline(const Mat4 &view, Scene_Item &obj)
 
 void Renderer::instances(Renderer::MeshOpt opt, GL::Instances &inst)
 {
-
     inst_shader.bind();
     inst_shader.uniform("use_v_id", opt.per_vert_id);
     inst_shader.uniform("use_i_id", true);
@@ -361,7 +355,6 @@ void Renderer::instances(Renderer::MeshOpt opt, GL::Instances &inst)
 
 void Renderer::halfedge_editor(Renderer::HalfedgeOpt opt)
 {
-
     auto [faces, spheres, cylinders, arrows] = opt.editor.shapes();
 
     MeshOpt fopt = MeshOpt();

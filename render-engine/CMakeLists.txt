@@ -12,7 +12,7 @@ file(GLOB_RECURSE HINA_RENDER_ENGINE_GUI "gui/*.cpp" "gui/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_GEOM "geometry/*.cpp" "geometry/*.h" "geometry/*.inl")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_RAYS "rays/*.cpp" "rays/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_UTIL "util/*.cpp" "util/*.h")
-file(GLOB_RECURSE HINA_RENDER_ENGINE_SCENE "scene/*.cpp" "scene/*.h")
+file(GLOB_RECURSE HINA_RENDER_ENGINE_SCENE "scene/*.cpp" "scene/*.h" "scene_new/*.cpp" "scene_new/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_LIB "lib/*.cpp" "lib/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_TO_IMPL "reference/*.cpp" "reference/*.h" "reference/*.inl")
 set(HINA_RENDER_ENGINE_PLATFORM
