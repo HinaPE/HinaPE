@@ -6,6 +6,10 @@ namespace HinaPE::RenderEngine
 class GraphicsAPI
 {
 public:
+    static void setup();
+    static void shutdown();
+
+public:
     static void wireframe_mode(bool enable);
     static void offset(bool enable);
     static void culling(bool enable);
