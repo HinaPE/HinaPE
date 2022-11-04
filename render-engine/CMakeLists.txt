@@ -6,13 +6,18 @@ option(ClothEngineOption "Enable Cloth Engine(Default: ON)" ON)
 option(RigidBodyEngineOption "Enable RigidBody Engine(Default: ON)" ON)
 
 set(HINAPE_DEPS_DIR "../deps")
+set(HINAPE_COMMON_DIR "../common")
 set(HINAPE_PHYSICS_DIR "../physics-engine")
+
+if (NOT TARGET HinaPE_Common)
+    add_subdirectory(${HINAPE_COMMON_DIR} HinaPE_Common)
+endif ()
 
 file(GLOB_RECURSE HINA_RENDER_ENGINE_GUI "gui/*.cpp" "gui/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_GEOM "geometry/*.cpp" "geometry/*.h" "geometry/*.inl")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_RAYS "rays/*.cpp" "rays/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_UTIL "util/*.cpp" "util/*.h")
-file(GLOB_RECURSE HINA_RENDER_ENGINE_SCENE "scene/*.cpp" "scene/*.h" "scene_new/*.cpp" "scene_new/*.h")
+file(GLOB_RECURSE HINA_RENDER_ENGINE_SCENE "scene/*.cpp" "scene/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_LIB "lib/*.cpp" "lib/*.h")
 file(GLOB_RECURSE HINA_RENDER_ENGINE_TO_IMPL "reference/*.cpp" "reference/*.h" "reference/*.inl")
 set(HINA_RENDER_ENGINE_PLATFORM
@@ -20,8 +25,6 @@ set(HINA_RENDER_ENGINE_PLATFORM
         "platform/gl.h"
         "platform/platform.cpp"
         "platform/platform.h"
-        "platform/mesh.cpp"
-        "platform/mesh.h"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_opengl3.cpp"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_opengl3.h"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_sdl.cpp"
@@ -36,8 +39,8 @@ set(HINA_RENDER_ENGINE_SRC
         ${HINA_RENDER_ENGINE_LIB}
         ${HINA_RENDER_ENGINE_TO_IMPL}
         ${HINA_RENDER_ENGINE_PLATFORM}
-        ${HINA_RENDER_ENGINE_PHYSICS_API}
         physics-system-api.h
+        math_api.h
         app.cpp
         app.h
         platform/icon.rc
@@ -46,6 +49,7 @@ set(HINA_RENDER_ENGINE_SRC
 add_library(HinaPE_Render_Engine ${HINA_RENDER_ENGINE_SRC})
 target_compile_definitions(HinaPE_Render_Engine PUBLIC HINAPE_SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/shader/")
 set_target_properties(HinaPE_Render_Engine PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+target_link_libraries(HinaPE_Render_Engine PUBLIC HinaPE_Common)
 
 # setup OS-specific options
 if (UNIX AND NOT APPLE)
@@ -104,6 +108,7 @@ target_include_directories(imgui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # define include paths
 target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_DEPS_DIR}" "${HINAPE_DEPS_DIR}/assimp/include" "${HINAPE_DEPS_DIR}/eigen3")
 target_include_directories(HinaPE_Render_Engine PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_COMMON_DIR}")
 
 # link libraries
 if (WIN32)
