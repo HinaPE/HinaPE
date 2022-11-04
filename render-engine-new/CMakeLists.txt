@@ -8,21 +8,35 @@ if (NOT TARGET HinaPE_Common)
     add_subdirectory(${HINAPE_COMMON_DIR} HinaPE_Common)
 endif ()
 
+file(GLOB_RECURSE HINA_RENDER_ENGINE_PRO_GRAPHICS_API "graphics_api/*.cpp" "graphics_api/*.h")
+file(GLOB_RECURSE HINA_RENDER_ENGINE_PRO_WORKBENCH "workbench/*.cpp" "workbench/*.h")
+file(GLOB_RECURSE HINA_RENDER_ENGINE_PRO_RASTERIZER "rasterizer/*.cpp" "rasterizer/*.h")
+file(GLOB_RECURSE HINA_RENDER_ENGINE_PRO_PATHTRACER "pathtracer/*.cpp" "pathtracer/*.h")
+
 set(HINA_RENDER_ENGINE_PRO_OpenGL
-        "graphics_api/OpenGL/mesh.cpp"
-        "graphics_api/mesh.h"
-#        "platform/platform.cpp"
-#        "platform/platform.h"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_opengl3.cpp"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_opengl3.h"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_sdl.cpp"
         "${HINAPE_DEPS_DIR}/imgui/imgui_impl_sdl.h")
 
-add_library(HinaPE_Render_Engine_Pro ${HINA_RENDER_ENGINE_PRO_OpenGL} math_api.h)
+set(HINA_RENDER_ENGINE_PRO_SRC
+        ${HINA_RENDER_ENGINE_PRO_GRAPHICS_API}
+        ${HINA_RENDER_ENGINE_PRO_WORKBENCH}
+        ${HINA_RENDER_ENGINE_PRO_RASTERIZER}
+        ${HINA_RENDER_ENGINE_PRO_PATHTRACER}
+        ${HINA_RENDER_ENGINE_PRO_OpenGL}
+        )
+
+add_library(HinaPE_Render_Engine_Pro ${HINA_RENDER_ENGINE_PRO_SRC} math_api.h)
 set_target_properties(HinaPE_Render_Engine_Pro PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 target_include_directories(HinaPE_Render_Engine_Pro PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_compile_definitions(HinaPE_Render_Engine_Pro PUBLIC HINAPE_SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/shader/") # TODO: Error Prone
 target_link_libraries(HinaPE_Render_Engine_Pro PUBLIC HinaPE_Common)
+target_compile_definitions(
+        HinaPE_Render_Engine_Pro
+        PUBLIC
+        HINAPE_SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/builtin_shaders/"
+        HINAPE_MODEL_DIR="${CMAKE_CURRENT_SOURCE_DIR}/builtin_models/"
+) # TODO: Error Prone
 
 
 # setup OS-specific options

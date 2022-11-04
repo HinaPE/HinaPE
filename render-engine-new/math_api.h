@@ -12,8 +12,17 @@
 namespace HinaPE::RenderEngine
 {
 using real = float;
-using mVector2 = Vector3F;
-using mVector3 = Vector3F;
+using mVector2 = Vector2<real>;
+using mVector3 = Vector3<real>;
+using mVector4 = Vector4<real>;
+using mVector2i = Vector2<int>;
+using mVector3i = Vector3<int>;
+using mVector4i = Vector4<int>;
+using mVector2ui = Vector2<unsigned int>;
+using mVector3ui = Vector3<unsigned int>;
+using mVector4ui = Vector4<unsigned int>;
+using mMatrix3x3 = Matrix3x3<real>;
+using mMatrix4x4 = Matrix4x4<real>;
 using mBBox = BoundingBox3F;
 }
 
