@@ -4,15 +4,18 @@
 #include "common/geometry/bounding_box3.h"
 #include "common/geometry/plane3.h"
 #include "common/geometry/box3.h"
+#include "common/geometry/cylinder3.h"
 #include "common/geometry/rigid_body_collider3.h"
 #include "common/geometry/sphere3.h"
 #include "common/geometry/implicit_surface_set3.h"
 #include "common/logging.h"
 #include "fluid-engine/solver/particle/sph/sph_solver3.h"
+#include "fluid-engine/solver/particle/pcisph/pci_sph_solver3.h"
 #include "fluid-engine/emitter/volume_particle_emitter3.h"
 #include "render-engine/scene/scene.h"
 #include "render-engine/gui/manager.h"
 #include "render-engine/physics-system-api.h"
+#include "array/array_utils-inl.h"
 
 class FluidAPI : public HinaPE::ParticleSystemAPI, public std::enable_shared_from_this<FluidAPI>
 {
@@ -22,6 +25,8 @@ public:
 
 public:
     void load_solver();
+    void load_pci_solver();
+    void load_dam_breaking_solver();
     void add_emitter(const std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3>&);
     void add_collider(const std::shared_ptr<HinaPE::Collider3>&);
     void assign_particles_domain(const HinaPE::BoundingBox3D &);
