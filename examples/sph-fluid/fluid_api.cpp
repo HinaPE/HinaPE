@@ -49,6 +49,7 @@ void FluidAPI::gui(Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widg
 {
     static int phase = 0;
     double lz = 0;
+    lz = BoundingBox3D(Vector3D(), Vector3D(3, 2, 1.5)).depth();
     switch (phase)
     {
         case 0:
@@ -74,7 +75,8 @@ void FluidAPI::gui(Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widg
                     _sp = std::make_shared<Scene_Particles>(_scene.reserve_id(), std::move(sphere_mesh));
                     _sp->opt.enabled = true;
                     assign_particles_domain(BoundingBox3D(Vector3D(-R / 2.0f, -R / 2.0f, -R / 2.0f), Vector3D(R / 2.0f, R / 2.0f, R / 2.0f)));
-                    lz = _particles_domain.depth();
+                    //assign_particles_domain(BoundingBox3D(Vector3D(), Vector3D(3, 2, 1.5)));
+                    //lz = _particles_domain.depth();
                     _sp->load_particle_system<FluidAPI>(shared_from_this());
                 }
                 ImGui::PopID();
@@ -96,7 +98,7 @@ void FluidAPI::gui(Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widg
                     auto box = Box3::builder().withIsNormalFlipped(true).withBoundingBox(_particles_domain).makeShared();
                     auto box_collider = RigidBodyCollider3::builder().withSurface(box).makeShared();
                     add_collider(box_collider);
-                    // load_solver();
+                    //load_solver();
                     load_pci_solver();
                     _sp->opt.scale = _fluid_opt.target_spacing / 1.5f;
                     _undo.add(std::move(*_sp));
@@ -104,7 +106,7 @@ void FluidAPI::gui(Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widg
                 ImGui::PopID();
             }
             break;
-//        case 2:
+//        case 1:
 //            if (ImGui::CollapsingHeader("Create Fluid"), ImGuiTreeNodeFlags_DefaultOpen)
 //            {
 //                ImGui::PushID(_index++);
@@ -143,6 +145,7 @@ void FluidAPI::gui(Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widg
 //                    auto cyl2 = Cylinder3::builder().withCenter({1.5, 0.375, 0.75}).withRadius(0.1).withHeight(0.75).makeShared();
 //                    auto cyl3 = Cylinder3::builder().withCenter({2, 0.375, 1.125}).withRadius(0.1).withHeight(0.75).makeShared();
 //                    auto box = Box3::builder().withIsNormalFlipped(true).withBoundingBox(_particles_domain).makeShared();
+//
 //                    auto surfaceSet = ImplicitSurfaceSet3::builder().withExplicitSurfaces({cyl1, cyl2, cyl3, box}).makeShared();
 //                    auto collider = RigidBodyCollider3::builder().withSurface(surfaceSet).makeShared();
 //                    add_collider(collider);
@@ -155,6 +158,23 @@ void FluidAPI::gui(Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widg
 //                ImGui::PopID();
 //            }
 //            break;
+/////////
+
+//        case 1:
+//            if (ImGui::CollapsingHeader("FLIP"), ImGuiTreeNodeFlags_DefaultOpen)
+//            {
+//                ImGui::PushID(_index++);
+//                if (ImGui::Button("Add"))
+//                {
+//                    auto plane = Plane3::builder().withNormal({0, 1, 0}).withPoint({0, 0.25 * _particles_domain.height(), 0}).makeShared();
+//                    auto sphere = Sphere3::builder().withCenter(_particles_domain.midPoint()).withRadius(0.15 * _particles_domain.width()).makeShared();
+//
+//                }
+//                ImGui::PopID();
+//            }
+            break;
+//////////
+
         default:
             break;
     }
@@ -198,6 +218,7 @@ void FluidAPI::load_dam_breaking_solver() {
         if (_fluid_opt.type == SPH)
         {
             std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(_solver_ptr)->setPseudoViscosityCoefficient(_fluid_opt.pseudo_viscosity_coefficient);
+            std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(_solver_ptr)->setTimeStepLimitScale(10.0);
         }
         _solver_prepared = true;
     }
