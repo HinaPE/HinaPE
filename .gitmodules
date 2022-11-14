@@ -25,3 +25,6 @@
 [submodule "deps/tinyobjloader"]
 	path = deps/tinyobjloader
 	url = https://github.com/BFU-Graphics/Hina_tinyobjloader.git
+[submodule "deps/fpm"]
+	path = deps/fpm
+	url = https://github.com/HinaPE/HinaFPM.git
