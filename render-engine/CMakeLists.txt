@@ -40,7 +40,6 @@ set(HINA_RENDER_ENGINE_SRC
         ${HINA_RENDER_ENGINE_TO_IMPL}
         ${HINA_RENDER_ENGINE_PLATFORM}
         physics-system-api.h
-        math_api.h
         app.cpp
         app.h
         platform/icon.rc
