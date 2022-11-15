@@ -28,22 +28,3 @@ foreach (Example ${Examples})
         set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
     endif ()
 endforeach ()
-
-# new render engine ~
-add_subdirectory(render-engine-new)
-file(GLOB_RECURSE HINAPE_NEW_RENDERER_SRC examples/new-renderer/main.cpp)
-add_executable(New-Render ${HINAPE_NEW_RENDERER_SRC} render-engine/platform/icon.rc)
-set_target_properties(New-Render PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-
-target_include_directories(New-Render PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(New-Render PUBLIC HinaPE_Render_Engine_Pro)
-
-if (APPLE)
-    find_library(APPKIT_LIB AppKit)
-    target_link_libraries(New-Render PRIVATE ${APPKIT_LIB})
-endif ()
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    target_compile_options(New-Render PUBLIC -fno-omit-frame-pointer)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-    set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
-endif ()
