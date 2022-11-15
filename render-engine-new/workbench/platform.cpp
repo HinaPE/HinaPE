@@ -186,8 +186,8 @@ void HinaPE::RenderEngine::Workbench::Platform::strcpy(char *dest, const char *s
 #ifdef _WIN32
     strncpy_s(dest, limit, src, limit - 1);
 #else
-    strncpy(dst, src, limit - 1);
-    dst[limit - 1] = '\0';
+    strncpy(dest, src, limit - 1);
+    dest[limit - 1] = '\0';
 #endif
 }
 auto HinaPE::RenderEngine::Workbench::Platform::window_draw() -> std::pair<float, float>

@@ -65,7 +65,7 @@ auto HinaPE::RenderEngine::Shader::validate(unsigned int id) -> bool
         auto *msg = new GLchar[len];
         glGetShaderInfoLog(id, len, &len, msg);
 
-        printf_s("Shader %d failed to compile: %s", id, msg); // TODO: Replace with logger
+//        printf_s("Shader %d failed to compile: %s", id, msg); // TODO: Replace with logger
         delete[] msg;
 
         return false;
