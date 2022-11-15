@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE_Render_Engine VERSION 1.1.1 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE_Render_Engine VERSION 1.1.3 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 option(FluidEngineOption "Enable Fluid Engine(Default: ON)" ON)
 option(ClothEngineOption "Enable Cloth Engine(Default: ON)" ON)

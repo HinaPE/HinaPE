@@ -1,9 +1,3 @@
-[submodule "deps/eigen3"]
-	path = deps/eigen3
-	url = https://github.com/BFU-Graphics/Hina_eigen3.git
-[submodule "deps/libigl"]
-	path = deps/libigl
-	url = https://github.com/BFU-Graphics/libigl.git
 [submodule "common"]
 	path = common
 	url = https://github.com/HinaPE/common.git
@@ -25,3 +19,6 @@
 [submodule "render-engine/deps/nfd"]
 	path = render-engine/deps/nfd
 	url = https://github.com/BFU-Graphics/Hina_nfd.git
+[submodule "physics-engine/deps/libigl"]
+	path = physics-engine/deps/libigl
+	url = https://github.com/BFU-Graphics/libigl.git
