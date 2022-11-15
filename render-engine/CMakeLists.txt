@@ -5,7 +5,6 @@ option(FluidEngineOption "Enable Fluid Engine(Default: ON)" ON)
 option(ClothEngineOption "Enable Cloth Engine(Default: ON)" ON)
 option(RigidBodyEngineOption "Enable RigidBody Engine(Default: ON)" ON)
 
-set(HINAPE_DEPS_DIR "../deps")
 set(HINAPE_COMMON_DIR "../common")
 set(HINAPE_PHYSICS_DIR "../physics-engine")
 
@@ -25,10 +24,10 @@ set(HINA_RENDER_ENGINE_PLATFORM
         "platform/gl.h"
         "platform/platform.cpp"
         "platform/platform.h"
-        "${HINAPE_DEPS_DIR}/imgui/imgui_impl_opengl3.cpp"
-        "${HINAPE_DEPS_DIR}/imgui/imgui_impl_opengl3.h"
-        "${HINAPE_DEPS_DIR}/imgui/imgui_impl_sdl.cpp"
-        "${HINAPE_DEPS_DIR}/imgui/imgui_impl_sdl.h")
+        "deps/imgui/imgui_impl_opengl3.cpp"
+        "deps/imgui/imgui_impl_opengl3.h"
+        "deps/imgui/imgui_impl_sdl.cpp"
+        "deps/imgui/imgui_impl_sdl.h")
 
 set(HINA_RENDER_ENGINE_SRC
         ${HINA_RENDER_ENGINE_GUI}
@@ -87,18 +86,18 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(HinaPE_Render_Engine PUBLIC Threads::Threads) # std::thread need pthread lib to be linked
 if (NOT TARGET imgui)
-    add_subdirectory("${HINAPE_DEPS_DIR}/imgui/" "${CMAKE_CURRENT_BINARY_DIR}/imgui")
+    add_subdirectory("deps/imgui/" "${CMAKE_CURRENT_BINARY_DIR}/imgui")
     target_include_directories(imgui PUBLIC ../render-engine/)
 endif ()
 if (NOT TARGET glad)
-    add_subdirectory("${HINAPE_DEPS_DIR}/glad/" "${CMAKE_CURRENT_BINARY_DIR}/glad")
-    target_include_directories(glad PUBLIC ${HINAPE_DEPS_DIR})
+    add_subdirectory("deps/glad/" "${CMAKE_CURRENT_BINARY_DIR}/glad")
+    target_include_directories(glad PUBLIC deps)
 endif ()
 if (NOT TARGET nfd)
-    add_subdirectory("${HINAPE_DEPS_DIR}/nfd/" "${CMAKE_CURRENT_BINARY_DIR}/nfd")
+    add_subdirectory("deps/nfd/" "${CMAKE_CURRENT_BINARY_DIR}/nfd")
 endif ()
 if (NOT TARGET sf_libs)
-    add_subdirectory("${HINAPE_DEPS_DIR}/sf_libs/" "${CMAKE_CURRENT_BINARY_DIR}/sf_libs")
+    add_subdirectory("deps/sf_libs/" "${CMAKE_CURRENT_BINARY_DIR}/sf_libs")
 endif ()
 if (NOT TARGET assimp)
     set(ASSIMP_BUILD_COLLADA_IMPORTER TRUE)
@@ -110,7 +109,7 @@ if (NOT TARGET assimp)
     set(ASSIMP_BUILD_STL_IMPORTER TRUE)
     set(ASSIMP_BUILD_BLEND_IMPORTER TRUE)
     set(ASSIMP_BUILD_COLLADA_EXPORTER TRUE)
-    add_subdirectory("${HINAPE_DEPS_DIR}/assimp/" "${CMAKE_CURRENT_BINARY_DIR}/assimp")
+    add_subdirectory("deps/assimp/" "${CMAKE_CURRENT_BINARY_DIR}/assimp")
     if (APPLE)
         target_compile_options(assimp PUBLIC -Wno-error)
     endif ()
@@ -118,16 +117,16 @@ endif ()
 target_include_directories(HinaPE_Render_Engine PUBLIC ${ASSIMP_INCLUDE_DIRS})
 
 # define include paths
-target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_DEPS_DIR}" "${HINAPE_DEPS_DIR}/assimp/include" "${HINAPE_DEPS_DIR}/eigen3")
+target_include_directories(HinaPE_Render_Engine PUBLIC "deps" "deps/assimp/include" "deps/eigen3")
 target_include_directories(HinaPE_Render_Engine PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_COMMON_DIR}")
 
 # link libraries
 if (WIN32)
-    target_include_directories(HinaPE_Render_Engine PUBLIC "${HINAPE_DEPS_DIR}/win")
+    target_include_directories(HinaPE_Render_Engine PUBLIC "deps/win")
     add_definitions(-DWIN32_LEAN_AND_MEAN)
-    target_link_libraries(HinaPE_Render_Engine PUBLIC ${HINAPE_DEPS_DIR}/win/SDL2/SDL2main)
-    target_link_libraries(HinaPE_Render_Engine PUBLIC ${HINAPE_DEPS_DIR}/win/SDL2/SDL2)
+    target_link_libraries(HinaPE_Render_Engine PUBLIC deps/win/SDL2/SDL2main)
+    target_link_libraries(HinaPE_Render_Engine PUBLIC deps/win/SDL2/SDL2)
     target_link_libraries(HinaPE_Render_Engine PUBLIC Winmm)
     target_link_libraries(HinaPE_Render_Engine PUBLIC Version)
     target_link_libraries(HinaPE_Render_Engine PUBLIC Setupapi)

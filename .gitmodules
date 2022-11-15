@@ -1,27 +1,27 @@
-[submodule "deps/win"]
-	path = deps/win
-	url = https://github.com/BFU-Graphics/Hina_winSDL2.git
-[submodule "deps/glad"]
-	path = deps/glad
-	url = https://github.com/BFU-Graphics/Hina_glad.git
-[submodule "deps/sf_libs"]
-	path = deps/sf_libs
-	url = https://github.com/BFU-Graphics/Hina_sf_libs.git
-[submodule "deps/imgui"]
-	path = deps/imgui
-	url = https://github.com/BFU-Graphics/Hina_imgui.git
-[submodule "deps/nfd"]
-	path = deps/nfd
-	url = https://github.com/BFU-Graphics/Hina_nfd.git
-[submodule "deps/assimp"]
-	path = deps/assimp
-	url = https://github.com/BFU-Graphics/Hina_assimp.git
 [submodule "deps/eigen3"]
 	path = deps/eigen3
 	url = https://github.com/BFU-Graphics/Hina_eigen3.git
 [submodule "deps/libigl"]
 	path = deps/libigl
 	url = https://github.com/BFU-Graphics/libigl.git
-[submodule "deps/tinyobjloader"]
-	path = deps/tinyobjloader
-	url = https://github.com/BFU-Graphics/Hina_tinyobjloader.git
+[submodule "common"]
+	path = common
+	url = https://github.com/HinaPE/common.git
+[submodule "render-engine/deps/assimp"]
+	path = render-engine/deps/assimp
+	url = https://github.com/BFU-Graphics/Hina_assimp.git
+[submodule "render-engine/deps/glad"]
+	path = render-engine/deps/glad
+	url = https://github.com/BFU-Graphics/Hina_glad.git
+[submodule "render-engine/deps/imgui"]
+	path = render-engine/deps/imgui
+	url = https://github.com/BFU-Graphics/Hina_imgui.git
+[submodule "render-engine/deps/win"]
+	path = render-engine/deps/win
+	url = https://github.com/BFU-Graphics/Hina_winSDL2.git
+[submodule "render-engine/deps/sf_libs"]
+	path = render-engine/deps/sf_libs
+	url = https://github.com/BFU-Graphics/Hina_sf_libs.git
+[submodule "render-engine/deps/nfd"]
+	path = render-engine/deps/nfd
+	url = https://github.com/BFU-Graphics/Hina_nfd.git

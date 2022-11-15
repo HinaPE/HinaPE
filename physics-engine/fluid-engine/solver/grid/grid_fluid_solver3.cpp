@@ -3,7 +3,7 @@
 #include "../../../../common/array/array_utils.h"
 #include "../../../../common/field/constant_scalar_field3.h"
 #include "constants.h"
-#include "../../../../common/array/cubic_semi_lagrangian3.h"
+#include "cubic_semi_lagrangian3.h"
 #include "grid_backward_euler_diffusion_solver3.h"
 #include "grid_blocked_boundary_condition_solver3.h"
 #include "grid_fluid_solver3.h"
