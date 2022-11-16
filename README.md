@@ -30,7 +30,7 @@ As a cross-platform project, [Clion](https://www.jetbrains.com/clion/) is highly
 First recursively clone this repo and all submodules.
 
 ```shell
-git clone --recursive https://github.com/Xayah-Hina/HinaPE.git
+git clone --recursive https://github.com/HinaPE/HinaPE.git
 ```
 
 ### macOS
