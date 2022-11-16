@@ -3,7 +3,7 @@
 
 #include "widgets.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <optional>
 #include <unordered_map>
 

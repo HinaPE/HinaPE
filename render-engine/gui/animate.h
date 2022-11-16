@@ -2,7 +2,7 @@
 #define HINAPE_ANIMATE_H
 
 #include "widgets.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <set>
 
 namespace Gui

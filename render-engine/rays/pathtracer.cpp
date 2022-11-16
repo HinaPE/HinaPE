@@ -2,7 +2,7 @@
 #include "../geometry/util.h"
 #include "../gui/render.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <thread>
 
 namespace PT

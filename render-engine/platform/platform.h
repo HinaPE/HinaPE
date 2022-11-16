@@ -1,7 +1,7 @@
 #ifndef HINAPE_PLATFORM_H
 #define HINAPE_PLATFORM_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "../app.h"
 #include "../lib/mathlib.h"

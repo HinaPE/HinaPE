@@ -1,7 +1,7 @@
 #ifndef HINAPE_RENDER_H
 #define HINAPE_RENDER_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <mutex>
 
 #include "../platform/gl.h"

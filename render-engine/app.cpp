@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl.h>
 

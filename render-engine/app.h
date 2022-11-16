@@ -1,7 +1,7 @@
 #ifndef HINAPE_APP_H
 #define HINAPE_APP_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <map>
 #include <string>
 

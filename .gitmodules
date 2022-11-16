@@ -10,9 +10,6 @@
 [submodule "render-engine/deps/imgui"]
 	path = render-engine/deps/imgui
 	url = https://github.com/BFU-Graphics/Hina_imgui.git
-[submodule "render-engine/deps/win"]
-	path = render-engine/deps/win
-	url = https://github.com/BFU-Graphics/Hina_winSDL2.git
 [submodule "render-engine/deps/sf_libs"]
 	path = render-engine/deps/sf_libs
 	url = https://github.com/BFU-Graphics/Hina_sf_libs.git
@@ -22,3 +19,6 @@
 [submodule "physics-engine/deps/libigl"]
 	path = physics-engine/deps/libigl
 	url = https://github.com/BFU-Graphics/libigl.git
+[submodule "render-engine/deps/SDL"]
+	path = render-engine/deps/SDL
+	url = https://github.com/libsdl-org/SDL.git

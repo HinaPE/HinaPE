@@ -3,7 +3,7 @@
 
 #include "../rays/tri_mesh.h"
 #include "widgets.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 namespace Gui
 {

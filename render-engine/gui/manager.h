@@ -1,7 +1,7 @@
 #ifndef HINAPE_MANAGER_H
 #define HINAPE_MANAGER_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <imgui/imgui.h>
 
 #ifndef SCOTTY3D_BUILD_REF

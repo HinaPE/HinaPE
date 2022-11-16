@@ -1,7 +1,7 @@
 #ifndef HINAPE_LAYOUT_H
 #define HINAPE_LAYOUT_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "../scene/scene.h"
 #include "../util/camera.h"
