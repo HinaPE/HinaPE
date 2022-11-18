@@ -22,3 +22,6 @@
 [submodule "render-engine/deps/SDL"]
 	path = render-engine/deps/SDL
 	url = https://github.com/libsdl-org/SDL.git
+[submodule "physics-engine/rigidbody-engine/hina-rigidbody"]
+	path = physics-engine/rigidbody-engine/hina-rigidbody
+	url = https://github.com/HinaPE/HinaRigidBody.git
