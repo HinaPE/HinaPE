@@ -28,11 +28,3 @@ add_library(HinaPE_Fluid_Engine ${HINA_FLUID_ENGINE_SRC} solver/grid/grid_fluid_
 set_target_properties(HinaPE_Fluid_Engine PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 target_include_directories(HinaPE_Fluid_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_COMMON_DIR})
 target_link_libraries(HinaPE_Fluid_Engine PUBLIC HinaPE_Common)
-
-# Fluid Engine Test Part
-#get_directory_property(HINA_FLUID_ENGINE_PARENT_DIR PARENT_DIRECTORY)
-#if (NOT HINA_FLUID_ENGINE_PARENT_DIR)
-#    add_executable(HinaPE_Fluid_Engine_Test main.cpp)
-#    set_target_properties(HinaPE_Fluid_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-#    target_link_libraries(HinaPE_Fluid_Engine_Test PUBLIC HinaPE_Fluid_Engine)
-#endif ()

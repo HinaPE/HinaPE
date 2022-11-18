@@ -26,11 +26,3 @@ target_link_libraries(HinaPE_Cloth_Engine PUBLIC HinaPE_Common)
 # add dependencies
 add_subdirectory("${HINAPE_DEPS_DIR}/libigl/" "${CMAKE_CURRENT_BINARY_DIR}/libigl")
 target_include_directories(HinaPE_Cloth_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_COMMON_DIR} "${HINAPE_DEPS_DIR}" "${HINAPE_DEPS_DIR}/libigl/include" "${HINAPE_DEPS_DIR}/eigen3")
-
-# Cloth Engine Test Part
-#get_directory_property(HINA_CLOTH_ENGINE_PARENT_DIR PARENT_DIRECTORY)
-#if (NOT HINA_CLOTH_ENGINE_PARENT_DIR)
-#    add_executable(HinaPE_Cloth_Engine_Test main.cpp)
-#    set_target_properties(HinaPE_Cloth_Engine_Test PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-#    target_link_libraries(HinaPE_Cloth_Engine_Test PUBLIC HinaPE_Cloth_Engine)
-#endif ()
