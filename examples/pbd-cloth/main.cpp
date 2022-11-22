@@ -1,6 +1,6 @@
-#include "render-engine/platform/platform.h"
-#include "render-engine/util/rand.h"
-#include "render-engine/scene/particles.h"
+#include "kasumi-legacy/platform/platform.h"
+#include "kasumi-legacy/util/rand.h"
+#include "kasumi-legacy/scene/particles.h"
 
 #include "cloth_api.h"
 

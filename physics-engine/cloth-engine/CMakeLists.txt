@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE_Cloth_Engine VERSION 1.14 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE_Cloth_Engine VERSION 1.20 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 set(HINAPE_COMMON_DIR "../../common")
 set(HINAPE_DEPS_DIR "../deps")
@@ -20,9 +20,5 @@ file(GLOB_RECURSE HINA_CLOTH_ENGINE_SRC
 
 add_library(HinaPE_Cloth_Engine ${HINA_CLOTH_ENGINE_SRC})
 set_target_properties(HinaPE_Cloth_Engine PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-target_include_directories(HinaPE_Cloth_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_COMMON_DIR})
+target_include_directories(HinaPE_Cloth_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_COMMON_DIR} ${HINAPE_DEPS_DIR})
 target_link_libraries(HinaPE_Cloth_Engine PUBLIC HinaPE_Common)
-
-# add dependencies
-add_subdirectory("${HINAPE_DEPS_DIR}/libigl/" "${CMAKE_CURRENT_BINARY_DIR}/libigl")
-target_include_directories(HinaPE_Cloth_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_COMMON_DIR} "${HINAPE_DEPS_DIR}" "${HINAPE_DEPS_DIR}/libigl/include" "${HINAPE_DEPS_DIR}/eigen3")

@@ -3,8 +3,8 @@
 
 #include "common/logging.h"
 #include "cloth-engine/solver/cloth_solver.h"
-#include "render-engine/scene/object.h"
-#include "render-engine/physics-system-api.h"
+#include "kasumi-legacy/scene/object.h"
+#include "kasumi-legacy/physics-system-api.h"
 
 class ClothAPI : public HinaPE::ClothSystemAPI
 {

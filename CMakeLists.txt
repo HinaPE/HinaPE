@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE VERSION 1.14 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
-
-set(HINAPE_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common)
-set(HINAPE_PHYSICS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/physics-engine)
-set(HINAPE_RENDERER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/render-engine)
+project(HinaPE VERSION 1.20 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 option(HinaPE_CLOTH_ENGINE "Load HinaPE Cloth Engine" ON)
 option(HinaPE_RIGIDBODY_ENGINE "Load HinaPE Rigidbody Engine" ON)
 option(HinaPE_FLUID_ENGINE "Load HinaPE Fluid Engine" ON)
+option(HinaPE_USE_LEGACY_KASUMI "Use Legacy Kasumi Renderer" ON)
 option(HinaPE_EXAMPLES "Load HinaPE Examples" ON)
+
+set(HINAPE_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common)
+set(HINAPE_PHYSICS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/physics-engine)
+set(HINAPE_RENDERER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/render-engine)
 
 # Load engine modules
 if (HinaPE_CLOTH_ENGINE)
@@ -25,7 +26,12 @@ endif ()
 
 get_directory_property(HINAPE_PARENT_DIR PARENT_DIRECTORY)
 if (NOT HINAPE_PARENT_DIR)
-    add_subdirectory(${HINAPE_RENDERER_DIR})
+    if (HinaPE_USE_LEGACY_KASUMI)
+        add_subdirectory(${HINAPE_RENDERER_DIR}/kasumi-legacy)
+        set(HinaPE_Icon render-engine/kasumi-legacy/platform/icon.rc)
+    else ()
+        add_subdirectory(${HINAPE_RENDERER_DIR}/kasumi-2.0)
+    endif ()
     if (HinaPE_EXAMPLES)
         set(Examples
                 sph-fluid
@@ -33,9 +39,8 @@ if (NOT HINAPE_PARENT_DIR)
                 )
         foreach (Example ${Examples})
             file(GLOB_RECURSE HINAPE_EXAMPLE_SPH_SRC examples/${Example}/*.cpp examples/${Example}/*.h)
-            add_executable(Example-${Example} ${HINAPE_EXAMPLE_SPH_SRC} render-engine/platform/icon.rc)
+            add_executable(Example-${Example} ${HINAPE_EXAMPLE_SPH_SRC} ${HinaPE_Icon})
             set_target_properties(Example-${Example} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-
             target_include_directories(Example-${Example} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_PHYSICS_DIR} ${HINAPE_RENDERER_DIR})
             target_link_libraries(Example-${Example} PUBLIC HinaPE_Render_Engine)
 

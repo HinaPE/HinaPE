@@ -1,27 +1,12 @@
 [submodule "common"]
 	path = common
 	url = https://github.com/HinaPE/common.git
-[submodule "render-engine/deps/assimp"]
-	path = render-engine/deps/assimp
-	url = https://github.com/BFU-Graphics/Hina_assimp.git
-[submodule "render-engine/deps/glad"]
-	path = render-engine/deps/glad
-	url = https://github.com/BFU-Graphics/Hina_glad.git
-[submodule "render-engine/deps/imgui"]
-	path = render-engine/deps/imgui
-	url = https://github.com/BFU-Graphics/Hina_imgui.git
-[submodule "render-engine/deps/sf_libs"]
-	path = render-engine/deps/sf_libs
-	url = https://github.com/BFU-Graphics/Hina_sf_libs.git
-[submodule "render-engine/deps/nfd"]
-	path = render-engine/deps/nfd
-	url = https://github.com/BFU-Graphics/Hina_nfd.git
-[submodule "physics-engine/deps/libigl"]
-	path = physics-engine/deps/libigl
-	url = https://github.com/BFU-Graphics/libigl.git
-[submodule "render-engine/deps/SDL"]
-	path = render-engine/deps/SDL
-	url = https://github.com/libsdl-org/SDL.git
 [submodule "physics-engine/rigidbody-engine/hina-rigidbody"]
 	path = physics-engine/rigidbody-engine/hina-rigidbody
 	url = https://github.com/HinaPE/HinaRigidBody.git
+[submodule "render-engine/kasumi-legacy"]
+	path = render-engine/kasumi-legacy
+	url = https://github.com/HinaPE/Kasumi-legacy.git
+[submodule "render-engine/kasumi-2.0"]
+	path = render-engine/kasumi-2.0
+	url = https://github.com/HinaPE/Kasumi-renderer.git

@@ -9,13 +9,13 @@
 #include "common/geometry/sphere3.h"
 #include "common/geometry/implicit_surface_set3.h"
 #include "common/logging.h"
+#include "common/array/array_utils-inl.h"
 #include "fluid-engine/solver/particle/sph/sph_solver3.h"
 #include "fluid-engine/solver/particle/pcisph/pci_sph_solver3.h"
 #include "fluid-engine/emitter/volume_particle_emitter3.h"
-#include "render-engine/scene/scene.h"
-#include "render-engine/gui/manager.h"
-#include "render-engine/physics-system-api.h"
-#include "array/array_utils-inl.h"
+#include "kasumi-legacy/scene/scene.h"
+#include "kasumi-legacy/gui/manager.h"
+#include "kasumi-legacy/physics-system-api.h"
 
 class FluidAPI : public HinaPE::ParticleSystemAPI, public std::enable_shared_from_this<FluidAPI>
 {
