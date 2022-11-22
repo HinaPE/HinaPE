@@ -8,7 +8,7 @@
 
 1. HinaPE is a recursive acronym for "**HinaPE is not a Physics Engine**".
 2. HinaPE is a cross-platform, light and easy-to-use research-oriented physics engine developed after [CMU Scotty3D](https://github.com/CMU-Graphics/Scotty3D), [Fluid Engine Dev](http://github.com/doyubkim/fluid-engine-dev) and [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH), consisting Rigidbody Dynamics, Deformables and Fluids.
-3. HinaPE contains a built-in workbench renderer, a built-in rasterizer and a built-in pathtracer.
+3. HinaPE is proudly powered by [Kasumi-render](https://github.com/HinaPE/Kasumi-renderer.git).
 
 ## Gallery
 
