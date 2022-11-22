@@ -24,7 +24,7 @@ if (HinaPE_FLUID_ENGINE)
 endif ()
 
 get_directory_property(HINAPE_PARENT_DIR PARENT_DIRECTORY)
-if (HINAPE_PARENT_DIR)
+if (NOT HINAPE_PARENT_DIR)
     add_subdirectory(${HINAPE_RENDERER_DIR})
     if (HinaPE_EXAMPLES)
         set(Examples
