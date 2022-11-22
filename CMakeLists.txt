@@ -29,30 +29,30 @@ if (NOT HINAPE_PARENT_DIR)
     if (HinaPE_USE_LEGACY_KASUMI)
         add_subdirectory(${HINAPE_RENDERER_DIR}/kasumi-legacy)
         set(HinaPE_Icon render-engine/kasumi-legacy/platform/icon.rc)
+        if (HinaPE_EXAMPLES)
+            set(Examples
+                    sph-fluid
+                    pbd-cloth
+                    )
+            foreach (Example ${Examples})
+                file(GLOB_RECURSE HINAPE_EXAMPLE_SPH_SRC examples/${Example}/*.cpp examples/${Example}/*.h)
+                add_executable(Example-${Example} ${HINAPE_EXAMPLE_SPH_SRC} ${HinaPE_Icon})
+                set_target_properties(Example-${Example} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
+                target_include_directories(Example-${Example} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_PHYSICS_DIR} ${HINAPE_RENDERER_DIR})
+                target_link_libraries(Example-${Example} PUBLIC HinaPE_Render_Engine)
+
+                if (APPLE)
+                    find_library(APPKIT_LIB AppKit)
+                    target_link_libraries(Example-${Example} PRIVATE ${APPKIT_LIB})
+                endif ()
+                if (CMAKE_CXX_COMPILER_ID MATCHES "Clang") # fixed by: https://github.com/libMesh/libmesh/issues/1396
+                    target_compile_options(Example-${Example} PUBLIC -fno-omit-frame-pointer)
+                    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+                    set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
+                endif ()
+            endforeach ()
+        endif ()
     else ()
         add_subdirectory(${HINAPE_RENDERER_DIR}/kasumi-2.0)
-    endif ()
-    if (HinaPE_EXAMPLES)
-        set(Examples
-                sph-fluid
-                pbd-cloth
-                )
-        foreach (Example ${Examples})
-            file(GLOB_RECURSE HINAPE_EXAMPLE_SPH_SRC examples/${Example}/*.cpp examples/${Example}/*.h)
-            add_executable(Example-${Example} ${HINAPE_EXAMPLE_SPH_SRC} ${HinaPE_Icon})
-            set_target_properties(Example-${Example} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-            target_include_directories(Example-${Example} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_PHYSICS_DIR} ${HINAPE_RENDERER_DIR})
-            target_link_libraries(Example-${Example} PUBLIC HinaPE_Render_Engine)
-
-            if (APPLE)
-                find_library(APPKIT_LIB AppKit)
-                target_link_libraries(Example-${Example} PRIVATE ${APPKIT_LIB})
-            endif ()
-            if (CMAKE_CXX_COMPILER_ID MATCHES "Clang") # fixed by: https://github.com/libMesh/libmesh/issues/1396
-                target_compile_options(Example-${Example} PUBLIC -fno-omit-frame-pointer)
-                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-                set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
-            endif ()
-        endforeach ()
     endif ()
 endif ()
