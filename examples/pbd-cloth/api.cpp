@@ -17,12 +17,13 @@ void HinaPE::Cloth::Api::gui(Kasumi::Workbench::ScenePtr &scene)
         _cloth_data = std::make_shared<ClothGeometryData>(10.f, 10.f, (size_t) rows, (size_t) cols);
         auto verts = _cloth_data->get_vertices();
         auto indices = _cloth_data->get_indices();
-        std::vector<Kasumi::ColoredMesh::Vertex> res_v;
-        std::vector<Kasumi::ColoredMesh::Index> res_i;
+        std::vector<Kasumi::TexturedMesh::Vertex> res_v;
+        std::vector<Kasumi::TexturedMesh::Index> res_i;
         for (auto &v: verts)
         {
-            Kasumi::ColoredMesh::Vertex v_;
+            Kasumi::TexturedMesh::Vertex v_;
             v_.position = v;
+            v_.tex_coord = {v.x / static_cast<float>(cols), v.y / static_cast<float>(rows)};
             res_v.emplace_back(v_);
         }
         for (auto &i: indices)
@@ -31,7 +32,8 @@ void HinaPE::Cloth::Api::gui(Kasumi::Workbench::ScenePtr &scene)
             i_ = i;
             res_i.emplace_back(i_);
         }
-        scene->add_primitive(std::move(res_v), std::move(indices), "BLACK");
+        auto tex = std::make_shared<Kasumi::Texture>("/Users/xayah/Downloads/TexturesCom_FabricWool0022_2_seamless_S.jpg");
+        scene->add_primitive(std::move(res_v), std::move(indices), tex);
     }
     ImGui::End();
 }
