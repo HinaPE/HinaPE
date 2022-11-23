@@ -14,8 +14,14 @@ void HinaPE::Cloth::Api::gui(Kasumi::Workbench::ScenePtr &scene)
     ImGui::SliderInt("cols", &cols, 1, 50);
     if (ImGui::Button("Create"))
     {
-        auto data = std::make_shared<ClothGeometryData>(2.f, 2.f, (size_t)rows, (size_t)cols);
-        scene->add_primitive("cube");
+        _cloth_data = std::make_shared<ClothGeometryData>(2.f, 2.f, (size_t) rows, (size_t) cols);
+        auto verts = _cloth_data->get_vertices();
+        for (auto &v:verts)
+        {
+            auto id = scene->add_primitive("sphere");
+            scene->set_position(id, v);
+            scene->set_scale(id, {0.01f, 0.01f, 0.01f});
+        }
     }
     ImGui::End();
 }
