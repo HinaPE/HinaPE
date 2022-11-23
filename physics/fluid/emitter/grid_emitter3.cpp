@@ -2,7 +2,7 @@
 
 #include "grid_emitter3.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 GridEmitter3::GridEmitter3() {}
 

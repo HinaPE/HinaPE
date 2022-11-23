@@ -6,7 +6,7 @@
 
 #include <algorithm>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 PicSolver3::PicSolver3() : PicSolver3({1, 1, 1}, {1, 1, 1}, {0, 0, 0}) {
 }

@@ -1,7 +1,7 @@
 #include "flip_solver3.h"
 #include <pch.h>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 FlipSolver3::FlipSolver3() : FlipSolver3({1, 1, 1}, {1, 1, 1}, {0, 0, 0}) {}
 

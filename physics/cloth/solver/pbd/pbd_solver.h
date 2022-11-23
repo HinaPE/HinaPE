@@ -1,10 +1,10 @@
-#ifndef HINAPE_CLOTH_ENGINE_PBD_SOLVER_H
-#define HINAPE_CLOTH_ENGINE_PBD_SOLVER_H
+#ifndef HINAPE_CLOTH_PBD_SOLVER_H
+#define HINAPE_CLOTH_PBD_SOLVER_H
 
 //#include "../cloth_solver.h"
 //#include <memory>
 //
-//namespace HinaPE::ClothEngine
+//namespace HinaPE::Cloth
 //{
 //class PBDSolver : public ClothSolver
 //{
@@ -44,4 +44,4 @@
 //};
 //}
 
-#endif //HINAPE_CLOTH_ENGINE_PBD_SOLVER_H
+#endif //HINAPE_CLOTH_PBD_SOLVER_H

@@ -16,7 +16,7 @@
 #include <vector>
 
 using namespace HinaPE;
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 GridSystemData3::GridSystemData3()
         : GridSystemData3({0, 0, 0}, {1, 1, 1}, {0, 0, 0}) {
@@ -247,19 +247,19 @@ void GridSystemData3::deserialize(const std::vector<uint8_t>& buffer) {
 
     deserializeGrid(
             gsd->scalarData(),
-            HinaPE::FluidEngine::Factory::buildScalarGrid3,
+            HinaPE::Fluid::Factory::buildScalarGrid3,
             &_scalarDataList);
     deserializeGrid(
             gsd->vectorData(),
-            HinaPE::FluidEngine::Factory::buildVectorGrid3,
+            HinaPE::Fluid::Factory::buildVectorGrid3,
             &_vectorDataList);
     deserializeGrid(
             gsd->advectableScalarData(),
-            HinaPE::FluidEngine::Factory::buildScalarGrid3,
+            HinaPE::Fluid::Factory::buildScalarGrid3,
             &_advectableScalarDataList);
     deserializeGrid(
             gsd->advectableVectorData(),
-            HinaPE::FluidEngine::Factory::buildVectorGrid3,
+            HinaPE::Fluid::Factory::buildVectorGrid3,
             &_advectableVectorDataList);
 
     _velocityIdx = static_cast<size_t>(gsd->velocityIdx());

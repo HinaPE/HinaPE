@@ -6,7 +6,7 @@
 #include "../../../../common/geometry/surface_to_implicit3.h"
 #include <algorithm>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 static const char kFluid = 1;
 static const char kCollider = 0;

@@ -1,7 +1,7 @@
 #include <pch.h>
 #include "grid_boundary_condition_solver3.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 GridBoundaryConditionSolver3::GridBoundaryConditionSolver3() {
 }

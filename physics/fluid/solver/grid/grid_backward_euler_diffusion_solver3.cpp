@@ -5,7 +5,7 @@
 #include "fdm_utils.h"
 #include "level_set_utils.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 const char kFluid = 0;
 const char kAir = 1;

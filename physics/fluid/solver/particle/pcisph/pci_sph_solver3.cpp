@@ -6,7 +6,7 @@
 
 #include <algorithm>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 // Heuristically chosen
 const double kDefaultTimeStepLimitScale = 5.0;

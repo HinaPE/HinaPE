@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_SPH_SOLVER3_H_
-#define HINAPE_FLUID_ENGINE_SPH_SOLVER3_H_
+#ifndef HINAPE_FLUID_SPH_SOLVER3_H_
+#define HINAPE_FLUID_SPH_SOLVER3_H_
 
 #include "sph_system_data3.h"
 
@@ -7,7 +7,7 @@
 
 #include "constants.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 //!
@@ -233,6 +233,6 @@ public:
     auto makeShared() const -> SphSolver3Ptr;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
-#endif  // HINAPE_FLUID_ENGINE_SPH_SOLVER3_H_
+#endif  // HINAPE_FLUID_SPH_SOLVER3_H_

@@ -17,7 +17,7 @@
 #include <vector>
 
 using namespace HinaPE;
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 static const size_t kDefaultHashGridResolution = 64;
 

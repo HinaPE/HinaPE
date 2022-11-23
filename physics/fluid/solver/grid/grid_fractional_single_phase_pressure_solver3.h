@@ -11,7 +11,7 @@
 
 #include <memory>
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief 3-D fractional single-phase pressure solver.

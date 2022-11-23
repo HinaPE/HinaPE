@@ -27,7 +27,7 @@ namespace HinaPE::fbs
 
 #endif  // JET_DOXYGEN
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief      3-D grid system data.

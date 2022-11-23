@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_PARTICLE_SYSTEM_SOLVER3_H_
-#define HINAPE_FLUID_ENGINE_PARTICLE_SYSTEM_SOLVER3_H_
+#ifndef HINAPE_FLUID_PARTICLE_SYSTEM_SOLVER3_H_
+#define HINAPE_FLUID_PARTICLE_SYSTEM_SOLVER3_H_
 
 #include "particle_system_data3.h"
 
@@ -10,7 +10,7 @@
 
 #include "constants.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 //!
@@ -209,6 +209,6 @@ public:
     auto makeShared() const -> ParticleSystemSolver3Ptr;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
-#endif  // HINAPE_FLUID_ENGINE_PARTICLE_SYSTEM_SOLVER3_H_
+#endif  // HINAPE_FLUID_PARTICLE_SYSTEM_SOLVER3_H_

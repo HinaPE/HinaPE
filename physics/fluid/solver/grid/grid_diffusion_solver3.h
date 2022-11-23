@@ -13,7 +13,7 @@
 #include <limits>
 #include <memory>
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief Abstract base class for 3-D grid-based diffusion equation solver.

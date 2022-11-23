@@ -1,6 +1,6 @@
 #include "cloth_geometry_data.h"
 
-HinaPE::ClothEngine::ClothGeometryData::ClothGeometryData(HinaPE::ClothEngine::real width, HinaPE::ClothEngine::real height, size_t num_x, size_t num_y)
+HinaPE::Cloth::ClothGeometryData::ClothGeometryData(HinaPE::Cloth::real width, HinaPE::Cloth::real height, size_t num_x, size_t num_y)
 {
     _vertices.resize(num_x * num_y);
     _indices.resize((num_x - 1) * (num_y - 1) * 6);
@@ -20,5 +20,5 @@ HinaPE::ClothEngine::ClothGeometryData::ClothGeometryData(HinaPE::ClothEngine::r
         }
     }
 }
-auto HinaPE::ClothEngine::ClothGeometryData::get_vertices() const -> const std::vector<HinaPE::ClothEngine::mVector3> & { return _vertices; }
-auto HinaPE::ClothEngine::ClothGeometryData::get_indices() const -> const std::vector<unsigned int> & { return _indices; }
+auto HinaPE::Cloth::ClothGeometryData::get_vertices() const -> const std::vector<HinaPE::Cloth::mVector3> & { return _vertices; }
+auto HinaPE::Cloth::ClothGeometryData::get_indices() const -> const std::vector<unsigned int> & { return _indices; }

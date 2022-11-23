@@ -13,7 +13,7 @@
 
 using namespace HinaPE;
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 SphSystemData3::SphSystemData3() : SphSystemData3(0) {}
@@ -323,4 +323,4 @@ auto SphSystemData3::operator=(const SphSystemData3 &other) -> SphSystemData3 &
     return *this;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid

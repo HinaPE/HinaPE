@@ -10,7 +10,7 @@
 #include "../../../../common/grid/scalar_grid3.h"
 #include <memory>
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief Abstract base class for 3-D grid-based pressure solver.

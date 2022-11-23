@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_POINT_KDTREE_SEARCHER2_H
-#define HINAPE_FLUID_ENGINE_POINT_KDTREE_SEARCHER2_H
+#ifndef HINAPE_FLUID_POINT_KDTREE_SEARCHER2_H
+#define HINAPE_FLUID_POINT_KDTREE_SEARCHER2_H
 
 #include "point_neighbor_searcher2.h"
 
@@ -9,7 +9,7 @@
 
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 //!
@@ -101,6 +101,6 @@ public:
     PointNeighborSearcher2Ptr buildPointNeighborSearcher() const override;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
-#endif  // HINAPE_FLUID_ENGINE_POINT_KDTREE_SEARCHER2_H
+#endif  // HINAPE_FLUID_POINT_KDTREE_SEARCHER2_H

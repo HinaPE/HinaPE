@@ -1,12 +1,12 @@
-#ifndef HINAPE_CLOTH_ENGINE_CLOTH_DATA_H
-#define HINAPE_CLOTH_ENGINE_CLOTH_DATA_H
+#ifndef HINAPE_CLOTH_CLOTH_DATA_H
+#define HINAPE_CLOTH_CLOTH_DATA_H
 
 #include "array/array1.h"
 #include "math/vector3.h"
 #include <memory>
 #include <vector>
 
-namespace HinaPE::ClothEngine
+namespace HinaPE::Cloth
 {
 class ClothData
 {
@@ -47,4 +47,4 @@ private:
 using ClothDataPtr = std::shared_ptr<ClothData>;
 }
 
-#endif //HINAPE_CLOTH_ENGINE_CLOTH_DATA_H
+#endif //HINAPE_CLOTH_CLOTH_DATA_H

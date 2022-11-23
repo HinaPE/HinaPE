@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_FACTORY_H_
-#define HINAPE_FLUID_ENGINE_FACTORY_H_
+#ifndef HINAPE_FLUID_FACTORY_H_
+#define HINAPE_FLUID_FACTORY_H_
 
 #include "grid/scalar_grid2.h"
 #include "grid/scalar_grid3.h"
@@ -10,7 +10,7 @@
 
 #include <string>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 class Factory
@@ -29,6 +29,6 @@ public:
     static PointNeighborSearcher3Ptr buildPointNeighborSearcher3(const std::string &name);
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
-#endif  // HINAPE_FLUID_ENGINE_FACTORY_H_
+#endif  // HINAPE_FLUID_FACTORY_H_

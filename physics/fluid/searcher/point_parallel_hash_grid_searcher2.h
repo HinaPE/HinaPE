@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_POINT_PARALLEL_HASH_GRID_SEARCHER2_H_
-#define HINAPE_FLUID_ENGINE_POINT_PARALLEL_HASH_GRID_SEARCHER2_H_
+#ifndef HINAPE_FLUID_POINT_PARALLEL_HASH_GRID_SEARCHER2_H_
+#define HINAPE_FLUID_POINT_PARALLEL_HASH_GRID_SEARCHER2_H_
 
 #include "point_neighbor_searcher2.h"
 
@@ -10,7 +10,7 @@
 
 class PointParallelHashGridSearcher2Tests;
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 //!
@@ -244,6 +244,6 @@ private:
     double _gridSpacing = 1.0;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
-#endif  // HINAPE_FLUID_ENGINE_POINT_PARALLEL_HASH_GRID_SEARCHER2_H_
+#endif  // HINAPE_FLUID_POINT_PARALLEL_HASH_GRID_SEARCHER2_H_

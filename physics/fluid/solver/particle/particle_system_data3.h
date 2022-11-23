@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_PARTICLE_SYSTEM_DATA3_H_
-#define HINAPE_FLUID_ENGINE_PARTICLE_SYSTEM_DATA3_H_
+#ifndef HINAPE_FLUID_PARTICLE_SYSTEM_DATA3_H_
+#define HINAPE_FLUID_PARTICLE_SYSTEM_DATA3_H_
 
 #include "searcher/point_neighbor_searcher3.h"
 #include "array/array1.h"
@@ -25,7 +25,7 @@ struct ParticleSystemData3;
 
 #endif  // JET_DOXYGEN
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 //!
@@ -230,6 +230,6 @@ private:
 //! Shared pointer type of ParticleSystemData3.
 using ParticleSystemData3Ptr = std::shared_ptr<ParticleSystemData3>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
-#endif  // HINAPE_FLUID_ENGINE_PARTICLE_SYSTEM_DATA3_H_
+#endif  // HINAPE_FLUID_PARTICLE_SYSTEM_DATA3_H_

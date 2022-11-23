@@ -2,7 +2,7 @@
 #include "advection_solver3.h"
 #include <limits>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 AdvectionSolver3::AdvectionSolver3() {
 }

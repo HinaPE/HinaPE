@@ -16,7 +16,7 @@ namespace HinaPE {
 //! classes can override SemiLagrangian2::getScalarSamplerFunc and
 //! SemiLagrangian2::getVectorSamplerFunc. See CubicSemiLagrangian2 for example.
 //!
-    class SemiLagrangian3 : public FluidEngine::AdvectionSolver3 {
+    class SemiLagrangian3 : public Fluid::AdvectionSolver3 {
     public:
         SemiLagrangian3();
 

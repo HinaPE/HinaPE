@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 void BccLatticePointGenerator::forEachPoint(const BoundingBox3D &boundingBox, double spacing, const std::function<bool(const Vector3D &)> &callback) const
@@ -40,4 +40,4 @@ void BccLatticePointGenerator::forEachPoint(const BoundingBox3D &boundingBox, do
     }
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid

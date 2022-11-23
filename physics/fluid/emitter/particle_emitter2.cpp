@@ -3,7 +3,7 @@
 #include "pch.h"
 #include "parallel.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 ParticleEmitter2::ParticleEmitter2() = default;
@@ -46,4 +46,4 @@ void ParticleEmitter2::setOnBeginUpdateCallback(const OnBeginUpdateCallback &cal
     _onBeginUpdateCallback = callback;
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid

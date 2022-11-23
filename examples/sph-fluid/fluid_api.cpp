@@ -2,7 +2,7 @@
 #include "fluid_api.h"
 
 using namespace HinaPE;
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 void saveParticleAsXyz(const ParticleSystemData3Ptr &particles, const std::string &rootDir, int frameCnt)
 {
@@ -34,7 +34,7 @@ void FluidAPI::step(Scene_Particles *_scene_particles, float dt)
     static HinaPE::Frame frame(0, 1.0 / 60.0);
     _solver_ptr->update(frame++);
 
-    auto const &data = std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(_solver_ptr)->sphSystemData();
+    auto const &data = std::static_pointer_cast<HinaPE::Fluid::SphSolver3>(_solver_ptr)->sphSystemData();
     HinaPE::parallelFor((size_t) 0, (size_t) size, [&](size_t i)
     {
         auto &p = data->positions()[i];
@@ -184,12 +184,12 @@ void FluidAPI::load_solver()
 {
     if (!_emitter_ptr_list.empty() && !_collider_ptr_list.empty() && !_particles_domain.isEmpty() && !_solver_prepared)
     {
-        _solver_ptr = HinaPE::FluidEngine::SphSolver3::builder().withTargetDensity(_fluid_opt.target_density).withTargetSpacing(_fluid_opt.target_spacing).makeShared();
+        _solver_ptr = HinaPE::Fluid::SphSolver3::builder().withTargetDensity(_fluid_opt.target_density).withTargetSpacing(_fluid_opt.target_spacing).makeShared();
         _solver_ptr->setEmitter(_emitter_ptr_list.back()); // TODO: to support more emitter
         _solver_ptr->setCollider(_collider_ptr_list.back()); // TODO: to support more collider
         if (_fluid_opt.type == SPH)
         {
-            std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(_solver_ptr)->setPseudoViscosityCoefficient(_fluid_opt.pseudo_viscosity_coefficient);
+            std::static_pointer_cast<HinaPE::Fluid::SphSolver3>(_solver_ptr)->setPseudoViscosityCoefficient(_fluid_opt.pseudo_viscosity_coefficient);
         }
         _solver_prepared = true;
     }
@@ -198,12 +198,12 @@ void FluidAPI::load_solver()
 void FluidAPI::load_pci_solver() {
     if (!_emitter_ptr_list.empty() && !_collider_ptr_list.empty() && !_particles_domain.isEmpty() && !_solver_prepared)
     {
-        _solver_ptr = HinaPE::FluidEngine::PciSphSolver3::builder().withTargetDensity(_fluid_opt.target_density).withTargetSpacing(_fluid_opt.target_spacing).makeShared();
+        _solver_ptr = HinaPE::Fluid::PciSphSolver3::builder().withTargetDensity(_fluid_opt.target_density).withTargetSpacing(_fluid_opt.target_spacing).makeShared();
         _solver_ptr->setEmitter(_emitter_ptr_list.back()); // TODO: to support more emitter
         _solver_ptr->setCollider(_collider_ptr_list.back()); // TODO: to support more collider
         if (_fluid_opt.type == SPH)
         {
-            std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(_solver_ptr)->setPseudoViscosityCoefficient(_fluid_opt.pseudo_viscosity_coefficient);
+            std::static_pointer_cast<HinaPE::Fluid::SphSolver3>(_solver_ptr)->setPseudoViscosityCoefficient(_fluid_opt.pseudo_viscosity_coefficient);
         }
         _solver_prepared = true;
     }
@@ -212,19 +212,19 @@ void FluidAPI::load_pci_solver() {
 void FluidAPI::load_dam_breaking_solver() {
     if (!_emitter_ptr_list.empty() && !_collider_ptr_list.empty() && !_particles_domain.isEmpty() && !_solver_prepared)
     {
-        _solver_ptr = HinaPE::FluidEngine::PciSphSolver3::builder().withTargetDensity(_fluid_opt.target_density).withTargetSpacing(_fluid_opt.target_spacing).makeShared();
+        _solver_ptr = HinaPE::Fluid::PciSphSolver3::builder().withTargetDensity(_fluid_opt.target_density).withTargetSpacing(_fluid_opt.target_spacing).makeShared();
         _solver_ptr->setEmitter(_emitter_ptr_list.back()); // TODO: to support more emitter
         _solver_ptr->setCollider(_collider_ptr_list.back()); // TODO: to support more collider
         if (_fluid_opt.type == SPH)
         {
-            std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(_solver_ptr)->setPseudoViscosityCoefficient(_fluid_opt.pseudo_viscosity_coefficient);
-            std::static_pointer_cast<HinaPE::FluidEngine::SphSolver3>(_solver_ptr)->setTimeStepLimitScale(10.0);
+            std::static_pointer_cast<HinaPE::Fluid::SphSolver3>(_solver_ptr)->setPseudoViscosityCoefficient(_fluid_opt.pseudo_viscosity_coefficient);
+            std::static_pointer_cast<HinaPE::Fluid::SphSolver3>(_solver_ptr)->setTimeStepLimitScale(10.0);
         }
         _solver_prepared = true;
     }
 }
 
-void FluidAPI::add_emitter(const std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3> &_emitter_ptr)
+void FluidAPI::add_emitter(const std::shared_ptr<HinaPE::Fluid::ParticleEmitter3> &_emitter_ptr)
 { _emitter_ptr_list.emplace_back(_emitter_ptr); }
 
 void FluidAPI::add_collider(const std::shared_ptr<HinaPE::Collider3> &_collider_ptr)

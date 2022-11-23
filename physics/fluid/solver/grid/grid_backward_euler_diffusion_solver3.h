@@ -7,7 +7,7 @@
 #include <limits>
 #include <memory>
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief 3-D grid-based backward Euler diffusion solver.

@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <vector>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 PointSimpleListSearcher2::PointSimpleListSearcher2()
 {

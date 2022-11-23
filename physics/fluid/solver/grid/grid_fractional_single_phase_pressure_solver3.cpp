@@ -432,15 +432,15 @@ namespace {
 
 }  // namespace
 
-HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::
+HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::
 GridFractionalSinglePhasePressureSolver3() {
     _systemSolver = std::make_shared<FdmIccgSolver3>(100, kDefaultTolerance);
 }
 
-HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::
+HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::
 ~GridFractionalSinglePhasePressureSolver3() {}
 
-void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::solve(
+void HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::solve(
         const FaceCenteredGrid3& input, double timeIntervalInSeconds,
         FaceCenteredGrid3* output, const ScalarField3& boundarySdf,
         const VectorField3& boundaryVelocity, const ScalarField3& fluidSdf,
@@ -470,18 +470,18 @@ void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::solve(
     }
 }
 
-HinaPE::FluidEngine::GridBoundaryConditionSolver3Ptr
-HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::suggestedBoundaryConditionSolver()
+HinaPE::Fluid::GridBoundaryConditionSolver3Ptr
+HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::suggestedBoundaryConditionSolver()
 const {
     return std::make_shared<GridFractionalBoundaryConditionSolver3>();
 }
 
 const FdmLinearSystemSolver3Ptr&
-HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::linearSystemSolver() const {
+HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::linearSystemSolver() const {
     return _systemSolver;
 }
 
-void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::setLinearSystemSolver(
+void HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::setLinearSystemSolver(
         const FdmLinearSystemSolver3Ptr& solver) {
     _systemSolver = solver;
     _mgSystemSolver = std::dynamic_pointer_cast<FdmMgSolver3>(_systemSolver);
@@ -496,7 +496,7 @@ void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::setLinearSys
     }
 }
 
-const FdmVector3& HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::pressure() const {
+const FdmVector3& HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::pressure() const {
     if (_mgSystemSolver == nullptr) {
         return _system.x;
     } else {
@@ -504,7 +504,7 @@ const FdmVector3& HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3:
     }
 }
 
-void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::buildWeights(
+void HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::buildWeights(
         const FaceCenteredGrid3& input, const ScalarField3& boundarySdf,
         const VectorField3& boundaryVelocity, const ScalarField3& fluidSdf) {
     auto size = input.resolution();
@@ -622,7 +622,7 @@ void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::buildWeights
     }
 }
 
-void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::decompressSolution() {
+void HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::decompressSolution() {
     const auto acc = _fluidSdf[0].constAccessor();
     _system.x.resize(acc.size());
 
@@ -635,7 +635,7 @@ void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::decompressSo
     });
 }
 
-void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::buildSystem(
+void HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::buildSystem(
         const FaceCenteredGrid3& input, bool useCompressed) {
     Size3 size = input.resolution();
     size_t numLevels = 1;
@@ -699,7 +699,7 @@ void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::buildSystem(
     }
 }
 
-void HinaPE::FluidEngine::GridFractionalSinglePhasePressureSolver3::applyPressureGradient(
+void HinaPE::Fluid::GridFractionalSinglePhasePressureSolver3::applyPressureGradient(
         const FaceCenteredGrid3& input, FaceCenteredGrid3* output) {
     Size3 size = input.resolution();
     auto u = input.uConstAccessor();

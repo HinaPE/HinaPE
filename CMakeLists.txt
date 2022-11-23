@@ -1,21 +1,21 @@
 cmake_minimum_required(VERSION 3.16)
 project(HinaPE VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
-option(HinaPE_CLOTH_ENGINE "Load HinaPE Cloth Engine" ON)
-option(HinaPE_RIGIDBODY_ENGINE "Load HinaPE Rigidbody Engine" ON)
-option(HinaPE_FLUID_ENGINE "Load HinaPE Fluid Engine" ON)
+option(HINAPE_CLOTH "Load HinaPE Cloth Engine" ON)
+option(HINAPE_RIGID "Load HinaPE Rigidbody Engine" ON)
+option(HINAPE_FLUID "Load HinaPE Fluid Engine" ON)
 option(HinaPE_USE_KASUMI "Use Kasumi Renderer" ON)
 option(HinaPE_EXAMPLES "Load HinaPE Examples" ON)
 
-if (HinaPE_CLOTH_ENGINE)
+if (HINAPE_CLOTH)
     add_subdirectory(physics/cloth)
 endif ()
 
-if (HinaPE_RIGIDBODY_ENGINE)
+if (HINAPE_RIGID)
     add_subdirectory(physics/fluid)
 endif ()
 
-if (HinaPE_FLUID_ENGINE)
+if (HINAPE_FLUID)
     add_subdirectory(physics/rigid)
 endif ()
 

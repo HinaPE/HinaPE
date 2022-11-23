@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief Blocked 3-D boundary condition solver for grids.
@@ -16,7 +16,7 @@ namespace HinaPE::FluidEngine {
 //! since the pressure solver assumes blocked boundary representation as well.
 //!
     class GridBlockedBoundaryConditionSolver3 final
-            : public FluidEngine::GridFractionalBoundaryConditionSolver3 {
+            : public Fluid::GridFractionalBoundaryConditionSolver3 {
     public:
         //! Default constructor.
         GridBlockedBoundaryConditionSolver3();

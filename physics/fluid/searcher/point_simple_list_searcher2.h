@@ -1,11 +1,11 @@
-#ifndef HINAPE_FLUID_ENGINE_POINT_SIMPLE_LIST_SEARCHER2_H_
-#define HINAPE_FLUID_ENGINE_POINT_SIMPLE_LIST_SEARCHER2_H_
+#ifndef HINAPE_FLUID_POINT_SIMPLE_LIST_SEARCHER2_H_
+#define HINAPE_FLUID_POINT_SIMPLE_LIST_SEARCHER2_H_
 
 #include "point_neighbor_searcher2.h"
 
 #include <vector>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 //!
@@ -105,6 +105,6 @@ public:
     PointNeighborSearcher2Ptr buildPointNeighborSearcher() const override;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
-#endif  // HINAPE_FLUID_ENGINE_POINT_SIMPLE_LIST_SEARCHER2_H_
+#endif  // HINAPE_FLUID_POINT_SIMPLE_LIST_SEARCHER2_H_

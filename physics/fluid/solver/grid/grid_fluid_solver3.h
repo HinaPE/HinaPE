@@ -12,7 +12,7 @@
 #include "grid_system_data3.h"
 #include "../../../../common/animation/physics_animation.h"
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief Abstract base class for grid-based 3-D fluid solver.

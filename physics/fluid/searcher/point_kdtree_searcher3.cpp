@@ -12,7 +12,7 @@
 
 #include <numeric>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 PointKdTreeSearcher3::PointKdTreeSearcher3() {}
 

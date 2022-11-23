@@ -14,7 +14,7 @@
 #include <vector>
 
 using namespace HinaPE;
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 PointHashGridSearcher3::PointHashGridSearcher3(const Size3 &resolution, double gridSpacing) : PointHashGridSearcher3(resolution.x, resolution.y, resolution.z, gridSpacing)
 {

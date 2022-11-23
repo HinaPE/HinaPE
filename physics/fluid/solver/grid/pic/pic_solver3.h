@@ -5,7 +5,7 @@
 #include "../../../emitter/particle_emitter3.h"
 #include "../../particle/particle_system_data3.h"
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief 3-D Particle-in-Cell (PIC) implementation.

@@ -27,7 +27,7 @@ public:
     void load_solver();
     void load_pci_solver();
     void load_dam_breaking_solver();
-    void add_emitter(const std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3>&);
+    void add_emitter(const std::shared_ptr<HinaPE::Fluid::ParticleEmitter3>&);
     void add_collider(const std::shared_ptr<HinaPE::Collider3>&);
     void assign_particles_domain(const HinaPE::BoundingBox3D &);
     enum FluidType
@@ -45,8 +45,8 @@ public:
     };
     FluidOpt _fluid_opt;
     bool _solver_prepared = false;
-    std::shared_ptr<HinaPE::FluidEngine::ParticleSystemSolver3> _solver_ptr;
-    std::vector<std::shared_ptr<HinaPE::FluidEngine::ParticleEmitter3>> _emitter_ptr_list;
+    std::shared_ptr<HinaPE::Fluid::ParticleSystemSolver3> _solver_ptr;
+    std::vector<std::shared_ptr<HinaPE::Fluid::ParticleEmitter3>> _emitter_ptr_list;
     std::vector<std::shared_ptr<HinaPE::Collider3>> _collider_ptr_list;
     HinaPE::BoundingBox3D _particles_domain;
 };

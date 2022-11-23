@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 PointGenerator2::PointGenerator2()
@@ -20,4 +20,4 @@ void PointGenerator2::generate(const BoundingBox2D &boundingBox, double spacing,
     });
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid

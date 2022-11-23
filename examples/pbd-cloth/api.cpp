@@ -1,12 +1,12 @@
 #include "api.h"
 #include "imgui.h"
 
-void HinaPE::ClothEngine::Api::step(Kasumi::Workbench::ScenePtr &scene, float dt)
+void HinaPE::Cloth::Api::step(Kasumi::Workbench::ScenePtr &scene, float dt)
 {
 
 }
 
-void HinaPE::ClothEngine::Api::gui(Kasumi::Workbench::ScenePtr &scene)
+void HinaPE::Cloth::Api::gui(Kasumi::Workbench::ScenePtr &scene)
 {
     static int rows = 30, cols = 30;
     ImGui::Begin("Cloth", nullptr, ImGuiWindowFlags_AlwaysAutoResize);

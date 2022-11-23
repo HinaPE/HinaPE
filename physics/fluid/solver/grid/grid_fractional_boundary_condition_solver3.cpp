@@ -7,7 +7,7 @@
 #include "../../../../common/geometry/surface_to_implicit3.h"
 #include <algorithm>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 GridFractionalBoundaryConditionSolver3
 ::GridFractionalBoundaryConditionSolver3() {

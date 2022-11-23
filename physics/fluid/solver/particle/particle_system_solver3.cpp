@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 ParticleSystemSolver3::ParticleSystemSolver3() : ParticleSystemSolver3(1e-3, 1e-3)
@@ -280,4 +280,4 @@ auto ParticleSystemSolver3::Builder::makeShared() const -> ParticleSystemSolver3
     });
 }
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid

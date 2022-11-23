@@ -1,11 +1,11 @@
-#ifndef HINAPE_FLUID_ENGINE_SPH_KERNELS3_H_
-#define HINAPE_FLUID_ENGINE_SPH_KERNELS3_H_
+#ifndef HINAPE_FLUID_SPH_KERNELS3_H_
+#define HINAPE_FLUID_SPH_KERNELS3_H_
 
 #include "math/vector3.h"
 
 #include "constants.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 //!
@@ -105,8 +105,8 @@ struct SphSpikyKernel3
     auto secondDerivative(double distance) const -> double;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
 #include "sph_kernels3-inl.h"
 
-#endif  // HINAPE_FLUID_ENGINE_SPH_KERNELS3_H_
+#endif  // HINAPE_FLUID_SPH_KERNELS3_H_

@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 PointNeighborSearcher2::PointNeighborSearcher2()
 {

@@ -3,7 +3,7 @@
 
 #include "../pic/pic_solver3.h"
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief 3-D Fluid-Implicit Particle (FLIP) implementation.

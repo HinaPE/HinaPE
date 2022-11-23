@@ -1,5 +1,5 @@
-#ifndef HINAPE_FLUID_ENGINE_VOLUME_PARTICLE_EMITTER3_H_
-#define HINAPE_FLUID_ENGINE_VOLUME_PARTICLE_EMITTER3_H_
+#ifndef HINAPE_FLUID_VOLUME_PARTICLE_EMITTER3_H_
+#define HINAPE_FLUID_VOLUME_PARTICLE_EMITTER3_H_
 
 #include "particle_emitter3.h"
 
@@ -11,7 +11,7 @@
 #include <memory>
 #include <random>
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 //!
@@ -233,6 +233,6 @@ private:
     uint32_t _seed = 0;
 };
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
-#endif  // HINAPE_FLUID_ENGINE_VOLUME_PARTICLE_EMITTER3_H_
+#endif  // HINAPE_FLUID_VOLUME_PARTICLE_EMITTER3_H_

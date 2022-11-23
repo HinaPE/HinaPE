@@ -1,10 +1,10 @@
-#ifndef HINAPE_FLUID_ENGINE_PARTICLE_EMITTER3_H_
-#define HINAPE_FLUID_ENGINE_PARTICLE_EMITTER3_H_
+#ifndef HINAPE_FLUID_PARTICLE_EMITTER3_H_
+#define HINAPE_FLUID_PARTICLE_EMITTER3_H_
 
 #include "animation/animation.h"
 #include "solver/particle/particle_system_data3.h"
 
-namespace HinaPE::FluidEngine
+namespace HinaPE::Fluid
 {
 
 //!
@@ -71,6 +71,6 @@ private:
 //! Shared pointer for the ParticleEmitter3 type.
 using ParticleEmitter3Ptr = std::shared_ptr<ParticleEmitter3>;
 
-}  // namespace HinaPE::FluidEngine
+}  // namespace HinaPE::Fluid
 
-#endif  // HINAPE_FLUID_ENGINE_PARTICLE_EMITTER3_H_
+#endif  // HINAPE_FLUID_PARTICLE_EMITTER3_H_

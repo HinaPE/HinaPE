@@ -8,7 +8,7 @@
 
 #include <algorithm>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 static double kTimeStepLimitBySpeedFactor = 0.4;
 static double kTimeStepLimitByForceFactor = 0.25;

@@ -9,7 +9,7 @@
 #include <limits>
 #include <memory>
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief Abstract based class for 3-D grid-based advection solver.

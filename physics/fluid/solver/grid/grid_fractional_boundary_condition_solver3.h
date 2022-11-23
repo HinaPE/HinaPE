@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace HinaPE::FluidEngine {
+namespace HinaPE::Fluid {
 
 //!
 //! \brief Fractional 3-D boundary condition solver for grids.

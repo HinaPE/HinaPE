@@ -13,7 +13,7 @@
 #include <iomanip>
 #include <memory>
 
-namespace HinaPE::ClothEngine
+namespace HinaPE::Cloth
 {
 using real = float;
 using mVector2 = HinaPE::Vector2<real>;

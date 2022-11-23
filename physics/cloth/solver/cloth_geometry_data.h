@@ -6,7 +6,7 @@
 #include <memory>
 #include <vector>
 
-namespace HinaPE::ClothEngine
+namespace HinaPE::Cloth
 {
 class ClothGeometryData
 {

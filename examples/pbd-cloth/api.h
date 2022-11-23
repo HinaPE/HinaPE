@@ -5,7 +5,7 @@
 #include "renderer/scene/scene.h"
 #include "cloth/solver/cloth_geometry_data.h"
 
-namespace HinaPE::ClothEngine
+namespace HinaPE::Cloth
 {
 class Api : public Kasumi::Api, public std::enable_shared_from_this<Api>
 {

@@ -14,7 +14,7 @@
 
 #include <algorithm>
 
-using namespace HinaPE::FluidEngine;
+using namespace HinaPE::Fluid;
 
 GridFluidSolver3::GridFluidSolver3()
         : GridFluidSolver3({1, 1, 1}, {1, 1, 1}, {0, 0, 0}) {}
