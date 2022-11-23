@@ -8,15 +8,15 @@ option(HinaPE_USE_KASUMI "Use Kasumi Renderer" ON)
 option(HinaPE_EXAMPLES "Load HinaPE Examples" ON)
 
 if (HinaPE_CLOTH_ENGINE)
-    add_subdirectory(engine/cloth)
+    add_subdirectory(physics/cloth)
 endif ()
 
 if (HinaPE_RIGIDBODY_ENGINE)
-    add_subdirectory(engine/fluid)
+    add_subdirectory(physics/fluid)
 endif ()
 
 if (HinaPE_FLUID_ENGINE)
-    add_subdirectory(engine/rigid)
+    add_subdirectory(physics/rigid)
 endif ()
 
 # If HinaPE is the Root Project, then enable Renderer and Examples

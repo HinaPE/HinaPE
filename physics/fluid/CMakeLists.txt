@@ -26,7 +26,8 @@ file(GLOB_RECURSE HINA_FLUID_ENGINE_SRC
         factory.h
         )
 
-add_library(HinaPE_Fluid_Engine ${HINA_FLUID_ENGINE_SRC})
-set_target_properties(HinaPE_Fluid_Engine PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-target_include_directories(HinaPE_Fluid_Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_COMMON_DIR} ${HINAPE_DEPS_DIR})
-target_link_libraries(HinaPE_Fluid_Engine PUBLIC HinaPE_Common)
+add_library(HinaPE_Fluid ${HINA_FLUID_ENGINE_SRC})
+set_target_properties(HinaPE_Fluid PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+target_include_directories(HinaPE_Fluid PUBLIC ${HINAPE_COMMON_DIR} ${HINAPE_DEPS_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
+target_include_directories(HinaPE_Fluid PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(HinaPE_Fluid PUBLIC HinaPE_Common)

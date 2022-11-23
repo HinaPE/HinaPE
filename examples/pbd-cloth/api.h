@@ -1,9 +1,9 @@
 #ifndef HINAPE_API_H
 #define HINAPE_API_H
 
-#include "../../kasumi/workbench/api.h"
-#include "scene/scene.h"
-#include "solver/cloth_geometry_data.h"
+#include "renderer/api.h"
+#include "renderer/scene/scene.h"
+#include "cloth/solver/cloth_geometry_data.h"
 
 namespace HinaPE::ClothEngine
 {
