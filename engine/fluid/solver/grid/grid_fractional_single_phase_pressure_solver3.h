@@ -2,9 +2,9 @@
 #define HINAPE_GRID_FRACTIONAL_SINGLE_PHASE_PRESSURE_SOLVER3_H
 
 #include "../../../../common/grid/cell_centered_scalar_grid3.h"
-#include "../fluid-engine/FDM/fdm_linear_system_solver3.h"
-#include "../fluid-engine/FDM/fdm_mg_linear_system3.h"
-#include "../fluid-engine/FDM/fdm_mg_solver3.h"
+#include "FDM/fdm_linear_system_solver3.h"
+#include "FDM/fdm_mg_linear_system3.h"
+#include "FDM/fdm_mg_solver3.h"
 #include "grid_boundary_condition_solver3.h"
 #include "grid_pressure_solver3.h"
 #include "../../../../common/grid/vertex_centered_scalar_grid3.h"

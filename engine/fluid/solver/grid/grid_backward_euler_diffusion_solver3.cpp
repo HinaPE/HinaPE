@@ -1,7 +1,7 @@
 #include <pch.h>
 #include "grid_backward_euler_diffusion_solver3.h"
 #include "constants.h"
-#include "../fluid-engine/FDM/fdm_iccg_solver3.h"
+#include "FDM/fdm_iccg_solver3.h"
 #include "fdm_utils.h"
 #include "level_set_utils.h"
 

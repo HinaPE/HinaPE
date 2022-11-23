@@ -1,58 +1,32 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE VERSION 1.20 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+
+set(HINAPE_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common)
+set(HINAPE_PHYSICS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/engine)
+set(HINAPE_RENDERER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kasumi)
 
 option(HinaPE_CLOTH_ENGINE "Load HinaPE Cloth Engine" ON)
 option(HinaPE_RIGIDBODY_ENGINE "Load HinaPE Rigidbody Engine" ON)
 option(HinaPE_FLUID_ENGINE "Load HinaPE Fluid Engine" ON)
-option(HinaPE_USE_LEGACY_KASUMI "Use Legacy Kasumi Renderer" ON)
-option(HinaPE_EXAMPLES "Load HinaPE Examples" ON)
+option(HinaPE_USE_LEGACY_KASUMI "Use Legacy Kasumi Renderer" OFF)
+option(HinaPE_EXAMPLES "Load HinaPE Examples" OFF)
 
-set(HINAPE_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common)
-set(HINAPE_PHYSICS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/physics-engine)
-set(HINAPE_RENDERER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/render-engine)
-
-# Load engine modules
 if (HinaPE_CLOTH_ENGINE)
-    add_subdirectory(${HINAPE_PHYSICS_DIR}/cloth-engine)
+    add_subdirectory(${HINAPE_PHYSICS_DIR}/cloth)
 endif ()
 
 if (HinaPE_RIGIDBODY_ENGINE)
-    add_subdirectory(${HINAPE_PHYSICS_DIR}/fluid-engine)
+    add_subdirectory(${HINAPE_PHYSICS_DIR}/fluid)
 endif ()
 
 if (HinaPE_FLUID_ENGINE)
-    add_subdirectory(${HINAPE_PHYSICS_DIR}/rigidbody-engine)
+    add_subdirectory(${HINAPE_PHYSICS_DIR}/rigid)
 endif ()
 
-get_directory_property(HINAPE_PARENT_DIR PARENT_DIRECTORY)
-if (NOT HINAPE_PARENT_DIR)
-    if (HinaPE_USE_LEGACY_KASUMI)
-        add_subdirectory(${HINAPE_RENDERER_DIR}/kasumi-legacy)
-        set(HinaPE_Icon render-engine/kasumi-legacy/platform/icon.rc)
-        if (HinaPE_EXAMPLES)
-            set(Examples
-                    sph-fluid
-                    pbd-cloth
-                    )
-            foreach (Example ${Examples})
-                file(GLOB_RECURSE HINAPE_EXAMPLE_SPH_SRC examples/${Example}/*.cpp examples/${Example}/*.h)
-                add_executable(Example-${Example} ${HINAPE_EXAMPLE_SPH_SRC} ${HinaPE_Icon})
-                set_target_properties(Example-${Example} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-                target_include_directories(Example-${Example} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${HINAPE_PHYSICS_DIR} ${HINAPE_RENDERER_DIR})
-                target_link_libraries(Example-${Example} PUBLIC HinaPE_Render_Engine)
+if (HinaPE_USE_LEGACY_KASUMI)
+    add_library(${HINAPE_RENDERER_DIR})
+endif ()
 
-                if (APPLE)
-                    find_library(APPKIT_LIB AppKit)
-                    target_link_libraries(Example-${Example} PRIVATE ${APPKIT_LIB})
-                endif ()
-                if (CMAKE_CXX_COMPILER_ID MATCHES "Clang") # fixed by: https://github.com/libMesh/libmesh/issues/1396
-                    target_compile_options(Example-${Example} PUBLIC -fno-omit-frame-pointer)
-                    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-                    set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
-                endif ()
-            endforeach ()
-        endif ()
-    else ()
-        add_subdirectory(${HINAPE_RENDERER_DIR}/kasumi-2.0)
-    endif ()
+if (HinaPE_EXAMPLES)
+    add_subdirectory(${HINAPE_COMMON_DIR}/examples)
 endif ()

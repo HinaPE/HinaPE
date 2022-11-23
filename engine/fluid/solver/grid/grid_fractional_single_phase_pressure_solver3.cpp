@@ -1,7 +1,7 @@
 #include <pch.h>
 
 #include "constants.h"
-#include "../fluid-engine/FDM/fdm_iccg_solver3.h"
+#include "FDM/fdm_iccg_solver3.h"
 #include "grid_fractional_boundary_condition_solver3.h"
 #include "grid_fractional_single_phase_pressure_solver3.h"
 #include "level_set_utils.h"

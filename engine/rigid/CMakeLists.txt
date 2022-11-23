@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE_RigidBody_Engine VERSION 1.20 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE_RigidBody_Engine VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 set(HINAPE_COMMON_DIR "../../common")
 set(HINAPE_DEPS_DIR "../deps")
@@ -8,7 +8,7 @@ if (NOT TARGET HinaPE_Common)
     add_subdirectory(${HINAPE_COMMON_DIR} HinaPE_Common)
 endif ()
 
-add_subdirectory(hina-rigidbody)
+#add_subdirectory(hina-rigidbody)
 
 file(GLOB_RECURSE HINA_RIGIDBODY_ENGINE_SOLVER "solver/*.cpp" "solver/*.h" "solver/*.inl.h")
 

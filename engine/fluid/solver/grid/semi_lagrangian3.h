@@ -1,6 +1,6 @@
 #ifndef HINAPE_SEMI_LAGRANGIAN3_H
 #define HINAPE_SEMI_LAGRANGIAN3_H
-#include "../physics-engine/fluid-engine/solver/advection/advection_solver3.h"
+#include "solver/advection/advection_solver3.h"
 #include <limits>
 
 namespace HinaPE {

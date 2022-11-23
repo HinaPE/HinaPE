@@ -14,7 +14,7 @@ public:
     static auto builder() -> Builder;
 
 protected:
-    explicit ClothSolver(const ClothGeometryDataPtr& cloth_geometry_data_ptr);
+    explicit ClothSolver(const ClothGeometryDataPtr &cloth_geometry_data_ptr);
     void onInitialize() override;
     void onAdvanceTimeStep(double timeIntervalInSeconds) final;
     virtual void on_begin_advance_time_step(double time_interval_in_seconds); // Empty, to be overridden
@@ -37,7 +37,7 @@ public:
     auto with_position(const Vector3D &position) -> DerivedBuilder &;
     auto with_orientation(const Vector3D &orientation) -> DerivedBuilder &;
 
-private:
+protected:
     double _width = 1, _height = 1;
     double _rows = 20, _cols = 20;
     Vector3D _position = {0, 0, 0};

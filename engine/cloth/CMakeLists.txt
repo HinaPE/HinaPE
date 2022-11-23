@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(HinaPE_Cloth_Engine VERSION 1.20 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE_Cloth_Engine VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 set(HINAPE_COMMON_DIR "../../common")
 set(HINAPE_DEPS_DIR "../deps")
@@ -16,6 +16,7 @@ file(GLOB_RECURSE HINA_CLOTH_ENGINE_SRC
         ${HINA_CLOTH_ENGINE_SOLVER}
         ${HINA_CLOTH_ENGINE_FACTORY}
         ${HINA_CLOTH_ENGINE_UTIL}
+        math_api.h
         )
 
 add_library(HinaPE_Cloth_Engine ${HINA_CLOTH_ENGINE_SRC})
