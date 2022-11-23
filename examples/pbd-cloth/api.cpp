@@ -14,14 +14,24 @@ void HinaPE::Cloth::Api::gui(Kasumi::Workbench::ScenePtr &scene)
     ImGui::SliderInt("cols", &cols, 1, 50);
     if (ImGui::Button("Create"))
     {
-        _cloth_data = std::make_shared<ClothGeometryData>(2.f, 2.f, (size_t) rows, (size_t) cols);
+        _cloth_data = std::make_shared<ClothGeometryData>(10.f, 10.f, (size_t) rows, (size_t) cols);
         auto verts = _cloth_data->get_vertices();
-        for (auto &v:verts)
+        auto indices = _cloth_data->get_indices();
+        std::vector<Kasumi::ColoredMesh::Vertex> res_v;
+        std::vector<Kasumi::ColoredMesh::Index> res_i;
+        for (auto &v: verts)
         {
-            auto id = scene->add_primitive("sphere");
-            scene->set_position(id, v);
-            scene->set_scale(id, {0.01f, 0.01f, 0.01f});
+            Kasumi::ColoredMesh::Vertex v_;
+            v_.position = v;
+            res_v.emplace_back(v_);
         }
+        for (auto &i: indices)
+        {
+            Kasumi::ColoredMesh::Index i_;
+            i_ = i;
+            res_i.emplace_back(i_);
+        }
+        scene->add_primitive(std::move(res_v), std::move(indices), "BLACK");
     }
     ImGui::End();
 }
