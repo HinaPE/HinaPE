@@ -4,7 +4,7 @@
 #include <algorithm>
 
 HinaPE::Cloth::ClothSolver::ClothSolver(const HinaPE::Cloth::ClothSolver::Opt &opt) : _opt(opt) { setup(); }
-void HinaPE::Cloth::ClothSolver::step(HinaPE::Cloth::real dt) {}
+void HinaPE::Cloth::ClothSolver::step(real dt) {}
 void HinaPE::Cloth::ClothSolver::setup()
 {
     _cloth_data = nullptr;
@@ -46,5 +46,5 @@ void HinaPE::Cloth::ClothSolver::setup()
     std::fill(_forces.begin(), _forces.end(), mVector3(0.f, 0.f, 0.f));
     std::fill(_masses.begin(), _masses.end(), 1e-3);
 }
-auto HinaPE::Cloth::ClothSolver::vertices() -> std::vector<HinaPE::Cloth::mVector3> & { return _cloth_data->_positions; }
+auto HinaPE::Cloth::ClothSolver::vertices() -> std::vector<mVector3> & { return _cloth_data->_positions; }
 auto HinaPE::Cloth::ClothSolver::indices() -> std::vector<unsigned int> & { return _cloth_data->_init_indices; }

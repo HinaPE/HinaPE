@@ -8,11 +8,6 @@ namespace HinaPE::Cloth
 class ClothSolver
 {
 public:
-    virtual void step(real dt);
-    auto vertices() -> std::vector<mVector3> &;
-    auto indices() -> std::vector<unsigned int> &;
-
-public:
     struct Opt
     {
         float width = 2.f;
@@ -21,7 +16,12 @@ public:
         int cols = 30;
     } _opt;
 
-private:
+public:
+    virtual void step(real dt);
+    auto vertices() -> std::vector<mVector3> &;
+    auto indices() -> std::vector<unsigned int> &;
+
+protected:
     class ClothData;
     using ClothDataPtr = std::shared_ptr<ClothData>;
     ClothDataPtr _cloth_data;
@@ -53,6 +53,7 @@ private:
 
 public:
     friend class ClothSolver;
+    friend class PBDSolver;
     explicit ClothData() = default;
     ClothData(const ClothData &) = delete;
     ClothData(ClothData &&) = default;

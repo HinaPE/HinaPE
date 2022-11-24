@@ -7,7 +7,7 @@
 
 namespace HinaPE::Cloth
 {
-class Api : public Kasumi::Api, public std::enable_shared_from_this<Api>
+class Api : public Kasumi::Api
 {
 public:
     void step(float dt) final;
@@ -15,7 +15,7 @@ public:
     void sync();
 
 private:
-    std::map<unsigned int, ClothSolverPtr> _solvers;
+    std::map<Kasumi::TexturedMeshPtr, ClothSolverPtr> _solvers;
 };
 }
 

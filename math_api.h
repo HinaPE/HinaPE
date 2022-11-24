@@ -1,5 +1,5 @@
-#ifndef HINAPE_MATH_API_H
-#define HINAPE_MATH_API_H
+#ifndef MATH_API_H
+#define MATH_API_H
 
 #include "math/vector2.h"
 #include "math/vector3.h"
@@ -13,8 +13,6 @@
 #include <iomanip>
 #include <memory>
 
-namespace HinaPE::Cloth
-{
 using real = float;
 using mVector2 = HinaPE::Vector2<real>;
 using mVector3 = HinaPE::Vector3<real>;
@@ -29,6 +27,6 @@ using mMatrix3x3 = HinaPE::Matrix3x3<real>;
 using mMatrix4x4 = HinaPE::Matrix4x4<real>;
 using mQuaternion = HinaPE::Quaternion<real>;
 using mBBox = HinaPE::BoundingBox<real, 3>;
-}
 
-#endif //HINAPE_MATH_API_H
+
+#endif //MATH_API_H

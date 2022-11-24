@@ -33,15 +33,18 @@ void HinaPE::Cloth::Api::ui_sidebar()
             res_v.emplace_back(v_);
         }
         auto tex = std::make_shared<Kasumi::Texture>(std::string(MyAssetDir) + "TexturesCom_FabricWool0022_2_seamless_S.jpg");
-        auto id = _scene->add_primitive(std::move(res_v), std::move(indices), tex);
-        _solvers[id] = solver;
+        auto res = _scene->add_primitive(std::move(res_v), std::move(indices), tex);
+        _solvers[res.second] = solver;
     }
 }
 void HinaPE::Cloth::Api::sync()
 {
     for (auto &pair: _solvers)
     {
-        auto id = pair.first;
-        auto &solver = pair.second;
+        auto &vert_mesh = pair.first->vertices();
+        const auto &vert_physics = pair.second->vertices();
+
+        for (int i = 0; i < vert_mesh.size(); ++i)
+            vert_mesh[i].position = vert_physics[i];
     }
 }
