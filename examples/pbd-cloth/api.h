@@ -3,18 +3,19 @@
 
 #include "renderer/api.h"
 #include "renderer/scene/scene.h"
-#include "cloth/solver/cloth_geometry_data.h"
+#include "cloth/solver/cloth_solver.h"
 
 namespace HinaPE::Cloth
 {
 class Api : public Kasumi::Api, public std::enable_shared_from_this<Api>
 {
 public:
-    void step(Kasumi::ScenePtr &scene, float dt) final;
-    void ui_sidebar(Kasumi::ScenePtr &scene) final;
+    void step(float dt) final;
+    void ui_sidebar() final;
+    void sync();
 
 private:
-    ClothGeometryDataPtr _cloth_data;
+    std::map<unsigned int, ClothSolverPtr> _solvers;
 };
 }
 
