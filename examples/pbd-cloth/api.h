@@ -10,8 +10,8 @@ namespace HinaPE::Cloth
 class Api : public Kasumi::Api, public std::enable_shared_from_this<Api>
 {
 public:
-    void step(Kasumi::Workbench::ScenePtr &scene, float dt) final;
-    void gui(Kasumi::Workbench::ScenePtr &scene) final;
+    void step(Kasumi::ScenePtr &scene, float dt) final;
+    void ui_sidebar(Kasumi::ScenePtr &scene) final;
 
 private:
     ClothGeometryDataPtr _cloth_data;
