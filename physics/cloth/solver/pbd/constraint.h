@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <tuple>
+#include <memory>
 
 namespace HinaPE::Cloth
 {

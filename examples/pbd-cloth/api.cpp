@@ -18,10 +18,10 @@ void HinaPE::Cloth::Api::ui_sidebar()
     ImGui::InputInt2("dims", dim2.data());
     if (ImGui::Button("Create"))
     {
-        ClothSolver::Opt opt;
+        PBDSolver::Opt opt;
         opt.width = 10;
         opt.height = 10;
-        auto solver = std::make_shared<ClothSolver>(opt);
+        auto solver = std::make_shared<PBDSolver>(opt);
         auto &verts = solver->vertices();
         auto &indices = solver->indices();
         std::vector<Kasumi::TexturedMesh::Vertex> res_v;

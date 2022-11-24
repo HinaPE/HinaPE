@@ -1,7 +1,7 @@
 #include "pbd_solver.h"
 
 HinaPE::Cloth::PBDSolver::PBDSolver(const HinaPE::Cloth::PBDSolver::Opt &opt) : ClothSolver(opt), _opt(opt) { setup_pbd(); }
-void HinaPE::Cloth::PBDSolver::step(real dt) { ClothSolver::step(dt); }
+void HinaPE::Cloth::PBDSolver::step(real dt) {}
 void HinaPE::Cloth::PBDSolver::setup_pbd()
 {
     if (_opt.distance_constraint)

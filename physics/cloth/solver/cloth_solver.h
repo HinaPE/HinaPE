@@ -17,7 +17,7 @@ public:
     } _opt;
 
 public:
-    virtual void step(real dt);
+    virtual void step(real dt) = 0;
     auto vertices() -> std::vector<mVector3> &;
     auto indices() -> std::vector<unsigned int> &;
 

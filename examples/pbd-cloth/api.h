@@ -3,7 +3,7 @@
 
 #include "renderer/api.h"
 #include "renderer/scene/scene.h"
-#include "cloth/solver/cloth_solver.h"
+#include "cloth/solver/pbd/pbd_solver.h"
 
 namespace HinaPE::Cloth
 {

@@ -4,7 +4,6 @@
 #include <algorithm>
 
 HinaPE::Cloth::ClothSolver::ClothSolver(const HinaPE::Cloth::ClothSolver::Opt &opt) : _opt(opt) { setup(); }
-void HinaPE::Cloth::ClothSolver::step(real dt) {}
 void HinaPE::Cloth::ClothSolver::setup()
 {
     _cloth_data = nullptr;
