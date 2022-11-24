@@ -19,6 +19,8 @@ void HinaPE::Cloth::Api::ui_sidebar()
     if (ImGui::Button("Create"))
     {
         PBDSolver::Opt opt;
+        opt.rows = dim2[0];
+        opt.cols = dim2[1];
         opt.width = 10;
         opt.height = 10;
         auto solver = std::make_shared<PBDSolver>(opt);
@@ -46,5 +48,10 @@ void HinaPE::Cloth::Api::sync()
 
         for (int i = 0; i < vert_mesh.size(); ++i)
             vert_mesh[i].position = vert_physics[i];
+
+        pair.first->dirty = true;
+
+        //        for (int i = 0; i < vert_mesh.size(); ++i)
+        //            std::cout << vert_mesh[i].position.x << ", " << vert_mesh[i].position.y << ", " << vert_mesh[i].position.z << "/" << vert_physics[i].x << ", " << vert_physics[i].y << ", " << vert_physics[i].z << std::endl;
     }
 }

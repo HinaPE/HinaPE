@@ -3,6 +3,8 @@
 
 #include "../math_api.h"
 
+#include <utility>
+
 namespace HinaPE::Cloth
 {
 class ClothSolver
@@ -44,12 +46,14 @@ class ClothSolver::ClothData
 private:
     std::vector<mVector3> _init_vertices;
     std::vector<unsigned int> _init_indices;
+    std::vector<std::pair<unsigned int, unsigned int>> _init_edges;
 
 private:
     std::vector<mVector3> _positions;
+    std::vector<mVector3> _pre_positions;
     std::vector<mVector3> _velocities;
     std::vector<mVector3> _forces;
-    std::vector<real> _masses;
+    std::vector<real> _inv_masses;
 
 public:
     friend class ClothSolver;
