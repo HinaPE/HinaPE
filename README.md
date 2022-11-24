@@ -56,3 +56,9 @@ cmake -S . -B Build
 cmake --build Build --config Release
 .\Build\Release\HinaPE.exe
 ```
+
+For update all submodules: https://stackoverflow.com/questions/5828324/update-git-submodule-to-latest-commit-on-origin
+```git
+git submodule foreach git pull origin master
+git submodule foreach git checkout master
+```
