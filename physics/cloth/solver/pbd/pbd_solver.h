@@ -21,7 +21,7 @@ public:
     } _opt;
 
 public:
-    void step(real dt) override;
+    void step(real dt) final;
 
 protected:
     void setup_pbd();
