@@ -16,7 +16,6 @@ file(GLOB_RECURSE HINA_CLOTH_ENGINE_SRC
         ${HINA_CLOTH_ENGINE_SOLVER}
         ${HINA_CLOTH_ENGINE_FACTORY}
         ${HINA_CLOTH_ENGINE_UTIL}
-        math_api.h
         )
 
 add_library(HinaPE_Cloth ${HINA_CLOTH_ENGINE_SRC})

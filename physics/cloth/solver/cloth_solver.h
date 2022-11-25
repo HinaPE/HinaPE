@@ -1,7 +1,7 @@
 #ifndef HINAPE_CLOTH_CLOTH_SOLVER_H
 #define HINAPE_CLOTH_CLOTH_SOLVER_H
 
-#include "../math_api.h"
+#include "../../../math_api.h"
 
 #include <utility>
 

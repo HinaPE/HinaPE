@@ -1,11 +1,11 @@
 #ifndef HINAPE_PBD_SOLVER_H
 #define HINAPE_PBD_SOLVER_H
 
-#include "../rigidbody_solver.h"
+#include "../rigid_solver.h"
 
-namespace HinaPE::RigidBodyEngine
+namespace HinaPE::Rigid
 {
-class PBDSolver : public RigidBodySolver
+class PBDSolver : public RigidSolver
 {
 
 };
