@@ -20,7 +20,7 @@ more illustrations in coming...
 
 ## Build Instruction
 
-As a cross-platform project, [Clion](https://www.jetbrains.com/clion/) is highly recommanded to build HinaPE.
+As a cross-platform project, [Clion](https://www.jetbrains.com/clion/) is highly recommended to build HinaPE.
 
 ### Prerequisites
 
