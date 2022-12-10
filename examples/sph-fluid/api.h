@@ -4,6 +4,7 @@
 #include "renderer/api.h"
 #include "renderer/scene/scene.h"
 #include "fluid/solver/particle/sph/sph_solver3.h"
+#include "imgui.h"
 
 namespace HinaPE::Fluid
 {
@@ -15,7 +16,6 @@ public:
 	void sync();
 
 private:
-
 };
 }
 

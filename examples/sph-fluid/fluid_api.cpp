@@ -48,8 +48,8 @@ void FluidAPI::step(Scene_Particles *_scene_particles, float dt)
 void FluidAPI::gui(Gui::Manager &_manager, Scene &_scene, Undo &_undo, Gui::Widgets &_widgets, Scene_Maybe _obj, int &_index)
 {
     static int phase = 0;
-    double lz = 0;
-    lz = BoundingBox3D(Vector3D(), Vector3D(3, 2, 1.5)).depth();
+	double lz = 0;
+	lz = BoundingBox3D(Vector3D(), Vector3D(3, 2, 1.5)).depth();
     switch (phase)
     {
         case 0:
