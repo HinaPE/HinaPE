@@ -1,23 +1,13 @@
-#include "kasumi-legacy/platform/platform.h"
-#include "kasumi-legacy/util/rand.h"
-#include "kasumi-legacy/scene/particles.h"
-
-#include "fluid_api.h"
+#include "renderer/app.h"
+#include "api.h"
 
 using namespace HinaPE;
 
-auto main(int argc, char **argv) -> int
+auto main() -> int
 {
-    // Init Render Engine
-    RNG::seed();
-    Launch_Settings set;
-    Platform platform;
-    App app(set, &platform);
-
-    // Register Fluid Engine
-    Logging::mute();
-    app.register_physics_API(std::make_shared<FluidAPI>());
-    platform.loop(app);
-
+	auto platform = std::make_shared<Kasumi::Platform>(1920, 768);
+	auto app = std::make_shared<Kasumi::Renderer>("empty.txt");
+	app->load_api(std::make_shared<HinaPE::Fluid::Api>());
+	platform->launch(app);
     return 0;
 }
