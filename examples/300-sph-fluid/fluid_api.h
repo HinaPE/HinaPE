@@ -10,18 +10,19 @@
 #include "common/geometry/implicit_surface_set3.h"
 #include "common/logging.h"
 #include "common/array/array_utils-inl.h"
-#include "fluid-engine/solver/particle/sph/sph_solver3.h"
-#include "fluid-engine/solver/particle/pcisph/pci_sph_solver3.h"
-#include "fluid-engine/emitter/volume_particle_emitter3.h"
-#include "kasumi-legacy/scene/scene.h"
-#include "kasumi-legacy/gui/manager.h"
-#include "kasumi-legacy/physics-system-api.h"
+#include "../physics/fluid/solver/particle/sph/sph_solver3.h"
+#include "../physics/fluid/solver/particle/pcisph/pci_sph_solver3.h"
+#include "../physics/fluid/emitter/volume_particle_emitter3.h"
+#include "../kasumi/renderer/scene/scene.h"
+#include "../kasumi/renderer/gui/manager.h"
+#include "../kasumi/common/animation/physics_animation.h"
+#include "renderer/api.h"
 
-class FluidAPI : public HinaPE::ParticleSystemAPI, public std::enable_shared_from_this<FluidAPI>
+class FluidAPI : public Kasumi::Api, public std::enable_shared_from_this<FluidAPI>
 {
 public:
     void step(Scene_Particles *, float dt) final;
-    void gui(Gui::Manager &manager, Scene &scene, Undo &undo, Gui::Widgets &widgets, Scene_Maybe obj, int &index) override;
+    void gui(Kasumi::Manager &manager, Kasumi::Scene &scene, Kasumi::Undo &undo, Gui::Widgets &widgets, Scene_Maybe obj, int &index) override;
 
 public:
     void load_solver();

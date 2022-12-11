@@ -1,9 +1,9 @@
 #ifndef HINAPE_PIC_SOLVER3_H
 #define HINAPE_PIC_SOLVER3_H
 
-#include "../grid_fluid_solver3.h"
-#include "../../../emitter/particle_emitter3.h"
-#include "../../particle/particle_system_data3.h"
+#include "fluid/solver/grid/grid_fluid_solver3.h"
+#include "fluid/emitter/particle_emitter3.h"
+#include "fluid/solver/particle/particle_system_data3.h"
 
 namespace HinaPE::Fluid {
 
