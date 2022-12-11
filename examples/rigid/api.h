@@ -17,7 +17,7 @@ public:
 	void sync();
 
 private:
-	std::map<Kasumi::TexturedMeshPtr, RigidSolver> _solvers;
+	std::map<Kasumi::UniversalMeshPtr, RigidSolver> _solvers;
 };
 }
 

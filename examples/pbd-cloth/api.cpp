@@ -3,55 +3,51 @@
 
 void HinaPE::Cloth::Api::step(float dt)
 {
-    if (_solvers.empty())
-        return;
-    for (auto &pair: _solvers)
-        pair.second->step(dt);
-    sync();
+	if (_solvers.empty())
+		return;
+
+	for (auto &pair: _solvers)
+		pair.second->step(dt);
+	sync();
 }
 void HinaPE::Cloth::Api::ui_sidebar()
 {
-    ImGui::Text("Cloth");
-    static std::array<float, 3> position = {0, 0, 0};
-    static std::array<int, 2> dim2 = {30, 30};
-    ImGui::InputFloat3("position", position.data());
-    ImGui::InputInt2("dims", dim2.data());
-    if (ImGui::Button("Create"))
-    {
-        PBDSolver::Opt opt;
-        opt.rows = dim2[0];
-        opt.cols = dim2[1];
-        opt.width = 10;
-        opt.height = 10;
-        auto solver = std::make_shared<PBDSolver>(opt);
-        auto &verts = solver->vertices();
-        auto &indices = solver->indices();
-        std::vector<Kasumi::TexturedMesh::Vertex> res_v;
-        for (auto &v: verts)
-        {
-            Kasumi::TexturedMesh::Vertex v_;
-            v_.position = v;
-            v_.tex_coord = {v.x / static_cast<float>(dim2[1]), v.y / static_cast<float>(dim2[0])};
-            res_v.emplace_back(v_);
-        }
-        auto tex = std::make_shared<Kasumi::Texture>(std::string(MyAssetDir) + "TexturesCom_FabricWool0022_2_seamless_S.jpg");
-        auto res = _scene->add_primitive(std::move(res_v), std::move(indices), tex);
-        _solvers[res.second] = solver;
-    }
+	ImGui::Text("Cloth");
+	static std::array<float, 3> position = {0, 0, 0};
+	static std::array<int, 2> dim2 = {30, 30};
+	ImGui::InputFloat3("position", position.data());
+	ImGui::InputInt2("dims", dim2.data());
+	if (ImGui::Button("Create"))
+	{
+		PBDSolver::Opt opt;
+		opt.rows = dim2[0];
+		opt.cols = dim2[1];
+		opt.width = 10;
+		opt.height = 10;
+		auto solver = std::make_shared<PBDSolver>(opt);
+		auto &verts = solver->vertices();
+		auto &indices = solver->indices();
+		std::vector<Kasumi::Model::Vertex> res_v;
+		for (auto &v: verts)
+		{
+			Kasumi::Model::Vertex v_;
+			v_.position = v;
+			v_.tex_coord = {v.x / static_cast<float>(dim2[1]), v.y / static_cast<float>(dim2[0])};
+			res_v.emplace_back(v_);
+		}
+		auto tex = std::make_shared<Kasumi::Texture>(std::string(MyAssetDir) + "TexturesCom_FabricWool0022_2_seamless_S.jpg");
+		auto obj_id = _scene->add_object(std::make_shared<Kasumi::Model>(std::move(res_v), std::move(indices)));
+		_solvers[_scene->get_object(obj_id)->get_model()] = solver;
+	}
 }
 void HinaPE::Cloth::Api::sync()
 {
-    for (auto &pair: _solvers)
-    {
-        auto &vert_mesh = pair.first->vertices();
-        const auto &vert_physics = pair.second->vertices();
+	for (auto &pair: _solvers)
+	{
+		auto &vert_mesh = pair.first->vertices(0);
+		const auto &vert_physics = pair.second->vertices();
 
-        for (int i = 0; i < vert_mesh.size(); ++i)
-            vert_mesh[i].position = vert_physics[i];
-
-        pair.first->dirty = true;
-
-        //        for (int i = 0; i < vert_mesh.size(); ++i)
-        //            std::cout << vert_mesh[i].position.x << ", " << vert_mesh[i].position.y << ", " << vert_mesh[i].position.z << "/" << vert_physics[i].x << ", " << vert_physics[i].y << ", " << vert_physics[i].z << std::endl;
-    }
+		for (int i = 0; i < vert_mesh.size(); ++i)
+			vert_mesh[i].position = vert_physics[i];
+	}
 }

@@ -10,12 +10,12 @@ namespace HinaPE::Cloth
 class Api : public Kasumi::Api
 {
 public:
-    void step(float dt) final;
-    void ui_sidebar() final;
-    void sync();
+	void step(float dt) final;
+	void ui_sidebar() final;
+	void sync();
 
 private:
-    std::map<Kasumi::TexturedMeshPtr, ClothSolverPtr> _solvers;
+	std::map<Kasumi::ModelPtr, ClothSolverPtr> _solvers;
 };
 }
 
