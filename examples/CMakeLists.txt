@@ -4,3 +4,4 @@ project(HinaPE-examples VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine
 add_subdirectory(pbd-cloth)
 add_subdirectory(rigid)
 add_subdirectory(sph-fluid)
+add_subdirectory(painting2D)
