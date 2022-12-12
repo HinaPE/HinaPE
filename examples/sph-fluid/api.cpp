@@ -40,7 +40,6 @@ void Api::ui_sidebar()
 
 void Api::sync()
 {
-
 	auto const &positions = _fluid_solver->sphSystemData()->positions();
 
 	std::vector<Kasumi::Pose> poses;
@@ -51,23 +50,9 @@ void Api::sync()
 		pose.scale = {0.01, 0.01, 0.01};
 		poses.push_back(pose);
 	}
-	if (positions.size() > 0)
-	{
-		static bool first = true;
-		if (first)
-		{
-			_particle_model = std::make_shared<Kasumi::Model>("sphere", Color::BLUE);
-			_particle_model_scene = _scene->get_object(_scene->add_object(_particle_model));
-			_particle_model->setup_instancing(poses);
-			first = false;
-		} else
-		{
-			_particle_model->_opt.instance_count = poses.size();
-			_particle_model->_opt.instance_matrices.clear();
-			for (auto &pose: poses)
-				_particle_model->_opt.instance_matrices.emplace_back(pose.get_model_matrix().transposed());
-		}
-	}
+	_particle_model->clear_instances();
+	if (poses.size() > 0)
+		_particle_model->add_instances(poses);
 }
 
 auto Api::phase1() -> bool
@@ -90,6 +75,7 @@ auto Api::phase2() -> bool
 	{
 		ImGui::SliderFloat("Density", &_opt.target_density, 500.f, 2000.0f, "%10.f");
 		ImGui::SliderFloat("Spacing", &_opt.target_spacing, 0.01f, 1.0f, "%.02f");
+		ImGui::SliderFloat("Viscosity", &_opt.pseudo_viscosity_coefficient, 0.0f, 1.0f, "%.02f");
 		if (ImGui::Button("Add"))
 		{
 			auto plane = HinaPE::Plane3::builder()
@@ -124,6 +110,11 @@ auto Api::phase2() -> bool
 			_fluid_solver->setCollider(_fluid_collider);
 			_fluid_solver->setPseudoViscosityCoefficient(_opt.pseudo_viscosity_coefficient);
 
+			_particle_model = std::make_shared<Kasumi::Model>("sphere", Color::BLUE);
+			_particle_model_scene = _scene->get_object(_scene->add_object(_particle_model));
+			_particle_model->instancing();
+
+			sync();
 			return true;
 		}
 	}

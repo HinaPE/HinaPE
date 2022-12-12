@@ -1,7 +1,5 @@
 #include "api.h"
 #include "imgui.h"
-#include "../sph-fluid/api.h"
-
 
 void Api::step(float dt)
 {
@@ -13,9 +11,10 @@ void Api::step(float dt)
 }
 void Api::ui_sidebar()
 {
-	ImGui::Text("Cloth");
 	static std::array<float, 3> position = {0, 0, 0};
 	static std::array<int, 2> dim2 = {30, 30};
+
+	ImGui::Text("Cloth");
 	ImGui::InputFloat3("position", position.data());
 	ImGui::InputInt2("dims", dim2.data());
 
@@ -46,16 +45,10 @@ void Api::ui_sidebar()
 		_scene->add_object(_cloth_model);
 
 		_cloth_particle_model = std::make_shared<Kasumi::Model>("sphere", Color::RED);
-		std::vector<Kasumi::Pose> poses;
-		for (auto &v: verts)
-		{
-			Kasumi::Pose pose;
-			pose.position = v;
-			pose.scale = {0.05f, 0.05f, 0.05f};
-			poses.emplace_back(pose);
-		}
-		_cloth_particle_model->setup_instancing(poses);
+		_cloth_particle_model->instancing();
 		_scene->add_object(_cloth_particle_model);
+
+		sync();
 	}
 }
 void Api::sync() const
@@ -63,16 +56,19 @@ void Api::sync() const
 	auto &vert_mesh = _cloth_model->vertices(0);
 	const auto &vert_physics = _cloth_solver->vertices();
 
+	// sync physics res to mesh
 	for (int i = 0; i < vert_mesh.size(); ++i)
 		vert_mesh[i].position = vert_physics[i];
 
-	auto &vert_particle_mesh = _cloth_particle_model->_opt.instance_matrices;
-
-	for (int i = 0; i < vert_particle_mesh.size(); ++i)
+	// sync physics res to instancing spheres
+	std::vector<Kasumi::Pose> poses;
+	for (int i = 0; i < vert_mesh.size(); ++i)
 	{
 		Kasumi::Pose pose;
 		pose.position = vert_physics[i];
 		pose.scale = {0.05f, 0.05f, 0.05f};
-		vert_particle_mesh[i] = pose.get_model_matrix().transposed();
+		poses.emplace_back(pose);
 	}
+	_cloth_particle_model->clear_instances();
+	_cloth_particle_model->add_instances(poses);
 }
