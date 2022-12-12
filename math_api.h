@@ -28,5 +28,27 @@ using mMatrix4x4 = HinaPE::Matrix4x4<real>;
 using mQuaternion = HinaPE::Quaternion<real>;
 using mBBox = HinaPE::BoundingBox<real, 3>;
 
+struct Color
+{
+	constexpr static mVector3 MIKU = mVector3(0.2227f, 0.7698f, 0.7307f);
+	constexpr static mVector3 RED = mVector3(1.0f, 0.0f, 0.0f);
+	constexpr static mVector3 GREEN = mVector3(0.0f, 1.0f, 0.0f);
+	constexpr static mVector3 BLUE = mVector3(0.0f, 0.0f, 1.0f);
+	constexpr static mVector3 YELLOW = mVector3(1.0f, 1.0f, 0.0f);
+	constexpr static mVector3 CYAN = mVector3(0.0f, 1.0f, 1.0f);
+	constexpr static mVector3 MAGENTA = mVector3(1.0f, 0.0f, 1.0f);
+	constexpr static mVector3 WHITE = mVector3(1.0f, 1.0f, 1.0f);
+	constexpr static mVector3 BLACK = mVector3(0.0f, 0.0f, 0.0f);
+	constexpr static mVector3 GRAY = mVector3(0.5f, 0.5f, 0.5f);
+	constexpr static mVector3 ORANGE = mVector3(1.0f, 0.5f, 0.0f);
+	constexpr static mVector3 PURPLE = mVector3(0.5f, 0.0f, 0.5f);
+	constexpr static mVector3 BROWN = mVector3(0.5f, 0.25f, 0.0f);
+	constexpr static mVector3 PINK = mVector3(1.0f, 0.75f, 0.8f);
+	constexpr static mVector3 NO_COLORS = mVector3(0.0f, 0.0f, 0.0f);
+};
+
+#ifdef Hina_DEBUG
+
+#endif
 
 #endif //MATH_API_H
