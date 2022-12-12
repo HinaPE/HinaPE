@@ -1,32 +1,37 @@
 #include "api.h"
 #include "imgui.h"
+#include "../sph-fluid/api.h"
 
-void HinaPE::Cloth::Api::step(float dt)
+
+void Api::step(float dt)
 {
-	if (_solvers.empty())
+	if (_cloth_solver == nullptr || _cloth_model == nullptr)
 		return;
 
-	for (auto &pair: _solvers)
-		pair.second->step(dt);
+	_cloth_solver->step(dt);
 	sync();
 }
-void HinaPE::Cloth::Api::ui_sidebar()
+void Api::ui_sidebar()
 {
 	ImGui::Text("Cloth");
 	static std::array<float, 3> position = {0, 0, 0};
 	static std::array<int, 2> dim2 = {30, 30};
 	ImGui::InputFloat3("position", position.data());
 	ImGui::InputInt2("dims", dim2.data());
+
 	if (ImGui::Button("Create"))
 	{
-		PBDSolver::Opt opt;
+		// init solver data
+		HinaPE::Cloth::PBDSolver::Opt opt;
 		opt.rows = dim2[0];
 		opt.cols = dim2[1];
 		opt.width = 10;
 		opt.height = 10;
-		auto solver = std::make_shared<PBDSolver>(opt);
-		auto &verts = solver->vertices();
-		auto &indices = solver->indices();
+		_cloth_solver = std::make_shared<HinaPE::Cloth::PBDSolver>(opt);
+
+		// init corresponding rendering model
+		auto &verts = _cloth_solver->vertices();
+		auto &indices = _cloth_solver->indices();
 		std::vector<Kasumi::Model::Vertex> res_v;
 		for (auto &v: verts)
 		{
@@ -37,27 +42,37 @@ void HinaPE::Cloth::Api::ui_sidebar()
 		}
 		std::map<std::string, std::vector<Kasumi::TexturePtr>> textures;
 		textures["diffuse"].push_back(std::make_shared<Kasumi::Texture>(std::string(MyAssetDir) + "TexturesCom_FabricWool0022_2_seamless_S.jpg"));
-		auto obj_id = _scene->add_object(std::make_shared<Kasumi::Model>(std::move(res_v), std::move(indices), std::move(textures)));
-		auto &model = _scene->get_object(obj_id)->get_model();
+		_cloth_model = std::make_shared<Kasumi::Model>(std::move(res_v), std::move(indices), std::move(textures));
+		_scene->add_object(_cloth_model);
+
+		_cloth_particle_model = std::make_shared<Kasumi::Model>("sphere", Color::RED);
 		std::vector<Kasumi::Pose> poses;
-		Kasumi::Pose pose1;
-		pose1.position = {0, 0, 0};
-		poses.push_back(pose1);
-		Kasumi::Pose pose2;
-		pose2.position = {5, 5, 5};
-		poses.push_back(pose2);
-		model->setup_instancing(poses);
-		_solvers[_scene->get_object(obj_id)->get_model()] = solver;
+		for (auto &v: verts)
+		{
+			Kasumi::Pose pose;
+			pose.position = v;
+			pose.scale = {0.05f, 0.05f, 0.05f};
+			poses.emplace_back(pose);
+		}
+		_cloth_particle_model->setup_instancing(poses);
+		_scene->add_object(_cloth_particle_model);
 	}
 }
-void HinaPE::Cloth::Api::sync()
+void Api::sync() const
 {
-	for (auto &pair: _solvers)
-	{
-		auto &vert_mesh = pair.first->vertices(0);
-		const auto &vert_physics = pair.second->vertices();
+	auto &vert_mesh = _cloth_model->vertices(0);
+	const auto &vert_physics = _cloth_solver->vertices();
 
-		for (int i = 0; i < vert_mesh.size(); ++i)
-			vert_mesh[i].position = vert_physics[i];
+	for (int i = 0; i < vert_mesh.size(); ++i)
+		vert_mesh[i].position = vert_physics[i];
+
+	auto &vert_particle_mesh = _cloth_particle_model->_opt.instance_matrices;
+
+	for (int i = 0; i < vert_particle_mesh.size(); ++i)
+	{
+		Kasumi::Pose pose;
+		pose.position = vert_physics[i];
+		pose.scale = {0.05f, 0.05f, 0.05f};
+		vert_particle_mesh[i] = pose.get_model_matrix().transposed();
 	}
 }

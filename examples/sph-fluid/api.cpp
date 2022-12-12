@@ -1,15 +1,14 @@
 #include "api.h"
+#include "imgui.h"
 
-void HinaPE::Fluid::Api::step(float dt)
+void Api::step(float dt)
 {
 }
 
-void HinaPE::Fluid::Api::ui_sidebar()
+void Api::ui_sidebar()
 {
 	static int phase = 0;
 	static int index = 1;
-	double lz = 0;
-	lz = BoundingBox3D(Vector3D(), Vector3D(3, 2, 1.5)).depth();
 	switch (phase)
 	{
 		case 0:
@@ -36,6 +35,6 @@ void HinaPE::Fluid::Api::ui_sidebar()
 	}
 }
 
-void HinaPE::Fluid::Api::sync()
+void Api::sync()
 {
 }
