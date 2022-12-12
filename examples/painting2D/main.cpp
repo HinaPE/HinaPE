@@ -10,7 +10,8 @@ public:
 	Painter() : Kasumi::App(800, 600, "2D Painter") {}
 	void prepare() final
 	{
-		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "painter_fragment.glsl");
+//		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "painter_fragment.glsl");
+		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "field_visualizer.glsl");
 		_screen_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "screen_vertex.glsl", std::string(MyShaderDir) + "screen_fragment.glsl");
 		_framebuffer = std::make_shared<Kasumi::Framebuffer>(_width, _height);
 
@@ -43,9 +44,6 @@ public:
 		_framebuffer->use();
 		_shader->use();
 		mVector2 screen(_width, _height);
-		static int time = 0;
-		_shader->uniform("iTime", time++);
-		time %= 60;
 		_shader->uniform("iResolution", screen);
 		glBindVertexArray(_vao);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
