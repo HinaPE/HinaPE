@@ -60,4 +60,110 @@ HinaPE是一个建立以Kasumi Renderer为后端建立起的物理模拟平台�
 
 实践是掌握Kasumi渲染后端最快的办法。我们将简单进行几个扩展练习。
 
-一、
+### 一：从零开始，使用Kasumi Renderer渲染一个自定义模型
+
+#### 建立CMake项目
+
+在`examples`下新建一个文件夹`kasumi-from-scratch`（其实，我们可以在任何文件夹下新建）。
+
+作为一个CMake建构的项目，第一步需要编写一个`CMakeLists.txt`来组织起我们的工程。在`kasumi-from-scratch`下新建一个`CMakeLists.txt`，然后简单写入：
+
+```cmake
+# HinaPE使用现代CMake，因此必须支持3.16及以上版本的Cmake
+cmake_minimum_required(VERSION 3.16)
+
+# 新建一个独立的Project，并指定为C++的Project（如果不指定，编译器将有概率将程序误判为C工程，导致部分文件无法编译）。
+project(KasumiFromScratch LANGUAGES CXX)
+
+# 添加一个可执行文件，编译源文件指定为main.cpp api.h api.cpp这三个文件。
+add_executable(KasumiFromScratch main.cpp)
+
+# HinaPE积极拥抱现代的C++，因此，我们将使用C++20标准。
+set_target_properties(KasumiFromScratch PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
+
+# 将Kasumi_renderer链接进KasumiFromScratch这个Target。这样，KasumiFromScratch就可以使用Kasumi_renderer的全部功能了（包括Kasumi_renderer自己定义的头文件也会被链式法则引入到KasumiFromScratch）。
+target_link_libraries(KasumiFromScratch PUBLIC Kasumi_renderer)
+
+# 为了方便，我们添加一个我们自己的Asset的文件夹的宏。
+target_compile_definitions(
+        KasumiFromScratch
+        PUBLIC
+        -DMyAssetsDir="${CMAKE_CURRENT_SOURCE_DIR}/assets/"
+)
+```
+
+并且，我们在外部的`examples`中添加我们的新项目，
+
+```cmake
+# in examples/CMakeLists.txt
+add_subdirectory(kasumi-from-scratch)
+```
+
+然后在文件夹下新建并初始化`main.cpp`
+
+```c++
+#include <iostream>
+auto main() -> int
+{
+	std::cout << "Hello Kasumi~" << std::endl;
+	return 0;
+}
+```
+
+这样就成功在HinaPE建立起了我们的新项目。
+
+#### Kasumi常用函数调用
+
+接下来我们将在main函数中，使用Kasumi Renderer来实现一些常用的功能。
+
+首先，建立`Kasumi Renderer`的实例。
+
+从前文中我们知道，`Kasumi Renderer`是一个`Platform`下的App的实例。因此，我们特意将Renderer类的文件保留为`app.h`与`app.cpp`。
+
+由于CMake链接的传导性质，我们的文件默认include目录就包括Kasumi渲染器的根目录。所以，我们可以直接include到`Kasumi Renderer`。
+
+```c++
+#include "renderer/app.h"
+```
+
+接下来，将它实例化。由于我们采用的标准是现代C++标准C++20，因此，我们的代码风格也将与此对应。
+
+```c++
+auto kasumi = std::make_shared<Kasumi::Renderer>();
+```
+
+我们使用智能指针`shared_ptr`初始化一份Kasumi渲染器实例。
+
+**<u>在`Kasumi::Renderer`实例被创建的同时，整个图形Api后端都会被初始化</u>**。这同样意味着，如果没有初始化一个App（这里是Kasumi::Renderer），任何Backends内的操作都是不被允许的。
+
+在`Kasumi::Renderer`实例中，我们可以得到一个场景
+
+```c++
+auto scene = kasumi->get_scene();
+```
+
+接下来，我们将加载一个模型（比如：[这个](https://www.aplaybox.com/details/model/O606QHAv4EM2)，并将其放在我们自己的assets目录下。需要注意，不支持中文路径，所以要把`pmx`文件改个名字。），并将其加入到场景中。
+
+```c++
+auto miku = std::make_shared<Kasumi::Model>(std::string(MyAssetsDir) + "miku.pmx");
+
+scene->add_object(miku);
+```
+
+
+
+最后启动Kasumi Renderer App。
+
+![image-20221213205015635](images/miku.png)
+
+### 二：使用扩展Api调用Kasumi Renderer
+
+TODO
+
+
+
+### 三：使用扩展App直接注册Platform开发图形程序
+
+（如例：examples/painting2D，一个类似Shadertoy的2DFragment Shader画板）
+
+TODO
