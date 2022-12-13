@@ -45,7 +45,7 @@ void Api::ui_sidebar()
 		std::map<std::string, std::vector<Kasumi::TexturePtr>> textures;
 		textures["diffuse"].push_back(std::make_shared<Kasumi::Texture>(std::string(MyAssetDir) + "miku.jpg"));
 		_cloth_model = std::make_shared<Kasumi::Model>(std::move(res_v), std::move(indices), std::move(textures));
-		_scene->add_object(_cloth_model);
+		_scene->_state.selected_object_id = _scene->add_object(_cloth_model);
 
 		_cloth_particle_model = std::make_shared<Kasumi::Model>("sphere", Color::RED);
 		_cloth_particle_model->instancing();
