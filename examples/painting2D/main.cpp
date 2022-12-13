@@ -7,12 +7,12 @@
 class Painter : public Kasumi::App
 {
 public:
-	Painter() : Kasumi::App(800, 600, "2D Painter") {}
+	Painter() : Kasumi::App(800, 600, "2D Painter"), _vao(0) {}
 	void prepare() final
 	{
 //		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "painter_fragment.glsl");
 		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "field_visualizer.glsl");
-		_screen_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "screen_vertex.glsl", std::string(MyShaderDir) + "screen_fragment.glsl");
+		_screen_shader = std::make_shared<Kasumi::Shader>(std::string(BuiltinShaderDir) + "screen_vertex.glsl", std::string(BuiltinShaderDir) + "screen_fragment.glsl");
 		_framebuffer = std::make_shared<Kasumi::Framebuffer>(_width, _height);
 
 		std::array<float, 24> screen = {
