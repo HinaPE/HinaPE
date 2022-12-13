@@ -3,7 +3,7 @@
 
 auto main() -> int
 {
-	std::make_shared<Kasumi::Renderer>("miku.txt")
+	std::make_shared<Kasumi::Renderer>("desk.txt")
 			->load_api(std::make_shared<Api>())
 			->launch();
 	return 0;
