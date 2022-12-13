@@ -12,12 +12,12 @@ class PBDSolver : public ClothSolver
 public:
     struct Opt : ClothSolver::Opt
     {
-        float damping = 0.99f;
-        float time_step = 0.01f;
+        float time_step = 0.02f;
         float gravity = -9.8f;
+		float damping = 0.99f;
 
         bool distance_constraint = true;
-        float distance_constraint_stiffness = 0.7f;
+        float distance_constraint_stiffness = 0.9f;
     } _opt;
 
 public:

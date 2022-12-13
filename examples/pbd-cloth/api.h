@@ -13,7 +13,7 @@ public:
 	void sync() const;
 
 private:
-	HinaPE::Cloth::ClothSolverPtr _cloth_solver;
+	HinaPE::Cloth::PBDSolverPtr _cloth_solver;
 	Kasumi::ModelPtr _cloth_model;
 	Kasumi::ModelPtr _cloth_particle_model;
 };
