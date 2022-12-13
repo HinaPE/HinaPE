@@ -12,8 +12,7 @@ public:
 	{
 //		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "painter_fragment.glsl");
 		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "field_visualizer.glsl");
-		_screen_shader = std::make_shared<Kasumi::Shader>(std::string(BuiltinShaderDir) + "screen_vertex.glsl", std::string(BuiltinShaderDir) + "screen_fragment.glsl");
-		_framebuffer = std::make_shared<Kasumi::Framebuffer>(_width, _height);
+		_framebuffer = std::make_shared<Kasumi::Framebuffer>(_width, _height, 0.4, 0.2, 1.0, 1.0);
 
 		std::array<float, 24> screen = {
 				-1.0, -1.0, 0.0, 0.0,
@@ -41,24 +40,24 @@ public:
 	}
 	void update(double dt) final
 	{
-		_framebuffer->use();
 		_shader->use();
 		mVector2 screen(_width, _height);
 		_shader->uniform("iResolution", screen);
 		glBindVertexArray(_vao);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		_framebuffer->unuse();
-		_screen_shader->use();
+		_framebuffer->use();
+		_shader->use();
+		_shader->uniform("iResolution", screen);
 		glBindVertexArray(_vao);
-		_framebuffer->bind_texture();
-		glLineWidth(3);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		_framebuffer->unuse();
+		_framebuffer->render();
 	}
 
 private:
 	Kasumi::ShaderPtr _shader;
-	Kasumi::ShaderPtr _screen_shader;
 	Kasumi::FramebufferPtr _framebuffer;
 
 	unsigned int _vao;
