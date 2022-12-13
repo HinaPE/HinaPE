@@ -1,5 +1,6 @@
 #include "api.h"
 #include "imgui.h"
+#include "implot.h"
 
 void Api::step(float dt)
 {
@@ -62,6 +63,14 @@ void Api::ui_sidebar()
 			++phase;
 		}
 	}
+
+	ImVec2 s(200.f, 100.f);
+	std::string name = "my plot";
+	ImPlot::BeginPlot(name.c_str(), s, ImPlotFlags_CanvasOnly | ImPlotFlags_NoChild);
+	static float x_data[1000] = {1.f, 2.f, 3.f, 4.f};
+	static float y_data[1000] = {1.f, 2.f, 3.f, 4.f};
+	ImPlot::PlotLine("My Line Plot", x_data, y_data, 1000);
+	ImPlot::EndPlot();
 }
 void Api::sync() const
 {
