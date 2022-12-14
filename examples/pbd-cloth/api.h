@@ -1,8 +1,7 @@
 #ifndef HINAPE_API_H
 #define HINAPE_API_H
 
-#include "renderer/api.h"
-#include "renderer/scene/scene.h"
+#include "renderer/app.h"
 #include "cloth/solver/pbd/pbd_solver.h"
 
 class Api : public Kasumi::Api

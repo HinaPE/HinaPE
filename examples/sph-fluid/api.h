@@ -1,7 +1,7 @@
 #ifndef HINAPE_API_H
 #define HINAPE_API_H
 
-#include "renderer/api.h"
+#include "renderer/app.h"
 #include "renderer/scene/scene.h"
 
 #include "common/geometry/bounding_box3.h"
