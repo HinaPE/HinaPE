@@ -1,7 +1,7 @@
 #ifndef HINAPE_RIGID_SOLVER_H
 #define HINAPE_RIGID_SOLVER_H
 
-#include "../../../math_api.h"
+#include "cloth/math_api.h"
 
 #include <utility>
 

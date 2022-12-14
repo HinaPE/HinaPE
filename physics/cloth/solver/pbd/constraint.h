@@ -1,7 +1,7 @@
 #ifndef HINAPE_CONSTRAINT_H
 #define HINAPE_CONSTRAINT_H
 
-#include "../../../../math_api.h"
+#include "cloth/math_api.h"
 
 #include <vector>
 #include <tuple>
