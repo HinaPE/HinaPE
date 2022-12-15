@@ -1,14 +1,14 @@
 #include "physics_animation.h"
 
 #ifdef HinaDebug
-#include <iostream>
+int HinaPE::Timer::stack_depth = 0;
 #endif
 
 void HinaPE::PhysicsAnimation::on_update(const HinaPE::Frame &frame)
 {
 	if (frame._index > _current_frame._index)
 	{
-		if (_current_frame._index < 0)
+		if (_current_frame._index <= 0)
 			init_physics();
 
 		int frame_num = frame._index - _current_frame._index;
@@ -37,7 +37,7 @@ void HinaPE::PhysicsAnimation::update_physics(float time_step)
 			on_update_physics(actual_time);
 
 #ifdef HinaDebug
-			std::cout << timer.duration() << std::endl;
+			timer.duration("On Update Physics");
 #endif
 
 			_current_time += actual_time;
@@ -56,7 +56,7 @@ void HinaPE::PhysicsAnimation::update_physics(float time_step)
 			on_update_physics(actual_time);
 
 #ifdef HinaDebug
-			std::cout << timer.duration() << std::endl;
+			timer.duration("On Update Physics");
 #endif
 
 			remaining_time -= actual_time;

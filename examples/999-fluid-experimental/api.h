@@ -1,6 +1,8 @@
 #ifndef HINAPE_API_H
 #define HINAPE_API_H
 
+#include "_solver/particle/particle_system_solver3.h"
+
 #include "renderer/app.h"
 #include "renderer/scene/scene.h"
 
@@ -24,6 +26,7 @@ private:
 	} _opt;
 
 private:
+	HinaPE::Fluid::ParticleSystemSolver3Ptr _solver;
 
 	// scene part
 	Kasumi::ModelPtr _bounding_model;

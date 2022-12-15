@@ -14,7 +14,7 @@ public:
 	struct Opt
 	{
 		bool fix_sub_time_step = false;
-		int sub_time_step = 10;
+		int sub_time_step = 1;
 	} _opt;
 
 protected:
