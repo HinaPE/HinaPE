@@ -87,7 +87,7 @@ void PBDClothExample::sync() const
 	{
 		Kasumi::Pose pose;
 		pose.position = vert_physics[i];
-		pose.scale = {0.005f, 0.005f, 0.005f};
+		pose.scale = {0.02f, 0.02f, 0.02f};
 		poses.emplace_back(pose);
 	}
 	_cloth_particle_model->clear_instances();

@@ -25,7 +25,6 @@ void RigidExample::prepare()
 		mVector3 color = {random(0, 1), random(0, 1), random(0, 1)};
 		auto sphere_id = _scene->add_object(std::make_shared<Kasumi::Model>("sphere", color));
 		auto sphere = _scene->get_object(sphere_id);
-		sphere->get_model()->_opt.render_wireframe = true;
 
 		_objs.emplace_back(sphere, id);
 	}
@@ -76,7 +75,6 @@ void RigidExample::ui_sidebar()
 		mVector3 color = {random(0, 1), random(0, 1), random(0, 1)};
 		auto sphere_id = _scene->add_object(std::make_shared<Kasumi::Model>("sphere", color));
 		auto sphere = _scene->get_object(sphere_id);
-		sphere->get_model()->_opt.render_wireframe = true;
 
 		_objs.emplace_back(sphere, id);
 	}
@@ -100,7 +98,6 @@ void RigidExample::ui_sidebar()
 		mVector3 color = {random(0, 1), random(0, 1), random(0, 1)};
 		auto cube_id = _scene->add_object(std::make_shared<Kasumi::Model>("cube", color));
 		auto cube = _scene->get_object(cube_id);
-		cube->get_model()->_opt.render_wireframe = true;
 		cube->position() = pos;
 		cube->scale() = size;
 
