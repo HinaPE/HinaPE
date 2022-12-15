@@ -2,17 +2,17 @@ cmake_minimum_required(VERSION 3.16)
 project(HinaPE-examples VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 # tutorial series
-add_subdirectory(000kasumi-from-scratch)
-add_subdirectory(001painting2D)
+add_subdirectory(000-kasumi-from-scratch)
+add_subdirectory(001-painting2D)
 
 # cloth & deformable series
-add_subdirectory(100pbd-cloth)
+add_subdirectory(100-pbd-cloth)
 
 # rigid body series
-add_subdirectory(200rigid)
+add_subdirectory(200-rigid)
 
 # fluid series
-add_subdirectory(300sph-fluid)
+add_subdirectory(300-sph-fluid)
 
 #experimental series
-add_subdirectory(999fluid-experimental)
+add_subdirectory(999-fluid-experimental)
