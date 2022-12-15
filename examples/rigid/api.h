@@ -2,7 +2,7 @@
 #define HINAPE_API_H
 
 #include "renderer/app.h"
-#include "rigid/reactphysics3d/reactphysics3d.h"
+#include "solver/rigid_solver.h"
 
 class Api : public Kasumi::Api
 {
@@ -13,11 +13,7 @@ public:
 	void sync();
 
 private:
-	reactphysics3d::PhysicsCommon common;
-	reactphysics3d::PhysicsWorld *world;
-
-private:
-	std::vector<std::pair<Kasumi::SceneObjectPtr, reactphysics3d::RigidBody *>> _objs;
+	std::vector<std::pair<Kasumi::SceneObjectPtr, unsigned int>> _objs; // scene object, rigid body id
 };
 
 
