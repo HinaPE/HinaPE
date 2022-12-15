@@ -20,8 +20,8 @@ protected:
 	void on_init_physics() override; // allow to override again
 	void on_update_physics(float time_step) override; // allow to override again
 	virtual void accumulate_force(float dt);
-	virtual void on_begin_particle_system_update(real dt) {};
-	virtual void on_end_particle_system_update(real dt) {};
+	virtual void on_begin_particle_system_update(real dt) {}; // to be overridden
+	virtual void on_end_particle_system_update(real dt) {}; // to be overridden
 	void resolve_collision();
 	void resolve_collision(ArrayAccessor1<mVector3> positions, ArrayAccessor1<mVector3> velocities);
 

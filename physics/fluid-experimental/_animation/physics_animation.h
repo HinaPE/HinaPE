@@ -8,7 +8,12 @@ namespace HinaPE
 class PhysicsAnimation : public Animation
 {
 public:
-	inline void advance_a_frame() { update(Frame(_current_frame)); }
+	inline void advance_a_frame()
+	{
+		Frame f(_current_frame);
+		f.advance();
+		update(f);
+	}
 
 public:
 	struct Opt
