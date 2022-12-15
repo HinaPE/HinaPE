@@ -43,6 +43,7 @@ void PBDClothExample::ui_sidebar()
 			{
 				Kasumi::Model::Vertex v_;
 				v_.position = v;
+				v_.normal = mVector3(0, 1, 0);
 				v_.tex_coord = {0.5f - v.x / static_cast<float>(size[0]), 0.5f - v.y / static_cast<float>(size[1])};
 				res_v.emplace_back(v_);
 			}
