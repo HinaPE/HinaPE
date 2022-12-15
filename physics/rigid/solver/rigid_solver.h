@@ -3,7 +3,7 @@
 
 #include "cloth/math_api.h"
 
-#include <utility>
+#include <memory>
 
 namespace HinaPE::Rigid
 {

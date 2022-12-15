@@ -3,6 +3,7 @@ project(HinaPE VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAG
 
 option(HINAPE_CLOTH "Load HinaPE Cloth Engine" ON)
 option(HINAPE_RIGID "Load HinaPE Rigidbody Engine" ON)
+option(HINAPE_RIGID2D "Load HinaPE Rigidbody 2D Engine" ON)
 option(HINAPE_FLUID "Load HinaPE Fluid Engine" ON)
 option(HinaPE_USE_KASUMI "Use Kasumi Renderer" ON)
 option(HinaPE_EXAMPLES "Load HinaPE Examples" ON)
@@ -13,6 +14,10 @@ endif ()
 
 if (HINAPE_RIGID)
     add_subdirectory(physics/fluid)
+endif ()
+
+if (HINAPE_RIGID2D)
+    add_subdirectory(physics/rigid-2d)
 endif ()
 
 if (HINAPE_FLUID)
