@@ -2,7 +2,7 @@
 #include "imgui.h"
 #include "implot.h"
 
-void Api::step(float dt)
+void PBDClothExample::step(float dt)
 {
 	if (_cloth_solver == nullptr || _cloth_model == nullptr)
 		return;
@@ -10,7 +10,7 @@ void Api::step(float dt)
 	_cloth_solver->step(dt);
 	sync();
 }
-void Api::ui_sidebar()
+void PBDClothExample::ui_sidebar()
 {
 	static std::array<float, 2> size = {9, 6};
 	static std::array<int, 2> dim2 = {30, 30};
@@ -72,7 +72,7 @@ void Api::ui_sidebar()
 	ImPlot::PlotLine("My Line Plot", x_data, y_data, 1000);
 	ImPlot::EndPlot();
 }
-void Api::sync() const
+void PBDClothExample::sync() const
 {
 	auto &vert_mesh = _cloth_model->vertices(0);
 	const auto &vert_physics = _cloth_solver->vertices();

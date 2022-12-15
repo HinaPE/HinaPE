@@ -1,7 +1,7 @@
 #include "api.h"
 #include "imgui.h"
 
-void Api::step(float dt)
+void SPHFluidExample::step(float dt)
 {
 	if (_fluid_solver == nullptr)
 		return;
@@ -12,7 +12,7 @@ void Api::step(float dt)
 	sync();
 }
 
-void Api::ui_sidebar()
+void SPHFluidExample::ui_sidebar()
 {
 	if (!_inited)
 	{
@@ -38,7 +38,7 @@ void Api::ui_sidebar()
 	}
 }
 
-void Api::sync()
+void SPHFluidExample::sync()
 {
 	auto const &positions = _fluid_solver->sphSystemData()->positions();
 
@@ -55,7 +55,7 @@ void Api::sync()
 		_particle_model->add_instances(poses);
 }
 
-auto Api::phase1() -> bool
+auto SPHFluidExample::phase1() -> bool
 {
 	if (ImGui::CollapsingHeader("Create Fluid Domain"), ImGuiTreeNodeFlags_DefaultOpen)
 	{
@@ -69,7 +69,7 @@ auto Api::phase1() -> bool
 	}
 	return false;
 }
-auto Api::phase2() -> bool
+auto SPHFluidExample::phase2() -> bool
 {
 	if (ImGui::CollapsingHeader("Create Fluid"), ImGuiTreeNodeFlags_DefaultOpen)
 	{

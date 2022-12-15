@@ -6,7 +6,7 @@ static std::mt19937 mt;
 static std::random_device rnd;
 static auto random(float min, float max) -> float { return min + (max - min) * (mt() % 10000 / 10000.f); }
 
-void Api::prepare()
+void RigidExample::prepare()
 {
 	mt.seed(rnd());
 
@@ -53,12 +53,12 @@ void Api::prepare()
 
 	sync();
 }
-void Api::step(float dt)
+void RigidExample::step(float dt)
 {
 	HinaPE::Rigid::RigidSolver::update(dt);
 	sync();
 }
-void Api::ui_sidebar()
+void RigidExample::ui_sidebar()
 {
 	if (ImGui::Button("Add a sphere"))
 	{
@@ -107,7 +107,7 @@ void Api::ui_sidebar()
 		_objs.emplace_back(cube, id);
 	}
 }
-void Api::sync()
+void RigidExample::sync()
 {
 	for (auto &pair: _objs)
 	{

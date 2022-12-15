@@ -4,7 +4,7 @@
 #include "renderer/app.h"
 #include "solver/rigid_solver.h"
 
-class Api : public Kasumi::Api
+class RigidExample : public Kasumi::Api
 {
 public:
 	void prepare() final;

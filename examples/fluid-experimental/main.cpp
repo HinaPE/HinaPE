@@ -4,7 +4,7 @@
 auto main() -> int
 {
 	std::make_shared<Kasumi::Renderer>("empty.txt")
-			->load_api(std::make_shared<SPHFluidExample>())
+			->load_api(std::make_shared<FluidExperimental>())
 			->launch();
 	return 0;
 }

@@ -18,7 +18,7 @@
 #include "fluid/solver/particle/pcisph/pci_sph_solver3.h"
 #include "fluid/emitter/volume_particle_emitter3.h"
 
-class Api : public Kasumi::Api
+class SPHFluidExample : public Kasumi::Api
 {
 public:
 	void step(float dt) final;

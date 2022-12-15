@@ -5,5 +5,5 @@ add_subdirectory(pbd-cloth)
 add_subdirectory(rigid)
 add_subdirectory(sph-fluid)
 add_subdirectory(painting2D)
-
 add_subdirectory(kasumi-from-scratch)
+add_subdirectory(fluid-experimental)

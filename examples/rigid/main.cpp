@@ -4,7 +4,7 @@
 auto main() -> int
 {
 	std::make_shared<Kasumi::Renderer>("empty.txt")
-			->load_api(std::make_shared<Api>())
+			->load_api(std::make_shared<RigidExample>())
 			->launch();
     return 0;
 }

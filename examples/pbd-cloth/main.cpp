@@ -4,7 +4,7 @@
 auto main() -> int
 {
 	std::make_shared<Kasumi::Renderer>("playground.txt")
-			->load_api(std::make_shared<Api>())
+			->load_api(std::make_shared<PBDClothExample>())
 			->launch();
 	return 0;
 }

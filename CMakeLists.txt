@@ -13,7 +13,7 @@ if (HINAPE_CLOTH)
 endif ()
 
 if (HINAPE_RIGID)
-    add_subdirectory(physics/fluid)
+    add_subdirectory(physics/rigid)
 endif ()
 
 if (HINAPE_RIGID2D)
@@ -21,7 +21,8 @@ if (HINAPE_RIGID2D)
 endif ()
 
 if (HINAPE_FLUID)
-    add_subdirectory(physics/rigid)
+    add_subdirectory(physics/fluid)
+    add_subdirectory(physics/fluid-experimental) # experimental target, would be remove in future
 endif ()
 
 # If HinaPE is the Root Project, then enable Renderer and Examples

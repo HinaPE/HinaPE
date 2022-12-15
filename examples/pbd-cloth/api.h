@@ -4,7 +4,7 @@
 #include "renderer/app.h"
 #include "cloth/solver/pbd/pbd_solver.h"
 
-class Api : public Kasumi::Api
+class PBDClothExample : public Kasumi::Api
 {
 public:
 	void step(float dt) final;
