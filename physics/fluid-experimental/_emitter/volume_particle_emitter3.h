@@ -31,7 +31,7 @@ public:
 	} _opt;
 
 public:
-	VolumeParticleEmitter3(ParticleSystemData3Ptr ptr, ImplicitSurface3Ptr surface, const Opt &opt);
+	VolumeParticleEmitter3(ParticleSystemData3Ptr ptr, ImplicitSurface3Ptr surface, const mBBox& max_region, Opt opt);
 
 private:
 	void on_update(real current_time, real dt) final;
@@ -39,7 +39,8 @@ private:
 private:
 	std::mt19937 _rng;
 	ImplicitSurface3Ptr _implicit_surface;
-	BoundingBox3D _bounds;
+	PointGenerator3Ptr _point_generator;
+	mBBox _bounds;
 };
 }
 
