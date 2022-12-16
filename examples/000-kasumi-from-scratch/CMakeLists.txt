@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # 新建一个独立的Project，并指定为C++的Project（如果不指定，编译器将有概率将程序误判为C工程，导致部分文件无法编译）。
-project(KasumiFromScratch LANGUAGES CXX)
+project(000-KasumiFromScratch LANGUAGES CXX)
 
 # 添加一个可执行文件，编译源文件指定为main.cpp api.h api.cpp这三个文件。
 add_executable(000-KasumiFromScratch main.cpp)

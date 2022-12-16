@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(Fluid_Experimental VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(999-Fluid_Experimental VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 add_executable(999-Fluid-Experimental main.cpp api.h api.cpp)
 set_target_properties(999-Fluid-Experimental PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
