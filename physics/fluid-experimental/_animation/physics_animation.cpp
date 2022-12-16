@@ -22,7 +22,7 @@ void HinaPE::PhysicsAnimation::on_update(const HinaPE::Frame &frame)
 
 void HinaPE::PhysicsAnimation::update_physics(float time_step)
 {
-	_current_time = _current_frame.time();
+	_opt._current_time = _current_frame.time();
 
 	if (_opt.fix_sub_time_step)
 	{
@@ -40,7 +40,7 @@ void HinaPE::PhysicsAnimation::update_physics(float time_step)
 			timer.duration("On Update Physics");
 #endif
 
-			_current_time += actual_time;
+			_opt._current_time += actual_time;
 		}
 	} else
 	{
@@ -60,7 +60,7 @@ void HinaPE::PhysicsAnimation::update_physics(float time_step)
 #endif
 
 			remaining_time -= actual_time;
-			_current_time += actual_time;
+			_opt._current_time += actual_time;
 		}
 	}
 }

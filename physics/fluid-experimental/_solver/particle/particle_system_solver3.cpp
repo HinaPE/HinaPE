@@ -11,8 +11,8 @@ void HinaPE::Fluid::ParticleSystemSolver3::on_init_physics()
 
 	_particle_system_data = std::make_shared<ParticleSystemData3>();
 
-	update_collider(0.f);
-	update_emitter(0.f);
+	_collider->update(_opt._current_time, 0.f);
+	_emitter->update(_opt._current_time, 0.f);
 
 #ifdef HinaDebug
 	timer.duration("On Init Physics Phase");
@@ -80,18 +80,17 @@ void HinaPE::Fluid::ParticleSystemSolver3::begin_particle_system_update(real dt)
 	auto forces = _particle_system_data->forces();
 	setRange1(forces.size(), mVector3(), &forces);
 
-
 #ifdef HinaDebug
 	timer.duration("Clear Forces");
 #endif
 
-	update_collider(dt);
+	_collider->update(_opt._current_time, dt);
 
 #ifdef HinaDebug
 	timer.duration("Update Collider");
 #endif
 
-	update_emitter(dt);
+	_emitter->update(_opt._current_time, dt);
 
 #ifdef HinaDebug
 	timer.duration("Update Emitter");
@@ -113,6 +112,16 @@ void HinaPE::Fluid::ParticleSystemSolver3::begin_particle_system_update(real dt)
 }
 void HinaPE::Fluid::ParticleSystemSolver3::end_particle_system_update(real dt)
 {
+	size_t n = _particle_system_data->particles_num();
+	auto positions = _particle_system_data->positions();
+	auto velocities = _particle_system_data->velocities();
+
+	parallelFor((size_t) 0, n, [&](size_t i)
+	{
+		positions[i] = _new_positions[i];
+		velocities[i] = _new_velocities[i];
+	});
+
 	on_end_particle_system_update(dt);
 }
 void HinaPE::Fluid::ParticleSystemSolver3::resolve_collision() { resolve_collision(_new_positions.accessor(), _new_velocities.accessor()); }
@@ -124,14 +133,23 @@ void HinaPE::Fluid::ParticleSystemSolver3::resolve_collision(HinaPE::ArrayAccess
 	parallelFor((size_t) 0, n, [&](size_t i)
 	{
 		// TODO: resolve collision
+//		_collider->resolveCollision(radius, _opt.restitution_coefficient, &positions[i], &velocities[i]);
 	});
-}
-void HinaPE::Fluid::ParticleSystemSolver3::update_collider(real dt)
-{
-}
-void HinaPE::Fluid::ParticleSystemSolver3::update_emitter(real dt)
-{
 }
 void HinaPE::Fluid::ParticleSystemSolver3::time_integration(real dt)
 {
+	size_t n = _particle_system_data->particles_num();
+	auto positions = _particle_system_data->positions();
+	auto velocities = _particle_system_data->velocities();
+	auto forces = _particle_system_data->forces();
+	const real mass = _particle_system_data->mass();
+
+	parallelFor((size_t) 0, n, [&](size_t i)
+	{
+		// Integrate velocity first
+		_new_velocities[i] = velocities[i] + dt * forces[i] / mass;
+
+		// Integrate position.
+		_new_positions[i] = positions[i] + dt * _new_velocities[i];
+	});
 }

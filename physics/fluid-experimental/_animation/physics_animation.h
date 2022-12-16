@@ -18,6 +18,8 @@ public:
 public:
 	struct Opt
 	{
+		float _current_time = 0.f;
+
 		bool fix_sub_time_step = false;
 		int sub_time_step = 1;
 	} _opt;
@@ -33,7 +35,6 @@ private:
 
 private:
 	Frame _current_frame;
-	float _current_time = 0.f;
 };
 using PhysicsAnimationPtr = std::shared_ptr<PhysicsAnimation>;
 }
