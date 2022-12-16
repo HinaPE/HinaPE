@@ -7,6 +7,13 @@ namespace HinaPE::Fluid
 {
 class SPHSolver3 : public ParticleSystemSolver3
 {
+public:
+	struct Opt : public ParticleSystemSolver3::Opt
+	{
+	} _opt;
+protected:
+	void on_begin_particle_system_update(real dt) final;
+	void on_end_particle_system_update(real dt) final;
 };
 using SPHSolver3Ptr = std::shared_ptr<SPHSolver3>;
 }
