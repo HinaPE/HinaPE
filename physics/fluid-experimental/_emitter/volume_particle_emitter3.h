@@ -3,6 +3,9 @@
 
 #include "particle_emitter3.h"
 #include "geometry/implicit_surface3.h"
+#include "_point_generator/point_generator3.h"
+
+#include <random>
 
 namespace HinaPE::Fluid
 {
@@ -34,7 +37,9 @@ private:
 	void on_update(real current_time, real dt) final;
 
 private:
+	std::mt19937 _rng;
 	ImplicitSurface3Ptr _implicit_surface;
+	BoundingBox3D _bounds;
 };
 }
 
