@@ -11,9 +11,15 @@ class ParticleEmitter3
 {
 public:
 	void update(real current_time, real dt);
+//	std::function<void(ParticleSystemData3Ptr)>
 
 public:
-	struct Opt {} _opt;
+	struct Opt
+	{
+		bool enable = false;
+	} _opt;
+	inline auto target() const -> ParticleSystemData3Ptr { return _particles; }
+	inline void set_enable(bool enable) { _opt.enable = enable; }
 
 public:
 	explicit ParticleEmitter3(ParticleSystemData3Ptr ptr) : _particles(std::move(ptr)) {};
