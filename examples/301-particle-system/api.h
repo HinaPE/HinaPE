@@ -2,6 +2,7 @@
 #define HINAPE_API_H
 
 #include "renderer/app.h"
+#include "_solver/particle/particle_system_solver3.h"
 
 class ParticleSystem : public Kasumi::Api
 {
@@ -10,7 +11,11 @@ public:
 	void step(float dt) final;
 	void ui_sidebar() final;
 	void key(int key, int scancode, int action, int mods) final;
-};
+	void sync();
 
+private:
+	HinaPE::Fluid::ParticleSystemSolver3Ptr _solver;
+	Kasumi::SceneObjectPtr _obj;
+};
 
 #endif //HINAPE_API_H

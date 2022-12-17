@@ -11,6 +11,9 @@ namespace HinaPE::Fluid
 class ParticleSystemSolver3 : public PhysicsAnimation
 {
 public:
+	inline auto particle_positions() const -> ConstArrayAccessor1<mVector3> { return _particle_system_data->positions(); }
+
+public:
 	struct Opt : public PhysicsAnimation::Opt
 	{
 		mVector3 gravity = {0, -9.8f, 0};

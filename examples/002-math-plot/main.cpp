@@ -13,11 +13,11 @@
 class MathPlot final : public Kasumi::App
 {
 public:
-	MathPlot() : App(1500, 600, "Math Function Plotter")
+	MathPlot() : App(1500, 300, "Math Function Plotter")
 	{
-		_math_func = [](float x) -> float
+		_math_func = [](float x) -> std::pair<float, float>
 		{
-			return std::sin(x) * std::cos(8 * x);
+			return {x, std::sin(x) * std::cos(8 * x)};
 		};
 	}
 	void prepare() final
@@ -31,8 +31,9 @@ public:
 		_lines->add({-1, 0, 0}, {1, 0, 0}, Color::RED); // x axis
 		_lines->add({0, -1, 0}, {0, 1, 0}, Color::GREEN); // y axis
 
-		float x = start_x + step * static_cast<float>(current_sample++);
-		float y = _math_func(x);
+		auto r = _math_func(start_x + step * static_cast<float>(current_sample++));
+		float x = r.first;
+		float y = r.second;
 		res.emplace_back(x, y);
 		if (res.size() > samples)
 			res.pop_front();
@@ -60,7 +61,7 @@ public:
 private:
 	Kasumi::ShaderPtr _shader;
 	Kasumi::LinesPtr _lines; // math function lines
-	std::function<float(float)> _math_func;
+	std::function<std::pair<float, float>(float)> _math_func;
 
 private:
 	int current_sample = 0;

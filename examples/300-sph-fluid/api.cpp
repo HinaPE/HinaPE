@@ -51,7 +51,7 @@ void SPHFluidExample::sync()
 		poses.push_back(pose);
 	}
 	_particle_model->clear_instances();
-	if (poses.size() > 0)
+	if (!poses.empty())
 		_particle_model->add_instances(poses);
 }
 
