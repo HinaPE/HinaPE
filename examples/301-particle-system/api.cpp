@@ -6,10 +6,21 @@
 void ParticleSystem::prepare()
 {
 	// init render object
-	auto particles_model = std::make_shared<Kasumi::Model>("sphere", Color::RED);
-	particles_model->instancing();
-	auto id = _scene->add_object(particles_model);
-	_obj = _scene->get_object(id);
+	{
+		auto fluid_model = std::make_shared<Kasumi::Model>("sphere", Color::RED);
+		fluid_model->instancing();
+		auto id = _scene->add_object(fluid_model);
+		_fluid_obj = _scene->get_object(id);
+	}
+	{
+		auto bbox_model = std::make_shared<Kasumi::Model>("cube", Color::NO_COLORS);
+		bbox_model->_opt.render_surface = false;
+		bbox_model->_opt.render_bbox = true;
+		bbox_model->_opt.bbox_color = Color::GRAY;
+		auto id = _scene->add_object(bbox_model);
+		_bbox_obj = _scene->get_object(id);
+	}
+
 
 	// init physics object
 //	auto plane = HinaPE::Plane3::builder()
@@ -35,7 +46,7 @@ void ParticleSystem::sync()
 {
 	auto const &positions = _solver->particle_positions();
 
-	auto model = _obj->get_model();
+	auto model = _fluid_obj->get_model();
 	std::vector<Kasumi::Pose> poses;
 	for (auto const &pos: positions)
 	{

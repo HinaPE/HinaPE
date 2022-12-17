@@ -4,11 +4,11 @@
 void SPHFluidExample::prepare()
 {
 	HinaPE::Logging::mute();
-	_bounding_model = std::make_shared<Kasumi::Model>("cube", Color::NO_COLORS);
-	_bounding_model_scene = _scene->get_object(_scene->add_object(_bounding_model));
-	_bounding_model->_opt.render_surface = false; // dont render the surface
-	_bounding_model->_opt.render_bbox = true; // render the bounding box instead
-	_bounding_model->_opt.bbox_color = Color::GRAY;
+	auto bbox_model = std::make_shared<Kasumi::Model>("cube", Color::NO_COLORS);
+	bbox_model->_opt.render_surface = false; // dont render the surface
+	bbox_model->_opt.render_bbox = true; // render the bounding box instead
+	bbox_model->_opt.bbox_color = Color::GRAY;
+	_bbox_obj = _scene->get_object(_scene->add_object(bbox_model));
 }
 void SPHFluidExample::step(float dt)
 {
@@ -49,9 +49,9 @@ void SPHFluidExample::sync()
 		pose.scale = {0.01, 0.01, 0.01};
 		poses.push_back(pose);
 	}
-	_particle_model->clear_instances();
+	_fluid_obj->get_model()->clear_instances();
 	if (!poses.empty())
-		_particle_model->add_instances(poses);
+		_fluid_obj->get_model()->add_instances(poses);
 }
 
 auto SPHFluidExample::phase1() -> bool
@@ -59,10 +59,10 @@ auto SPHFluidExample::phase1() -> bool
 	if (ImGui::CollapsingHeader("Create Fluid Domain"), ImGuiTreeNodeFlags_DefaultOpen)
 	{
 		ImGui::SliderFloat("Size", &_opt.bounding_box_size, 0.01f, 10.0f, "%.2f");
-		_bounding_model_scene->scale() = mVector3(_opt.bounding_box_size, _opt.bounding_box_size, _opt.bounding_box_size);
+		_bbox_obj->scale() = mVector3(_opt.bounding_box_size, _opt.bounding_box_size, _opt.bounding_box_size);
 		if (ImGui::Button("Add"))
 		{
-			_bounding_model->_opt.bbox_color = Color::BLACK;
+			_bbox_obj->get_model()->_opt.bbox_color = Color::BLACK;
 			return true;
 		}
 	}
@@ -82,7 +82,7 @@ auto SPHFluidExample::phase2() -> bool
 					.withPoint({0, 0.25 * _opt.bounding_box_size, 0})
 					.makeShared();
 			auto sphere = HinaPE::Sphere3::builder()
-					.withCenter({_bounding_model_scene->position().x, _bounding_model_scene->position().y, _bounding_model_scene->position().z})
+					.withCenter({_bbox_obj->position().x, _bbox_obj->position().y, _bbox_obj->position().z})
 					.withRadius(0.15 * _opt.bounding_box_size)
 					.makeShared();
 			auto surfaceSet = HinaPE::ImplicitSurfaceSet3::builder()
@@ -109,9 +109,9 @@ auto SPHFluidExample::phase2() -> bool
 			_fluid_solver->setCollider(_fluid_collider);
 			_fluid_solver->setPseudoViscosityCoefficient(_opt.pseudo_viscosity_coefficient);
 
-			_particle_model = std::make_shared<Kasumi::Model>("sphere", Color::BLUE);
-			_particle_model_scene = _scene->get_object(_scene->add_object(_particle_model));
-			_particle_model->instancing();
+			auto fluid_model = std::make_shared<Kasumi::Model>("sphere", Color::BLUE);
+			fluid_model->instancing();
+			_fluid_obj = _scene->get_object(_scene->add_object(fluid_model));
 
 			sync();
 			return true;

@@ -48,10 +48,8 @@ private:
 	HinaPE::RigidBodyCollider3Ptr _fluid_collider;
 
 	// scene part
-	Kasumi::ModelPtr _bounding_model;
-	Kasumi::ModelPtr _particle_model;
-	Kasumi::SceneObjectPtr _bounding_model_scene;
-	Kasumi::SceneObjectPtr _particle_model_scene;
+	Kasumi::SceneObjectPtr _fluid_obj;
+	Kasumi::SceneObjectPtr _bbox_obj;
 };
 
 #endif //HINAPE_API_H

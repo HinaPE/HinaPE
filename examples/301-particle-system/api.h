@@ -15,8 +15,8 @@ public:
 
 private:
 	HinaPE::Fluid::ParticleSystemSolver3Ptr _solver;
-	Kasumi::SceneObjectPtr _obj;
-	Kasumi::SceneObjectPtr _bounding_box;
+	Kasumi::SceneObjectPtr _fluid_obj;
+	Kasumi::SceneObjectPtr _bbox_obj;
 };
 
 #endif //HINAPE_API_H
