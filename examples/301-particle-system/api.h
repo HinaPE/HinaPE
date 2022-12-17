@@ -17,6 +17,9 @@ private:
 	HinaPE::Fluid::ParticleSystemSolver3Ptr _solver;
 	Kasumi::SceneObjectPtr _fluid_obj;
 	Kasumi::SceneObjectPtr _bbox_obj;
+
+private:
+	mBBox domain;
 };
 
 #endif //HINAPE_API_H

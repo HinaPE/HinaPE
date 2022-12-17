@@ -22,7 +22,7 @@ public:
 	} _opt;
 
 public:
-	explicit ParticleSystemSolver3(const ImplicitSurface3Ptr& surface, const mBBox& max_region, Collider3Ptr ptr);
+	ParticleSystemSolver3(const ImplicitSurface3Ptr& surface, const mBBox& max_region, Collider3Ptr ptr);
 
 protected:
 	void on_init_physics() override; // allow to override again

@@ -27,7 +27,7 @@ public:
 protected:
 	virtual void on_update(real current_time, real dt) = 0;
 
-private:
+protected:
 	ParticleSystemData3Ptr _particles;
 };
 using ParticleEmitter3Ptr = std::shared_ptr<ParticleEmitter3>;

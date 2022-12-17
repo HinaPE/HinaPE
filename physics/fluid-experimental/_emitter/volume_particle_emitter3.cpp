@@ -38,6 +38,7 @@ void HinaPE::Fluid::VolumeParticleEmitter3::on_update(real current_time, real dt
 
 	Array1<mVector3> newPositions;
 	Array1<mVector3> newVelocities;
+	Array1<mVector3> newForces;
 
 	if (_opt.allow_overlapping || _opt.is_one_shut)
 	{
@@ -54,8 +55,8 @@ void HinaPE::Fluid::VolumeParticleEmitter3::on_update(real current_time, real dt
 
 			Vector3D candidateD = {candidate.x, candidate.y, candidate.z}; // TODO: remove this
 
-			if (_implicit_surface->signedDistance(candidateD) <= 0.0)
-			{
+//			if (_implicit_surface->signedDistance(candidateD) <= 0.0)
+//			{
 				if (_opt.current_particle_num < _opt.max_particle_num)
 				{
 					newPositions.append(candidate);
@@ -63,7 +64,7 @@ void HinaPE::Fluid::VolumeParticleEmitter3::on_update(real current_time, real dt
 					++new_particle_num;
 				} else
 					return false;
-			}
+//			}
 
 			return true;
 		});
@@ -81,7 +82,12 @@ void HinaPE::Fluid::VolumeParticleEmitter3::on_update(real current_time, real dt
 				Vector3D rD = point - _implicit_surface->transform.translation();
 				mVector3 r = {rD.x, rD.y, rD.z}; // TODO: remove this
 				newVelocities[i] = _opt.initial_velocity + _opt.linear_velocity + _opt.angular_velocity.cross(r);
+				newVelocities[i] = {rand() % 30 / 10.f, rand() % 30 / 10.f, rand() % 30 / 10.f};
 			});
+
+	newForces.resize(newPositions.size());
+
+	_particles->add_particles(newPositions.constAccessor(), newVelocities.constAccessor(), newForces.constAccessor());
 
 	if (_opt.is_one_shut)
 		_opt.enable = false;

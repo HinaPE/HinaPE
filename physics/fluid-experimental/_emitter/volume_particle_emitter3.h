@@ -14,12 +14,12 @@ class VolumeParticleEmitter3 final : public ParticleEmitter3
 public:
 	struct Opt
 	{
-		bool enable = false;
+		bool enable = true;
 
 		float spacing;
 
-		bool is_one_shut = false;
-		bool allow_overlapping = false;
+		bool is_one_shut = true;
+		bool allow_overlapping = true;
 		float jitter = 0.f;
 
 		mVector3 initial_velocity;
@@ -27,7 +27,7 @@ public:
 		mVector3 angular_velocity;
 
 		size_t current_particle_num = 0;
-		size_t max_particle_num = 1e6;
+		size_t max_particle_num = 1e3;
 	} _opt;
 
 public:
