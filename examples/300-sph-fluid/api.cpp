@@ -1,6 +1,15 @@
 #include "api.h"
 #include "imgui.h"
 
+void SPHFluidExample::prepare()
+{
+	HinaPE::Logging::mute();
+	_bounding_model = std::make_shared<Kasumi::Model>("cube", Color::NO_COLORS);
+	_bounding_model_scene = _scene->get_object(_scene->add_object(_bounding_model));
+	_bounding_model->_opt.render_surface = false; // dont render the surface
+	_bounding_model->_opt.render_bbox = true; // render the bounding box instead
+	_bounding_model->_opt.bbox_color = Color::GRAY;
+}
 void SPHFluidExample::step(float dt)
 {
 	if (_fluid_solver == nullptr)
@@ -14,16 +23,6 @@ void SPHFluidExample::step(float dt)
 
 void SPHFluidExample::ui_sidebar()
 {
-	if (!_inited)
-	{
-		HinaPE::Logging::mute();
-		_bounding_model = std::make_shared<Kasumi::Model>("cube", Color::NO_COLORS);
-		_bounding_model_scene = _scene->get_object(_scene->add_object(_bounding_model));
-		_bounding_model->_opt.render_surface = false; // dont render the surface
-		_bounding_model->_opt.render_bbox = true; // render the bounding box instead
-		_bounding_model->_opt.bbox_color = Color::GRAY;
-		_inited = true;
-	}
 	static int phase = 0;
 	switch (phase)
 	{
