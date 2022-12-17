@@ -2,8 +2,8 @@
 
 #include "samplers.h"
 
-#include <exception>
 #include <utility>
+#include <stdexcept>
 
 HinaPE::Fluid::VolumeParticleEmitter3::VolumeParticleEmitter3(ParticleSystemData3Ptr ptr, ImplicitSurface3Ptr surface, const mBBox &max_region, Opt opt) : ParticleEmitter3(std::move(ptr)), _implicit_surface(std::move(surface)), _bounds(max_region), _opt(std::move(opt)), _rng(rand())
 {

@@ -1,8 +1,6 @@
 #include "particle_system_data3.h"
 
-#ifdef HinaDebug
-#include <exception>
-#endif
+#include <stdexcept>
 
 #include "parallel.h"
 
@@ -23,10 +21,8 @@ void HinaPE::Fluid::ParticleSystemData3::add_particle(const mVector3 &position, 
 }
 void HinaPE::Fluid::ParticleSystemData3::add_particles(const HinaPE::ConstArrayAccessor1<mVector3> &positions_, const HinaPE::ConstArrayAccessor1<mVector3> &velocities_, const HinaPE::ConstArrayAccessor1<mVector3> &forces_)
 {
-#ifdef HinaDebug
 	if (!(positions_.size() == velocities_.size() && positions_.size() == forces_.size()))
 		throw std::runtime_error("INVALID INPUT");
-#endif
 
 	size_t old_size = particles_num();
 	size_t new_size = old_size + positions_.size();
