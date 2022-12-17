@@ -36,12 +36,20 @@ Rendering Features
 
 ## Build Instruction
 
-Prerequisites
+Prerequisites & dependencies: 
+
+(**NOTE: all external dependencies are built-in**)
 
 - C++ 20
 - cmake > 3.16
-
-All dependencies is included in HinaPE.
+- [assimp](https://github.com/assimp/assimp.git): various 3d-model-formats loader
+- [glfw3](https://github.com/glfw/glfw.git): windowing & input
+- [stb](https://github.com/nothings/stb.git): texture loader
+- [glad](https://github.com/Dav1dde/glad.git): OpenGL loader
+- [nfd](https://github.com/EmbarkStudios/nfd2.git): file dialog
+- [imgui](https://github.com/ocornut/imgui.git): GUI (include [implot](https://github.com/epezent/implot.git) & [imguizmo](https://github.com/CedricGuillemet/ImGuizmo.git))
+- [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader.git): obj model loader (to be removed soon)
+- [fpm](https://github.com/MikeLankamp/fpm.git): fixed-point math library (not used)
 
 First recursively clone this repo and all submodules.
 
