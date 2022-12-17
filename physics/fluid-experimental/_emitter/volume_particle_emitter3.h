@@ -2,7 +2,7 @@
 #define HINAPE_VOLUME_PARTICLE_EMITTER3_H
 
 #include "particle_emitter3.h"
-#include "geometry/implicit_surface3.h"
+#include "geometry/implicit_surface_set3.h"
 #include "_point_generator/point_generator3.h"
 
 #include <random>

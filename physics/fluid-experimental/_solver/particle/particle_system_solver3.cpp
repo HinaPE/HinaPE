@@ -3,13 +3,18 @@
 #include "array/array_utils.h"
 #include "parallel.h"
 
+HinaPE::Fluid::ParticleSystemSolver3::ParticleSystemSolver3(const ImplicitSurface3Ptr &surface, const mBBox &max_region, HinaPE::Collider3Ptr ptr) : _collider(std::move(ptr))
+{
+	_particle_system_data = std::make_shared<ParticleSystemData3>();
+	VolumeParticleEmitter3::Opt opt;
+	_emitter = std::make_shared<VolumeParticleEmitter3>(_particle_system_data, surface, max_region, opt);
+}
+
 void HinaPE::Fluid::ParticleSystemSolver3::on_init_physics()
 {
 #ifdef HinaDebug
 	Timer timer;
 #endif
-
-	_particle_system_data = std::make_shared<ParticleSystemData3>();
 
 	_collider->update(_opt._current_time, 0.f);
 	_emitter->update(_opt._current_time, 0.f);
@@ -132,8 +137,20 @@ void HinaPE::Fluid::ParticleSystemSolver3::resolve_collision(HinaPE::ArrayAccess
 
 	parallelFor((size_t) 0, n, [&](size_t i)
 	{
-		// TODO: resolve collision
-//		_collider->resolveCollision(radius, _opt.restitution_coefficient, &positions[i], &velocities[i]);
+		// convert double to real (would be removed in the future
+		std::vector<Vector3D> positionsD;
+		positionsD.resize(positions.size());
+		for (int j = 0; j < positions.size(); ++j)
+			positionsD[i] = {positions[i].x, positions[i].y, positions[i].z};
+		std::vector<Vector3D> velocitiesD;
+		velocitiesD.resize(velocities.size());
+		for (int j = 0; j < velocities.size(); ++j)
+			velocitiesD[i] = {velocities[i].x, velocities[i].y, velocities[i].z};
+		_collider->resolveCollision(radius, _opt.restitution_coefficient, &positionsD[i], &velocitiesD[i]);
+		for (int j = 0; j < positions.size(); ++j)
+			positions[i] = {positionsD[i].x, positionsD[i].y, positionsD[i].z};
+		for (int j = 0; j < velocities.size(); ++j)
+			velocities[i] = {velocitiesD[i].x, velocitiesD[i].y, velocitiesD[i].z};
 	});
 }
 void HinaPE::Fluid::ParticleSystemSolver3::time_integration(real dt)

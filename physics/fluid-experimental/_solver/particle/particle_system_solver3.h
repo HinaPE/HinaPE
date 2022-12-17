@@ -3,7 +3,7 @@
 
 #include "_animation/physics_animation.h"
 #include "particle_system_data3.h"
-#include "_emitter/particle_emitter3.h"
+#include "_emitter/volume_particle_emitter3.h"
 #include "geometry/collider3.h"
 
 namespace HinaPE::Fluid
@@ -20,6 +20,9 @@ public:
 		float drag_coefficient = 1e-4;
 		float restitution_coefficient = 0.0f;
 	} _opt;
+
+public:
+	explicit ParticleSystemSolver3(const ImplicitSurface3Ptr& surface, const mBBox& max_region, Collider3Ptr ptr);
 
 protected:
 	void on_init_physics() override; // allow to override again
