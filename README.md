@@ -7,33 +7,49 @@
 ## Introduction
 
 1. HinaPE is a recursive acronym for "**HinaPE is not a Physics Engine**".
-2. HinaPE is a cross-platform, light and easy-to-use research-oriented physics engine developed after [CMU Scotty3D](https://github.com/CMU-Graphics/Scotty3D), [Fluid Engine Dev](http://github.com/doyubkim/fluid-engine-dev) and [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH), consisting Rigidbody Dynamics, Deformables and Fluids.
-3. HinaPE is proudly powered by [Kasumi-render](https://github.com/HinaPE/Kasumi-renderer.git).
+2. HinaPE is a cross-platform and portable research-oriented physics-based animation infrastructure.
+3. HinaPE is proudly powered by [Kasumi-renderer](https://github.com/HinaPE/Kasumi-renderer.git).
 
-## Gallery
+## Features
 
-![HinaPE](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20220715.png?raw=true)
-![HinaPE](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20220715-2.png?raw=true)
-![HinaPE](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20220715-3.png?raw=true)
-![HinaPE](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/HinaPE-20221024.png?raw=true)
-more illustrations in coming...
+Physics Features
+- Cloth Engine
+  - FEM solver
+  - FMS solver
+  - PBD solver
+  - PD solver
+  - XPBD solver
+- Rigidbody Engine
+  - powered by [reactphysics3D](https://github.com/DanielChappuis/reactphysics3d.git)
+  - powered by [PhysX 5.1](https://github.com/NVIDIA-Omniverse/PhysX.git) (optional)
+- Fluid Engine
+  - SPH solver
+  - PciSPH solver
+  - Flip solver
+  - PIC solver
+  - APIC solver
+  - Level set solver
+
+Rendering Features
+- Backends: HinaPE is designed with OpenGL & Vulkan & DirectX 12 & Apple Metal backends.
+- Rendering Engine: Built-in PBR renderer & GLSL pathtracer.
 
 ## Build Instruction
 
-As a cross-platform project, [Clion](https://www.jetbrains.com/clion/) is highly recommended to build HinaPE.
-
-### Prerequisites
+Prerequisites
 
 - C++ 20
 - cmake > 3.16
+
+All dependencies is included in HinaPE.
 
 First recursively clone this repo and all submodules.
 
 ```shell
 git clone --recursive https://github.com/HinaPE/HinaPE.git
+cd HinaPE
 ```
-
-### macOS
+For all platform (MacOS, Ubuntu, Windows)
 
 ```shell
 cmake -S . -B Build
@@ -41,24 +57,15 @@ cmake --build Build --config Release
 ./Build/HinaPE
 ```
 
-### Ubuntu
+## Documentation
+on dev...
 
-```shell
-cmake -S . -B Build
-cmake --build Build --config Release
-./Build/HinaPE
-```
-
-### Windows
-
-```shell
-cmake -S . -B Build
-cmake --build Build --config Release
-.\Build\Release\HinaPE.exe
-```
-
-For update all submodules: https://stackoverflow.com/questions/5828324/update-git-submodule-to-latest-commit-on-origin
+## Q&A
+update all submodules
 ```git
 git submodule foreach git pull origin master
 git submodule foreach git checkout master
 ```
+
+## TODOs
+- ray-marching: https://www.youtube.com/watch?v=hUaYxqkrfjA
