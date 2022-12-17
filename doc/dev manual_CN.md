@@ -6,15 +6,17 @@ HinaPE是一个建立以Kasumi Renderer为后端建立起的物理模拟平台�
 
 ## Kasumi 渲染后端
 
-### 核心架构：
+### 核心架构
 
 ![HinaPE](HinaPE.png)
+
+[pdf 版本](./HinaPE.pdf)
 
 ### 文件结构
 
 - `backends`：通用渲染后端，所有与OpenGL（或其他图形API）相关的功能类全部被封装在这里。
-- `common`：通用数学/几何库。一个大项目只需要依赖一个common就可以了。如果Kasumi渲染器外面还有工程包含它，那么这个common是不使用的，而是会使用外面那个common。（比如HinaPE便是）
-- `renderer app`：通用渲染器，一个App的实例。这个层级不关心渲染后端的实现（如OpenGL等），完全解耦，支持场景、UI等操作。
+- `common`：通用数学/几何库。一个大项目只需要依赖一个common就可以了。如果Kasumi渲染器外面还有工程包含它，那么这个Kasumi内部的common是不使用的，而是会使用外面那个common。
+- `renderer app`：通用渲染器，一个Platform App的实例。这个层级不关心渲染后端的实现（如OpenGL/Vulkan等），完全解耦，支持场景、UI等操作。
 
 ### Backends：通用渲染后端
 
@@ -30,16 +32,17 @@ HinaPE是一个建立以Kasumi Renderer为后端建立起的物理模拟平台�
 
 #### 文件依赖关系
 
-| File          | Dependency                   |
-| ------------- | ---------------------------- |
-| `camera`      | math_api                     |
-| `framebuffer` | shader                       |
-| `mesh`        | math_api/shader/texture      |
-| `model`       | math_api/shader/texture/mesh |
-| `platform`    | /                            |
-| `pose`        | math_api                     |
-| `shader`      | math_api                     |
-| `texture`     | /                            |
+| File          | Dependency                              |
+| ------------- | --------------------------------------- |
+| `camera`      | math_api                                |
+| `framebuffer` | shader                                  |
+| `light`       | camera/shader                           |
+| `mesh`        | math_api/shader/texture                 |
+| `model`       | math_api/shader/texture/mesh/light/pose |
+| `platform`    | /                                       |
+| `pose`        | math_api                                |
+| `shader`      | math_api                                |
+| `texture`     | /                                       |
 
 可以看到，backends中的所有文件的依赖结构都简单。由于math_api可完全自定义实现（比如使用自己的Vector或者Matrix等），在这里的所有的文件均可单独作为一个完整的模块任何项目被引入。
 
@@ -62,6 +65,8 @@ HinaPE是一个建立以Kasumi Renderer为后端建立起的物理模拟平台�
 
 ### 一：从零开始，使用Kasumi Renderer渲染一个自定义模型
 
+**<u>Kasumi Render</u>**是一个**<u>Platform</u>**的内置的一个**<u>App class</u>**的渲染器实例，位于`HinaPE/kasumi/renderer`。
+
 #### 建立CMake项目
 
 在`examples`下新建一个文件夹`kasumi-from-scratch`（其实，我们可以在任何文件夹下新建）。
@@ -73,20 +78,20 @@ HinaPE是一个建立以Kasumi Renderer为后端建立起的物理模拟平台�
 cmake_minimum_required(VERSION 3.16)
 
 # 新建一个独立的Project，并指定为C++的Project（如果不指定，编译器将有概率将程序误判为C工程，导致部分文件无法编译）。
-project(KasumiFromScratch LANGUAGES CXX)
+project(000-KasumiFromScratch LANGUAGES CXX)
 
 # 添加一个可执行文件，编译源文件指定为main.cpp api.h api.cpp这三个文件。
-add_executable(KasumiFromScratch main.cpp)
+add_executable(000-KasumiFromScratch main.cpp)
 
 # HinaPE积极拥抱现代的C++，因此，我们将使用C++20标准。
-set_target_properties(KasumiFromScratch PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
+set_target_properties(000-KasumiFromScratch PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 
 # 将Kasumi_renderer链接进KasumiFromScratch这个Target。这样，KasumiFromScratch就可以使用Kasumi_renderer的全部功能了（包括Kasumi_renderer自己定义的头文件也会被链式法则引入到KasumiFromScratch）。
-target_link_libraries(KasumiFromScratch PUBLIC Kasumi_renderer)
+target_link_libraries(000-KasumiFromScratch PUBLIC Kasumi_renderer)
 
 # 为了方便，我们添加一个我们自己的Asset的文件夹的宏。
 target_compile_definitions(
-        KasumiFromScratch
+        000-KasumiFromScratch
         PUBLIC
         -DMyAssetsDir="${CMAKE_CURRENT_SOURCE_DIR}/assets/"
 )
@@ -96,7 +101,7 @@ target_compile_definitions(
 
 ```cmake
 # in examples/CMakeLists.txt
-add_subdirectory(kasumi-from-scratch)
+add_subdirectory(000-kasumi-from-scratch)
 ```
 
 然后在文件夹下新建并初始化`main.cpp`
@@ -150,20 +155,22 @@ auto miku = std::make_shared<Kasumi::Model>(std::string(MyAssetsDir) + "miku.pmx
 scene->add_object(miku);
 ```
 
-
-
 最后启动Kasumi Renderer App。
 
 ![image-20221213205015635](images/miku.png)
 
-### 二：使用扩展Api调用Kasumi Renderer
+### 二：使用扩展Api调用Kasumi Renderer开发动画
 
-TODO
+**<u>Kasumi Renderer</u>**支持扩展API，通常用于与外部的动画（比如物理模拟动画）插件交互，实现每帧更新画面。
 
-
+我们需要继承位于**<u>Kasumi Renderer</u>**下的**<u>Api class</u>**来定义我们的动画行为，并在main函数中最终注册进**<u>Kasumi Renderer</u>**。
 
 ### 三：使用扩展App直接注册Platform开发图形程序
 
-（如例：examples/painting2D，一个类似Shadertoy的2DFragment Shader画板）
+如上例所示，**<u>Kasumi Renderer</u>**实质上只是一个**<u>Platform</u>**的内置的一个**<u>App class</u>**的渲染器实例。
 
-TODO
+这意味着，事实上，我们可以直接继承位于**<u>Platform</u>**头文件下面的**<u>App class</u>**来开发各种图形程序。
+
+（如例：examples/001-painting2D，一个类似Shadertoy的2DFragment Shader画板）
+
+（如例：examples/002-math-plot，一个用于画2D函数图像的图形APP）
