@@ -6,6 +6,10 @@
 #include "geometry/rigid_body_collider3.h"
 
 #include "imgui.h"
+#include "implot.h"
+
+static std::vector<float> x_data;
+static std::vector<float> y_data;
 
 void ParticleSystem::prepare()
 {
@@ -31,12 +35,23 @@ void ParticleSystem::step(float dt)
 	if (!_solver)
 		return;
 
+	x_data.emplace_back(frame.time());
+	y_data.emplace_back(_solver->timer._last_duration);
+
 	frame.advance();
 	_solver->update(frame);
+
 	sync();
 }
 void ParticleSystem::ui_sidebar()
 {
+	ImGui::Text("Physics FPS:");
+	ImVec2 s(200.f, 100.f);
+	std::string name = "physics fps";
+	ImPlot::BeginPlot(name.c_str(), s, ImPlotFlags_CanvasOnly | ImPlotFlags_NoChild);
+	ImPlot::PlotLine("physics fps line", x_data.data(), y_data.data(), static_cast<int>(x_data.size()));
+	ImPlot::EndPlot();
+
 	static bool disable = false;
 	ImGui::BeginDisabled(disable);
 	if (ImGui::CollapsingHeader("Create Fluid Domain"), ImGuiTreeNodeFlags_DefaultOpen)
