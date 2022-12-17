@@ -25,7 +25,7 @@ HinaPE是一个建立以Kasumi Renderer为后端建立起的物理模拟平台�
 1. 要绝对解耦。尽可能做到最大的复用性。
    - 要与外部解耦。比如Kasumi渲染器、HinaPE等。不能依赖除了数学函数之外任何外部的东西。
    - 要与自己解耦。同在backends后端下的文件之间，也要尽可能解耦，尽可能每个文件都可以单独引用。如果做不到单独引用，那么依赖链条也必须清晰简洁。
-   - 要与图形Api实现解耦。在头文件里不出现任何OpenGL的东西。（注：GLFW窗口实质上是系统层级的，并不严格属于OpenGL，因为OpenGL、Vulkan、Metal等图形API都可以使用GLFW的窗口。所以GLFW是被允许在头文件中出现的。）
+   - 要与图形Api实现解耦。在头文件里不出现任何OpenGL的东西。（注：GLFW窗口实质上是系统层级的，并不严格属于OpenGL，因为OpenGL、Vulkan、Metal、DirectX 12等图形API都可以使用GLFW的窗口。所以GLFW是被允许在头文件中出现的。）
 2. 要尽最大的可能封装起来。
    - 比如`Model`。一旦编写完成，外部的调用（比如Kasumi Renderer）就只需要在Model层级进行操作，不需要深入`UniversalMesh`这一层级，也不需要写任何GL开头的指令。
    - 再比如`Platform`。作为一个通用图形渲染后端，我们可以发现Platform的头文件没有依赖除了标准库外的任何库。这样的封装使得扩展开发变得特别容易。
