@@ -12,9 +12,14 @@ public:
 	Painter() : Kasumi::App(800, 600, "2D Painter") {}
 	void prepare() final
 	{
-//		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "painter_fragment.glsl");
-		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "heart.glsl");
-		_framebuffer = std::make_shared<Kasumi::Framebuffer>(_width, _height);
+		_shader1 = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "heart.glsl");
+		_shader2 = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "cloud.glsl");
+		_shader3 = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "field_visualizer.glsl");
+		_shader4 = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "painter_fragment.glsl");
+		_framebuffer1 = std::make_shared<Kasumi::Framebuffer>(_width, _height, -1, 0, 0, 1);
+		_framebuffer2 = std::make_shared<Kasumi::Framebuffer>(_width, _height, 0, 0, 1, 1);
+		_framebuffer3 = std::make_shared<Kasumi::Framebuffer>(_width, _height, -1, -1, 0, 0);
+		_framebuffer4 = std::make_shared<Kasumi::Framebuffer>(_width, _height, 0, -1, 1, 0);
 
 		// draw a rectangle to fill the screen
 		std::array<float, 24> screen_vertices = {
@@ -41,26 +46,62 @@ public:
 
 		glBindVertexArray(0);
 
-		_framebuffer->render_callback = [&]() // render the scene to the framebuffer
+		_framebuffer1->render_callback = [&]() // render the scene to the framebuffer
 		{
-			_shader->use();
+			_shader1->use();
 			static mVector2 screen(_width, _height);
-			_shader->uniform("iResolution", screen);
+			_shader1->uniform("iResolution", screen);
 			static std::chrono::steady_clock::time_point _starting_point = std::chrono::steady_clock::now();
 			float time = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - _starting_point).count()) / 1000000.f;
-			_shader->uniform("iTime", time);
+			_shader1->uniform("iTime", time);
+			glBindVertexArray(_vao);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		};
+		_framebuffer2->render_callback = [&]() // render the scene to the framebuffer
+		{
+			_shader2->use();
+			static mVector2 screen(_width, _height);
+			_shader2->uniform("iResolution", screen);
+			static std::chrono::steady_clock::time_point _starting_point = std::chrono::steady_clock::now();
+			float time = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - _starting_point).count()) / 1000000.f;
+			_shader2->uniform("iTime", time);
+			glBindVertexArray(_vao);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		};
+		_framebuffer3->render_callback = [&]() // render the scene to the framebuffer
+		{
+			_shader3->use();
+			static mVector2 screen(_width, _height);
+			_shader3->uniform("iResolution", screen);
+			static std::chrono::steady_clock::time_point _starting_point = std::chrono::steady_clock::now();
+			float time = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - _starting_point).count()) / 1000000.f;
+			_shader3->uniform("iTime", time);
+			glBindVertexArray(_vao);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		};
+		_framebuffer4->render_callback = [&]() // render the scene to the framebuffer
+		{
+			_shader4->use();
+			static mVector2 screen(_width, _height);
+			_shader4->uniform("iResolution", screen);
+			static std::chrono::steady_clock::time_point _starting_point = std::chrono::steady_clock::now();
+			float time = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - _starting_point).count()) / 1000000.f;
+			_shader4->uniform("iTime", time);
 			glBindVertexArray(_vao);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		};
 	}
 	void update(double dt) final
 	{
-		_framebuffer->render(); // render the texture onto the screen
+		_framebuffer1->render();
+		_framebuffer2->render();
+		_framebuffer3->render();
+		_framebuffer4->render();
 	}
 
 private:
-	Kasumi::ShaderPtr _shader;
-	Kasumi::FramebufferPtr _framebuffer;
+	Kasumi::ShaderPtr _shader1, _shader2, _shader3, _shader4;
+	Kasumi::FramebufferPtr _framebuffer1, _framebuffer2, _framebuffer3, _framebuffer4;
 
 	unsigned int _vao{0};
 };

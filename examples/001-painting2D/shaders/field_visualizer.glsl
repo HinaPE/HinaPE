@@ -2,8 +2,9 @@
 out vec4 FragColor;
 in vec2 TexCoords;
 
-vec2 fragCoord = gl_FragCoord.xy;
 uniform vec2 iResolution;
+uniform float iTime;
+vec2 fragCoord = gl_FragCoord.xy;
 void main()
 {
     // Normalized pixel coordinates (from 0 to 1)
@@ -12,7 +13,7 @@ void main()
 
     vec3 res = vec3(uv, 0.0);
 
-    res = sin(res * 10.0) * 0.5 + 0.5;
+    res = sin(res * 10.0 + iTime) * 0.5 + 0.5;
 
     FragColor = vec4(res, 1.0);
 }
