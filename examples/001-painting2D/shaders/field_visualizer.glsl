@@ -1,8 +1,8 @@
 #version 330 core
 out vec4 FragColor;
 in vec2 TexCoords;
-vec2 fragCoord = gl_FragCoord.xy;
 
+vec2 fragCoord = gl_FragCoord.xy;
 uniform vec2 iResolution;
 void main()
 {

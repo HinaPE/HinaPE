@@ -4,6 +4,8 @@
 #include "backends/shader.h"
 #include "backends/framebuffer.h"
 
+#include <chrono>
+
 class Painter final : public Kasumi::App
 {
 public:
@@ -11,7 +13,7 @@ public:
 	void prepare() final
 	{
 //		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "painter_fragment.glsl");
-		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "field_visualizer.glsl");
+		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "heart.glsl");
 		_framebuffer = std::make_shared<Kasumi::Framebuffer>(_width, _height);
 
 		// draw a rectangle to fill the screen
@@ -44,6 +46,9 @@ public:
 			_shader->use();
 			static mVector2 screen(_width, _height);
 			_shader->uniform("iResolution", screen);
+			static std::chrono::steady_clock::time_point _starting_point = std::chrono::steady_clock::now();
+			float time = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - _starting_point).count()) / 1000000.f;
+			_shader->uniform("iTime", time);
 			glBindVertexArray(_vao);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		};
