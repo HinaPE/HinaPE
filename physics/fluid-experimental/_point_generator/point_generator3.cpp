@@ -8,7 +8,7 @@ void HinaPE::PointGenerator3::generate(const mBBox &boundingBox, real spacing, H
 		return true;
 	});
 }
-void HinaPE::BccLatticePointGenerator::forEachPoint(const mBBox &bounding_box, real spacing, const std::function<bool(const mVector3 &)> &callback) const
+void HinaPE::BccLatticePointGenerator3::forEachPoint(const mBBox &bounding_box, real spacing, const std::function<bool(const mVector3 &)> &callback) const
 {
 	real half_spacing = spacing / static_cast<real>(2.0);
 	real box_width = bounding_box.width();

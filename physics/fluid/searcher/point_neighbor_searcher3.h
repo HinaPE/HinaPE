@@ -47,7 +47,7 @@ public:
     //! Invokes the callback function for each nearby point around the origin
     //! within given radius.
     //!
-    //! \param[in]  origin   The origin position.
+    //! \param[in]  origin   The origin posi tion.
     //! \param[in]  radius   The search radius.
     //! \param[in]  callback The callback function.
     //!

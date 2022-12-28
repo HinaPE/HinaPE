@@ -7,7 +7,7 @@
 
 HinaPE::Fluid::VolumeParticleEmitter3::VolumeParticleEmitter3(ParticleSystemData3Ptr ptr, ImplicitSurface3Ptr surface, const mBBox &max_region, Opt opt) : ParticleEmitter3(std::move(ptr)), _implicit_surface(std::move(surface)), _bounds(max_region), _opt(std::move(opt)), _rng(rand())
 {
-	_point_generator = std::make_shared<BccLatticePointGenerator>();
+	_point_generator = std::make_shared<BccLatticePointGenerator3>();
 }
 void HinaPE::Fluid::VolumeParticleEmitter3::on_update(real current_time, real dt)
 {

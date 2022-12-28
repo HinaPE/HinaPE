@@ -10,6 +10,12 @@ class SPHSolver3 : public ParticleSystemSolver3
 public:
 	struct Opt : public ParticleSystemSolver3::Opt
 	{
+		real eos_exponent = 7.0;
+		real negative_pressure_scale = 0.01;
+		real viscosity_coefficient = 0.01;
+		real pseudo_viscosity_coefficient = 10.0;
+		real speed_of_sound = 100.0;
+		real time_step_limit_scale = 1.0;
 	} _opt;
 protected:
 	void on_begin_particle_system_update(real dt) final;

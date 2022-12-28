@@ -16,7 +16,7 @@ public:
 };
 using PointGenerator3Ptr = std::shared_ptr<PointGenerator3>;
 
-class BccLatticePointGenerator final : public PointGenerator3
+class BccLatticePointGenerator3 final : public PointGenerator3
 {
 public:
 	//!
@@ -33,7 +33,7 @@ public:
 	//!
 	void forEachPoint(const mBBox &bounding_box, real spacing, const std::function<bool(const mVector3 &)> &callback) const override;
 };
-using BccLatticePointGeneratorPtr = std::shared_ptr<BccLatticePointGenerator>;
+using BccLatticePointGenerator3Ptr = std::shared_ptr<BccLatticePointGenerator3>;
 }
 
 #endif //HINAPE_POINT_GENERATOR3_H
