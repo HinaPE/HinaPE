@@ -8,6 +8,7 @@
 #include "math/matrix4x4.h"
 #include "math/quaternion.h"
 #include "geometry/bounding_box3.h"
+#include "geometry/point3.h"
 
 #include <iostream>
 #include <iomanip>
@@ -27,6 +28,7 @@ using mMatrix3x3 = HinaPE::Matrix3x3<real>;
 using mMatrix4x4 = HinaPE::Matrix4x4<real>;
 using mQuaternion = HinaPE::Quaternion<real>;
 using mBBox = HinaPE::BoundingBox<real, 3>;
+using mPoint3I = HinaPE::Point3I;
 
 struct Color
 {
