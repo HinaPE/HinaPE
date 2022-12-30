@@ -29,6 +29,7 @@ using mMatrix4x4 = HinaPE::Matrix4x4<real>;
 using mQuaternion = HinaPE::Quaternion<real>;
 using mBBox = HinaPE::BoundingBox<real, 3>;
 using mPoint3I = HinaPE::Point3I;
+using mRay3 = HinaPE::Ray3<real>;
 
 struct Color
 {

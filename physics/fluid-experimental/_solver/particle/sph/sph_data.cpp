@@ -1,6 +1,6 @@
 #include "sph_data.h"
 
-void HinaPE::Fluid::SphData3::compute_mass()
+void HinaPE::Fluid::SphData3::compute_mass() const
 {
 	Array1<mVector3> points;
 	BccLatticePointGenerator3 generator;

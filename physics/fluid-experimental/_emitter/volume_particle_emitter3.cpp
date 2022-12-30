@@ -44,19 +44,17 @@ void HinaPE::Fluid::VolumeParticleEmitter3::on_update(real current_time, real dt
 	{
 		_point_generator->forEachPoint(region, _opt.spacing, [&](const mVector3 &point)
 		{
-			std::uniform_real_distribution<> d(0.f, 1.f);
+			static std::uniform_real_distribution<> d(0.f, 1.f);
 
-			Vector3D random_dirD = uniformSampleSphere(d(_rng), d(_rng)); // TODO: remove this
-
-			mVector3 random_dir = {random_dirD.x, random_dirD.y, random_dirD.z};
+			mVector3 random_dir = uniformSampleSphere(static_cast<real>(d(_rng)), static_cast<real>(d(_rng))); // TODO: remove this
 
 			mVector3 offset = max_jitter_dist * random_dir;
 			mVector3 candidate = point + offset;
 
 			Vector3D candidateD = {candidate.x, candidate.y, candidate.z}; // TODO: remove this
 
-//			if (_implicit_surface->signedDistance(candidateD) <= 0.0)
-//			{
+			if (_implicit_surface->signedDistance(candidateD) <= 0.0)
+			{
 				if (_opt.current_particle_num < _opt.max_particle_num)
 				{
 					newPositions.append(candidate);
@@ -64,7 +62,7 @@ void HinaPE::Fluid::VolumeParticleEmitter3::on_update(real current_time, real dt
 					++new_particle_num;
 				} else
 					return false;
-//			}
+			}
 
 			return true;
 		});

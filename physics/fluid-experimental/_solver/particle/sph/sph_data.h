@@ -22,7 +22,7 @@ public:
 	} _opt;
 
 private:
-	void compute_mass();
+	void compute_mass() const;
 };
 }
 
