@@ -1,8 +1,8 @@
 #ifndef HINAPE_VOLUME_GRID_EMITTER3_H
 #define HINAPE_VOLUME_GRID_EMITTER3_H
 #include "grid_emitter3.h"
-#include "common/grid/scalar_grid3.h"
-#include "common/grid/vector_grid3.h"
+#include "../common/grid/scalar_grid3.h"
+#include "../common/grid/vector_grid3.h"
 
 #include <tuple>
 #include <vector>
