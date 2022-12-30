@@ -8,7 +8,7 @@ namespace HinaPE
 class Sphere3 : public Surface3
 {
 public:
-
+	Sphere3(const mVector3 &center = mVector3(0, 0, 0), real radius = 1.0) : _center(center), _radius(radius) {}
 
 protected:
 	auto intersects_local(const mRay3 &ray) const -> bool final;

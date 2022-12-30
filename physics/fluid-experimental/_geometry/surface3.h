@@ -32,9 +32,6 @@ public:
 		bool normal_flipped = false;
 	} _opt;
 
-public:
-	Surface3(Transform3 transform = Transform3(), bool is_normal_flipped = false) : _transform(std::move(transform)), _opt({is_normal_flipped}) {}
-
 protected:
 	virtual auto intersects_local(const mRay3 &ray) const -> bool = 0;
 	virtual auto bounding_box_local() const -> mBBox = 0;
@@ -45,7 +42,7 @@ protected:
 	inline virtual auto is_inside_local(const mVector3 &other_point) const -> bool { return (other_point - closest_point_local(other_point)).dot(closest_normal_local(other_point)) < 0; }
 
 public:
-	Transform3 _transform;
+	Transform3 _transform = Transform3();
 };
 using Surface3Ptr = std::shared_ptr<Surface3>;
 }
