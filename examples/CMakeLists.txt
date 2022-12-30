@@ -5,6 +5,7 @@ project(HinaPE-examples VERSION 1.40 DESCRIPTION "HinaPE is not a Physics Engine
 add_subdirectory(000-kasumi-from-scratch)
 add_subdirectory(001-painting2D)
 add_subdirectory(002-math-plot)
+add_subdirectory(003-surface)
 
 # cloth & deformable series
 add_subdirectory(100-pbd-cloth)

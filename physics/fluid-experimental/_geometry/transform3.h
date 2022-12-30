@@ -30,6 +30,8 @@ public:
 		}
 		return bbox_in_world;
 	}
+	inline auto to_local(const mRay3 &ray) const -> mRay3 { return {to_local(ray.origin), to_local(ray.direction)}; }
+	inline auto to_world(const mRay3 &ray) const -> mRay3 { return {to_world(ray.origin), to_world(ray.direction)}; }
 	inline auto to_local(const mVector3 &point_in_world) const -> mVector3 { return _inverse_orientation_mat3 * (point_in_world - _translation); }
 	inline auto to_world(const mVector3 &point_in_local) const -> mVector3 { return _orientation_mat3 * point_in_local + _translation; }
 	inline auto to_local_direction(const mVector3 &dir_in_world) const -> mVector3 { return _inverse_orientation_mat3 * dir_in_world; }
