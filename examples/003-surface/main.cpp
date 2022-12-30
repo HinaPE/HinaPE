@@ -18,19 +18,24 @@ public:
 	{
 		mVector3 center = mVector3(0, 1, 0);
 		real radius = 1;
-		add_sphere(center, radius);
+//		add_sphere(center, radius);
 
 		_lines = std::make_shared<Kasumi::Lines>();
-
-		auto camera = _scene->get_camera();
-		const auto &eye_pose = camera->_opt.position;
-		_lines->add(eye_pose, center);
+		const auto &eye_pose = _scene->get_camera()->_opt.position;
+		_lines->add(eye_pose, {1, 1, -10}, Color::RED);
 	}
-	void step(float dt) final {}
+	void step(float dt) final
+	{
+		_lines->render(Kasumi::Model::_default_line_shader);
+	}
 	void ui_sidebar() final {}
 	void mouse_cursor(double x_pos, double y_pos) final
 	{
-		std::cout << x_pos << ", " << y_pos << std::endl;
+		auto res = _scene->get_camera()->screen_to_world(mVector2(x_pos, y_pos));
+		const auto &eye_pose = _scene->get_camera()->_opt.position;
+//		_lines->clear();
+//		_lines->add(eye_pose, {1, 1, -10}, Color::RED);
+		std::cout << "[" << eye_pose.x << ", " << eye_pose.y << ", " << eye_pose.z << "]" << " -> " << "[" << res.x << ", " << res.y << ", " << res.z << "]" << std::endl;
 	}
 
 private:
