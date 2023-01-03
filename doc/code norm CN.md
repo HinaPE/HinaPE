@@ -125,7 +125,7 @@ Foo another_foo = foo;
 class MyFirstClass
 {
 public:
-		void public_method1();
+    void public_method1();
   	auto public_method2(int param) -> bool {}
   	auto public_method3() -> mVector3 {}
   
@@ -146,7 +146,7 @@ public:
     auto operator=(MyFirstClass &&) -> MyFirstClass & = default;
       
 private:
-		void private_method1();
+    void private_method1();
   	auto private_method2(int param) -> bool {}
   	auto private_method3() -> mVector3 {}
   
@@ -161,9 +161,9 @@ public methods一定是我们最需要关注的东西。因为它们定义了我
 
 #### 第二优先级：参数列表Option
 
-对于一个类而言，我们需要划分出什么是`参数`，而什么是`成员`。
+对于一个类而言，我们需要划分出什么是`参数`，而什么是`成员数据`。
 
-`参数`就是一些调整系数，可能需要频繁在外部调整的。二成员通常是一些别的类，或者是一些占据内存非常大的`数据`。因此，我们把`参数`直接public然后支持让外部直接access是一个比较好的方案。这样也可以避免一大堆get/set方法使得整个类变得非常臃肿。
+`参数`就是一些调整系数，可能需要频繁在外部调整的。而`成员数据`通常是一些别的类，或者是一些占据内存非常大的`数据`。因此，我们把`参数`直接public然后支持让外部直接access是一个比较好的方案。这样也可以避免一大堆get/set方法使得整个类变得非常臃肿。
 
 #### 第三优先级：构造函数与析构函数
 
