@@ -16,10 +16,10 @@ public:
 		_shader2 = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "cloud.glsl");
 		_shader3 = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "field_visualizer.glsl");
 		_shader4 = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "painter_fragment.glsl");
-		_framebuffer1 = std::make_shared<Kasumi::Framebuffer>(_width, _height, -1, 0, 0, 1);
-		_framebuffer2 = std::make_shared<Kasumi::Framebuffer>(_width, _height, 0, 0, 1, 1);
-		_framebuffer3 = std::make_shared<Kasumi::Framebuffer>(_width, _height, -1, -1, 0, 0);
-		_framebuffer4 = std::make_shared<Kasumi::Framebuffer>(_width, _height, 0, -1, 1, 0);
+		_framebuffer1 = std::make_shared<Kasumi::Framebuffer>(_width, _height, -1, 0, 0, 1); // left top frame
+		_framebuffer2 = std::make_shared<Kasumi::Framebuffer>(_width, _height, 0, 0, 1, 1); // right top frame
+		_framebuffer3 = std::make_shared<Kasumi::Framebuffer>(_width, _height, -1, -1, 0, 0); // left bottom frame
+		_framebuffer4 = std::make_shared<Kasumi::Framebuffer>(_width, _height, 0, -1, 1, 0); // right bottom frame
 
 		// draw a rectangle to fill the screen
 		std::array<float, 24> screen_vertices = {
