@@ -14,7 +14,6 @@ public:
 
 public:
 	void sync() const;
-	void one_frame();
 	double _time{0.0};
 
 private:

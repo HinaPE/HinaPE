@@ -24,17 +24,14 @@ void TestEmitter::prepare()
 
 void TestEmitter::key(int key, int scancode, int action, int mods)
 {
+	static float dt = 0.02;
+
 	if (key == GLFW_KEY_N)
 	{
-		one_frame();
+		_emitter->update(_time, dt);
+		_time += dt;
 		sync();
 	}
-}
-
-void TestEmitter::one_frame()
-{
-	_emitter->update(_time, 0.01f);
-	_time += 0.01f;
 }
 
 void TestEmitter::sync() const
