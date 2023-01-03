@@ -19,4 +19,4 @@ add_subdirectory(301-particle-system)
 add_subdirectory(302-pcisph-fluid)
 
 #experimental series
-add_subdirectory(999-fluid-experimental)
+add_subdirectory(999-unit-test)
