@@ -1,4 +1,4 @@
-#ifndef HINAPE_API_H
+#ifndef HINAPE_TEST_EMITTER_H
 #define HINAPE_API_H
 
 #include "renderer/app.h"
@@ -17,4 +17,4 @@ private:
 };
 
 
-#endif //HINAPE_API_H
+#endif //HINAPE_TEST_EMITTER_H

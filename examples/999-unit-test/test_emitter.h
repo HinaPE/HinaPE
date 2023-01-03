@@ -1,5 +1,5 @@
-#ifndef HINAPE_API_H
-#define HINAPE_API_H
+#ifndef HINAPE_TEST_EMITTER_H
+#define HINAPE_TEST_EMITTER_H
 
 #include "renderer/app.h"
 
@@ -25,4 +25,4 @@ private:
 	Kasumi::SceneObjectPtr _fluid_obj;
 };
 
-#endif //HINAPE_API_H
+#endif //HINAPE_TEST_EMITTER_H
