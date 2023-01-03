@@ -16,6 +16,7 @@ add_subdirectory(200-rigid)
 # fluid series
 add_subdirectory(300-sph-fluid)
 add_subdirectory(301-particle-system)
+add_subdirectory(302-pcisph-fluid)
 
 #experimental series
 add_subdirectory(999-fluid-experimental)
