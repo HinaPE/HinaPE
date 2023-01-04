@@ -5,6 +5,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 #include <iostream>
 
 #include "imgui.h"
@@ -96,8 +97,9 @@ public:
 
 auto main() -> int
 {
-	std::make_shared<Kasumi::Renderer>("empty.txt")
-			->load_api(std::make_shared<XyzViewer>())
-			->launch();
+	auto renderer = std::make_shared<Kasumi::Renderer>("empty.txt");
+	renderer->get_scene()->get_camera()->_opt.radius = 7;
+	renderer->load_api(std::make_shared<XyzViewer>());
+	renderer->launch();
 	return 0;
 }

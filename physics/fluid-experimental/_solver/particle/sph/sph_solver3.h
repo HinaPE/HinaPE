@@ -17,6 +17,7 @@ public:
 		real speed_of_sound = 100.0;
 		real time_step_limit_scale = 1.0;
 	} _opt;
+
 protected:
 	void on_begin_particle_system_update(real dt) final;
 	void on_end_particle_system_update(real dt) final;
