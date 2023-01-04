@@ -1,6 +1,6 @@
 #include "test_grid.h"
 
-void setup_lines(const HinaPE::ScalarGrid3Ptr &grid, Kasumi::LinesPtr &lines, const mVector3 &color = Color::RED)
+void setup_lines(const HinaPE::ScalarGrid3Ptr &grid, Kasumi::LinesPtr &lines, const mVector3 &color = Color::GRAY)
 {
 	lines->clear();
 	const auto &res = grid->resolution();
