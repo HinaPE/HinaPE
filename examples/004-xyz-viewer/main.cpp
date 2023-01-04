@@ -28,6 +28,9 @@ public:
 		std::map<int, std::filesystem::path> temp;
 		for (const auto &entry: std::filesystem::directory_iterator(directory))
 		{
+			if (entry.path().extension().string() != ".xyz")
+				continue;
+
 			auto filename = entry.path().stem().string();
 
 			auto pos = filename.find_first_of("0123456789");
@@ -101,6 +104,8 @@ public:
 
 	void ui_sidebar() final
 	{
+		if (_particles_frames.empty())
+			return;
 		ImGui::Text("Frame: %d", _current_frame->first);
 	}
 
@@ -122,7 +127,7 @@ public:
 	}
 
 	std::map<int, std::vector<mMatrix4x4>> _particles_frames;
-	std::map<int, std::vector<mMatrix4x4>>::iterator _current_frame;
+	std::map<int, std::vector<mMatrix4x4>>::iterator _current_frame = _particles_frames.begin();
 	Kasumi::SceneObjectPtr _fluid_model;
 };
 
