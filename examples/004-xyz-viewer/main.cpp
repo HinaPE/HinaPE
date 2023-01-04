@@ -12,7 +12,7 @@
 class XyzViewer : public Kasumi::Api
 {
 public:
-	void prepare() override
+	void prepare() final
 	{
 		char *path = nullptr;
 		nfdresult_t result = NFD_OpenDialog("xyz", nullptr, &path);
@@ -23,6 +23,7 @@ public:
 		for (const auto &entry: std::filesystem::directory_iterator(directory))
 		{
 			auto filename = entry.path().stem().string();
+			std::cout << "Loading file: " << filename << std::endl;
 
 			auto pos = filename.find_first_of("0123456789");
 			if (pos == std::string::npos)
@@ -32,7 +33,6 @@ public:
 			if (!std::all_of(digits.begin(), digits.end(), ::isdigit))
 				return;
 			int index = std::stoi(digits);
-			std::cout << index << std::endl;
 
 			std::ifstream file(entry.path());
 			std::string line;
@@ -55,7 +55,7 @@ public:
 		sync();
 	}
 
-	void key(int key, int scancode, int action, int mods) override
+	void key(int key, int scancode, int action, int mods) final
 	{
 		if (key == GLFW_KEY_LEFT)
 		{
