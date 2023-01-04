@@ -6,6 +6,7 @@ add_subdirectory(000-kasumi-from-scratch)
 add_subdirectory(001-painting2D)
 add_subdirectory(002-math-plot)
 add_subdirectory(003-surface)
+add_subdirectory(004-xyz-viewer)
 
 # cloth & deformable series
 add_subdirectory(100-pbd-cloth)
