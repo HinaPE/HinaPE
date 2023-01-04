@@ -1,6 +1,6 @@
 #include "test_grid.h"
 
-void setup_lines(const HinaPE::ScalarGrid3Ptr& grid, Kasumi::LinesPtr &lines, const mVector3& color = Color::RED)
+void setup_lines(const HinaPE::ScalarGrid3Ptr &grid, Kasumi::LinesPtr &lines, const mVector3 &color = Color::RED)
 {
 	lines->clear();
 	const auto &res = grid->resolution();
@@ -45,12 +45,13 @@ void TestGrid::prepare()
 {
 	// sim a grid
 	auto grid = HinaPE::CellCenteredScalarGrid3::builder()
-			.withOrigin({0, 0, 0})
-			.withGridSpacing({1, 1, 1})
+			.withOrigin({-5, -5, -5})
+			.withGridSpacing({2, 2, 2})
 			.withInitialValue(0)
-			.withResolution({10, 10, 10})
+			.withResolution({5, 5, 5})
 			.makeShared();
 	auto lines = std::make_shared<Kasumi::Lines>();
+	lines->_opt._opacity = 0.3f;
 	setup_lines(grid, lines, Color::GRAY);
 	auto model = std::make_shared<Kasumi::Model>(lines);
 	_grid_obj = _scene->get_object(_scene->add_object(model));
