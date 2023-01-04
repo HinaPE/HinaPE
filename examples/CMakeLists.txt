@@ -19,5 +19,5 @@ add_subdirectory(301-particle-system)
 add_subdirectory(302-grid-based-fluid)
 add_subdirectory(303-grid-based-fluid2D)
 
-#experimental series
+# unit test
 add_subdirectory(999-unit-test)
