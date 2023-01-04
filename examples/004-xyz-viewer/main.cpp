@@ -17,6 +17,8 @@ public:
 		char *path = nullptr;
 		nfdresult_t result = NFD_OpenDialog("xyz", nullptr, &path);
 		std::filesystem::path const p(path);
+		if (result != NFD_OKAY)
+			return;
 
 		auto directory = p.parent_path().string();
 
@@ -36,19 +38,23 @@ public:
 
 			std::ifstream file(entry.path());
 			std::string line;
-			std::vector<mVector3> points;
+			std::vector<Kasumi::Pose> poses;
 			while (std::getline(file, line))
 			{
 				std::stringstream ss(line);
 				mVector3 point;
 				ss >> point.x >> point.y >> point.z;
-				points.push_back(point);
+
+				Kasumi::Pose pose;
+				pose.position = {point.x, point.y, point.z};
+				pose.scale = {0.01, 0.01, 0.01};
+				poses.push_back(pose);
 			}
-			_particles_frames[index] = points;
+			_particles_frames[index] = poses;
 		}
 		_current_frame = _particles_frames.begin();
 
-		auto fluid_model = std::make_shared<Kasumi::Model>("sphere", Color::RED);
+		auto fluid_model = std::make_shared<Kasumi::Model>("cube", Color::RED);
 		fluid_model->instancing();
 		_fluid_model = _scene->get_object(_scene->add_object(fluid_model));
 
@@ -79,21 +85,12 @@ public:
 
 	void sync() const
 	{
-		std::vector<Kasumi::Pose> poses;
-		for (auto const &pos: _current_frame->second)
-		{
-			Kasumi::Pose pose;
-			pose.position = {pos.x, pos.y, pos.z};
-			pose.scale = {0.01, 0.01, 0.01};
-			poses.push_back(pose);
-		}
 		_fluid_model->get_model()->clear_instances();
-		if (!poses.empty())
-			_fluid_model->get_model()->add_instances(poses);
+		_fluid_model->get_model()->add_instances(_current_frame->second);
 	}
 
-	std::map<int, std::vector<mVector3>> _particles_frames;
-	std::map<int, std::vector<mVector3>>::const_iterator _current_frame;
+	std::map<int, std::vector<Kasumi::Pose>> _particles_frames;
+	std::map<int, std::vector<Kasumi::Pose>>::const_iterator _current_frame;
 	Kasumi::SceneObjectPtr _fluid_model;
 };
 
