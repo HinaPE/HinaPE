@@ -4,12 +4,18 @@
 
 void TestEmitter::prepare()
 {
-	auto sphere = HinaPE::Sphere3::builder()
+	auto bunny = HinaPE::TriangleMesh3::builder().makeShared();
+	bunny->readObj(std::string(BuiltinModelDir) + "bunny.obj");
+	bunny->scale(5);
+
+	auto sphere = HinaPE::Sphere3::builder() // NOT USED
 			.withCenter({0, 0, 0})
 			.withRadius(2)
 			.makeShared();
+
 	_emitter = HinaPE::Fluid::VolumeParticleEmitter3::builder()
-			.withSurface(sphere)
+			.withSpacing(0.05)
+			.withSurface(bunny)
 			.withIsOneShot(false)
 			.makeShared();
 

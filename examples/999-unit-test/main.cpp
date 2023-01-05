@@ -6,7 +6,7 @@
 auto main() -> int
 {
 	std::make_shared<Kasumi::Renderer>("empty.txt")
-			->load_api(std::make_shared<TestGrid>())
+			->load_api(std::make_shared<TestPciSPH>())
 			->launch();
 	return 0;
 }

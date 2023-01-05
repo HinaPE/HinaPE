@@ -3,6 +3,12 @@
 
 #include "renderer/app.h"
 
+#include "emitter/volume_particle_emitter3.h"
+#include "solver/particle/pcisph/pci_sph_solver3.h"
+#include "geometry/triangle_mesh3.h"
+#include "geometry/box3.h"
+#include "geometry/rigid_body_collider3.h"
+
 class TestPciSPH : public Kasumi::Api
 {
 public:
@@ -11,10 +17,14 @@ public:
 
 protected:
 	void sync() const;
-	void one_frame() const;
+	HinaPE::Frame _frame = HinaPE::Frame(0, 1 / 60.0);
 
 private:
+	HinaPE::Fluid::PciSphSolver3Ptr _solver;
+	HinaPE::Fluid::VolumeParticleEmitter3Ptr _emitter;
 
+	// scene part
+	Kasumi::SceneObjectPtr _fluid_obj;
 };
 
 #endif //HINAPE_TEST_PCISPH_H

@@ -4,6 +4,7 @@
 #include "renderer/app.h"
 
 #include "geometry/sphere3.h"
+#include "geometry/triangle_mesh3.h"
 #include "emitter/volume_particle_emitter3.h"
 
 class TestEmitter : public Kasumi::Api
