@@ -2,8 +2,6 @@
 
 #include "GLFW/glfw3.h"
 
-#include <format>
-
 void TestPciSPH::prepare()
 {
 	// set up emitter
@@ -43,10 +41,10 @@ void TestPciSPH::key(int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
 	{
-		std::cout << std::format(">>>>> frame: {} start", _frame.index) << std::endl;
+		std::cout << ">>>>> frame: start " <<  _frame.index << std::endl;
 		_solver->update(_frame++);
 		sync();
-		std::cout << std::format(">>>>> frame: end") << std::endl;
+		std::cout << ">>>>> frame: end" << std::endl;
 	}
 }
 void TestPciSPH::sync() const
