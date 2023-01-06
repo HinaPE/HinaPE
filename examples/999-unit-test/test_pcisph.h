@@ -9,8 +9,6 @@
 #include "geometry/box3.h"
 #include "geometry/rigid_body_collider3.h"
 
-#include <thread>
-
 class TestPciSPH : public Kasumi::Api
 {
 public:
@@ -28,11 +26,7 @@ private:
 
 	// scene part
 	Kasumi::SceneObjectPtr _fluid_obj;
-
-	std::thread _physics_thread;
-	bool _advance_frame = false;
-	bool _is_complete = true;
-	bool _should_close = false;
+	bool _physics_thread_running;
 };
 
 #endif //HINAPE_TEST_PCISPH_H

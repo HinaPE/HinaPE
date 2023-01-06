@@ -3,6 +3,10 @@
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 
+#include <thread>
+
+#include "logging.h"
+
 void TestPciSPH::prepare()
 {
 	// set up emitter
@@ -13,7 +17,7 @@ void TestPciSPH::prepare()
 	_emitter = HinaPE::Fluid::VolumeParticleEmitter3::builder()
 			.withSpacing(0.05)
 			.withSurface(bunny)
-			.withIsOneShot(false)
+			.withIsOneShot(true)
 			.makeShared();
 
 	_solver = HinaPE::Fluid::PciSphSolver3::builder()
@@ -30,6 +34,7 @@ void TestPciSPH::prepare()
 			.makeShared();
 
 	auto collider = HinaPE::RigidBodyCollider3::builder().withSurface(box).makeShared();
+	collider->setFrictionCoefficient(0.5);
 
 	_solver->setCollider(collider);
 
@@ -38,35 +43,49 @@ void TestPciSPH::prepare()
 	model->instancing();
 	_fluid_obj = _scene->get_object(_scene->add_object(model));
 
-	_physics_thread = std::thread([&]()
-								  {
-									  while (!_should_close)
-										  if (_advance_frame)
-										  {
-											  _is_complete = false;
-											  std::cout << ">>>>> frame: start " << _frame.index << std::endl;
-											  _solver->update(_frame++);
-											  sync();
-											  std::cout << ">>>>> frame: end" << std::endl;
-
-											  _advance_frame = false;
-											  _is_complete = true;
-										  }
-								  });
-
-	_physics_thread.detach();
+	HinaPE::Logging::mute();
 }
 void TestPciSPH::key(int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-		_advance_frame = true;
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		_should_close = true;
+	{
+		std::thread([&]()
+					{
+						_physics_thread_running = true;
+						_solver->update(_frame++);
+						sync();
+						_physics_thread_running = false;
+					}).detach();
+	} else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+	{
+		static bool inited = false;
+		if (!inited)
+		{
+			inited = true;
+			_physics_thread_running = true;
+			std::thread([&]()
+						{
+							while (true)
+							{
+								if (_physics_thread_running)
+								{
+									_solver->update(_frame++);
+									sync();
+								} else
+								{
+									std::cout << ""; // avoid compiler optimizing
+								}
+							}
+						}).detach();
+		} else
+			_physics_thread_running = !_physics_thread_running;
+	}
 }
 void TestPciSPH::ui_sidebar()
 {
 	ImGui::Text("Frame: %d", _frame.index);
-	ImGui::Text("Physics Running: %s", _is_complete ? "false" : "true");
+	ImGui::Text("Physics Thread Running: %s", _physics_thread_running ? "true" : "false");
+	ImGui::Text("Particles: %zu", _solver->sphSystemData()->positions().size());
 }
 void TestPciSPH::sync() const
 {
