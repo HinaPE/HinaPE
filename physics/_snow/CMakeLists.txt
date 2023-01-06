@@ -46,6 +46,7 @@ elseif ()
 endif ()
 
 add_executable(snow main.cpp)
+set_target_properties(snow PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(
         snow
         PUBLIC

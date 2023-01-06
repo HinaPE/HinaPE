@@ -19,7 +19,7 @@ file(GLOB_RECURSE HINA_CLOTH_ENGINE_SRC
         )
 
 add_library(HinaPE_Cloth ${HINA_CLOTH_ENGINE_SRC})
-set_target_properties(HinaPE_Cloth PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+set_target_properties(HinaPE_Cloth PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Cloth PUBLIC ${HINAPE_COMMON_DIR} ${HINAPE_DEPS_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 target_include_directories(HinaPE_Cloth PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(HinaPE_Cloth PUBLIC HinaPE_Common)
