@@ -77,3 +77,6 @@ git submodule foreach git checkout master
 
 ## TODOs
 - ray-marching: https://www.youtube.com/watch?v=hUaYxqkrfjA
+- MLS-MPM:
+  - https://github.com/cb-geo/mpm
+  - https://github.com/WindQAQ/MPM
