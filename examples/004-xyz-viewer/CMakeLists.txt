@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.18)
 project(004-xyz-viewer LANGUAGES CXX)
 
 add_executable(004-xyz-viewer main.cpp)

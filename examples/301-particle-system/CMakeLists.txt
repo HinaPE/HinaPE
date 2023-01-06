@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.18)
 project(301-ParticleSystem VERSION 1.40 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 add_executable(301-ParticleSystem main.cpp api.h api.cpp)

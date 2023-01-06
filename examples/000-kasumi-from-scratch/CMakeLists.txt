@@ -1,5 +1,5 @@
 # HinaPE使用现代CMake，因此必须支持3.16及以上版本的Cmake
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.18)
 
 # 新建一个独立的Project，并指定为C++的Project（如果不指定，编译器将有概率将程序误判为C工程，导致部分文件无法编译）。
 project(000-KasumiFromScratch LANGUAGES CXX)

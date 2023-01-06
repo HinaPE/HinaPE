@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.18)
 project(003-Surface LANGUAGES CXX)
 
 add_executable(003-Surface main.cpp)

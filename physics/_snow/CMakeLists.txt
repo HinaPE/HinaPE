@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.18)
 project(HINAPE_SNOW VERSION 1.40 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
-FindCUDA()
+find_package(CUDAToolkit)
 if (CUDA_FOUND)
 
 elseif ()

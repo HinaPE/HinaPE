@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.18)
 project(303-grid-based_Fluid2D VERSION 1.21 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 add_executable(303-grid-based-Fluid2D main.cpp api.h api.cpp)

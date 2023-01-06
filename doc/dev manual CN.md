@@ -74,8 +74,8 @@ HinaPE是一个建立以Kasumi Renderer为后端建立起的物理模拟平台�
 作为一个CMake建构的项目，第一步需要编写一个`CMakeLists.txt`来组织起我们的工程。在`kasumi-from-scratch`下新建一个`CMakeLists.txt`，然后简单写入：
 
 ```cmake
-# HinaPE使用现代CMake，因此必须支持3.16及以上版本的Cmake
-cmake_minimum_required(VERSION 3.16)
+# HinaPE使用现代CMake，因此必须支持3.18及以上版本的Cmake
+cmake_minimum_required(VERSION 3.18)
 
 # 新建一个独立的Project，并指定为C++的Project（如果不指定，编译器将有概率将程序误判为C工程，导致部分文件无法编译）。
 project(000-KasumiFromScratch LANGUAGES CXX)
