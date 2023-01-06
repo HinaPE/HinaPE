@@ -1,6 +1,7 @@
 #include "test_pcisph.h"
 
 #include "GLFW/glfw3.h"
+#include "imgui.h"
 
 void TestPciSPH::prepare()
 {
@@ -36,16 +37,36 @@ void TestPciSPH::prepare()
 	auto model = std::make_shared<Kasumi::Model>("sphere", Color::RED);
 	model->instancing();
 	_fluid_obj = _scene->get_object(_scene->add_object(model));
+
+	_physics_thread = std::thread([&]()
+								  {
+									  while (!_should_close)
+										  if (_advance_frame)
+										  {
+											  _is_complete = false;
+											  std::cout << ">>>>> frame: start " << _frame.index << std::endl;
+											  _solver->update(_frame++);
+											  sync();
+											  std::cout << ">>>>> frame: end" << std::endl;
+
+											  _advance_frame = false;
+											  _is_complete = true;
+										  }
+								  });
+
+	_physics_thread.detach();
 }
 void TestPciSPH::key(int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-	{
-		std::cout << ">>>>> frame: start " <<  _frame.index << std::endl;
-		_solver->update(_frame++);
-		sync();
-		std::cout << ">>>>> frame: end" << std::endl;
-	}
+		_advance_frame = true;
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		_should_close = true;
+}
+void TestPciSPH::ui_sidebar()
+{
+	ImGui::Text("Frame: %d", _frame.index);
+	ImGui::Text("Physics Running: %s", _is_complete ? "false" : "true");
 }
 void TestPciSPH::sync() const
 {
