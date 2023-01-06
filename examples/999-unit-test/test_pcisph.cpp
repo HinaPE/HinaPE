@@ -34,7 +34,7 @@ void TestPciSPH::prepare()
 	_solver->setCollider(collider);
 
 	// scene obj
-	auto model = std::make_shared<Kasumi::Model>("sphere", Color::RED);
+	auto model = std::make_shared<Kasumi::Model>("cube", Color::RED);
 	model->instancing();
 	_fluid_obj = _scene->get_object(_scene->add_object(model));
 
