@@ -29,6 +29,7 @@ Physics Features
   - PIC solver
   - APIC solver
   - Level set solver
+  - MPM snow
 
 Rendering Features
 - Backends: HinaPE is designed with OpenGL & Vulkan & DirectX 12 & Apple Metal backends.
