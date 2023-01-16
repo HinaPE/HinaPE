@@ -38,8 +38,9 @@ Rendering Features
 ## Gallery
 
 ![Kasumi](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/fluid.png?raw=true)
-![Kasumi](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/conellbox.PNG?raw=true)
+![Kasumi](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/cloth.PNG?raw=true)
 ![Kasumi](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/painting2d.PNG?raw=true)
+![Kasumi](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/conellbox.PNG?raw=true)
 
 ## Build Instruction
 
