@@ -24,6 +24,7 @@ if (HINAPE_FLUID)
     add_subdirectory(physics/fluid)
     add_subdirectory(physics/fluid-experimental) # experimental target, would be remove in future
     add_subdirectory(physics/_snow) # experimental, would merge into fluid as MPM target
+    add_subdirectory(physics/_test)
 endif ()
 
 # If HinaPE is the Root Project, then enable Renderer and Examples
