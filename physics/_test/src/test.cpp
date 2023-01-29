@@ -1,19 +1,11 @@
 #include "gtest/gtest.h"
 #include "base/vector.h"
-#include <iostream>
-
-//#pragma pack (1)
-struct Test1
-{
-	int d;
-	int b;
-	long a;
-};
-//#pragma pack(0)
 
 // Demonstrate some basic assertions.
 TEST(TestVector, Vector3f)
 {
+	EXPECT_EQ(sizeof(HinaPE::Base::Vector3<char>), 3 * sizeof(char));
+	EXPECT_EQ(sizeof(HinaPE::Base::Vector3<short>), 3 * sizeof(short));
 	EXPECT_EQ(sizeof(HinaPE::Base::Vector3<int>), 3 * sizeof(int));
 	EXPECT_EQ(sizeof(HinaPE::Base::Vector3<float>), 3 * sizeof(float));
 	EXPECT_EQ(sizeof(HinaPE::Base::Vector3<double>), 3 * sizeof(double));
