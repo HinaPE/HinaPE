@@ -5,7 +5,7 @@
 #include <array>
 #include <type_traits>
 
-namespace HinaPE::Base
+namespace Hina::Base
 {
 class Size3
 {

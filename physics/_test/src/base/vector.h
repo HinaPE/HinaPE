@@ -6,7 +6,7 @@
 #endif
 #include <type_traits>
 
-namespace HinaPE::Base
+namespace Hina::Base
 {
 template<typename T>
 class Vector3 final
@@ -61,7 +61,7 @@ private:
 };
 
 #ifdef HINAPE_EIGEN
-#include "vector_impl_eigen.h"
+#include "base/impl/vector_impl_eigen.h"
 #else
 #endif
 }

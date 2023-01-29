@@ -5,7 +5,7 @@
 
 #include <limits>
 
-namespace HinaPE::Base
+namespace Hina::Base
 {
 template<typename T>
 class BoundingBox3

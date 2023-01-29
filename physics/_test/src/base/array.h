@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace HinaPE::Base
+namespace Hina::Base
 {
 template<typename T>
 class Array1

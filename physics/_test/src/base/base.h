@@ -6,7 +6,9 @@
 #include "vector.h"
 #include "bbox.h"
 
-namespace HinaPE::Base
+#include <memory>
+
+namespace Hina::Base
 {
 using real = double;
 using mVector3 = Vector3<real>;
