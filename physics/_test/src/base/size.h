@@ -1,6 +1,7 @@
 #ifndef HINAPE_SIZE_H
 #define HINAPE_SIZE_H
 
+#include <cstddef>
 #include <array>
 #include <type_traits>
 
