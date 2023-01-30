@@ -9,11 +9,11 @@ template<typename T>
 class Ray3 final
 {
 public:
-	inline auto point_at(Base::real t) const -> Base::mVector3 { return _origin + t * _direction; }
+	inline auto point_at(real t) const -> mVector3 { return _origin + t * _direction; }
 
 public:
-	Base::mVector3 _origin;
-	Base::mVector3 _direction;
+	mVector3 _origin;
+	mVector3 _direction;
 };
 }
 

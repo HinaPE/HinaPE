@@ -9,14 +9,14 @@ namespace Hina
 class GridSystemData3
 {
 public:
-	void resize(const Base::Size3 &resolution, const Base::mVector3 &grid_spacing, const Base::mVector3 &origin);
+	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin);
 
 public:
 	struct Opt
 	{
 		Base::Size3 resolution;
-		Base::mVector3 grid_spacing;
-		Base::mVector3 origin;
+		mVector3 grid_spacing;
+		mVector3 origin;
 	} _opt;
 
 public:

@@ -10,14 +10,17 @@
 
 #include <memory>
 
-namespace Hina::Base
+namespace Hina
 {
 using real = double;
+using mVector3 = Base::Vector3<real>;
+using mQuaternion = Base::Quaternion<real>;
+using mMatrix3x3 = Base::Matrix3x3<real>;
+using mBBox3 = Base::BoundingBox3<real>;
+namespace Constant
+{
 static constexpr real Zero = static_cast<real>(0);
-using mVector3 = Vector3<real>;
-using mQuaternion = Quaternion<real>;
-using mMatrix3x3 = Matrix3x3<real>;
-using mBBox3 = BoundingBox3<real>;
+}
 }
 
 #endif //HINAPE_BASE_H

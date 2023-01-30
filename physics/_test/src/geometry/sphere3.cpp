@@ -24,20 +24,20 @@
 //}
 //auto Hina::Sphere3::bounding_box_local() const -> Base::mBBox
 //{
-//	Base::mVector3 r(_radius, _radius, _radius);
+//	mVector3 r(_radius, _radius, _radius);
 //	return {_center - r, _center + r};
 //}
-//auto Hina::Sphere3::closest_point_local(const Base::mVector3 &other_point) const -> Base::mVector3
+//auto Hina::Sphere3::closest_point_local(const mVector3 &other_point) const -> mVector3
 //{
 //	return _radius * closest_normal_local(other_point) + _center;
 //}
 //auto Hina::Sphere3::closest_intersection_local(const mRay3 &ray) const -> Hina::SurfaceRayIntersection3
 //{
 //	SurfaceRayIntersection3 intersection;
-//	Base::mVector3 r = ray.origin - _center;
-//	Base::real b = ray.direction.dot(r);
-//	Base::real c = r.lengthSquared() - square(_radius);
-//	Base::real d = b * b - c;
+//	mVector3 r = ray.origin - _center;
+//	real b = ray.direction.dot(r);
+//	real c = r.lengthSquared() - square(_radius);
+//	real d = b * b - c;
 //
 //	if (d > 0.)
 //	{
@@ -62,11 +62,11 @@
 //
 //	return intersection;
 //}
-//auto Hina::Sphere3::closest_distance_local(const Base::mVector3 &other_point) const -> Base::real
+//auto Hina::Sphere3::closest_distance_local(const mVector3 &other_point) const -> real
 //{
 //	return std::fabs(_center.distanceTo(other_point) - _radius);
 //}
-//auto Hina::Sphere3::closest_normal_local(const Base::mVector3 &other_point) const -> Base::mVector3
+//auto Hina::Sphere3::closest_normal_local(const mVector3 &other_point) const -> mVector3
 //{
 //	if (_center.isSimilar(other_point))
 //		return {1, 0, 0};

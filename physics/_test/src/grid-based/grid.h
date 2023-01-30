@@ -11,15 +11,15 @@ namespace Hina
 class Grid3
 {
 public:
-	void resize(const Base::Size3 &resolution, const Base::mVector3 &grid_spacing, const Base::mVector3 &origin);
+	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin);
 
 public:
 	struct Opt
 	{
 		Base::Size3 resolution;
-		Base::mVector3 origin;
-		Base::mVector3 grid_spacing = Base::mVector3(1, 1, 1);
-		Base::mBBox3 bounding_box;
+		mVector3 origin;
+		mVector3 grid_spacing = mVector3(1, 1, 1);
+		mBBox3 bounding_box;
 	} _opt;
 };
 
@@ -27,11 +27,11 @@ public:
 class ScalarGrid3 : public Grid3, public ScalarField3
 {
 public:
-	void resize(const Base::Size3 &resolution, const Base::mVector3 &grid_spacing, const Base::mVector3 &origin, Base::real initial_value);
+	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, real initial_value);
 	virtual inline auto size() const -> Base::Size3 = 0;
 
 private:
-	Base::Array3<Base::real> _data;
+	Base::Array3<real> _data;
 };
 class CellCenteredScalarGrid3 final : public ScalarGrid3
 {
@@ -51,24 +51,24 @@ using VertexCenteredScalarGrid3Ptr = std::shared_ptr<VertexCenteredScalarGrid3>;
 class VectorGrid3 : public Grid3, public VectorField3
 {
 public:
-	void resize(const Base::Size3 &resolution, const Base::mVector3 &grid_spacing, const Base::mVector3 &origin, const Base::mVector3& initial_value);
+	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3& initial_value);
 protected:
-	virtual void on_resize(const Base::Size3 &resolution, const Base::mVector3 &grid_spacing, const Base::mVector3 &origin, const Base::mVector3 &initial_value) = 0;
+	virtual void on_resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value) = 0;
 };
 class CollocatedVectorGrid3 : public VectorGrid3
 {
 protected:
-	void on_resize(const Base::Size3 &resolution, const Base::mVector3 &grid_spacing, const Base::mVector3 &origin, const Base::mVector3 &initial_value) final;
+	void on_resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value) final;
 
 private:
-	Base::Array3<Base::mVector3> _data;
+	Base::Array3<mVector3> _data;
 };
 class CellCenteredVectorGrid3 final : public CollocatedVectorGrid3 {};
 class VertexCenteredVectorGrid3 final : public CollocatedVectorGrid3 {};
 class FaceCenteredVectorGrid3 final : public VectorGrid3
 {
 protected:
-	void on_resize(const Base::Size3 &resolution, const Base::mVector3 &grid_spacing, const Base::mVector3 &origin, const Base::mVector3 &initial_value) override;
+	void on_resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value) override;
 };
 using VectorGrid3Ptr = std::shared_ptr<VectorGrid3>;
 using CollocatedVectorGrid3Ptr = std::shared_ptr<CollocatedVectorGrid3>;

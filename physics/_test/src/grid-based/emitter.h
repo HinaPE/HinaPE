@@ -8,6 +8,8 @@ namespace Hina
 class GridEmitter3
 {
 public:
+
+public:
 	struct Opt
 	{
 		bool is_enabled = false;
@@ -15,14 +17,14 @@ public:
 	} _opt;
 
 protected:
-	virtual void on_update(Base::real current_time, Base::real time_interval) = 0;
+	virtual void on_update(real current_time, real time_interval) = 0;
 };
 using GridEmitter3Ptr = std::shared_ptr<GridEmitter3>;
 
 class VolumeGridEmitter3 final : public GridEmitter3
 {
 protected:
-	void on_update(Base::real current_time, Base::real time_interval) final;
+	void on_update(real current_time, real time_interval) final;
 };
 }
 
