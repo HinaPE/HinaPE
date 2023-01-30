@@ -194,3 +194,11 @@ public methods一定是我们最需要关注的东西。因为它们定义了我
 - 移动引用传递
 
 这五种最常用的变量传递方法我们需要熟练掌握。
+
+### 一：Struct中的虚函数表
+
+大意：虚函数需要维护一个虚函数表，这将占据struct的内存（8字节，但要考虑内存对齐的情况），需要特别注意。
+
+https://stackoverflow.com/questions/9439240/sizeof-class-with-int-function-virtual-function-in-c
+
+TODO
