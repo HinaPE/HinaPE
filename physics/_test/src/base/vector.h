@@ -56,8 +56,7 @@ public:
 	constexpr Vector3(const Vector3 &v);
 	constexpr Vector3(Vector3 &&v) noexcept;
 	~Vector3() = default;
-private:
-	Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v;
+	Eigen::Matrix<T, 3, 1, Eigen::DontAlign> _v;
 #else
 	T x, y, z;
 #endif
