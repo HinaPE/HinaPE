@@ -13,11 +13,19 @@ template<typename T>
 class Matrix3x3 final
 {
 public:
+	void inverse();
+
+public:
+	static inline constexpr auto Zero() -> Matrix3x3 { return Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign>::Zero()); }
+	static inline constexpr auto Identity() -> Matrix3x3 { return Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign>::Identity()); }
+
+public:
 #ifdef HINAPE_EIGEN
+	template<typename U>
+	Matrix3x3(const std::initializer_list<U> &lst);
+	constexpr explicit Matrix3x3();
+	constexpr explicit Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign> m_);
 	Eigen::Matrix<T, 3,3, Eigen::DontAlign> _m;
-	constexpr explicit Matrix3x3(Eigen::Matrix<T, 3,3, Eigen::DontAlign> m_);
-#else
-	T w, x, y, z;
 #endif
 };
 

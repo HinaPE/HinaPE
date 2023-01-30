@@ -5,7 +5,7 @@ template<typename T>
 template<typename U>
 Vector3<T>::Vector3(const std::initializer_list<U> &lst)
 {
-	assert(lst.size() >= 3);
+	assert(lst.size() == 3);
 
 	auto input_elem = lst.begin();
 	_v.x() = static_cast<T>(*input_elem);
