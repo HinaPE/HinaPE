@@ -6,12 +6,16 @@
 #endif
 #include <type_traits>
 
+#include "base/matrix.h"
+
 namespace Hina::Base
 {
 template<typename T>
 class Quaternion final
 {
 public:
+	auto matrix3x3() const -> Matrix3x3<T>;
+	auto inverse() const -> Quaternion<T>;
 
 private:
 #ifdef HINAPE_EIGEN

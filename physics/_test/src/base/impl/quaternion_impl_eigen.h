@@ -2,8 +2,13 @@
 #define HINAPE_QUATERNION_IMPL_EIGEN_H
 
 template<typename T>
-constexpr Quaternion<T>::Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_){
-
+constexpr Quaternion<T>::Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_)
+{
 }
+
+template<typename T>
+auto Quaternion<T>::matrix3x3() const -> Matrix3x3<T> { return Matrix3x3<T>(_q.toRotationMatrix()); }
+template<typename T>
+auto Quaternion<T>::inverse() const -> Quaternion<T> { return Quaternion<T>(_q.inverse()); }
 
 #endif //HINAPE_QUATERNION_IMPL_EIGEN_H

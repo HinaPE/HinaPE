@@ -1,15 +1,13 @@
 #ifndef HINAPE_TRANSFORM3_H
 #define HINAPE_TRANSFORM3_H
 
-#ifdef HINAPE_EIGEN
-#include "Eigen/Eigen"
-#endif
-#include <type_traits>
-
 #include "vector.h"
 #include "quaternion.h"
 #include "matrix.h"
 #include "bbox.h"
+#include "ray.h"
+
+#include <type_traits>
 
 namespace Hina::Base
 {
@@ -39,26 +37,29 @@ public:
 		}
 		return bbox_in_world;
 	}
-//	inline auto to_local(const Ray3 &ray) const -> Ray3 { return {to_local(ray._origin), to_local(ray._direction)}; }
-//	inline auto to_world(const Ray3 &ray) const -> Ray3 { return {to_world(ray._origin), to_world(ray._direction)}; }
+	inline auto to_local(const Ray3<T> &ray) const -> Ray3<T> { return {to_local(ray._origin), to_local(ray._direction)}; }
+	inline auto to_world(const Ray3<T> &ray) const -> Ray3<T> { return {to_world(ray._origin), to_world(ray._direction)}; }
 	inline auto to_local(const Vector3<T> &point_in_world) const -> Vector3<T> { return _inverse_orientation_mat3 * (point_in_world - _translation); }
 	inline auto to_world(const Vector3<T> &point_in_local) const -> Vector3<T> { return _orientation_mat3 * point_in_local + _translation; }
-//	inline auto to_local_direction(const mVector3 &dir_in_world) const -> mVector3 { return _inverse_orientation_mat3 * dir_in_world; }
-//	inline auto to_world_direction(const mVector3 &dir_in_local) const -> mVector3 { return _orientation_mat3 * dir_in_local; }
+	inline auto to_local_direction(const Vector3<T> &dir_in_world) const -> Vector3<T> { return _inverse_orientation_mat3 * dir_in_world; }
+	inline auto to_world_direction(const Vector3<T> &dir_in_local) const -> Vector3<T> { return _orientation_mat3 * dir_in_local; }
+
+public:
+	constexpr explicit Transform3() = default;
+	constexpr explicit Transform3(Vector3<T> t, Quaternion<T> q);
 
 private:
-#ifdef HINAPE_EIGEN
 	Vector3<T> _translation;
 	Quaternion<T> _orientation;
 	Matrix3x3<T> _orientation_mat3;
 	Matrix3x3<T> _inverse_orientation_mat3;
-//	constexpr explicit Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_);
-#endif
 };
 
-#ifdef HINAPE_EIGEN
-#include "base/impl/transform_impl_eigen.h"
-#else
-#endif
+template<typename T>
+constexpr Transform3<T>::Transform3(Vector3<T> t, Quaternion<T> q) :
+		_translation(t),
+		_orientation(q),
+		_orientation_mat3(q.matrix3x3()),
+		_inverse_orientation_mat3(q.inverse().matrix3x3()) {}
 }
 #endif //HINAPE_TRANSFORM3_H

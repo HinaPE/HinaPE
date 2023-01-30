@@ -29,15 +29,6 @@ public:
 	static inline constexpr auto Zero() -> Vector3 { return Vector3(0, 0, 0); }
 
 public:
-	template<typename U>
-	Vector3(const std::initializer_list<U> &lst);
-	constexpr Vector3();
-	constexpr explicit Vector3(T s);
-	constexpr Vector3(T x_, T y_, T z_);
-	constexpr Vector3(const Vector3 &v);
-	constexpr Vector3(Vector3 &&v) noexcept;
-
-public:
     template<typename U>
     auto operator=(const std::initializer_list<U> &lst) -> Vector3 &;
 	auto operator=(const Vector3 &v_) -> Vector3 &;
@@ -54,10 +45,19 @@ public:
     auto operator==(const Vector3 &v_) const -> bool;
     auto operator!=(const Vector3 &v_) const -> bool;
 
-private:
+public:
 #ifdef HINAPE_EIGEN
-	Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v;
 	constexpr explicit Vector3(Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v_);
+	template<typename U>
+	Vector3(const std::initializer_list<U> &lst);
+	constexpr Vector3();
+	constexpr explicit Vector3(T s);
+	constexpr Vector3(T x_, T y_, T z_);
+	constexpr Vector3(const Vector3 &v);
+	constexpr Vector3(Vector3 &&v) noexcept;
+	~Vector3() = default;
+private:
+	Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v;
 #else
 	T x, y, z;
 #endif

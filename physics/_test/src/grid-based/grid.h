@@ -7,7 +7,7 @@
 
 namespace Hina
 {
-// ==================== Grid3 ====================
+// ============================== Grid3 ==============================
 class Grid3
 {
 public:
@@ -22,8 +22,11 @@ public:
 		mBBox3 bounding_box;
 	} _opt;
 };
+// ============================== Grid3 ==============================
 
-// ==================== ScalarGrid3 ====================
+
+
+// ============================== ScalarGrid3 ==============================
 class ScalarGrid3 : public Grid3, public ScalarField3
 {
 public:
@@ -43,12 +46,15 @@ class VertexCenteredScalarGrid3 final : public ScalarGrid3
 public:
 	inline auto size() const -> Base::Size3 final { return _opt.resolution + Base::Size3(1, 1, 1); }
 };
+// ============================== ScalarGrid3 ==============================
 
-// ==================== VectorGrid3 ====================
+
+
+// ============================== VectorGrid3 ==============================
 class VectorGrid3 : public Grid3, public VectorField3
 {
 public:
-	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3& initial_value);
+	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value);
 protected:
 	virtual void on_resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value) = 0;
 };
@@ -67,7 +73,11 @@ class FaceCenteredVectorGrid3 final : public VectorGrid3
 protected:
 	void on_resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value) override;
 };
+// ============================== VectorGrid3 ==============================
 
+
+
+// ============================== Shared pointers ==============================
 using Grid3Ptr = std::shared_ptr<Grid3>;
 using ScalarGrid3Ptr = std::shared_ptr<ScalarGrid3>;
 using CellCenteredScalarGrid3Ptr = std::shared_ptr<CellCenteredScalarGrid3>;
@@ -77,6 +87,7 @@ using CollocatedVectorGrid3Ptr = std::shared_ptr<CollocatedVectorGrid3>;
 using CellCenteredVectorGrid3Ptr = std::shared_ptr<CellCenteredVectorGrid3>;
 using VertexCenteredVectorGrid3Ptr = std::shared_ptr<VertexCenteredVectorGrid3>;
 using FaceCenteredVectorGrid3Ptr = std::shared_ptr<FaceCenteredVectorGrid3>;
+// ============================== Shared pointers ==============================
 }
 
 #endif //HINAPE_GRID_H

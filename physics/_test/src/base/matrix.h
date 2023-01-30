@@ -12,8 +12,6 @@ namespace Hina::Base
 template<typename T>
 class Matrix3x3 final
 {
-public:
-
 private:
 #ifdef HINAPE_EIGEN
 	Eigen::Matrix<T, 3,3, Eigen::DontAlign> _m;

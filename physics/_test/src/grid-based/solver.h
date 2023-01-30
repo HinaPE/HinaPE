@@ -5,6 +5,8 @@
 #include "data.h"
 #include "emitter.h"
 
+#include "geometry/collider.h"
+
 namespace Hina
 {
 class GridFluidSolver : public PhysicsAnimation
@@ -31,6 +33,7 @@ protected:
 private:
 	GridSystemData3Ptr _grids;
 	GridEmitter3Ptr _emitter;
+	ColliderPtr _collider;
 };
 }
 
