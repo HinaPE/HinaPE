@@ -11,6 +11,7 @@
 namespace Hina::Base
 {
 using real = double;
+static constexpr real Zero = static_cast<real>(0);
 using mVector3 = Vector3<real>;
 using mBBox3 = BoundingBox3<real>;
 }

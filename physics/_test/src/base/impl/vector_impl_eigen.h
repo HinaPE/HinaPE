@@ -8,9 +8,9 @@ Vector3<T>::Vector3(const std::initializer_list<U> &lst)
 	assert(lst.size() >= 3);
 
 	auto input_elem = lst.begin();
-	v.x = static_cast<T>(*input_elem);
-	v.y = static_cast<T>(*(++input_elem));
-	v.z = static_cast<T>(*(++input_elem));
+	v.x() = static_cast<T>(*input_elem);
+	v.y() = static_cast<T>(*(++input_elem));
+	v.z() = static_cast<T>(*(++input_elem));
 }
 
 template<typename T>

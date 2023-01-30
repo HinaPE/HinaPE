@@ -20,8 +20,10 @@ public:
 public:
 	constexpr BoundingBox3();
 	constexpr BoundingBox3(const Vector3<T> &point1, const Vector3<T> &point2);
-	constexpr BoundingBox3(const BoundingBox3 &bbox);
-	constexpr BoundingBox3(BoundingBox3 &&bbox) noexcept;
+	constexpr BoundingBox3(const BoundingBox3 &bbox) = default;
+	constexpr BoundingBox3(BoundingBox3 &&bbox) noexcept = default;
+	auto operator=(const BoundingBox3 &bbox) -> BoundingBox3 & = default;
+	auto operator=(BoundingBox3 &&bbox) noexcept -> BoundingBox3 & = default;
 
 public:
 	Vector3<T> lower_corner, upper_corner;
@@ -39,10 +41,6 @@ constexpr BoundingBox3<T>::BoundingBox3(const Vector3<T> &point1, const Vector3<
 	upper_corner.y() = std::max(point1.y(), point2.y());
 	upper_corner.z() = std::max(point1.z(), point2.z());
 }
-template<typename T>
-constexpr BoundingBox3<T>::BoundingBox3(const BoundingBox3 &bbox) = default;
-template<typename T>
-constexpr BoundingBox3<T>::BoundingBox3(BoundingBox3 &&bbox) noexcept = default;
 
 template<typename T>
 auto BoundingBox3<T>::width() const -> T { return upper_corner.x() - lower_corner.x(); }

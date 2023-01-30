@@ -26,6 +26,9 @@ public:
     auto cross(const Vector3 &v) const -> Vector3;
 
 public:
+	static inline constexpr auto Zero() -> Vector3 { return Vector3(0, 0, 0); }
+
+public:
 	template<typename U>
 	Vector3(const std::initializer_list<U> &lst);
 	constexpr Vector3();
@@ -59,6 +62,35 @@ private:
 	T x, y, z;
 #endif
 };
+
+template <typename T>
+auto operator+(const Vector3<T>& a) -> Vector3<T> { return a;} // Positive sign operator.
+template <typename T>
+auto operator-(const Vector3<T>& a) -> Vector3<T> { return {-a.x(), -a.y(), -a.z()}; } // Negative sign operator.
+template <typename T>
+auto operator+(const Vector3<T>& a, T b) -> Vector3<T> { return { a.x() + b, a.y() + b, a.z() + b}; } // Computes (a.x, a.y, a.z) + (b, b, b).
+template <typename T>
+auto operator+(T a, const Vector3<T>& b) -> Vector3<T> { return { a + b.x(), a + b.y(), a + b.z()}; } // Computes (a, a, a) + (b.x, b.y, b.z).
+template <typename T>
+auto operator+(const Vector3<T>& a, const Vector3<T>& b) -> Vector3<T> { return { a.x() + b.x(), a.y() + b.y(), a.z() + b.z()}; } // Computes (a.x, a.y, a.z) + (b.x, b.y, b.z).
+template <typename T>
+auto operator-(const Vector3<T>& a, T b) -> Vector3<T> { return { a.x() - b, a.y() - b, a.z() - b}; } // Computes (a.x, a.y, a.z) - (b, b, b).
+template <typename T>
+auto operator-(T a, const Vector3<T>& b) -> Vector3<T> { return { a - b.x(), a - b.y(), a - b.z()}; } // Computes (a, a, a) - (b.x, b.y, b.z).
+template <typename T>
+auto operator-(const Vector3<T>& a, const Vector3<T>& b) -> Vector3<T> { return { a.x() - b.x(), a.y() - b.y(), a.z() - b.z()}; } // Computes (a.x, a.y, a.z) - (b.x, b.y, b.z).
+template <typename T>
+auto operator*(const Vector3<T>& a, T b) -> Vector3<T> { return { a.x() * b, a.y() * b, a.z() * b}; } // Computes (a.x, a.y, a.z) * (b, b, b).
+template <typename T>
+auto operator*(T a, const Vector3<T>& b) -> Vector3<T> { return { a * b.x(), a * b.y(), a * b.z()}; } // Computes (a, a, a) * (b.x, b.y, b.z).
+template <typename T>
+auto operator*(const Vector3<T>& a, const Vector3<T>& b) -> Vector3<T> { return { a.x() * b.x(), a.y() * b.y(), a.z() * b.z()}; } // Computes (a.x, a.y, a.z) * (b.x, b.y, b.z).
+template <typename T>
+auto operator/(const Vector3<T>& a, T b) -> Vector3<T> { return { a.x() / b, a.y() / b, a.z() / b}; } // Computes (a.x, a.y, a.z) / (b, b, b).
+template <typename T>
+auto operator/(T a, const Vector3<T>& b) -> Vector3<T> { return { a / b.x(), a / b.y(), a / b.z()}; } // Computes (a, a, a) / (b.x, b.y, b.z).
+template <typename T>
+auto operator/(const Vector3<T>& a, const Vector3<T>& b) -> Vector3<T> { return { a.x() / b.x(), a.y() / b.y(), a.z() / b.z()}; } // Computes (a.x, a.y, a.z) / (b.x, b.y, b.z).
 
 #ifdef HINAPE_EIGEN
 #include "base/impl/vector_impl_eigen.h"
