@@ -29,19 +29,35 @@ public:
 #endif
 };
 
+
+template<typename T>
+auto operator+(const Matrix3x3<T> &a) -> Matrix3x3<T> { return Matrix3x3<T>(a._m); }
+template<typename T>
+auto operator-(const Matrix3x3<T> &a) -> Matrix3x3<T> { return Matrix3x3<T>(-a._m); }
+template<typename T>
+auto operator+(const Matrix3x3<T> &a, const Matrix3x3<T> &b) -> Matrix3x3<T> { return Matrix3x3<T>(a._m + b._m); }
+template<typename T>
+auto operator+(const Matrix3x3<T> &a, T b) -> Matrix3x3<T> { return Matrix3x3<T>(a._m + b); }
+template<typename T>
+auto operator+(T a, const Matrix3x3<T> &b) -> Matrix3x3<T> { return Matrix3x3<T>(a + b._m); }
+template<typename T>
+auto operator-(const Matrix3x3<T> &a, const Matrix3x3<T> &b) -> Matrix3x3<T> { return Matrix3x3<T>(a._m - b._m); }
+template<typename T>
+auto operator-(const Matrix3x3<T> &a, T b) -> Matrix3x3<T> { return Matrix3x3<T>(a._m - b); }
+template<typename T>
+auto operator-(T a, const Matrix3x3<T> &b) -> Matrix3x3<T> { return Matrix3x3<T>(a - b._m); }
 template <typename T>
-auto operator*(const Matrix3x3<T>& a, T b) -> Matrix3x3<T> {
-	return Matrix3x3<T>(a._m * b);
-}
+auto operator*(const Matrix3x3<T>& a, T b) -> Matrix3x3<T> { return Matrix3x3<T>(a._m * b); }
 template <typename T>
-auto operator*(T a, const Matrix3x3<T>& b) -> Matrix3x3<T>{
-	return Matrix3x3<T>(a * b._m);}
+auto operator*(T a, const Matrix3x3<T>& b) -> Matrix3x3<T> { return Matrix3x3<T>(a * b._m); }
 template <typename T>
-auto operator*(const Matrix3x3<T>& a, const Vector3<T>& b) -> Vector3<T>{
-	return Vector3<T>(a._m * b._v);}
+auto operator*(const Matrix3x3<T>& a, const Vector3<T>& b) -> Vector3<T> { return Vector3<T>(a._m * b._v); }
 template <typename T>
-auto operator*(const Matrix3x3<T>& a, const Matrix3x3<T>& b) -> Matrix3x3<T>{
-	return Matrix3x3<T>(a._m * b._m);}
+auto operator*(const Matrix3x3<T>& a, const Matrix3x3<T>& b) -> Matrix3x3<T> { return Matrix3x3<T>(a._m * b._m); }
+template<typename T>
+auto operator/(const Matrix3x3<T> &a, T b) -> Matrix3x3<T> { return Matrix3x3<T>(a._m / b); }
+template<typename T>
+auto operator/(T a, const Matrix3x3<T> &b) -> Matrix3x3<T> { return Matrix3x3<T>(a / b._m); }
 
 #ifdef HINAPE_EIGEN
 #include "base/impl/matrix_impl_eigen.h"
