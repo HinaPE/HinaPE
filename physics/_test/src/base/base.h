@@ -6,9 +6,12 @@
 #include "vector.h"
 #include "quaternion.h"
 #include "matrix.h"
+#include "transform.h"
 #include "bbox.h"
 
 #include <memory>
+#include <functional>
+#include <tuple>
 
 namespace Hina
 {
@@ -16,6 +19,7 @@ using real = double;
 using mVector3 = Base::Vector3<real>;
 using mQuaternion = Base::Quaternion<real>;
 using mMatrix3x3 = Base::Matrix3x3<real>;
+using mTransform3 = Base::Transform3<real>;
 using mBBox3 = Base::BoundingBox3<real>;
 namespace Constant
 {

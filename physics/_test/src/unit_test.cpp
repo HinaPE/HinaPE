@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "base/vector.h"
+#include "base/base.h"
 
 // Demonstrate some basic assertions.
 TEST(TestVector, Vector3f)
@@ -103,6 +103,7 @@ auto main(int argc, char **argv) -> int
 	bool res = RUN_ALL_TESTS();
 
 	// run sim application
+	Eigen::Transform<Hina::real, 3, Eigen::Isometry> t;
 
 	return res;
 }

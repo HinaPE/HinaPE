@@ -43,9 +43,6 @@ class VertexCenteredScalarGrid3 final : public ScalarGrid3
 public:
 	inline auto size() const -> Base::Size3 final { return _opt.resolution + Base::Size3(1, 1, 1); }
 };
-using ScalarGrid3Ptr = std::shared_ptr<ScalarGrid3>;
-using CellCenteredScalarGrid3Ptr = std::shared_ptr<CellCenteredScalarGrid3>;
-using VertexCenteredScalarGrid3Ptr = std::shared_ptr<VertexCenteredScalarGrid3>;
 
 // ==================== VectorGrid3 ====================
 class VectorGrid3 : public Grid3, public VectorField3
@@ -70,6 +67,11 @@ class FaceCenteredVectorGrid3 final : public VectorGrid3
 protected:
 	void on_resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value) override;
 };
+
+using Grid3Ptr = std::shared_ptr<Grid3>;
+using ScalarGrid3Ptr = std::shared_ptr<ScalarGrid3>;
+using CellCenteredScalarGrid3Ptr = std::shared_ptr<CellCenteredScalarGrid3>;
+using VertexCenteredScalarGrid3Ptr = std::shared_ptr<VertexCenteredScalarGrid3>;
 using VectorGrid3Ptr = std::shared_ptr<VectorGrid3>;
 using CollocatedVectorGrid3Ptr = std::shared_ptr<CollocatedVectorGrid3>;
 using CellCenteredVectorGrid3Ptr = std::shared_ptr<CellCenteredVectorGrid3>;

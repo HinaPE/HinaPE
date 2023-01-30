@@ -28,10 +28,10 @@ public:
 	auto operator=(BoundingBox3 &&bbox) noexcept -> BoundingBox3 & = default;
 
 public:
-	Vector3<T> lower_corner, upper_corner;
+	Vector3<T> _lower_corner, _upper_corner;
 };
 template<typename T>
-auto BoundingBox3<T>::center() const -> Vector3<T> { return (lower_corner + upper_corner) / static_cast<T>(2); }
+auto BoundingBox3<T>::center() const -> Vector3<T> { return (_lower_corner + _upper_corner) / static_cast<T>(2); }
 template<typename T>
 auto BoundingBox3<T>::corner(size_t idx) const -> Vector3<T>
 {
@@ -51,40 +51,40 @@ auto BoundingBox3<T>::corner(size_t idx) const -> Vector3<T>
 }
 
 template<typename T>
-constexpr BoundingBox3<T>::BoundingBox3() : lower_corner(0), upper_corner(0) {}
+constexpr BoundingBox3<T>::BoundingBox3() : _lower_corner(0), _upper_corner(0) {}
 template<typename T>
 constexpr BoundingBox3<T>::BoundingBox3(const Vector3<T> &point1, const Vector3<T> &point2)
 {
-	lower_corner.x() = std::min(point1.x(), point2.x());
-	lower_corner.y() = std::min(point1.y(), point2.y());
-	lower_corner.z() = std::min(point1.z(), point2.z());
-	upper_corner.x() = std::max(point1.x(), point2.x());
-	upper_corner.y() = std::max(point1.y(), point2.y());
-	upper_corner.z() = std::max(point1.z(), point2.z());
+	_lower_corner.x() = std::min(point1.x(), point2.x());
+	_lower_corner.y() = std::min(point1.y(), point2.y());
+	_lower_corner.z() = std::min(point1.z(), point2.z());
+	_upper_corner.x() = std::max(point1.x(), point2.x());
+	_upper_corner.y() = std::max(point1.y(), point2.y());
+	_upper_corner.z() = std::max(point1.z(), point2.z());
 }
 
 template<typename T>
-auto BoundingBox3<T>::width() const -> T { return upper_corner.x() - lower_corner.x(); }
+auto BoundingBox3<T>::width() const -> T { return _upper_corner.x() - _lower_corner.x(); }
 template<typename T>
-auto BoundingBox3<T>::height() const -> T { return upper_corner.y() - lower_corner.y(); }
+auto BoundingBox3<T>::height() const -> T { return _upper_corner.y() - _lower_corner.y(); }
 template<typename T>
-auto BoundingBox3<T>::depth() const -> T { return upper_corner.z() - lower_corner.z(); }
+auto BoundingBox3<T>::depth() const -> T { return _upper_corner.z() - _lower_corner.z(); }
 template<typename T>
 auto BoundingBox3<T>::length(size_t axis) -> T
 {
 	assert(axis < 3);
-	return upper_corner[axis] - lower_corner[axis];
+	return _upper_corner[axis] - _lower_corner[axis];
 }
 template<typename T>
 auto BoundingBox3<T>::overlaps(const BoundingBox3 &other) const -> bool
 {
-	if (upper_corner.x() < other.lower_corner.x() || lower_corner.x() > other.upper_corner.x())
+	if (_upper_corner.x() < other._lower_corner.x() || _lower_corner.x() > other._upper_corner.x())
 		return false;
 
-	if (upper_corner.y() < other.lower_corner.y() || lower_corner.y() > other.upper_corner.y())
+	if (_upper_corner.y() < other._lower_corner.y() || _lower_corner.y() > other._upper_corner.y())
 		return false;
 
-	if (upper_corner.z() < other.lower_corner.z() || lower_corner.z() > other.upper_corner.z())
+	if (_upper_corner.z() < other._lower_corner.z() || _lower_corner.z() > other._upper_corner.z())
 		return false;
 
 	return true;
