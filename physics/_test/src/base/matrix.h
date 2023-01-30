@@ -13,7 +13,7 @@ template<typename T>
 class Matrix3x3 final
 {
 public:
-	void inverse();
+	auto inverse() const -> Matrix3x3;
 
 public:
 	static inline constexpr auto Zero() -> Matrix3x3 { return Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign>::Zero()); }

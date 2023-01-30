@@ -6,7 +6,7 @@ constexpr Matrix3x3<T>::Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign> m_) :
 
 template<typename T>
 template<typename U>
-Matrix3x3<T>::Matrix3x3(const std::initializer_list<U> & lst)
+Matrix3x3<T>::Matrix3x3(const std::initializer_list<U> &lst)
 {
 	assert(lst.size() == 9);
 
@@ -29,8 +29,9 @@ constexpr Matrix3x3<T>::Matrix3x3()
 }
 
 template<typename T>
-void Matrix3x3<T>::inverse()
+auto Matrix3x3<T>::inverse() const -> Matrix3x3
 {
-	_m = _m.inverse();
+	return Matrix3x3(_m.inverse());
 }
+
 #endif //HINAPE_MATRIX_IMPL_EIGEN_H

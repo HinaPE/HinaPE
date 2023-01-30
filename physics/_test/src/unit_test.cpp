@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "base/base.h"
 
+#include <iostream>
+
 // Demonstrate some basic assertions.
 TEST(TestVector, Vector3f)
 {
@@ -108,6 +110,14 @@ TEST(TestMatrix, Matrix3x3f)
 		EXPECT_EQ(Hina::Base::Matrix3x3<float>::Zero()._m, Eigen::Matrix3f::Zero());
 		EXPECT_EQ(Hina::Base::Matrix3x3<float>::Identity()._m, Eigen::Matrix3f::Identity());
 		EXPECT_EQ(Hina::Base::Matrix3x3<float>()._m, Eigen::Matrix3f::Zero());
+	}
+	{
+		Eigen::Matrix3f inv;
+		inv << -5, 3, 4, 7, 3, -8, 1, -3, 4;
+		inv /= 12.f;
+		std::cout << Hina::Base::Matrix3x3<float>({1, 2, 3, 3, 2, 1, 2, 1, 3}).inverse()._m << std::endl;
+		std::cout << inv << std::endl;
+//		EXPECT_EQ(, inv);
 	}
 }
 
