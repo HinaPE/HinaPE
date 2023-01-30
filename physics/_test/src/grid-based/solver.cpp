@@ -8,6 +8,12 @@ Hina::GridFluidSolver::GridFluidSolver(const Hina::Base::Size3 &resolution, cons
 void Hina::GridFluidSolver::on_physics_init()
 {
 }
-void Hina::GridFluidSolver::on_physics_update(float time_step)
+void Hina::GridFluidSolver::on_physics_update(float dt)
+{
+}
+void Hina::GridFluidSolver::update_collider(float dt)
+{
+}
+void Hina::GridFluidSolver::update_emitter(float dt)
 {
 }

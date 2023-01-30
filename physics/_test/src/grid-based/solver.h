@@ -24,7 +24,9 @@ public:
 
 protected:
 	void on_physics_init() final;
-	void on_physics_update(float time_step) final;
+	void on_physics_update(float dt) final;
+	void update_collider(float dt);
+	void update_emitter(float dt);
 
 private:
 	GridSystemData3Ptr _grids;

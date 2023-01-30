@@ -30,7 +30,6 @@ template<typename T>
 T Vector3<T>::length() { return v.norm(); }
 template<typename T>
 void Vector3<T>::normalize() { v.normalize(); }
-
 template<typename T>
 auto Vector3<T>::x() -> T & { return this->v[0]; }
 template<typename T>
