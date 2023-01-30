@@ -19,11 +19,23 @@ public:
 		Base::mVector3 origin;
 	} _opt;
 
+public:
+	explicit GridSystemData3() = default;
+	explicit GridSystemData3(const Opt &opt);
+	GridSystemData3(const GridSystemData3 &other) = default;
+	auto operator=(const GridSystemData3 &other) -> GridSystemData3 & = default;
+	GridSystemData3(GridSystemData3 &&other) = default;
+	auto operator=(GridSystemData3 &&other) -> GridSystemData3 & = default;
+	~GridSystemData3() = default;
+
 private:
 	std::vector<Hina::ScalarGrid3Ptr> _scalar_data;
 	std::vector<Hina::VectorGrid3Ptr> _vector_data;
 	std::vector<Hina::ScalarGrid3Ptr> _advectable_scalar_data;
 	std::vector<Hina::VectorGrid3Ptr> _advectable_vector_data;
+
+	FaceCenteredVectorGrid3Ptr _velocity;
+	size_t _velocity_index = 0;
 };
 using GridSystemData3Ptr = std::shared_ptr<GridSystemData3>;
 }
