@@ -1,8 +1,9 @@
 #include "solver.h"
 
-Hina::GridFluidSolver::GridFluidSolver()
+Hina::GridFluidSolver::GridFluidSolver(const Hina::Base::Size3 &resolution, const Hina::Base::mVector3 &grid_spacing, const Hina::Base::mVector3 &origin)
 {
 	_grids = std::make_shared<GridSystemData3>();
+	_grids->resize(resolution, grid_spacing, origin);
 }
 void Hina::GridFluidSolver::on_physics_init()
 {

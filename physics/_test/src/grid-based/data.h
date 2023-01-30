@@ -22,10 +22,10 @@ public:
 public:
 	explicit GridSystemData3() = default;
 	explicit GridSystemData3(const Opt &opt);
-	GridSystemData3(const GridSystemData3 &other) = default;
-	auto operator=(const GridSystemData3 &other) -> GridSystemData3 & = default;
-	GridSystemData3(GridSystemData3 &&other) = default;
-	auto operator=(GridSystemData3 &&other) -> GridSystemData3 & = default;
+	GridSystemData3(const GridSystemData3 &other) = delete;
+	auto operator=(const GridSystemData3 &other) -> GridSystemData3 & = delete;
+	GridSystemData3(GridSystemData3 &&other) = delete;
+	auto operator=(GridSystemData3 &&other) -> GridSystemData3 & = delete;
 	~GridSystemData3() = default;
 
 private:

@@ -98,6 +98,11 @@ TEST(TestVector, Vector3f)
 
 auto main(int argc, char **argv) -> int
 {
+	// run unit test first
 	::testing::InitGoogleTest(&argc, argv);
-	return RUN_ALL_TESTS();
+	bool res = RUN_ALL_TESTS();
+
+	// run sim application
+
+	return res;
 }

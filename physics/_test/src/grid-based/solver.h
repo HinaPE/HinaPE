@@ -10,7 +10,17 @@ namespace Hina
 class GridFluidSolver : public PhysicsAnimation
 {
 public:
-	GridFluidSolver();
+	struct Opt
+	{
+		// Env
+		Base::mVector3 gravity = Base::mVector3(0, -9.8, 0);
+
+		Base::real viscosity = 0.0;
+		Base::real max_cfl = 5.0;
+	} _opt;
+
+public:
+	GridFluidSolver(const Base::Size3 &resolution, const Base::mVector3 &grid_spacing, const Base::mVector3 &origin);
 
 protected:
 	void on_physics_init() final;

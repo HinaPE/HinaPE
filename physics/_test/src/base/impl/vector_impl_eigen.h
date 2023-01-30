@@ -24,7 +24,7 @@ constexpr Vector3<T>::Vector3(const Vector3 &v) : v(v.v) {}
 template<typename T>
 constexpr Vector3<T>::Vector3(Vector3 &&v) noexcept : v(std::move(v.v)) {}
 template<typename T>
-constexpr Vector3<T>::Vector3(Eigen::Matrix<T, 3, 1> v_) : v(v_) {}
+constexpr Vector3<T>::Vector3(Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v_) : v(v_) {}
 
 template<typename T>
 T Vector3<T>::length() { return v.norm(); }

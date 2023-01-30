@@ -16,6 +16,8 @@ public:
 	auto depth() const -> T;
 	auto length(size_t axis) -> T;
 	auto overlaps(const BoundingBox3 &other) const -> bool;
+	auto corner(size_t idx) const -> Vector3<T>;
+	auto center() const -> Vector3<T>;
 
 public:
 	constexpr BoundingBox3();
@@ -28,6 +30,25 @@ public:
 public:
 	Vector3<T> lower_corner, upper_corner;
 };
+template<typename T>
+auto BoundingBox3<T>::center() const -> Vector3<T> { return (lower_corner + upper_corner) / static_cast<T>(2); }
+template<typename T>
+auto BoundingBox3<T>::corner(size_t idx) const -> Vector3<T>
+{
+	static const T h = static_cast<T>(1) / 2;
+	static const std::array<Vector3<T>, 8> offset = {
+			Vector3 < T > (-h, -h, -h),
+			Vector3 < T > (+h, -h, -h),
+			Vector3 < T > (-h, +h, -h),
+			Vector3 < T > (+h, +h, -h),
+			Vector3 < T > (-h, -h, +h),
+			Vector3 < T > (+h, -h, +h),
+			Vector3 < T > (-h, +h, +h),
+			Vector3 < T > (+h, +h, +h)
+	};
+
+	return Vector3 < T > (width(), height(), depth()) * offset[idx] + center();
+}
 
 template<typename T>
 constexpr BoundingBox3<T>::BoundingBox3() : lower_corner(0), upper_corner(0) {}
