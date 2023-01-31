@@ -48,7 +48,8 @@ private:
 template<typename T, typename R>
 class LinearArray3Sampler final
 {
-public:
+public: // constructors & destructor & operators
+	/* !IMPORTANT: ONLY ONE CONSTRUCTOR AVAILABLE */
 	constexpr explicit LinearArray3Sampler(const Array3<T> &accessor) : _accessor(accessor) {}
 	auto operator()(const Vector3<R> &pt) const -> T;
 
@@ -56,7 +57,7 @@ private:
 	Vector3<R> _grid_spacing;
 	Vector3<R> _inv_grid_spacing;
 	Vector3<R> _origin;
-	const Array3<T> &_accessor;
+	const Array3<T> &_accessor; // use const reference to avoid altering the original data
 };
 
 template<typename T, typename R>
