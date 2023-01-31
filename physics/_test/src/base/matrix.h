@@ -25,6 +25,11 @@ public:
 	Matrix3x3(const std::initializer_list<U> &lst);
 	constexpr explicit Matrix3x3();
 	constexpr explicit Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign> m_);
+	constexpr Matrix3x3(const Matrix3x3<T> &m_) = default;
+	constexpr Matrix3x3(Matrix3x3<T> &&m_) noexcept = default;
+	constexpr auto operator=(const Matrix3x3<T> &m_) -> Matrix3x3<T> & = default;
+	constexpr auto operator=(Matrix3x3<T> &&m_) noexcept -> Matrix3x3<T> & = default;
+	~Matrix3x3() = default;
 	Eigen::Matrix<T, 3,3, Eigen::DontAlign> _m;
 #endif
 };

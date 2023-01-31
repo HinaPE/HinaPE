@@ -29,6 +29,8 @@ namespace Constant
 {
 static constexpr real Zero = static_cast<real>(0);
 static constexpr real One = static_cast<real>(1);
+static constexpr real Infinity = std::numeric_limits<real>::max();
+static constexpr real Epsilon = std::numeric_limits<real>::epsilon();
 static constexpr real PI = static_cast<real>(3.1415926535897932384);
 static constexpr real TwoPI = static_cast<real>(6.2831853071795864769);
 static constexpr real HalfPI = static_cast<real>(1.5707963267948966192);

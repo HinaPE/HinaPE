@@ -27,10 +27,6 @@ template<typename T>
 constexpr Vector3<T>::Vector3(Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v_) : _v(v_) {}
 
 template<typename T>
-T Vector3<T>::length() { return _v.norm(); }
-template<typename T>
-void Vector3<T>::normalize() { _v.normalize(); }
-template<typename T>
 auto Vector3<T>::x() -> T & { return this->_v[0]; }
 template<typename T>
 auto Vector3<T>::y() -> T & { return this->_v[1]; }
@@ -58,6 +54,13 @@ template<typename T>
 auto Vector3<T>::dot(const Vector3 &v_) const -> T { return this->_v.dot(v_._v); }
 template<typename T>
 auto Vector3<T>::cross(const Vector3 &v_) const -> Vector3 { return Vector3(this->_v.cross(v_._v)); }
+template<typename T>
+T Vector3<T>::length() { return _v.norm(); }
+template<typename T>
+auto Vector3<T>::length_squared() -> T { return _v.squaredNorm(); }
+template<typename T>
+void Vector3<T>::normalize() { _v.normalize(); }
+
 
 template<typename T>
 template<typename U>

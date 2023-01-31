@@ -16,20 +16,21 @@ struct SurfaceRayIntersection3
 class Surface3
 {
 public:
-	struct Opt
-	{
-		bool normal_flipped = false;
-	} _opt;
-
-
-public:
 	virtual void update_query_engine() {}
 	virtual auto is_bounded() -> bool { return true; }
 	virtual auto is_valid_geometry() -> bool { return true; }
 	inline auto intersects(const mRay3 &ray) const -> bool { return intersects_local(_transform.to_local(ray)); }
 	inline auto bounding_box() const -> mBBox3 { return _transform.to_world(bounding_box_local()); }
 	inline auto closest_point(const mVector3 &other_point) const -> mVector3 { return _transform.to_world(closest_point_local(_transform.to_local(other_point))); }
+	inline auto closest_distance(const mVector3 &other_point) const -> real { return closest_distance_local(_transform.to_local(other_point)); }
+	inline auto closest_normal(const mVector3 &other_point) const -> mVector3 { return ((_opt.normal_flipped) ? -Constant::One : Constant::One) * _transform.to_world_direction(closest_normal_local(_transform.to_local(other_point))); }
 	inline auto is_inside(const mVector3 &point) -> bool { return _opt.normal_flipped == is_inside_local(_transform.to_local(point)); }
+
+public:
+	struct Opt
+	{
+		bool normal_flipped = false;
+	} _opt;
 
 protected:
 	virtual auto intersects_local(const mRay3 &ray) const -> bool = 0;

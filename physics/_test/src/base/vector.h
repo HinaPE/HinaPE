@@ -12,8 +12,6 @@ template<typename T>
 class Vector3 final
 {
 public:
-	auto length() -> T;
-	void normalize();
 	auto x() -> T&;
 	auto y() -> T&;
 	auto z() -> T&;
@@ -24,6 +22,9 @@ public:
 	auto at(size_t i) const -> const T &;
     auto dot(const Vector3 &v) const -> T;
     auto cross(const Vector3 &v) const -> Vector3;
+	auto length() -> T;
+	auto length_squared() -> T;
+	void normalize();
 
 public:
 	static inline constexpr auto Zero() -> Vector3 { return Vector3(0, 0, 0); }
