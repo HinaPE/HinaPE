@@ -4,6 +4,7 @@
 #include "size.h"
 #include "vector.h"
 #include "math_ext.h"
+#include "parallel.h"
 #include <vector>
 
 namespace Hina::Base

@@ -71,12 +71,19 @@ class VertexCenteredVectorGrid3 final : public CollocatedVectorGrid3 {};
 class FaceCenteredVectorGrid3 final : public VectorGrid3
 {
 public:
-	inline auto u(size_t i, size_t j, size_t k) -> real& { return _u_data(i, j, k); }
-	inline auto v(size_t i, size_t j, size_t k) -> real& { return _v_data(i, j, k); }
-	inline auto w(size_t i, size_t j, size_t k) -> real& { return _w_data(i, j, k); }
-	inline auto u(size_t i, size_t j, size_t k) const -> const real& { return _u_data(i, j, k); }
-	inline auto v(size_t i, size_t j, size_t k) const -> const real& { return _v_data(i, j, k); }
-	inline auto w(size_t i, size_t j, size_t k) const -> const real& { return _w_data(i, j, k); }
+	inline auto u(size_t i, size_t j, size_t k) -> real & { return _u_data(i, j, k); }
+	inline auto v(size_t i, size_t j, size_t k) -> real & { return _v_data(i, j, k); }
+	inline auto w(size_t i, size_t j, size_t k) -> real & { return _w_data(i, j, k); }
+	inline auto u(size_t i, size_t j, size_t k) const -> const real & { return _u_data(i, j, k); }
+	inline auto v(size_t i, size_t j, size_t k) const -> const real & { return _v_data(i, j, k); }
+	inline auto w(size_t i, size_t j, size_t k) const -> const real & { return _w_data(i, j, k); }
+
+	inline void for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
+	inline void for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
+	inline void for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
+	inline void parallel_for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
+	inline void parallel_for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
+	inline void parallel_for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
 
 public:
 	explicit FaceCenteredVectorGrid3() : _u_sampler(_u_data), _v_sampler(_v_data), _w_sampler(_w_data) {}
