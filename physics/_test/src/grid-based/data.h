@@ -28,14 +28,16 @@ public:
 	auto operator=(GridSystemData3 &&other) -> GridSystemData3 & = delete;
 	~GridSystemData3() = default;
 
+public:
+	// velocity
+	FaceCenteredVectorGrid3Ptr _velocity;
+	size_t _velocity_index = 0;
+
 private:
 	std::vector<Hina::ScalarGrid3Ptr> _scalar_data;
 	std::vector<Hina::VectorGrid3Ptr> _vector_data;
 	std::vector<Hina::ScalarGrid3Ptr> _advectable_scalar_data;
 	std::vector<Hina::VectorGrid3Ptr> _advectable_vector_data;
-
-	FaceCenteredVectorGrid3Ptr _velocity;
-	size_t _velocity_index = 0;
 };
 using GridSystemData3Ptr = std::shared_ptr<GridSystemData3>;
 }

@@ -17,6 +17,7 @@ public:
 		// Env
 		mVector3 gravity = mVector3(0, -9.8, 0);
 
+		// fluid params
 		real viscosity = 0.0;
 		real max_cfl = 5.0;
 	} _opt;
@@ -27,8 +28,21 @@ public:
 protected:
 	void on_physics_init() final;
 	void on_physics_update(float dt) final;
+
+	virtual void on_before_physics_update(float dt) {}; // empty now
+	virtual void on_after_physics_update(float dt) {}; // empty now
+	virtual void compute_external_forces(float dt);
+	virtual void compute_viscosity(float dt);
+	virtual void compute_pressure(float dt);
+	virtual void compute_advection(float dt);
+
+private:
+	void before_physics_update(float dt);
+	void after_physics_update(float dt);
 	void update_collider(float dt);
 	void update_emitter(float dt);
+
+	void apply_boundary_condition();
 
 private:
 	GridSystemData3Ptr _grids;

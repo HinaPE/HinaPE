@@ -5,7 +5,7 @@
 
 namespace Hina
 {
-class Collider
+class Collider /* Abstract */
 {
 public:
 	using OnBeginUpdateCallback = std::function<void(Collider *, real, real)>;
