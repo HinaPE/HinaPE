@@ -1,6 +1,8 @@
 #ifndef HINAPE_MATRIX_IMPL_EIGEN_H
 #define HINAPE_MATRIX_IMPL_EIGEN_H
 
+namespace Hina::Base
+{
 template<typename T>
 constexpr Matrix3x3<T>::Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign> m_) : _m(m_) {}
 
@@ -33,5 +35,5 @@ auto Matrix3x3<T>::inverse() const -> Matrix3x3
 {
 	return Matrix3x3(_m.inverse());
 }
-
+}
 #endif //HINAPE_MATRIX_IMPL_EIGEN_H

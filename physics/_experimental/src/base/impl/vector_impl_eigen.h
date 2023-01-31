@@ -1,6 +1,8 @@
 #ifndef HINAPE_VECTOR_EIGEN_H
 #define HINAPE_VECTOR_EIGEN_H
 
+namespace Hina::Base
+{
 template<typename T>
 template<typename U>
 Vector3<T>::Vector3(const std::initializer_list<U> &lst)
@@ -159,5 +161,5 @@ template<typename T>
 auto Vector3<T>::operator==(const Vector3 &v_) const -> bool { return this->_v == v_.v; }
 template<typename T>
 auto Vector3<T>::operator!=(const Vector3 &v_) const -> bool { return this->_v != v_.v; }
-
+}
 #endif //HINAPE_VECTOR_EIGEN_H

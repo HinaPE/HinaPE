@@ -25,10 +25,9 @@ private:
 	T w, x, y, z;
 #endif
 };
-
+}
 #ifdef HINAPE_EIGEN
 #include "base/impl/quaternion_impl_eigen.h"
 #else
 #endif
-}
 #endif //HINAPE_QUATERNION_H

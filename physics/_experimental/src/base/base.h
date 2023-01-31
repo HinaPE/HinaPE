@@ -10,6 +10,7 @@
 #include "bbox.h"
 #include "ray.h"
 #include "math_ext.h"
+#include "timer.h"
 
 #include <memory>
 #include <functional>

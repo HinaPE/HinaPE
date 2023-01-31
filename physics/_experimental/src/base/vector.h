@@ -96,10 +96,10 @@ template<typename T>
 auto max(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T> { return { std::max(a.x(), b.x()), std::max(a.y(), b.y()), std::max(a.z(), b.z()) };}
 template<typename T>
 auto min(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T>{ return { std::min(a.x(), b.x()), std::min(a.y(), b.y()), std::min(a.z(), b.z()) };}
+}
 
 #ifdef HINAPE_EIGEN
 #include "base/impl/vector_impl_eigen.h"
 #else
 #endif
-}
 #endif //HINAPE_VECTOR_H

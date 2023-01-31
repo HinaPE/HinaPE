@@ -63,10 +63,9 @@ template<typename T>
 auto operator/(const Matrix3x3<T> &a, T b) -> Matrix3x3<T> { return Matrix3x3<T>(a._m / b); }
 template<typename T>
 auto operator/(T a, const Matrix3x3<T> &b) -> Matrix3x3<T> { return Matrix3x3<T>(a / b._m); }
-
+}
 #ifdef HINAPE_EIGEN
 #include "base/impl/matrix_impl_eigen.h"
 #else
 #endif
-}
 #endif //HINAPE_MATRIX_H
