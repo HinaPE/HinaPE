@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <memory>
 
 class Timer final
 {
