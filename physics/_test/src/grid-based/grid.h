@@ -72,6 +72,15 @@ class FaceCenteredVectorGrid3 final : public VectorGrid3
 {
 protected:
 	void on_resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value) override;
+
+private:
+	Base::Array1<real> _u_data;
+	Base::Array1<real> _v_data;
+	Base::Array1<real> _w_data;
+	mVector3 _u_origin;
+	mVector3 _v_origin;
+	mVector3 _w_origin;
+
 };
 // ============================== VectorGrid3 ==============================
 

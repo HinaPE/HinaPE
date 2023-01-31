@@ -9,6 +9,7 @@
 #include "transform.h"
 #include "bbox.h"
 #include "ray.h"
+#include "math_ext.h"
 
 #include <memory>
 #include <functional>

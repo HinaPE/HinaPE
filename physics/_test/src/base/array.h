@@ -2,6 +2,8 @@
 #define HINAPE_ARRAY_H
 
 #include "size.h"
+#include "vector.h"
+#include "math_ext.h"
 #include <vector>
 
 namespace Hina::Base
@@ -54,6 +56,25 @@ private:
 	std::vector<T> _data;
 	Size3 _size;
 };
-}
 
+template<typename T, typename R>
+class LinearArray3Sampler final
+{
+public:
+	constexpr explicit LinearArray3Sampler(const Array3<T> &accessor) : _accessor(accessor) {}
+	auto operator()(const Vector3<R> &pt) const -> T;
+
+private:
+	Vector3<R> _grid_spacing;
+	Vector3<R> _inv_grid_spacing;
+	Vector3<R> _origin;
+	const Array3<T> &_accessor;
+};
+
+template<typename T, typename R>
+auto LinearArray3Sampler<T, R>::operator()(const Vector3<R> &pt) const -> T
+{
+	return nullptr;
+}
+}
 #endif //HINAPE_ARRAY_H

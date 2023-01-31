@@ -24,6 +24,8 @@ void Hina::GridFluidSolver::on_physics_update(float dt)
 }
 void Hina::GridFluidSolver::compute_external_forces(float dt)
 {
+	// gravity
+	auto vel = _grids->_velocity;
 }
 void Hina::GridFluidSolver::compute_viscosity(float dt)
 {
