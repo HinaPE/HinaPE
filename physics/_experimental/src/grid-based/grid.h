@@ -34,8 +34,14 @@ class ScalarGrid3 : public Grid3, public ScalarField3
 {
 public: // implement ScalarField3
 	auto sample(const mVector3 &x) const -> real final { return _sampler(x); }
-	auto gradient(const mVector3 &x) const -> mVector3 final { return Hina::mVector3(); }
-	auto laplacian(const mVector3 &x) const -> real final { return 0; }
+	auto gradient(const mVector3 &x) const -> mVector3 final
+	{
+		return Hina::mVector3();
+	}
+	auto laplacian(const mVector3 &x) const -> real final
+	{
+		return 0;
+	}
 	auto sampler() const -> std::function<real(const mVector3 &)> final { return _sampler; }
 
 public: // math
@@ -78,9 +84,18 @@ public:
 class VectorGrid3 : public Grid3, public VectorField3
 {
 public: // implement VectorField3
-	auto sample(const mVector3 &x) const -> mVector3 final { return Hina::mVector3(); }
-	auto divergence(const mVector3 &x) const -> real final { return 0; }
-	auto curl(const mVector3 &x) const -> mVector3 final { return Hina::mVector3(); }
+	auto sample(const mVector3 &x) const -> mVector3 final
+	{
+		return Hina::mVector3();
+	}
+	auto divergence(const mVector3 &x) const -> real final
+	{
+		return 0;
+	}
+	auto curl(const mVector3 &x) const -> mVector3 final
+	{
+		return Hina::mVector3();
+	}
 	auto sampler() const -> std::function<mVector3(const mVector3 &)> final
 	{
 		return std::function < mVector3(
