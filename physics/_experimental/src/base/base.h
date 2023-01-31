@@ -11,11 +11,14 @@
 #include "ray.h"
 #include "math_ext.h"
 #include "timer.h"
+#include "parallel.h"
 
 #include <memory>
 #include <functional>
 #include <tuple>
 #include <utility>
+#include <string>
+#include <vector>
 
 namespace Hina
 {
@@ -31,6 +34,7 @@ namespace Constant
 {
 static constexpr real Zero = static_cast<real>(0);
 static constexpr real One = static_cast<real>(1);
+static constexpr real Half = static_cast<real>(0.5);
 static constexpr real Infinity = std::numeric_limits<real>::max();
 static constexpr real Epsilon = std::numeric_limits<real>::epsilon();
 static constexpr real PI = static_cast<real>(3.1415926535897932384);

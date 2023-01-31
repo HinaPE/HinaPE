@@ -3,7 +3,6 @@
 
 #include "base/base.h"
 #include "field.h"
-#include <vector>
 
 namespace Hina
 {
@@ -11,7 +10,11 @@ namespace Hina
 class Grid3
 {
 public:
+	using DataPositionFunc = std::function<mVector3(size_t, size_t, size_t)>;
 	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin);
+	auto cell_center_position() const -> DataPositionFunc;
+	void for_each_cell_index(const std::function<void(size_t, size_t, size_t)> &func) const;
+	void parallel_for_each_cell_index(const std::function<void(size_t, size_t, size_t)> &func) const;
 
 public:
 	struct Opt
@@ -29,22 +32,49 @@ public:
 // ============================== ScalarGrid3 ==============================
 class ScalarGrid3 : public Grid3, public ScalarField3
 {
-public:
+public: // implement ScalarField3
+	auto sample(const mVector3 &x) const -> real final { return _sampler(x); }
+	auto gradient(const mVector3 &x) const -> mVector3 final
+	{
+		return Hina::mVector3();
+	}
+	auto laplacian(const mVector3 &x) const -> real final
+	{
+		return 0;
+	}
+	auto sampler() const -> std::function<real(const mVector3 &)> final { return _sampler; }
+
+public: // math
+	auto gradient_at_data_point(size_t i, size_t j, size_t k) const -> mVector3;
+	auto laplacian_at_data_point(size_t i, size_t j, size_t k) const -> real;
+
 	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, real initial_value);
-	virtual inline auto size() const -> Base::Size3 = 0;
+	inline void clear() { resize(Base::Size3(0, 0, 0), _opt.grid_spacing, _opt.origin, Constant::Zero); }
+
+	virtual inline auto data_size() const -> Base::Size3 = 0; /// not necessarily equal to _opt.resolution
+	virtual inline auto data_origin() const -> mVector3 = 0; /// not necessarily equal to _opt.origin
+
+public: // constructors & destructor & assignment operators
+	ScalarGrid3() : _linear_sampler(_data) {}
+	inline auto operator()(size_t i, size_t j, size_t k) -> real & { return _data(i, j, k); }
+	inline auto operator()(size_t i, size_t j, size_t k) const -> const real & { return _data(i, j, k); }
 
 private:
 	Base::Array3<real> _data;
+	Base::LinearArray3Sampler<real, real> _linear_sampler;
+	std::function<real(const mVector3 &)> _sampler;
 };
 class CellCenteredScalarGrid3 final : public ScalarGrid3
 {
 public:
-	inline auto size() const -> Base::Size3 final { return _opt.resolution; }
+	inline auto data_size() const -> Base::Size3 final { return _opt.resolution; }
+	inline auto data_origin() const -> mVector3 final { return _opt.origin; }
 };
 class VertexCenteredScalarGrid3 final : public ScalarGrid3
 {
 public:
-	inline auto size() const -> Base::Size3 final { return _opt.resolution + Base::Size3(1, 1, 1); }
+	inline auto data_size() const -> Base::Size3 final { return _opt.resolution + Base::Size3(1, 1, 1); }
+	inline auto data_origin() const -> mVector3 final { return _opt.origin - _opt.grid_spacing * Constant::Half; }
 };
 // ============================== ScalarGrid3 ==============================
 
@@ -53,6 +83,24 @@ public:
 // ============================== VectorGrid3 ==============================
 class VectorGrid3 : public Grid3, public VectorField3
 {
+public: // implement VectorField3
+	auto sample(const mVector3 &x) const -> mVector3 final
+	{
+		return Hina::mVector3();
+	}
+	auto divergence(const mVector3 &x) const -> real final
+	{
+		return 0;
+	}
+	auto curl(const mVector3 &x) const -> mVector3 final
+	{
+		return Hina::mVector3();
+	}
+	auto sampler() const -> std::function<mVector3(const mVector3 &)> final
+	{
+		return std::function < mVector3(
+		const mVector3 &)>();
+	}
 public:
 	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value);
 protected:
@@ -89,7 +137,7 @@ public:
 	explicit FaceCenteredVectorGrid3() : _u_sampler(_u_data), _v_sampler(_v_data), _w_sampler(_w_data) {}
 
 protected:
-	void on_resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value) override;
+	void on_resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value) final;
 
 private:
 	Base::Array3<real> _u_data;
