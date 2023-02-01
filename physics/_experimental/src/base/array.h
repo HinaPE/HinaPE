@@ -84,9 +84,9 @@ auto LinearArray3Sampler<T, R>::operator()(const Vector3<R> &pt) const -> T
 	long j_size = static_cast<long>(_accessor.size().y);
 	long k_size = static_cast<long>(_accessor.size().z);
 
-	get_barycentric(normalized_pt.x, 0, i_size - 1, &i, &fx);
-	get_barycentric(normalized_pt.y, 0, j_size - 1, &j, &fy);
-	get_barycentric(normalized_pt.z, 0, k_size - 1, &k, &fz);
+	get_barycentric(normalized_pt.x(), 0, i_size - 1, &i, &fx);
+	get_barycentric(normalized_pt.y(), 0, j_size - 1, &j, &fy);
+	get_barycentric(normalized_pt.z(), 0, k_size - 1, &k, &fz);
 
 	long ip1 = std::min(i + 1, i_size - 1);
 	long jp1 = std::min(j + 1, j_size - 1);
@@ -121,9 +121,9 @@ void LinearArray3Sampler<T, R>::get_coordinate_and_weights(const Vector3<R> &pt,
 	const long j_size = static_cast<long>(_accessor.size().y);
 	const long k_size = static_cast<long>(_accessor.size().z);
 
-	get_barycentric(normalized_pt.x, 0, i_size - 1, &i, &fx);
-	get_barycentric(normalized_pt.y, 0, j_size - 1, &j, &fy);
-	get_barycentric(normalized_pt.z, 0, k_size - 1, &k, &fz);
+	get_barycentric(normalized_pt.x(), 0, i_size - 1, &i, &fx);
+	get_barycentric(normalized_pt.y(), 0, j_size - 1, &j, &fy);
+	get_barycentric(normalized_pt.z(), 0, k_size - 1, &k, &fz);
 
 	const long ip1 = std::min(i + 1, i_size - 1);
 	const long jp1 = std::min(j + 1, j_size - 1);
@@ -160,9 +160,9 @@ void LinearArray3Sampler<T, R>::get_coordinate_and_gradient_weights(const Vector
 	const long j_size = static_cast<long>(_accessor.size().y);
 	const long k_size = static_cast<long>(_accessor.size().z);
 
-	get_barycentric(normalized_pt.x, 0, i_size - 1, &i, &fx);
-	get_barycentric(normalized_pt.y, 0, j_size - 1, &j, &fy);
-	get_barycentric(normalized_pt.z, 0, k_size - 1, &k, &fz);
+	get_barycentric(normalized_pt.x(), 0, i_size - 1, &i, &fx);
+	get_barycentric(normalized_pt.y(), 0, j_size - 1, &j, &fy);
+	get_barycentric(normalized_pt.z(), 0, k_size - 1, &k, &fz);
 
 	const long ip1 = std::min(i + 1, i_size - 1);
 	const long jp1 = std::min(j + 1, j_size - 1);
@@ -185,6 +185,103 @@ void LinearArray3Sampler<T, R>::get_coordinate_and_gradient_weights(const Vector
 	(*weights)[5] = Vector3<R>(_inv_grid_spacing.x * (1 - fy) * fz, fx * (-_inv_grid_spacing.y) * fz, fx * (1 - fy) * _inv_grid_spacing.z);
 	(*weights)[6] = Vector3<R>((-_inv_grid_spacing.x) * fy * fz, (1 - fx) * _inv_grid_spacing.y * fz, (1 - fx) * fy * _inv_grid_spacing.z);
 	(*weights)[7] = Vector3<R>(_inv_grid_spacing.x * fy * fz, fx * _inv_grid_spacing.y * fz, fx * fy * _inv_grid_spacing.z);
+}
+
+// FDM
+
+template<typename T>
+auto gradient3(const Array3<T> &data, const Vector3<T> &grid_spacing, size_t i, size_t j, size_t k) -> Vector3<T>
+{
+	const Size3 ds = data.size();
+	assert(i < ds.x && j < ds.y && k < ds.z);
+
+	T left = data((i > 0) ? i - 1 : i, j, k);
+	T right = data((i + 1 < ds.x) ? i + 1 : i, j, k);
+	T down = data(i, (j > 0) ? j - 1 : j, k);
+	T up = data(i, (j + 1 < ds.y) ? j + 1 : j, k);
+	T back = data(i, j, (k > 0) ? k - 1 : k);
+	T front = data(i, j, (k + 1 < ds.z) ? k + 1 : k);
+
+	return static_cast<T>(0.5) * Vector3<T>(right - left, up - down, front - back) / grid_spacing;
+}
+template<typename T>
+auto gradient3(const Array3<Vector3<T>> &data, const Vector3<T> &grid_spacing, size_t i, size_t j, size_t k) -> std::array<Vector3<T>, 3>
+{
+	const Size3 ds = data.size();
+	assert(i < ds.x && j < ds.y && k < ds.z);
+
+	Vector3<T> left = data((i > 0) ? i - 1 : i, j, k);
+	Vector3<T> right = data((i + 1 < ds.x) ? i + 1 : i, j, k);
+	Vector3<T> down = data(i, (j > 0) ? j - 1 : j, k);
+	Vector3<T> up = data(i, (j + 1 < ds.y) ? j + 1 : j, k);
+	Vector3<T> back = data(i, j, (k > 0) ? k - 1 : k);
+	Vector3<T> front = data(i, j, (k + 1 < ds.z) ? k + 1 : k);
+
+	std::array<Vector3<T>, 3> result;
+	result[0] = 0.5 * Vector3<T>(
+			right.x() - left.x(), up.x() - down.x(), front.x() - back.x()) / grid_spacing;
+	result[1] = 0.5 * Vector3<T>(
+			right.y() - left.y(), up.y() - down.y(), front.y() - back.y()) / grid_spacing;
+	result[2] = 0.5 * Vector3<T>(
+			right.z() - left.z(), up.z() - down.z(), front.z() - back.z()) / grid_spacing;
+	return result;
+}
+template<typename T>
+auto laplacian3(const Array3<T> &data, const Vector3<T> &grid_spacing, size_t i, size_t j, size_t k) -> T
+{
+	const T center = data(i, j, k);
+	const Size3 ds = data.size();
+	assert(i < ds.x && j < ds.y && k < ds.z);
+
+	T d_left = static_cast<T>(0.0);
+	T d_right = static_cast<T>(0.0);
+	T d_down = static_cast<T>(0.0);
+	T d_up = static_cast<T>(0.0);
+	T d_back = static_cast<T>(0.0);
+	T d_front = static_cast<T>(0.0);
+
+	if (i > 0)
+		d_left = center - data(i - 1, j, k);
+	if (i + 1 < ds.x)
+		d_right = data(i + 1, j, k) - center;
+	if (j > 0)
+		d_down = center - data(i, j - 1, k);
+	if (j + 1 < ds.y)
+		d_up = data(i, j + 1, k) - center;
+	if (k > 0)
+		d_back = center - data(i, j, k - 1);
+	if (k + 1 < ds.z)
+		d_front = data(i, j, k + 1) - center;
+
+	return (d_right - d_left) / square(grid_spacing.x()) + (d_up - d_down) / square(grid_spacing.y()) + (d_front - d_back) / square(grid_spacing.z());
+}
+template<typename T>
+auto laplacian3(const Array3<Vector3<T>> &data, const Vector3<T> &grid_spacing, size_t i, size_t j, size_t k) -> Vector3<T>
+{
+	const Vector3<T> center = data(i, j, k);
+	const Size3 ds = data.size();
+
+	Vector3<T> d_left = Vector3<T>::Zero();
+	Vector3<T> d_right = Vector3<T>::Zero();
+	Vector3<T> d_down = Vector3<T>::Zero();
+	Vector3<T> d_up = Vector3<T>::Zero();
+	Vector3<T> d_back = Vector3<T>::Zero();
+	Vector3<T> d_front = Vector3<T>::Zero();
+
+	if (i > 0)
+		d_left = center - data(i - 1, j, k);
+	if (i + 1 < ds.x)
+		d_right = data(i + 1, j, k) - center;
+	if (j > 0)
+		d_down = center - data(i, j - 1, k);
+	if (j + 1 < ds.y)
+		d_up = data(i, j + 1, k) - center;
+	if (k > 0)
+		d_back = center - data(i, j, k - 1);
+	if (k + 1 < ds.z)
+		d_front = data(i, j, k + 1) - center;
+
+	return (d_right - d_left) / square(grid_spacing.x()) + (d_up - d_down) / square(grid_spacing.y()) + (d_front - d_back) / square(grid_spacing.z());
 }
 }
 #endif //HINAPE_ARRAY_H

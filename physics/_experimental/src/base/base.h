@@ -19,11 +19,13 @@
 #include <utility>
 #include <string>
 #include <vector>
+#include <array>
 
 namespace Hina
 {
 using real = double;
 using mVector3 = Base::Vector3<real>;
+using mVectorUI3 = Base::Vector3<size_t>;
 using mQuaternion = Base::Quaternion<real>;
 using mMatrix3x3 = Base::Matrix3x3<real>;
 using mTransform3 = Base::Transform3<real>;

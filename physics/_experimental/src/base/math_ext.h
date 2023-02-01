@@ -5,7 +5,7 @@
 #include <limits>
 #include <algorithm>
 
-namespace Hina
+namespace Hina::Base
 {
 template<typename T>
 inline auto similar(T x, T y, T eps) -> bool { return (std::abs(x - y) <= eps); }

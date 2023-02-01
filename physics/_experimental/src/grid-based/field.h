@@ -10,9 +10,9 @@ class ScalarField3 : public Field3
 {
 public:
 	virtual auto sample(const mVector3 &x) const -> real = 0;
+	virtual auto sampler() const -> std::function<real(const mVector3 &)> = 0;
 	virtual auto gradient(const mVector3 &x) const -> mVector3 = 0;
 	virtual auto laplacian(const mVector3 &x) const -> real = 0;
-	virtual auto sampler() const -> std::function<real(const mVector3 &)> = 0;
 };
 class ConstantScalarField3 final : public ScalarField3
 {
@@ -28,9 +28,9 @@ class VectorField3 : public Field3
 {
 public:
 	virtual auto sample(const mVector3 &x) const -> mVector3 = 0;
+	virtual auto sampler() const -> std::function<mVector3(const mVector3 &)> = 0;
 	virtual auto divergence(const mVector3 &x) const -> real = 0;
 	virtual auto curl(const mVector3 &x) const -> mVector3 = 0;
-	virtual auto sampler() const -> std::function<mVector3(const mVector3 &)> = 0;
 };
 class ConstantVectorField3 final : public VectorField3
 {

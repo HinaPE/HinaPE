@@ -33,20 +33,36 @@ public:
 class ScalarGrid3 : public Grid3, public ScalarField3
 {
 public: // implement ScalarField3
-	auto sample(const mVector3 &x) const -> real final { return _sampler(x); }
-	auto gradient(const mVector3 &x) const -> mVector3 final
+	inline auto sample(const mVector3 &x) const -> real final { return _sampler(x); }
+	inline auto sampler() const -> std::function<real(const mVector3 &)> final { return _sampler; }
+	inline auto gradient(const mVector3 &x) const -> mVector3 final
 	{
-		return Hina::mVector3();
+		std::array<mVectorUI3, 8> indices{};
+		std::array<real, 8> weights{};
+		_linear_sampler.get_coordinate_and_weights(x, &indices, &weights);
+
+		mVector3 res = mVector3::Zero();
+		for (size_t i = 0; i < 8; ++i)
+			res += weights[i] * gradient_at_data_point(indices[i].x(), indices[i].y(), indices[i].z());
+
+		return res;
 	}
-	auto laplacian(const mVector3 &x) const -> real final
+	inline auto laplacian(const mVector3 &x) const -> real final
 	{
-		return 0;
+		std::array<mVectorUI3, 8> indices{};
+		std::array<real, 8> weights{};
+		_linear_sampler.get_coordinate_and_weights(x, &indices, &weights);
+
+		real result = Constant::Zero;
+		for (size_t i = 0; i < 8; ++i)
+			result += weights[i] * laplacian_at_data_point(indices[i].x(), indices[i].y(), indices[i].z());
+
+		return result;
 	}
-	auto sampler() const -> std::function<real(const mVector3 &)> final { return _sampler; }
 
 public: // math
-	auto gradient_at_data_point(size_t i, size_t j, size_t k) const -> mVector3;
-	auto laplacian_at_data_point(size_t i, size_t j, size_t k) const -> real;
+	inline auto gradient_at_data_point(size_t i, size_t j, size_t k) const -> mVector3 { return gradient3(_data, _opt.grid_spacing, i, j, k); }
+	inline auto laplacian_at_data_point(size_t i, size_t j, size_t k) const -> real { return laplacian3(_data, _opt.grid_spacing, i, j, k); }
 
 	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, real initial_value);
 	inline void clear() { resize(Base::Size3(0, 0, 0), _opt.grid_spacing, _opt.origin, Constant::Zero); }

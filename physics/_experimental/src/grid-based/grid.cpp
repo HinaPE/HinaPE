@@ -29,6 +29,10 @@ void Hina::Grid3::parallel_for_each_cell_index(const std::function<void(size_t, 
 {
 	Base::parallelFor((size_t) 0, _opt.resolution.x, (size_t) 0, _opt.resolution.y, (size_t) 0, _opt.resolution.z, [&func](size_t i, size_t j, size_t k) { func(i, j, k); }); // TODO: why another lambda
 }
+
+
+
+
 void Hina::ScalarGrid3::resize(const Hina::Base::Size3 &resolution, const Hina::mVector3 &grid_spacing, const Hina::mVector3 &origin, Hina::real initial_value)
 {
 	// update opt
@@ -41,14 +45,10 @@ void Hina::ScalarGrid3::resize(const Hina::Base::Size3 &resolution, const Hina::
 	Grid3::resize(resolution, grid_spacing, origin);
 	_data.resize(data_size(), initial_value);
 }
-auto Hina::ScalarGrid3::gradient_at_data_point(size_t i, size_t j, size_t k) const -> Hina::mVector3
-{
-	return Hina::mVector3();
-}
-auto Hina::ScalarGrid3::laplacian_at_data_point(size_t i, size_t j, size_t k) const -> Hina::real
-{
-	return 0;
-}
+
+
+
+
 void Hina::VectorGrid3::resize(const Hina::Base::Size3 &resolution, const Hina::mVector3 &grid_spacing, const Hina::mVector3 &origin, const Hina::mVector3 &initial_value)
 {
 	Grid3::resize(resolution, grid_spacing, origin);
