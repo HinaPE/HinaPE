@@ -188,7 +188,6 @@ void LinearArray3Sampler<T, R>::get_coordinate_and_gradient_weights(const Vector
 }
 
 // FDM
-
 template<typename T>
 auto gradient3(const Array3<T> &data, const Vector3<T> &grid_spacing, size_t i, size_t j, size_t k) -> Vector3<T>
 {
@@ -218,12 +217,9 @@ auto gradient3(const Array3<Vector3<T>> &data, const Vector3<T> &grid_spacing, s
 	Vector3<T> front = data(i, j, (k + 1 < ds.z) ? k + 1 : k);
 
 	std::array<Vector3<T>, 3> result;
-	result[0] = 0.5 * Vector3<T>(
-			right.x() - left.x(), up.x() - down.x(), front.x() - back.x()) / grid_spacing;
-	result[1] = 0.5 * Vector3<T>(
-			right.y() - left.y(), up.y() - down.y(), front.y() - back.y()) / grid_spacing;
-	result[2] = 0.5 * Vector3<T>(
-			right.z() - left.z(), up.z() - down.z(), front.z() - back.z()) / grid_spacing;
+	result[0] = 0.5 * Vector3<T>(right.x() - left.x(), up.x() - down.x(), front.x() - back.x()) / grid_spacing;
+	result[1] = 0.5 * Vector3<T>(right.y() - left.y(), up.y() - down.y(), front.y() - back.y()) / grid_spacing;
+	result[2] = 0.5 * Vector3<T>(right.z() - left.z(), up.z() - down.z(), front.z() - back.z()) / grid_spacing;
 	return result;
 }
 template<typename T>
@@ -240,18 +236,12 @@ auto laplacian3(const Array3<T> &data, const Vector3<T> &grid_spacing, size_t i,
 	T d_back = static_cast<T>(0.0);
 	T d_front = static_cast<T>(0.0);
 
-	if (i > 0)
-		d_left = center - data(i - 1, j, k);
-	if (i + 1 < ds.x)
-		d_right = data(i + 1, j, k) - center;
-	if (j > 0)
-		d_down = center - data(i, j - 1, k);
-	if (j + 1 < ds.y)
-		d_up = data(i, j + 1, k) - center;
-	if (k > 0)
-		d_back = center - data(i, j, k - 1);
-	if (k + 1 < ds.z)
-		d_front = data(i, j, k + 1) - center;
+	if (i > 0) d_left = center - data(i - 1, j, k);
+	if (i + 1 < ds.x) d_right = data(i + 1, j, k) - center;
+	if (j > 0) d_down = center - data(i, j - 1, k);
+	if (j + 1 < ds.y) d_up = data(i, j + 1, k) - center;
+	if (k > 0) d_back = center - data(i, j, k - 1);
+	if (k + 1 < ds.z) d_front = data(i, j, k + 1) - center;
 
 	return (d_right - d_left) / square(grid_spacing.x()) + (d_up - d_down) / square(grid_spacing.y()) + (d_front - d_back) / square(grid_spacing.z());
 }
@@ -268,18 +258,12 @@ auto laplacian3(const Array3<Vector3<T>> &data, const Vector3<T> &grid_spacing, 
 	Vector3<T> d_back = Vector3<T>::Zero();
 	Vector3<T> d_front = Vector3<T>::Zero();
 
-	if (i > 0)
-		d_left = center - data(i - 1, j, k);
-	if (i + 1 < ds.x)
-		d_right = data(i + 1, j, k) - center;
-	if (j > 0)
-		d_down = center - data(i, j - 1, k);
-	if (j + 1 < ds.y)
-		d_up = data(i, j + 1, k) - center;
-	if (k > 0)
-		d_back = center - data(i, j, k - 1);
-	if (k + 1 < ds.z)
-		d_front = data(i, j, k + 1) - center;
+	if (i > 0) d_left = center - data(i - 1, j, k);
+	if (i + 1 < ds.x) d_right = data(i + 1, j, k) - center;
+	if (j > 0) d_down = center - data(i, j - 1, k);
+	if (j + 1 < ds.y) d_up = data(i, j + 1, k) - center;
+	if (k > 0) d_back = center - data(i, j, k - 1);
+	if (k + 1 < ds.z) d_front = data(i, j, k + 1) - center;
 
 	return (d_right - d_left) / square(grid_spacing.x()) + (d_up - d_down) / square(grid_spacing.y()) + (d_front - d_back) / square(grid_spacing.z());
 }
