@@ -137,37 +137,9 @@ public:
 	inline void parallel_for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const {	_w_data.parallel_for_each_index(func); }
 
 public: // math
-	inline auto value_at_cell_center(size_t i, size_t j, size_t k) const -> mVector3 { return Constant::Half * mVector3(_u_data(i, j, k) + _u_data(i + 1, j, k), _v_data(i, j, k) + _v_data(i, j + 1, k), _w_data(i, j, k) + _w_data(i, j, k + 1)); }
-	inline auto divergence_at_cell_center(size_t i, size_t j, size_t k) const -> real { return (_u_data(i + 1, j, k) - _u_data(i, j, k)) / _opt.grid_spacing.x() + (_v_data(i, j + 1, k) - _v_data(i, j, k)) / _opt.grid_spacing.y() + (_w_data(i, j, k + 1) - _w_data(i, j, k)) / _opt.grid_spacing.z(); }
-	inline auto curl_at_cell_center(size_t i, size_t j, size_t k) const -> mVector3
-	{
-		const Base::Size3 &res = _opt.resolution;
-		const mVector3 &gs = _opt.grid_spacing;
-
-		mVector3 left = value_at_cell_center((i > 0) ? i - 1 : i, j, k);
-		mVector3 right = value_at_cell_center((i + 1 < res.x) ? i + 1 : i, j, k);
-		mVector3 down = value_at_cell_center(i, (j > 0) ? j - 1 : j, k);
-		mVector3 up = value_at_cell_center(i, (j + 1 < res.y) ? j + 1 : j, k);
-		mVector3 back = value_at_cell_center(i, j, (k > 0) ? k - 1 : k);
-		mVector3 front = value_at_cell_center(i, j, (k + 1 < res.z) ? k + 1 : k);
-
-		real Fx_ym = down.x();
-		real Fx_yp = up.x();
-		real Fx_zm = back.x();
-		real Fx_zp = front.x();
-		real Fy_xm = left.y();
-		real Fy_xp = right.y();
-		real Fy_zm = back.y();
-		real Fy_zp = front.y();
-		real Fz_xm = left.z();
-		real Fz_xp = right.z();
-		real Fz_ym = down.z();
-		real Fz_yp = up.z();
-
-		return {(Fz_yp - Fz_ym) / (2 * gs.y()) - (Fy_zp - Fy_zm) / (2 * gs.z()),
-				(Fx_zp - Fx_zm) / (2 * gs.z()) - (Fz_xp - Fz_xm) / (2 * gs.x()),
-				(Fy_xp - Fy_xm) / (2 * gs.x()) - (Fx_yp - Fx_ym) / (2 * gs.y())};
-	}
+	auto value_at_cell_center(size_t i, size_t j, size_t k) const -> mVector3;
+	auto divergence_at_cell_center(size_t i, size_t j, size_t k) const -> real;
+	auto curl_at_cell_center(size_t i, size_t j, size_t k) const -> mVector3;
 
 public:
 	explicit FaceCenteredVectorGrid3() : _u_sampler(_u_data), _v_sampler(_v_data), _w_sampler(_w_data) { _sampler = [&](const mVector3 &x) -> mVector3 { return {_u_sampler(x), _v_sampler(x), _w_sampler(x)}; }; }

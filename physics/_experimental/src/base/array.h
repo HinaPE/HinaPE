@@ -15,15 +15,15 @@ template<typename T>
 class Array3
 {
 public:
-	inline void resize(const Size3 &size, const T &initial_value = T());
-	inline auto swap(Array3<T> &other) -> void;
-	inline auto size() const -> const Size3 & { return _size; }
+	void resize(const Size3 &size, const T &initial_value = T());
+	auto swap(Array3<T> &other) -> void;
 
 public:
 	inline auto at(size_t i, size_t j, size_t k) -> T & { return _data[i + j * _size.x + k * _size.x * _size.y]; }
 	inline auto at(size_t i, size_t j, size_t k) const -> const T & { return _data[i + j * _size.x + k * _size.x * _size.y]; }
 	inline auto operator()(size_t i, size_t j, size_t k) -> T & { return _data[i + j * _size.x + k * _size.x * _size.y]; }
 	inline auto operator()(size_t i, size_t j, size_t k) const -> const T & { return _data[i + j * _size.x + k * _size.x * _size.y]; }
+	inline auto size() const -> const Size3 & { return _size; }
 
 public:
 	template<typename Callback>

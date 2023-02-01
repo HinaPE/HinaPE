@@ -2,10 +2,14 @@
 #define HINAPE_SOLVER_H
 
 #include "animation/physics_animation.h"
+#include "geometry/collider.h"
 #include "data.h"
 #include "emitter.h"
 
-#include "geometry/collider.h"
+#include "advection_solver.h"
+#include "grid_pressure_solver.h"
+#include "grid_diffusion_solver.h"
+#include "grid_boundary_condition_solver.h"
 
 namespace Hina
 {
@@ -48,6 +52,12 @@ private:
 	GridSystemData3Ptr _grids;
 	GridEmitter3Ptr _emitter;
 	ColliderPtr _collider;
+
+	// solvers
+	AdvectionSolver3Ptr _advection_solver;
+	GridPressureSolver3Ptr _pressure_solver;
+	GridDiffusionSolver3Ptr _diffusion_solver;
+	GridBoundaryConditionSolver3Ptr _boundary_condition_solver;
 };
 }
 

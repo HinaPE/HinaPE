@@ -37,17 +37,17 @@ auto BoundingBox3<T>::corner(size_t idx) const -> Vector3<T>
 {
 	static const T h = static_cast<T>(1) / 2;
 	static const std::array<Vector3<T>, 8> offset = {
-			Vector3 < T > (-h, -h, -h),
-			Vector3 < T > (+h, -h, -h),
-			Vector3 < T > (-h, +h, -h),
-			Vector3 < T > (+h, +h, -h),
-			Vector3 < T > (-h, -h, +h),
-			Vector3 < T > (+h, -h, +h),
-			Vector3 < T > (-h, +h, +h),
-			Vector3 < T > (+h, +h, +h)
+			Vector3<T>(-h, -h, -h),
+			Vector3<T>(+h, -h, -h),
+			Vector3<T>(-h, +h, -h),
+			Vector3<T>(+h, +h, -h),
+			Vector3<T>(-h, -h, +h),
+			Vector3<T>(+h, -h, +h),
+			Vector3<T>(-h, +h, +h),
+			Vector3<T>(+h, +h, +h)
 	};
 
-	return Vector3 < T > (width(), height(), depth()) * offset[idx] + center();
+	return Vector3<T>(width(), height(), depth()) * offset[idx] + center();
 }
 
 template<typename T>
@@ -78,15 +78,9 @@ auto BoundingBox3<T>::length(size_t axis) -> T
 template<typename T>
 auto BoundingBox3<T>::overlaps(const BoundingBox3 &other) const -> bool
 {
-	if (_upper_corner.x() < other._lower_corner.x() || _lower_corner.x() > other._upper_corner.x())
-		return false;
-
-	if (_upper_corner.y() < other._lower_corner.y() || _lower_corner.y() > other._upper_corner.y())
-		return false;
-
-	if (_upper_corner.z() < other._lower_corner.z() || _lower_corner.z() > other._upper_corner.z())
-		return false;
-
+	if (_upper_corner.x() < other._lower_corner.x() || _lower_corner.x() > other._upper_corner.x()) return false;
+	if (_upper_corner.y() < other._lower_corner.y() || _lower_corner.y() > other._upper_corner.y()) return false;
+	if (_upper_corner.z() < other._lower_corner.z() || _lower_corner.z() > other._upper_corner.z()) return false;
 	return true;
 }
 }

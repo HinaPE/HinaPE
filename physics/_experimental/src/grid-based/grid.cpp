@@ -31,8 +31,6 @@ void Hina::Grid3::parallel_for_each_cell_index(const std::function<void(size_t, 
 }
 
 
-
-
 void Hina::ScalarGrid3::resize(const Hina::Base::Size3 &resolution, const Hina::mVector3 &grid_spacing, const Hina::mVector3 &origin, Hina::real initial_value)
 {
 	// update opt
@@ -47,8 +45,6 @@ void Hina::ScalarGrid3::resize(const Hina::Base::Size3 &resolution, const Hina::
 }
 
 
-
-
 void Hina::VectorGrid3::resize(const Hina::Base::Size3 &resolution, const Hina::mVector3 &grid_spacing, const Hina::mVector3 &origin, const Hina::mVector3 &initial_value)
 {
 	Grid3::resize(resolution, grid_spacing, origin);
@@ -59,4 +55,45 @@ void Hina::CollocatedVectorGrid3::on_resize(const Hina::Base::Size3 &resolution,
 }
 void Hina::FaceCenteredVectorGrid3::on_resize(const Hina::Base::Size3 &resolution, const Hina::mVector3 &grid_spacing, const Hina::mVector3 &origin, const Hina::mVector3 &initial_value)
 {
+}
+auto Hina::FaceCenteredVectorGrid3::value_at_cell_center(size_t i, size_t j, size_t k) const -> Hina::mVector3
+{
+	return Constant::Half * mVector3(_u_data(i, j, k) + _u_data(i + 1, j, k),
+									 _v_data(i, j, k) + _v_data(i, j + 1, k),
+									 _w_data(i, j, k) + _w_data(i, j, k + 1));
+}
+auto Hina::FaceCenteredVectorGrid3::divergence_at_cell_center(size_t i, size_t j, size_t k) const -> Hina::real
+{
+	return (_u_data(i + 1, j, k) - _u_data(i, j, k)) / _opt.grid_spacing.x() +
+		   (_v_data(i, j + 1, k) - _v_data(i, j, k)) / _opt.grid_spacing.y() +
+		   (_w_data(i, j, k + 1) - _w_data(i, j, k)) / _opt.grid_spacing.z();
+}
+auto Hina::FaceCenteredVectorGrid3::curl_at_cell_center(size_t i, size_t j, size_t k) const -> Hina::mVector3
+{
+	const Base::Size3 &res = _opt.resolution;
+	const mVector3 &gs = _opt.grid_spacing;
+
+	mVector3 left = value_at_cell_center((i > 0) ? i - 1 : i, j, k);
+	mVector3 right = value_at_cell_center((i + 1 < res.x) ? i + 1 : i, j, k);
+	mVector3 down = value_at_cell_center(i, (j > 0) ? j - 1 : j, k);
+	mVector3 up = value_at_cell_center(i, (j + 1 < res.y) ? j + 1 : j, k);
+	mVector3 back = value_at_cell_center(i, j, (k > 0) ? k - 1 : k);
+	mVector3 front = value_at_cell_center(i, j, (k + 1 < res.z) ? k + 1 : k);
+
+	real Fx_ym = down.x();
+	real Fx_yp = up.x();
+	real Fx_zm = back.x();
+	real Fx_zp = front.x();
+	real Fy_xm = left.y();
+	real Fy_xp = right.y();
+	real Fy_zm = back.y();
+	real Fy_zp = front.y();
+	real Fz_xm = left.z();
+	real Fz_xp = right.z();
+	real Fz_ym = down.z();
+	real Fz_yp = up.z();
+
+	return {(Fz_yp - Fz_ym) / (2 * gs.y()) - (Fy_zp - Fy_zm) / (2 * gs.z()),
+			(Fx_zp - Fx_zm) / (2 * gs.z()) - (Fz_xp - Fz_xm) / (2 * gs.x()),
+			(Fy_xp - Fy_xm) / (2 * gs.x()) - (Fx_yp - Fx_ym) / (2 * gs.y())};
 }
