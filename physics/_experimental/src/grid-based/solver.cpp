@@ -4,6 +4,7 @@ Hina::GridFluidSolver::GridFluidSolver(const Hina::Base::Size3 &resolution, cons
 {
 	_grids = std::make_shared<GridSystemData3>();
 	_grids->resize(resolution, grid_spacing, origin);
+	_opt.fix_sub_time_step = false;
 }
 void Hina::GridFluidSolver::on_physics_init()
 {

@@ -28,6 +28,24 @@ public:
 private:
 	real _value = Constant::Zero;
 };
+class CustomScalarField3 final : public ScalarField3
+{
+public:
+	auto sample(const mVector3 &x) const -> real final { return _custom_function(x); }
+	auto gradient(const mVector3 &x) const -> mVector3 final { return _custom_gradient_function(x); }
+	auto laplacian(const mVector3 &x) const -> real final { return _custom_laplacian_function(x); }
+	auto sampler() const -> std::function<real(const mVector3 &)> final { return _custom_function; }
+
+public:
+	struct Opt
+	{
+		real _resolution = static_cast<real>(1e-3);
+	};
+private:
+	std::function<real(const mVector3 &)> _custom_function;
+	std::function<mVector3(const mVector3 &)> _custom_gradient_function;
+	std::function<real(const mVector3 &)> _custom_laplacian_function;
+};
 class VectorField3 : public Field3
 {
 public:

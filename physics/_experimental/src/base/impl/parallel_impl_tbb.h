@@ -84,6 +84,5 @@ void parallelRangeFor(IndexType begin_indexX, IndexType end_indexX, IndexType be
 					 policy);
 }
 }
-
 #endif
 #endif //HINAPE_PARALLEL_IMPL_TBB_H

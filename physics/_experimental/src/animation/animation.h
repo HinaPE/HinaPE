@@ -50,6 +50,9 @@ public:
 #ifdef HinaDebug
 	Timer timer;
 #endif
+
+private:
+
 };
 using AnimationPtr = std::shared_ptr<Animation>;
 }

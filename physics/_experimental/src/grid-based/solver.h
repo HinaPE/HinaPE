@@ -16,7 +16,7 @@ namespace Hina
 class GridFluidSolver : public PhysicsAnimation
 {
 public:
-	struct Opt
+	struct Opt : PhysicsAnimation::Opt
 	{
 		// Env
 		mVector3 gravity = mVector3(0, -9.8, 0);

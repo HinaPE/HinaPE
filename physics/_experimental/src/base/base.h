@@ -24,7 +24,7 @@
 //@formatter:off
 namespace Hina
 {
-using real        = double;
+using real        = float;
 using mVector3    = Base::Vector3<real>;
 using mVectorUI3  = Base::Vector3<size_t>;
 using mQuaternion = Base::Quaternion<real>;
@@ -48,12 +48,12 @@ static constexpr real InvTwoPI  = static_cast<real>(0.1591549430918953358);
 static constexpr real InvHalfPI = static_cast<real>(0.6366197723675813431);
 static constexpr real E         = static_cast<real>(2.7182818284590452354);
 static constexpr real Log2E     = static_cast<real>(1.4426950408889634074);
-static constexpr real Log10E    = static_cast<real>(0.43429448190325182765);
-static constexpr real Ln2       = static_cast<real>(0.69314718055994530942);
-static constexpr real Ln10      = static_cast<real>(2.30258509299404568402);
-static constexpr real Sqrt2     = static_cast<real>(1.41421356237309504880);
-static constexpr real Sqrt3     = static_cast<real>(1.73205080756887729352);
-static constexpr real SqrtHalf  = static_cast<real>(0.70710678118654752440);
+static constexpr real Log10E    = static_cast<real>(0.4342944819032518276);
+static constexpr real Ln2       = static_cast<real>(0.6931471805599453094);
+static constexpr real Ln10      = static_cast<real>(2.3025850929940456840);
+static constexpr real Sqrt2     = static_cast<real>(1.4142135623730950488);
+static constexpr real Sqrt3     = static_cast<real>(1.7320508075688772935);
+static constexpr real SqrtHalf  = static_cast<real>(0.7071067811865475244);
 }
 
 namespace Direction

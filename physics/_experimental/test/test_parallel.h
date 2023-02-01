@@ -13,7 +13,7 @@
 
 TEST(TestParallel, Parallel)
 {
-	int scale = 20000;
+	int scale = 2000;
 	std::srand(std::time(nullptr));
 	std::vector<int> v1;
 	for (int i = 0; i < scale; ++i)

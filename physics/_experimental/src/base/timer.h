@@ -18,7 +18,7 @@ public:
 	inline void reset() { _starting_point = std::chrono::steady_clock::now(); }
 
 public:
-	static int stack_depth;
+	int stack_depth{}; // TODO
 	Timer()
 	{
 		if (stack_depth == 0) { std::cout << "==================== Start Evaluation ====================" << std::endl; }
