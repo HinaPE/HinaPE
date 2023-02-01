@@ -33,8 +33,8 @@ protected:
 	void on_physics_init() final;
 	void on_physics_update(float dt) final;
 
-	virtual void on_before_physics_update(float dt) {}; // empty now
-	virtual void on_after_physics_update(float dt) {}; // empty now
+	/* NOT IMPLEMENTED */ virtual void on_before_physics_update(float dt) {};
+	/* NOT IMPLEMENTED */ virtual void on_after_physics_update(float dt) {};
 	virtual void compute_external_forces(float dt);
 	virtual void compute_viscosity(float dt);
 	virtual void compute_pressure(float dt);

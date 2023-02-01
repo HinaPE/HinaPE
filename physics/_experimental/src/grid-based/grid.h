@@ -129,12 +129,14 @@ public:
 	inline auto v(size_t i, size_t j, size_t k) const -> const real & { return _v_data(i, j, k); }
 	inline auto w(size_t i, size_t j, size_t k) const -> const real & { return _w_data(i, j, k); }
 
-	inline void for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const { _u_data.for_each_index(func); }
-	inline void for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const { _v_data.for_each_index(func); }
-	inline void for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const { _w_data.for_each_index(func); }
-	inline void parallel_for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const { _u_data.parallel_for_each_index(func); }
-	inline void parallel_for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const { _v_data.parallel_for_each_index(func); }
-	inline void parallel_for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const {	_w_data.parallel_for_each_index(func); }
+	void for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const { _u_data.for_each_index(func); }
+	void for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const { _v_data.for_each_index(func); }
+	void for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const { _w_data.for_each_index(func); }
+	void parallel_for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const { _u_data.parallel_for_each_index(func); }
+	void parallel_for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const { _v_data.parallel_for_each_index(func); }
+	void parallel_for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const { _w_data.parallel_for_each_index(func); }
+
+	inline auto clone() const -> std::shared_ptr<FaceCenteredVectorGrid3> { return {new FaceCenteredVectorGrid3(*this), [](FaceCenteredVectorGrid3 *obj) { delete obj; }}; }
 
 public: // math
 	auto value_at_cell_center(size_t i, size_t j, size_t k) const -> mVector3;

@@ -40,6 +40,15 @@ void Hina::GridFluidSolver::compute_viscosity(float dt)
 }
 void Hina::GridFluidSolver::compute_pressure(float dt)
 {
+	if (_pressure_solver != nullptr)
+	{
+		auto vel = _grids->_velocity;
+		auto vel0 = _grids->_velocity->clone();
+
+//		_pressure_solver->solve(vel0, dt, vel,
+
+		apply_boundary_condition();
+	}
 }
 void Hina::GridFluidSolver::compute_advection(float dt)
 {

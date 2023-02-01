@@ -1,6 +1,8 @@
 #ifndef HINAPE_FIELD_H
 #define HINAPE_FIELD_H
 
+#include <utility>
+
 #include "base/base.h"
 
 namespace Hina
@@ -21,6 +23,8 @@ public:
 	auto gradient(const mVector3 &x) const -> mVector3 final { return mVector3::Zero(); }
 	auto laplacian(const mVector3 &x) const -> real final { return Constant::Zero; }
 	auto sampler() const -> std::function<real(const mVector3 &)> final { return [this](const mVector3 &) { return _value; }; }
+public:
+	explicit ConstantScalarField3(real value) : _value(value) {}
 private:
 	real _value = Constant::Zero;
 };
@@ -39,6 +43,8 @@ public:
 	auto divergence(const mVector3 &x) const -> real final { return Constant::Zero; }
 	auto curl(const mVector3 &x) const -> mVector3 final { return mVector3::Zero(); }
 	auto sampler() const -> std::function<mVector3(const mVector3 &)> final { return [this](const mVector3 &) -> mVector3 { return _value; }; }
+public:
+	explicit ConstantVectorField3(mVector3 value) : _value(std::move(value)) {}
 private:
 	mVector3 _value = mVector3::Zero();
 };
