@@ -15,6 +15,44 @@ namespace Hina
 {
 class GridFluidSolver : public PhysicsAnimation
 {
+protected:
+	void on_physics_init() final
+	{
+		_update_collider(Constant::Zero);
+		_update_emitter(Constant::Zero);
+	}
+	void on_physics_update(float dt) final
+	{
+		_before_physics_update(dt);
+
+		compute_external_forces(dt);
+		compute_viscosity(dt);
+		compute_pressure(dt);
+		compute_advection(dt);
+
+		_after_physics_update(dt);
+	}
+	void _before_physics_update(float dt)
+	{
+		_update_collider(dt);
+		_update_emitter(dt);
+		_apply_boundary_condition();
+
+		on_before_physics_update(dt);
+	}
+	void _after_physics_update(float dt)
+	{
+		on_after_physics_update(dt);
+	}
+	virtual void on_before_physics_update(float dt) {};
+	virtual void on_after_physics_update(float dt) {};
+
+protected:
+	virtual void compute_external_forces(float dt);
+	virtual void compute_viscosity(float dt);
+	virtual void compute_pressure(float dt);
+	virtual void compute_advection(float dt);
+
 public:
 	struct Opt : PhysicsAnimation::Opt
 	{
@@ -29,24 +67,11 @@ public:
 public:
 	GridFluidSolver(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin);
 
-protected:
-	void on_physics_init() final;
-	void on_physics_update(float dt) final;
-
-	/* NOT IMPLEMENTED */ virtual void on_before_physics_update(float dt) {};
-	/* NOT IMPLEMENTED */ virtual void on_after_physics_update(float dt) {};
-	virtual void compute_external_forces(float dt);
-	virtual void compute_viscosity(float dt);
-	virtual void compute_pressure(float dt);
-	virtual void compute_advection(float dt);
-
 private:
-	void before_physics_update(float dt);
-	void after_physics_update(float dt);
-	void update_collider(float dt);
-	void update_emitter(float dt);
-
-	void apply_boundary_condition();
+	void _update_collider(float dt);
+	void _update_emitter(float dt);
+	void _apply_boundary_condition();
+	auto ___VALID_CHECK___() -> bool final;
 
 private:
 	GridSystemData3Ptr _grids;

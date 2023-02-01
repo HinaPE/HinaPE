@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <memory>
+#include <cassert>
 
 #ifdef HinaDebug
 #include <iostream>
@@ -32,6 +33,8 @@ class Animation
 public:
 	virtual void update(const Frame &frame) final
 	{
+		assert(___VALID_CHECK___());
+
 #ifdef HinaDebug
 		timer.reset();
 #endif
@@ -52,7 +55,7 @@ public:
 #endif
 
 private:
-
+	virtual auto ___VALID_CHECK___() -> bool { return true; }
 };
 using AnimationPtr = std::shared_ptr<Animation>;
 }
