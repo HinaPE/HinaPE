@@ -48,11 +48,33 @@ public:
 private:
 	mVector3 _value = mVector3::Zero();
 };
-using Field3Ptr = std::shared_ptr<Field3>;
-using ScalarField3Ptr = std::shared_ptr<ScalarField3>;
-using VectorField3Ptr = std::shared_ptr<VectorField3>;
+class CustomVectorField3 final : public VectorField3
+{
+public:
+	auto sample(const mVector3 &x) const -> mVector3 final { return _custom_function(x); }
+	auto sampler() const -> std::function<mVector3(const mVector3 &)> final { return _custom_function; }
+	auto divergence(const mVector3 &x) const -> real final { return _custom_divergence_function(x); }
+	auto curl(const mVector3 &x) const -> mVector3 final { return _custom_curl_function(x); }
+
+public:
+	struct Opt
+	{
+		real _resolution = 1e-3;
+	} _opt;
+
+private:
+	std::function<mVector3(const mVector3 &)> _custom_function;
+	std::function<real(const mVector3 &)> _custom_divergence_function;
+	std::function<mVector3(const mVector3 &)> _custom_curl_function;
+};
+
+//@formatter:off
+using Field3Ptr               = std::shared_ptr<Field3>;
+using ScalarField3Ptr         = std::shared_ptr<ScalarField3>;
+using VectorField3Ptr         = std::shared_ptr<VectorField3>;
 using ConstantScalarField3Ptr = std::shared_ptr<ConstantScalarField3>;
 using ConstantVectorField3Ptr = std::shared_ptr<ConstantVectorField3>;
+using CustomVectorField3Ptr   = std::shared_ptr<CustomVectorField3>;
+//@formatter:on
 }
-
 #endif //HINAPE_FIELD_H

@@ -165,17 +165,17 @@ private:
 
 
 
-// ============================== Shared pointers ==============================
-using Grid3Ptr = std::shared_ptr<Grid3>;
-using ScalarGrid3Ptr = std::shared_ptr<ScalarGrid3>;
-using CellCenteredScalarGrid3Ptr = std::shared_ptr<CellCenteredScalarGrid3>;
+//@formatter:off
+using Grid3Ptr                     = std::shared_ptr<Grid3>;
+using ScalarGrid3Ptr               = std::shared_ptr<ScalarGrid3>;
+using CellCenteredScalarGrid3Ptr   = std::shared_ptr<CellCenteredScalarGrid3>;
 using VertexCenteredScalarGrid3Ptr = std::shared_ptr<VertexCenteredScalarGrid3>;
-using VectorGrid3Ptr = std::shared_ptr<VectorGrid3>;
-using CollocatedVectorGrid3Ptr = std::shared_ptr<CollocatedVectorGrid3>;
-using CellCenteredVectorGrid3Ptr = std::shared_ptr<CellCenteredVectorGrid3>;
+using VectorGrid3Ptr               = std::shared_ptr<VectorGrid3>;
+using CollocatedVectorGrid3Ptr     = std::shared_ptr<CollocatedVectorGrid3>;
+using CellCenteredVectorGrid3Ptr   = std::shared_ptr<CellCenteredVectorGrid3>;
 using VertexCenteredVectorGrid3Ptr = std::shared_ptr<VertexCenteredVectorGrid3>;
-using FaceCenteredVectorGrid3Ptr = std::shared_ptr<FaceCenteredVectorGrid3>;
-// ============================== Shared pointers ==============================
+using FaceCenteredVectorGrid3Ptr   = std::shared_ptr<FaceCenteredVectorGrid3>;
+//@formatter:on
 }
 
 #endif //HINAPE_GRID_H
