@@ -129,12 +129,12 @@ public:
 	inline auto v(size_t i, size_t j, size_t k) const -> const real & { return _v_data(i, j, k); }
 	inline auto w(size_t i, size_t j, size_t k) const -> const real & { return _w_data(i, j, k); }
 
-	inline void for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
-	inline void for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
-	inline void for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
-	inline void parallel_for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
-	inline void parallel_for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
-	inline void parallel_for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const {}
+	inline void for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const { _u_data.for_each_index(func); }
+	inline void for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const { _v_data.for_each_index(func); }
+	inline void for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const { _w_data.for_each_index(func); }
+	inline void parallel_for_each_u_index(const std::function<void(size_t, size_t, size_t)> &func) const { _u_data.parallel_for_each_index(func); }
+	inline void parallel_for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const { _v_data.parallel_for_each_index(func); }
+	inline void parallel_for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const {	_w_data.parallel_for_each_index(func); }
 
 public: // math
 	inline auto value_at_cell_center(size_t i, size_t j, size_t k) const -> mVector3 { return Constant::Half * mVector3(_u_data(i, j, k) + _u_data(i + 1, j, k), _v_data(i, j, k) + _v_data(i, j + 1, k), _w_data(i, j, k) + _w_data(i, j, k + 1)); }

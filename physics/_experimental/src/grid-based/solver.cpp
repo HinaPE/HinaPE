@@ -27,11 +27,11 @@ void Hina::GridFluidSolver::compute_external_forces(float dt)
 	// gravity
 	auto vel = _grids->_velocity;
 	if (_opt.gravity.x() > Constant::Epsilon)
-		vel->for_each_u_index([&](size_t i, size_t j, size_t k) { vel->u(i, j, k) += _opt.gravity.x() * dt; });
+		vel->parallel_for_each_u_index([&](size_t i, size_t j, size_t k) { vel->u(i, j, k) += _opt.gravity.x() * dt; });
 	if (_opt.gravity.y() > Constant::Epsilon)
-		vel->for_each_v_index([&](size_t i, size_t j, size_t k) { vel->v(i, j, k) += _opt.gravity.y() * dt; });
+		vel->parallel_for_each_u_index([&](size_t i, size_t j, size_t k) { vel->v(i, j, k) += _opt.gravity.y() * dt; });
 	if (_opt.gravity.z() > Constant::Epsilon)
-		vel->for_each_w_index([&](size_t i, size_t j, size_t k) { vel->w(i, j, k) += _opt.gravity.z() * dt; });
+		vel->parallel_for_each_u_index([&](size_t i, size_t j, size_t k) { vel->w(i, j, k) += _opt.gravity.z() * dt; });
 
 	apply_boundary_condition();
 }
