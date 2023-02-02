@@ -42,7 +42,7 @@ public:
 	{
 		// one shot
 		bool is_one_shot = true;
-		bool has_emited = false;
+		bool has_emitted = false;
 	} _opt;
 
 protected:

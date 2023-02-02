@@ -35,7 +35,7 @@ void Hina::VolumeGridEmitter3::on_update(Hina::real current_time, Hina::real tim
 	if (_opt.is_one_shot)
 		_opt.is_enabled = false;
 
-	_opt.has_emited = true;
+	_opt.has_emitted = true;
 }
 void Hina::VolumeGridEmitter3::_emit()
 {
