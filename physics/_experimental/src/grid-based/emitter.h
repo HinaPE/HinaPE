@@ -17,6 +17,7 @@ public:
 	{
 		bool is_enabled = false;
 	} _opt;
+	virtual void VALID_CHECK() {}
 
 protected:
 	virtual void on_update(real current_time, real time_interval) = 0;
@@ -44,6 +45,7 @@ public:
 		bool is_one_shot = true;
 		bool has_emitted = false;
 	} _opt;
+	void VALID_CHECK() final;
 
 protected:
 	void on_update(real current_time, real time_interval) final;

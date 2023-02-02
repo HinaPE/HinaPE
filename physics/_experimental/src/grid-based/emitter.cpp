@@ -1,6 +1,8 @@
 #include "emitter.h"
 void Hina::GridEmitter3::update(Hina::real current_time, Hina::real time_interval)
 {
+	VALID_CHECK();
+
 	if (_on_begin_update_callback)
 		_on_begin_update_callback(current_time, time_interval);
 	on_update(current_time, time_interval);
@@ -27,7 +29,7 @@ void Hina::VolumeGridEmitter3::add_target(const Hina::ScalarGrid3Ptr &scalar_gri
 void Hina::VolumeGridEmitter3::add_target(const Hina::VectorGrid3Ptr &vector_grid_target, Hina::VolumeGridEmitter3::ScalarMapper &mapper) { _vector_targets.emplace_back(vector_grid_target, mapper); }
 void Hina::VolumeGridEmitter3::on_update(Hina::real current_time, Hina::real time_interval)
 {
-	if (!_opt.is_enabled)
+	if (!GridEmitter3::_opt.is_enabled)
 		return;
 
 	_emit();
@@ -39,4 +41,9 @@ void Hina::VolumeGridEmitter3::on_update(Hina::real current_time, Hina::real tim
 }
 void Hina::VolumeGridEmitter3::_emit()
 {
+}
+void Hina::VolumeGridEmitter3::VALID_CHECK()
+{
+	if (_scalar_targets.empty() && _vector_targets.empty())
+		throw std::runtime_error("VolumeGridEmitter3::_scalar_targets and _vector_targets are empty");
 }

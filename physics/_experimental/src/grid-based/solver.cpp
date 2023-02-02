@@ -44,10 +44,10 @@ void Hina::GridFluidSolver::_apply_boundary_condition()
 //	auto vel = _grids->_velocity;
 //	if (vel != nullptr && )
 }
-auto Hina::GridFluidSolver::___VALID_CHECK___() -> bool
+void Hina::GridFluidSolver::VALID_CHECK()
 {
 	if (_grids->_opt.resolution.x == 0 || _grids->_opt.resolution.y == 0 || _grids->_opt.resolution.z == 0)
-		return false;
+		throw std::runtime_error("Resolution is not set");
 
-	return true;
+	_emitter->VALID_CHECK();
 }

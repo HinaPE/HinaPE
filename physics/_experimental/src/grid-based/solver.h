@@ -63,6 +63,7 @@ public:
 		real viscosity = 0.0;
 		real max_cfl = 5.0;
 	} _opt;
+	void VALID_CHECK() final;
 
 public:
 	GridFluidSolver(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin);
@@ -71,7 +72,6 @@ private:
 	void _update_collider(float dt);
 	void _update_emitter(float dt);
 	void _apply_boundary_condition();
-	auto ___VALID_CHECK___() -> bool final;
 
 private:
 	GridSystemData3Ptr _grids;

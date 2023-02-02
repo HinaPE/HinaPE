@@ -33,7 +33,7 @@ class Animation
 public:
 	virtual void update(const Frame &frame) final
 	{
-		assert(___VALID_CHECK___());
+		VALID_CHECK();
 
 #ifdef HinaDebug
 		timer.reset();
@@ -45,6 +45,7 @@ public:
 		timer.duration("Total Time");
 #endif
 	}
+	virtual void VALID_CHECK() {}
 
 protected:
 	virtual void on_update(const Frame &frame) = 0;
@@ -53,9 +54,6 @@ public:
 #ifdef HinaDebug
 	Timer timer;
 #endif
-
-private:
-	virtual auto ___VALID_CHECK___() -> bool { return true; }
 };
 using AnimationPtr = std::shared_ptr<Animation>;
 }
