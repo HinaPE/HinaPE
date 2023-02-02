@@ -6,6 +6,8 @@
 #endif
 #include <type_traits>
 
+#include "math_ext.h"
+
 namespace Hina::Base
 {
 template<typename T>
@@ -20,6 +22,10 @@ public:
 	auto z() const -> const T &;
 	auto at(size_t i) -> T &;
 	auto at(size_t i) const -> const T &;
+	auto sum() const -> T;
+	auto avg() const -> T;
+	auto min() const -> T;
+	auto max() const -> T;
 	auto dot(const Vector3 &v) const -> T;
 	auto cross(const Vector3 &v) const -> Vector3;
 	auto length() -> T;
@@ -80,9 +86,11 @@ template<typename T> auto operator/(T a, const Vector3<T>& b) -> Vector3<T> { re
 template<typename T> auto operator/(const Vector3<T>& a, const Vector3<T>& b) -> Vector3<T> { return { a.x() / b.x(), a.y() / b.y(), a.z() / b.z()}; }
 template<typename T> auto max(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T> { return { std::max(a.x(), b.x()), std::max(a.y(), b.y()), std::max(a.z(), b.z()) };}
 template<typename T> auto min(const Vector3<T> &a, const Vector3<T> &b) -> Vector3<T>{ return { std::min(a.x(), b.x()), std::min(a.y(), b.y()), std::min(a.z(), b.z()) };}
+template<typename T> auto clamp(const Vector3<T> &v, const Vector3<T> &low, const Vector3<T> &high) -> Vector3<T> { return {clamp(v.x(), low.x(), high.x()), clamp(v.y(), low.y(), high.y()), clamp(v.z(), low.z(), high.z())}; }
+template<typename T> auto ceil(const Vector3<T> &a) -> Vector3<T> { return {std::ceil(a.x()), std::ceil(a.y()), std::ceil(a.z())}; }
+template<typename T> auto floor(const Vector3<T> &a) -> Vector3<T> { return {std::floor(a.x()), std::floor(a.y()), std::floor(a.z())}; }
 //@formatter:on
 }
-
 #ifdef HINAPE_EIGEN
 #include "base/impl/vector_impl_eigen.h"
 #else
