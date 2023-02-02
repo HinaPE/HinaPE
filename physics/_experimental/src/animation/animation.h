@@ -5,7 +5,7 @@
 #include <memory>
 #include <cassert>
 
-#ifdef HinaDebug
+#ifdef HINA_DEBUG
 #include <iostream>
 #endif
 
@@ -14,7 +14,7 @@ namespace Hina
 struct Frame final
 {
 public:
-	inline auto time() const -> float { return static_cast<float >(_index) * _time_step; }
+	inline auto time() const -> float { return static_cast<float>(_index) * _time_step; }
 	inline void advance() { ++_index; }
 	inline void advance(int delta) { _index += delta; }
 
@@ -24,7 +24,7 @@ public:
 };
 using FramePtr = std::shared_ptr<Frame>;
 
-#ifdef HinaDebug
+#ifdef HINA_DEBUG
 #include "base/timer.h"
 #endif
 
@@ -33,15 +33,17 @@ class Animation
 public:
 	virtual void update(const Frame &frame) final
 	{
-		VALID_CHECK();
+#ifdef HINA_DEBUG
+		VALID_CHECK(); // if not debug mode, this will be optimized out
+#endif
 
-#ifdef HinaDebug
+#ifdef HINA_DEBUG
 		timer.reset();
 #endif
 
 		on_update(frame);
 
-#ifdef HinaDebug
+#ifdef HINA_DEBUG
 		timer.duration("Total Time");
 #endif
 	}
@@ -51,7 +53,7 @@ protected:
 	virtual void on_update(const Frame &frame) = 0;
 
 public:
-#ifdef HinaDebug
+#ifdef HINA_DEBUG
 	Timer timer;
 #endif
 };

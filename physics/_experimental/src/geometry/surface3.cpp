@@ -78,7 +78,7 @@ auto Hina::Plane3::_closest_normal_local(const Hina::mVector3 &other_point) cons
 }
 
 
-// ============================== Plane ==============================
+// ============================== Cylinder3 ==============================
 auto Hina::Cylinder3::_intersects_local(const Hina::mRay3 &ray) const -> bool
 {
 	return false;
@@ -102,6 +102,12 @@ auto Hina::Cylinder3::_closest_distance_local(const Hina::mVector3 &other_point)
 auto Hina::Cylinder3::_closest_normal_local(const Hina::mVector3 &other_point) const -> Hina::mVector3
 {
 	return {};
+}
+
+
+// ============================== SurfaceToImplicit3 ==============================
+Hina::SurfaceToImplicit3::SurfaceToImplicit3(const std::shared_ptr<Surface3> &surface) : _surface(surface)
+{
 }
 auto Hina::SurfaceToImplicit3::_intersects_local(const Hina::mRay3 &ray) const -> bool
 {

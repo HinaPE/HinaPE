@@ -26,8 +26,6 @@ protected:
 private:
 	OnBeginUpdateCallback _on_begin_update_callback = nullptr;
 };
-using GridEmitter3Ptr = std::shared_ptr<GridEmitter3>;
-
 
 class VolumeGridEmitter3 final : public GridEmitter3
 {
@@ -61,6 +59,10 @@ private:
 	std::vector<VectorTarget> _vector_targets;
 	ImplicitSurface3Ptr _source_region;
 };
+
+
+using GridEmitter3Ptr = std::shared_ptr<GridEmitter3>;
+using VolumeGridEmitter3Ptr = std::shared_ptr<VolumeGridEmitter3>;
 }
 
 #endif //HINAPE_EMITTER_H

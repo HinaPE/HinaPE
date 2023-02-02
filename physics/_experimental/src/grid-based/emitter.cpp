@@ -48,9 +48,30 @@ void Hina::VolumeGridEmitter3::_emit()
 		const auto &grid = std::get<0>(target);
 		const auto &mapper = std::get<1>(target);
 
-		auto pos = grid->data_origin();
+		auto pos = grid->data_position();
+		grid->parallel_for_each_data_point_index(
+				[&](size_t i, size_t j, size_t k)
+				{
+					mVector3 gx = pos(i, j, k);
+					real sdf = _source_region->signed_distance(gx);
+					(*grid)(i, j, k) = mapper(sdf, gx, (*grid)(i, j, k));
+				}
+		);
 	}
-	for (const auto &target: _vector_targets) {}
+	for (const auto &target: _vector_targets)
+	{
+		const auto &grid = std::get<0>(target);
+		const auto &mapper = std::get<1>(target);
+
+		auto collocated = std::dynamic_pointer_cast<CollocatedVectorGrid3Ptr>(grid);
+		if (collocated != nullptr)
+		{
+		}
+		auto face_centered = std::dynamic_pointer_cast<FaceCenteredVectorGrid3Ptr>(grid);
+		if (face_centered != nullptr)
+		{
+		}
+	}
 }
 void Hina::VolumeGridEmitter3::VALID_CHECK()
 {

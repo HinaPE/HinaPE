@@ -11,7 +11,7 @@ file(GLOB_RECURSE HINAPE_TEST_SOURCES "src/*.cpp" "src/*.h" "test/*.cpp" "test/*
 add_executable(HINAPE_TEST ${HINAPE_TEST_SOURCES})
 set_target_properties(HINAPE_TEST PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HINAPE_TEST PUBLIC "src" "vendor/eigen3")
-target_compile_definitions(HINAPE_TEST PUBLIC HINAPE_ENABLE_TEST HINAPE_EIGEN HinaDebug)
+target_compile_definitions(HINAPE_TEST PUBLIC HINAPE_ENABLE_TEST HINAPE_EIGEN HINA_DEBUG)
 
 enable_testing()
 target_link_libraries(HINAPE_TEST GTest::gtest_main)

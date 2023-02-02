@@ -114,6 +114,9 @@ protected:
 
 class SurfaceToImplicit3 final : public ImplicitSurface3
 {
+public:
+	explicit SurfaceToImplicit3(const std::shared_ptr<Surface3> &surface);
+
 protected:
 	auto _intersects_local(const mRay3 &ray) const -> bool final;
 	auto _bounding_box_local() const -> mBBox3 final;
@@ -121,14 +124,18 @@ protected:
 	auto _closest_intersection_local(const mRay3 &ray) const -> SurfaceRayIntersection3 final;
 	auto _closest_normal_local(const mVector3 &other_point) const -> mVector3 final;
 	auto _signed_distance_local(const mVector3 &other_point) const -> real final;
+
 private:
 	std::shared_ptr<Surface3> _surface;
 };
 
-using Surface3Ptr = std::shared_ptr<Surface3>;
-using Box3Ptr = std::shared_ptr<Box3>;
-using Sphere3Ptr = std::shared_ptr<Sphere3>;
-using ImplicitSurface3Ptr = std::shared_ptr<ImplicitSurface3>;
+//@formatter:off
+using Surface3Ptr           = std::shared_ptr<Surface3>;
+using Box3Ptr               = std::shared_ptr<Box3>;
+using Sphere3Ptr            = std::shared_ptr<Sphere3>;
+using ImplicitSurface3Ptr   = std::shared_ptr<ImplicitSurface3>;
+using SurfaceToImplicit3Ptr = std::shared_ptr<SurfaceToImplicit3>;
+//@formatter:on
 }
 
 #endif //HINAPE_SURFACE3_H

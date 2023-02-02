@@ -13,8 +13,8 @@ public:
 	using DataPositionFunc = std::function<mVector3(size_t, size_t, size_t)>;
 	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin);
 	auto cell_center_position() const -> DataPositionFunc;
-	void for_each_cell_index(const std::function<void(size_t, size_t, size_t)> &func) const;
-	void parallel_for_each_cell_index(const std::function<void(size_t, size_t, size_t)> &func) const;
+	void for_each_cell_index(const std::function<void(size_t, size_t, size_t)> &func) const { for (size_t k = 0; k < _opt.resolution.z; ++k) for (size_t j = 0; j < _opt.resolution.y; ++j) for (size_t i = 0; i < _opt.resolution.x; ++i) func(i, j, k); }
+	void parallel_for_each_cell_index(const std::function<void(size_t, size_t, size_t)> &func) const { Base::parallelFor((size_t) 0, _opt.resolution.x, (size_t) 0, _opt.resolution.y, (size_t) 0, _opt.resolution.z, [&func](size_t i, size_t j, size_t k) { func(i, j, k); }); }
 
 public:
 	struct Opt
@@ -32,6 +32,10 @@ public:
 // ============================== ScalarGrid3 ==============================
 class ScalarGrid3 : public Grid3, public ScalarField3
 {
+public:
+	void for_each_data_point_index(const std::function<void(size_t, size_t, size_t)> &func) const { _data.for_each_index(func); }
+	void parallel_for_each_data_point_index(const std::function<void(size_t, size_t, size_t)> &func) const { _data.parallel_for_each_index(func); }
+
 public: // implement ScalarField3
 	inline auto sample(const mVector3 &x) const -> real final { return _sampler(x); }
 	inline auto sampler() const -> std::function<real(const mVector3 &)> final { return _sampler; }
