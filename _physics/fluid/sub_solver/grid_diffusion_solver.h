@@ -3,7 +3,7 @@
 
 #include "geom/grid.h"
 
-namespace Hina
+namespace HinaPE
 {
 class GridDiffusionSolver3
 {
