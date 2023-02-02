@@ -101,4 +101,6 @@ using mVector3 = HinaPE::Math::Vector3<double>;
 #else
 using Vector3 = Math::Vector3<float>;
 #endif
+using mVector3i = HinaPE::Math::Vector3<int>;
+using mVector3u = HinaPE::Math::Vector3<size_t>;
 #endif //HINAPE_VECTOR_H

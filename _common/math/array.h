@@ -29,11 +29,11 @@ public:
 	template<typename Callback>
 	void for_each(const Callback &callback) const { for (size_t k = 0; k < _size.z; ++k) for (size_t j = 0; j < _size.y; ++j) for (size_t i = 0; i < _size.x; ++i) callback(at(i, j, k)); }
 	template<typename Callback>
-	void parallel_for_each(const Callback &callback) const { parallelFor((size_t) 0, _size.x, (size_t) 0, _size.y, (size_t) 0, _size.z, [&](size_t i, size_t j, size_t k) { callback(at(i, j, k)); }); }
+	void parallel_for_each(const Callback &callback) const { Util::parallelFor((size_t) 0, _size.x, (size_t) 0, _size.y, (size_t) 0, _size.z, [&](size_t i, size_t j, size_t k) { callback(at(i, j, k)); }); }
 	template<typename Callback>
 	void for_each_index(const Callback &callback) const { for (size_t k = 0; k < _size.z; ++k) for (size_t j = 0; j < _size.y; ++j) for (size_t i = 0; i < _size.x; ++i) callback(i, j, k); }
 	template<typename Callback>
-	void parallel_for_each_index(const Callback &callback) const { parallelFor((size_t) 0, _size.x, (size_t) 0, _size.y, (size_t) 0, _size.z, callback); }
+	void parallel_for_each_index(const Callback &callback) const { Util::parallelFor((size_t) 0, _size.x, (size_t) 0, _size.y, (size_t) 0, _size.z, callback); }
 
 private:
 	std::vector<T> _data;

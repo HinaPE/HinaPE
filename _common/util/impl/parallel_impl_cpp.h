@@ -5,7 +5,7 @@
 
 #include "../parallel.h"
 
-namespace HinaPE::Common
+namespace HinaPE::Util
 {
 template<typename IndexType, typename Function>
 void parallelFor(IndexType begin_index, IndexType end_index, const Function &function, ExecutionPolicy policy) {}
