@@ -17,10 +17,11 @@ public:
 	auto matrix3x3() const -> Matrix3x3<T>;
 	auto inverse() const -> Quaternion<T>;
 
-private:
+public:
 #ifdef HINAPE_EIGEN
 	Eigen::Quaternion<T, Eigen::DontAlign> _q;
 	constexpr explicit Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_);
+	constexpr explicit Quaternion() = default;
 #else
 	T w, x, y, z;
 #endif

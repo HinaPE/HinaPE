@@ -45,8 +45,8 @@ public:
 	inline auto to_world_direction(const Vector3<T> &dir_in_local) const -> Vector3<T> { return _orientation_mat3 * dir_in_local; }
 
 public:
-	constexpr explicit Transform3() = default;
-	constexpr explicit Transform3(Vector3<T> t, Quaternion<T> q);
+	explicit Transform3() = default;
+	explicit Transform3(Vector3<T> t, Quaternion<T> q);
 
 private:
 	Vector3<T> _translation;
@@ -56,7 +56,7 @@ private:
 };
 
 template<typename T>
-constexpr Transform3<T>::Transform3(Vector3<T> t, Quaternion<T> q) :
+Transform3<T>::Transform3(Vector3<T> t, Quaternion<T> q) :
 		_translation(t),
 		_orientation(q),
 		_orientation_mat3(q.matrix3x3()),

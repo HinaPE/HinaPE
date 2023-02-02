@@ -1,6 +1,8 @@
 #ifndef HINAPE_SURFACE3_H
 #define HINAPE_SURFACE3_H
 
+#include <utility>
+
 #include "base/base.h"
 
 namespace Hina
@@ -19,12 +21,12 @@ public:
 	virtual void update_query_engine() {}
 	virtual auto is_bounded() -> bool { return true; }
 	virtual auto is_valid_geometry() -> bool { return true; }
-	inline auto intersects(const mRay3 &ray) const -> bool { return intersects_local(_transform.to_local(ray)); }
-	inline auto bounding_box() const -> mBBox3 { return _transform.to_world(bounding_box_local()); }
-	inline auto closest_point(const mVector3 &other_point) const -> mVector3 { return _transform.to_world(closest_point_local(_transform.to_local(other_point))); }
-	inline auto closest_distance(const mVector3 &other_point) const -> real { return closest_distance_local(_transform.to_local(other_point)); }
-	inline auto closest_normal(const mVector3 &other_point) const -> mVector3 { return ((_opt.normal_flipped) ? -Constant::One : Constant::One) * _transform.to_world_direction(closest_normal_local(_transform.to_local(other_point))); }
-	inline auto is_inside(const mVector3 &point) -> bool { return _opt.normal_flipped == is_inside_local(_transform.to_local(point)); }
+	inline auto intersects(const mRay3 &ray) const -> bool { return _intersects_local(_transform.to_local(ray)); }
+	inline auto bounding_box() const -> mBBox3 { return _transform.to_world(_bounding_box_local()); }
+	inline auto closest_point(const mVector3 &other_point) const -> mVector3 { return _transform.to_world(_closest_point_local(_transform.to_local(other_point))); }
+	inline auto closest_distance(const mVector3 &other_point) const -> real { return _closest_distance_local(_transform.to_local(other_point)); }
+	inline auto closest_normal(const mVector3 &other_point) const -> mVector3 { return ((_opt.normal_flipped) ? -Constant::One : Constant::One) * _transform.to_world_direction(_closest_normal_local(_transform.to_local(other_point))); }
+	inline auto is_inside(const mVector3 &point) -> bool { return _opt.normal_flipped == _is_inside_local(_transform.to_local(point)); }
 
 public:
 	struct Opt
@@ -32,19 +34,36 @@ public:
 		bool normal_flipped = false;
 	} _opt;
 
-protected:
-	virtual auto intersects_local(const mRay3 &ray) const -> bool = 0;
-	virtual auto bounding_box_local() const -> mBBox3 = 0;
-	virtual auto closest_point_local(const mVector3 &other_point) const -> mVector3 = 0;
-	virtual auto closest_intersection_local(const mRay3 &ray) const -> SurfaceRayIntersection3 = 0;
-	virtual auto closest_distance_local(const mVector3 &other_point) const -> real = 0;
-	virtual auto closest_normal_local(const mVector3 &other_point) const -> mVector3 = 0;
-	inline virtual auto is_inside_local(const mVector3 &other_point) const -> bool { return (other_point - closest_point_local(other_point)).dot(closest_normal_local(other_point)) < 0; }
+public:
+	explicit Surface3(mTransform3 transform = mTransform3()) : _transform(std::move(transform)) {}
 
-private:
+protected:
+	virtual auto _intersects_local(const mRay3 &ray) const -> bool = 0;
+	virtual auto _bounding_box_local() const -> mBBox3 = 0;
+	virtual auto _closest_point_local(const mVector3 &other_point) const -> mVector3 = 0;
+	virtual auto _closest_intersection_local(const mRay3 &ray) const -> SurfaceRayIntersection3 = 0;
+	virtual auto _closest_distance_local(const mVector3 &other_point) const -> real = 0;
+	virtual auto _closest_normal_local(const mVector3 &other_point) const -> mVector3 = 0;
+	inline virtual auto _is_inside_local(const mVector3 &other_point) const -> bool { return (other_point - _closest_point_local(other_point)).dot(_closest_normal_local(other_point)) < 0; }
+
+protected:
 	mTransform3 _transform;
 };
+
+class ImplicitSurface3 : public Surface3
+{
+public:
+	auto signed_distance(const mVector3 &other_point) const -> real { return _opt.normal_flipped ? -_signed_distance_local(_transform.to_local(other_point)) : _signed_distance_local(_transform.to_local(other_point)); }
+
+protected:
+	auto _closest_distance_local(const mVector3 &other_point) const -> real override { return std::fabs(_signed_distance_local(other_point)); }
+	auto _is_inside_local(const mVector3 &other_point) const -> bool override { return Base::is_inside_sdf(_signed_distance_local(other_point)); }
+
+	virtual auto _signed_distance_local(const mVector3 &other_point) const -> real = 0;
+};
+
 using Surface3Ptr = std::shared_ptr<Surface3>;
+using ImplicitSurface3Ptr = std::shared_ptr<ImplicitSurface3>;
 }
 
 #endif //HINAPE_SURFACE3_H
