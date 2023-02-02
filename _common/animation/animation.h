@@ -1,13 +1,12 @@
 #ifndef HINAPE_ANIMATION_H
 #define HINAPE_ANIMATION_H
 
-#include "util/timer.h"
-
 #include <chrono>
 #include <memory>
 #include <cassert>
 
 #ifdef HINAPE_DEBUG
+#include "util/timer.h"
 #include <iostream>
 #endif
 
@@ -25,10 +24,6 @@ public:
 	float _time_step = 1.0f / 60.0f;
 };
 using FramePtr = std::shared_ptr<Frame>;
-
-#ifdef HINAPE_DEBUG
-#include "base/timer.h"
-#endif
 
 class Animation
 {

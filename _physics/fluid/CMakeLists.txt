@@ -5,9 +5,10 @@ if (NOT TARGET HINA_COMMON)
     return()
 endif ()
 
-file(GLOB_RECURSE SOLVERS_SRC "sub_solver/*.cpp" "sub_solver/*.h")
+file(GLOB_RECURSE SUB_SOLVERS_SRC "sub_solver/*.cpp" "sub_solver/*.h")
 file(GLOB_RECURSE EMITTERS_SRC "emitter/*.cpp" "emitter/*.h")
+file(GLOB SOLVERS_SRC "*.cpp" "*.h")
 
-add_library(HINAPE_FLUID STATIC ${SOLVERS_SRC} ${EMITTERS_SRC})
+add_library(HINAPE_FLUID STATIC ${SUB_SOLVERS_SRC} ${EMITTERS_SRC} ${SOLVERS_SRC})
 set_target_properties(HINAPE_FLUID PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_link_libraries(HINAPE_FLUID PRIVATE HINA_COMMON)
