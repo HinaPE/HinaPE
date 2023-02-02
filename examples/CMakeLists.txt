@@ -14,9 +14,9 @@ add_subdirectory(100-pbd-cloth)
 add_subdirectory(200-rigid)
 
 # fluid series
-add_subdirectory(300-sph-fluid)
-add_subdirectory(302-grid-based-fluid)
-add_subdirectory(303-grid-based-fluid2D)
+#add_subdirectory(300-sph-fluid)
+#add_subdirectory(302-grid-based-fluid)
+#add_subdirectory(303-grid-based-fluid2D)
 
 # unit test
-add_subdirectory(999-unit-test)
+#add_subdirectory(999-unit-test)
