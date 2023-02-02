@@ -13,7 +13,6 @@ class Grid3
 {
 public:
 	using DataPositionFunc = std::function<mVector3(size_t, size_t, size_t)>;
-	void resize(const mSize3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin);
 	auto cell_center_position() const -> DataPositionFunc;
 	void for_each_cell_index(const std::function<void(size_t, size_t, size_t)> &func) const { for (size_t k = 0; k < _opt.resolution.z; ++k) for (size_t j = 0; j < _opt.resolution.y; ++j) for (size_t i = 0; i < _opt.resolution.x; ++i) func(i, j, k); }
 	void parallel_for_each_cell_index(const std::function<void(size_t, size_t, size_t)> &func) const { Util::parallelFor((size_t) 0, _opt.resolution.x, (size_t) 0, _opt.resolution.y, (size_t) 0, _opt.resolution.z, [&func](size_t i, size_t j, size_t k) { func(i, j, k); }); }
@@ -37,6 +36,12 @@ class ScalarGrid3 : public Grid3, public ScalarField3
 public:
 	void for_each_data_point_index(const std::function<void(size_t, size_t, size_t)> &func) const { _data.for_each_index(func); }
 	void parallel_for_each_data_point_index(const std::function<void(size_t, size_t, size_t)> &func) const { _data.parallel_for_each_index(func); }
+	void fill(real value, Util::ExecutionPolicy policy = Util::ExecutionPolicy::Parallel) { Util::parallelFor((size_t) 0, _data.size().x, (size_t) 0, _data.size().y, (size_t) 0, _data.size().z, [&](size_t i, size_t j, size_t k) { _data(i, j, k) = value; }, policy); }
+	void fill(const std::function<real(const mVector3 &)> &func, Util::ExecutionPolicy policy = Util::ExecutionPolicy::Parallel)
+	{
+		auto pos = data_position();
+		Util::parallelFor((size_t) 0, _data.size().x, (size_t) 0, _data.size().y, (size_t) 0, _data.size().z, [&](size_t i, size_t j, size_t k) { _data(i, j, k) = func(pos(i, j, k)); }, policy);
+	}
 
 public: // implement ScalarField3
 	inline auto sample(const mVector3 &x) const -> real final { return _sampler(x); }
@@ -67,19 +72,19 @@ public: // implement ScalarField3
 	}
 
 public: // math
-	inline auto gradient_at_data_point(size_t i, size_t j, size_t k) const -> mVector3 { return gradient3(_data, _opt.grid_spacing, i, j, k); }
-	inline auto laplacian_at_data_point(size_t i, size_t j, size_t k) const -> real { return laplacian3(_data, _opt.grid_spacing, i, j, k); }
-
-	void resize(const mSize3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, real initial_value);
-	inline void clear() { resize(mSize3(0, 0, 0), _opt.grid_spacing, _opt.origin, Constant::Zero); }
+	inline auto gradient_at_data_point(size_t i, size_t j, size_t k) const -> mVector3 { return gradient3(_data, _opt.grid_spacing, i, j, k); } // TODO: remove
+	inline auto laplacian_at_data_point(size_t i, size_t j, size_t k) const -> real { return laplacian3(_data, _opt.grid_spacing, i, j, k); } // TODO: remove
 
 	using DataPositionFunc = std::function<mVector3(size_t, size_t, size_t)>;
 	auto data_position() const -> DataPositionFunc { return [this](size_t i, size_t j, size_t k) -> mVector3 { return _opt.origin + _opt.grid_spacing * mVector3({i, j, k}); }; }
 	virtual inline auto data_size() const -> mSize3 = 0; /// not necessarily equal to _opt.resolution
 	virtual inline auto data_origin() const -> mVector3 = 0; /// not necessarily equal to _opt.origin
+	virtual auto clone() const -> std::shared_ptr<ScalarGrid3> = 0;
+	void resize(const mSize3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, real initial_value);
+	void clear() { resize(mSize3(0, 0, 0), _opt.grid_spacing, _opt.origin, Constant::Zero); }
 
 public: // constructors & destructor & assignment operators
-	ScalarGrid3() : _linear_sampler(_data) {}
+	ScalarGrid3() : _linear_sampler(_data) { _sampler = _linear_sampler.functor(); }
 	inline auto operator()(size_t i, size_t j, size_t k) -> real & { return _data(i, j, k); }
 	inline auto operator()(size_t i, size_t j, size_t k) const -> const real & { return _data(i, j, k); }
 
@@ -93,12 +98,14 @@ class CellCenteredScalarGrid3 final : public ScalarGrid3
 public:
 	inline auto data_size() const -> mSize3 final { return _opt.resolution; }
 	inline auto data_origin() const -> mVector3 final { return _opt.origin + Constant::Half * _opt.grid_spacing; }
+	auto clone() const -> std::shared_ptr<ScalarGrid3> final { new CellCenteredScalarGrid3(*this), [](CellCenteredScalarGrid3 *obj) { delete obj; }; }
 };
 class VertexCenteredScalarGrid3 final : public ScalarGrid3
 {
 public:
 	inline auto data_size() const -> mSize3 final { return _opt.resolution + mSize3(1, 1, 1); }
 	inline auto data_origin() const -> mVector3 final { return _opt.origin; }
+	auto clone() const -> std::shared_ptr<ScalarGrid3> final { new VertexCenteredScalarGrid3(*this), [](VertexCenteredScalarGrid3 *obj) { delete obj; }; }
 };
 // ============================== ScalarGrid3 ==============================
 
@@ -107,6 +114,10 @@ public:
 // ============================== VectorGrid3 ==============================
 class VectorGrid3 : public Grid3, public VectorField3
 {
+public:
+	virtual void fill(const mVector3 &value, Util::ExecutionPolicy policy = Util::ExecutionPolicy::Parallel) = 0;
+	virtual void fill(const std::function<mVector3(const mVector3 &)> &func, Util::ExecutionPolicy policy) = 0;
+	virtual auto clone() -> std::shared_ptr<VectorGrid3> = 0;
 public: // implement VectorField3
 	/* NOT IMPLEMENTED */ auto sample(const mVector3 &x) const -> mVector3 final { return mVector3::Zero(); }
 	/* NOT IMPLEMENTED */ auto sampler() const -> std::function<mVector3(const mVector3 &)> final { return [this](const mVector3 &x) { return sample(x); }; }
@@ -125,8 +136,34 @@ protected:
 private:
 	Math::Array3<mVector3> _data;
 };
-class CellCenteredVectorGrid3 final : public CollocatedVectorGrid3 {};
-class VertexCenteredVectorGrid3 final : public CollocatedVectorGrid3 {};
+class CellCenteredVectorGrid3 final : public CollocatedVectorGrid3
+{
+public:
+	void fill(const mVector3 &value, Util::ExecutionPolicy policy) override
+	{
+	}
+	void fill(const std::function<mVector3(const mVector3 &)> &func, Util::ExecutionPolicy policy) override
+	{
+	}
+	auto clone() -> std::shared_ptr<VectorGrid3> override
+	{
+		return {new CellCenteredVectorGrid3(*this), [](CellCenteredVectorGrid3 *obj) { delete obj; }};
+	}
+};
+class VertexCenteredVectorGrid3 final : public CollocatedVectorGrid3
+{
+public:
+	void fill(const mVector3 &value, Util::ExecutionPolicy policy) override
+	{
+	}
+	void fill(const std::function<mVector3(const mVector3 &)> &func, Util::ExecutionPolicy policy) override
+	{
+	}
+	auto clone() -> std::shared_ptr<VectorGrid3> override
+	{
+		return {new VertexCenteredVectorGrid3(*this), [](VertexCenteredVectorGrid3 *obj) { delete obj; }};
+	}
+};
 class FaceCenteredVectorGrid3 final : public VectorGrid3
 {
 public:
@@ -144,8 +181,9 @@ public:
 	void parallel_for_each_v_index(const std::function<void(size_t, size_t, size_t)> &func) const { _v_data.parallel_for_each_index(func); }
 	void parallel_for_each_w_index(const std::function<void(size_t, size_t, size_t)> &func) const { _w_data.parallel_for_each_index(func); }
 
-	inline auto clone() const -> std::shared_ptr<FaceCenteredVectorGrid3> { return {new FaceCenteredVectorGrid3(*this), [](FaceCenteredVectorGrid3 *obj) { delete obj; }}; }
-
+	void fill(const mVector3 &value, Util::ExecutionPolicy policy) override {}
+	void fill(const std::function<mVector3(const mVector3 &)> &func, Util::ExecutionPolicy policy) override {}
+	auto clone() -> std::shared_ptr<VectorGrid3> override { return {new FaceCenteredVectorGrid3(*this), [](FaceCenteredVectorGrid3 *obj) { delete obj; }}; }
 public: // math
 	auto value_at_cell_center(size_t i, size_t j, size_t k) const -> mVector3;
 	auto divergence_at_cell_center(size_t i, size_t j, size_t k) const -> real;

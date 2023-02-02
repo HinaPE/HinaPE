@@ -1,17 +1,5 @@
 #include "geom/grid.h"
 
-void HinaPE::Geom::Grid3::resize(const mSize3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin)
-{
-	_opt.resolution = resolution;
-	_opt.grid_spacing = grid_spacing;
-	_opt.origin = origin;
-	_opt.bounding_box = mBBox3(
-			origin,
-			origin + grid_spacing * mVector3(
-					static_cast<real>(resolution.x),
-					static_cast<real>(resolution.y),
-					static_cast<real>(resolution.z)));
-}
 auto HinaPE::Geom::Grid3::cell_center_position() const -> HinaPE::Geom::Grid3::DataPositionFunc
 {
 	mVector3 h = _opt.grid_spacing;
@@ -29,14 +17,20 @@ void HinaPE::Geom::ScalarGrid3::resize(const mSize3 &resolution, const mVector3 
 	_opt.bounding_box = mBBox3(origin, origin + grid_spacing * mVector3(static_cast<real>(resolution.x), static_cast<real>(resolution.y), static_cast<real>(resolution.z)));
 
 	// update data
-	Grid3::resize(resolution, grid_spacing, origin);
 	_data.resize(data_size(), initial_value);
+	_sampler = _linear_sampler.functor();
 }
 
 
 void HinaPE::Geom::VectorGrid3::resize(const mSize3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value)
 {
-	Grid3::resize(resolution, grid_spacing, origin);
+	// update opt
+	_opt.resolution = resolution;
+	_opt.grid_spacing = grid_spacing;
+	_opt.origin = origin;
+	_opt.bounding_box = mBBox3(origin, origin + grid_spacing * mVector3(static_cast<real>(resolution.x), static_cast<real>(resolution.y), static_cast<real>(resolution.z)));
+
+	// update data
 	on_resize(resolution, grid_spacing, origin, initial_value);
 }
 void HinaPE::Geom::CollocatedVectorGrid3::on_resize(const mSize3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, const mVector3 &initial_value)
