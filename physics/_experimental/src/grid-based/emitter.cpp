@@ -41,6 +41,16 @@ void Hina::VolumeGridEmitter3::on_update(Hina::real current_time, Hina::real tim
 }
 void Hina::VolumeGridEmitter3::_emit()
 {
+	_source_region->update_query_engine();
+
+	for (const auto &target: _scalar_targets)
+	{
+		const auto &grid = std::get<0>(target);
+		const auto &mapper = std::get<1>(target);
+
+		auto pos = grid->data_origin();
+	}
+	for (const auto &target: _vector_targets) {}
 }
 void Hina::VolumeGridEmitter3::VALID_CHECK()
 {

@@ -3,6 +3,7 @@
 
 #include "base/base.h"
 #include "grid.h"
+#include "geometry/surface3.h"
 
 namespace Hina
 {
@@ -58,6 +59,7 @@ private:
 	using VectorTarget = std::tuple<VectorGrid3Ptr, ScalarMapper>;
 	std::vector<ScalarTarget> _scalar_targets;
 	std::vector<VectorTarget> _vector_targets;
+	ImplicitSurface3Ptr _source_region;
 };
 }
 

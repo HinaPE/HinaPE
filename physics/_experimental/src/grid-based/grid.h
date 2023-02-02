@@ -67,6 +67,8 @@ public: // math
 	void resize(const Base::Size3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin, real initial_value);
 	inline void clear() { resize(Base::Size3(0, 0, 0), _opt.grid_spacing, _opt.origin, Constant::Zero); }
 
+	using DataPositionFunc = std::function<mVector3(size_t, size_t, size_t)>;
+	auto data_position() const -> DataPositionFunc { return [this](size_t i, size_t j, size_t k) -> mVector3 { return _opt.origin + _opt.grid_spacing * mVector3({i, j, k}); }; }
 	virtual inline auto data_size() const -> Base::Size3 = 0; /// not necessarily equal to _opt.resolution
 	virtual inline auto data_origin() const -> mVector3 = 0; /// not necessarily equal to _opt.origin
 
@@ -84,13 +86,13 @@ class CellCenteredScalarGrid3 final : public ScalarGrid3
 {
 public:
 	inline auto data_size() const -> Base::Size3 final { return _opt.resolution; }
-	inline auto data_origin() const -> mVector3 final { return _opt.origin; }
+	inline auto data_origin() const -> mVector3 final { return _opt.origin + Constant::Half * _opt.grid_spacing; }
 };
 class VertexCenteredScalarGrid3 final : public ScalarGrid3
 {
 public:
 	inline auto data_size() const -> Base::Size3 final { return _opt.resolution + Base::Size3(1, 1, 1); }
-	inline auto data_origin() const -> mVector3 final { return _opt.origin - _opt.grid_spacing * Constant::Half; }
+	inline auto data_origin() const -> mVector3 final { return _opt.origin; }
 };
 // ============================== ScalarGrid3 ==============================
 

@@ -50,6 +50,23 @@ protected:
 	mTransform3 _transform;
 };
 
+class Box3 final : public Surface3
+{
+public:
+
+
+protected:
+	auto _intersects_local(const mRay3 &ray) const -> bool final { return false; }
+	auto _bounding_box_local() const -> mBBox3 final { return Hina::mBBox3(); }
+	auto _closest_point_local(const mVector3 &other_point) const -> mVector3 final { return Hina::mVector3(); }
+	auto _closest_intersection_local(const mRay3 &ray) const -> SurfaceRayIntersection3 final { return SurfaceRayIntersection3(); }
+	auto _closest_distance_local(const mVector3 &other_point) const -> real final { return 0; }
+	auto _closest_normal_local(const mVector3 &other_point) const -> mVector3 final { return Hina::mVector3(); }
+
+protected:
+	mBBox3 _bound;
+};
+
 class ImplicitSurface3 : public Surface3
 {
 public:
