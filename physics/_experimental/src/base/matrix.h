@@ -3,7 +3,7 @@
 
 #include "math_ext.h"
 
-#ifdef HINAPE_EIGEN
+#ifdef HINA_EIGEN
 #include "Eigen/Eigen"
 #endif
 #include <type_traits>
@@ -21,7 +21,7 @@ public:
 	static inline constexpr auto Identity() -> Matrix3x3 { return Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign>::Identity()); }
 
 public:
-#ifdef HINAPE_EIGEN
+#ifdef HINA_EIGEN
 	template<typename U>
 	Matrix3x3(const std::initializer_list<U> &lst);
 	constexpr explicit Matrix3x3();
@@ -61,7 +61,7 @@ auto similar(const Matrix3x3<T> &a, const Matrix3x3<T> &b) -> bool
 		   similar(a._m(2, 0), b._m(2, 0), eps) && similar(a._m(2, 1), b._m(2, 1), eps) && similar(a._m(2, 2), b._m(2, 2), eps);
 }
 }
-#ifdef HINAPE_EIGEN
+#ifdef HINA_EIGEN
 #include "base/impl/matrix_impl_eigen.h"
 #else
 #endif

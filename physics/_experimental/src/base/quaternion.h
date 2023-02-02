@@ -1,7 +1,7 @@
 #ifndef HINAPE_QUATERNION_H
 #define HINAPE_QUATERNION_H
 
-#ifdef HINAPE_EIGEN
+#ifdef HINA_EIGEN
 #include "Eigen/Eigen"
 #endif
 #include <type_traits>
@@ -18,7 +18,7 @@ public:
 	auto inverse() const -> Quaternion<T>;
 
 public:
-#ifdef HINAPE_EIGEN
+#ifdef HINA_EIGEN
 	Eigen::Quaternion<T, Eigen::DontAlign> _q;
 	constexpr explicit Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_);
 	constexpr explicit Quaternion() = default;
@@ -27,7 +27,7 @@ public:
 #endif
 };
 }
-#ifdef HINAPE_EIGEN
+#ifdef HINA_EIGEN
 #include "base/impl/quaternion_impl_eigen.h"
 #else
 #endif

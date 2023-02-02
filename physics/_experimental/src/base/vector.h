@@ -1,7 +1,7 @@
 #ifndef HINAPE_VECTOR_H
 #define HINAPE_VECTOR_H
 
-#ifdef HINAPE_EIGEN
+#ifdef HINA_EIGEN
 #include "Eigen/Eigen"
 #endif
 #include <type_traits>
@@ -53,7 +53,7 @@ public:
 	auto operator!=(const Vector3 &v_) const -> bool;
 
 public:
-#ifdef HINAPE_EIGEN
+#ifdef HINA_EIGEN
 	constexpr explicit Vector3(Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v_);
 	template<typename U>
 	Vector3(const std::initializer_list<U> &lst);
@@ -91,7 +91,7 @@ template<typename T> auto ceil(const Vector3<T> &a) -> Vector3<T> { return {std:
 template<typename T> auto floor(const Vector3<T> &a) -> Vector3<T> { return {std::floor(a.x()), std::floor(a.y()), std::floor(a.z())}; }
 //@formatter:on
 }
-#ifdef HINAPE_EIGEN
+#ifdef HINA_EIGEN
 #include "base/impl/vector_impl_eigen.h"
 #else
 #endif
