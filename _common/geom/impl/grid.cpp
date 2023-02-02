@@ -1,4 +1,4 @@
-#include "grid.h"
+#include "geom/grid.h"
 
 void HinaPE::Geom::Grid3::resize(const mSize3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin)
 {

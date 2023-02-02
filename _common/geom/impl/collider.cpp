@@ -1,4 +1,4 @@
-#include "collider.h"
+#include "geom/collider.h"
 
 void HinaPE::Geom::Collider::update(real current_time, real time_interval)
 {

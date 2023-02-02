@@ -1,4 +1,5 @@
-#include "surface3.h"
+#include "geom/surface3.h"
+
 // ============================== Box ==============================
 auto HinaPE::Geom::Box3::_intersects_local(const mRay3 &ray) const -> bool
 {
