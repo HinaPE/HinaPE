@@ -42,6 +42,7 @@ template<typename T> auto Vector3<T>::cross(const Vector3 &v_) const -> Vector3 
 template<typename T> auto Vector3<T>::length() -> T 							{ return _v.norm(); }
 template<typename T> auto Vector3<T>::length_squared() -> T 					{ return _v.squaredNorm(); }
 template<typename T> void Vector3<T>::normalize() 								{ _v.normalize(); }
+template<typename T> auto Vector3<T>::normalized() const -> Vector3 			{ return Vector3(_v.normalized()); }
 //@formatter:on
 
 template<typename T>
@@ -178,6 +179,7 @@ template<typename T> auto Vector2<T>::cross(const Vector2 &v_) const -> Vector2 
 template<typename T> auto Vector2<T>::length() -> T 							{ return _v.norm(); }
 template<typename T> auto Vector2<T>::length_squared() -> T 					{ return _v.squaredNorm(); }
 template<typename T> void Vector2<T>::normalize() 								{ _v.normalize(); }
+template<typename T> auto Vector2<T>::normalized() const -> Vector2 			{ return Vector2(_v.normalized()); }
 //@formatter:on
 
 template<typename T>
@@ -311,6 +313,7 @@ template<typename T> auto Vector4<T>::cross(const Vector4 &v_) const -> Vector4 
 template<typename T> auto Vector4<T>::length() -> T 							{ return _v.norm(); }
 template<typename T> auto Vector4<T>::length_squared() -> T 					{ return _v.squaredNorm(); }
 template<typename T> void Vector4<T>::normalize() 								{ _v.normalize(); }
+template<typename T> auto Vector4<T>::normalized() const -> Vector4 			{ return Vector4(_v.normalized()); }
 //@formatter:on
 
 template<typename T>

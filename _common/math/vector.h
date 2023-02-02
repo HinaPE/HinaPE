@@ -32,6 +32,7 @@ public:
 	auto length() -> T;
 	auto length_squared() -> T;
 	void normalize();
+	auto normalized() const -> Vector3;
 
 public:
 	static inline constexpr auto Zero() -> Vector3 { return Vector3(0, 0, 0); }
@@ -113,6 +114,7 @@ public:
 	auto length() -> T;
 	auto length_squared() -> T;
 	void normalize();
+	auto normalized() const -> Vector2;
 
 public:
 	static inline constexpr auto Zero() -> Vector2 { return Vector2(0, 0); }
@@ -198,6 +200,7 @@ public:
 	auto length() -> T;
 	auto length_squared() -> T;
 	void normalize();
+	auto normalized() const -> Vector4;
 
 public:
 	static inline constexpr auto Zero() -> Vector4 { return Vector4(0, 0, 0, 0); }
