@@ -10,6 +10,7 @@
 
 namespace HinaPE::Math
 {
+// ============================== Matrix3x3 ==============================
 template<typename T>
 class Matrix3x3 final
 {
@@ -52,6 +53,51 @@ template<typename T> auto operator/(const Matrix3x3<T> &a, T b) -> Matrix3x3<T> 
 template<typename T> auto operator/(T a, const Matrix3x3<T> &b) -> Matrix3x3<T> { return Matrix3x3<T>(a / b._m); }
 //@formatter:on
 
+
+// ============================== Matrix4x4 ==============================
+template<typename T>
+class Matrix4x4 final
+{
+public:
+	auto inverse() const -> Matrix4x4;
+
+public:
+	static inline constexpr auto Zero() -> Matrix4x4 { return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>::Zero()); }
+	static inline constexpr auto Identity() -> Matrix4x4 { return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>::Identity()); }
+
+public:
+#ifdef HINA_EIGEN
+	template<typename U>
+	Matrix4x4(const std::initializer_list<U> &lst);
+	constexpr explicit Matrix4x4();
+	constexpr explicit Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign> m_);
+	constexpr Matrix4x4(const Matrix4x4<T> &m_) = default;
+	constexpr Matrix4x4(Matrix4x4<T> &&m_) noexcept = default;
+	constexpr auto operator=(const Matrix4x4<T> &m_) -> Matrix4x4<T> & = default;
+	constexpr auto operator=(Matrix4x4<T> &&m_) noexcept -> Matrix4x4<T> & = default;
+	~Matrix4x4() = default;
+	Eigen::Matrix<T, 4, 4, Eigen::DontAlign> _m;
+#endif
+};
+
+//@formatter:off
+template<typename T> auto operator+(const Matrix4x4<T> &a) -> Matrix4x4<T> { return Matrix4x4<T>(a._m); }
+template<typename T> auto operator-(const Matrix4x4<T> &a) -> Matrix4x4<T> { return Matrix4x4<T>(-a._m); }
+template<typename T> auto operator+(const Matrix4x4<T> &a, const Matrix4x4<T> &b) -> Matrix4x4<T> { return Matrix4x4<T>(a._m + b._m); }
+template<typename T> auto operator+(const Matrix4x4<T> &a, T b) -> Matrix4x4<T> { return Matrix4x4<T>(a._m + b); }
+template<typename T> auto operator+(T a, const Matrix4x4<T> &b) -> Matrix4x4<T> { return Matrix4x4<T>(a + b._m); }
+template<typename T> auto operator-(const Matrix4x4<T> &a, const Matrix4x4<T> &b) -> Matrix4x4<T> { return Matrix4x4<T>(a._m - b._m); }
+template<typename T> auto operator-(const Matrix4x4<T> &a, T b) -> Matrix4x4<T> { return Matrix4x4<T>(a._m - b); }
+template<typename T> auto operator-(T a, const Matrix4x4<T> &b) -> Matrix4x4<T> { return Matrix4x4<T>(a - b._m); }
+template<typename T> auto operator*(const Matrix4x4<T>& a, T b) -> Matrix4x4<T> { return Matrix4x4<T>(a._m * b); }
+template<typename T> auto operator*(T a, const Matrix4x4<T>& b) -> Matrix4x4<T> { return Matrix4x4<T>(a * b._m); }
+template<typename T> auto operator*(const Matrix4x4<T>& a, const Vector4<T>& b) -> Vector4<T> { return Vector4<T>(a._m * b._v); }
+template<typename T> auto operator*(const Matrix4x4<T>& a, const Matrix4x4<T>& b) -> Matrix4x4<T> { return Matrix4x4<T>(a._m * b._m); }
+template<typename T> auto operator/(const Matrix4x4<T> &a, T b) -> Matrix4x4<T> { return Matrix4x4<T>(a._m / b); }
+template<typename T> auto operator/(T a, const Matrix4x4<T> &b) -> Matrix4x4<T> { return Matrix4x4<T>(a / b._m); }
+//@formatter:on
+
+
 template<typename T>
 auto similar(const Matrix3x3<T> &a, const Matrix3x3<T> &b) -> bool
 {
@@ -59,6 +105,15 @@ auto similar(const Matrix3x3<T> &a, const Matrix3x3<T> &b) -> bool
 	return similar(a._m(0, 0), b._m(0, 0), eps) && similar(a._m(0, 1), b._m(0, 1), eps) && similar(a._m(0, 2), b._m(0, 2), eps) &&
 		   similar(a._m(1, 0), b._m(1, 0), eps) && similar(a._m(1, 1), b._m(1, 1), eps) && similar(a._m(1, 2), b._m(1, 2), eps) &&
 		   similar(a._m(2, 0), b._m(2, 0), eps) && similar(a._m(2, 1), b._m(2, 1), eps) && similar(a._m(2, 2), b._m(2, 2), eps);
+}
+template<typename T>
+auto similar(const Matrix4x4<T> &a, const Matrix4x4<T> &b) -> bool
+{
+	auto eps = static_cast<T>(1e-2);
+	return similar(a._m(0, 0), b._m(0, 0), eps) && similar(a._m(0, 1), b._m(0, 1), eps) && similar(a._m(0, 2), b._m(0, 2), eps) && similar(a._m(0, 3), b._m(0, 3), eps) &&
+		   similar(a._m(1, 0), b._m(1, 0), eps) && similar(a._m(1, 1), b._m(1, 1), eps) && similar(a._m(1, 2), b._m(1, 2), eps) && similar(a._m(1, 3), b._m(1, 3), eps) &&
+		   similar(a._m(2, 0), b._m(2, 0), eps) && similar(a._m(2, 1), b._m(2, 1), eps) && similar(a._m(2, 2), b._m(2, 2), eps) && similar(a._m(2, 3), b._m(2, 3), eps) &&
+		   similar(a._m(3, 0), b._m(3, 0), eps) && similar(a._m(3, 1), b._m(3, 1), eps) && similar(a._m(3, 2), b._m(3, 2), eps) && similar(a._m(3, 3), b._m(3, 3), eps);
 }
 }
 #ifdef HINA_EIGEN
@@ -68,7 +123,9 @@ auto similar(const Matrix3x3<T> &a, const Matrix3x3<T> &b) -> bool
 
 #ifdef HINAPE_DOUBLE
 using mMatrix3x3 = HinaPE::Math::Matrix3x3<double>;
+using mMatrix4x4 = HinaPE::Math::Matrix4x4<double>;
 #else
 using mMatrix3x3 = HinaPE::Math::Matrix3x3<float>;
+using mMatrix4x4 = HinaPE::Math::Matrix4x4<float>;
 #endif
 #endif //HINAPE_MATRIX_H
