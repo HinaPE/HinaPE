@@ -103,4 +103,30 @@ using Vector3 = Math::Vector3<float>;
 #endif
 using mVector3i = HinaPE::Math::Vector3<int>;
 using mVector3u = HinaPE::Math::Vector3<size_t>;
+
+namespace Color
+{
+//@formatter:off
+static mVector3 MIKU      = mVector3(0.2227f, 0.7698f, 0.7307f);
+static mVector3 RED       = mVector3(1.0f   , 0.0f   , 0.0f);
+static mVector3 GREEN     = mVector3(0.0f   , 1.0f   , 0.0f);
+static mVector3 BLUE      = mVector3(0.0f   , 0.0f   , 1.0f);
+static mVector3 YELLOW    = mVector3(1.0f   , 1.0f   , 0.0f);
+static mVector3 CYAN      = mVector3(0.0f   , 1.0f   , 1.0f);
+static mVector3 MAGENTA   = mVector3(1.0f   , 0.0f   , 1.0f);
+static mVector3 WHITE     = mVector3(1.0f   , 1.0f   , 1.0f);
+static mVector3 BLACK     = mVector3(0.0f   , 0.0f   , 0.0f);
+static mVector3 GRAY      = mVector3(0.5f   , 0.5f   , 0.5f);
+static mVector3 ORANGE    = mVector3(1.0f   , 0.5f   , 0.0f);
+static mVector3 PURPLE    = mVector3(0.5f   , 0.0f   , 0.5f);
+static mVector3 BROWN     = mVector3(0.5f   , 0.25f  , 0.0f);
+static mVector3 PINK      = mVector3(1.0f   , 0.75f  , 0.8f);
+static mVector3 NO_COLORS = mVector3(0.0f   , 0.0f   , 0.0f);
+//@formatter:on
+
+
+
+// ============================== Vector4 ==============================
+
+}
 #endif //HINAPE_VECTOR_H

@@ -40,3 +40,4 @@ project(HinaPE VERSION 1.40 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAG
 # experimental, would be remove in future
 add_subdirectory(_common)
 add_subdirectory(_physics/fluid)
+add_subdirectory(kasumi)

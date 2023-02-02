@@ -18,6 +18,8 @@ using real = float;
 #include <limits>
 #include <algorithm>
 #include <cmath>
+#include <iomanip>
+#include <iostream>
 
 //@formatter:off
 namespace HinaPE::Constant
