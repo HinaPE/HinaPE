@@ -6,7 +6,7 @@ Hina::GridFluidSolver::GridFluidSolver(const Hina::Base::Size3 &resolution, cons
 	_grids->resize(resolution, grid_spacing, origin);
 	_opt.fix_sub_time_step = false;
 }
-void Hina::GridFluidSolver::compute_external_forces(float dt)
+void Hina::GridFluidSolver::_compute_external_forces(float dt)
 {
 	// gravity
 	auto vel = _grids->_velocity;
@@ -19,10 +19,10 @@ void Hina::GridFluidSolver::compute_external_forces(float dt)
 
 	_apply_boundary_condition();
 }
-void Hina::GridFluidSolver::compute_viscosity(float dt)
+void Hina::GridFluidSolver::_compute_viscosity(float dt)
 {
 }
-void Hina::GridFluidSolver::compute_pressure(float dt)
+void Hina::GridFluidSolver::_compute_pressure(float dt)
 {
 	if (_pressure_solver != nullptr)
 	{
@@ -34,7 +34,7 @@ void Hina::GridFluidSolver::compute_pressure(float dt)
 		_apply_boundary_condition();
 	}
 }
-void Hina::GridFluidSolver::compute_advection(float dt)
+void Hina::GridFluidSolver::_compute_advection(float dt)
 {
 }
 void Hina::GridFluidSolver::_update_collider(float dt) { if (_collider) _collider->update(PhysicsAnimation::_opt._current_time, dt); }

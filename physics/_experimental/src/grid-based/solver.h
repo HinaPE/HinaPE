@@ -25,10 +25,10 @@ protected:
 	{
 		_before_physics_update(dt);
 
-		compute_external_forces(dt);
-		compute_viscosity(dt);
-		compute_pressure(dt);
-		compute_advection(dt);
+		_compute_external_forces(dt);
+		_compute_viscosity(dt);
+		_compute_pressure(dt);
+		_compute_advection(dt);
 
 		_after_physics_update(dt);
 	}
@@ -48,10 +48,10 @@ protected:
 	virtual void on_after_physics_update(float dt) {};
 
 protected:
-	virtual void compute_external_forces(float dt);
-	virtual void compute_viscosity(float dt);
-	virtual void compute_pressure(float dt);
-	virtual void compute_advection(float dt);
+	virtual void _compute_external_forces(float dt);
+	virtual void _compute_viscosity(float dt);
+	virtual void _compute_pressure(float dt);
+	virtual void _compute_advection(float dt);
 
 public:
 	struct Opt : PhysicsAnimation::Opt
