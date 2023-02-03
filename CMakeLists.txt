@@ -10,17 +10,24 @@ option(HinaPE_EXAMPLES "Load HinaPE Examples" ON)
 
 # experimental, would be remove in future
 add_subdirectory(_common)
+
 add_subdirectory(_physics/fluid)
-add_subdirectory(kasumi)
+
+if (HinaPE_USE_KASUMI)
+    add_subdirectory(kasumi)
+endif ()
+if (HinaPE_EXAMPLES)
+    add_subdirectory(_examples)
+endif ()
 
 
-#if (HINAPE_CLOTH)
-#    add_subdirectory(physics/cloth)
-#endif ()
-#
-#if (HINAPE_RIGID)
-#    add_subdirectory(physics/rigid)
-#endif ()
+if (HINAPE_CLOTH)
+    add_subdirectory(physics/cloth)
+endif ()
+
+if (HINAPE_RIGID)
+    add_subdirectory(physics/rigid)
+endif ()
 
 #if (HINAPE_RIGID2D)
 #    add_subdirectory(physics/rigid-2d)
@@ -35,9 +42,6 @@ add_subdirectory(kasumi)
 # If HinaPE is the Root Project, then enable Renderer and Examples
 #get_directory_property(HINAPE_PARENT_DIR PARENT_DIRECTORY)
 #if (NOT HINAPE_PARENT_DIR)
-#    if (HinaPE_USE_KASUMI)
-#        add_subdirectory(kasumi)
-#    endif ()
 #    if (HinaPE_EXAMPLES)
 #        add_subdirectory(examples)
 #    endif ()
