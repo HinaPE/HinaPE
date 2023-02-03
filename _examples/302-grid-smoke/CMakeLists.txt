@@ -3,4 +3,4 @@ project(302-grid-smoke VERSION 1.40 DESCRIPTION "HinaPE is not a Physics Engine"
 
 add_executable(302-grid-smoke main.cpp)
 set_target_properties(302-grid-smoke PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-target_link_libraries(302-grid-smoke PUBLIC Kasumi_renderer)
+target_link_libraries(302-grid-smoke PUBLIC Kasumi_renderer HinaPE_fluid)

@@ -20,7 +20,6 @@ if (HinaPE_EXAMPLES)
     add_subdirectory(_examples)
 endif ()
 
-
 if (HINAPE_CLOTH)
     add_subdirectory(physics/cloth)
 endif ()
