@@ -115,7 +115,7 @@ public:
 class VectorGrid3 : public Grid3, public VectorField3
 {
 public:
-	virtual void fill(const mVector3 &value, Util::ExecutionPolicy policy = Util::ExecutionPolicy::Parallel) = 0;
+	virtual void fill(const mVector3 &value, Util::ExecutionPolicy policy) = 0;
 	virtual void fill(const std::function<mVector3(const mVector3 &)> &func, Util::ExecutionPolicy policy) = 0;
 	virtual auto clone() -> std::shared_ptr<VectorGrid3> = 0;
 public: // implement VectorField3

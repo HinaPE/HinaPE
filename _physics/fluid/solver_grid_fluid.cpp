@@ -25,8 +25,15 @@ void HinaPE::GridSystemData3::resize(const mSize3 &resolution, const mVector3 &g
 
 HinaPE::GridFluidSolver::GridFluidSolver(const mSize3 &resolution, const mVector3 &grid_spacing, const mVector3 &origin)
 {
+	// _grid_data
 	_grids = std::make_shared<GridSystemData3>();
 	_grids->resize(resolution, grid_spacing, origin);
+	_opt.fix_sub_time_step = false;
+
+	// sub_solvers
+	_advection_solver = std::make_shared<CubicSemiLagrangian3>();
+	_diffusion_solver = std::make_shared<GridBackwardEulerDiffusionSolver3>();
+	_pressure_solver = std::make_shared<GridFractionalSinglePhasePressureSolver3>();
 	_opt.fix_sub_time_step = false;
 }
 void HinaPE::GridFluidSolver::_compute_external_forces(float dt)
@@ -71,6 +78,9 @@ void HinaPE::GridFluidSolver::VALID_CHECK()
 {
 	if (_grids->_opt.resolution.x == 0 || _grids->_opt.resolution.y == 0 || _grids->_opt.resolution.z == 0)
 		throw std::runtime_error("Resolution is not set");
+
+	if (_emitter == nullptr)
+		throw std::runtime_error("Emitter is not set");
 
 	_emitter->VALID_CHECK();
 }

@@ -8,7 +8,6 @@ namespace HinaPE::Animation
 class PhysicsAnimation : public Animation
 {
 public:
-	inline void on_update(const Frame &frame) final;
 	inline void advance_a_frame()
 	{
 		Frame f(_current_frame);
@@ -26,6 +25,7 @@ public:
 	} _opt;
 
 protected:
+	inline void on_update(const Frame &frame) final;
 	virtual void on_physics_init() = 0;
 	virtual void on_physics_update(float time_step) = 0;
 

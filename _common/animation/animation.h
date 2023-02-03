@@ -49,7 +49,7 @@ public:
 protected:
 	virtual void on_update(const Frame &frame) = 0;
 
-public:
+private:
 #ifdef HINAPE_DEBUG
 	Util::Timer timer;
 #endif

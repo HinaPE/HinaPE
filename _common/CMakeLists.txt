@@ -21,7 +21,7 @@ set_target_properties(_HinaPE_Common PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS O
 target_include_directories(_HinaPE_Common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(_HinaPE_Common PUBLIC HINAPE_DEBUG)
 if (HINAPE_DOUBLE)
-    target_compile_definitions(_HinaPE_Common PUBLIC HINAPE_DOUBLE HINAPE_DEBUG)
+    target_compile_definitions(_HinaPE_Common PUBLIC HINAPE_DOUBLE)
 endif ()
 
 # builtin dependency: Eigen3

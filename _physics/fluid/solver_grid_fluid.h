@@ -50,6 +50,10 @@ using GridSystemData3Ptr = std::shared_ptr<GridSystemData3>;
 
 class GridFluidSolver : public Animation::PhysicsAnimation
 {
+public:
+	void add_emitter(const GridEmitter3Ptr &emitter) { _emitter = emitter; } // TODO: support multiple emitters in the future
+	void add_collider(const Geom::ColliderPtr &collider) { _collider = collider; } // TODO: support multiple colliders in the future
+
 protected:
 	void on_physics_init() final
 	{
