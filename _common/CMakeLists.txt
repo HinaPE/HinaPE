@@ -23,7 +23,17 @@ if (HINAPE_DOUBLE)
     target_compile_definitions(HINA_COMMON PUBLIC HINAPE_DOUBLE HINAPE_DEBUG)
 endif ()
 
-# dependency: TBB
+# builtin dependency: Eigen3
+target_include_directories(HINA_COMMON PUBLIC vendor/eigen3)
+target_compile_definitions(HINA_COMMON PUBLIC HINA_EIGEN)
+
+# builtin dependency: google test
+if (HINAPE_UNIT_TEST)
+    add_subdirectory(vendor/googletest)
+    add_subdirectory(_unit_test)
+endif ()
+
+# optional dependency: TBB
 if (APPLE)
     set(TBB_DIR /opt/homebrew/Cellar/tbb@2020/2020_U3/lib/cmake/TBB)
 endif ()
@@ -34,12 +44,10 @@ if (TBB_FOUND)
     target_link_libraries(HINA_COMMON PUBLIC TBB::tbb)
 endif ()
 
-# dependency: Eigen3
-target_include_directories(HINA_COMMON PUBLIC vendor/eigen3)
-target_compile_definitions(HINA_COMMON PUBLIC HINA_EIGEN)
-
-# dependency: google test
-if (HINAPE_UNIT_TEST)
-    add_subdirectory(vendor/googletest)
-    add_subdirectory(_unit_test)
+# optional dependency:
+find_package(OpenVDB CONFIG)
+if (OpenVDB_FOUND)
+    message(STATUS ">> OpenVDB found")
+    target_compile_definitions(HINA_COMMON PUBLIC HINAPE_OPENVDB)
+    target_link_libraries(HINA_COMMON PUBLIC OpenVDB::openvdb)
 endif ()
