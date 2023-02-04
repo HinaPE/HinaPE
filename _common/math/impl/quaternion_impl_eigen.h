@@ -30,15 +30,16 @@ constexpr Quaternion<T>::Quaternion(T roll, T pitch, T yaw)
 	_q.z() = cr * cp * sy - sr * sp * cy;
 }
 template<typename T>
-constexpr Quaternion<T>::Quaternion(const std::initializer_list<T> &lst)
+template<typename U>
+constexpr Quaternion<T>::Quaternion(const std::initializer_list<U> &lst)
 {
 	assert(lst.size() == 4);
 
 	auto input_elem = lst.begin();
-	_q.w() = *input_elem;
-	_q.x() = *(++input_elem);
-	_q.y() = *(++input_elem);
-	_q.z() = *(++input_elem);
+	_q.w() = *static_cast<T>(input_elem);
+	_q.x() = *static_cast<T>(++input_elem);
+	_q.y() = *static_cast<T>(++input_elem);
+	_q.z() = *static_cast<T>(++input_elem);
 }
 template<typename T>
 constexpr Quaternion<T>::Quaternion(const Vector3<T> &axis, T angle)

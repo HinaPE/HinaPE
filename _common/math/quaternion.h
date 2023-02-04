@@ -28,7 +28,8 @@ public:
 public:
 #ifdef HINA_EIGEN
 	Eigen::Quaternion<T, Eigen::DontAlign> _q;
-	constexpr Quaternion(const std::initializer_list<T> &lst);
+	template<typename U>
+	constexpr Quaternion(const std::initializer_list<U> &lst);
 	constexpr explicit Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_);
 	constexpr explicit Quaternion() = default;
 	constexpr explicit Quaternion(T w_, T x_, T y_, T z_);
