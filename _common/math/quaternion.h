@@ -38,7 +38,7 @@ public:
 	Eigen::Quaternion<T, Eigen::DontAlign> _q;
 
 	// constructors
-	Quaternion(); // Quaternion<float> q1
+	Quaternion();
 	Quaternion(T w_, T x_, T y_, T z_);
 	Quaternion(T roll, T pitch, T yaw);
 	Quaternion(const Vector3<T> &axis, T angle);

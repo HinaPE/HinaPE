@@ -6,11 +6,11 @@
 namespace HinaPE::Math
 {
 template<typename T>
-Quaternion<T>::Quaternion() : _q(1, 0, 0, 0) {}
+Quaternion<T>::Quaternion() : _q(1, 0, 0, 0) { _q.normalize(); }
 template<typename T>
-Quaternion<T>::Quaternion(T w_, T x_, T y_, T z_) : _q(w_, x_, y_, z_) {}
+Quaternion<T>::Quaternion(T w_, T x_, T y_, T z_) : _q(w_, x_, y_, z_) { _q.normalize(); }
 template<typename T>
-Quaternion<T>::Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_) : _q(q_) {}
+Quaternion<T>::Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_) : _q(q_) { _q.normalize(); }
 template<typename T>
 Quaternion<T>::Quaternion(T roll, T pitch, T yaw)
 {
@@ -30,6 +30,8 @@ Quaternion<T>::Quaternion(T roll, T pitch, T yaw)
 	_q.x() = sr * cp * cy - cr * sp * sy;
 	_q.y() = cr * sp * cy + sr * cp * sy;
 	_q.z() = cr * cp * sy - sr * sp * cy;
+
+	_q.normalize();
 }
 template<typename T>
 Quaternion<T>::Quaternion(const std::initializer_list<T> &lst)
@@ -41,6 +43,8 @@ Quaternion<T>::Quaternion(const std::initializer_list<T> &lst)
 	_q.x() = static_cast<T>((*++input_elem));
 	_q.y() = static_cast<T>((*++input_elem));
 	_q.z() = static_cast<T>((*++input_elem));
+
+	_q.normalize();
 }
 template<typename T>
 auto Quaternion<T>::operator=(const std::initializer_list<T> &lst) -> Quaternion<T> &
@@ -52,17 +56,23 @@ auto Quaternion<T>::operator=(const std::initializer_list<T> &lst) -> Quaternion
 	_q.x() = static_cast<T>((*++input_elem));
 	_q.y() = static_cast<T>((*++input_elem));
 	_q.z() = static_cast<T>((*++input_elem));
+
+	_q.normalize();
 }
 template<typename T>
-Quaternion<T>::Quaternion(const Vector3<T> &axis, T angle)
+Quaternion<T>::Quaternion(const Vector3<T> &axis, T angle) : _q(Eigen::AngleAxis<real>(angle * 2, axis._v.normalized()))
 {
-	Vector3<T> normalized_axis = axis.normalized();
-	T s = std::sin(angle / 2);
+//	Vector3<T> normalized_axis = axis.normalized();
+//	T s = std::sin(angle / 2);
+//
+//	_q.x() = normalized_axis.x() * s;
+//	_q.y() = normalized_axis.y() * s;
+//	_q.z() = normalized_axis.z() * s;
+//	_q.w() = std::cos(angle / 2);
 
-	_q.x() = normalized_axis.x() * s;
-	_q.y() = normalized_axis.y() * s;
-	_q.z() = normalized_axis.z() * s;
-	_q.w() = std::cos(angle / 2);
+	assert(false); // NOTE: not tested
+
+	_q.normalize();
 }
 template<typename T>
 Quaternion<T>::Quaternion(const Matrix3x3<T> &m)
@@ -107,11 +117,14 @@ Quaternion<T>::Quaternion(const Matrix3x3<T> &m)
 	_q.y() = y;
 	_q.z() = z;
 	_q.w() = w;
+
+	_q.normalize();
 }
 template<typename T>
 Quaternion<T>::Quaternion(const Vector3<T> &from, const Vector3<T> &to)
 {
 	_q.setFromTwoVectors(from._v, to._v);
+	_q.normalize();
 }
 template<typename T>
 Quaternion<T>::Quaternion(const Quaternion<T> &q_) : _q(q_._q) {}
