@@ -56,8 +56,6 @@ Prerequisites & dependencies:
 - [glad](https://github.com/Dav1dde/glad.git): OpenGL loader
 - [nfd](https://github.com/EmbarkStudios/nfd2.git): file dialog
 - [imgui](https://github.com/ocornut/imgui.git): GUI (include [implot](https://github.com/epezent/implot.git) & [imguizmo](https://github.com/CedricGuillemet/ImGuizmo.git))
-- [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader.git): obj model loader (to be removed soon)
-- [fpm](https://github.com/MikeLankamp/fpm.git): fixed-point math library (not used)
 
 First recursively clone this repo and all submodules.
 
