@@ -6,9 +6,11 @@
 namespace HinaPE::Math
 {
 template<typename T>
-Quaternion<T>::Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_) : _q(q_) {}
+Quaternion<T>::Quaternion() : _q(1, 0, 0, 0) {}
 template<typename T>
 Quaternion<T>::Quaternion(T w_, T x_, T y_, T z_) : _q(w_, x_, y_, z_) {}
+template<typename T>
+Quaternion<T>::Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_) : _q(q_) {}
 template<typename T>
 Quaternion<T>::Quaternion(T roll, T pitch, T yaw)
 {
@@ -31,6 +33,17 @@ Quaternion<T>::Quaternion(T roll, T pitch, T yaw)
 }
 template<typename T>
 Quaternion<T>::Quaternion(const std::initializer_list<T> &lst)
+{
+	assert(lst.size() == 4);
+
+	auto input_elem = lst.begin();
+	_q.w() = static_cast<T>((*input_elem));
+	_q.x() = static_cast<T>((*++input_elem));
+	_q.y() = static_cast<T>((*++input_elem));
+	_q.z() = static_cast<T>((*++input_elem));
+}
+template<typename T>
+auto Quaternion<T>::operator=(const std::initializer_list<T> &lst) -> Quaternion<T> &
 {
 	assert(lst.size() == 4);
 
@@ -100,7 +113,22 @@ Quaternion<T>::Quaternion(const Vector3<T> &from, const Vector3<T> &to)
 {
 	_q.setFromTwoVectors(from._v, to._v);
 }
-
+template<typename T>
+Quaternion<T>::Quaternion(const Quaternion<T> &q_) : _q(q_._q) {}
+template<typename T>
+auto Quaternion<T>::operator=(const Quaternion<T> &q_) -> Quaternion<T> &
+{
+	_q = q_._q;
+	return *this;
+}
+template<typename T>
+Quaternion<T>::Quaternion(Quaternion<T> &&q_) noexcept : _q(std::move(q_._q)) {}
+template<typename T>
+auto Quaternion<T>::operator=(Quaternion<T> &&q_) noexcept -> Quaternion<T> &
+{
+	_q = std::move(q_._q);
+	return *this;
+}
 
 template<typename T>
 auto Quaternion<T>::normalized() -> Quaternion<T>

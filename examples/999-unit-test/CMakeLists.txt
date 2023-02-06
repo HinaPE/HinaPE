@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-project(999-UnitTest VERSION 1.40 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(999-UnitTest VERSION 1.50 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 add_executable(999-UnitTest main.cpp test_emitter.h test_emitter.cpp test_emitter.h test_pcisph.cpp test_grid.h test_grid.cpp)
 set_target_properties(999-UnitTest PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)

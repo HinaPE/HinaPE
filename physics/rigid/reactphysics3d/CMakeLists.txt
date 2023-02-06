@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-project(react-physics VERSION 1.40 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(react-physics VERSION 1.50 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 file(GLOB_RECURSE REACT_PHYSICS_SRC *.h *.cpp)
 

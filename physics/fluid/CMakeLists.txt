@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-project(HINAPE_FLUID VERSION 1.40 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HINAPE_FLUID VERSION 1.50 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 set(HINAPE_COMMON_DIR "../../common")
 set(HINAPE_DEPS_DIR "../deps")
