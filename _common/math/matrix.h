@@ -15,8 +15,11 @@ template<typename T>
 class Matrix3x3 final
 {
 public:
-	inline auto inverse() const -> Matrix3x3 { return Matrix3x3(_m.inverse()); }
-	inline auto transpose() const -> Matrix3x3 { return Matrix3x3(_m.transpose()); }
+	inline void inverse() { _m = _m.inverse(); }
+	inline void transpose() { _m = _m.transpose(); }
+	inline auto inversed() const -> Matrix3x3 { return Matrix3x3(_m.inverse()); }
+	inline auto transposed() const -> Matrix3x3 { return Matrix3x3(_m.transpose()); }
+	inline auto data() -> T * { return _m.data(); }
 	inline auto frobenius_norm() const -> T { return _m.norm(); }
 
 public:
@@ -67,12 +70,36 @@ template<typename T>
 class Matrix4x4 final
 {
 public:
-	inline auto inverse() const -> Matrix4x4 { return Matrix4x4(_m.inverse()); }
-	inline auto transpose() const -> Matrix4x4 { return Matrix4x4(_m.transpose()); }
+	inline void inverse() { _m = _m.inverse(); }
+	inline void transpose() { _m = _m.transpose(); }
+	inline auto inversed() const -> Matrix4x4 { return Matrix4x4(_m.inverse()); }
+	inline auto transposed() const -> Matrix4x4 { return Matrix4x4(_m.transpose()); }
+	inline auto data() -> T * { return _m.data(); }
+	inline auto frobenius_norm() const -> T { return _m.norm(); }
 
 public:
 	static inline constexpr auto Zero() -> Matrix4x4 { return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>::Zero()); }
 	static inline constexpr auto Identity() -> Matrix4x4 { return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>::Identity()); }
+	static inline constexpr auto make_translation_matrix(const Vector3<T> &t) -> Matrix4x4<T>
+	{
+		return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>{{1, 0, 0, t.x()},
+																  {0, 1, 0, t.y()},
+																  {0, 0, 1, t.z()},
+																  {0, 0, 0, 1}});
+	}
+	static inline constexpr auto make_rotation_matrix(const Vector3<T> &axis, T angle) -> Matrix4x4<T> { return Matrix4x4(Eigen::AngleAxis<T>(angle, axis._v)); } // TODO
+	static inline constexpr auto make_scale_matrix(const Vector3<T> &s) -> Matrix4x4<T>
+	{
+		return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>{{s.x(), 0,     0,     0},
+																  {0,     s.y(), 0,     0},
+																  {0,     0,     s.z(), 0},
+																  {0,     0,     0,     1}});
+	}
+public:
+	auto operator[](size_t i) -> T & { return _m(i); }
+	auto operator[](size_t i) const -> const T & { return _m(i); }
+	auto operator()(size_t i, size_t j) -> T & { return _m(i, j); }
+	auto operator()(size_t i, size_t j) const -> const T & { return _m(i, j); }
 
 public:
 #ifdef HINA_EIGEN

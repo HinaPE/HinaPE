@@ -36,13 +36,13 @@ void RigidExample::prepare()
 		HinaPE::Rigid::RigidSolver::RigidOpt _rb_opt;
 		_rb_opt.type = HinaPE::Rigid::RigidSolver::Type::STATIC;
 		HinaPE::Rigid::BoxOpt _box_opt;
-		_box_opt.x = size.x;
-		_box_opt.y = size.y;
-		_box_opt.z = size.z;
+		_box_opt.x = size.x();
+		_box_opt.y = size.y();
+		_box_opt.z = size.z();
 		unsigned id = HinaPE::Rigid::RigidSolver::add_rigidbody(_rb_opt, &_box_opt, pos);
 
 		// init rendering world
-		auto floor_id = _scene->add_object(std::make_shared<Kasumi::Model>("cube", Color::GRAY));
+		auto floor_id = _scene->add_object(std::make_shared<Kasumi::Model>("cube", HinaPE::Color::GRAY));
 		auto floor = _scene->get_object(floor_id);
 		floor->position() = pos;
 		floor->scale() = size;
@@ -89,9 +89,9 @@ void RigidExample::ui_sidebar()
 		_rb_opt.type = HinaPE::Rigid::RigidSolver::Type::DYNAMIC;
 		_rb_opt.vel = {random(0, 1), random(0, 1), random(0, 1)};
 		HinaPE::Rigid::BoxOpt _box_opt;
-		_box_opt.x = size.x;
-		_box_opt.y = size.y;
-		_box_opt.z = size.z;
+		_box_opt.x = size.x();
+		_box_opt.y = size.y();
+		_box_opt.z = size.z();
 		unsigned id = HinaPE::Rigid::RigidSolver::add_rigidbody(_rb_opt, &_box_opt, pos);
 
 		// init rendering world

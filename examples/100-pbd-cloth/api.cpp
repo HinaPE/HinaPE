@@ -44,7 +44,7 @@ void PBDClothExample::ui_sidebar()
 				Kasumi::Model::Vertex v_;
 				v_.position = v;
 				v_.normal = mVector3(0, 1, 0);
-				v_.tex_coord = {0.5f - v.x / static_cast<float>(size[0]), 0.5f - v.y / static_cast<float>(size[1])};
+				v_.tex_coord = {0.5f - v.x() / static_cast<float>(size[0]), 0.5f - v.y() / static_cast<float>(size[1])};
 				res_v.emplace_back(v_);
 			}
 			std::map<std::string, std::vector<Kasumi::TexturePtr>> textures;
@@ -55,7 +55,7 @@ void PBDClothExample::ui_sidebar()
 
 			_scene->_state.selected_object_id = id1;
 
-			_cloth_particle_model = std::make_shared<Kasumi::Model>("sphere", Color::RED);
+			_cloth_particle_model = std::make_shared<Kasumi::Model>("sphere", HinaPE::Color::RED);
 			_cloth_particle_model->instancing();
 			auto id2 = _scene->add_object(_cloth_particle_model);
 			_scene->get_object(id2)->_name = "Particles Instance";

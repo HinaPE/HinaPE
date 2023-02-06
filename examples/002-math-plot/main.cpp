@@ -28,8 +28,8 @@ public:
 	void draw()
 	{
 		_lines->clear();
-		_lines->add({-1, 0, 0}, {1, 0, 0}, Color::RED); // x axis
-		_lines->add({0, -1, 0}, {0, 1, 0}, Color::GREEN); // y axis
+		_lines->add({-1, 0, 0}, {1, 0, 0}, HinaPE::Color::RED); // x axis
+		_lines->add({0, -1, 0}, {0, 1, 0}, HinaPE::Color::GREEN); // y axis
 
 		auto r = _math_func(start_x + step * static_cast<float>(current_sample++));
 		float x = r.first;
@@ -52,7 +52,7 @@ public:
 			float y0 = (iter->second - y_middle) / y_size * 1.8f;
 			++iter;
 			float y1 = (iter->second - y_middle) / y_size * 1.8f;
-			_lines->add({x0, y0, 0}, {x1, y1, 0}, Color::BLUE);
+			_lines->add({x0, y0, 0}, {x1, y1, 0}, HinaPE::Color::BLUE);
 		}
 		_lines->render(_shader);
 	}

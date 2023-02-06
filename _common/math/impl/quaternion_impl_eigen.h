@@ -6,11 +6,11 @@
 namespace HinaPE::Math
 {
 template<typename T>
-constexpr Quaternion<T>::Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_) : _q(q_) {}
+Quaternion<T>::Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_) : _q(q_) {}
 template<typename T>
-constexpr Quaternion<T>::Quaternion(T w_, T x_, T y_, T z_) : _q(w_, x_, y_, z_) {}
+Quaternion<T>::Quaternion(T w_, T x_, T y_, T z_) : _q(w_, x_, y_, z_) {}
 template<typename T>
-constexpr Quaternion<T>::Quaternion(T roll, T pitch, T yaw)
+Quaternion<T>::Quaternion(T roll, T pitch, T yaw)
 {
 	// ref: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Euler_angles_to_quaternion_conversion
 	auto radians_roll = to_radians(roll);
@@ -30,30 +30,29 @@ constexpr Quaternion<T>::Quaternion(T roll, T pitch, T yaw)
 	_q.z() = cr * cp * sy - sr * sp * cy;
 }
 template<typename T>
-template<typename U>
-constexpr Quaternion<T>::Quaternion(const std::initializer_list<U> &lst)
+Quaternion<T>::Quaternion(const std::initializer_list<T> &lst)
 {
 	assert(lst.size() == 4);
 
 	auto input_elem = lst.begin();
-	_q.w() = *static_cast<T>(input_elem);
-	_q.x() = *static_cast<T>(++input_elem);
-	_q.y() = *static_cast<T>(++input_elem);
-	_q.z() = *static_cast<T>(++input_elem);
+	_q.w() = static_cast<T>((*input_elem));
+	_q.x() = static_cast<T>((*++input_elem));
+	_q.y() = static_cast<T>((*++input_elem));
+	_q.z() = static_cast<T>((*++input_elem));
 }
 template<typename T>
-constexpr Quaternion<T>::Quaternion(const Vector3<T> &axis, T angle)
+Quaternion<T>::Quaternion(const Vector3<T> &axis, T angle)
 {
 	Vector3<T> normalized_axis = axis.normalized();
 	T s = std::sin(angle / 2);
 
-	_q.x() = normalized_axis.x * s;
-	_q.y() = normalized_axis.y * s;
-	_q.z() = normalized_axis.z * s;
+	_q.x() = normalized_axis.x() * s;
+	_q.y() = normalized_axis.y() * s;
+	_q.z() = normalized_axis.z() * s;
 	_q.w() = std::cos(angle / 2);
 }
 template<typename T>
-constexpr Quaternion<T>::Quaternion(const Matrix3x3<T> &m)
+Quaternion<T>::Quaternion(const Matrix3x3<T> &m)
 {
 	const T quater = static_cast<T>(0.25);
 
@@ -97,7 +96,7 @@ constexpr Quaternion<T>::Quaternion(const Matrix3x3<T> &m)
 	_q.w() = w;
 }
 template<typename T>
-constexpr Quaternion<T>::Quaternion(const Vector3<T> &from, const Vector3<T> &to)
+Quaternion<T>::Quaternion(const Vector3<T> &from, const Vector3<T> &to)
 {
 	_q.setFromTwoVectors(from._v, to._v);
 }
@@ -211,10 +210,10 @@ auto Quaternion<T>::matrix4x4() const -> Matrix4x4<T>
 	T _2yw = 2 * y * w;
 	T _2zw = 2 * z * w;
 
-	Matrix4x4<T> m({1 - _2yy - _2zz, _2xy - _2zw, _2xz + _2yw, 0,
-					_2xy + _2zw, 1 - _2zz - _2xx, _2yz - _2xw, 0,
-					_2xz - _2yw, _2yz + _2xw, 1 - _2yy - _2xx, 0,
-					0, 0, 0, 1});
+	Matrix4x4<T> m({1 - _2yy - _2zz, _2xy - _2zw, _2xz + _2yw, Constant::Zero,
+					_2xy + _2zw, 1 - _2zz - _2xx, _2yz - _2xw, Constant::Zero,
+					_2xz - _2yw, _2yz + _2xw, 1 - _2yy - _2xx, Constant::Zero,
+					Constant::Zero, Constant::Zero, Constant::Zero, Constant::One});
 
 	return m;
 }

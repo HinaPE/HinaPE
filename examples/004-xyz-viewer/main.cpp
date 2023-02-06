@@ -10,7 +10,7 @@
 #include <iostream>
 #include <iterator>
 
-#include "parallel.h"
+#include "util/parallel.h"
 
 class XyzViewer : public Kasumi::Api
 {
@@ -49,7 +49,7 @@ public:
 		}
 		_current_frame = _particles_frames.begin();
 
-		HinaPE::parallelFor((size_t) 0, _particles_frames.size(), [&](size_t i)
+		HinaPE::Util::parallelFor((size_t) 0, _particles_frames.size(), [&](size_t i)
 		{
 			auto begin_iter = _particles_frames.begin();
 			for (int j = 0; j < i; ++j)
@@ -62,17 +62,17 @@ public:
 			{
 				std::stringstream ss(line);
 				mVector3 point;
-				ss >> point.x >> point.y >> point.z;
+				ss >> point.x() >> point.y() >> point.z();
 
 				Kasumi::Pose pose;
-				pose.position = {point.x, point.y, point.z};
+				pose.position = {point.x(), point.y(), point.z()};
 				pose.scale = {0.01, 0.01, 0.01};
 				begin_iter->second.push_back(pose.get_model_matrix().transposed());
 			}
 			std::cout << "Loaded file: " << filepath << std::endl;
 		});
 
-		auto fluid_model = std::make_shared<Kasumi::Model>("cube", Color::RED);
+		auto fluid_model = std::make_shared<Kasumi::Model>("cube", HinaPE::Color::RED);
 		fluid_model->instancing();
 		_fluid_model = _scene->get_object(_scene->add_object(fluid_model));
 

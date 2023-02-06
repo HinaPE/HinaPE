@@ -1,5 +1,4 @@
 #include "cloth_solver.h"
-#include "parallel.h"
 
 #include <algorithm>
 

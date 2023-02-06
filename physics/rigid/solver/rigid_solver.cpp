@@ -16,14 +16,14 @@ std::map<unsigned int, reactphysics3d::RigidBody *> RigidApi::_rbs;
 
 auto HinaPE::Rigid::RigidSolver::add_rigidbody(const RigidOpt &rb_opt, ShapeOpt *shape_opt, const mVector3 &pos, const mVector3 &rot, const mVector3 &scale) -> unsigned int
 {
-	reactphysics3d::Vector3 position(pos.x, pos.y, pos.z);
-	auto q = mQuaternion(rot.x, rot.y, rot.z);
-	reactphysics3d::Quaternion orientation = {q.x, q.y, q.z, q.w};
+	reactphysics3d::Vector3 position(pos.x(), pos.y(), pos.z());
+	auto q = mQuaternion(rot.x(), rot.y(), rot.z());
+	reactphysics3d::Quaternion orientation = {q.x(), q.y(), q.z(), q.w()};
 	reactphysics3d::Transform transform(position, orientation);
 
 	auto rb = RigidApi::world->createRigidBody(transform);
-	rb->setLinearVelocity({rb_opt.vel.x, rb_opt.vel.y, rb_opt.vel.z});
-	rb->setAngularVelocity({rb_opt.ang_vel.x, rb_opt.ang_vel.y, rb_opt.ang_vel.z});
+	rb->setLinearVelocity({rb_opt.vel.x(), rb_opt.vel.y(), rb_opt.vel.z()});
+	rb->setAngularVelocity({rb_opt.ang_vel.x(), rb_opt.ang_vel.y(), rb_opt.ang_vel.z()});
 	rb->setMass(rb_opt.mass);
 	rb->setLinearDamping(rb_opt.friction);
 	switch (rb_opt.type)

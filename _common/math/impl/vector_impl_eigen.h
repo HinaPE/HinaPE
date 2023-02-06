@@ -18,12 +18,12 @@ Vector3<T>::Vector3(const std::initializer_list<U> &lst)
 }
 
 //@formatter:off
-template<typename T> constexpr Vector3<T>::Vector3() : _v(0, 0, 0) 											{}
-template<typename T> constexpr Vector3<T>::Vector3(T s) : _v(s, s, s) 										{}
-template<typename T> constexpr Vector3<T>::Vector3(T x_, T y_, T z_) : _v(x_, y_, z_) 						{}
-template<typename T> constexpr Vector3<T>::Vector3(const Vector3 &v) : _v(v._v) 							{}
-template<typename T> constexpr Vector3<T>::Vector3(Vector3 &&v) noexcept : _v(std::move(v._v)) 				{}
-template<typename T> constexpr Vector3<T>::Vector3(Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v_) : _v(v_) 	{}
+template<typename T> Vector3<T>::Vector3() : _v(0, 0, 0) 											{}
+template<typename T> Vector3<T>::Vector3(T s) : _v(s, s, s) 										{}
+template<typename T> Vector3<T>::Vector3(T x_, T y_, T z_) : _v(x_, y_, z_) 						{}
+template<typename T> Vector3<T>::Vector3(const Vector3 &v) : _v(v._v) 							{}
+template<typename T> Vector3<T>::Vector3(Vector3 &&v) noexcept : _v(std::move(v._v)) 				{}
+template<typename T> Vector3<T>::Vector3(Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v_) : _v(v_) 	{}
 
 template<typename T> auto Vector3<T>::x() -> T & 								{ return this->_v[0]; }
 template<typename T> auto Vector3<T>::y() -> T & 								{ return this->_v[1]; }
@@ -52,9 +52,11 @@ auto Vector3<T>::operator=(const std::initializer_list<U> &lst) -> Vector3 &
 	assert(lst.size() >= 3);
 
 	auto input_elem = lst.begin();
-	_v.x = static_cast<T>(*input_elem);
-	_v.y = static_cast<T>(*(++input_elem));
-	_v.z = static_cast<T>(*(++input_elem));
+	_v.x() = static_cast<T>(*input_elem);
+	_v.y() = static_cast<T>(*(++input_elem));
+	_v.z() = static_cast<T>(*(++input_elem));
+
+	return (*this);
 }
 template<typename T>
 auto Vector3<T>::operator=(const Vector3 &v_) -> Vector3 &
@@ -157,12 +159,12 @@ Vector2<T>::Vector2(const std::initializer_list<U> &lst)
 }
 
 //@formatter:off
-template<typename T> constexpr Vector2<T>::Vector2() : _v(0, 0, 0) 											{}
-template<typename T> constexpr Vector2<T>::Vector2(T s) : _v(s, s) 											{}
-template<typename T> constexpr Vector2<T>::Vector2(T x_, T y_) : _v(x_, y_) 								{}
-template<typename T> constexpr Vector2<T>::Vector2(const Vector2 &v) : _v(v._v) 							{}
-template<typename T> constexpr Vector2<T>::Vector2(Vector2 &&v) noexcept : _v(std::move(v._v)) 				{}
-template<typename T> constexpr Vector2<T>::Vector2(Eigen::Matrix<T, 2, 1, Eigen::DontAlign> v_) : _v(v_) 	{}
+template<typename T> Vector2<T>::Vector2() : _v(0, 0) 											{}
+template<typename T> Vector2<T>::Vector2(T s) : _v(s, s) 										{}
+template<typename T> Vector2<T>::Vector2(T x_, T y_) : _v(x_, y_) 								{}
+template<typename T> Vector2<T>::Vector2(const Vector2 &v) : _v(v._v) 							{}
+template<typename T> Vector2<T>::Vector2(Vector2 &&v) noexcept : _v(std::move(v._v)) 			{}
+template<typename T> Vector2<T>::Vector2(Eigen::Matrix<T, 2, 1, Eigen::DontAlign> v_) : _v(v_) 	{}
 
 template<typename T> auto Vector2<T>::x() -> T & 								{ return this->_v[0]; }
 template<typename T> auto Vector2<T>::y() -> T & 								{ return this->_v[1]; }
@@ -189,8 +191,10 @@ auto Vector2<T>::operator=(const std::initializer_list<U> &lst) -> Vector2 &
 	assert(lst.size() >= 2);
 
 	auto input_elem = lst.begin();
-	_v.x = static_cast<T>(*input_elem);
-	_v.y = static_cast<T>(*(++input_elem));
+	_v.x() = static_cast<T>(*input_elem);
+	_v.y() = static_cast<T>(*(++input_elem));
+
+	return (*this);
 }
 template<typename T>
 auto Vector2<T>::operator=(const Vector2 &v_) -> Vector2 &
@@ -323,10 +327,12 @@ auto Vector4<T>::operator=(const std::initializer_list<U> &lst) -> Vector4 &
 	assert(lst.size() >= 4);
 
 	auto input_elem = lst.begin();
-	_v.x = static_cast<T>(*input_elem);
-	_v.y = static_cast<T>(*(++input_elem));
-	_v.z = static_cast<T>(*(++input_elem));
-	_v.w = static_cast<T>(*(++input_elem));
+	_v.x() = static_cast<T>(*input_elem);
+	_v.y() = static_cast<T>(*(++input_elem));
+	_v.z() = static_cast<T>(*(++input_elem));
+	_v.w() = static_cast<T>(*(++input_elem));
+
+	return (*this);
 }
 template<typename T>
 auto Vector4<T>::operator=(const Vector4 &v_) -> Vector4 &

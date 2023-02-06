@@ -45,10 +45,10 @@ void HinaPE::Cloth::PBDSolver::time_integration()
 
 	// simple collision
 	for (auto i = 0; i < positions.size(); ++i)
-		if (positions[i].y < -6.3)
+		if (positions[i].y() < -6.3)
 		{
-			positions[i].y = -6.3;
-			velocities[i].y = 0.f;
+			positions[i].y() = -6.3;
+			velocities[i].y() = 0.f;
 		}
 }
 void HinaPE::Cloth::PBDSolver::constraint_projection()

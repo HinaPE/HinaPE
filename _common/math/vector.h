@@ -56,14 +56,14 @@ public:
 
 public:
 #ifdef HINA_EIGEN
-	constexpr explicit Vector3(Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v_);
+	explicit Vector3(Eigen::Matrix<T, 3, 1, Eigen::DontAlign> v_);
 	template<typename U>
 	Vector3(const std::initializer_list<U> &lst);
-	constexpr Vector3();
-	constexpr explicit Vector3(T s);
-	constexpr Vector3(T x_, T y_, T z_);
-	constexpr Vector3(const Vector3 &v);
-	constexpr Vector3(Vector3 &&v) noexcept;
+	Vector3();
+	explicit Vector3(T s);
+	Vector3(T x_, T y_, T z_);
+	Vector3(const Vector3 &v);
+	Vector3(Vector3 &&v) noexcept;
 	~Vector3() = default;
 	Eigen::Matrix<T, 3, 1, Eigen::DontAlign> _v;
 #else
@@ -138,14 +138,14 @@ public:
 
 public:
 #ifdef HINA_EIGEN
-	constexpr explicit Vector2(Eigen::Matrix<T, 2, 1, Eigen::DontAlign> v_);
+	explicit Vector2(Eigen::Matrix<T, 2, 1, Eigen::DontAlign> v_);
 	template<typename U>
 	Vector2(const std::initializer_list<U> &lst);
-	constexpr Vector2();
-	constexpr explicit Vector2(T s);
-	constexpr Vector2(T x_, T y_);
-	constexpr Vector2(const Vector2 &v);
-	constexpr Vector2(Vector2 &&v) noexcept;
+	Vector2();
+	explicit Vector2(T s);
+	Vector2(T x_, T y_);
+	Vector2(const Vector2 &v);
+	Vector2(Vector2 &&v) noexcept;
 	~Vector2() = default;
 	Eigen::Matrix<T, 2, 1, Eigen::DontAlign> _v;
 #else

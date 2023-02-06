@@ -14,6 +14,11 @@ template<typename T>
 class Quaternion final
 {
 public:
+	inline auto x() const -> T { return _q.x(); }
+	inline auto y() const -> T { return _q.y(); }
+	inline auto z() const -> T { return _q.z(); }
+	inline auto w() const -> T { return _q.w(); }
+
 	auto normalized() -> Quaternion<T>;
 	void normalize();
 	void rotate(T angle);
@@ -28,24 +33,23 @@ public:
 public:
 #ifdef HINA_EIGEN
 	Eigen::Quaternion<T, Eigen::DontAlign> _q;
-	template<typename U>
-	constexpr Quaternion(const std::initializer_list<U> &lst);
-	constexpr explicit Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_);
-	constexpr explicit Quaternion() = default;
-	constexpr explicit Quaternion(T w_, T x_, T y_, T z_);
-	constexpr explicit Quaternion(T roll, T pitch, T yaw);
-	constexpr explicit Quaternion(const Vector3<T> &axis, T angle);
-	constexpr explicit Quaternion(const Vector3<T>& from, const Vector3<T>& to);
-	constexpr explicit Quaternion(const Matrix3x3<T> &m);
+	Quaternion(const std::initializer_list<T> &lst);
+	explicit Quaternion(Eigen::Quaternion<T, Eigen::DontAlign> q_);
+	Quaternion() = default;
+	Quaternion(T w_, T x_, T y_, T z_);
+	Quaternion(T roll, T pitch, T yaw);
+	Quaternion(const Vector3<T> &axis, T angle);
+	Quaternion(const Vector3<T>& from, const Vector3<T>& to);
+	explicit Quaternion(const Matrix3x3<T> &m);
 #else
 	T w, x, y, z;
 #endif
 };
 
 template<typename T>
-auto operator*(const Quaternion<T> &q, const Vector3<T> &v) -> Vector3<T> { return {q._q * v._v}; }
+auto operator*(const Quaternion<T> &q, const Vector3<T> &v) -> Vector3<T> { return Vector3<T>(q._q * v._v); }
 template<typename T>
-auto operator*(const Quaternion<T> &a, const Quaternion<T> &b) -> Quaternion<T> { return {a._q * b._q}; }
+auto operator*(const Quaternion<T> &a, const Quaternion<T> &b) -> Quaternion<T> { return Quaternion<T>(a._q * b._q); }
 template<typename T>
 auto to_radians(T v) -> T { return v * (static_cast<T>(HINA_PI) / 180.0f); }
 template<typename T>
