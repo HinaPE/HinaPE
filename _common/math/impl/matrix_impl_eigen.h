@@ -33,12 +33,6 @@ constexpr Matrix3x3<T>::Matrix3x3()
 	_m = Eigen::Matrix<T, 3, 3, Eigen::DontAlign>::Zero();
 }
 
-template<typename T>
-auto Matrix3x3<T>::inverse() const -> Matrix3x3
-{
-	return Matrix3x3(_m.inverse());
-}
-
 // ============================== Matrix4x4 ==============================
 template<typename T>
 constexpr Matrix4x4<T>::Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign> m_) : _m(m_) {}
@@ -72,12 +66,6 @@ template<typename T>
 constexpr Matrix4x4<T>::Matrix4x4()
 {
 	_m = Eigen::Matrix<T, 4, 4, Eigen::DontAlign>::Zero();
-}
-
-template<typename T>
-auto Matrix4x4<T>::inverse() const -> Matrix4x4
-{
-	return Matrix4x4(_m.inverse());
 }
 }
 #endif //HINAPE_MATRIX_IMPL_EIGEN_H

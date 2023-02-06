@@ -15,11 +15,19 @@ template<typename T>
 class Matrix3x3 final
 {
 public:
-	auto inverse() const -> Matrix3x3;
+	inline auto inverse() const -> Matrix3x3 { return Matrix3x3(_m.inverse()); }
+	inline auto transpose() const -> Matrix3x3 { return Matrix3x3(_m.transpose()); }
+	inline auto frobenius_norm() const -> T { return _m.norm(); }
 
 public:
 	static inline constexpr auto Zero() -> Matrix3x3 { return Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign>::Zero()); }
 	static inline constexpr auto Identity() -> Matrix3x3 { return Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign>::Identity()); }
+
+public:
+	auto operator[](size_t i) -> T & { return _m(i); }
+	auto operator[](size_t i) const -> const T & { return _m(i); }
+	auto operator()(size_t i, size_t j) -> T & { return _m(i, j); }
+	auto operator()(size_t i, size_t j) const -> const T & { return _m(i, j); }
 
 public:
 #ifdef HINA_EIGEN
@@ -59,7 +67,8 @@ template<typename T>
 class Matrix4x4 final
 {
 public:
-	auto inverse() const -> Matrix4x4;
+	inline auto inverse() const -> Matrix4x4 { return Matrix4x4(_m.inverse()); }
+	inline auto transpose() const -> Matrix4x4 { return Matrix4x4(_m.transpose()); }
 
 public:
 	static inline constexpr auto Zero() -> Matrix4x4 { return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>::Zero()); }
