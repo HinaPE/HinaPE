@@ -82,18 +82,20 @@ public:
 	static inline constexpr auto Identity() -> Matrix4x4 { return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>::Identity()); }
 	static inline constexpr auto make_translation_matrix(const Vector3<T> &t) -> Matrix4x4<T>
 	{
-		return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>{{1, 0, 0, t.x()},
-																  {0, 1, 0, t.y()},
-																  {0, 0, 1, t.z()},
-																  {0, 0, 0, 1}});
+		return Matrix4x4(
+				Eigen::Matrix<T, 4, 4, Eigen::DontAlign>{{1, 0, 0, t.x()},
+														 {0, 1, 0, t.y()},
+														 {0, 0, 1, t.z()},
+														 {0, 0, 0, 1}});
 	}
 	static inline constexpr auto make_rotation_matrix(const Vector3<T> &axis, T angle) -> Matrix4x4<T> { return Matrix4x4(Eigen::AngleAxis<T>(angle, axis._v)); } // TODO
 	static inline constexpr auto make_scale_matrix(const Vector3<T> &s) -> Matrix4x4<T>
 	{
-		return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>{{s.x(), 0,     0,     0},
-																  {0,     s.y(), 0,     0},
-																  {0,     0,     s.z(), 0},
-																  {0,     0,     0,     1}});
+		return Matrix4x4(
+				Eigen::Matrix<T, 4, 4, Eigen::DontAlign>{{s.x(), 0,     0,     0},
+														 {0,     s.y(), 0,     0},
+														 {0,     0,     s.z(), 0},
+														 {0,     0,     0,     1}});
 	}
 public:
 	auto operator[](size_t i) -> T & { return _m(i); }
