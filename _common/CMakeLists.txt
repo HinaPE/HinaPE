@@ -10,6 +10,7 @@ endif ()
 
 file(GLOB_RECURSE
         HinaPE_Common_SRC
+        "common.h"
         "animation/*.cpp" "animation/*.h"
         "geom/*.cpp" "geom/*.h"
         "math/*.cpp" "math/*.h"

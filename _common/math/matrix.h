@@ -19,7 +19,7 @@ public:
 	inline void transpose() { _m = _m.transpose(); }
 	inline auto inversed() const -> Matrix3x3 { return Matrix3x3(_m.inverse()); }
 	inline auto transposed() const -> Matrix3x3 { return Matrix3x3(_m.transpose()); }
-	inline auto data() -> T * { return _m.data(); }
+	inline auto data() const -> const T * { return _m.data(); }
 	inline auto frobenius_norm() const -> T { return _m.norm(); }
 
 public:
@@ -74,7 +74,7 @@ public:
 	inline void transpose() { _m = _m.transpose(); }
 	inline auto inversed() const -> Matrix4x4 { return Matrix4x4(_m.inverse()); }
 	inline auto transposed() const -> Matrix4x4 { return Matrix4x4(_m.transpose()); }
-	inline auto data() -> T * { return _m.data(); }
+	inline auto data() const -> const T * { return _m.data(); }
 	inline auto frobenius_norm() const -> T { return _m.norm(); }
 
 public:
