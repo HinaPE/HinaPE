@@ -21,6 +21,7 @@ public:
 	inline auto transposed() const -> Matrix3x3 { return Matrix3x3(_m.transpose()); }
 	inline auto data() const -> const T * { return _m.data(); }
 	inline auto frobenius_norm() const -> T { return _m.norm(); }
+	inline auto as_float() const -> Matrix3x3<float> { return Matrix3x3<float>(_m.template cast<float>()); }
 
 public:
 	static inline constexpr auto Zero() -> Matrix3x3 { return Matrix3x3(Eigen::Matrix<T, 3, 3, Eigen::DontAlign>::Zero()); }
@@ -76,6 +77,7 @@ public:
 	inline auto transposed() const -> Matrix4x4 { return Matrix4x4(_m.transpose()); }
 	inline auto data() const -> const T * { return _m.data(); }
 	inline auto frobenius_norm() const -> T { return _m.norm(); }
+	inline auto as_float() const -> Matrix4x4<float> { return Matrix4x4<float>(_m.template cast<float>()); }
 
 public:
 	static inline constexpr auto Zero() -> Matrix4x4 { return Matrix4x4(Eigen::Matrix<T, 4, 4, Eigen::DontAlign>::Zero()); }

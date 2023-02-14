@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 project(HinaPE_Common VERSION 1.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
-option(HINAPE_DOUBLE "use double float precision" OFF)
+option(HINAPE_DOUBLE "use double float precision" ON)
 option(HINAPE_UNIT_TEST "build unit test" ON)
 
 if (MSVC)
