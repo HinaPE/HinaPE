@@ -12,6 +12,7 @@ public:
 	Painter() : Kasumi::App(Kasumi::App::Opt()) {}
 	void prepare() final
 	{
+		Kasumi::Shader::Init();
 		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "heart.glsl");
 		_framebuffer = std::make_shared<Kasumi::Framebuffer>(_opt.width, _opt.height);
 
