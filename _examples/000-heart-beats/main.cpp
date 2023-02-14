@@ -9,11 +9,11 @@
 class Painter final : public Kasumi::App
 {
 public:
-	Painter() : Kasumi::App(800, 600, "Heart Beats ~") {}
+	Painter() : Kasumi::App(Kasumi::App::Opt()) {}
 	void prepare() final
 	{
 		_shader = std::make_shared<Kasumi::Shader>(std::string(MyShaderDir) + "painter_vertex.glsl", std::string(MyShaderDir) + "heart.glsl");
-		_framebuffer = std::make_shared<Kasumi::Framebuffer>(_width, _height);
+		_framebuffer = std::make_shared<Kasumi::Framebuffer>(_opt.width, _opt.height);
 
 		// draw a rectangle to fill the screen
 		std::array<float, 24> screen_vertices = {
@@ -43,7 +43,7 @@ public:
 		_framebuffer->render_callback = [&]() // render the scene to the framebuffer
 		{
 			_shader->use();
-			static mVector2 screen(_width, _height);
+			static mVector2 screen(_opt.width, _opt.height);
 			_shader->uniform("iResolution", screen);
 			static std::chrono::steady_clock::time_point _starting_point = std::chrono::steady_clock::now();
 			float time = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - _starting_point).count()) / 1000000.f;
