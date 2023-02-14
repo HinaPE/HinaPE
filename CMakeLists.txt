@@ -11,7 +11,7 @@ option(HinaPE_EXAMPLES "Load HinaPE Examples" ON)
 # experimental, would be remove in future
 add_subdirectory(_common)
 
-add_subdirectory(_physics/fluid)
+#add_subdirectory(_physics/fluid)
 
 if (HinaPE_USE_KASUMI)
     add_subdirectory(kasumi)
