@@ -3,7 +3,7 @@ project(000-HeartBeats VERSION 1.50 DESCRIPTION "HinaPE is not a Physics Engine"
 
 add_executable(000-HeartBeats main.cpp icon.rc)
 set_target_properties(000-HeartBeats PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-target_link_libraries(000-HeartBeats PUBLIC Kasumi_backend)
+target_link_libraries(000-HeartBeats PUBLIC Kasumi_Backends)
 target_compile_definitions(
         000-HeartBeats
         PUBLIC
