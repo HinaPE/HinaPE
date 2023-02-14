@@ -77,8 +77,8 @@ on dev...
 ## Q&A
 update all submodules
 ```git
-git submodule foreach git pull origin master
-git submodule foreach git checkout master
+git submodule foreach --recursive git pull origin master
+git submodule foreach --recursive git checkout master
 ```
 
 ## TODOs
