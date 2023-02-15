@@ -3,6 +3,7 @@
 #include "platform.h"
 #include "shader.h"
 #include "framebuffer.h"
+#include "object3D.h"
 
 #include <chrono>
 
@@ -67,6 +68,8 @@ private:
 
 auto main() -> int
 {
-	std::make_shared<Painter>()->launch();
+	auto painter = std::make_shared<Painter>();
+	painter->inspect(std::make_shared<Kasumi::ObjectMesh3D>());
+	painter->launch();
 	return 0;
 }

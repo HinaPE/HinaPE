@@ -33,6 +33,8 @@ public:
 	auto length_squared() -> T;
 	void normalize();
 	auto normalized() const -> Vector3;
+	auto as_float() const -> Vector3<float>;
+	auto as_double() const -> Vector3<double>;
 
 public:
 	static inline constexpr auto Zero() -> Vector3 { return Vector3(0, 0, 0); }
@@ -70,6 +72,10 @@ public:
 	T x, y, z;
 #endif
 };
+template<typename T>
+auto Vector3<T>::as_float() const -> Vector3<float> { return {static_cast<float>(x()), static_cast<float>(y()), static_cast<float>(z())}; }
+template<typename T>
+auto Vector3<T>::as_double() const -> Vector3<double> { return {static_cast<double>(x()), static_cast<double>(y()), static_cast<double>(z())}; }
 
 //@formatter:off
 template<typename T> auto operator+(const Vector3<T>& a) -> Vector3<T> { return a;}
