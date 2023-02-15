@@ -3,7 +3,7 @@
 #include "app.h"
 #include "shader.h"
 #include "framebuffer.h"
-#include "object3D.h"
+#include "objects/object3D.h"
 
 #include <chrono>
 
