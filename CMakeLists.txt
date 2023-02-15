@@ -8,14 +8,10 @@ option(HINAPE_FLUID "Load HinaPE Fluid Engine" ON)
 option(HinaPE_USE_KASUMI "Use Kasumi Renderer" ON)
 option(HinaPE_EXAMPLES "Load HinaPE Examples" ON)
 
-# experimental, would be remove in future
-add_subdirectory(_common)
-
 #add_subdirectory(_physics/fluid)
 
-if (HinaPE_USE_KASUMI)
-    add_subdirectory(kasumi)
-endif ()
+add_subdirectory(kasumi)
+
 if (HinaPE_EXAMPLES)
     add_subdirectory(_examples)
 endif ()

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 project(HINAPE_CLOTH VERSION 1.50 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
-set(HINAPE_COMMON_DIR "../../_common")
+set(HINAPE_COMMON_DIR "../../kasumi/_common")
 set(HINAPE_DEPS_DIR "../deps")
 
 if (NOT TARGET HinaPE_Common)
