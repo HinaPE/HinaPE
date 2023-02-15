@@ -1,6 +1,6 @@
 #include "glad/glad.h"
 
-#include "platform.h"
+#include "app.h"
 #include "shader.h"
 #include "framebuffer.h"
 #include "object3D.h"
@@ -10,7 +10,7 @@
 class Painter final : public Kasumi::App
 {
 public:
-	Painter() : Kasumi::App(Kasumi::App::Opt()) {}
+	Painter() : Kasumi::App() {}
 	void prepare() final
 	{
 		Kasumi::Shader::Init();
@@ -69,7 +69,6 @@ private:
 auto main() -> int
 {
 	auto painter = std::make_shared<Painter>();
-	painter->inspect(std::make_shared<Kasumi::ObjectMesh3D>(Kasumi::ObjectMesh3D::Opt{}));
 	painter->launch();
 	return 0;
 }
