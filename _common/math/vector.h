@@ -38,6 +38,7 @@ public:
 
 public:
 	static inline constexpr auto Zero() -> Vector3 { return Vector3(0, 0, 0); }
+	static inline constexpr auto One() -> Vector3 { return Vector3(1, 1, 1); }
 
 public:
 	template<typename U>

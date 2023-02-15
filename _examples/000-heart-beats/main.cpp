@@ -69,7 +69,7 @@ private:
 auto main() -> int
 {
 	auto painter = std::make_shared<Painter>();
-	painter->inspect(std::make_shared<Kasumi::ObjectMesh3D>());
+	painter->inspect(std::make_shared<Kasumi::ObjectMesh3D>(Kasumi::ObjectMesh3D::Opt{}));
 	painter->launch();
 	return 0;
 }

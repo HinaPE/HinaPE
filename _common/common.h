@@ -8,6 +8,7 @@
 #include "math/transform.h"
 #include "math/vector.h"
 #include "geom/bbox.h"
+#include "geom/surface3.h"
 #include "util/parallel.h"
 #include "util/timer.h"
 
