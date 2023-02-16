@@ -77,6 +77,15 @@ void HinaPE::PBDClothSolver::_update_state()
 }
 void HinaPE::PBDClothSolver::Data::_sync_opt()
 {
+	_inv_masses.clear();
+	_init_vertices.clear();
+	_init_indices.clear();
+	_init_edges.clear();
+	_positions.clear();
+	_pre_positions.clear();
+	_velocities.clear();
+	_forces.clear();
+
 	// init geometry data.
 	auto &_vertices = _init_vertices;
 	auto &_indices = _init_indices;

@@ -3,4 +3,5 @@ project(HinaPE VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUA
 
 add_subdirectory(kasumi)
 add_subdirectory(physics/cloth)
+add_subdirectory(physics/_fluid)
 add_subdirectory(tutorials)
