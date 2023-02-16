@@ -68,14 +68,13 @@ For all platform (MacOS, Ubuntu, Windows)
 ```shell
 cmake -S . -B Build
 cmake --build Build --config Release
-./Build/HinaPE
 ```
 
 ## Documentation
 on dev...
 
 ## Q&A
-update all submodules
+recursively update all submodules
 ```git
 git submodule foreach --recursive git pull origin master
 git submodule foreach --recursive git checkout master
