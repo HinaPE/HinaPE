@@ -7,6 +7,7 @@ namespace HinaPE
 {
 class Constraint
 {
+public:
 	virtual void solve() = 0;
 };
 using ConstraintPtr = std::shared_ptr<Constraint>;

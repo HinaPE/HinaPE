@@ -15,8 +15,13 @@ set_target_properties(HinaPE_Cloth PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Cloth PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(HinaPE_Cloth PUBLIC HinaPE_Common)
 
+if (NOT TARGET Kasumi_Render3D)
+    message(FATAL_ERROR "Kasumi_Render3D is not found")
+    return()
+endif ()
+
 # APP EXECUTABLE
 add_executable(HinaPE_Cloth_App main.cpp)
 set_target_properties(HinaPE_Cloth_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Cloth_App PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(HinaPE_Cloth_App PUBLIC HinaPE_Cloth)
+target_link_libraries(HinaPE_Cloth_App PUBLIC HinaPE_Cloth Kasumi_Render3D)

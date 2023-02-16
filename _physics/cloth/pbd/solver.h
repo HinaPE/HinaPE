@@ -14,19 +14,19 @@ public:
 public:
 	struct Opt
 	{
-		float time_step = 0.02f;
-		float gravity = -9.8f;
-		float damping = 0.99f;
+		real time_step = 0.02f;
+		real gravity = -9.8f;
+		real damping = 0.99f;
 
 		bool distance_constraint = true;
-		float distance_constraint_stiffness = 0.9f;
+		real distance_constraint_stiffness = 0.9f;
 	} _opt;
 	PBDClothSolver();
 
 protected:
 	void _prepare();
-	void _external_force();
-	void _time_integration();
+	void _external_force() const;
+	void _time_integration() const;
 	void _constraint_projection();
 	void _update_state();
 
