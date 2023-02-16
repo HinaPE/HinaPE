@@ -11,13 +11,12 @@ protected:
 	}
 	void update(double dt) final
 	{
-		timer.reset();
+		_timer.reset();
 		_solver->step(dt);
-		_last_update_time = timer.duration();
+		_last_update_time = _timer.duration();
 	}
 
 	HinaPE::PBDClothSolverPtr _solver;
-	HinaPE::Util::Timer timer;
 };
 
 auto main() -> int
