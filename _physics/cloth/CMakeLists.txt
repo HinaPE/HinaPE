@@ -14,6 +14,11 @@ add_library(HinaPE_Cloth ${src})
 set_target_properties(HinaPE_Cloth PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Cloth PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(HinaPE_Cloth PUBLIC HinaPE_Common)
+target_compile_definitions(
+        HinaPE_Cloth
+        PUBLIC
+        -DMyAssetDir="${CMAKE_CURRENT_SOURCE_DIR}/assets/"
+)
 
 if (NOT TARGET Kasumi_Render3D)
     message(FATAL_ERROR "Kasumi_Render3D is not found")

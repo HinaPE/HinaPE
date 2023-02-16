@@ -42,8 +42,8 @@ struct PBDClothSolver::Data : public CopyDisable
 public:
 	struct Opt
 	{
-		real width = 2.0f;
-		real height = 2.0f;
+		real width = 7.0f;
+		real height = 5.0f;
 		int rows = 30;
 		int cols = 30;
 	} _opt;

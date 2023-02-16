@@ -17,7 +17,7 @@ class DistanceConstraint : public Constraint
 public:
 	struct Opt
 	{
-		real stiffness = 1.f;
+		real stiffness = 0.8f;
 	} _opt;
 	explicit DistanceConstraint(std::vector<mVector3> &vertices, std::vector<real> &inv_masses, const std::vector<std::pair<unsigned int, unsigned int>> &edges);
 	void solve() override;
