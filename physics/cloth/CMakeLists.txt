@@ -1,25 +1,32 @@
 cmake_minimum_required(VERSION 3.18)
-project(HINAPE_CLOTH VERSION 1.50 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
-
-set(HINAPE_COMMON_DIR "../../kasumi/_common")
-set(HINAPE_DEPS_DIR "../deps")
+project(HinaPE_Cloth VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 if (NOT TARGET HinaPE_Common)
-    add_subdirectory(${HINAPE_COMMON_DIR} HinaPE_Common)
+    message(FATAL_ERROR "HinaPE_Common is not found")
+    return()
 endif ()
 
-file(GLOB_RECURSE HINA_CLOTH_ENGINE_FACTORY "factory/*.cpp" "factory/*.h" "factory/*.inl.h")
-file(GLOB_RECURSE HINA_CLOTH_ENGINE_SOLVER "solver/*.cpp" "solver/*.h" "solver/*.inl.h")
-file(GLOB_RECURSE HINA_CLOTH_ENGINE_UTIL "util/*.cpp" "util/*.h" "util/*.inl.h")
-
-file(GLOB_RECURSE HINA_CLOTH_ENGINE_SRC
-        ${HINA_CLOTH_ENGINE_SOLVER}
-        ${HINA_CLOTH_ENGINE_FACTORY}
-        ${HINA_CLOTH_ENGINE_UTIL}
+file(GLOB_RECURSE src
+        pbd/solver.h pbd/solver.cpp
+        pbd/constraints.h pbd/constraints.cpp
         )
-
-add_library(HinaPE_Cloth ${HINA_CLOTH_ENGINE_SRC})
+add_library(HinaPE_Cloth ${src})
 set_target_properties(HinaPE_Cloth PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-target_include_directories(HinaPE_Cloth PUBLIC ${HINAPE_COMMON_DIR} ${HINAPE_DEPS_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 target_include_directories(HinaPE_Cloth PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(HinaPE_Cloth PUBLIC HinaPE_Common)
+target_compile_definitions(
+        HinaPE_Cloth
+        PUBLIC
+        -DMyAssetDir="${CMAKE_CURRENT_SOURCE_DIR}/assets/"
+)
+
+if (NOT TARGET Kasumi_Render3D)
+    message(FATAL_ERROR "Kasumi_Render3D is not found")
+    return()
+endif ()
+
+# APP EXECUTABLE
+add_executable(HinaPE_Cloth_App main.cpp)
+set_target_properties(HinaPE_Cloth_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
+target_include_directories(HinaPE_Cloth_App PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(HinaPE_Cloth_App PUBLIC HinaPE_Cloth Kasumi_Render3D)
