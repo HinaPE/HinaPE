@@ -1,9 +1,10 @@
 #include "solver.h"
 
-HinaPE::PBDClothSolver::PBDClothSolver()
+HinaPE::PBDClothSolver::PBDClothSolver() : _current_dt(0.2f)
 {
 	_data = std::make_shared<Data>();
 	_data->_sync_opt();
+	_prepare();
 }
 void HinaPE::PBDClothSolver::step(real dt)
 {
@@ -15,6 +16,10 @@ void HinaPE::PBDClothSolver::step(real dt)
 }
 void HinaPE::PBDClothSolver::_prepare()
 {
+	if (_opt.distance_constraint)
+	{
+		_constraints.emplace_back(std::make_shared<DistanceConstraint>(_data->_positions, _data->_inv_masses, _data->_init_edges));
+	}
 }
 void HinaPE::PBDClothSolver::_external_force()
 {

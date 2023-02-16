@@ -33,7 +33,7 @@ protected:
 public:
 	struct Data;
 	std::shared_ptr<Data> _data;
-	std::vector<Constraint> _constraints;
+	std::vector<ConstraintPtr> _constraints;
 	real _current_dt;
 };
 
