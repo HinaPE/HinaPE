@@ -3,7 +3,7 @@
 HinaPE::PBDClothSolver::PBDClothSolver() : _current_dt(0.2f)
 {
 	_data = std::make_shared<Data>();
-	_data->_sync_opt();
+	_data->_build_();
 	_prepare();
 }
 void HinaPE::PBDClothSolver::step(real dt)
@@ -75,7 +75,7 @@ void HinaPE::PBDClothSolver::_update_state()
 	auto &forces = _data->_forces;
 	std::fill(forces.begin(), forces.end(), mVector3(0.f, 0.f, 0.f));
 }
-void HinaPE::PBDClothSolver::Data::_sync_opt()
+void HinaPE::PBDClothSolver::Data::_build_()
 {
 	_inv_masses.clear();
 	_init_vertices.clear();

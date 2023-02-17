@@ -15,6 +15,7 @@ public:
 private:
 	std::vector<mVector3> _points;
 };
+using PointSimpleListSearcher3Ptr = std::shared_ptr<PointSimpleListSearcher3>;
 } //namespace HinaPE
 
 #endif //HINAPE_POINT_SIMPLE_LIST_SEARCHER_H

@@ -47,7 +47,7 @@ public:
 		int rows = 30;
 		int cols = 30;
 	} _opt;
-	void _sync_opt();
+	void _build_();
 
 	// init infos
 	std::vector<real> _inv_masses;

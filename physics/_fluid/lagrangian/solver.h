@@ -2,6 +2,7 @@
 #define HINAPE_SOLVER_H
 
 #include "common.h"
+#include "neighbor_search/point_simple_list_searcher.h"
 
 namespace HinaPE
 {
@@ -21,6 +22,7 @@ protected:
 public:
 	struct Data;
 	std::shared_ptr<Data> _data;
+
 	real _current_dt;
 };
 
@@ -29,16 +31,29 @@ struct SPHSolver::Data : public CopyDisable
 public:
 	struct Opt
 	{
-		real width = 7.0f;
-		real height = 5.0f;
-		int rows = 30;
-		int cols = 30;
+		// common
+		real mass = 1e-3;
+		real radius = 1e-3;
+		real max_search_radius = 1e-3;
+
+		// sph
+		real target_density = 1000; // water density
+		real target_spacing = 0.1;
+		real kernel_radius_over_target_spacing = 1.8;
+		real kernel_radius = kernel_radius_over_target_spacing * target_spacing;
 	} _opt;
-	void _sync_opt();
+	void _rebuild_();
 
-	// init infos
+	// particles
+	std::vector<mVector3> _positions;
+	std::vector<mVector3> _velocities;
+	std::vector<mVector3> _forces;
+	std::vector<real> _densities;
+	std::vector<real> _pressures;
 
-	// update infos
+	// neighbor searcher
+	PointNeighborSearcher3Ptr _neighbor_searcher;
+	std::vector<std::vector<size_t>> _neighbor_lists;
 };
 } // namespace HinaPE
 
