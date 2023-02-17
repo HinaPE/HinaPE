@@ -1,9 +1,15 @@
 #include "solver.h"
 
-HinaPE::SPHSolver::SPHSolver()
+HinaPE::SPHSolver::SPHSolver() : _data(std::make_shared<Data>()), _current_dt(0.02)
 {
+	_data->_rebuild_();
 }
 void HinaPE::SPHSolver::step(real dt)
+{
+	_current_dt = dt;
+	_update_density();
+}
+void HinaPE::SPHSolver::_update_density()
 {
 }
 void HinaPE::SPHSolver::Data::_rebuild_()

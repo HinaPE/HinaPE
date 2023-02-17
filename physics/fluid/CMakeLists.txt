@@ -1,16 +1,28 @@
 cmake_minimum_required(VERSION 3.18)
-project(HINAPE_FLUID VERSION 1.50 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
+project(HinaPE_Fluid VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 if (NOT TARGET HinaPE_Common)
-    message(FATAL_ERROR "HinaPE_Common is not found. Please build HinaPE_Common first.")
+    message(FATAL_ERROR "HinaPE_Common is not found")
     return()
 endif ()
 
-file(GLOB_RECURSE SUB_SOLVERS_SRC "sub_solver/*.cpp" "sub_solver/*.h")
-file(GLOB_RECURSE EMITTERS_SRC "emitter/*.cpp" "emitter/*.h")
-file(GLOB SOLVERS_SRC "*.cpp" "*.h")
+file(GLOB_RECURSE src
+        lagrangian/*.h lagrangian/*.cpp
+        euler/*.h euler/*.cpp
+        hybrid/*.h hybrid/*.cpp
+        )
+add_library(HinaPE_Fluid ${src})
+set_target_properties(HinaPE_Fluid PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
+target_include_directories(HinaPE_Fluid PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(HinaPE_Fluid PUBLIC HinaPE_Common)
 
-add_library(HinaPE_fluid STATIC ${SUB_SOLVERS_SRC} ${EMITTERS_SRC} ${SOLVERS_SRC})
-set_target_properties(HinaPE_fluid PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-target_include_directories(HinaPE_fluid PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(HinaPE_fluid PUBLIC HinaPE_Common)
+if (NOT TARGET Kasumi_Render3D)
+    message(FATAL_ERROR "Kasumi_Render3D is not found")
+    return()
+endif ()
+
+# APP EXECUTABLE
+add_executable(HinaPE_Fluid_App main.cpp)
+set_target_properties(HinaPE_Fluid_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
+target_include_directories(HinaPE_Fluid_App PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(HinaPE_Fluid_App PUBLIC HinaPE_Fluid Kasumi_Render3D)

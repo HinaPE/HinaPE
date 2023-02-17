@@ -18,6 +18,7 @@ public:
 	SPHSolver();
 
 protected:
+	void _update_density();
 
 public:
 	struct Data;
@@ -44,6 +45,7 @@ public:
 	} _opt;
 	void _rebuild_();
 
+public:
 	// particles
 	std::vector<mVector3> _positions;
 	std::vector<mVector3> _velocities;
