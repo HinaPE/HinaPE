@@ -22,7 +22,12 @@ void HinaPE::SPHSolver::_update_density() const
 	Util::parallelFor(static_cast<size_t>(0), _data->size(), [&](size_t i)
 	{
 		mVector3 origin = p[i];
-		real sum = 1;
+		real sum = 0;
+		_data->_neighbor_searcher->for_each_nearby_point(origin, _data->_opt.kernel_radius, [&](size_t, const mVector3 &neighbor_position)
+		{
+			real dist = (origin - neighbor_position).length();
+			sum += (*_kernel)(dist); // Note: Don't use parallel for here
+		});
 		d[i] = m * sum;
 	});
 }
