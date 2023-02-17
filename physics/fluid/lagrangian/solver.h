@@ -14,14 +14,30 @@ public:
 public:
 	struct Opt
 	{
+		// common
 		real current_dt = 0.02; // don't alter this
+		mVector3 gravity = mVector3(0, -9.8, 0);
+
+		//sph
+		real eos_exponent = 7;
+		real negative_pressure_scale = 0.0;
+		real viscosity_coefficient = 0.01;
+		real pseudo_viscosity_coefficient = 10.0;
+		real speed_of_sound = 100;
+		real time_step_limit_scale = 0.4;
 	} _opt;
 	struct Data;
 	struct Kernel;
 	SPHSolver();
 
 protected:
+	void _accumulate_force() const;
+	void _time_integration() const;
+	void _resolve_collision() const;
+
+private:
 	void _update_density() const;
+	void _update_pressure() const;
 
 private:
 	std::shared_ptr<Data> _data;
