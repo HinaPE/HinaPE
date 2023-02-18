@@ -22,7 +22,10 @@ if (NOT TARGET Kasumi_Render3D)
 endif ()
 
 # APP EXECUTABLE
-add_executable(HinaPE_Fluid_App main.cpp)
+file(GLOB_RECURSE vis_src
+        visualization/*.h visualization/*.cpp
+        )
+add_executable(HinaPE_Fluid_App main.cpp ${vis_src})
 set_target_properties(HinaPE_Fluid_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Fluid_App PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(HinaPE_Fluid_App PUBLIC HinaPE_Fluid Kasumi_Render3D)

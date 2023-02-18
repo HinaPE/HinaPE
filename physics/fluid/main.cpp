@@ -1,4 +1,4 @@
-#include "app.h"
+#include "backends/app.h"
 #include "lagrangian/solver.h"
 
 class FluidApp : public Kasumi::App

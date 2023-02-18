@@ -1,8 +1,6 @@
 #include "glad/glad.h"
 
-#include "app.h"
-#include "shader.h"
-#include "framebuffer.h"
+#include "backends/app.h"
 #include "objects/object3D.h"
 
 #include <chrono>
