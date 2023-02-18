@@ -3,7 +3,6 @@
 HinaPE::SPHSolver::SPHSolver()
 {
 	_data = std::make_shared<Data>();
-	_data->_rebuild_();
 	_kernel = std::make_shared<StdKernel>();
 	dynamic_cast<StdKernel *>(_kernel.get())->_opt.kernel_radius = _data->_opt.kernel_radius;
 	dynamic_cast<StdKernel *>(_kernel.get())->_rebuild_();
@@ -11,27 +10,17 @@ HinaPE::SPHSolver::SPHSolver()
 void HinaPE::SPHSolver::step(real dt)
 {
 	_opt.current_dt = dt;
+
+	// begin
+	_clear_force();
+	_update_collider();
+	_update_emitter();
 	_update_density();
+
+	// kernels
+	_build_neighbor();
 	_accumulate_force();
 	_time_integration();
-}
-void HinaPE::SPHSolver::_update_density() const
-{
-	auto &p = _data->_positions;
-	auto &d = _data->_densities;
-	const auto &m = _data->_opt.mass;
-
-	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i)
-	{
-		mVector3 origin = p[i];
-		real sum = 0;
-		_data->_neighbor_searcher->for_each_nearby_point(origin, _data->_opt.kernel_radius, [&](size_t, const mVector3 &neighbor_position)
-		{
-			real dist = (origin - neighbor_position).length();
-			sum += (*_kernel)(dist); // Note: Don't use parallel for here
-		});
-		d[i] = m * sum;
-	});
 }
 void HinaPE::SPHSolver::_accumulate_force() const
 {
@@ -93,6 +82,25 @@ void HinaPE::SPHSolver::_time_integration() const
 void HinaPE::SPHSolver::_resolve_collision() const
 {
 }
+void HinaPE::SPHSolver::_clear_force() const
+{
+	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i) { _data->_forces[i] = mVector3::Zero(); });
+}
+void HinaPE::SPHSolver::_resize_buffer() const
+{
+	_data->_new_positions.resize(_data->size());
+	_data->_new_velocities.resize(_data->size());
+}
+void HinaPE::SPHSolver::_build_neighbor() const
+{
+	_data->build_neighbor();
+}
+void HinaPE::SPHSolver::_update_collider() const
+{
+}
+void HinaPE::SPHSolver::_update_emitter() const
+{
+}
 void HinaPE::SPHSolver::_update_pressure() const
 {
 	auto &d = _data->_densities;
@@ -111,9 +119,27 @@ void HinaPE::SPHSolver::_update_pressure() const
 			p[i] *= negative_pressure_scale;
 	});
 }
+void HinaPE::SPHSolver::_update_density() const
+{
+	auto &p = _data->_positions;
+	auto &d = _data->_densities;
+	const auto &m = _data->_opt.mass;
+
+	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i)
+	{
+		mVector3 origin = p[i];
+		real sum = 0;
+		_data->_neighbor_searcher->for_each_nearby_point(origin, _data->_opt.kernel_radius, [&](size_t, const mVector3 &neighbor_position)
+		{
+			real dist = (origin - neighbor_position).length();
+			sum += (*_kernel)(dist); // Note: Don't use parallel for here
+		});
+		d[i] = m * sum;
+	});
+}
 
 
-void HinaPE::SPHSolver::Data::_rebuild_()
+void HinaPE::SPHSolver::Data::build_neighbor()
 {
 	_neighbor_searcher = std::make_shared<PointSimpleListSearcher3>();
 	_neighbor_searcher->build(_positions);

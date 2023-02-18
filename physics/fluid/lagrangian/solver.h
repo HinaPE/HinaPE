@@ -36,6 +36,11 @@ protected:
 	void _resolve_collision() const;
 
 private:
+	void _clear_force() const;
+	void _resize_buffer() const;
+	void _build_neighbor() const;
+	void _update_collider() const;
+	void _update_emitter() const;
 	void _update_density() const;
 	void _update_pressure() const;
 
@@ -62,7 +67,7 @@ public:
 		real kernel_radius_over_target_spacing = 1.8;
 		real kernel_radius = kernel_radius_over_target_spacing * target_spacing;
 	} _opt;
-	void _rebuild_();
+	void build_neighbor();
 	auto size() const -> size_t;
 
 public:
@@ -72,6 +77,10 @@ public:
 	std::vector<mVector3> _forces;
 	std::vector<real> _densities;
 	std::vector<real> _pressures;
+
+	// temp buffer
+	std::vector<mVector3> _new_positions;
+	std::vector<mVector3> _new_velocities;
 
 	// neighbor searcher
 	PointNeighborSearcher3Ptr _neighbor_searcher;

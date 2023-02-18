@@ -6,10 +6,15 @@ class FluidApp : public Kasumi::App
 protected:
 	void prepare() final
 	{
+		_solver = std::make_shared<HinaPE::SPHSolver>();
 	}
 	void update(double dt) final
 	{
+		_solver->step(dt);
 	}
+
+private:
+	HinaPE::SPHSolverPtr _solver;
 };
 
 auto main() -> int
