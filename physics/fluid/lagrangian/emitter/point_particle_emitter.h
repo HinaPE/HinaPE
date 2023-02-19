@@ -18,8 +18,8 @@ public:
 	{
 		mVector3 origin;
 		mVector3 direction;
-		real speed;
-		real spread_angle;
+		real speed = 1;
+		real spread_angle = 90;
 
 		size_t particles_at_once = 100;
 		size_t remaining_particles = 100000;

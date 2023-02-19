@@ -6,7 +6,7 @@ void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> &positions, std::
 	if (!ParticleEmitter3::_opt.enable || _opt.remaining_particles <= 0)
 		return;
 
-	auto random = [&]() -> real
+	auto rdm = [&]() -> real
 	{
 		std::uniform_real_distribution<> d(0.0, 1.0);
 		return d(_rng);
@@ -14,7 +14,9 @@ void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> &positions, std::
 
 	for (int i = 0; i < _opt.particles_at_once; ++i)
 	{
-		auto new_dir = Math::uniform_sample_cone(random(), random(), _opt.direction, _opt.spread_angle);
+		auto new_dir = Math::uniform_sample_cone(rdm(), rdm(), _opt.direction, _opt.spread_angle);
+		positions.push_back(_opt.origin);
+		velocities.push_back(_opt.speed * new_dir);
 	}
 	_opt.remaining_particles -= _opt.particles_at_once;
 }
