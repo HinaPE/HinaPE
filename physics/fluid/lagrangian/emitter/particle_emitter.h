@@ -1,6 +1,9 @@
 #ifndef HINAPE_PARTICLE_EMITTER_H
 #define HINAPE_PARTICLE_EMITTER_H
 
+// Copyright (c) 2023 Xayah Hina
+// MPL-2.0 license
+
 #include "backends/api.h"
 
 class ParticleEmitter3 : public Kasumi::INSPECTOR

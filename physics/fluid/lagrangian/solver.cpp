@@ -87,10 +87,10 @@ void HinaPE::SPHSolver::_clear_force() const
 {
 	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i) { _data->_forces[i] = mVector3::Zero(); });
 }
-void HinaPE::SPHSolver::_resize_buffer() const
+void HinaPE::SPHSolver::_resize_buffer()
 {
-	_data->_new_positions.resize(_data->size());
-	_data->_new_velocities.resize(_data->size());
+	_new_positions.resize(_data->size());
+	_new_velocities.resize(_data->size());
 }
 void HinaPE::SPHSolver::_build_neighbor() const
 {
@@ -102,6 +102,7 @@ void HinaPE::SPHSolver::_update_collider() const
 void HinaPE::SPHSolver::_update_emitter() const
 {
 	_emitter->emit(_data->_positions, _data->_velocities);
+	_data->resize();
 }
 void HinaPE::SPHSolver::_update_pressure() const
 {

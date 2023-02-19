@@ -1,6 +1,9 @@
 #ifndef HINAPE_POINT_SIMPLE_LIST_SEARCHER_H
 #define HINAPE_POINT_SIMPLE_LIST_SEARCHER_H
 
+// Copyright (c) 2023 Xayah Hina
+// MPL-2.0 license
+
 #include "point_neighbor_searcher.h"
 
 namespace HinaPE

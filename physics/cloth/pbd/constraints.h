@@ -1,6 +1,9 @@
 #ifndef HINAPE_CONSTRAINTS_H
 #define HINAPE_CONSTRAINTS_H
 
+// Copyright (c) 2023 Xayah Hina
+// MPL-2.0 license
+
 #include "common.h"
 
 namespace HinaPE

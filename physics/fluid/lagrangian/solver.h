@@ -1,6 +1,9 @@
 #ifndef HINAPE_SOLVER_H
 #define HINAPE_SOLVER_H
 
+// Copyright (c) 2023 Xayah Hina
+// MPL-2.0 license
+
 #include "backends/api.h"
 #include "common.h"
 #include "emitter/point_particle_emitter.h"
@@ -40,7 +43,7 @@ protected:
 
 private:
 	void _clear_force() const;
-	void _resize_buffer() const;
+	void _resize_buffer();
 	void _build_neighbor() const;
 	void _update_collider() const;
 	void _update_emitter() const;
@@ -51,6 +54,10 @@ private:
 	std::shared_ptr<Data> _data;
 	std::shared_ptr<Kernel> _kernel;
 	std::shared_ptr<ParticleEmitter3> _emitter;
+
+	// temp buffer
+	std::vector<mVector3> _new_positions;
+	std::vector<mVector3> _new_velocities;
 };
 using SPHSolverPtr = std::shared_ptr<SPHSolver>;
 
@@ -82,10 +89,6 @@ public:
 	std::vector<mVector3> _forces;
 	std::vector<real> _densities;
 	std::vector<real> _pressures;
-
-	// temp buffer
-	std::vector<mVector3> _new_positions;
-	std::vector<mVector3> _new_velocities;
 
 	// neighbor searcher
 	PointNeighborSearcher3Ptr _neighbor_searcher;

@@ -1,6 +1,9 @@
 #ifndef HINAPE_POINT_NEIGHBOR_SEARCHER_H
 #define HINAPE_POINT_NEIGHBOR_SEARCHER_H
 
+// Copyright (c) 2023 Xayah Hina
+// MPL-2.0 license
+
 #include "common.h"
 
 namespace HinaPE

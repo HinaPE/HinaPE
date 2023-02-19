@@ -1,6 +1,9 @@
 #ifndef HINAPE_CLOTH_SOLVER_H
 #define HINAPE_CLOTH_SOLVER_H
 
+// Copyright (c) 2023 Xayah Hina
+// MPL-2.0 license
+
 #include "common.h"
 #include "constraints.h"
 

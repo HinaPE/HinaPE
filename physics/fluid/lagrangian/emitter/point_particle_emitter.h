@@ -1,6 +1,9 @@
 #ifndef HINAPE_POINT_PARTICLE_EMITTER_H
 #define HINAPE_POINT_PARTICLE_EMITTER_H
 
+// Copyright (c) 2023 Xayah Hina
+// MPL-2.0 license
+
 #include "particle_emitter.h"
 
 namespace HinaPE
@@ -18,8 +21,8 @@ public:
 		real speed;
 		real spread_angle;
 
-		size_t max_new_particles_per_sec = 1;
-		size_t max_particles = 100000;
+		size_t particles_at_once = 100;
+		size_t remaining_particles = 100000;
 	} _opt;
 	void INSPECT() final;
 	PointParticleEmitter3();
