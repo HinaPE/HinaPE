@@ -1,6 +1,6 @@
 #include "point_particle_emitter.h"
 
-HinaPE::PointParticleEmitter3::PointParticleEmitter3() : _rng(random()) {}
+HinaPE::PointParticleEmitter3::PointParticleEmitter3() : _rng(0) {}
 void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> &positions, std::vector<mVector3> &velocities)
 {
 	if (!ParticleEmitter3::_opt.enable || _opt.remaining_particles <= 0)
