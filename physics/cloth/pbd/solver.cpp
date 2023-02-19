@@ -1,4 +1,5 @@
 #include "solver.h"
+#include "backends/timer.h"
 
 HinaPE::PBDClothSolver::PBDClothSolver() : _current_dt(0.2f)
 {
@@ -9,10 +10,26 @@ HinaPE::PBDClothSolver::PBDClothSolver() : _current_dt(0.2f)
 void HinaPE::PBDClothSolver::step(real dt)
 {
 	_current_dt = dt;
-	_external_force();
-	_time_integration();
-	_constraint_projection();
-	_update_state();
+	{
+		Kasumi::Timer timer("force");
+		_external_force();
+		timer.record();
+	}
+	{
+		Kasumi::Timer timer("time integration");
+		_time_integration();
+		timer.record();
+	}
+	{
+		Kasumi::Timer timer("projection");
+		_constraint_projection();
+		timer.record();
+	}
+	{
+		Kasumi::Timer timer("update");
+		_update_state();
+		timer.record();
+	}
 }
 void HinaPE::PBDClothSolver::_prepare()
 {
