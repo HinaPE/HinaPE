@@ -6,12 +6,13 @@ class FluidApp : public Kasumi::App
 protected:
 	void prepare() final
 	{
-		_solver = std::make_shared<HinaPE::SPHSolver>();
-		inspect(_solver);
+		inspect(_solver = std::make_shared<HinaPE::SPHSolver>());
 	}
 	void update(double dt) final
 	{
+		Kasumi::Timer timer("SPHFluid");
 		_solver->step(dt);
+		timer.record();
 	}
 
 private:

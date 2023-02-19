@@ -40,10 +40,10 @@ protected:
 	}
 	void update(double dt) final
 	{
-		_timer.reset();
+		Kasumi::Timer timer("PBDCloth");
 		_solver->step(dt);
 		sync();
-		_last_update_time = _timer.duration();
+		timer.record();
 	}
 	void sync()
 	{

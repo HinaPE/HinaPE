@@ -20,6 +20,7 @@ public:
 	struct Opt
 	{
 		// common
+		bool inited = false;
 		real current_dt = 0.02; // don't alter this
 		mVector3 gravity = mVector3(0, -9.8, 0);
 

@@ -152,6 +152,16 @@ void HinaPE::SPHSolver::INSPECT()
 	INSPECT_REAL(_opt.speed_of_sound, "speed of sound");
 	INSPECT_REAL(_opt.time_step_limit_scale, "time step limit scale");
 	_emitter->INSPECT();
+
+	if (!_opt.inited)
+	{
+		if (ImGui::Button("Generate"))
+		{
+			_opt.inited = true;
+		}
+	}
+	ImGui::Separator();
+	ImGui::Separator();
 }
 
 
