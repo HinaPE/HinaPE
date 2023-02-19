@@ -1,12 +1,14 @@
 #ifndef HINAPE_SOLVER_H
 #define HINAPE_SOLVER_H
 
+#include "backends/api.h"
 #include "common.h"
+#include "emitter/point_particle_emitter.h"
 #include "neighbor_search/point_simple_list_searcher.h"
 
 namespace HinaPE
 {
-class SPHSolver : public CopyDisable
+class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR
 {
 public:
 	void step(real dt);
@@ -28,6 +30,7 @@ public:
 	} _opt;
 	struct Data;
 	struct Kernel;
+	void INSPECT() final;
 	SPHSolver();
 
 protected:
@@ -47,6 +50,7 @@ private:
 private:
 	std::shared_ptr<Data> _data;
 	std::shared_ptr<Kernel> _kernel;
+	std::shared_ptr<ParticleEmitter3> _emitter;
 };
 using SPHSolverPtr = std::shared_ptr<SPHSolver>;
 
@@ -68,6 +72,7 @@ public:
 		real kernel_radius = kernel_radius_over_target_spacing * target_spacing;
 	} _opt;
 	void build_neighbor();
+	void resize();
 	auto size() const -> size_t;
 
 public:

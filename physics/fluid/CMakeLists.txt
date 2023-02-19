@@ -6,6 +6,11 @@ if (NOT TARGET HinaPE_Common)
     return()
 endif ()
 
+if (NOT TARGET Kasumi_Render3D)
+    message(FATAL_ERROR "Kasumi_Render3D is not found")
+    return()
+endif ()
+
 file(GLOB_RECURSE src
         lagrangian/*.h lagrangian/*.cpp
         euler/*.h euler/*.cpp
@@ -14,18 +19,10 @@ file(GLOB_RECURSE src
 add_library(HinaPE_Fluid ${src})
 set_target_properties(HinaPE_Fluid PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Fluid PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(HinaPE_Fluid PUBLIC HinaPE_Common)
-
-if (NOT TARGET Kasumi_Render3D)
-    message(FATAL_ERROR "Kasumi_Render3D is not found")
-    return()
-endif ()
+target_link_libraries(HinaPE_Fluid PUBLIC HinaPE_Common Kasumi_Render3D)
 
 # APP EXECUTABLE
-file(GLOB_RECURSE vis_src
-        visualization/*.h visualization/*.cpp
-        )
-add_executable(HinaPE_Fluid_App main.cpp ${vis_src})
+add_executable(HinaPE_Fluid_App main.cpp)
 set_target_properties(HinaPE_Fluid_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Fluid_App PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(HinaPE_Fluid_App PUBLIC HinaPE_Fluid Kasumi_Render3D)
+target_link_libraries(HinaPE_Fluid_App PUBLIC HinaPE_Fluid)

@@ -1,12 +1,12 @@
 #include "backends/app.h"
-#include "visualization/solver.h"
+#include "lagrangian/solver.h"
 
 class FluidApp : public Kasumi::App
 {
 protected:
 	void prepare() final
 	{
-		_solver = std::make_shared<HinaPE::VisSPHSolver>();
+		_solver = std::make_shared<HinaPE::SPHSolver>();
 		inspect(_solver);
 	}
 	void update(double dt) final
@@ -15,7 +15,7 @@ protected:
 	}
 
 private:
-	HinaPE::VisSPHSolverPtr _solver;
+	HinaPE::SPHSolverPtr _solver;
 };
 
 auto main() -> int
