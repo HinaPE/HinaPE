@@ -10,26 +10,10 @@ HinaPE::PBDClothSolver::PBDClothSolver() : _current_dt(0.2f)
 void HinaPE::PBDClothSolver::step(real dt)
 {
 	_current_dt = dt;
-	{
-		Kasumi::Timer timer("force");
-		_external_force();
-		timer.record();
-	}
-	{
-		Kasumi::Timer timer("time integration");
-		_time_integration();
-		timer.record();
-	}
-	{
-		Kasumi::Timer timer("projection");
-		_constraint_projection();
-		timer.record();
-	}
-	{
-		Kasumi::Timer timer("update");
-		_update_state();
-		timer.record();
-	}
+	HINA_TRACK(_external_force(), "external force");
+	HINA_TRACK(_time_integration(), "time integration");
+	HINA_TRACK(_constraint_projection(), "constraint projection");
+	HINA_TRACK(_update_state(), "update state");
 }
 void HinaPE::PBDClothSolver::_prepare()
 {

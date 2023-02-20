@@ -10,9 +10,7 @@ protected:
 	}
 	void update(double dt) final
 	{
-		Kasumi::Timer timer("SPHFluid");
-		_solver->step(dt);
-		timer.record();
+		HINA_TRACK(_solver->step(dt), "SPHFluid");
 	}
 
 private:
