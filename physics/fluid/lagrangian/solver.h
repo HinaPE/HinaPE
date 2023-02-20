@@ -4,7 +4,8 @@
 // Copyright (c) 2023 Xayah Hina
 // MPL-2.0 license
 
-#include "backends/api.h"
+#include "renderer3D/scene.h"
+
 #include "common.h"
 #include "emitter/point_particle_emitter.h"
 #include "neighbor_search/point_simple_list_searcher.h"
@@ -14,6 +15,7 @@ namespace HinaPE
 class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR
 {
 public:
+	void sync(Kasumi::Scene3D &scene);
 	void step(real dt);
 
 public:

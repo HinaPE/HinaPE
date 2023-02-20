@@ -8,27 +8,28 @@ class FluidApp : public Kasumi::App
 protected:
 	void prepare() final
 	{
-		_scene = std::make_shared<Kasumi::Scene3D>();
-		_scene->add(_emitter = std::make_shared<Kasumi::ArrowObject>());
+		(_solver = std::make_shared<HinaPE::SPHSolver>())
+				->sync
+						(*(_scene = std::make_shared<Kasumi::Scene3D>()));
 
 		inspect(_scene);
+
+		sync_ui();
 	}
 	void update(double dt) final
 	{
+		HINA_TRACK(_solver->step(dt), "SPHFluid")
+		_scene->draw();
 		sync_ui();
-		HINA_TRACK(_solver->step(dt), "SPHFluid");
 	}
 
 private:
 	friend class HinaPE::SPHSolver;
-	void sync_ui()
-	{
-	}
+	void sync_ui() {}
 
 private:
 	HinaPE::SPHSolverPtr _solver;
 	Kasumi::Scene3DPtr _scene;
-	Kasumi::ArrowObjectPtr _emitter;
 };
 
 auto main() -> int

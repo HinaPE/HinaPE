@@ -8,6 +8,10 @@ HinaPE::SPHSolver::SPHSolver()
 	dynamic_cast<StdKernel *>(_kernel.get())->_opt.kernel_radius = _data->_opt.kernel_radius;
 	dynamic_cast<StdKernel *>(_kernel.get())->_rebuild_();
 }
+void HinaPE::SPHSolver::sync(Kasumi::Scene3D &scene)
+{
+	scene.add(_emitter);
+}
 void HinaPE::SPHSolver::step(real dt)
 {
 	_opt.current_dt = dt;
