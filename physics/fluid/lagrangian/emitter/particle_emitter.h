@@ -16,10 +16,10 @@ public:
 public:
 	struct Opt
 	{
-		bool enable = false;
+		bool enable = true;
 
 		mVector3 position = mVector3::Zero();
-		mVector3 direction = mVector3::UnitZ();
+		mVector3 direction = mVector3::UnitX();
 
 		size_t particles_at_once = 1;
 		size_t remaining_particles = 100;

@@ -4,7 +4,7 @@
 // Copyright (c) 2023 Xayah Hina
 // MPL-2.0 license
 
-#include "renderer3D/scene.h"
+#include "renderer3D/renderer3D.h"
 
 #include "common.h"
 #include "emitter/point_particle_emitter.h"
@@ -12,11 +12,11 @@
 
 namespace HinaPE
 {
-class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR
+class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::Renderer3D
 {
 public:
-	void sync(Kasumi::Scene3D &scene);
-	void step(real dt);
+	void init() final;
+	void step(real dt) final;
 
 public:
 	struct Opt

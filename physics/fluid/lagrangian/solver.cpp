@@ -8,28 +8,29 @@ HinaPE::SPHSolver::SPHSolver()
 	dynamic_cast<StdKernel *>(_kernel.get())->_opt.kernel_radius = _data->_opt.kernel_radius;
 	dynamic_cast<StdKernel *>(_kernel.get())->_rebuild_();
 }
-void HinaPE::SPHSolver::sync(Kasumi::Scene3D &scene)
+void HinaPE::SPHSolver::init()
 {
-	scene.add(_data);
-	scene.add(_emitter);
+	_scene->add(_emitter);
+	_scene->add(_data);
+	inspect(std::shared_ptr<SPHSolver>(this));
 }
 void HinaPE::SPHSolver::step(real dt)
 {
 	_opt.current_dt = dt;
 
 	// begin
-	_clear_force();
+	HINA_TRACK(_clear_force(), "clear force");
 //	_update_collider();
-	_update_emitter();
+	HINA_TRACK(_update_emitter(), "update emitter");
 
 	// kernels
 //	_build_neighbor();
 //	_update_density();
 
-	_accumulate_force();
-//	_time_integration();
+	HINA_TRACK(_accumulate_force(), "accumulate force");
+	HINA_TRACK(_time_integration(), "time integration");
 
-	_data->update();
+	HINA_TRACK(_data->update(), "???");
 }
 void HinaPE::SPHSolver::_accumulate_force() const
 {
@@ -195,9 +196,6 @@ void HinaPE::SPHSolver::Data::build_neighbor()
 }
 void HinaPE::SPHSolver::Data::update()
 {
-	if (ParticlesObject::_opt.poses.size() == _positions.size())
-		return;
-
 	ParticlesObject::_opt.poses.clear();
 
 	Object3D::_opt.dirty = true;
@@ -206,7 +204,7 @@ void HinaPE::SPHSolver::Data::update()
 	{
 		Kasumi::Pose pose;
 		pose.position = pos;
-		pose.scale = 0.01 * mVector3::One();
+		pose.scale = 0.1 * mVector3::One();
 		ParticlesObject::_opt.poses.push_back(pose);
 	}
 

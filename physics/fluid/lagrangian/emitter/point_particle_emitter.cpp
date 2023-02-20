@@ -16,7 +16,8 @@ void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> &positions, std::
 	{
 		auto new_dir = Math::uniform_sample_cone(rdm(), rdm(), _opt.direction, _opt.spread_angle);
 		positions.push_back(_opt.origin);
-		velocities.push_back(_opt.speed * new_dir);
+//		velocities.push_back(_opt.speed * new_dir);
+		velocities.push_back(_opt.speed * _opt.direction);
 	}
 	ParticleEmitter3::_opt.remaining_particles -= ParticleEmitter3::_opt.particles_at_once;
 }
