@@ -1,8 +1,7 @@
 #include "backends/api.h"
+#include "renderer3D/scene.h"
 
 #include "pbd/solver.h"
-
-#include "scene.h"
 #include "objects/cloth.h"
 
 class App : public Kasumi::App
@@ -10,12 +9,12 @@ class App : public Kasumi::App
 protected:
 	void prepare() final
 	{
-		// physics
-		_solver = std::make_shared<HinaPE::PBDClothSolver>();
-
 		// renderer
 		_scene = std::make_shared<Kasumi::Scene3D>();
 		_cloth = std::make_shared<Kasumi::ClothObject>();
+
+		// physics
+		_solver = std::make_shared<HinaPE::PBDClothSolver>();
 
 		std::vector<Kasumi::Mesh::Vertex> vertices_;
 		for (auto &v: _solver->_data->_positions)
@@ -40,10 +39,8 @@ protected:
 	}
 	void update(double dt) final
 	{
-		Kasumi::Timer timer("PBDCloth");
-		_solver->step(dt);
+		HINA_TRACK(_solver->step(dt), "PBDCloth");
 		sync();
-		timer.record();
 	}
 	void sync()
 	{
