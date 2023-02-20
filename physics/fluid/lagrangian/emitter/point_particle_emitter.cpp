@@ -3,7 +3,7 @@
 HinaPE::PointParticleEmitter3::PointParticleEmitter3() : _rng(rand()) {}
 void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> &positions, std::vector<mVector3> &velocities)
 {
-	if (!ParticleEmitter3::_opt.enable || _opt.remaining_particles <= 0)
+	if (!ParticleEmitter3::_opt.enable || ParticleEmitter3::_opt.remaining_particles <= 0)
 		return;
 
 	auto rdm = [&]() -> real
@@ -12,13 +12,13 @@ void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> &positions, std::
 		return d(_rng);
 	};
 
-	for (int i = 0; i < _opt.particles_at_once; ++i)
+	for (int i = 0; i < ParticleEmitter3::_opt.particles_at_once; ++i)
 	{
 		auto new_dir = Math::uniform_sample_cone(rdm(), rdm(), _opt.direction, _opt.spread_angle);
 		positions.push_back(_opt.origin);
 		velocities.push_back(_opt.speed * new_dir);
 	}
-	_opt.remaining_particles -= _opt.particles_at_once;
+	ParticleEmitter3::_opt.remaining_particles -= ParticleEmitter3::_opt.particles_at_once;
 }
 void HinaPE::PointParticleEmitter3::INSPECT()
 {

@@ -20,6 +20,9 @@ public:
 
 		mVector3 position = mVector3::Zero();
 		mVector3 direction = mVector3::UnitZ();
+
+		size_t particles_at_once = 1;
+		size_t remaining_particles = 100;
 	} _opt;
 	void INSPECT() override;
 	ParticleEmitter3();

@@ -12,7 +12,7 @@ protected:
 				->sync
 						(*(_scene = std::make_shared<Kasumi::Scene3D>()));
 
-		inspect(_scene);
+		inspect(_solver);
 
 		sync_ui();
 	}
@@ -22,6 +22,10 @@ protected:
 		_scene->draw();
 		sync_ui();
 	}
+	void key(int key, int scancode, int action, int mods) final { _scene->key(key, scancode, action, mods); }
+	void mouse_button(int button, int action, int mods) final { _scene->mouse_button(button, action, mods); }
+	void mouse_scroll(double x_offset, double y_offset) final { _scene->mouse_scroll(x_offset, y_offset); }
+	void mouse_cursor(double x_pos, double y_pos) final { _scene->mouse_cursor(x_pos, y_pos); }
 
 private:
 	friend class HinaPE::SPHSolver;

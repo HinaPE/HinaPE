@@ -65,7 +65,7 @@ private:
 using SPHSolverPtr = std::shared_ptr<SPHSolver>;
 
 
-struct SPHSolver::Data : public CopyDisable
+struct SPHSolver::Data : public CopyDisable, public Kasumi::ParticlesObject
 {
 public:
 	struct Opt
@@ -82,6 +82,7 @@ public:
 		real kernel_radius = kernel_radius_over_target_spacing * target_spacing;
 	} _opt;
 	void build_neighbor();
+	void update();
 	void resize();
 	auto size() const -> size_t;
 

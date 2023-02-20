@@ -9,4 +9,11 @@ void HinaPE::ParticleEmitter3::INSPECT()
 	ImGui::Text("Emitter Physics");
 	ImGui::Separator();
 	INSPECT_BOOL(_opt.enable, "Enable");
+
+	if (Object3D::_opt.dirty)
+	{
+		_opt.position = Object3D::_opt.pose.position;
+		_opt.direction = mQuaternion(Object3D::_opt.pose.euler) * mVector3::UnitZ();
+		Object3D::_opt.dirty = false;
+	}
 }

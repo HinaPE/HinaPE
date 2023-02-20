@@ -10,6 +10,7 @@ HinaPE::SPHSolver::SPHSolver()
 }
 void HinaPE::SPHSolver::sync(Kasumi::Scene3D &scene)
 {
+	scene.add(_data);
 	scene.add(_emitter);
 }
 void HinaPE::SPHSolver::step(real dt)
@@ -18,14 +19,17 @@ void HinaPE::SPHSolver::step(real dt)
 
 	// begin
 	_clear_force();
-	_update_collider();
+//	_update_collider();
 	_update_emitter();
-	_update_density();
 
 	// kernels
-	_build_neighbor();
+//	_build_neighbor();
+//	_update_density();
+
 	_accumulate_force();
-	_time_integration();
+//	_time_integration();
+
+	_data->update();
 }
 void HinaPE::SPHSolver::_accumulate_force() const
 {
@@ -43,32 +47,32 @@ void HinaPE::SPHSolver::_accumulate_force() const
 		f[i] += gravity;
 	});
 
-	// viscosity
-	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i)
-	{
-		const auto &neighbors = _data->_neighbor_lists[i];
-		for (size_t j: neighbors)
-		{
-			real dist = (x[i] - x[j]).length();
-			f[i] += _opt.viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * (*_kernel).second_derivative(dist);
-		}
-	});
-
-	// pressure
-	_update_pressure();
-	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i)
-	{
-		const auto &neighbors = _data->_neighbor_lists[i];
-		for (size_t j: neighbors)
-		{
-			real dist = (x[i] - x[j]).length();
-			if (dist > HinaPE::Constant::Epsilon)
-			{
-				mVector3 dir = (x[i] - x[j]) / dist;
-				f[i] += -m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * (*_kernel).gradient(dist, dir);
-			}
-		}
-	});
+//	// viscosity
+//	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i)
+//	{
+//		const auto &neighbors = _data->_neighbor_lists[i];
+//		for (size_t j: neighbors)
+//		{
+//			real dist = (x[i] - x[j]).length();
+//			f[i] += _opt.viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * (*_kernel).second_derivative(dist);
+//		}
+//	});
+//
+//	// pressure
+//	_update_pressure();
+//	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i)
+//	{
+//		const auto &neighbors = _data->_neighbor_lists[i];
+//		for (size_t j: neighbors)
+//		{
+//			real dist = (x[i] - x[j]).length();
+//			if (dist > HinaPE::Constant::Epsilon)
+//			{
+//				mVector3 dir = (x[i] - x[j]) / dist;
+//				f[i] += -m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * (*_kernel).gradient(dist, dir);
+//			}
+//		}
+//	});
 }
 void HinaPE::SPHSolver::_time_integration() const
 {
@@ -147,6 +151,7 @@ void HinaPE::SPHSolver::_update_density() const
 void HinaPE::SPHSolver::INSPECT()
 {
 	ImGui::Text("Solver");
+	ImGui::Text("Solver %zu", _data->_positions.size());
 	ImGui::Separator();
 	INSPECT_VEC3(_opt.gravity, "gravity");
 	INSPECT_REAL(_opt.eos_exponent, "eos exponent");
@@ -187,6 +192,25 @@ void HinaPE::SPHSolver::Data::build_neighbor()
 				_neighbor_lists[i].push_back(j);
 		});
 	}
+}
+void HinaPE::SPHSolver::Data::update()
+{
+	if (ParticlesObject::_opt.poses.size() == _positions.size())
+		return;
+
+	ParticlesObject::_opt.poses.clear();
+
+	Object3D::_opt.dirty = true;
+
+	for (auto &pos: _positions)
+	{
+		Kasumi::Pose pose;
+		pose.position = pos;
+		pose.scale = 0.01 * mVector3::One();
+		ParticlesObject::_opt.poses.push_back(pose);
+	}
+
+	_rebuild_();
 }
 auto HinaPE::SPHSolver::Data::size() const -> size_t
 {
