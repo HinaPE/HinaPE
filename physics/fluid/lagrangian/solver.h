@@ -8,6 +8,7 @@
 
 #include "common.h"
 #include "emitter/point_particle_emitter.h"
+#include "domain/fluid_domain.h"
 #include "neighbor_search/point_simple_list_searcher.h"
 
 namespace HinaPE
@@ -56,6 +57,7 @@ private:
 	std::shared_ptr<Data> _data;
 	std::shared_ptr<Kernel> _kernel;
 	std::shared_ptr<ParticleEmitter3> _emitter;
+	std::shared_ptr<FluidDomain3> _domain;
 
 	// temp buffer
 	std::vector<mVector3> _new_positions;

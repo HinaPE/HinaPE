@@ -16,7 +16,7 @@ public:
 public:
 	struct Opt
 	{
-		bool enable = true;
+		bool enable = false;
 
 		mVector3 origin = mVector3::Zero();
 		mVector3 direction = mVector3::UnitY();

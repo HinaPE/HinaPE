@@ -2,14 +2,16 @@
 
 HinaPE::SPHSolver::SPHSolver()
 {
+	_domain = std::make_shared<FluidDomain3>();
+	_emitter = std::make_shared<PointParticleEmitter3>();
 	_data = std::make_shared<Data>();
 	_kernel = std::make_shared<StdKernel>();
-	_emitter = std::make_shared<PointParticleEmitter3>();
 	dynamic_cast<StdKernel *>(_kernel.get())->_opt.kernel_radius = _data->_opt.kernel_radius;
 	dynamic_cast<StdKernel *>(_kernel.get())->_rebuild_();
 }
 void HinaPE::SPHSolver::init()
 {
+	_scene->add(_domain);
 	_scene->add(_emitter);
 	_scene->add(_data);
 	inspect(_scene.get());
