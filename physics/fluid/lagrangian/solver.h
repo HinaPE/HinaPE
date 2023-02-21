@@ -45,7 +45,6 @@ protected:
 	void _resolve_collision() const;
 
 private:
-	void _clear_force() const;
 	void _resize_buffer();
 	void _build_neighbor() const;
 	void _update_collider() const;

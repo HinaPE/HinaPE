@@ -12,14 +12,13 @@ void HinaPE::SPHSolver::init()
 {
 	_scene->add(_emitter);
 	_scene->add(_data);
-	inspect(std::shared_ptr<SPHSolver>(this));
+//	inspect(std::shared_ptr<SPHSolver>(this));
 }
 void HinaPE::SPHSolver::step(real dt)
 {
 	_opt.current_dt = dt;
 
 	// begin
-	HINA_TRACK(_clear_force(), "clear force");
 //	_update_collider();
 	HINA_TRACK(_update_emitter(), "update emitter");
 
@@ -45,7 +44,7 @@ void HinaPE::SPHSolver::_accumulate_force() const
 	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i)
 	{
 		mVector3 gravity = m * _opt.gravity;
-		f[i] += gravity;
+		f[i] = gravity;
 	});
 
 //	// viscosity
@@ -91,10 +90,6 @@ void HinaPE::SPHSolver::_time_integration() const
 }
 void HinaPE::SPHSolver::_resolve_collision() const
 {
-}
-void HinaPE::SPHSolver::_clear_force() const
-{
-	Util::parallelFor(Constant::ZeroSize, _data->size(), [&](size_t i) { _data->_forces[i] = mVector3::Zero(); });
 }
 void HinaPE::SPHSolver::_resize_buffer()
 {
