@@ -80,6 +80,7 @@ public:
 		real kernel_radius_over_target_spacing = 1.8;
 		real kernel_radius = kernel_radius_over_target_spacing * target_spacing;
 	} _opt;
+	Data() { NAME = "SPHSolver::Data"; }
 	void build_neighbor();
 	void update();
 	void resize();

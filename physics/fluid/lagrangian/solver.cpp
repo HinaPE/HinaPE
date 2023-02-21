@@ -12,7 +12,7 @@ void HinaPE::SPHSolver::init()
 {
 	_scene->add(_emitter);
 	_scene->add(_data);
-//	inspect(std::shared_ptr<SPHSolver>(this));
+	inspect(_scene.get());
 }
 void HinaPE::SPHSolver::step(real dt)
 {
@@ -20,16 +20,16 @@ void HinaPE::SPHSolver::step(real dt)
 
 	// begin
 //	_update_collider();
-	HINA_TRACK(_update_emitter(), "update emitter");
+	_update_emitter();
 
 	// kernels
 //	_build_neighbor();
 //	_update_density();
 
-	HINA_TRACK(_accumulate_force(), "accumulate force");
-	HINA_TRACK(_time_integration(), "time integration");
+	_accumulate_force();
+	_time_integration();
 
-	HINA_TRACK(_data->update(), "???");
+	_data->update();
 }
 void HinaPE::SPHSolver::_accumulate_force() const
 {
@@ -199,7 +199,7 @@ void HinaPE::SPHSolver::Data::update()
 	{
 		Kasumi::Pose pose;
 		pose.position = pos;
-		pose.scale = 0.1 * mVector3::One();
+		pose.scale = 0.02 * mVector3::One();
 		ParticlesObject::_opt.poses.push_back(pose);
 	}
 

@@ -19,8 +19,8 @@ public:
 		bool enable = true;
 
 		mVector3 origin = mVector3::Zero();
-		mVector3 direction = mVector3::UnitX();
-		real speed = 10;
+		mVector3 direction = mVector3::UnitY();
+		real speed = 20;
 		real spread_angle = 90;
 
 		size_t particles_at_once = 100;

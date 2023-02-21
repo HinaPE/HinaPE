@@ -1,6 +1,10 @@
 #include "particle_emitter.h"
 
-HinaPE::ParticleEmitter3::ParticleEmitter3() : Kasumi::ArrowObject() { _rebuild_(); }
+HinaPE::ParticleEmitter3::ParticleEmitter3() : Kasumi::ArrowObject()
+{
+	NAME = "Emitter";
+	_rebuild_();
+}
 
 void HinaPE::ParticleEmitter3::INSPECT()
 {
