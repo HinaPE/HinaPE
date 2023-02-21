@@ -14,18 +14,13 @@ void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> &positions, std::
 
 	for (int i = 0; i < ParticleEmitter3::_opt.particles_at_once; ++i)
 	{
-		auto new_dir = Math::uniform_sample_cone(rdm(), rdm(), _opt.direction, _opt.spread_angle);
-		positions.push_back(_opt.origin);
-//		velocities.push_back(_opt.speed * new_dir);
-		velocities.push_back(_opt.speed * _opt.direction);
+		auto new_dir = Math::uniform_sample_cone(rdm(), rdm(), ParticleEmitter3::_opt.direction, ParticleEmitter3::_opt.spread_angle);
+		positions.push_back(ParticleEmitter3::_opt.origin);
+		velocities.push_back(ParticleEmitter3::_opt.speed * new_dir);
 	}
 	ParticleEmitter3::_opt.remaining_particles -= ParticleEmitter3::_opt.particles_at_once;
 }
 void HinaPE::PointParticleEmitter3::INSPECT()
 {
 	ParticleEmitter3::INSPECT();
-	INSPECT_VEC3(_opt.origin, "origin");
-	INSPECT_VEC3(_opt.direction, "direction");
-	INSPECT_REAL(_opt.speed, "speed");
-	INSPECT_REAL(_opt.spread_angle, "spread angle");
 }

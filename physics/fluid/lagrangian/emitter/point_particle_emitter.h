@@ -16,10 +16,6 @@ public:
 public:
 	struct Opt
 	{
-		mVector3 origin;
-		mVector3 direction;
-		real speed = 10;
-		real spread_angle = 90;
 	} _opt;
 	void INSPECT() final;
 	PointParticleEmitter3();

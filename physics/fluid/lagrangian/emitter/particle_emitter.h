@@ -18,11 +18,13 @@ public:
 	{
 		bool enable = true;
 
-		mVector3 position = mVector3::Zero();
+		mVector3 origin = mVector3::Zero();
 		mVector3 direction = mVector3::UnitX();
+		real speed = 10;
+		real spread_angle = 90;
 
-		size_t particles_at_once = 1;
-		size_t remaining_particles = 100;
+		size_t particles_at_once = 100;
+		size_t remaining_particles = 10000;
 	} _opt;
 	void INSPECT() override;
 	ParticleEmitter3();
