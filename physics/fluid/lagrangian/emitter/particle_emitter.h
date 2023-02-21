@@ -24,7 +24,7 @@ public:
 		real spread_angle = 90;
 
 		size_t particles_at_once = 100;
-		size_t remaining_particles = 10000;
+		size_t remaining_particles = 50000;
 	} _opt;
 	void INSPECT() override;
 	ParticleEmitter3();

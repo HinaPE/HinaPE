@@ -199,7 +199,7 @@ void HinaPE::SPHSolver::Data::update()
 	{
 		Kasumi::Pose pose;
 		pose.position = pos;
-		pose.scale = 0.02 * mVector3::One();
+		pose.scale = 0.04 * mVector3::One();
 		ParticlesObject::_opt.poses.push_back(pose);
 	}
 
