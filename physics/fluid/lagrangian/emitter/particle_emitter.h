@@ -16,7 +16,7 @@ public:
 public:
 	struct Opt
 	{
-		bool enable = false;
+		bool enable = true;
 
 		mVector3 origin = mVector3::Zero();
 		mVector3 direction = mVector3::UnitY();
@@ -24,7 +24,7 @@ public:
 		real spread_angle = 90;
 
 		size_t particles_at_once = 100;
-		size_t remaining_particles = 50000;
+		size_t remaining_particles = 20000;
 	} _opt;
 	void INSPECT() override;
 	ParticleEmitter3();
