@@ -168,7 +168,6 @@ void HinaPE::SPHSolver::INSPECT()
 		}
 	}
 	ImGui::Separator();
-	ImGui::Separator();
 }
 
 
@@ -194,6 +193,7 @@ void HinaPE::SPHSolver::Data::build_neighbor()
 void HinaPE::SPHSolver::Data::update()
 {
 	ParticlesObject::_opt.poses.clear();
+	ParticlesObject::_opt.poses.reserve(_positions.size());
 
 	Object3D::_opt.dirty = true;
 
