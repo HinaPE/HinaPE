@@ -3,7 +3,7 @@
 HinaPE::FluidDomain3::FluidDomain3()
 {
 	NAME = "Domain";
-	_rebuild_();
+	Kasumi::CubeObject::sync_opt();
 	switch_surface();
 	switch_bbox();
 }
