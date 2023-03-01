@@ -3,7 +3,6 @@
 HinaPE::ParticleEmitter3::ParticleEmitter3() : Kasumi::ArrowObject()
 {
 	NAME = "Emitter";
-	_rebuild_();
 }
 
 void HinaPE::ParticleEmitter3::INSPECT()
@@ -18,10 +17,7 @@ void HinaPE::ParticleEmitter3::INSPECT()
 	INSPECT_REAL(_opt.speed, "speed");
 	INSPECT_REAL(_opt.spread_angle, "spread angle");
 
-	if (Object3D::_opt.dirty)
-	{
-		_opt.origin = Object3D::_opt.pose.position;
-		_opt.direction = mQuaternion(Object3D::_opt.pose.euler) * mVector3::UnitZ();
-		Object3D::_opt.dirty = false;
-	}
+	_opt.origin = _pose.position;
+	_opt.direction = mQuaternion(_pose.euler) * mVector3::UnitZ();
+	_dirty = false;
 }
