@@ -2,7 +2,7 @@
 #define HINAPE_GRID_BOUNDARY_CONDITION_SOLVER_H
 
 #include "geom/grid.h"
-#include "geom/collider.h"
+#include "geom/collider3.h"
 
 namespace HinaPE
 {

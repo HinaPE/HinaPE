@@ -3,7 +3,7 @@
 
 #include "animation/physics_animation.h"
 #include "geom/grid.h"
-#include "geom/collider.h"
+#include "geom/collider3.h"
 #include "emitter/emitter.h"
 
 #include "sub_solver/grid_diffusion_solver.h"
