@@ -8,8 +8,6 @@ namespace HinaPE
 class FluidDomain3 : public Kasumi::CubeObject
 {
 public:
-
-public:
 	struct Opt {};
 	FluidDomain3();
 };

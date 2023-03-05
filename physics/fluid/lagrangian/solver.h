@@ -13,7 +13,7 @@
 
 namespace HinaPE
 {
-class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::Renderer3D
+class SPHSolver : public Kasumi::Renderer3D, public CopyDisable, public Kasumi::INSPECTOR
 {
 public:
 	void init() final;
