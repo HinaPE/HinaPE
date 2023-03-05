@@ -8,7 +8,7 @@ if (NOT TARGET HinaPE_Common)
     add_subdirectory(${HINAPE_COMMON_DIR} HinaPE_Common)
 endif ()
 
-add_subdirectory(reactphysics3d)
+add_subdirectory(../../physics/rigid/reactphysics3d)
 
 file(GLOB_RECURSE HINA_RIGIDBODY_ENGINE_SOLVER "solver/*.cpp" "solver/*.h" "solver/*.inl.h")
 
