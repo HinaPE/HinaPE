@@ -17,7 +17,7 @@ void HinaPE::ParticleEmitter3::INSPECT()
 	INSPECT_REAL(_opt.speed, "speed");
 	INSPECT_REAL(_opt.spread_angle, "spread angle");
 
-	_opt.origin = _pose.position;
-	_opt.direction = mQuaternion(_pose.euler) * mVector3::UnitZ();
+	_opt.origin = POSE.position;
+	_opt.direction = mQuaternion(POSE.euler) * mVector3::UnitZ();
 	_dirty = false;
 }

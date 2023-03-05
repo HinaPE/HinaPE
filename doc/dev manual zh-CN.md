@@ -14,7 +14,7 @@ Kasumi 3D渲染器是一个面向快速实现3D图形学算法的基础渲染平
 
 ### Objects List
 
-#### Abstract -` Object3D`
+#### [Abstract] Object3D
 
 一个通用3D Object类，用于管理一切物体。
 
@@ -22,13 +22,23 @@ Kasumi 3D渲染器是一个面向快速实现3D图形学算法的基础渲染平
 
 - 唯一ID，不可变。
 
-##### FIELD: `_pose`
+##### FIELD: `NAME`
+
+- Object name，任意时刻可修改，实时更新。
+
+##### FIELD: `POSE`
 
 - Transform，任意时刻可修改，实时更新。
 
-#### Abstract - `ObjectMesh3D`
+#### [Abstract] ObjectMesh3D
 
-METHOD: 
+##### METHOD: `sync_opt()`
+
+- 改变Object的Opt内容之后，一定要手动执行sync_opt
+
+#### Cube
+
+- 
 
 ### Scene3D
 
