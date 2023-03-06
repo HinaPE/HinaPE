@@ -2,7 +2,7 @@
 #include "renderer3D/scene.h"
 
 #include "pbd/solver.h"
-#include "objects/cloth.h"
+#include "backends/objects/cloth.h"
 
 class App : public Kasumi::App
 {
