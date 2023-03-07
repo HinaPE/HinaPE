@@ -1,5 +1,5 @@
 #include "renderer3D/renderer3D.h"
-#include "solver.h"
+#include "sph_solver.h"
 
 auto main() -> int
 {

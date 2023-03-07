@@ -1,10 +1,20 @@
-#include "solver.h"
+#include "sph_solver.h"
 
 void HinaPE::SPHSolver::update(real dt) const
 {
+	// emit particle to data
 	_emit_particles();
+
+	_data->_update_density();
+	_data->_update_pressure();
+
+	// accumulate external forces and pressure force
 	_accumulate_force();
+
+	// do semi-euler integration
 	_time_integration();
+
+	// deal with collision (particle-solid)
 	_resolve_collision();
 }
 void HinaPE::SPHSolver::_emit_particles() const
@@ -40,6 +50,7 @@ void HinaPE::SPHSolver::_time_integration() const
 	const auto &m = _data->_mass;
 	const auto &dt = _opt.current_dt;
 
+	// semi-euler integration
 	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
 	{
 		v[i] += dt * f[i] / m;
@@ -73,7 +84,6 @@ void HinaPE::SPHSolver::INSPECT()
 			_opt.inited = true;
 	ImGui::Separator();
 }
-
 void HinaPE::SPHSolver::VALID_CHECK() const
 {
 	if (_data == nullptr) throw std::runtime_error("SPHSolver::_data is nullptr");
@@ -94,4 +104,10 @@ void HinaPE::SPHSolver::Data::_update_poses()
 	for (int i = 0; i < _positions.size(); ++i)
 		_poses[i] = Kasumi::Pose(_positions[i], {}, {size, size, size});
 	_dirty = true;
+}
+void HinaPE::SPHSolver::Data::_update_density()
+{
+}
+void HinaPE::SPHSolver::Data::_update_pressure()
+{
 }
