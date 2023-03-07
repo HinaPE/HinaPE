@@ -1,6 +1,9 @@
 #ifndef HINAPE_FLUID_PARTICLES_SOLVER_H
 #define HINAPE_FLUID_PARTICLES_SOLVER_H
 
+// Copyright (c) 2023 Xayah Hina
+// MPL-2.0 license
+
 #include "domain/box_domain.h"
 
 namespace HinaPE
