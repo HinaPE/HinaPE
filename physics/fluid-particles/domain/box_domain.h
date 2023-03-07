@@ -7,9 +7,10 @@ namespace HinaPE
 {
 class BoxDomain : public Kasumi::CubeObject
 {
+public:
+	BoxDomain();
 };
 using BoxDomainPtr = std::shared_ptr<BoxDomain>;
 } // namespace HinaPE
-
 
 #endif //HINAPE_BOX_DOMAIN_H

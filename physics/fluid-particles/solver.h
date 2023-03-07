@@ -5,13 +5,18 @@
 
 namespace HinaPE
 {
-class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR
+class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
 	struct Data;
+	BoxDomainPtr _domain;
+
+public:
+	void update(real dt);
 
 protected:
 	void INSPECT() final;
+	void VALID_CHECK() const final;
 };
 
 struct SPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
