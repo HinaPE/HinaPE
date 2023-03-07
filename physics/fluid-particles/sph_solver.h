@@ -49,6 +49,7 @@ protected:
 	void VALID_CHECK() const final;
 };
 
+
 struct SPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 {
 public:

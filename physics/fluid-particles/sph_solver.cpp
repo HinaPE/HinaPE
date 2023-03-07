@@ -21,9 +21,9 @@ void HinaPE::SPHSolver::_emit_particles() const
 	_data->_forces.resize(_data->_positions.size(), mVector3::Zero());
 	_data->_densities.resize(_data->_positions.size(), 0);
 	_data->_pressures.resize(_data->_positions.size(), 0);
-	_data->_update_neighbor();
-	_data->_update_density();
-	_data->_update_pressure();
+//	_data->_update_neighbor();
+//	_data->_update_density();
+//	_data->_update_pressure();
 }
 
 void HinaPE::SPHSolver::_accumulate_force() const
@@ -42,31 +42,31 @@ void HinaPE::SPHSolver::_accumulate_force() const
 		f[i] = gravity;
 	});
 
-	StdKernel kernel(_data->kernel_radius);
-	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
-	{
-		const auto &neighbors = _data->_neighbor_lists[i];
-		for (size_t j: neighbors)
-		{
-			real dist = (x[i] - x[j]).length();
-			f[i] += _opt.viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
-		}
-	});
-
-	// Pressure Forces
-	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
-	{
-		const auto &neighbors = _data->_neighbor_lists[i];
-		for (size_t j: neighbors)
-		{
-			real dist = (x[i] - x[j]).length();
-			if (dist > HinaPE::Constant::Epsilon)
-			{
-				mVector3 dir = (x[i] - x[j]) / dist;
-				f[i] += -m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * kernel.gradient(dist, dir);
-			}
-		}
-	});
+//	StdKernel kernel(_data->kernel_radius);
+//	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+//	{
+//		const auto &neighbors = _data->_neighbor_lists[i];
+//		for (size_t j: neighbors)
+//		{
+//			real dist = (x[i] - x[j]).length();
+//			f[i] += _opt.viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
+//		}
+//	});
+//
+//	// Pressure Forces
+//	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+//	{
+//		const auto &neighbors = _data->_neighbor_lists[i];
+//		for (size_t j: neighbors)
+//		{
+//			real dist = (x[i] - x[j]).length();
+//			if (dist > HinaPE::Constant::Epsilon)
+//			{
+//				mVector3 dir = (x[i] - x[j]) / dist;
+//				f[i] += -m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * kernel.gradient(dist, dir);
+//			}
+//		}
+//	});
 }
 
 void HinaPE::SPHSolver::_time_integration() const
