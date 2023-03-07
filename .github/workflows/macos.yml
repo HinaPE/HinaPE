@@ -23,7 +23,7 @@ jobs:
         submodules: recursive
 
     - name: Prepare
-      run: brew install onedpl
+      run: brew install onedpl tbb
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
