@@ -26,6 +26,7 @@ auto main() -> int
 	};
 
 
+	renderer->inspect(solver.get());
 
 	// launch renderer
 	renderer->launch();

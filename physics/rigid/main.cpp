@@ -21,6 +21,7 @@ auto main() -> int
 	{
 		solver->update(dt);
 	};
+
 	renderer->launch();
 	return 0;
 }

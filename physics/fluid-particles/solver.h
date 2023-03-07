@@ -39,19 +39,21 @@ protected:
 	void VALID_CHECK() const final;
 };
 
+// @formatter:off
 struct SPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 {
 public:
 	// particles
-	std::vector<mVector3> _positions;
-	std::vector<mVector3> _velocities;
-	std::vector<mVector3> _forces;
-	std::vector<real> _densities;
-	std::vector<real> _pressures;
+	std::vector<mVector3> 	_positions;
+	std::vector<mVector3> 	_velocities;
+	std::vector<mVector3> 	_forces;
+	std::vector<real> 		_densities;
+	std::vector<real> 		_pressures;
 
 protected:
 	void _update_poses() final;
 };
+// @formatter:on
 
 using SPHSolverPtr = std::shared_ptr<SPHSolver>;
 using SPHSolverDataPtr = std::shared_ptr<SPHSolver::Data>;
