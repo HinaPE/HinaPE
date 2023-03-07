@@ -45,8 +45,6 @@ protected:
 	void _time_integration() const;
 	void _resolve_collision() const;
 
-
-
 	void INSPECT() final;
 	void VALID_CHECK() const final;
 };

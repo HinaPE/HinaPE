@@ -7,11 +7,12 @@ if (NOT TARGET Kasumi_Render3D)
 endif ()
 
 file(GLOB_RECURSE src
-        sph_solver.cpp sph_solver.h
         domain/*.cpp domain/*.h
         emitter/*.cpp emitter/*.h
         neighbor_search/*.cpp neighbor_search/*.h
         kernel/*.cpp kernel/*.h
+        sph_solver.cpp sph_solver.h
+        pcisph_solver.cpp pcisph_solver.h
         )
 add_library(HinaPE_Fluid_Particles ${src})
 set_target_properties(HinaPE_Fluid_Particles PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
