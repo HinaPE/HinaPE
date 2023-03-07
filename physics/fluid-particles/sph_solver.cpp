@@ -21,9 +21,9 @@ void HinaPE::SPHSolver::_emit_particles() const
 	_data->_forces.resize(_data->_positions.size(), mVector3::Zero());
 	_data->_densities.resize(_data->_positions.size(), 0);
 	_data->_pressures.resize(_data->_positions.size(), 0);
-//	_data->_update_neighbor();
-//	_data->_update_density();
-//	_data->_update_pressure();
+	_data->_update_neighbor();
+	_data->_update_density();
+	_data->_update_pressure();
 }
 
 void HinaPE::SPHSolver::_accumulate_force() const
@@ -52,7 +52,7 @@ void HinaPE::SPHSolver::_accumulate_force() const
 //			f[i] += _opt.viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
 //		}
 //	});
-//
+
 //	// Pressure Forces
 //	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
 //	{
