@@ -66,7 +66,7 @@ private:
 using SPHSolverPtr = std::shared_ptr<SPHSolver>;
 
 
-struct SPHSolver::Data : public CopyDisable, public Kasumi::ParticlesObject
+struct SPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 {
 public:
 	struct Opt

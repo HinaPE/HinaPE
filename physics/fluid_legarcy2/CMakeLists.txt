@@ -1,11 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 project(HinaPE_Fluid VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
-if (NOT TARGET HinaPE_Common)
-    message(FATAL_ERROR "HinaPE_Common is not found")
-    return()
-endif ()
-
 if (NOT TARGET Kasumi_Render3D)
     message(FATAL_ERROR "Kasumi_Render3D is not found")
     return()
