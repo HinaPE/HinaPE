@@ -13,6 +13,7 @@ file(GLOB_RECURSE src
         kernel/*.cpp kernel/*.h
         sph_solver.cpp sph_solver.h
         pcisph_solver.cpp pcisph_solver.h
+        pbf_solver.cpp pbf_solver.h
         )
 add_library(HinaPE_Fluid_Particles ${src})
 set_target_properties(HinaPE_Fluid_Particles PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)

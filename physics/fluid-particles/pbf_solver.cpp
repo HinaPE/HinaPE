@@ -1,14 +1,14 @@
-#include "pcisph_solver.h"
+#include "pbf_solver.h"
 
-void HinaPE::PCISPHSolver::update(real dt) const
+void HinaPE::PBFSolver::update(real dt) const
 {
 }
 
-void HinaPE::PCISPHSolver::INSPECT()
+void HinaPE::PBFSolver::INSPECT()
 {
 }
 
-void HinaPE::PCISPHSolver::VALID_CHECK() const
+void HinaPE::PBFSolver::VALID_CHECK() const
 {
 	if (_data == nullptr) throw std::runtime_error("SPHSolver::_data is nullptr");
 	if (_domain == nullptr) throw std::runtime_error("SPHSolver::_domain is nullptr");
@@ -21,7 +21,7 @@ void HinaPE::PCISPHSolver::VALID_CHECK() const
 		throw std::runtime_error("SPHSolver::_data size mismatch");
 }
 
-void HinaPE::PCISPHSolver::Data::_update_poses()
+void HinaPE::PBFSolver::Data::_update_poses()
 {
 	static real size = 0.03;
 	_poses.resize(_positions.size());

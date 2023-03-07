@@ -5,7 +5,7 @@ void HinaPE::SPHSolver::update(real dt) const
 	// emit particle to data, and rebuild data
 	_emit_particles();
 
-	// accumulate external forces and pressure force
+	// accumulate external forces, viscosity force and pressure force
 	_accumulate_force();
 
 	// do semi-euler integration
@@ -14,6 +14,7 @@ void HinaPE::SPHSolver::update(real dt) const
 	// deal with collision (particle-solid)
 	_resolve_collision();
 }
+
 void HinaPE::SPHSolver::_emit_particles() const
 {
 	_emitter->emit(&_data->_positions, &_data->_velocities);
@@ -24,6 +25,7 @@ void HinaPE::SPHSolver::_emit_particles() const
 	_data->_update_density();
 	_data->_update_pressure();
 }
+
 void HinaPE::SPHSolver::_accumulate_force() const
 {
 	auto &x = _data->_positions;
@@ -66,6 +68,7 @@ void HinaPE::SPHSolver::_accumulate_force() const
 		}
 	});
 }
+
 void HinaPE::SPHSolver::_time_integration() const
 {
 	auto &x = _data->_positions;
@@ -81,6 +84,7 @@ void HinaPE::SPHSolver::_time_integration() const
 		x[i] += dt * v[i];
 	});
 }
+
 void HinaPE::SPHSolver::_resolve_collision() const
 {
 	// collide with domain
@@ -89,6 +93,7 @@ void HinaPE::SPHSolver::_resolve_collision() const
 		_domain->resolve_collision(_data->_radius, _opt.restitution, &_data->_positions[i], &_data->_velocities[i]);
 	});
 }
+
 void HinaPE::SPHSolver::INSPECT()
 {
 	ImGui::Text("Solver Inspector");
@@ -108,6 +113,7 @@ void HinaPE::SPHSolver::INSPECT()
 			_opt.inited = true;
 	ImGui::Separator();
 }
+
 void HinaPE::SPHSolver::VALID_CHECK() const
 {
 	if (_data == nullptr) throw std::runtime_error("SPHSolver::_data is nullptr");
@@ -129,6 +135,7 @@ void HinaPE::SPHSolver::Data::_update_poses()
 		_poses[i] = Kasumi::Pose(_positions[i], {}, {size, size, size});
 	_dirty = true;
 }
+
 void HinaPE::SPHSolver::Data::_update_neighbor()
 {
 	_neighbor_search = std::make_shared<PointSimpleListSearch3>();
@@ -148,6 +155,7 @@ void HinaPE::SPHSolver::Data::_update_neighbor()
 		});
 	}
 }
+
 void HinaPE::SPHSolver::Data::_update_density()
 {
 	auto &x = _positions;
@@ -166,6 +174,7 @@ void HinaPE::SPHSolver::Data::_update_density()
 		d[i] = m * sum;
 	});
 }
+
 void HinaPE::SPHSolver::Data::_update_pressure()
 {
 	auto &d = _densities;
