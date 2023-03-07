@@ -24,8 +24,18 @@ void HinaPE::SPHSolver::INSPECT()
 }
 void HinaPE::SPHSolver::VALID_CHECK() const
 {
+	if (_data == nullptr) throw std::runtime_error("SPHSolver::_data is nullptr");
 	if (_domain == nullptr) throw std::runtime_error("SPHSolver::_domain is nullptr");
 }
 void HinaPE::SPHSolver::update(real dt)
 {
+	if (_data->_positions.size() < 100)
+		_data->_positions.emplace_back(rand() % 10 - 5, rand() % 10 - 5, rand() % 10 - 5);
+}
+void HinaPE::SPHSolver::Data::_update_poses()
+{
+	_poses.resize(_positions.size());
+	for (int i = 0; i < _positions.size(); ++i)
+		_poses[i] = Kasumi::Pose(_positions[i], {}, {0.1, 0.1, 0.1});
+	_dirty = true;
 }

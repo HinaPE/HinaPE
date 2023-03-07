@@ -9,7 +9,7 @@ class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::V
 {
 public:
 	struct Data;
-	std::shared_ptr<Data> _data;
+	std::shared_ptr<Data> _data = std::make_shared<Data>();
 	BoxDomainPtr _domain;
 
 	void update(real dt);
@@ -38,12 +38,16 @@ protected:
 
 struct SPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 {
+public:
 	// particles
 	std::vector<mVector3> _positions;
 	std::vector<mVector3> _velocities;
 	std::vector<mVector3> _forces;
 	std::vector<real> _densities;
 	std::vector<real> _pressures;
+
+protected:
+	void _update_poses() final;
 };
 
 using SPHSolverPtr = std::shared_ptr<SPHSolver>;

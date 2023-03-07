@@ -17,6 +17,7 @@ auto main() -> int
 	renderer->_init = [&](const Kasumi::Scene3DPtr &scene)
 	{
 		scene->add(domain);
+		scene->add(solver->_data);
 	};
 
 	renderer->_step = [&](real dt)
