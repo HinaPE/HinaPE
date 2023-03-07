@@ -1,7 +1,7 @@
-#include "point_particle_emitter.h"
+#include "particle_emitter.h"
 
 HinaPE::PointParticleEmitter3::PointParticleEmitter3() : _rng(0) {}
-void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> &positions, std::vector<mVector3> &velocities)
+void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> *positions, std::vector<mVector3> *velocities)
 {
 	if (!ParticleEmitter3::_opt.enable || ParticleEmitter3::_opt.remaining_particles <= 0)
 		return;
@@ -15,12 +15,8 @@ void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> &positions, std::
 	for (int i = 0; i < ParticleEmitter3::_opt.particles_at_once; ++i)
 	{
 		auto new_dir = Math::uniform_sample_cone(rdm(), rdm(), ParticleEmitter3::_opt.direction, ParticleEmitter3::_opt.spread_angle);
-		positions.push_back(ParticleEmitter3::_opt.origin);
-		velocities.push_back(ParticleEmitter3::_opt.speed * new_dir);
+		positions->push_back(ParticleEmitter3::_opt.origin);
+		velocities->push_back(ParticleEmitter3::_opt.speed * new_dir);
 	}
 	ParticleEmitter3::_opt.remaining_particles -= ParticleEmitter3::_opt.particles_at_once;
-}
-void HinaPE::PointParticleEmitter3::INSPECT()
-{
-	ParticleEmitter3::INSPECT();
 }

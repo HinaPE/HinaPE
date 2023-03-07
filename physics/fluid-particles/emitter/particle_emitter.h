@@ -11,9 +11,8 @@ namespace HinaPE
 class ParticleEmitter3 : public Kasumi::ArrowObject
 {
 public:
-	virtual void emit(std::vector<mVector3> &positions, std::vector<mVector3> &velocities) = 0;
+	virtual void emit(std::vector<mVector3> *positions, std::vector<mVector3> *velocities) = 0;
 
-public:
 	struct Opt
 	{
 		bool enable = true;
@@ -26,10 +25,20 @@ public:
 		size_t particles_at_once = 100;
 		size_t remaining_particles = 20000;
 	} _opt;
-	void INSPECT() override;
-	ParticleEmitter3();
 };
+
+class PointParticleEmitter3 final : public ParticleEmitter3
+{
+public:
+	void emit(std::vector<mVector3> *positions, std::vector<mVector3> *velocities) final;
+	PointParticleEmitter3();
+
+private:
+	std::mt19937 _rng;
+};
+
 using ParticleEmitter3Ptr = std::shared_ptr<ParticleEmitter3>;
+using PointParticleEmitter3Ptr = std::shared_ptr<PointParticleEmitter3>;
 } // namespace HinaPE
 
 #endif //HINAPE_PARTICLE_EMITTER_H
