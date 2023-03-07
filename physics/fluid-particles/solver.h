@@ -9,10 +9,27 @@ class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::V
 {
 public:
 	struct Data;
+	std::shared_ptr<Data> _data;
 	BoxDomainPtr _domain;
 
-public:
 	void update(real dt);
+
+public:
+	struct Opt
+	{
+		// common
+		bool inited = false;
+		real current_dt = 0.02; // don't alter this
+		mVector3 gravity = mVector3(0, -9.8, 0);
+
+		//sph
+		real eos_exponent = 7;
+		real negative_pressure_scale = 0.0;
+		real viscosity_coefficient = 0.01;
+		real pseudo_viscosity_coefficient = 10.0;
+		real speed_of_sound = 100;
+		real time_step_limit_scale = 0.4;
+	} _opt;
 
 protected:
 	void INSPECT() final;
