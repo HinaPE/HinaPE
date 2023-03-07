@@ -2,11 +2,8 @@
 
 void HinaPE::SPHSolver::update(real dt) const
 {
-	// emit particle to data
+	// emit particle to data, and rebuild data
 	_emit_particles();
-
-	_data->_update_density();
-	_data->_update_pressure();
 
 	// accumulate external forces and pressure force
 	_accumulate_force();
@@ -23,6 +20,9 @@ void HinaPE::SPHSolver::_emit_particles() const
 	_data->_forces.resize(_data->_positions.size(), mVector3::Zero());
 	_data->_densities.resize(_data->_positions.size(), 0);
 	_data->_pressures.resize(_data->_positions.size(), 0);
+	_data->_update_neighbor();
+	_data->_update_density();
+	_data->_update_pressure();
 }
 void HinaPE::SPHSolver::_accumulate_force() const
 {
@@ -40,7 +40,31 @@ void HinaPE::SPHSolver::_accumulate_force() const
 		f[i] = gravity;
 	});
 
+	StdKernel kernel(_data->kernel_radius);
+	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+	{
+		const auto &neighbors = _data->_neighbor_lists[i];
+		for (size_t j: neighbors)
+		{
+			real dist = (x[i] - x[j]).length();
+			f[i] += _opt.viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
+		}
+	});
+
 	// Pressure Forces
+	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+	{
+		const auto &neighbors = _data->_neighbor_lists[i];
+		for (size_t j: neighbors)
+		{
+			real dist = (x[i] - x[j]).length();
+			if (dist > HinaPE::Constant::Epsilon)
+			{
+				mVector3 dir = (x[i] - x[j]) / dist;
+				f[i] += -m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * kernel.gradient(dist, dir);
+			}
+		}
+	});
 }
 void HinaPE::SPHSolver::_time_integration() const
 {
@@ -101,13 +125,61 @@ void HinaPE::SPHSolver::Data::_update_poses()
 {
 	static real size = 0.03;
 	_poses.resize(_positions.size());
-	for (int i = 0; i < _positions.size(); ++i)
+	for (size_t i = 0; i < _positions.size(); ++i)
 		_poses[i] = Kasumi::Pose(_positions[i], {}, {size, size, size});
 	_dirty = true;
 }
+void HinaPE::SPHSolver::Data::_update_neighbor()
+{
+	_neighbor_search = std::make_shared<PointSimpleListSearch3>();
+	_neighbor_search->build(_positions);
+	_neighbor_lists.resize(_positions.size());
+
+	auto &x = _positions;
+	for (size_t i = 0; i < _positions.size(); ++i)
+	{
+		mVector3 origin = x[i];
+		_neighbor_lists[i].clear();
+
+		_neighbor_search->for_each_nearby_point(origin, kernel_radius, [&](size_t j, const mVector3 &)
+		{
+			if (i != j)
+				_neighbor_lists[i].push_back(j);
+		});
+	}
+}
 void HinaPE::SPHSolver::Data::_update_density()
 {
+	auto &x = _positions;
+	auto &d = _densities;
+	const auto &m = _mass;
+
+	Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
+	{
+		real sum = 0;
+		StdKernel kernel(kernel_radius);
+		_neighbor_search->for_each_nearby_point(x[i], kernel_radius, [&](size_t, const mVector3 &p)
+		{
+			real dist = (x[i] - p).length();
+			sum += kernel(dist);
+		});
+		d[i] = m * sum;
+	});
 }
 void HinaPE::SPHSolver::Data::_update_pressure()
 {
+	auto &d = _densities;
+	auto &p = _pressures;
+	const real eos_scale = target_density * 100 * 100; // speed of sound = 100
+	const real eos_exponent = eos_exponent;
+	const real negative_pressure_scale = negative_pressure_scale;
+	Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
+	{
+		// See Murnaghan-Tait equation of state from
+		// https://en.wikipedia.org/wiki/Tait_equation
+		p[i] = eos_scale / eos_exponent * (std::pow(d[i] / target_density, eos_exponent) - 1.0);
+
+		if (p[i] < 0)
+			p[i] *= negative_pressure_scale;
+	});
 }

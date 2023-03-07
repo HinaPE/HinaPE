@@ -1,12 +1,6 @@
 #include "sph_kernel.h"
 
-void HinaPE::StdKernel::_rebuild_()
-{
-	h = _opt.kernel_radius;
-	h2 = h * h;
-	h3 = h2 * h;
-	h5 = h3 * h2;
-}
+HinaPE::StdKernel::StdKernel(real kernel_radius) : h(kernel_radius), h2(kernel_radius * kernel_radius), h3(h2 * kernel_radius), h5(h3 * h2) {}
 auto HinaPE::StdKernel::operator()(real distance) const -> real
 {
 	if (distance * distance >= h2)

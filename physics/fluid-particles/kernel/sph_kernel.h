@@ -24,12 +24,7 @@ public:
 	auto gradient(const mVector3 &point) const -> mVector3 final;
 	auto gradient(real distance, const mVector3 &direction) const -> mVector3 final;
 
-public:
-	struct Opt
-	{
-		real kernel_radius = 0.18;
-	} _opt;
-	void _rebuild_();
+	explicit StdKernel(real kernel_radius);
 
 public:
 	real h, h2, h3, h5;

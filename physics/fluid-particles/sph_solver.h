@@ -75,8 +75,12 @@ public:
 protected:
 	friend class SPHSolver;
 	void _update_poses() final;
+	void _update_neighbor();
 	void _update_density();
 	void _update_pressure();
+
+	PointNeighborSearch3Ptr _neighbor_search;
+	std::vector<std::vector<size_t>> _neighbor_lists;
 };
 // @formatter:on
 
