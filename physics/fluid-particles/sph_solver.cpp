@@ -178,18 +178,18 @@ void HinaPE::SPHSolver::Data::_update_density()
 
 void HinaPE::SPHSolver::Data::_update_pressure()
 {
-	auto &d = _densities;
-	auto &p = _pressures;
-	const real eos_scale = target_density * 100 * 100; // speed of sound = 100
-	const real eos_exponent = eos_exponent;
-	const real negative_pressure_scale = negative_pressure_scale;
-	Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
-	{
-		// See Murnaghan-Tait equation of state from
-		// https://en.wikipedia.org/wiki/Tait_equation
-		p[i] = eos_scale / eos_exponent * (std::pow(d[i] / target_density, eos_exponent) - 1.0);
-
-		if (p[i] < 0)
-			p[i] *= negative_pressure_scale;
-	});
+//	auto &d = _densities;
+//	auto &p = _pressures;
+//	const real eos_scale = target_density * 100 * 100; // speed of sound = 100
+//	const real eos_exponent = eos_exponent;
+//	const real negative_pressure_scale = negative_pressure_scale;
+//	Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
+//	{
+//		// See Murnaghan-Tait equation of state from
+//		// https://en.wikipedia.org/wiki/Tait_equation
+//		p[i] = eos_scale / eos_exponent * (std::pow(d[i] / target_density, eos_exponent) - 1.0);
+//
+//		if (p[i] < 0)
+//			p[i] *= negative_pressure_scale;
+//	});
 }
