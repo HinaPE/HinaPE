@@ -10,6 +10,8 @@ struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 
 	void load(size_t i)
 	{
+		if (i < 0 || i >= _data->_positions.size())
+			return;
 		auto origin = _data->_positions[i];
 		load(origin);
 	}
@@ -41,7 +43,7 @@ auto main() -> int
 	auto vis = std::make_shared<NeighborSearchVisualization>(data);
 
 
-	// set up init & step
+	// set up init & step & debugger
 	renderer->_init = [&](const Kasumi::Scene3DPtr &scene)
 	{
 		scene->add(data);
@@ -53,7 +55,11 @@ auto main() -> int
 	renderer->_step = [&](real dt)
 	{
 		solver->update(dt);
-		vis->load(mVector3(0, 0, 0));
+	};
+
+	renderer->_debugger = [&]()
+	{
+		vis->load(data->_inst_id);
 	};
 
 
