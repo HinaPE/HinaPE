@@ -1,9 +1,11 @@
+#include <utility>
+
 #include "renderer3D/renderer3D.h"
 #include "sph_solver.h"
 
 struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 {
-	explicit NeighborSearchVisualization(const HinaPE::SPHSolverDataPtr &data) : _data(data) {}
+	explicit NeighborSearchVisualization(HinaPE::SPHSolverDataPtr data) : _data(std::move(data)) {}
 	HinaPE::SPHSolverDataPtr _data;
 
 	void load(size_t i)
@@ -15,7 +17,7 @@ struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 	void load(const mVector3 &origin)
 	{
 		clear();
-		_data->_neighbor_search->for_each_nearby_point(origin, 3, [&](size_t, const mVector3 &p)
+		_data->_neighbor_search->for_each_nearby_point(origin, 1, [&](size_t, const mVector3 &p)
 		{
 			add(origin, p);
 		});
