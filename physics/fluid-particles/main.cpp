@@ -1,6 +1,21 @@
 #include "renderer3D/renderer3D.h"
 #include "sph_solver.h"
 
+struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
+{
+	explicit NeighborSearchVisualization(const HinaPE::SPHSolverDataPtr &data) : _data(data) {}
+	HinaPE::SPHSolverDataPtr _data;
+
+	void load(const mVector3 &origin)
+	{
+		clear();
+		_data->_neighbor_search->for_each_nearby_point(origin, 3, [&](size_t, const mVector3 &p)
+		{
+			add(origin, p);
+		});
+	}
+};
+
 auto main() -> int
 {
 	// prepare solver
@@ -15,18 +30,22 @@ auto main() -> int
 	solver->_domain = domain;
 	solver->_emitter = emitter;
 
+	auto vis = std::make_shared<NeighborSearchVisualization>(data);
+
 
 	// set up init & step
 	renderer->_init = [&](const Kasumi::Scene3DPtr &scene)
 	{
-		scene->add(data);
+//		scene->add(data);
 		scene->add(domain);
 		scene->add(emitter);
+		scene->add(vis);
 	};
 
 	renderer->_step = [&](real dt)
 	{
 		solver->update(dt);
+		vis->load(mVector3(0, 0, 0));
 	};
 
 

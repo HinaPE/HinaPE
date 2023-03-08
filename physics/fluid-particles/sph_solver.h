@@ -72,6 +72,8 @@ public:
 	real kernel_radius_over_target_spacing = 1.8;
 	real kernel_radius 		= kernel_radius_over_target_spacing * target_spacing;
 
+	PointNeighborSearch3Ptr _neighbor_search;
+
 protected:
 	friend class SPHSolver;
 	void _update_poses() final;
@@ -79,7 +81,6 @@ protected:
 	void _update_density();
 	void _update_pressure();
 
-	PointNeighborSearch3Ptr _neighbor_search;
 	std::vector<std::vector<size_t>> _neighbor_lists;
 };
 // @formatter:on
