@@ -6,6 +6,12 @@ struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 	explicit NeighborSearchVisualization(const HinaPE::SPHSolverDataPtr &data) : _data(data) {}
 	HinaPE::SPHSolverDataPtr _data;
 
+	void load(size_t i)
+	{
+		auto origin = _data->_positions[i];
+		load(origin);
+	}
+
 	void load(const mVector3 &origin)
 	{
 		clear();
