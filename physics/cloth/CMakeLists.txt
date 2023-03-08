@@ -12,8 +12,8 @@ if (NOT TARGET Kasumi_Render3D)
 endif ()
 
 file(GLOB_RECURSE src
-        pbd/solver.h pbd/solver.cpp
-        pbd/constraints.h pbd/constraints.cpp
+        objects/*.cpp  objects/*.h
+        pbd/*.cpp  pbd/*.h
         )
 add_library(HinaPE_Cloth ${src})
 set_target_properties(HinaPE_Cloth PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)

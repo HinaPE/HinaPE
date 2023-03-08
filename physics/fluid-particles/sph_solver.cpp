@@ -99,13 +99,13 @@ void HinaPE::SPHSolver::INSPECT()
 	ImGui::Text("Solver Inspector");
 	ImGui::Text("Particles: %zu", _data->_positions.size());
 	ImGui::Separator();
-	INSPECT_VEC3(_opt.gravity, "gravity");
-	INSPECT_REAL(_opt.eos_exponent, "eos exponent");
-	INSPECT_REAL(_opt.negative_pressure_scale, "negative pressure scale");
-	INSPECT_REAL(_opt.viscosity_coefficient, "viscosity coefficient");
-	INSPECT_REAL(_opt.pseudo_viscosity_coefficient, "pseudo viscosity coefficient");
-	INSPECT_REAL(_opt.speed_of_sound, "speed of sound");
-	INSPECT_REAL(_opt.time_step_limit_scale, "time step limit scale");
+	INSPECT_REAL(_opt.gravity[1], "g");
+	INSPECT_REAL(_opt.eos_exponent, "eos");
+	INSPECT_REAL(_opt.negative_pressure_scale, "-p scale");
+	INSPECT_REAL(_opt.viscosity_coefficient, "vis");
+	INSPECT_REAL(_opt.pseudo_viscosity_coefficient, "pseudo vis");
+	INSPECT_REAL(_opt.speed_of_sound, "v of sound");
+	INSPECT_REAL(_opt.time_step_limit_scale, "dt limit");
 //	_emitter->INSPECT();
 
 	if (!_opt.inited)

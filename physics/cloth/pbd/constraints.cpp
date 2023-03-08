@@ -1,9 +1,11 @@
 #include "constraints.h"
+
 HinaPE::DistanceConstraint::DistanceConstraint(std::vector<mVector3> &vertices, std::vector<real> &inv_masses, const std::vector<std::pair<unsigned int, unsigned int>> &edges) : _vertices(vertices), _inv_masses(inv_masses)
 {
 	for (auto &edge: edges)
 		_pairs.emplace_back(edge.first, edge.second, (vertices[edge.first] - vertices[edge.second]).length());
 }
+
 void HinaPE::DistanceConstraint::solve()
 {
 	if (_vertices.empty())

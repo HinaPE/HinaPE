@@ -4,15 +4,15 @@
 // Copyright (c) 2023 Xayah Hina
 // MPL-2.0 license
 
-#include "common.h"
+#include "../objects/cloth.h"
 #include "constraints.h"
 
 namespace HinaPE
 {
-class PBDClothSolver : public CopyDisable
+class PBDClothSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
-	void step(real dt);
+	void update(real dt);
 
 public:
 	struct Opt
@@ -31,42 +31,16 @@ protected:
 	void _external_force() const;
 	void _time_integration() const;
 	void _constraint_projection();
-	void _update_state();
+	void _update_state() const;
+	void INSPECT() final;
 
 public:
-	struct Data;
-	std::shared_ptr<Data> _data;
+	std::shared_ptr<ClothObject> _data;
 	std::vector<ConstraintPtr> _constraints;
 	real _current_dt;
 };
 
-struct PBDClothSolver::Data : public CopyDisable
-{
-public:
-	struct Opt
-	{
-		real width = 7.0f;
-		real height = 5.0f;
-		int rows = 30;
-		int cols = 30;
-	} _opt;
-	void _build_();
-
-	// init infos
-	std::vector<real> _inv_masses;
-	std::vector<mVector3> _init_vertices;
-	std::vector<unsigned int> _init_indices;
-	std::vector<std::pair<unsigned int, unsigned int>> _init_edges;
-
-	// update infos
-	std::vector<mVector3> _positions;
-	std::vector<mVector3> _pre_positions;
-	std::vector<mVector3> _velocities;
-	std::vector<mVector3> _forces;
-};
-
 using PBDClothSolverPtr = std::shared_ptr<PBDClothSolver>;
-using PBDClothSolverDataPtr = std::shared_ptr<PBDClothSolver::Data>;
 } // namespace HinaPE
 
 #endif //HINAPE_CLOTH_SOLVER_H
