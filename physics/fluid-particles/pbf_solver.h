@@ -5,9 +5,10 @@
 // MPL-2.0 license
 
 #include "domain/box_domain.h"
+#include "kernel/sph_kernel.h"
 #include "emitter/particle_emitter.h"
 #include "neighbor_search/point_neighbor_search.h"
-#include "kernel/sph_kernel.h"
+#include "neighbor_search/compact_nsearch.h"
 
 // @formatter:off
 namespace HinaPE

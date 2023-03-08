@@ -9,7 +9,7 @@
 
 namespace HinaPE
 {
-class CompactNSearch final : public PointNeighborSearch3
+class CompactNSearch3 final : public PointNeighborSearch3
 {
 public:
 	void for_each_nearby_point(const mVector3 &origin, real radius, const ForEachNearbyPointFunc &callback) final;
