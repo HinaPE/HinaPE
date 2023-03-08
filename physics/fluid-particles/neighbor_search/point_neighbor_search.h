@@ -19,7 +19,7 @@ public:
 };
 
 
-class PointSimpleListSearch3 : public PointNeighborSearch3
+class PointSimpleListSearch3 final : public PointNeighborSearch3
 {
 public:
 	void for_each_nearby_point(const mVector3 &origin, real radius, const ForEachNearbyPointFunc &callback) final;
@@ -31,7 +31,7 @@ private:
 };
 
 
-class PointHashGridSearch3 : public PointNeighborSearch3
+class PointHashGridSearch3 final : public PointNeighborSearch3
 {
 public:
 	void for_each_nearby_point(const mVector3 &origin, real radius, const ForEachNearbyPointFunc &callback) final;
