@@ -44,7 +44,7 @@ auto main() -> int
 	// set up init & step
 	renderer->_init = [&](const Kasumi::Scene3DPtr &scene)
 	{
-//		scene->add(data);
+		scene->add(data);
 		scene->add(domain);
 		scene->add(emitter);
 		scene->add(vis);

@@ -129,6 +129,8 @@ void HinaPE::SPHSolver::VALID_CHECK() const
 
 void HinaPE::SPHSolver::Data::_update_poses()
 {
+	if (_dirty)
+		return;
 	static real size = 0.03;
 	_poses.resize(_positions.size());
 	for (size_t i = 0; i < _positions.size(); ++i)
