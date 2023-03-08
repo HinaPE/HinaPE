@@ -18,6 +18,7 @@ public:
 
 private:
 	std::shared_ptr<::CompactNSearch::NeighborhoodSearch> _searcher;
+	std::vector<mVector3> _points;
 };
 } //namespace HinaPE
 

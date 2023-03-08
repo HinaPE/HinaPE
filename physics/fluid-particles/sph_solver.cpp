@@ -140,8 +140,8 @@ void HinaPE::SPHSolver::Data::_update_poses()
 
 void HinaPE::SPHSolver::Data::_update_neighbor()
 {
-	_neighbor_search = std::make_shared<PointSimpleListSearch3>();
-//	_neighbor_search = std::make_shared<CompactNSearch3>();
+//	_neighbor_search = std::make_shared<PointSimpleListSearch3>();
+	_neighbor_search = std::make_shared<CompactNSearch3>();
 	_neighbor_search->build(_positions);
 	_neighbor_lists.resize(_positions.size());
 
