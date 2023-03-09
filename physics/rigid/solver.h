@@ -15,7 +15,7 @@ enum class RigidType
 	Dynamic,
 	Kinematic
 };
-class RigidSolver
+class RigidSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
 	void add(const Kasumi::ObjectMesh3DPtr &object, RigidType type = RigidType::Dynamic);
@@ -23,6 +23,9 @@ public:
 
 public:
 	RigidSolver();
+
+protected:
+	void INSPECT() final;
 
 private:
 	std::vector<std::pair<Kasumi::ObjectMesh3DPtr, reactphysics3d::RigidBody *>> _objects;

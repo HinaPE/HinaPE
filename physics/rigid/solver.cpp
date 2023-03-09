@@ -14,6 +14,7 @@ HinaPE::RigidSolver::RigidSolver()
 {
 	world = physicsCommon.createPhysicsWorld();
 }
+
 void HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType type)
 {
 	auto *rb = world->createRigidBody(toR(object->POSE));
@@ -22,8 +23,13 @@ void HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType t
 	if (is<Kasumi::SphereObject>(object.get())) { rb->addCollider(physicsCommon.createSphereShape(as<Kasumi::SphereObject>(object.get())->_radius), reactphysics3d::Transform::identity()); }
 	else if (is<Kasumi::CubeObject>(object.get())) { rb->addCollider(physicsCommon.createBoxShape(toR(as<Kasumi::CubeObject>(object.get())->_extent)), reactphysics3d::Transform::identity()); }
 }
+
 void HinaPE::RigidSolver::update(real dt)
 {
 	world->update(dt);
 	for (auto &[object, rb]: _objects) { object->POSE = toM(rb->getTransform()); }
+}
+
+void HinaPE::RigidSolver::INSPECT()
+{
 }

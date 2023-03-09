@@ -26,6 +26,4 @@ void HinaPE::CompactNSearch3::build(const std::vector<mVector3> &points)
 	auto id = _searcher->add_point_set(_points.front().data(), _points.size(), true, true, true, this);
 	_searcher->find_neighbors();
 	_searcher->update_point_sets();
-
-	_searcher->point_set(id).neighbor_list();
 }

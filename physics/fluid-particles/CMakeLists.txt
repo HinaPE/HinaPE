@@ -17,7 +17,7 @@ file(GLOB_RECURSE src
         )
 add_library(HinaPE_Fluid_Particles ${src})
 set_target_properties(HinaPE_Fluid_Particles PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-target_include_directories(HinaPE_Fluid_Particles PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(HinaPE_Fluid_Particles PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 target_link_libraries(HinaPE_Fluid_Particles PUBLIC Kasumi_Render3D)
 
 # APP EXECUTABLE

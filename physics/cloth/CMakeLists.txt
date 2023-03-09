@@ -1,11 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 project(HinaPE_Cloth VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
-if (NOT TARGET HinaPE_Common)
-    message(FATAL_ERROR "HinaPE_Common is not found")
-    return()
-endif ()
-
 if (NOT TARGET Kasumi_Render3D)
     message(FATAL_ERROR "Kasumi_Render3D is not found")
     return()
@@ -17,8 +12,8 @@ file(GLOB_RECURSE src
         )
 add_library(HinaPE_Cloth ${src})
 set_target_properties(HinaPE_Cloth PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-target_include_directories(HinaPE_Cloth PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(HinaPE_Cloth PUBLIC HinaPE_Common Kasumi_Render3D)
+target_include_directories(HinaPE_Cloth PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
+target_link_libraries(HinaPE_Cloth PUBLIC Kasumi_Render3D)
 target_compile_definitions(
         HinaPE_Cloth
         PUBLIC
