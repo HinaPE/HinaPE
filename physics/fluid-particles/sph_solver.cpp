@@ -35,13 +35,14 @@ void HinaPE::SPHSolver::_accumulate_force() const
 	auto &p = _data->_pressures;
 	const auto &m = _data->_mass;
 
-	// Non Pressure Forces
+	// Gravity Forces
 	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
 	{
 		mVector3 gravity = m * _opt.gravity;
 		f[i] = gravity;
 	});
 
+	// Viscosity Forces
 	StdKernel kernel(_data->kernel_radius);
 	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
 	{
@@ -49,10 +50,9 @@ void HinaPE::SPHSolver::_accumulate_force() const
 		for (size_t j: neighbors)
 		{
 			real dist = (x[i] - x[j]).length();
-			f[i] += _data->viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
+			if (d[j] > HinaPE::Constant::Epsilon)
+				f[i] += _data->viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
 		}
-		auto res = f[i] - m * _opt.gravity;
-		std::cout << res.x() << " " << res.y() << " " << res.z() << std::endl;
 	});
 
 	// Pressure Forces
@@ -62,10 +62,15 @@ void HinaPE::SPHSolver::_accumulate_force() const
 		for (size_t j: neighbors)
 		{
 			real dist = (x[i] - x[j]).length();
-			if (dist > HinaPE::Constant::Epsilon)
+			if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
 			{
 				mVector3 dir = (x[j] - x[i]) / dist;
 				f[i] -= m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * kernel.gradient(dist, dir);
+//				std::cout << "====================" << std::endl;
+//				std::cout << p[i] / (d[i] * d[i]) << std::endl;
+//				std::cout << p[j] / (d[j] * d[j]) << std::endl;
+//				std::cout << kernel.gradient(dist, dir) << std::endl;
+//				std::cout << "====================" << std::endl;
 			}
 		}
 	});
@@ -175,10 +180,10 @@ void HinaPE::SPHSolver::Data::_update_pressure()
 {
 	auto &d = _densities;
 	auto &p = _pressures;
+	const real td = target_density;
 	const real es = target_density * speed_of_sound * speed_of_sound;
 	const real ee = eos_exponent;
 	const real nps = negative_pressure_scale;
-	const real td = target_density;
 	Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
 	{
 		// See Murnaghan-Tait equation of state from

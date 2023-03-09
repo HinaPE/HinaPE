@@ -19,7 +19,7 @@ struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 	void load(const mVector3 &origin)
 	{
 		clear();
-		_data->_neighbor_search->for_each_nearby_point(origin, 10, [&](size_t, const mVector3 &p)
+		_data->_neighbor_search->for_each_nearby_point(origin, _data->kernel_radius, [&](size_t, const mVector3 &p)
 		{
 			add(origin, p);
 		});

@@ -19,8 +19,10 @@ auto HinaPE::CompactNSearch3::has_nearby_point(const mVector3 &origin, real radi
 
 void HinaPE::CompactNSearch3::build(const std::vector<mVector3> &points)
 {
-	_searcher = std::make_shared<::CompactNSearch::NeighborhoodSearch>(points.size());
-	_searcher->add_point_set(&points[0][0], points.size(), true, true, true, this);
+	_points.resize(points.size());
+	std::copy(points.begin(), points.end(), _points.begin());
+
+	_searcher = std::make_shared<::CompactNSearch::NeighborhoodSearch>(_points.size(), true);
+	_searcher->add_point_set(_points.front().data(), _points.size(), true, true, true, this);
 	_searcher->update_point_sets();
-	_points = points;
 }
