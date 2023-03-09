@@ -18,7 +18,7 @@ public:
 		bool enable = true;
 
 		real speed = 20;
-		real spread_angle = 90;
+		real spread_angle = 30;
 
 		size_t particles_at_once = 100;
 		size_t remaining_particles = 10000;

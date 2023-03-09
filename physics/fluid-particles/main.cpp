@@ -36,6 +36,8 @@ auto main() -> int
 	auto data = std::make_shared<HinaPE::SPHSolver::Data>();
 	auto domain = std::make_shared<HinaPE::BoxDomain>();
 	auto emitter = std::make_shared<HinaPE::PointParticleEmitter3>();
+	emitter->POSE.position = {-2.5, 2, 0};
+	emitter->POSE.euler = {0, 0, -90};
 	solver->_data = data;
 	solver->_domain = domain;
 	solver->_emitter = emitter;
@@ -50,6 +52,7 @@ auto main() -> int
 		scene->add(domain);
 		scene->add(emitter);
 		scene->add(vis);
+		scene->_scene_opt._particle_mode = true;
 	};
 
 	renderer->_step = [&](real dt)
