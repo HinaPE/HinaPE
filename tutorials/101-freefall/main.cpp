@@ -9,7 +9,6 @@ struct SimpleObject
 };
 struct Ball : public SimpleObject, public Kasumi::SphereObject { Ball() { track(&x); }};
 
-// a simple free fall solver
 class SimpleFreeFallSolver
 {
 public:
@@ -23,7 +22,7 @@ public:
 			auto &f = o->f;
 			auto &m = o->m;
 
-			f = {0, -9.8, 0};
+			f = _gravity;
 
 			v += dt * f / m;
 			x += dt * v;
@@ -32,6 +31,7 @@ public:
 
 private:
 	std::vector<std::shared_ptr<SimpleObject>> _objects;
+	mVector3 _gravity = {0, -9.8, 0};
 };
 
 auto main() -> int
@@ -40,6 +40,7 @@ auto main() -> int
 	auto solver = std::make_shared<SimpleFreeFallSolver>();
 
 	auto ball = std::make_shared<Ball>();
+	ball->x = {0, 5, 0};
 
 	solver->add(ball);
 
