@@ -51,6 +51,8 @@ void HinaPE::SPHSolver::_accumulate_force() const
 			real dist = (x[i] - x[j]).length();
 			f[i] += _data->viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
 		}
+		auto res = f[i] - m * _opt.gravity;
+		std::cout << res.x() << " " << res.y() << " " << res.z() << std::endl;
 	});
 
 	// Pressure Forces
@@ -165,7 +167,7 @@ void HinaPE::SPHSolver::Data::_update_density()
 			real dist = (x[i] - p).length();
 			sum += kernel(dist);
 		});
-		d[i] = m * sum;
+		d[i] = m * sum; // rho(x) = m * sum(W(x - xj))
 	});
 }
 

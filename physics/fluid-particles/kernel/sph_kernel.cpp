@@ -22,7 +22,7 @@ auto HinaPE::StdKernel::second_derivative(real distance) const -> real
 	if (distance * distance > h2)
 		return 0;
 
-	double x = distance * distance / h2;
+	real x = distance * distance / h2;
 	return 945.0 / (32.0 * HinaPE::Constant::PI * h5) * (1 - x) * (5 * x - 1);
 }
 auto HinaPE::StdKernel::gradient(const mVector3 &point) const -> mVector3
