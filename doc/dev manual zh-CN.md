@@ -2,6 +2,8 @@
 
 [TOC]
 
+## 注意：此文档已经过时，正在等待重写
+
 ## HinaPE Common
 
 HinaPE 通用模块

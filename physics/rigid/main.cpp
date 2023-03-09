@@ -17,6 +17,7 @@ auto main() -> int
 		scene->add(sphere1);
 		scene->add(sphere2);
 	};
+
 	renderer->_step = [&](real dt)
 	{
 		solver->update(dt);

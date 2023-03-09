@@ -14,7 +14,7 @@ auto main() -> int
 
 	renderer->_step = [&](real dt)
 	{
-		rigid->update(dt);
+//		rigid->update(dt);
 //		fluid->update(dt);
 	};
 

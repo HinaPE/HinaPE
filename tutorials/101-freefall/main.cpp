@@ -1,30 +1,55 @@
 #include "renderer3D/renderer3D.h"
 
-class SimpleFreeFallSystem
+struct SimpleObject
+{
+	mVector3 x; // position
+	mVector3 v; // velocity
+	mVector3 f; // force
+	real m = 1; // mass
+};
+struct Ball : public SimpleObject, public Kasumi::SphereObject { Ball() { track(&x); }};
+
+// a simple free fall solver
+class SimpleFreeFallSolver
 {
 public:
-	void add_sphere() {}
-	void add_box() {}
-	void add_plane() {}
-	void update(real dt) {}
+	void add(const std::shared_ptr<SimpleObject> &o) { _objects.push_back(o); }
+	void update(real dt)
+	{
+		for (auto &o: _objects)
+		{
+			auto &x = o->x;
+			auto &v = o->v;
+			auto &f = o->f;
+			auto &m = o->m;
+
+			f = {0, -9.8, 0};
+
+			v += dt * f / m;
+			x += dt * v;
+		}
+	}
+
+private:
+	std::vector<std::shared_ptr<SimpleObject>> _objects;
 };
 
 auto main() -> int
 {
-	auto free_fall = std::make_shared<SimpleFreeFallSystem>();
 	auto renderer = std::make_shared<Kasumi::Renderer3D>();
+	auto solver = std::make_shared<SimpleFreeFallSolver>();
+
+	auto ball = std::make_shared<Ball>();
+
+	solver->add(ball);
+
 	renderer->_init = [&](const Kasumi::Scene3DPtr &scene)
 	{
-		auto sphere = std::make_shared<Kasumi::SphereObject>();
-		sphere->POSE.position = {0, 5, 0};
-		scene->add(sphere);
-		auto cube = std::make_shared<Kasumi::CubeObject>();
-		cube->POSE.position = {0, 0, 0};
-		scene->add(cube);
+		scene->add(ball);
 	};
-	renderer->_step = [&](real dt)
-	{
-	};
+
+	renderer->_step = [&](real dt) { solver->update(dt); };
+
 	renderer->launch();
 	return 0;
 }
