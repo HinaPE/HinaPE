@@ -21,7 +21,7 @@ public:
 		real spread_angle = 90;
 
 		size_t particles_at_once = 100;
-		size_t remaining_particles = 20000;
+		size_t remaining_particles = 10000;
 	} _opt;
 };
 

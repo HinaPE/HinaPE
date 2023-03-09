@@ -26,19 +26,6 @@ struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 	}
 };
 
-struct DensityMonitor : public Kasumi::INSPECTOR
-{
-	explicit DensityMonitor(HinaPE::SPHSolverDataPtr data) : _data(std::move(data)) {}
-	HinaPE::SPHSolverDataPtr _data;
-
-protected:
-	void INSPECT() final
-	{
-		if (_data->_inst_id >= 0 && _data->_inst_id < _data->_densities.size())
-			ImGui::Text("Inst: %d, Density: %.3f", _data->_inst_id, _data->_densities[_data->_inst_id]);
-	}
-};
-
 auto main() -> int
 {
 	// prepare solver
@@ -54,7 +41,6 @@ auto main() -> int
 	solver->_emitter = emitter;
 
 	auto vis = std::make_shared<NeighborSearchVisualization>(data);
-	auto des_vis = std::make_shared<DensityMonitor>(data);
 
 
 	// set up init & step & debugger
@@ -78,7 +64,6 @@ auto main() -> int
 
 
 	renderer->inspect(solver.get());
-	renderer->inspect(des_vis.get());
 
 	// launch renderer
 	renderer->launch();

@@ -42,31 +42,31 @@ void HinaPE::SPHSolver::_accumulate_force() const
 		f[i] = gravity;
 	});
 
-//	StdKernel kernel(_data->kernel_radius);
-//	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
-//	{
-//		const auto &neighbors = _data->_neighbor_lists[i];
-//		for (size_t j: neighbors)
-//		{
-//			real dist = (x[i] - x[j]).length();
-//			f[i] += _opt.viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
-//		}
-//	});
+	StdKernel kernel(_data->kernel_radius);
+	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+	{
+		const auto &neighbors = _data->_neighbor_lists[i];
+		for (size_t j: neighbors)
+		{
+			real dist = (x[i] - x[j]).length();
+			f[i] += _data->viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
+		}
+	});
 
-//	// Pressure Forces
-//	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
-//	{
-//		const auto &neighbors = _data->_neighbor_lists[i];
-//		for (size_t j: neighbors)
-//		{
-//			real dist = (x[i] - x[j]).length();
-//			if (dist > HinaPE::Constant::Epsilon)
-//			{
-//				mVector3 dir = (x[i] - x[j]) / dist;
-//				f[i] += -m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * kernel.gradient(dist, dir);
-//			}
-//		}
-//	});
+	// Pressure Forces
+	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+	{
+		const auto &neighbors = _data->_neighbor_lists[i];
+		for (size_t j: neighbors)
+		{
+			real dist = (x[i] - x[j]).length();
+			if (dist > HinaPE::Constant::Epsilon)
+			{
+				mVector3 dir = (x[j] - x[i]) / dist;
+				f[i] -= m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * kernel.gradient(dist, dir);
+			}
+		}
+	});
 }
 
 void HinaPE::SPHSolver::_time_integration() const
@@ -100,17 +100,10 @@ void HinaPE::SPHSolver::INSPECT()
 	ImGui::Text("Particles: %zu", _data->_positions.size());
 	ImGui::Separator();
 	INSPECT_REAL(_opt.gravity[1], "g");
-	INSPECT_REAL(_opt.eos_exponent, "eos");
-	INSPECT_REAL(_opt.negative_pressure_scale, "-p scale");
-	INSPECT_REAL(_opt.viscosity_coefficient, "vis");
-	INSPECT_REAL(_opt.pseudo_viscosity_coefficient, "pseudo vis");
-	INSPECT_REAL(_opt.speed_of_sound, "v of sound");
-	INSPECT_REAL(_opt.time_step_limit_scale, "dt limit");
-//	_emitter->INSPECT();
 
-	if (!_opt.inited)
-		if (ImGui::Button("Generate"))
-			_opt.inited = true;
+//	if (!_opt.inited)
+//		if (ImGui::Button("Generate"))
+//			_opt.inited = true;
 	ImGui::Separator();
 }
 
@@ -178,18 +171,31 @@ void HinaPE::SPHSolver::Data::_update_density()
 
 void HinaPE::SPHSolver::Data::_update_pressure()
 {
-//	auto &d = _densities;
-//	auto &p = _pressures;
-//	const real eos_scale = target_density * 100 * 100; // speed of sound = 100
-//	const real eos_exponent = eos_exponent;
-//	const real negative_pressure_scale = negative_pressure_scale;
-//	Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
-//	{
-//		// See Murnaghan-Tait equation of state from
-//		// https://en.wikipedia.org/wiki/Tait_equation
-//		p[i] = eos_scale / eos_exponent * (std::pow(d[i] / target_density, eos_exponent) - 1.0);
-//
-//		if (p[i] < 0)
-//			p[i] *= negative_pressure_scale;
-//	});
+	auto &d = _densities;
+	auto &p = _pressures;
+	const real es = target_density * speed_of_sound * speed_of_sound;
+	const real ee = eos_exponent;
+	const real nps = negative_pressure_scale;
+	const real td = target_density;
+	Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
+	{
+		// See Murnaghan-Tait equation of state from
+		// https://en.wikipedia.org/wiki/Tait_equation
+		p[i] = es / ee * (std::pow(d[i] / td, ee) - 1.0);
+
+		if (p[i] < 0)
+			p[i] *= nps;
+	});
+}
+
+void HinaPE::SPHSolver::Data::INSPECT()
+{
+	PoseBase::INSPECT();
+	if (_inst_id >= 0 && _inst_id < _densities.size())
+	{
+		ImGui::Text("Inst: %d", _inst_id);
+		ImGui::Text("Force: {%.3f, %.3f, %.3f}", _forces[_inst_id].x(), _forces[_inst_id].y(), _forces[_inst_id].z());
+		ImGui::Text("Density: %.3f", _densities[_inst_id]);
+		ImGui::Text("Pressure: %.3f", _pressures[_inst_id]);
+	}
 }

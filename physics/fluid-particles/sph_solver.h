@@ -26,14 +26,6 @@ public:
 		real current_dt 					= 0.02; // don't alter this
 		mVector3 gravity 					= mVector3(0, -9.8, 0);
 		real restitution 					= 0.3;
-
-		//sph
-		real eos_exponent 					= 7;
-		real negative_pressure_scale 		= 0.0;
-		real viscosity_coefficient 			= 0.01;
-		real pseudo_viscosity_coefficient 	= 10.0;
-		real speed_of_sound 				= 100;
-		real time_step_limit_scale 			= 0.4;
 	} _opt;
 	struct Data;
 	std::shared_ptr<Data> 	_data;
@@ -69,8 +61,15 @@ public:
 	// sph
 	real target_density 	= 1000; // water density
 	real target_spacing 	= 0.1;
-	real kernel_radius_over_target_spacing = 11.8;
+	real kernel_radius_over_target_spacing = 1.8;
 	real kernel_radius 		= kernel_radius_over_target_spacing * target_spacing;
+
+	real eos_exponent 					= 7;
+	real negative_pressure_scale 		= 0.0;
+	real viscosity_coefficient 			= 0.01;
+	real pseudo_viscosity_coefficient 	= 10.0;
+	real speed_of_sound 				= 100;
+
 
 	PointNeighborSearch3Ptr _neighbor_search;
 
@@ -80,6 +79,7 @@ protected:
 	void _update_neighbor();
 	void _update_density();
 	void _update_pressure();
+	void INSPECT() final;
 
 	std::vector<std::vector<size_t>> _neighbor_lists;
 };
