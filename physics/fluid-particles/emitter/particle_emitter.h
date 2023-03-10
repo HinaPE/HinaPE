@@ -20,8 +20,8 @@ public:
 		real speed = 20;
 		real spread_angle = 30;
 
-		size_t particles_at_once = 100;
-		size_t remaining_particles = 10000;
+		size_t particles_at_once = 500;
+		size_t remaining_particles = 20000;
 	} _opt;
 };
 
