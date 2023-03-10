@@ -61,7 +61,7 @@ public:
 	// sph
 	real target_density 	= 1000; // water density
 	real target_spacing 	= 0.1;
-	real kernel_radius_over_target_spacing = 3.8;
+	real kernel_radius_over_target_spacing = 1.8;
 	real kernel_radius 		= kernel_radius_over_target_spacing * target_spacing;
 
 	real eos_exponent 					= 7;

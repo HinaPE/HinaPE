@@ -145,6 +145,7 @@ void HinaPE::SPHSolver::Data::_update_neighbor()
 	{
 		mVector3 origin = x[i];
 		_neighbor_lists[i].clear();
+		_neighbor_lists[i].reserve(_positions.size());
 
 		_neighbor_search->for_each_nearby_point(origin, kernel_radius, [&](size_t j, const mVector3 &)
 		{

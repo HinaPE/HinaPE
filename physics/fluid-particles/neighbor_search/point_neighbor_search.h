@@ -46,8 +46,8 @@ private:
 	auto _get_bucket_index(const mVector3 &position) const -> mVector3u;
 
 private:
-	real _grid_spacing = 1.0;
-	mSize3 _resolution = {1, 1, 1};
+	real _grid_spacing = 2e-3;
+	mSize3 _resolution = {64, 64, 64};
 	std::vector<mVector3> _points;
 	std::vector<std::vector<size_t>> _buckets;
 };
