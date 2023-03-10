@@ -31,6 +31,7 @@ auto main() -> int
 	auto emitter = std::make_shared<HinaPE::PointParticleEmitter3>();
 	emitter->POSE.position = {-0.8, 0.8, 0};
 	emitter->POSE.euler = {0, 0, -90};
+	emitter->POSE.scale = {0.1, 0.2, 0.1};
 	solver->_data = data;
 	solver->_domain = domain;
 	solver->_emitter = emitter;
@@ -55,7 +56,7 @@ auto main() -> int
 
 	renderer->_debugger = [&]()
 	{
-		vis->load();
+//		vis->load();
 	};
 
 
