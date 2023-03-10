@@ -106,10 +106,6 @@ void HinaPE::SPHSolver::INSPECT()
 	ImGui::Text("Solver Inspector");
 	ImGui::Text("Particles: %zu", _data->_positions.size());
 	INSPECT_REAL(_opt.gravity[1], "g");
-
-//	if (!_opt.inited)
-//		if (ImGui::Button("Generate"))
-//			_opt.inited = true;
 	ImGui::Separator();
 }
 
