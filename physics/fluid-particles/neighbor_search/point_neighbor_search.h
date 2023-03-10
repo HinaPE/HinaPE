@@ -61,6 +61,12 @@ public:
 	void build(const std::vector<mVector3> &points) final;
 
 private:
+	auto _get_hash_key_from_position(const mVector3 &position) const -> size_t;
+	auto _get_nearby_keys(const mVector3 &position) const -> std::array<size_t, 8>;
+	auto _get_hash_key_from_bucket_index(const mVector3u &index) const -> size_t;
+	auto _get_bucket_index(const mVector3 &position) const -> mVector3u;
+
+private:
 	real _grid_spacing = 2e-3;
 	mSize3 _resolution = {64, 64, 64};
 	std::vector<mVector3> _points;
