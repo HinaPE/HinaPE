@@ -43,7 +43,6 @@ public:
 
 protected:
 	friend class PCISPHSolver;
-	void _update_poses() final;
 };
 } // namespace HinaPE
 

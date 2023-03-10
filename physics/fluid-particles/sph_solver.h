@@ -73,9 +73,10 @@ public:
 	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>();
 	std::vector<std::vector<size_t>> _neighbor_lists;
 
+	Data();
+
 protected:
 	friend class SPHSolver;
-	void _update_poses() final;
 	void _update_neighbor();
 	void _update_density();
 	void _update_pressure();

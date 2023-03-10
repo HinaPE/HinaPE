@@ -51,12 +51,3 @@ void HinaPE::PCISPHSolver::VALID_CHECK() const
 		_data->_positions.size() != _data->_pressures.size())
 		throw std::runtime_error("SPHSolver::_data size mismatch");
 }
-
-void HinaPE::PCISPHSolver::Data::_update_poses()
-{
-	static real size = 0.03;
-	_poses.resize(_positions.size());
-	for (size_t i = 0; i < _positions.size(); ++i)
-		_poses[i] = Kasumi::Pose(_positions[i], {}, {size, size, size});
-	_dirty = true;
-}

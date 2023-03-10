@@ -117,13 +117,12 @@ void HinaPE::SPHSolver::VALID_CHECK() const
 		throw std::runtime_error("SPHSolver::_data size mismatch");
 }
 
-void HinaPE::SPHSolver::Data::_update_poses()
+HinaPE::SPHSolver::Data::Data()
 {
-	static real size = 0.01;
-	_poses.resize(_positions.size());
-	for (size_t i = 0; i < _positions.size(); ++i)
-		_poses[i] = Kasumi::Pose(_positions[i], {}, {size, size, size});
-	_dirty = true;
+	track(&_positions);
+	DEFAULT_POSITION = mVector3::Zero();
+	DEFAULT_EULER = mVector3::Zero();
+	DEFAULT_SCALE = 0.01 * mVector3::One();
 }
 
 void HinaPE::SPHSolver::Data::_update_neighbor()
@@ -185,7 +184,7 @@ void HinaPE::SPHSolver::Data::_update_pressure()
 
 void HinaPE::SPHSolver::Data::INSPECT()
 {
-	PoseBase::INSPECT();
+	InstancePosesBase::INSPECT();
 	if (_inst_id >= 0 && _inst_id < _densities.size())
 	{
 		ImGui::Text("Inst: %d", _inst_id);
