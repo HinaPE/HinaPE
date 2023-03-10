@@ -43,7 +43,6 @@ auto main() -> int
 		scene->add(domain);
 		scene->add(emitter);
 		scene->add(vis);
-		scene->_scene_opt._particle_mode = true;
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)

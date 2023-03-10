@@ -13,7 +13,7 @@
 // @formatter:on
 namespace HinaPE
 {
-class PCISPHSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
+class PCISPHSolver final : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
 	void update(real dt) const;

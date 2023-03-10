@@ -13,7 +13,7 @@
 // @formatter:off
 namespace HinaPE
 {
-class SPHSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
+class SPHSolver final : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
 	void update(real dt) const;
