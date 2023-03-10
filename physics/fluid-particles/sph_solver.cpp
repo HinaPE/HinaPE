@@ -128,7 +128,7 @@ void HinaPE::SPHSolver::VALID_CHECK() const
 
 void HinaPE::SPHSolver::Data::_update_poses()
 {
-	static real size = 0.02;
+	static real size = 0.01;
 	_poses.resize(_positions.size());
 	for (size_t i = 0; i < _positions.size(); ++i)
 		_poses[i] = Kasumi::Pose(_positions[i], {}, {size, size, size});
