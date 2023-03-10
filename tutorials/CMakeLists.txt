@@ -3,6 +3,7 @@ project(HinaPE-tutorials VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engi
 
 # tutorials
 add_subdirectory(000-heart-beats)
+add_subdirectory(001-view-model)
 
 # basic applications
 add_subdirectory(101-freefall)
