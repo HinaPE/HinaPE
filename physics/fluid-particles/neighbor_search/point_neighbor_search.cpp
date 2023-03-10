@@ -110,7 +110,7 @@ void HinaPE::PointHashGridSearch3::add_point(const mVector3 &point)
 }
 
 auto HinaPE::PointHashGridSearch3::_get_hash_key_from_position(const mVector3 &position) const -> size_t { return _get_hash_key_from_bucket_index(_get_bucket_index(position)); }
-auto HinaPE::PointHashGridSearch3::_get_nearby_keys(const mVector3 &position) const -> std::vector<size_t>
+auto HinaPE::PointHashGridSearch3::_get_nearby_keys(const mVector3 &position) const -> std::array<size_t, 8>
 {
 	auto origin_index = _get_bucket_index(position);
 	std::array<mVector3u, 8> nearby_bucket_indices;
@@ -160,9 +160,10 @@ auto HinaPE::PointHashGridSearch3::_get_nearby_keys(const mVector3 &position) co
 		nearby_bucket_indices[7].z() -= 1;
 	}
 
-	std::vector<size_t> res;
+	std::array<size_t, 8> res = {};
 	for (int i = 0; i < 8; ++i)
 		res[i] = _get_hash_key_from_bucket_index(nearby_bucket_indices[i]);
+
 	return res;
 }
 auto HinaPE::PointHashGridSearch3::_get_hash_key_from_bucket_index(const mVector3u &index) const -> size_t

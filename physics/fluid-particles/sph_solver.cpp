@@ -169,9 +169,6 @@ void HinaPE::SPHSolver::Data::_update_density()
 			real dist = (x[i] - x[_neighbor_lists[i][j]]).length();
 			sum += kernel(dist);
 		}
-//		_neighbor_search->for_each_nearby_point(x[i], kernel_radius, [&](size_t, const mVector3 &p)
-//		{
-//		});
 		d[i] = m * sum; // rho(x) = m * sum(W(x - xj))
 	});
 }
@@ -192,8 +189,6 @@ void HinaPE::SPHSolver::Data::_update_pressure()
 
 		if (p[i] < 0)
 			p[i] *= nps;
-
-		p[i] = d[i];
 	});
 }
 
