@@ -1,5 +1,6 @@
 #include "point_neighbor_search.h"
 
+// ==================== PointSimpleListSearch3 ====================
 void HinaPE::PointSimpleListSearch3::for_each_nearby_point(const mVector3 &origin, real radius, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
 {
 	real radius_squared = radius * radius;
@@ -12,6 +13,7 @@ void HinaPE::PointSimpleListSearch3::for_each_nearby_point(const mVector3 &origi
 			callback(i, _points[i]);
 	}
 }
+
 auto HinaPE::PointSimpleListSearch3::has_nearby_point(const mVector3 &origin, real radius) const -> bool
 {
 	real radius_squared = radius * radius;
@@ -25,20 +27,176 @@ auto HinaPE::PointSimpleListSearch3::has_nearby_point(const mVector3 &origin, re
 		return false;
 	});
 }
+
 void HinaPE::PointSimpleListSearch3::build(const std::vector<mVector3> &points)
 {
 	_points.resize(points.size());
 	std::copy(points.data(), points.data() + points.size(), _points.begin());
 }
 
+
+// ==================== PointHashGridSearch3 ====================
 void HinaPE::PointHashGridSearch3::for_each_nearby_point(const mVector3 &origin, real radius, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
 {
+	if (_buckets.empty())
+		return;
+
+	auto nearby_keys = _get_nearby_keys(origin);
+	const real query_radius_squared = radius * radius;
+
+	for (auto key: nearby_keys)
+	{
+		for (auto i: _buckets[key])
+		{
+			mVector3 r = _points[i] - origin;
+			real distance_squared = r.dot(r);
+			if (distance_squared <= query_radius_squared)
+				callback(i, _points[i]);
+		}
+	}
 }
+
 auto HinaPE::PointHashGridSearch3::has_nearby_point(const mVector3 &origin, real radius) const -> bool
+{
+	if (_buckets.empty())
+		return false;
+
+	auto nearby_keys = _get_nearby_keys(origin);
+	const real query_radius_squared = radius * radius;
+
+	for (auto key: nearby_keys)
+	{
+		for (auto i: _buckets[key])
+		{
+			mVector3 r = _points[i] - origin;
+			real distance_squared = r.dot(r);
+			if (distance_squared <= query_radius_squared)
+				return true;
+		}
+	}
+}
+
+void HinaPE::PointHashGridSearch3::build(const std::vector<mVector3> &points)
+{
+	_buckets.clear();
+	_points.clear();
+
+	_buckets.resize(_resolution.x * _resolution.y * _resolution.z);
+	_points.resize(points.size());
+
+	if (points.empty()) return;
+
+	for (size_t i = 0; i < points.size(); ++i)
+	{
+		_points[i] = points[i];
+		size_t key = _get_hash_key_from_position(points[i]);
+		_buckets[key].push_back(i);
+	}
+}
+void HinaPE::PointHashGridSearch3::add_point(const mVector3 &point)
+{
+	if (_buckets.empty())
+	{
+		std::vector<mVector3> points;
+		points.push_back(point);
+		build(points);
+	} else
+	{
+		size_t i = _points.size();
+		_points.push_back(point);
+		size_t key = _get_hash_key_from_position(point);
+		_buckets[key].push_back(i);
+	}
+}
+
+auto HinaPE::PointHashGridSearch3::_get_hash_key_from_position(const mVector3 &position) const -> size_t { return _get_hash_key_from_bucket_index(_get_bucket_index(position)); }
+auto HinaPE::PointHashGridSearch3::_get_nearby_keys(const mVector3 &position) const -> std::vector<size_t>
+{
+	auto origin_index = _get_bucket_index(position);
+	std::array<mVector3u, 8> nearby_bucket_indices;
+
+	for (int i = 0; i < 8; ++i)
+		nearby_bucket_indices[i] = origin_index;
+
+	if ((static_cast<real>(origin_index.x()) + HinaPE::Constant::Half) * _grid_spacing <= position.x())
+	{
+		nearby_bucket_indices[4].x() += 1;
+		nearby_bucket_indices[5].x() += 1;
+		nearby_bucket_indices[6].x() += 1;
+		nearby_bucket_indices[7].x() += 1;
+	} else
+	{
+		nearby_bucket_indices[4].x() -= 1;
+		nearby_bucket_indices[5].x() -= 1;
+		nearby_bucket_indices[6].x() -= 1;
+		nearby_bucket_indices[7].x() -= 1;
+	}
+
+	if ((static_cast<real>(origin_index.y()) + HinaPE::Constant::Half) * _grid_spacing <= position.y())
+	{
+		nearby_bucket_indices[2].y() += 1;
+		nearby_bucket_indices[3].y() += 1;
+		nearby_bucket_indices[6].y() += 1;
+		nearby_bucket_indices[7].y() += 1;
+	} else
+	{
+		nearby_bucket_indices[2].y() -= 1;
+		nearby_bucket_indices[3].y() -= 1;
+		nearby_bucket_indices[6].y() -= 1;
+		nearby_bucket_indices[7].y() -= 1;
+	}
+
+	if ((static_cast<real>(origin_index.z()) + HinaPE::Constant::Half) * _grid_spacing <= position.z())
+	{
+		nearby_bucket_indices[1].z() += 1;
+		nearby_bucket_indices[3].z() += 1;
+		nearby_bucket_indices[5].z() += 1;
+		nearby_bucket_indices[7].z() += 1;
+	} else
+	{
+		nearby_bucket_indices[1].z() -= 1;
+		nearby_bucket_indices[3].z() -= 1;
+		nearby_bucket_indices[5].z() -= 1;
+		nearby_bucket_indices[7].z() -= 1;
+	}
+
+	std::vector<size_t> res;
+	for (int i = 0; i < 8; ++i)
+		res[i] = _get_hash_key_from_bucket_index(nearby_bucket_indices[i]);
+	return res;
+}
+auto HinaPE::PointHashGridSearch3::_get_hash_key_from_bucket_index(const mVector3u &index) const -> size_t
+{
+	mVector3u wrapped_index = index;
+
+	wrapped_index.x() = index.x() % _resolution.x;
+	wrapped_index.y() = index.y() % _resolution.y;
+	wrapped_index.z() = index.z() % _resolution.z;
+
+	if (wrapped_index.x() < 0) wrapped_index.x() += _resolution.x;
+	if (wrapped_index.y() < 0) wrapped_index.y() += _resolution.y;
+	if (wrapped_index.z() < 0) wrapped_index.z() += _resolution.z;
+
+	return static_cast<size_t>(wrapped_index.z() * _resolution.y + wrapped_index.y()) * _resolution.x + wrapped_index.x();
+}
+auto HinaPE::PointHashGridSearch3::_get_bucket_index(const mVector3 &position) const -> mVector3u
+{
+	mVector3u res;
+	res.x() = static_cast<size_t>(std::floor(position.x() / _grid_spacing));
+	res.y() = static_cast<size_t>(std::floor(position.y() / _grid_spacing));
+	res.z() = static_cast<size_t>(std::floor(position.z() / _grid_spacing));
+	return res;
+}
+
+
+// ==================== PointParallelHashGridSearch3 ====================
+void HinaPE::PointParallelHashGridSearch3::for_each_nearby_point(const mVector3 &origin, real radius, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
+{
+}
+bool HinaPE::PointParallelHashGridSearch3::has_nearby_point(const mVector3 &origin, real radius) const
 {
 	return false;
 }
-void HinaPE::PointHashGridSearch3::build(const std::vector<mVector3> &points)
+void HinaPE::PointParallelHashGridSearch3::build(const std::vector<mVector3> &points)
 {
 }
-

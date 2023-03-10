@@ -37,12 +37,31 @@ public:
 	void for_each_nearby_point(const mVector3 &origin, real radius, const ForEachNearbyPointFunc &callback) final;
 	auto has_nearby_point(const mVector3 &origin, real radius) const -> bool final;
 	void build(const std::vector<mVector3> &points) final;
+	void add_point(const mVector3 &point);
+
+private:
+	auto _get_hash_key_from_position(const mVector3 &position) const -> size_t;
+	auto _get_nearby_keys(const mVector3 &position) const -> std::vector<size_t>;
+	auto _get_hash_key_from_bucket_index(const mVector3u &index) const -> size_t;
+	auto _get_bucket_index(const mVector3 &position) const -> mVector3u;
 
 private:
 	real _grid_spacing = 1.0;
 	mSize3 _resolution = {1, 1, 1};
 	std::vector<mVector3> _points;
 	std::vector<std::vector<size_t>> _buckets;
+};
+
+
+class PointParallelHashGridSearch3 final : public PointNeighborSearch3
+{
+public:
+	void for_each_nearby_point(const mVector3 &origin, real radius, const ForEachNearbyPointFunc &callback) final;
+	auto has_nearby_point(const mVector3 &origin, real radius) const -> bool final;
+	void build(const std::vector<mVector3> &points) final;
+
+private:
+
 };
 
 using PointNeighborSearch3Ptr = std::shared_ptr<PointNeighborSearch3>;
