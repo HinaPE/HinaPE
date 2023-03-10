@@ -66,11 +66,6 @@ void HinaPE::SPHSolver::_accumulate_force() const
 			{
 				mVector3 dir = (x[j] - x[i]) / dist;
 				f[i] -= m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * kernel.gradient(dist, dir);
-//				std::cout << "====================" << std::endl;
-//				std::cout << p[i] / (d[i] * d[i]) << std::endl;
-//				std::cout << p[j] / (d[j] * d[j]) << std::endl;
-//				std::cout << kernel.gradient(dist, dir) << std::endl;
-//				std::cout << "====================" << std::endl;
 			}
 		}
 	});
@@ -141,7 +136,6 @@ void HinaPE::SPHSolver::Data::_update_neighbor()
 	{
 		mVector3 origin = x[i];
 		_neighbor_lists[i].clear();
-		_neighbor_lists[i].reserve(_positions.size());
 
 		_neighbor_search->for_each_nearby_point(origin, kernel_radius, [&](size_t j, const mVector3 &)
 		{
