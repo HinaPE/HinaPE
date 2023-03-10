@@ -115,7 +115,7 @@ auto HinaPE::PointHashGridSearch3::_get_hash_key_from_position(const mVector3 &p
 auto HinaPE::PointHashGridSearch3::_get_nearby_keys(const mVector3 &position) const -> std::array<size_t, 8>
 {
 	auto origin_index = _get_bucket_index(position);
-	std::array<mVector3u, 8> nearby_bucket_indices;
+	std::array<mVector3i, 8> nearby_bucket_indices;
 
 	for (int i = 0; i < 8; ++i)
 		nearby_bucket_indices[i] = origin_index;
@@ -168,26 +168,26 @@ auto HinaPE::PointHashGridSearch3::_get_nearby_keys(const mVector3 &position) co
 
 	return res;
 }
-auto HinaPE::PointHashGridSearch3::_get_hash_key_from_bucket_index(const mVector3u &index) const -> size_t
+auto HinaPE::PointHashGridSearch3::_get_hash_key_from_bucket_index(const mVector3i &index) const -> size_t
 {
-	mVector3u wrapped_index = index;
+	mVector3i wrapped_index = index;
 
-	wrapped_index.x() = index.x() % _resolution.x;
-	wrapped_index.y() = index.y() % _resolution.y;
-	wrapped_index.z() = index.z() % _resolution.z;
+	wrapped_index.x() = index.x() % static_cast<int>(_resolution.x);
+	wrapped_index.y() = index.y() % static_cast<int>(_resolution.y);
+	wrapped_index.z() = index.z() % static_cast<int>(_resolution.z);
 
-	if (wrapped_index.x() < 0) wrapped_index.x() += _resolution.x;
-	if (wrapped_index.y() < 0) wrapped_index.y() += _resolution.y;
-	if (wrapped_index.z() < 0) wrapped_index.z() += _resolution.z;
+	if (wrapped_index.x() < 0) wrapped_index.x() += static_cast<int>(_resolution.x);
+	if (wrapped_index.y() < 0) wrapped_index.y() += static_cast<int>(_resolution.y);
+	if (wrapped_index.z() < 0) wrapped_index.z() += static_cast<int>(_resolution.z);
 
 	return static_cast<size_t>(wrapped_index.z() * _resolution.y + wrapped_index.y()) * _resolution.x + wrapped_index.x();
 }
-auto HinaPE::PointHashGridSearch3::_get_bucket_index(const mVector3 &position) const -> mVector3u
+auto HinaPE::PointHashGridSearch3::_get_bucket_index(const mVector3 &position) const -> mVector3i
 {
-	mVector3u res;
-	res.x() = static_cast<size_t>(std::floor(position.x() / _grid_spacing));
-	res.y() = static_cast<size_t>(std::floor(position.y() / _grid_spacing));
-	res.z() = static_cast<size_t>(std::floor(position.z() / _grid_spacing));
+	mVector3i res;
+	res.x() = static_cast<int>(std::floor(position.x() / _grid_spacing));
+	res.y() = static_cast<int>(std::floor(position.y() / _grid_spacing));
+	res.z() = static_cast<int>(std::floor(position.z() / _grid_spacing));
 	return res;
 }
 
@@ -215,7 +215,7 @@ void HinaPE::PointParallelHashGridSearch3::for_each_nearby_point(const mVector3 
 		}
 	}
 }
-bool HinaPE::PointParallelHashGridSearch3::has_nearby_point(const mVector3 &origin, real radius) const
+auto HinaPE::PointParallelHashGridSearch3::has_nearby_point(const mVector3 &origin, real radius) const -> bool
 {
 	auto nearby_keys = _get_nearby_keys(origin);
 	const real query_radius_squared = radius * radius;
@@ -307,7 +307,7 @@ auto HinaPE::PointParallelHashGridSearch3::_get_hash_key_from_position(const mVe
 auto HinaPE::PointParallelHashGridSearch3::_get_nearby_keys(const mVector3 &position) const -> std::array<size_t, 8>
 {
 	auto origin_index = _get_bucket_index(position);
-	std::array<mVector3u, 8> nearby_bucket_indices;
+	std::array<mVector3i, 8> nearby_bucket_indices;
 
 	for (int i = 0; i < 8; ++i)
 		nearby_bucket_indices[i] = origin_index;
@@ -360,25 +360,25 @@ auto HinaPE::PointParallelHashGridSearch3::_get_nearby_keys(const mVector3 &posi
 
 	return res;
 }
-auto HinaPE::PointParallelHashGridSearch3::_get_hash_key_from_bucket_index(const mVector3u &index) const -> size_t
+auto HinaPE::PointParallelHashGridSearch3::_get_hash_key_from_bucket_index(const mVector3i &index) const -> size_t
 {
-	mVector3u wrapped_index = index;
+	mVector3i wrapped_index = index;
 
-	wrapped_index.x() = index.x() % _resolution.x;
-	wrapped_index.y() = index.y() % _resolution.y;
-	wrapped_index.z() = index.z() % _resolution.z;
+	wrapped_index.x() = index.x() % static_cast<int>(_resolution.x);
+	wrapped_index.y() = index.y() % static_cast<int>(_resolution.y);
+	wrapped_index.z() = index.z() % static_cast<int>(_resolution.z);
 
-	if (wrapped_index.x() < 0) wrapped_index.x() += _resolution.x;
-	if (wrapped_index.y() < 0) wrapped_index.y() += _resolution.y;
-	if (wrapped_index.z() < 0) wrapped_index.z() += _resolution.z;
+	if (wrapped_index.x() < 0) wrapped_index.x() += static_cast<int>(_resolution.x);
+	if (wrapped_index.y() < 0) wrapped_index.y() += static_cast<int>(_resolution.y);
+	if (wrapped_index.z() < 0) wrapped_index.z() += static_cast<int>(_resolution.z);
 
 	return static_cast<size_t>(wrapped_index.z() * _resolution.y + wrapped_index.y()) * _resolution.x + wrapped_index.x();
 }
-auto HinaPE::PointParallelHashGridSearch3::_get_bucket_index(const mVector3 &position) const -> mVector3u
+auto HinaPE::PointParallelHashGridSearch3::_get_bucket_index(const mVector3 &position) const -> mVector3i
 {
-	mVector3u res;
-	res.x() = static_cast<size_t>(std::floor(position.x() / _grid_spacing));
-	res.y() = static_cast<size_t>(std::floor(position.y() / _grid_spacing));
-	res.z() = static_cast<size_t>(std::floor(position.z() / _grid_spacing));
+	mVector3i res;
+	res.x() = static_cast<int>(std::floor(position.x() / _grid_spacing));
+	res.y() = static_cast<int>(std::floor(position.y() / _grid_spacing));
+	res.z() = static_cast<int>(std::floor(position.z() / _grid_spacing));
 	return res;
 }

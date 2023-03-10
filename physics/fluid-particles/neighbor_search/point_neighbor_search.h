@@ -42,8 +42,8 @@ public:
 private:
 	auto _get_hash_key_from_position(const mVector3 &position) const -> size_t;
 	auto _get_nearby_keys(const mVector3 &position) const -> std::array<size_t, 8>;
-	auto _get_hash_key_from_bucket_index(const mVector3u &index) const -> size_t;
-	auto _get_bucket_index(const mVector3 &position) const -> mVector3u;
+	auto _get_hash_key_from_bucket_index(const mVector3i &index) const -> size_t;
+	auto _get_bucket_index(const mVector3 &position) const -> mVector3i;
 
 private:
 	real _grid_spacing = 2e-3;
@@ -63,8 +63,8 @@ public:
 private:
 	auto _get_hash_key_from_position(const mVector3 &position) const -> size_t;
 	auto _get_nearby_keys(const mVector3 &position) const -> std::array<size_t, 8>;
-	auto _get_hash_key_from_bucket_index(const mVector3u &index) const -> size_t;
-	auto _get_bucket_index(const mVector3 &position) const -> mVector3u;
+	auto _get_hash_key_from_bucket_index(const mVector3i &index) const -> size_t;
+	auto _get_bucket_index(const mVector3 &position) const -> mVector3i;
 
 private:
 	real _grid_spacing = 2e-3;

@@ -60,7 +60,7 @@ public:
 	// sph
 	real target_density 	= 1000; // water density
 	real target_spacing 	= 0.1;
-	real kernel_radius_over_target_spacing = 1.8;
+	real kernel_radius_over_target_spacing = 4.8;
 	real kernel_radius 		= kernel_radius_over_target_spacing * target_spacing;
 
 	real eos_exponent 					= 7;
@@ -71,6 +71,7 @@ public:
 
 
 	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>();
+	std::vector<std::vector<size_t>> _neighbor_lists;
 
 protected:
 	friend class SPHSolver;
@@ -79,8 +80,6 @@ protected:
 	void _update_density();
 	void _update_pressure();
 	void INSPECT() final;
-
-	std::vector<std::vector<size_t>> _neighbor_lists;
 };
 // @formatter:on
 
