@@ -4,23 +4,20 @@
 auto main() -> int
 {
 	// prepare solver
-	auto renderer = std::make_shared<Kasumi::Renderer3D>();
 	auto solver = std::make_shared<HinaPE::PBDClothSolver>();
 
 	// set up init & step
-	renderer->_init = [&](const Kasumi::Scene3DPtr &scene)
+	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
 		scene->add(solver->_data);
 	};
 
-	renderer->_step = [&](real dt)
+	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
 	{
 		solver->update(dt);
 	};
 
-	renderer->inspect(solver.get());
-
-	// launch renderer
-	renderer->launch();
+	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());
+	Kasumi::Renderer3D::DEFAULT_RENDERER.launch();
 	return 0;
 }

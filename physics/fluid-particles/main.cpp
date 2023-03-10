@@ -25,7 +25,6 @@ auto main() -> int
 	auto renderer = std::make_shared<Kasumi::Renderer3D>();
 	auto solver = std::make_shared<HinaPE::SPHSolver>();
 
-	// solver init
 	auto data = std::make_shared<HinaPE::SPHSolver::Data>();
 	auto domain = std::make_shared<HinaPE::BoxDomain>();
 	auto emitter = std::make_shared<HinaPE::PointParticleEmitter3>();
@@ -38,9 +37,8 @@ auto main() -> int
 
 	auto vis = std::make_shared<NeighborSearchVisualization>(data);
 
-
-	// set up init & step & debugger
-	renderer->_init = [&](const Kasumi::Scene3DPtr &scene)
+	// setup renderer
+	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
 		scene->add(data);
 		scene->add(domain);
@@ -49,20 +47,17 @@ auto main() -> int
 		scene->_scene_opt._particle_mode = true;
 	};
 
-	renderer->_step = [&](real dt)
+	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
 	{
 		solver->update(dt);
 	};
 
-	renderer->_debugger = [&]()
+	Kasumi::Renderer3D::DEFAULT_RENDERER._debugger = [&]()
 	{
 //		vis->load();
 	};
 
-
-	renderer->inspect(solver.get());
-
-	// launch renderer
-	renderer->launch();
+	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());
+	Kasumi::Renderer3D::DEFAULT_RENDERER.launch();
 	return 0;
 }

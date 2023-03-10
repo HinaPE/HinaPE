@@ -36,21 +36,14 @@ private:
 
 auto main() -> int
 {
-	auto renderer = std::make_shared<Kasumi::Renderer3D>();
 	auto solver = std::make_shared<SimpleFreeFallSolver>();
 
 	auto ball = std::make_shared<Ball>();
 	ball->x = {0, 5, 0};
-
 	solver->add(ball);
 
-	renderer->_init = [&](const Kasumi::Scene3DPtr &scene)
-	{
-		scene->add(ball);
-	};
-
-	renderer->_step = [&](real dt) { solver->update(dt); };
-
-	renderer->launch();
+	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene) { scene->add(ball); };
+	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt) { solver->update(dt); };
+	Kasumi::Renderer3D::DEFAULT_RENDERER.launch();
 	return 0;
 }
