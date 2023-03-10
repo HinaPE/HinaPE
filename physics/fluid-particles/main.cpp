@@ -22,7 +22,6 @@ struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 auto main() -> int
 {
 	// prepare solver
-	auto renderer = std::make_shared<Kasumi::Renderer3D>();
 	auto solver = std::make_shared<HinaPE::SPHSolver>();
 
 	auto data = std::make_shared<HinaPE::SPHSolver::Data>();
