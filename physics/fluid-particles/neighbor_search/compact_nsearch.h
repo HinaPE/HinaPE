@@ -16,9 +16,13 @@ public:
 	auto has_nearby_point(const mVector3 &origin, real radius) const -> bool final;
 	void build(const std::vector<mVector3> &points) final;
 
+	explicit CompactNSearch3(real radius);
+
 private:
 	std::shared_ptr<::CompactNSearch::NeighborhoodSearch> _searcher;
 	std::vector<mVector3> _points;
+	bool _inited = false;
+	size_t ID;
 };
 } //namespace HinaPE
 

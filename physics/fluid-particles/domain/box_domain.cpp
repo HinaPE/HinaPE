@@ -7,5 +7,5 @@ HinaPE::BoxDomain::BoxDomain() : Kasumi::CubeObject()
 	_switch_bbox();
 	flip_normal(); // for inner collision
 
-	POSE.scale = {3.0, 3.0, 3.0};
+//	POSE.scale = {3.0, 3.0, 3.0};
 }

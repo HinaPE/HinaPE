@@ -129,7 +129,7 @@ void HinaPE::SPHSolver::VALID_CHECK() const
 
 void HinaPE::SPHSolver::Data::_update_poses()
 {
-	static real size = 0.03;
+	static real size = 0.02;
 	_poses.resize(_positions.size());
 	for (size_t i = 0; i < _positions.size(); ++i)
 		_poses[i] = Kasumi::Pose(_positions[i], {}, {size, size, size});
@@ -138,8 +138,6 @@ void HinaPE::SPHSolver::Data::_update_poses()
 
 void HinaPE::SPHSolver::Data::_update_neighbor()
 {
-//	_neighbor_search = std::make_shared<PointSimpleListSearch3>();
-	_neighbor_search = std::make_shared<CompactNSearch3>();
 	_neighbor_search->build(_positions);
 	_neighbor_lists.resize(_positions.size());
 
@@ -167,11 +165,14 @@ void HinaPE::SPHSolver::Data::_update_density()
 	{
 		real sum = 0;
 		StdKernel kernel(kernel_radius);
-		_neighbor_search->for_each_nearby_point(x[i], kernel_radius, [&](size_t, const mVector3 &p)
+		for (int j = 0; j < _neighbor_lists[i].size(); ++j)
 		{
-			real dist = (x[i] - p).length();
+			real dist = (x[i] - x[_neighbor_lists[i][j]]).length();
 			sum += kernel(dist);
-		});
+		}
+//		_neighbor_search->for_each_nearby_point(x[i], kernel_radius, [&](size_t, const mVector3 &p)
+//		{
+//		});
 		d[i] = m * sum; // rho(x) = m * sum(W(x - xj))
 	});
 }
@@ -192,6 +193,8 @@ void HinaPE::SPHSolver::Data::_update_pressure()
 
 		if (p[i] < 0)
 			p[i] *= nps;
+
+		p[i] = d[i];
 	});
 }
 

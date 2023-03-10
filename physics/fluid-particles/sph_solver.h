@@ -22,10 +22,10 @@ public:
 	struct Opt
 	{
 		// common
-		bool inited 						= false;
-		real current_dt 					= 0.02; // don't alter this
-		mVector3 gravity 					= mVector3(0, -9.8, 0);
-		real restitution 					= 0.3;
+		bool inited 		= false;
+		real current_dt 	= 0.02; // don't alter this
+		mVector3 gravity 	= mVector3(0, -9.8, 0);
+		real restitution 	= 0.3;
 	} _opt;
 	struct Data;
 	std::shared_ptr<Data> 	_data;
@@ -61,7 +61,7 @@ public:
 	// sph
 	real target_density 	= 1000; // water density
 	real target_spacing 	= 0.1;
-	real kernel_radius_over_target_spacing = 5.8;
+	real kernel_radius_over_target_spacing = 3.8;
 	real kernel_radius 		= kernel_radius_over_target_spacing * target_spacing;
 
 	real eos_exponent 					= 7;
@@ -71,7 +71,7 @@ public:
 	real speed_of_sound 				= 100;
 
 
-	PointNeighborSearch3Ptr _neighbor_search;
+	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointSimpleListSearch3>();
 
 protected:
 	friend class SPHSolver;

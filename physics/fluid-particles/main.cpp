@@ -19,15 +19,40 @@ struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 	void load(const mVector3 &origin)
 	{
 		clear();
-		_data->_neighbor_search->for_each_nearby_point(origin, _data->kernel_radius, [&](size_t, const mVector3 &p)
+		_data->_neighbor_search->for_each_nearby_point(origin, 3, [&](size_t i, const mVector3 &)
 		{
-			add(origin, p);
+			add(origin, _data->_positions[i]);
 		});
 	}
 };
 
 auto main() -> int
 {
+//	::CompactNSearch::NeighborhoodSearch search(5, true);
+//	std::vector<mVector3> d;
+//	d.emplace_back(0, 0, 0);
+//	d.emplace_back(1, 0, 0);
+//	d.emplace_back(0, 1, 0);
+//	d.emplace_back(0, 0, 1);
+//	d.emplace_back(10, 0, 0);
+//	d.emplace_back(0, 10, 0);
+//	d.emplace_back(0, 0, 10);
+//
+//	search.add_point_set(d.front().data(), d.size(), true, true, true, nullptr);
+//	search.find_neighbors();
+//
+//	mVector3 origin{0.1, -0.4, 0.5};
+//	std::vector<std::vector<unsigned int>> neighbors;
+//	search.find_neighbors(origin.data(), neighbors);
+//
+//	d[6] = {1, 1, 1};
+//
+//	search.update_point_sets();
+//
+//	std::vector<std::vector<unsigned int>> new_neighbors;
+//	search.find_neighbors(origin.data(), new_neighbors);
+
+
 	// prepare solver
 	auto renderer = std::make_shared<Kasumi::Renderer3D>();
 	auto solver = std::make_shared<HinaPE::SPHSolver>();
@@ -62,7 +87,7 @@ auto main() -> int
 
 	renderer->_debugger = [&]()
 	{
-		vis->load(data->_inst_id);
+//		vis->load(data->_inst_id);
 	};
 
 
