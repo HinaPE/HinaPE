@@ -3,7 +3,7 @@
 HinaPE::PointParticleEmitter3::PointParticleEmitter3() : _rng(0) {}
 void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> *positions, std::vector<mVector3> *velocities)
 {
-	if (!ParticleEmitter3::_opt.enable || ParticleEmitter3::_opt.remaining_particles <= 0)
+	if (!_opt.enable || _opt.remaining_particles <= 0)
 		return;
 
 	auto rdm = [&]() -> real
@@ -12,11 +12,38 @@ void HinaPE::PointParticleEmitter3::emit(std::vector<mVector3> *positions, std::
 		return d(_rng);
 	};
 
-	for (int i = 0; i < ParticleEmitter3::_opt.particles_at_once; ++i)
+	for (int i = 0; i < _opt.particles_at_once; ++i)
 	{
-		auto new_dir = Math::uniform_sample_cone(rdm(), rdm(), _direction, ParticleEmitter3::_opt.spread_angle);
+		auto new_dir = Math::uniform_sample_cone(rdm(), rdm(), _direction, _opt.spread_angle);
 		positions->push_back(_origin);
-		velocities->push_back(ParticleEmitter3::_opt.speed * new_dir);
+		velocities->push_back(_opt.speed * new_dir);
 	}
-	ParticleEmitter3::_opt.remaining_particles -= ParticleEmitter3::_opt.particles_at_once;
+	_opt.remaining_particles -= _opt.particles_at_once;
+}
+
+HinaPE::VolumeParticleEmitter3::VolumeParticleEmitter3() : _rng(0) {}
+void HinaPE::VolumeParticleEmitter3::emit(std::vector<mVector3> *positions, std::vector<mVector3> *velocities)
+{
+	if (_opt.one_shot && _opt.shot)
+		return;
+
+	auto width = 0.5, height = 0.5, depth = 0.5;
+	mVector3 start_point = {-width / 2, 0, -depth / 2};
+	auto rows = static_cast<size_t>(width / _opt.spacing);
+	auto cols = static_cast<size_t>(height / _opt.spacing);
+	auto layers = static_cast<size_t>(depth / _opt.spacing);
+
+	for (int i = 0; i < rows; ++i)
+	{
+		for (int j = 0; j < cols; ++j)
+		{
+			for (int k = 0; k < layers; ++k)
+			{
+				positions->push_back(start_point + mVector3(i * _opt.spacing, j * _opt.spacing, k * _opt.spacing));
+				velocities->push_back(mVector3(0, 0, 0));
+			}
+		}
+	}
+
+	_opt.shot = true;
 }

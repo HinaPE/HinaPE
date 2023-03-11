@@ -26,7 +26,7 @@ auto main() -> int
 
 	auto data = std::make_shared<HinaPE::SPHSolver::Data>();
 	auto domain = std::make_shared<HinaPE::BoxDomain>();
-	auto emitter = std::make_shared<HinaPE::PointParticleEmitter3>();
+	auto emitter = std::make_shared<HinaPE::VolumeParticleEmitter3>();
 	emitter->POSE.position = {-0.8, 0.8, 0};
 	emitter->POSE.euler = {0, 0, -90};
 	emitter->POSE.scale = {0.1, 0.2, 0.1};
@@ -41,8 +41,9 @@ auto main() -> int
 	{
 		scene->add(data);
 		scene->add(domain);
-		scene->add(emitter);
+//		scene->add(emitter);
 		scene->add(vis);
+		scene->_scene_opt._particle_mode = true;
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)

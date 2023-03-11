@@ -12,6 +12,13 @@ class ParticleEmitter3 : public Kasumi::ArrowObject
 {
 public:
 	virtual void emit(std::vector<mVector3> *positions, std::vector<mVector3> *velocities) = 0;
+};
+
+class PointParticleEmitter3 final : public ParticleEmitter3
+{
+public:
+	void emit(std::vector<mVector3> *positions, std::vector<mVector3> *velocities) final;
+	PointParticleEmitter3();
 
 	struct Opt
 	{
@@ -23,16 +30,27 @@ public:
 		size_t particles_at_once = 1000;
 		size_t remaining_particles = 50000;
 	} _opt;
-};
-
-class PointParticleEmitter3 final : public ParticleEmitter3
-{
-public:
-	void emit(std::vector<mVector3> *positions, std::vector<mVector3> *velocities) final;
-	PointParticleEmitter3();
 
 private:
 	std::mt19937 _rng;
+};
+
+class VolumeParticleEmitter3 final : public ParticleEmitter3
+{
+public:
+	void emit(std::vector<mVector3> *positions, std::vector<mVector3> *velocities) final;
+	VolumeParticleEmitter3();
+
+	struct Opt
+	{
+		real spacing = 0.02;
+		bool one_shot = true;
+		bool shot = false;
+	} _opt;
+
+private:
+	std::mt19937 _rng;
+	Geom::ImplicitSurface3Ptr _surface;
 };
 
 using ParticleEmitter3Ptr = std::shared_ptr<ParticleEmitter3>;
