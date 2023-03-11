@@ -1,5 +1,3 @@
-#include <utility>
-
 #include "renderer3D/renderer3D.h"
 #include "sph_solver.h"
 
@@ -41,7 +39,6 @@ auto main() -> int
 	{
 		scene->add(data);
 		scene->add(domain);
-//		scene->add(emitter);
 		scene->add(vis);
 		scene->_scene_opt._particle_mode = true;
 	};

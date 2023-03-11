@@ -146,6 +146,9 @@ void HinaPE::SPHSolver::Data::_update_neighbor()
 
 void HinaPE::SPHSolver::Data::_update_density()
 {
+	if (!_mass_inited)
+		_update_mass();
+
 	auto &x = _positions;
 	auto &d = _densities;
 	const auto &m = _mass;
@@ -161,6 +164,32 @@ void HinaPE::SPHSolver::Data::_update_density()
 		}
 		d[i] = m * sum; // rho(x) = m * sum(W(x - xj))
 	});
+}
+
+void HinaPE::SPHSolver::Data::_update_mass()
+{
+	// to be rewritten
+	_mass = 1.0;
+
+	StdKernel kernel(kernel_radius);
+
+	real max_number_density = 0;
+	for (int i = 0; i < _positions.size(); ++i)
+	{
+		real sum = 0;
+		const auto &point = _positions[i];
+		for (const auto &neighbor_point_id: _neighbor_lists[i])
+		{
+			auto dist = (point - _positions[neighbor_point_id]).length();
+			sum += kernel(dist);
+		}
+		max_number_density = std::max(max_number_density, sum);
+	}
+
+	if (max_number_density > 0)
+		_mass = std::max((target_density / max_number_density), HinaPE::Constant::Zero);
+
+	_mass_inited = true;
 }
 
 void HinaPE::SPHSolver::Data::_update_pressure()

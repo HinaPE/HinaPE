@@ -53,7 +53,7 @@ public:
 	std::vector<real> 		_pressures;
 
 	// params
-	real _mass 				= 1e-3;
+	real _mass 				= 1e-3; // should be recalculated  to fit water density
 	real _radius 			= 1e-3;
 	real max_search_radius 	= 1e-3;
 
@@ -80,7 +80,10 @@ protected:
 	void _update_neighbor();
 	void _update_density();
 	void _update_pressure();
+	void _update_mass();
 	void INSPECT() final;
+
+	bool _mass_inited = false;
 };
 // @formatter:on
 
