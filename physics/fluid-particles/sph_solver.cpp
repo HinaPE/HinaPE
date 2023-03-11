@@ -168,7 +168,7 @@ void HinaPE::SPHSolver::Data::_update_density()
 
 void HinaPE::SPHSolver::Data::_update_mass()
 {
-	// to be rewritten
+	// TODO: to be rewritten
 	_mass = 1.0;
 
 	StdKernel kernel(kernel_radius);
