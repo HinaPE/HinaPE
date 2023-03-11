@@ -50,7 +50,7 @@ auto main() -> int
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._debugger = [&]()
 	{
-//		vis->load();
+		vis->load();
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());
