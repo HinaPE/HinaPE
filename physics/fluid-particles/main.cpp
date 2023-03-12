@@ -1,10 +1,18 @@
 #include "renderer3D/renderer3D.h"
 #include "sph_solver.h"
+#include "pcisph_solver.h"
+#include "pbf_solver.h"
+
+using SolverType =
+		HinaPE::SPHSolver;
+//		HinaPE::PCISPHSolver;
+//		HinaPE::PBFSolver;
+using SolverDataType = SolverType::Data;
 
 struct NeighborSearchVisualization : public Kasumi::ObjectParticles3D
 {
-	explicit NeighborSearchVisualization(HinaPE::SPHSolverDataPtr data) : _data(std::move(data)) { track(&_neighbors); }
-	HinaPE::SPHSolverDataPtr _data;
+	explicit NeighborSearchVisualization(std::shared_ptr<SolverDataType> data) : _data(std::move(data)) { track(&_neighbors); }
+	std::shared_ptr<SolverDataType> _data;
 	std::vector<mVector3> _neighbors;
 
 	void on()
@@ -31,9 +39,9 @@ struct NeighborSearchVisualization : public Kasumi::ObjectParticles3D
 auto main() -> int
 {
 	// prepare solver
-	auto solver = std::make_shared<HinaPE::SPHSolver>();
+	auto solver = std::make_shared<SolverType>();
+	auto data = std::make_shared<SolverDataType>();
 
-	auto data = std::make_shared<HinaPE::SPHSolver::Data>();
 	auto domain = std::make_shared<HinaPE::BoxDomain>();
 	auto emitter = std::make_shared<HinaPE::VolumeParticleEmitter3>();
 	emitter->POSE.position = {-0.8, 0.8, 0};

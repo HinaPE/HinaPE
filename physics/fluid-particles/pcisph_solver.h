@@ -15,6 +15,7 @@ namespace HinaPE
 class PCISPHSolver final : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
+	void init() const;
 	void update(real dt) const;
 
 public:
@@ -49,6 +50,9 @@ public:
 	std::vector<mVector3> _forces;
 	std::vector<real> _densities;
 	std::vector<real> _pressures;
+
+	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>();
+	std::vector<std::vector<unsigned int>> _neighbor_lists;
 
 protected:
 	friend class PCISPHSolver;

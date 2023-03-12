@@ -1,10 +1,12 @@
 #include "pcisph_solver.h"
 
+void HinaPE::PCISPHSolver::init() const
+{
+	_emit_particles();
+}
+
 void HinaPE::PCISPHSolver::update(real dt) const
 {
-	// emit particle to data, and rebuild data
-	_emit_particles();
-
 	// accumulate external forces, viscosity force and pressure force
 	_accumulate_force();
 
@@ -13,6 +15,9 @@ void HinaPE::PCISPHSolver::update(real dt) const
 
 	// deal with collision (particle-solid)
 	_resolve_collision();
+
+	// emit particle to data, and rebuild data
+	_emit_particles();
 }
 
 void HinaPE::PCISPHSolver::_emit_particles() const

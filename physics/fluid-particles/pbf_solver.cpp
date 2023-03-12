@@ -1,5 +1,9 @@
 #include "pbf_solver.h"
 
+void HinaPE::PBFSolver::init() const
+{
+}
+
 void HinaPE::PBFSolver::update(real dt) const
 {
 }
