@@ -6,13 +6,17 @@ struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 	explicit NeighborSearchVisualization(HinaPE::SPHSolverDataPtr data) : _data(std::move(data)) {}
 	HinaPE::SPHSolverDataPtr _data;
 
+	void on() const { _data->_shader->uniform("highlight_mode", true); }
+	void off() const { _data->_shader->uniform("highlight_mode", false); }
 	void load()
 	{
 		if (_data->_inst_id < 0 || _data->_inst_id >= _data->_positions.size())
 			return;
 		auto origin = _data->_positions[_data->_inst_id];
 		clear();
-		_data->highlight(_data->_neighbor_lists[_data->_inst_id]);
+		auto neighbors = _data->_neighbor_lists[_data->_inst_id];
+		neighbors.push_back(_data->_inst_id);
+		_data->highlight(neighbors);
 	}
 };
 
@@ -50,6 +54,14 @@ auto main() -> int
 	Kasumi::Renderer3D::DEFAULT_RENDERER._debugger = [&]()
 	{
 		vis->load();
+	};
+
+	Kasumi::Renderer3D::DEFAULT_RENDERER._key = [&](int key, int scancode, int action, int mods)
+	{
+		if (key == GLFW_KEY_H && action == GLFW_PRESS)
+			vis->on();
+		if (key == GLFW_KEY_H && action == GLFW_RELEASE)
+			vis->off();
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());
