@@ -46,13 +46,13 @@ private:
 	auto _get_bucket_index(const mVector3 &position) const -> mVector3i;
 
 private:
-	real _grid_spacing = 0.1;
+	real _grid_spacing = 0.04; // 2 * kernel radius
 	mSize3 _resolution = {10, 10, 10};
 	std::vector<mVector3> _points;
 	std::vector<std::vector<size_t>> _buckets;
 };
 
-
+// NOTE: NOT COMPLETED
 class PointParallelHashGridSearch3 final : public PointNeighborSearch3
 {
 public:
