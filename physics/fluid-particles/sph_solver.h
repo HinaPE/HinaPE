@@ -55,12 +55,12 @@ public:
 
 	// params
 	real _mass 				= 1e-3; // should be recalculated  to fit water density
-	real _radius 			= 1e-3;
+	real _radius 			= 0.02;
 	real max_search_radius 	= 1e-3;
 
 	// sph
 	real target_density 	= 1000; // water density
-	real target_spacing 	= 0.02;
+	real target_spacing 	= _radius;
 	real kernel_radius_over_target_spacing = 1.8;
 	real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
 
