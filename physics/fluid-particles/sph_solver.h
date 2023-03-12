@@ -16,6 +16,7 @@ namespace HinaPE
 class SPHSolver final : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
+	void init() const;
 	void update(real dt) const;
 
 public:
@@ -74,10 +75,10 @@ public:
 	std::vector<std::vector<unsigned int>> _neighbor_lists;
 
 	Data();
+	void _update_neighbor();
 
 protected:
 	friend class SPHSolver;
-	void _update_neighbor();
 	void _update_density();
 	void _update_pressure();
 	void _update_mass();
