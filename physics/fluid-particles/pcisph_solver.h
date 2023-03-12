@@ -10,7 +10,6 @@
 #include "neighbor_search/point_neighbor_search.h"
 #include "neighbor_search/compact_nsearch.h"
 
-// @formatter:on
 namespace HinaPE
 {
 class PCISPHSolver final : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER

@@ -10,7 +10,6 @@
 #include "neighbor_search/point_neighbor_search.h"
 #include "neighbor_search/compact_nsearch.h"
 
-// @formatter:off
 namespace HinaPE
 {
 class PBFSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
@@ -42,7 +41,7 @@ public:
 	std::vector<real> 		_pressures;
 
 protected:
-	friend class PCISPHSolver;
+	friend class PBFSolver;
 };
 } // namespace HinaPE
 
