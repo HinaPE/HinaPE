@@ -70,7 +70,7 @@ public:
 	real speed_of_sound 				= 100;
 
 
-	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>();
+	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointSimpleListSearch3>();
 	std::vector<std::vector<unsigned int>> _neighbor_lists;
 
 	Data();

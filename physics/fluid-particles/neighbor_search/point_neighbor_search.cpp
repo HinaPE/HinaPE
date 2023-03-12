@@ -31,7 +31,7 @@ auto HinaPE::PointSimpleListSearch3::has_nearby_point(const mVector3 &origin, re
 void HinaPE::PointSimpleListSearch3::build(const std::vector<mVector3> &points)
 {
 	_points.resize(points.size());
-	std::copy(points.data(), points.data() + points.size(), _points.begin());
+	std::copy(points.begin(), points.end(), _points.begin());
 }
 
 

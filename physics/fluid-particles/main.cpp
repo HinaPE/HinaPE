@@ -1,23 +1,40 @@
 #include "renderer3D/renderer3D.h"
 #include "sph_solver.h"
 
-struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
+struct NeighborSearchVisualization
 {
 	explicit NeighborSearchVisualization(HinaPE::SPHSolverDataPtr data) : _data(std::move(data)) {}
 	HinaPE::SPHSolverDataPtr _data;
 
-	void on() const { _data->_shader->uniform("highlight_mode", true); }
-	void off() const { _data->_shader->uniform("highlight_mode", false); }
+	void on()
+	{
+		_data->_shader->uniform("highlight_mode", true);
+		_on = true;
+	}
+	void off()
+	{
+		_data->_shader->uniform("highlight_mode", false);
+		_on = false;
+		_printed = false;
+	}
 	void load()
 	{
 		if (_data->_inst_id < 0 || _data->_inst_id >= _data->_positions.size())
 			return;
 		auto origin = _data->_positions[_data->_inst_id];
-		clear();
 		auto neighbors = _data->_neighbor_lists[_data->_inst_id];
 		neighbors.push_back(_data->_inst_id);
-		_data->highlight(neighbors);
+//		_data->highlight(neighbors);
+		if (_on && !_printed)
+		{
+			for (auto neighbor: neighbors)
+				std::cout << (_data->_positions[neighbor] - origin).length() << " ";
+			std::cout << std::endl;
+			_printed = true;
+		}
 	}
+	bool _on = true;
+	bool _printed = false;
 };
 
 auto main() -> int
@@ -40,9 +57,8 @@ auto main() -> int
 	// setup renderer
 	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
-		scene->add(data);
 		scene->add(domain);
-		scene->add(vis);
+		scene->add(data);
 		scene->_scene_opt._particle_mode = true;
 	};
 
