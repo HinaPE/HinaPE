@@ -71,7 +71,7 @@ public:
 
 
 	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>();
-	std::vector<std::vector<size_t>> _neighbor_lists;
+	std::vector<std::vector<unsigned int>> _neighbor_lists;
 
 	Data();
 

@@ -12,8 +12,7 @@ struct NeighborSearchVisualization : public Kasumi::ObjectLines3DInstanced
 			return;
 		auto origin = _data->_positions[_data->_inst_id];
 		clear();
-		for (auto &i: _data->_neighbor_lists[_data->_inst_id])
-			add(origin, _data->_positions[i]);
+		_data->highlight(_data->_neighbor_lists[_data->_inst_id]);
 	}
 };
 
