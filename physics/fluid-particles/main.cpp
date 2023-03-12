@@ -11,7 +11,11 @@ using SolverDataType = SolverType::Data;
 
 struct NeighborSearchVisualization : public Kasumi::ObjectParticles3D
 {
-	explicit NeighborSearchVisualization(std::shared_ptr<SolverDataType> data) : _data(std::move(data)) { track(&_neighbors); }
+	explicit NeighborSearchVisualization(std::shared_ptr<SolverDataType> data) : _data(std::move(data))
+	{
+		NAME = "NSV";
+		track(&_neighbors);
+	}
 	std::shared_ptr<SolverDataType> _data;
 	std::vector<mVector3> _neighbors;
 

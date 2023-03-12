@@ -134,7 +134,7 @@ void HinaPE::SPHSolver::Data::_update_neighbor()
 		mVector3 origin = _positions[i];
 		_neighbor_lists[i].clear();
 
-		_neighbor_search->for_each_nearby_point(origin, kernel_radius, [&](size_t j, const mVector3 &)
+		_neighbor_search->for_each_nearby_point(origin, 8 * kernel_radius, [&](size_t j, const mVector3 &)
 		{
 			if (i != j)
 				_neighbor_lists[i].push_back(j);
@@ -145,7 +145,7 @@ void HinaPE::SPHSolver::Data::_update_neighbor()
 void HinaPE::SPHSolver::Data::_update_density()
 {
 	if (!_mass_inited)
-		_update_mass();
+		_update_mass(); // update mass to ensure the initial density is 1000
 
 	auto &x = _positions;
 	auto &d = _densities;

@@ -61,7 +61,7 @@ public:
 	// sph
 	real target_density 	= 1000; // water density
 	real target_spacing 	= 0.02;
-	real kernel_radius_over_target_spacing = 2;
+	real kernel_radius_over_target_spacing = 1.8;
 	real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
 
 	real eos_exponent 					= 7;
@@ -71,7 +71,7 @@ public:
 	real speed_of_sound 				= 100;
 
 
-	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>();
+	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointSimpleListSearch3>();
 	std::vector<std::vector<unsigned int>> _neighbor_lists;
 
 	Data();
