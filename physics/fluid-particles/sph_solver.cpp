@@ -134,18 +134,18 @@ void HinaPE::SPHSolver::Data::_update_neighbor()
 		mVector3 origin = _positions[i];
 		_neighbor_lists[i].clear();
 
-		for (int j = 0; j < _positions.size(); ++j)
-		{
-			if ((_positions[i] - _positions[j]).length() < kernel_radius)
-				if (i != j)
-					_neighbor_lists[i].push_back(j);
-		}
-
-//		_neighbor_search->for_each_nearby_point(origin, kernel_radius, [&](size_t j, const mVector3 &)
+//		for (int j = 0; j < _positions.size(); ++j)
 //		{
-//			if (i != j)
-//				_neighbor_lists[i].push_back(j);
-//		});
+//			if ((_positions[i] - _positions[j]).length() < kernel_radius)
+//				if (i != j)
+//					_neighbor_lists[i].push_back(j);
+//		}
+
+		_neighbor_search->for_each_nearby_point(origin, kernel_radius, [&](size_t j, const mVector3 &)
+		{
+			if (i != j)
+				_neighbor_lists[i].push_back(j);
+		});
 	}
 }
 
