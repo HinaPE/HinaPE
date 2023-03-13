@@ -147,6 +147,9 @@ void HinaPE::PBFSolver::Data::INSPECT()
 		ImGui::Text("Force: {%.3f, %.3f, %.3f}", _forces[_inst_id].x(), _forces[_inst_id].y(), _forces[_inst_id].z());
 		ImGui::Text("Density: %.3f", _densities[_inst_id]);
 		ImGui::Text("Pressure: %.3f", _pressures[_inst_id]);
+		ImGui::Text("Lambda: %.3f", _lambdas[_inst_id]);
+		ImGui::Text("Neighbors: %zu", _neighbor_lists[_inst_id].size());
+		ImGui::Text("dp: {%.3f, %.3f, %.3f}", _delta_p[_inst_id].x(), _delta_p[_inst_id].y(), _delta_p[_inst_id].z());
 	}
 }
 
