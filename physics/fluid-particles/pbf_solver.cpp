@@ -1,5 +1,6 @@
 #include "pbf_solver.h"
 
+// ============================== Solver ==============================
 void HinaPE::PBFSolver::init()
 {
 	_emit_particles();
@@ -18,7 +19,9 @@ void HinaPE::PBFSolver::update(real dt) const
 	_solve_density_constraints();
 
 	// algorithm line 20~24
-	_update_state();
+	_update_positions_and_velocities();
+
+	_resolve_collision();
 }
 
 void HinaPE::PBFSolver::_emit_particles() const
@@ -73,6 +76,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		const auto &d = _data->_densities;
 		const auto &nl = _data->_neighbor_lists;
 		const auto &kernel = _data->poly6_kernel;
+		const auto &domain = _domain;
 
 
 		// First, we compute all lambdas
@@ -110,9 +114,11 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 
 		// Second, we compute all correction delta p
 		auto &dp = _data->_delta_p;
+		auto &radius = _data->_radius;
+		auto &restitution = _opt.restitution;
 		dp.resize(size, mVector3::Zero()); // initialize delta p to zero vector
 
-		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &nl, &kernel](size_t i)
+		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &nl, &kernel, &radius, &restitution, &domain](size_t i)
 		{
 			const auto &lambda_i = lambdas[i];
 
@@ -139,8 +145,20 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 	}
 }
 
-void HinaPE::PBFSolver::_update_state() const
+void HinaPE::PBFSolver::_update_positions_and_velocities() const
 {
+	auto &x = _data->_positions;
+	auto &v = _data->_velocities;
+
+	const auto &p = _data->_predicted_position;
+	const auto size = p.size();
+	const auto dt = _opt.current_dt;
+
+	Util::parallelFor(Constant::ZeroSize, size, [&x, &p, &v, &dt](size_t i)
+	{
+		v[i] = (p[i] - x[i]) / dt;
+		x[i] = p[i];
+	});
 }
 
 void HinaPE::PBFSolver::_resolve_collision() const
@@ -152,6 +170,7 @@ void HinaPE::PBFSolver::_resolve_collision() const
 	});
 }
 
+// ============================== Solver Data ==============================
 
 HinaPE::PBFSolver::Data::Data() { track(&_positions); }
 

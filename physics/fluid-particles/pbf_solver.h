@@ -39,7 +39,7 @@ protected:
 	void _apply_force_and_predict_position() const;
 	void _update_neighbor() const;
 	void _solve_density_constraints() const;
-	void _update_state() const;
+	void _update_positions_and_velocities() const;
 
 private:
 	void _resolve_collision() const;
