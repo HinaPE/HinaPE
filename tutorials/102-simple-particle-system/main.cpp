@@ -9,7 +9,11 @@ struct SimpleParticlesObject
 };
 struct Fireworks : public SimpleParticlesObject, public Kasumi::ObjectParticles3D
 {
-	Fireworks() { track(&positions); _random_color = true; }
+	Fireworks()
+	{
+		track(&positions);
+		_random_color = true;
+	}
 };
 class SimpleFreeFallSolver
 {
@@ -27,10 +31,22 @@ public:
 				auto &f = o->forces[i];
 				auto &m = o->mass;
 
-				// apply semi-implicit Euler
+				// external force
 				f = _gravity;
+
+				// apply semi-implicit Euler
 				v += dt * f / m;
 				x += dt * v;
+
+				// damping
+				v *= 0.99;
+
+				// simple collision with ground
+				if (x.y() < -1)
+				{
+					x.y() = -1;
+					v.y() = -v.y();
+				}
 			}
 		}
 	}
@@ -54,9 +70,9 @@ auto main() -> int
 	for (auto &p: fireworks->positions)
 		p = {HinaPE::Math::random_real(-size, size), HinaPE::Math::random_real(-size, size), HinaPE::Math::random_real(-size, size)};
 	// initial velocities
-	real speed = 2;
+	real speed = 1.5;
 	for (auto &v: fireworks->velocities)
-		v = {HinaPE::Math::random_real(-speed, speed), 4* speed, HinaPE::Math::random_real(-speed, speed)};
+		v = {HinaPE::Math::random_real(-speed, speed), 5 * HinaPE::Math::random_real(0.5, speed), HinaPE::Math::random_real(-speed, speed)};
 
 	solver->add(fireworks);
 

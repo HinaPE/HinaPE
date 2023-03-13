@@ -22,11 +22,22 @@ public:
 			auto &f = o->f;
 			auto &m = o->m;
 
+			// external force
 			f = _gravity;
 
 			// apply semi-implicit Euler
 			v += dt * f / m;
 			x += dt * v;
+
+			// damping
+			v *= 0.99;
+
+			// simple collision with ground
+			if (x.y() < -1)
+			{
+				x.y() = -1;
+				v.y() = -v.y();
+			}
 		}
 	}
 
