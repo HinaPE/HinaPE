@@ -4,6 +4,13 @@
 void HinaPE::PBFSolver::init()
 {
 	_emit_particles();
+	_data->_forces.resize(_data->_positions.size(), mVector3::Zero());
+	_data->_densities.resize(_data->_positions.size(), 0);
+	_data->_predicted_position = _data->_positions; // copy
+	_data->_lambdas.resize(_data->_positions.size(), 0);
+	_data->_delta_p.resize(_data->_positions.size(), mVector3::Zero());
+	_update_neighbor();
+	VALID_CHECK();
 	_opt.inited = true;
 }
 
@@ -87,7 +94,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 			real d_i = d[i];
 			real C_i = d_i / d0 - 1;
 
-			if (C_i > 0) // if density is bigger than water density, do constraints projection
+			if (C_i > 1e-8) // if density is bigger than water density, do constraints projection
 			{
 				real sum_grad_C_i_squared = 0;
 				mVector3 grad_C_i = mVector3::Zero();
@@ -109,7 +116,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 				real lambda = -C_i / (sum_grad_C_i_squared + eps);
 				lambdas[i] = lambda; // thread safe write
 			}
-		});
+		}, Util::ExecutionPolicy::Serial);
 
 
 		// Second, we compute all correction delta p
@@ -203,7 +210,7 @@ void HinaPE::PBFSolver::Data::_update_density()
 
 	Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
 	{
-		real sum = 0;
+		real sum = (*poly6_kernel)(0); // self density
 		for (int j = 0; j < _neighbor_lists[i].size(); ++j)
 		{
 			real dist = (x[i] - x[_neighbor_lists[i][j]]).length();
@@ -221,7 +228,7 @@ void HinaPE::PBFSolver::Data::_update_mass()
 	real max_number_density = 0;
 	for (int i = 0; i < _positions.size(); ++i)
 	{
-		real sum = 0;
+		real sum = (*poly6_kernel)(0); // self density
 		const auto &point = _positions[i];
 		for (const auto &neighbor_point_id: _neighbor_lists[i])
 		{
@@ -252,6 +259,7 @@ void HinaPE::PBFSolver::Data::INSPECT()
 	if (_inst_id >= 0 && _inst_id < _densities.size())
 	{
 		ImGui::Text("Inst: %d", _inst_id);
+		ImGui::Text("Mass: %f", _mass);
 		ImGui::Text("Force: {%.3f, %.3f, %.3f}", _forces[_inst_id].x(), _forces[_inst_id].y(), _forces[_inst_id].z());
 		ImGui::Text("Density: %.3f", _densities[_inst_id]);
 		ImGui::Text("Lambda: %.3f", _lambdas[_inst_id]);

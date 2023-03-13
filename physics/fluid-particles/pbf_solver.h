@@ -26,7 +26,7 @@ public:
 		mVector3 gravity = mVector3(0, -9.8, 0);
 		real restitution = 0.3;
 
-		size_t constraint_solver_iterations = 10;
+		size_t constraint_solver_iterations = 3;
 	} _opt;
 	struct Data;
 	struct DensityConstraints;
@@ -65,7 +65,7 @@ public:
 
 	// params
 	real _mass 				= 1e-3; // should be recalculated  to fit water density
-	real _radius 			= 0.02;
+	real _radius 			= 0.1;
 
 	real target_density 	= 1000; // water density
 	real target_spacing 	= _radius;
