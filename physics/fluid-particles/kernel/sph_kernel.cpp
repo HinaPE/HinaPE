@@ -1,6 +1,8 @@
 #include "sph_kernel.h"
 
 HinaPE::SPHKernel::SPHKernel(real kernel_radius) : h(kernel_radius), h2(h * h), h3(h2 * h), h4(h2 * h2), h5(h2 * h3) {}
+HinaPE::StdKernel::StdKernel(real kernelRadius) : SPHKernel(kernelRadius) {}
+HinaPE::SpikyKernel::SpikyKernel(real kernelRadius) : SPHKernel(kernelRadius) {}
 auto HinaPE::StdKernel::operator()(real distance) const -> real
 {
 	if (distance * distance >= h2)

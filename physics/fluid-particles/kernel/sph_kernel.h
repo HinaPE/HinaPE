@@ -27,6 +27,7 @@ public:
 	auto second_derivative(real distance) const -> real final;
 	auto gradient(const mVector3 &point) const -> mVector3 final;
 	auto gradient(real distance, const mVector3 &direction) const -> mVector3 final;
+	explicit StdKernel(real kernelRadius);
 };
 
 struct SpikyKernel : public SPHKernel
@@ -37,6 +38,7 @@ public:
 	auto second_derivative(real distance) const -> real final;
 	auto gradient(const mVector3 &point) const -> mVector3 final;
 	auto gradient(real distance, const mVector3 &direction) const -> mVector3 final;
+	explicit SpikyKernel(real kernelRadius);
 };
 
 using SPHKernelPtr = std::shared_ptr<SPHKernel>;
