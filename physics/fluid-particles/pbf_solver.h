@@ -15,22 +15,34 @@ namespace HinaPE
 class PBFSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
-	void init() const;
+	void init();
 	void update(real dt) const;
 
 public:
 	struct Opt
-	{} _opt;
+	{
+		bool inited = false;
+		real current_dt = 0.02; // don't alter this
+		mVector3 gravity = mVector3(0, -9.8, 0);
+		real restitution = 0.3;
+	} _opt;
 	struct Data;
-	std::shared_ptr<Data> 	_data;
-	BoxDomainPtr 			_domain;
-	ParticleEmitter3Ptr 	_emitter;
+	std::shared_ptr<Data> _data;
+	BoxDomainPtr _domain;
+	ParticleEmitter3Ptr _emitter;
+
+protected:
+	void _emit_particles() const;
+	void _accumulate_force() const;
+	void _time_integration() const;
+	void _resolve_collision() const;
 
 protected:
 	void INSPECT() final;
 	void VALID_CHECK() const final;
 };
 
+// @formatter:off
 struct PBFSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 {
 public:
@@ -41,12 +53,31 @@ public:
 	std::vector<real> 		_densities;
 	std::vector<real> 		_pressures;
 
-	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>();
+	// params
+	real _mass 				= 1e-3; // should be recalculated  to fit water density
+	real _radius 			= 0.02;
+
+	real target_density 	= 1000; // water density
+	real target_spacing 	= _radius;
+	real kernel_radius_over_target_spacing = 1.8;
+	real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
+
+
+	SPHKernelPtr kernel = std::make_shared<StdKernel>(kernel_radius);
+	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>(_radius);
 	std::vector<std::vector<unsigned int>> _neighbor_lists;
 
-protected:
+	Data();
 	friend class PBFSolver;
+	void _update_neighbor();
+	void _update_density();
+	void _update_pressure();
+	void _update_mass();
+	void INSPECT() final;
+
+	bool _mass_inited = false;
 };
+// @formatter:on
 } // namespace HinaPE
 
 #endif //HINAPE_PBF_SOLVER_H

@@ -1,8 +1,9 @@
 #include "sph_solver.h"
 
-void HinaPE::SPHSolver::init() const
+void HinaPE::SPHSolver::init()
 {
 	_emit_particles();
+	_opt.inited = true;
 }
 
 void HinaPE::SPHSolver::update(real dt) const
@@ -48,7 +49,6 @@ void HinaPE::SPHSolver::_accumulate_force() const
 	});
 
 	// Viscosity Forces
-	StdKernel kernel(_data->kernel_radius);
 	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
 	{
 		const auto &neighbors = _data->_neighbor_lists[i];
@@ -56,7 +56,7 @@ void HinaPE::SPHSolver::_accumulate_force() const
 		{
 			real dist = (x[i] - x[j]).length();
 			if (d[j] > HinaPE::Constant::Epsilon)
-				f[i] += _data->viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * kernel.second_derivative(dist);
+				f[i] += _data->viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * (*_data->kernel).second_derivative(dist);
 		}
 	});
 
@@ -70,7 +70,7 @@ void HinaPE::SPHSolver::_accumulate_force() const
 			if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
 			{
 				mVector3 dir = (x[j] - x[i]) / dist;
-				f[i] -= m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * kernel.gradient(dist, dir);
+				f[i] -= m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * (*_data->kernel).gradient(dist, dir);
 			}
 		}
 	});
@@ -154,40 +154,13 @@ void HinaPE::SPHSolver::Data::_update_density()
 	Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
 	{
 		real sum = 0;
-		StdKernel kernel(kernel_radius);
 		for (int j = 0; j < _neighbor_lists[i].size(); ++j)
 		{
 			real dist = (x[i] - x[_neighbor_lists[i][j]]).length();
-			sum += kernel(dist);
+			sum += (*kernel)(dist);
 		}
 		d[i] = m * sum; // rho(x) = m * sum(W(x - xj))
 	});
-}
-
-void HinaPE::SPHSolver::Data::_update_mass()
-{
-	// TODO: to be rewritten
-	_mass = 1.0;
-
-	StdKernel kernel(kernel_radius);
-
-	real max_number_density = 0;
-	for (int i = 0; i < _positions.size(); ++i)
-	{
-		real sum = 0;
-		const auto &point = _positions[i];
-		for (const auto &neighbor_point_id: _neighbor_lists[i])
-		{
-			auto dist = (point - _positions[neighbor_point_id]).length();
-			sum += kernel(dist);
-		}
-		max_number_density = std::max(max_number_density, sum);
-	}
-
-	if (max_number_density > 0)
-		_mass = std::max((target_density / max_number_density), HinaPE::Constant::Zero);
-
-	_mass_inited = true;
 }
 
 void HinaPE::SPHSolver::Data::_update_pressure()
@@ -207,6 +180,30 @@ void HinaPE::SPHSolver::Data::_update_pressure()
 		if (p[i] < 0)
 			p[i] *= nps;
 	});
+}
+
+void HinaPE::SPHSolver::Data::_update_mass()
+{
+	// TODO: to be rewritten
+	_mass = 1.0;
+
+	real max_number_density = 0;
+	for (int i = 0; i < _positions.size(); ++i)
+	{
+		real sum = 0;
+		const auto &point = _positions[i];
+		for (const auto &neighbor_point_id: _neighbor_lists[i])
+		{
+			auto dist = (point - _positions[neighbor_point_id]).length();
+			sum += (*kernel)(dist);
+		}
+		max_number_density = std::max(max_number_density, sum);
+	}
+
+	if (max_number_density > 0)
+		_mass = std::max((target_density / max_number_density), HinaPE::Constant::Zero);
+
+	_mass_inited = true;
 }
 
 void HinaPE::SPHSolver::Data::INSPECT()

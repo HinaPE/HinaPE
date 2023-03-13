@@ -4,9 +4,9 @@
 #include "pbf_solver.h"
 
 using SolverType =
-		HinaPE::SPHSolver;
+//		HinaPE::SPHSolver;
 //		HinaPE::PCISPHSolver;
-//		HinaPE::PBFSolver;
+		HinaPE::PBFSolver;
 using SolverDataType = SolverType::Data;
 
 struct NeighborSearchVisualization : public Kasumi::ObjectParticles3D
