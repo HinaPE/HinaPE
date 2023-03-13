@@ -9,7 +9,7 @@ struct SimpleParticlesObject
 };
 struct Fireworks : public SimpleParticlesObject, public Kasumi::ObjectParticles3D
 {
-	Fireworks() { track(&positions); }
+	Fireworks() { track(&positions); _random_color = true; }
 };
 class SimpleFreeFallSolver
 {
@@ -45,17 +45,18 @@ auto main() -> int
 	auto solver = std::make_shared<SimpleFreeFallSolver>();
 
 	auto fireworks = std::make_shared<Fireworks>();
-	size_t particles = 1000;
+	size_t particles = 5000;
 	fireworks->positions.resize(particles);
 	fireworks->velocities.resize(particles);
 	fireworks->forces.resize(particles);
 	// initial positions
+	real size = 0.3;
 	for (auto &p: fireworks->positions)
-		p = {HinaPE::Math::random_real(-1, 1), HinaPE::Math::random_real(-1, 1), HinaPE::Math::random_real(-1, 1)};
+		p = {HinaPE::Math::random_real(-size, size), HinaPE::Math::random_real(-size, size), HinaPE::Math::random_real(-size, size)};
 	// initial velocities
-	real speed = 9;
+	real speed = 2;
 	for (auto &v: fireworks->velocities)
-		v = {HinaPE::Math::random_real(-speed, speed), speed, HinaPE::Math::random_real(-speed, speed)};
+		v = {HinaPE::Math::random_real(-speed, speed), 4* speed, HinaPE::Math::random_real(-speed, speed)};
 
 	solver->add(fireworks);
 
