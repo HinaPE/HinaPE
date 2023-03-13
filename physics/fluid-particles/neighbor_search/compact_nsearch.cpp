@@ -1,17 +1,17 @@
 #include "compact_nsearch.h"
 
-HinaPE::CompactNSearch3::CompactNSearch3(real radius) : ID(0) { _searcher = std::make_shared<::CompactNSearch::NeighborhoodSearch>(radius, true); }
+HinaPE::CompactNSearch3::CompactNSearch3(real radius) : ID(0), PointNeighborSearch3(radius) { _searcher = std::make_shared<::CompactNSearch::NeighborhoodSearch>(radius, true); }
 
-void HinaPE::CompactNSearch3::for_each_nearby_point(const mVector3 &origin, real radius, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
+void HinaPE::CompactNSearch3::for_each_nearby_point(const mVector3 &origin, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
 {
 	std::vector<std::vector<unsigned int>> neighbors;
-	_searcher->set_radius(radius);
+	_searcher->set_radius(_radius);
 	_searcher->find_neighbors(&origin[0], neighbors);
 	for (unsigned int i: neighbors[0])
 		callback(i, mVector3());
 }
 
-auto HinaPE::CompactNSearch3::has_nearby_point(const mVector3 &origin, real radius) const -> bool
+auto HinaPE::CompactNSearch3::has_nearby_point(const mVector3 &origin) const -> bool
 {
 	// TODO: to optimise this
 	std::vector<std::vector<unsigned int>> neighbors;

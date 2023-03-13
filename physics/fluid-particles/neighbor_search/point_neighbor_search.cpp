@@ -1,9 +1,9 @@
 #include "point_neighbor_search.h"
 
 // ==================== PointSimpleListSearch3 ====================
-void HinaPE::PointSimpleListSearch3::for_each_nearby_point(const mVector3 &origin, real radius, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
+void HinaPE::PointSimpleListSearch3::for_each_nearby_point(const mVector3 &origin, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
 {
-	real radius_squared = radius * radius;
+	real radius_squared = _radius * _radius;
 
 	for (int i = 0; i < _points.size(); ++i)
 	{
@@ -14,9 +14,9 @@ void HinaPE::PointSimpleListSearch3::for_each_nearby_point(const mVector3 &origi
 	}
 }
 
-auto HinaPE::PointSimpleListSearch3::has_nearby_point(const mVector3 &origin, real radius) const -> bool
+auto HinaPE::PointSimpleListSearch3::has_nearby_point(const mVector3 &origin) const -> bool
 {
-	real radius_squared = radius * radius;
+	real radius_squared = _radius * _radius;
 
 	return std::any_of(_points.begin(), _points.end(), [radius_squared, origin](const mVector3 &point)
 	{
@@ -36,13 +36,13 @@ void HinaPE::PointSimpleListSearch3::build(const std::vector<mVector3> &points)
 
 
 // ==================== PointHashGridSearch3 ====================
-void HinaPE::PointHashGridSearch3::for_each_nearby_point(const mVector3 &origin, real radius, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
+void HinaPE::PointHashGridSearch3::for_each_nearby_point(const mVector3 &origin, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
 {
 	if (_buckets.empty())
 		return;
 
 	auto nearby_keys = _get_nearby_keys(origin);
-	const real query_radius_squared = radius * radius;
+	const real query_radius_squared = _radius * _radius;
 
 	for (auto key: nearby_keys)
 	{
@@ -56,13 +56,13 @@ void HinaPE::PointHashGridSearch3::for_each_nearby_point(const mVector3 &origin,
 	}
 }
 
-auto HinaPE::PointHashGridSearch3::has_nearby_point(const mVector3 &origin, real radius) const -> bool
+auto HinaPE::PointHashGridSearch3::has_nearby_point(const mVector3 &origin) const -> bool
 {
 	if (_buckets.empty())
 		return false;
 
 	auto nearby_keys = _get_nearby_keys(origin);
-	const real query_radius_squared = radius * radius;
+	const real query_radius_squared = _radius * _radius;
 
 	for (auto key: nearby_keys)
 	{
@@ -193,10 +193,10 @@ auto HinaPE::PointHashGridSearch3::_get_bucket_index(const mVector3 &position) c
 
 
 // ==================== PointParallelHashGridSearch3 ====================
-void HinaPE::PointParallelHashGridSearch3::for_each_nearby_point(const mVector3 &origin, real radius, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
+void HinaPE::PointParallelHashGridSearch3::for_each_nearby_point(const mVector3 &origin, const HinaPE::PointNeighborSearch3::ForEachNearbyPointFunc &callback)
 {
 	auto nearby_keys = _get_nearby_keys(origin);
-	const auto query_radius_squared = radius * radius;
+	const auto query_radius_squared = _radius * _radius;
 
 	for (auto nearby_key: nearby_keys)
 	{
@@ -215,10 +215,10 @@ void HinaPE::PointParallelHashGridSearch3::for_each_nearby_point(const mVector3 
 		}
 	}
 }
-auto HinaPE::PointParallelHashGridSearch3::has_nearby_point(const mVector3 &origin, real radius) const -> bool
+auto HinaPE::PointParallelHashGridSearch3::has_nearby_point(const mVector3 &origin) const -> bool
 {
 	auto nearby_keys = _get_nearby_keys(origin);
-	const real query_radius_squared = radius * radius;
+	const real query_radius_squared = _radius * _radius;
 
 
 	for (auto nearby_key: nearby_keys)

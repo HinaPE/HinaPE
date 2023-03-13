@@ -13,18 +13,25 @@ class PointNeighborSearch3
 public:
 	using ForEachNearbyPointFunc = std::function<void(size_t, const mVector3 &)>;
 
-	virtual void for_each_nearby_point(const mVector3 &origin, real radius, const ForEachNearbyPointFunc &callback) = 0;
-	virtual auto has_nearby_point(const mVector3 &origin, real radius) const -> bool = 0;
+	virtual void for_each_nearby_point(const mVector3 &origin, const ForEachNearbyPointFunc &callback) = 0;
+	virtual auto has_nearby_point(const mVector3 &origin) const -> bool = 0;
 	virtual void build(const std::vector<mVector3> &points) = 0;
+
+public:
+	explicit PointNeighborSearch3(real radius) : _radius(radius) {}
+
+protected:
+	real _radius;
 };
 
 
 class PointSimpleListSearch3 final : public PointNeighborSearch3
 {
 public:
-	void for_each_nearby_point(const mVector3 &origin, real radius, const ForEachNearbyPointFunc &callback) final;
-	auto has_nearby_point(const mVector3 &origin, real radius) const -> bool final;
+	void for_each_nearby_point(const mVector3 &origin, const ForEachNearbyPointFunc &callback) final;
+	auto has_nearby_point(const mVector3 &origin) const -> bool final;
 	void build(const std::vector<mVector3> &points) final;
+	explicit PointSimpleListSearch3(real radius) : PointNeighborSearch3(radius) {}
 
 private:
 	std::vector<mVector3> _points;
@@ -34,10 +41,11 @@ private:
 class PointHashGridSearch3 final : public PointNeighborSearch3
 {
 public:
-	void for_each_nearby_point(const mVector3 &origin, real radius, const ForEachNearbyPointFunc &callback) final;
-	auto has_nearby_point(const mVector3 &origin, real radius) const -> bool final;
+	void for_each_nearby_point(const mVector3 &origin, const ForEachNearbyPointFunc &callback) final;
+	auto has_nearby_point(const mVector3 &origin) const -> bool final;
 	void build(const std::vector<mVector3> &points) final;
 	void add_point(const mVector3 &point);
+	explicit PointHashGridSearch3(real radius) : PointNeighborSearch3(radius), _grid_spacing(2 * radius) {}
 
 private:
 	auto _get_hash_key_from_position(const mVector3 &position) const -> size_t;
@@ -56,9 +64,10 @@ private:
 class PointParallelHashGridSearch3 final : public PointNeighborSearch3
 {
 public:
-	void for_each_nearby_point(const mVector3 &origin, real radius, const ForEachNearbyPointFunc &callback) final;
-	auto has_nearby_point(const mVector3 &origin, real radius) const -> bool final;
+	void for_each_nearby_point(const mVector3 &origin, const ForEachNearbyPointFunc &callback) final;
+	auto has_nearby_point(const mVector3 &origin) const -> bool final;
 	void build(const std::vector<mVector3> &points) final;
+	explicit PointParallelHashGridSearch3(real radius) : PointNeighborSearch3(radius), _grid_spacing(2 * radius) {}
 
 private:
 	auto _get_hash_key_from_position(const mVector3 &position) const -> size_t;
