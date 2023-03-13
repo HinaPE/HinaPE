@@ -2,44 +2,145 @@
 
 void HinaPE::PBFSolver::init()
 {
-	_density_constraints = std::make_shared<DensityConstraints>(_data);
 	_emit_particles();
 	_opt.inited = true;
 }
 
 void HinaPE::PBFSolver::update(real dt) const
 {
-	// TODO: PBF core
+	// algorithm line 1~4
+	_apply_force_and_predict_position();
+
+	// algorithm line 5~7
+	_update_neighbor();
+
+	// algorithm line 8~19
+	_solve_density_constraints();
+
+	// algorithm line 20~24
+	_update_state();
 }
 
 void HinaPE::PBFSolver::_emit_particles() const
 {
 	_emitter->emit(&_data->_positions, &_data->_velocities);
+}
+
+void HinaPE::PBFSolver::_apply_force_and_predict_position() const
+{
+	_data->_predicted_position = _data->_positions; // copy
 	_data->_forces.resize(_data->_positions.size(), mVector3::Zero());
+
+	auto &p = _data->_predicted_position;
+	auto &v = _data->_velocities;
+	auto &f = _data->_forces;
+	const auto &m = _data->_mass;
+	const auto g = _opt.gravity;
+	const auto dt = _opt.current_dt;
+
+	// Gravity Forces
+	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&p, &v, &f, &m, &g, &dt](size_t i)
+	{
+		mVector3 gravity = m * g;
+		f[i] = gravity;
+
+		v[i] += dt * f[i] / m;
+		p[i] += dt * v[i];
+	});
+}
+
+void HinaPE::PBFSolver::_update_neighbor() const
+{
 	_data->_densities.resize(_data->_positions.size(), 0);
-	_data->_pressures.resize(_data->_positions.size(), 0);
+
 	_data->_update_neighbor();
 	_data->_update_density();
 }
 
-void HinaPE::PBFSolver::_accumulate_force() const
+void HinaPE::PBFSolver::_solve_density_constraints() const
 {
+	for (int i = 0; i < _opt.constraint_solver_iterations; ++i)
+	{
+		// Note:
+		// "i" is the index of the current particle,
+		// "j" is the index of the neighbor particle
+
+		const size_t size = _data->_predicted_position.size();
+		const real d0 = _data->target_density;
+		const real eps = 1e-6;
+
+		const auto &p = _data->_predicted_position;
+		const auto &d = _data->_densities;
+		const auto &nl = _data->_neighbor_lists;
+		const auto &kernel = _data->poly6_kernel;
+
+
+		// First, we compute all lambdas
+		auto &lambdas = _data->_lambdas;
+		lambdas.resize(size, 0); // initialize lambdas to zero
+		Util::parallelFor(Constant::ZeroSize, size, [&lambdas, &p, &d, &nl, &kernel, d0, eps](size_t i)
+		{
+			real d_i = d[i];
+			real C_i = d_i / d0 - 1;
+
+			if (C_i > 0) // if density is bigger than water density, do constraints projection
+			{
+				real sum_grad_C_i_squared = 0;
+				mVector3 grad_C_i = mVector3::Zero();
+
+				for (const auto j: nl[i])
+				{
+					const auto p_i = p[i];
+					const auto p_j = p[j];
+					const mVector3 grad_C_j = -(*kernel).gradient(p_i - p_j);
+
+					// Equation (8)
+					sum_grad_C_i_squared += grad_C_j.length_squared();
+					grad_C_i -= grad_C_j;
+				}
+
+				sum_grad_C_i_squared += grad_C_i.length_squared();
+
+				// Equation (11): compute lambda
+				real lambda = -C_i / (sum_grad_C_i_squared + eps);
+				lambdas[i] = lambda; // thread safe write
+			}
+		});
+
+
+		// Second, we compute all correction delta p
+		auto &dp = _data->_delta_p;
+		dp.resize(size, mVector3::Zero()); // initialize delta p to zero vector
+
+		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &nl, &kernel](size_t i)
+		{
+			const auto &lambda_i = lambdas[i];
+
+			// Equation (12): compute delta p
+			mVector3 delta_p_i = mVector3::Zero();
+			for (const auto j: nl[i])
+			{
+				const auto &lambda_j = lambdas[j];
+				const auto p_i = p[i];
+				const auto p_j = p[j];
+				const mVector3 grad_C_j = -(*kernel).gradient(p_i - p_j);
+				delta_p_i -= (lambda_i + lambda_j) * grad_C_j;
+			}
+			dp[i] = delta_p_i; // thread safe write
+		});
+
+
+		// Finally, apply delta p to all particles
+		auto &p_to_write = _data->_predicted_position;
+		Util::parallelFor(Constant::ZeroSize, size, [&p_to_write, &dp](size_t i)
+		{
+			p_to_write[i] += dp[i];
+		});
+	}
 }
 
-void HinaPE::PBFSolver::_time_integration() const
+void HinaPE::PBFSolver::_update_state() const
 {
-	auto &x = _data->_positions;
-	auto &v = _data->_velocities;
-	auto &f = _data->_forces;
-	const auto &m = _data->_mass;
-	const auto &dt = _opt.current_dt;
-
-	// semi-euler integration
-	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
-	{
-		v[i] += dt * f[i] / m;
-		x[i] += dt * v[i];
-	});
 }
 
 void HinaPE::PBFSolver::_resolve_collision() const
@@ -51,38 +152,17 @@ void HinaPE::PBFSolver::_resolve_collision() const
 	});
 }
 
-void HinaPE::PBFSolver::INSPECT()
-{
-	ImGui::Text("Solver Inspector");
-	ImGui::Text("Particles: %zu", _data->_positions.size());
-	INSPECT_REAL(_opt.gravity[1], "g");
-	ImGui::Separator();
-}
-
-void HinaPE::PBFSolver::VALID_CHECK() const
-{
-	if (_data == nullptr) throw std::runtime_error("PBFSolver::_data is nullptr");
-	if (_domain == nullptr) throw std::runtime_error("PBFSolver::_domain is nullptr");
-	if (_emitter == nullptr) throw std::runtime_error("PBFSolver::_emitter is nullptr");
-
-	if (_data->_positions.size() != _data->_velocities.size() &&
-		_data->_positions.size() != _data->_forces.size() &&
-		_data->_positions.size() != _data->_densities.size() &&
-		_data->_positions.size() != _data->_pressures.size())
-		throw std::runtime_error("PBFSolver::_data size mismatch");
-}
-
 
 HinaPE::PBFSolver::Data::Data() { track(&_positions); }
 
 void HinaPE::PBFSolver::Data::_update_neighbor()
 {
-	_neighbor_search->build(_positions);
-	_neighbor_lists.resize(_positions.size());
+	_neighbor_search->build(_predicted_position);
+	_neighbor_lists.resize(_predicted_position.size());
 
-	for (size_t i = 0; i < _positions.size(); ++i)
+	for (size_t i = 0; i < _predicted_position.size(); ++i)
 	{
-		mVector3 origin = _positions[i];
+		mVector3 origin = _predicted_position[i];
 		_neighbor_lists[i].clear();
 
 		_neighbor_search->for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
@@ -138,6 +218,15 @@ void HinaPE::PBFSolver::Data::_update_mass()
 	_mass_inited = true;
 }
 
+
+void HinaPE::PBFSolver::INSPECT()
+{
+	ImGui::Text("Solver Inspector");
+	ImGui::Text("Particles: %zu", _data->_positions.size());
+	INSPECT_REAL(_opt.gravity[1], "g");
+	ImGui::Separator();
+}
+
 void HinaPE::PBFSolver::Data::INSPECT()
 {
 	PoseBase::INSPECT();
@@ -146,87 +235,21 @@ void HinaPE::PBFSolver::Data::INSPECT()
 		ImGui::Text("Inst: %d", _inst_id);
 		ImGui::Text("Force: {%.3f, %.3f, %.3f}", _forces[_inst_id].x(), _forces[_inst_id].y(), _forces[_inst_id].z());
 		ImGui::Text("Density: %.3f", _densities[_inst_id]);
-		ImGui::Text("Pressure: %.3f", _pressures[_inst_id]);
 		ImGui::Text("Lambda: %.3f", _lambdas[_inst_id]);
 		ImGui::Text("Neighbors: %zu", _neighbor_lists[_inst_id].size());
 		ImGui::Text("dp: {%.3f, %.3f, %.3f}", _delta_p[_inst_id].x(), _delta_p[_inst_id].y(), _delta_p[_inst_id].z());
 	}
 }
 
-void HinaPE::PBFSolver::DensityConstraints::solve() const
+void HinaPE::PBFSolver::VALID_CHECK() const
 {
-	// Note:
-	// "i" is the index of the current particle,
-	// "j" is the index of the neighbor particle
+	if (_data == nullptr) throw std::runtime_error("PBFSolver::_data is nullptr");
+	if (_domain == nullptr) throw std::runtime_error("PBFSolver::_domain is nullptr");
+	if (_emitter == nullptr) throw std::runtime_error("PBFSolver::_emitter is nullptr");
 
-	const size_t size = _data->_positions.size();
-	const real d0 = _data->target_density;
-	const real eps = 1e-6;
-
-	const auto &x = _data->_positions;
-	const auto &d = _data->_densities;
-	const auto &nl = _data->_neighbor_lists;
-	const auto &kernel = _data->poly6_kernel;
-
-
-	// First, we compute all lambdas
-	auto &lambdas = _data->_lambdas;
-	lambdas.resize(size, 0); // initialize lambdas to zero
-	Util::parallelFor(Constant::ZeroSize, size, [&lambdas, &x, &d, &nl, &kernel, d0, eps](size_t i)
-	{
-		real d_i = d[i];
-		real C_i = d_i / d0 - 1;
-
-		if (C_i > 0) // if density is bigger than water density, do constraints projection
-		{
-			real sum_grad_C_i_squared = 0;
-			mVector3 grad_C_i = mVector3::Zero();
-
-			for (const auto j: nl[i])
-			{
-				const auto p_i = x[i];
-				const auto p_j = x[j];
-				const mVector3 grad_C_j = -(*kernel).gradient(p_i - p_j);
-
-				// Equation (8)
-				sum_grad_C_i_squared += grad_C_j.length_squared();
-				grad_C_i -= grad_C_j;
-			}
-
-			sum_grad_C_i_squared += grad_C_i.length_squared();
-
-			// Equation (11): compute lambda
-			real lambda = -C_i / (sum_grad_C_i_squared + eps);
-			lambdas[i] = lambda; // thread safe write
-		}
-	});
-
-
-	// Second, we compute all correction delta p
-	auto &dp = _data->_delta_p;
-	dp.resize(size, mVector3::Zero()); // initialize delta p to zero vector
-
-	Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &x, &nl, &kernel](size_t i)
-	{
-		const auto &lambda_i = lambdas[i];
-
-		// Equation (12): compute delta p
-		mVector3 delta_p_i = mVector3::Zero();
-		for (const auto j: nl[i])
-		{
-			const auto &lambda_j = lambdas[j];
-			const auto p_i = x[i];
-			const auto p_j = x[j];
-			const mVector3 grad_C_j = -(*kernel).gradient(p_i - p_j);
-			delta_p_i -= (lambda_i + lambda_j) * grad_C_j;
-		}
-		dp[i] = delta_p_i; // thread safe write
-	});
-
-	// Finally, apply delta p to all particles
-	auto &x_to_write = _data->_positions;
-	Util::parallelFor(Constant::ZeroSize, size, [&x_to_write, &dp](size_t i)
-	{
-		x_to_write[i] += dp[i];
-	});
+	if (_data->_positions.size() != _data->_velocities.size() &&
+		_data->_positions.size() != _data->_forces.size() &&
+		_data->_positions.size() != _data->_densities.size() &&
+		_data->_positions.size() != _data->_predicted_position.size())
+		throw std::runtime_error("PBFSolver::_data size mismatch");
 }

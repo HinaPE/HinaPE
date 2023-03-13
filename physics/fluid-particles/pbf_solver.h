@@ -25,21 +25,25 @@ public:
 		real current_dt = 0.02; // don't alter this
 		mVector3 gravity = mVector3(0, -9.8, 0);
 		real restitution = 0.3;
+
+		size_t constraint_solver_iterations = 10;
 	} _opt;
 	struct Data;
 	struct DensityConstraints;
 	std::shared_ptr<Data> _data;
-	std::shared_ptr<DensityConstraints> _density_constraints;
 	BoxDomainPtr _domain;
 	ParticleEmitter3Ptr _emitter;
 
 protected:
 	void _emit_particles() const;
-	void _accumulate_force() const;
-	void _time_integration() const;
+	void _apply_force_and_predict_position() const;
+	void _update_neighbor() const;
+	void _solve_density_constraints() const;
+	void _update_state() const;
+
+private:
 	void _resolve_collision() const;
 
-protected:
 	void INSPECT() final;
 	void VALID_CHECK() const final;
 };
@@ -53,9 +57,9 @@ public:
 	std::vector<mVector3> 	_velocities;
 	std::vector<mVector3> 	_forces;
 	std::vector<real> 		_densities;
-	std::vector<real> 		_pressures;
 
 	// temporary buffers
+	std::vector<mVector3> 	_predicted_position;
 	std::vector<real> 		_lambdas;
 	std::vector<mVector3> 	_delta_p;
 
@@ -85,17 +89,8 @@ public:
 };
 // @formatter:on
 
-struct PBFSolver::DensityConstraints
-{
-	explicit DensityConstraints(std::shared_ptr<PBFSolver::Data> data) : _data(std::move(data)) {}
-	void solve() const;
-
-	std::shared_ptr<PBFSolver::Data> _data;
-};
-
 using PBFSolverPtr = std::shared_ptr<PBFSolver>;
 using PBFSolverDataPtr = std::shared_ptr<PBFSolver::Data>;
-using PBFDensityConstraintsPtr = std::shared_ptr<PBFSolver::DensityConstraints>;
 } // namespace HinaPE
 
 #endif //HINAPE_PBF_SOLVER_H
