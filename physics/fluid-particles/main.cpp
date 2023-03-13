@@ -31,19 +31,6 @@ struct NeighborSearchVisualization : public Kasumi::ObjectParticles3D
 
 		_shader->uniform("highlight_mode", true);
 		_data->hide(true);
-
-		const real td = _data->target_density;
-		const real es = _data->target_density * _data->speed_of_sound * _data->speed_of_sound;
-		const real ee = _data->eos_exponent;
-		const real nps = _data->negative_pressure_scale;
-
-		auto &_d = _data->_densities[_data->_inst_id];
-		auto &_p = _data->_pressures[_data->_inst_id];
-		auto p = es / ee * (std::pow(_d / td, ee) - 1.0);
-
-		std::cout << "Density: " << _d << std::endl;
-		std::cout << "Pressure: " << _p << std::endl;
-		std::cout << "Pressure Cal: " << p << std::endl;
 	}
 	void off()
 	{
