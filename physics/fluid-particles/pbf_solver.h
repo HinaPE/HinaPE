@@ -27,7 +27,9 @@ public:
 		real restitution = 0.3;
 	} _opt;
 	struct Data;
+	struct DensityConstraints;
 	std::shared_ptr<Data> _data;
+	std::shared_ptr<DensityConstraints> _density_constraints;
 	BoxDomainPtr _domain;
 	ParticleEmitter3Ptr _emitter;
 
@@ -78,6 +80,15 @@ public:
 	bool _mass_inited = false;
 };
 // @formatter:on
+
+struct PBFSolver::DensityConstraints
+{
+	void solve();
+	DensityConstraints(std::vector<mVector3> &positions, std::vector<std::vector<unsigned int>> &neighbor_lists) : _positions(positions), _neighbor_lists(neighbor_lists) {}
+
+	std::vector<mVector3> &_positions;
+	std::vector<std::vector<unsigned int>> &_neighbor_lists;
+};
 } // namespace HinaPE
 
 #endif //HINAPE_PBF_SOLVER_H

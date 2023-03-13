@@ -153,3 +153,7 @@ void HinaPE::PBFSolver::Data::INSPECT()
 		ImGui::Text("Pressure: %.3f", _pressures[_inst_id]);
 	}
 }
+
+void HinaPE::PBFSolver::DensityConstraints::solve()
+{
+}
