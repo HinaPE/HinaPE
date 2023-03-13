@@ -43,19 +43,43 @@ protected:
 
 struct PCISPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 {
-public:
 	// particles
-	std::vector<mVector3> _positions;
-	std::vector<mVector3> _velocities;
-	std::vector<mVector3> _forces;
-	std::vector<real> _densities;
-	std::vector<real> _pressures;
+	std::vector<mVector3> 	_positions;
+	std::vector<mVector3> 	_velocities;
+	std::vector<mVector3> 	_forces;
+	std::vector<real> 		_densities;
+	std::vector<real> 		_pressures;
 
-	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>();
+	// params
+	real _mass 				= 1e-3; // should be recalculated  to fit water density
+	real _radius 			= 0.02;
+
+	real target_density 	= 1000; // water density
+	real target_spacing 	= _radius;
+	real kernel_radius_over_target_spacing = 1.8;
+	real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
+
+	// pcisph
+	real eos_exponent 					= 7;
+	real negative_pressure_scale 		= 0.0;
+	real viscosity_coefficient 			= 0.01;
+	real pseudo_viscosity_coefficient 	= 10.0;
+	real speed_of_sound 				= 100;
+
+
+	SPHKernelPtr kernel = std::make_shared<StdKernel>(kernel_radius);
+	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>(_radius);
 	std::vector<std::vector<unsigned int>> _neighbor_lists;
 
-protected:
+	Data();
 	friend class PCISPHSolver;
+	void _update_neighbor();
+	void _update_density();
+	void _update_pressure();
+	void _update_mass();
+	void INSPECT() final;
+
+	bool _mass_inited = false;
 };
 } // namespace HinaPE
 
