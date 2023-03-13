@@ -220,8 +220,8 @@ void HinaPE::PBFSolver::DensityConstraints::solve() const
 		dp[i] = delta_p_i; // thread safe write
 	});
 
-	auto &x_to_write = _data->_positions;
 	// Finally, apply delta p to all particles
+	auto &x_to_write = _data->_positions;
 	Util::parallelFor(Constant::ZeroSize, size, [&x_to_write, &dp](size_t i)
 	{
 		x_to_write[i] += dp[i];

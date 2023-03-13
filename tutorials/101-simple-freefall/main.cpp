@@ -24,6 +24,7 @@ public:
 
 			f = _gravity;
 
+			// apply semi-implicit Euler
 			v += dt * f / m;
 			x += dt * v;
 		}

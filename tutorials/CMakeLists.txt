@@ -6,7 +6,8 @@ add_subdirectory(000-heart-beats)
 add_subdirectory(001-view-model)
 
 # basic applications
-add_subdirectory(101-freefall)
+add_subdirectory(101-simple-freefall)
+add_subdirectory(102-simple-particle-system)
 
 # advanced applications
 add_subdirectory(401-particle-solid-coupling)
