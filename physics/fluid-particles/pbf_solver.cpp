@@ -2,6 +2,7 @@
 
 void HinaPE::PBFSolver::init()
 {
+	_density_constraints = std::make_shared<DensityConstraints>(_data);
 	_emit_particles();
 	_opt.inited = true;
 }
@@ -19,7 +20,6 @@ void HinaPE::PBFSolver::_emit_particles() const
 	_data->_pressures.resize(_data->_positions.size(), 0);
 	_data->_update_neighbor();
 	_data->_update_density();
-	_data->_update_pressure();
 }
 
 void HinaPE::PBFSolver::_accumulate_force() const
@@ -108,14 +108,10 @@ void HinaPE::PBFSolver::Data::_update_density()
 		for (int j = 0; j < _neighbor_lists[i].size(); ++j)
 		{
 			real dist = (x[i] - x[_neighbor_lists[i][j]]).length();
-			sum += (*kernel)(dist);
+			sum += (*poly6_kernel)(dist);
 		}
 		d[i] = m * sum; // rho(x) = m * sum(W(x - xj))
 	});
-}
-
-void HinaPE::PBFSolver::Data::_update_pressure()
-{
 }
 
 void HinaPE::PBFSolver::Data::_update_mass()
@@ -131,7 +127,7 @@ void HinaPE::PBFSolver::Data::_update_mass()
 		for (const auto &neighbor_point_id: _neighbor_lists[i])
 		{
 			auto dist = (point - _positions[neighbor_point_id]).length();
-			sum += (*kernel)(dist);
+			sum += (*poly6_kernel)(dist);
 		}
 		max_number_density = std::max(max_number_density, sum);
 	}
@@ -154,6 +150,80 @@ void HinaPE::PBFSolver::Data::INSPECT()
 	}
 }
 
-void HinaPE::PBFSolver::DensityConstraints::solve()
+void HinaPE::PBFSolver::DensityConstraints::solve() const
 {
+	// Note:
+	// "i" is the index of the current particle,
+	// "j" is the index of the neighbor particle
+
+	const size_t size = _data->_positions.size();
+	const real d0 = _data->target_density;
+	const real eps = 1e-6;
+
+	const auto &x = _data->_positions;
+	const auto &d = _data->_densities;
+	const auto &nl = _data->_neighbor_lists;
+	const auto &kernel = _data->poly6_kernel;
+
+
+	// First, we compute all lambdas
+	auto &lambdas = _data->_lambdas;
+	lambdas.resize(size, 0); // initialize lambdas to zero
+	Util::parallelFor(Constant::ZeroSize, size, [&lambdas, &x, &d, &nl, &kernel, d0, eps](size_t i)
+	{
+		real d_i = d[i];
+		real C_i = d_i / d0 - 1;
+
+		if (C_i > 0) // if density is bigger than water density, do constraints projection
+		{
+			real sum_grad_C_i_squared = 0;
+			mVector3 grad_C_i = mVector3::Zero();
+
+			for (const auto j: nl[i])
+			{
+				const auto p_i = x[i];
+				const auto p_j = x[j];
+				const mVector3 grad_C_j = -(*kernel).gradient(p_i - p_j);
+
+				// Equation (8)
+				sum_grad_C_i_squared += grad_C_j.length_squared();
+				grad_C_i -= grad_C_j;
+			}
+
+			sum_grad_C_i_squared += grad_C_i.length_squared();
+
+			// Equation (11): compute lambda
+			real lambda = -C_i / (sum_grad_C_i_squared + eps);
+			lambdas[i] = lambda; // thread safe write
+		}
+	});
+
+
+	// Second, we compute all correction delta p
+	auto &dp = _data->_delta_p;
+	dp.resize(size, mVector3::Zero()); // initialize delta p to zero vector
+
+	Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &x, &nl, &kernel](size_t i)
+	{
+		const auto &lambda_i = lambdas[i];
+
+		// Equation (12): compute delta p
+		mVector3 delta_p_i = mVector3::Zero();
+		for (const auto j: nl[i])
+		{
+			const auto &lambda_j = lambdas[j];
+			const auto p_i = x[i];
+			const auto p_j = x[j];
+			const mVector3 grad_C_j = -(*kernel).gradient(p_i - p_j);
+			delta_p_i -= (lambda_i + lambda_j) * grad_C_j;
+		}
+		dp[i] = delta_p_i; // thread safe write
+	});
+
+	auto &x_to_write = _data->_positions;
+	// Finally, apply delta p to all particles
+	Util::parallelFor(Constant::ZeroSize, size, [&x_to_write, &dp](size_t i)
+	{
+		x_to_write[i] += dp[i];
+	});
 }

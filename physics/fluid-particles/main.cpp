@@ -86,6 +86,7 @@ auto main() -> int
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());
+	Kasumi::Renderer3D::DEFAULT_RENDERER.dark_mode(); // we use dark mode app to protect our eyes~ XD
 	Kasumi::Renderer3D::DEFAULT_RENDERER.launch();
 	return 0;
 }
