@@ -68,6 +68,7 @@ public:
 	// params
 	real _mass 				= 1e-3; // should be recalculated  to fit water density
 	real _radius 			= 0.017;
+	real viscosity_coeff 	= 0.01;
 
 	real target_density 	= 1000; // water density
 	real target_spacing 	= _radius;

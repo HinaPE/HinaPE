@@ -93,7 +93,6 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		const auto &d = _data->_densities;
 		const auto &nl = _data->_neighbor_lists;
 		const auto &kernel = _data->poly6_kernel;
-		const auto &domain = _domain;
 		const auto &m = _data->_mass;
 
 		// for debug
@@ -144,11 +143,9 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 
 		// Second, we compute all correction delta p
 		auto &dp = _data->_delta_p;
-		auto &radius = _data->_radius;
-		auto &restitution = _opt.restitution;
 		dp.resize(size, mVector3::Zero()); // initialize delta p to zero vector
 
-		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &m, d0, &nl, &kernel, &radius, &restitution, &domain, &_debug](size_t i)
+		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &m, d0, &nl, &kernel, &_debug](size_t i)
 		{
 			const auto &lambda_i = lambdas[i];
 
@@ -183,14 +180,44 @@ void HinaPE::PBFSolver::_update_positions_and_velocities() const
 	auto &v = _data->_velocities;
 
 	const auto &p = _data->_predicted_position;
+	const auto &d = _data->_densities;
+	const auto &m = _data->_mass;
+	const auto &nl = _data->_neighbor_lists;
 	const auto size = p.size();
 	const auto dt = _opt.current_dt;
+	const auto &kernel = _data->poly6_kernel;
 
+	// First, update velocities
 	Util::parallelFor(Constant::ZeroSize, size, [&x, &p, &v, &dt](size_t i)
 	{
 		v[i] = (p[i] - x[i]) / dt;
+	});
+
+	// Apply XSPH viscosity
+	auto c = _data->viscosity_coeff;
+	Util::parallelFor(Constant::ZeroSize, size, [&p, &d, &m, &nl, &v, &c, &kernel](size_t i)
+	{
+		const auto &p_i = p[i];
+		const auto &v_i = v[i];
+
+		mVector3 sum_value = mVector3::Zero();
+		for (auto const &j: nl[i])
+		{
+			const real d_j = d[j];
+			const auto &p_j = p[j];
+			const auto &v_j = v[j];
+			mVector3 tmp = v_i - v_j;
+			tmp *= (*kernel)((p_i - p_j).length()) * (m / d_j);
+			sum_value += tmp;
+		}
+
+		v[i] = v_i - c * sum_value;
+	});
+
+	// Finally, update positions
+	Util::parallelFor(Constant::ZeroSize, size, [&x, &p](size_t i)
+	{
 		x[i] = p[i];
-		v[i] *= 0.99;
 	});
 }
 
