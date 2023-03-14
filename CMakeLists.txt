@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.24)
 project(HinaPE VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 # Use this snippet *after* PROJECT(xxx):
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
