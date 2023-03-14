@@ -50,7 +50,7 @@ public:
 
 private:
 	std::mt19937 _rng;
-	Geom::ImplicitSurface3Ptr _surface;
+	Geom::ImplicitSurface3Ptr _surface; // TODO
 };
 
 using ParticleEmitter3Ptr = std::shared_ptr<ParticleEmitter3>;

@@ -1,8 +1,7 @@
 #include "pbf_solver.h"
 
 #define S HinaPE::Math::to_string
-#define Name(x) _debug[i].emplace_back(x)
-#define Record(x) _debug[i].emplace_back(S(x))
+#define Record(x, y) _debug[i].emplace_back(x + S(y))
 
 
 // ============================== Solver ==============================
@@ -67,11 +66,6 @@ void HinaPE::PBFSolver::_apply_force_and_predict_position() const
 
 		v[i] += dt * f[i] / m;
 		p[i] += dt * v[i];
-
-//		Record("ApplyForce & Predict Position");
-//		Record("F:" + S(f[i]) + " = " + S(gravity));
-//		Record("V:" + S(v[i]) + " += " + S(dt) + " * " + S(f[i]) + " / " + S(m));
-//		Record("P:" + S(p[i]) + " += " + S(dt) + " * " + S(v[i]));
 	});
 }
 
@@ -140,14 +134,10 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 
 
 				// for debug
-				Name("C: ");
-				Record(C_i);
-				Name("Sum Grad C Squared: ");
-				Record(sum_grad_C_i_squared);
-				Name("Grad C: ");
-				Record(grad_C_i);
-				Name("Lambda: ");
-				Record(lambda);
+				Record("C: ", C_i);
+				Record("Sum Grad C Squared: ", sum_grad_C_i_squared);
+				Record("Grad C: ", grad_C_i);
+				Record("Lambda: ", lambda);
 			}
 		});
 
@@ -158,7 +148,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		auto &restitution = _opt.restitution;
 		dp.resize(size, mVector3::Zero()); // initialize delta p to zero vector
 
-		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &m, d0, &nl, &kernel, &radius, &restitution, &domain](size_t i)
+		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &m, d0, &nl, &kernel, &radius, &restitution, &domain, &_debug](size_t i)
 		{
 			const auto &lambda_i = lambdas[i];
 
@@ -173,6 +163,8 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 				delta_p_i -= (lambda_i + lambda_j) * grad_C_j;
 			}
 			dp[i] = delta_p_i; // thread safe write
+
+			Record("delta p: ", delta_p_i);
 		});
 
 
@@ -180,7 +172,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		auto &p_to_write = _data->_predicted_position;
 		Util::parallelFor(Constant::ZeroSize, size, [&p_to_write, &dp](size_t i)
 		{
-			p_to_write[i] += dp[i];
+			p_to_write[i] -= dp[i];
 		});
 	}
 }
@@ -198,6 +190,7 @@ void HinaPE::PBFSolver::_update_positions_and_velocities() const
 	{
 		v[i] = (p[i] - x[i]) / dt;
 		x[i] = p[i];
+		v[i] *= 0.99;
 	});
 }
 
@@ -237,7 +230,7 @@ void HinaPE::PBFSolver::Data::_update_density()
 	if (!_mass_inited)
 		_update_mass(); // update mass to ensure the initial density is 1000
 
-	auto &x = _positions;
+	auto &x = _predicted_position;
 	auto &d = _densities;
 	const auto &m = _mass;
 
@@ -297,11 +290,14 @@ void HinaPE::PBFSolver::Data::INSPECT()
 		ImGui::Text("Density: %.3f", _densities[_inst_id]);
 		ImGui::Text("Lambda: %.3f", _lambdas[_inst_id]);
 		ImGui::Text("Neighbors: %zu", _neighbor_lists[_inst_id].size());
-		ImGui::Text("dp: {%.3f, %.3f, %.3f}", _delta_p[_inst_id].x(), _delta_p[_inst_id].y(), _delta_p[_inst_id].z());
+		ImGui::Separator();
 		if (_debug_info.empty())
 			return;
 		for (auto &info: _debug_info[_inst_id])
+		{
 			ImGui::Text("%s\n", info.c_str());
+			ImGui::Separator();
+		}
 	}
 }
 
