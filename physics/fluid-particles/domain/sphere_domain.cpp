@@ -1,6 +1,6 @@
-#include "box_domain.h"
+#include "sphere_domain.h"
 
-HinaPE::BoxDomain::BoxDomain() : Kasumi::CubeObject()
+HinaPE::SphereDomain::SphereDomain()
 {
 	NAME = "Domain";
 	_switch_surface();
