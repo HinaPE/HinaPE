@@ -7,27 +7,17 @@ if (NOT TARGET Kasumi_Render3D)
 endif ()
 
 add_library(HinaPE_Fluid_Particles)
+file(GLOB headers pbf_solver.h pcisph_solver.h sph_solver.h domain/*.h emitter/*.h neighbor_search/*.h kernel/*.h)
+file(GLOB sources pbf_solver.cpp pcisph_solver.cpp sph_solver.cpp domain/*.cpp emitter/*.cpp neighbor_search/*.cpp kernel/*.cpp)
 target_sources(HinaPE_Fluid_Particles
         PRIVATE
-        domain/box_domain.cpp
-        emitter/particle_emitter.cpp
-        neighbor_search/point_neighbor_search.cpp neighbor_search/compact_nsearch.cpp
-        kernel/sph_kernel.cpp
-        sph_solver.cpp
-        pcisph_solver.cpp
-        pbf_solver.cpp
+        ${sources}
 
         PUBLIC
         FILE_SET HEADERS
         BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../
         FILES
-        domain/box_domain.h
-        emitter/particle_emitter.h
-        neighbor_search/point_neighbor_search.h neighbor_search/compact_nsearch.h
-        kernel/sph_kernel.h
-        sph_solver.h
-        pcisph_solver.h
-        pbf_solver.h
+        ${headers}
         )
 set_target_properties(HinaPE_Fluid_Particles PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Fluid_Particles PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
