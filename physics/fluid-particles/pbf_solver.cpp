@@ -35,6 +35,7 @@ void HinaPE::PBFSolver::update(real dt) const
 	// algorithm line 20~24
 	_update_positions_and_velocities();
 
+	// simple collision handling here (temporary)
 	_resolve_collision();
 }
 
@@ -232,7 +233,7 @@ void HinaPE::PBFSolver::_resolve_collision() const
 
 // ============================== Solver Data ==============================
 
-HinaPE::PBFSolver::Data::Data() { track(&_positions); }
+HinaPE::PBFSolver::Data::Data() { track(&_positions); DEFAULT_SCALE = _radius * mVector3::One(); }
 
 void HinaPE::PBFSolver::Data::_update_neighbor()
 {
