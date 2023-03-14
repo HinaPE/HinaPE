@@ -12,7 +12,7 @@ HinaPE is a cross-platform and portable research-oriented physics-based animatio
 Prerequisites & dependencies:
 
 - C++ 20
-- cmake > 3.18
+- cmake > 3.23
 - [intel tbb](https://github.com/oneapi-src/oneTBB.git): we use intel tbb for parallel computing, so make sure you have installed it.
 
 Built-in dependencies
