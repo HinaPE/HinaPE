@@ -26,7 +26,7 @@ public:
 		mVector3 gravity = mVector3(0, -9.8, 0);
 		real restitution = 0.3;
 
-		size_t constraint_solver_iterations = 5;
+		size_t constraint_solver_iterations = 1;
 	} _opt;
 	struct Data;
 	struct DensityConstraints;

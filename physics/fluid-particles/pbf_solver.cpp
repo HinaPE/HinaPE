@@ -158,7 +158,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		auto &restitution = _opt.restitution;
 		dp.resize(size, mVector3::Zero()); // initialize delta p to zero vector
 
-		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &nl, &kernel, &radius, &restitution, &domain](size_t i)
+		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &m, d0, &nl, &kernel, &radius, &restitution, &domain](size_t i)
 		{
 			const auto &lambda_i = lambdas[i];
 
@@ -169,7 +169,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 				const auto &lambda_j = lambdas[j];
 				const auto p_i = p[i];
 				const auto p_j = p[j];
-				const mVector3 grad_C_j = -(*kernel).gradient(p_i - p_j);
+				const mVector3 grad_C_j = -(m / d0) * (*kernel).gradient(p_i - p_j);
 				delta_p_i -= (lambda_i + lambda_j) * grad_C_j;
 			}
 			dp[i] = delta_p_i; // thread safe write
