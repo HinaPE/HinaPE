@@ -1,5 +1,10 @@
 #include "pbf_solver.h"
 
+#define S HinaPE::Math::to_string
+#define Name(x) _debug[i].emplace_back(x)
+#define Record(x) _debug[i].emplace_back(S(x))
+
+
 // ============================== Solver ==============================
 void HinaPE::PBFSolver::init()
 {
@@ -16,6 +21,9 @@ void HinaPE::PBFSolver::init()
 
 void HinaPE::PBFSolver::update(real dt) const
 {
+	_data->_debug_info.clear();
+	_data->_debug_info.resize(_data->_positions.size());
+
 	// algorithm line 1~4
 	_apply_force_and_predict_position();
 
@@ -48,14 +56,22 @@ void HinaPE::PBFSolver::_apply_force_and_predict_position() const
 	const auto g = _opt.gravity;
 	const auto dt = _opt.current_dt;
 
+	// for debug
+	auto &_debug = _data->_debug_info;
+
 	// Gravity Forces
-	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&p, &v, &f, &m, &g, &dt](size_t i)
+	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&p, &v, &f, &m, &g, &dt, &_debug](size_t i)
 	{
 		mVector3 gravity = m * g;
 		f[i] = gravity;
 
 		v[i] += dt * f[i] / m;
 		p[i] += dt * v[i];
+
+//		Record("ApplyForce & Predict Position");
+//		Record("F:" + S(f[i]) + " = " + S(gravity));
+//		Record("V:" + S(v[i]) + " += " + S(dt) + " * " + S(f[i]) + " / " + S(m));
+//		Record("P:" + S(p[i]) + " += " + S(dt) + " * " + S(v[i]));
 	});
 }
 
@@ -85,11 +101,13 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		const auto &kernel = _data->poly6_kernel;
 		const auto &domain = _domain;
 
+		// for debug
+		auto &_debug = _data->_debug_info;
 
 		// First, we compute all lambdas
 		auto &lambdas = _data->_lambdas;
 		lambdas.resize(size, 0); // initialize lambdas to zero
-		Util::parallelFor(Constant::ZeroSize, size, [&lambdas, &p, &d, &nl, &kernel, d0, eps](size_t i)
+		Util::parallelFor(Constant::ZeroSize, size, [&lambdas, &p, &d, &nl, &kernel, d0, eps, &_debug](size_t i)
 		{
 			real d_i = d[i];
 			real C_i = d_i / d0 - 1;
@@ -98,6 +116,9 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 			{
 				real sum_grad_C_i_squared = 0;
 				mVector3 grad_C_i = mVector3::Zero();
+
+				std::string debug_sum_grad_C_i_squared;
+				std::string debug_grad_C_i;
 
 				for (const auto j: nl[i])
 				{
@@ -108,6 +129,10 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 					// Equation (8)
 					sum_grad_C_i_squared += grad_C_j.length_squared();
 					grad_C_i -= grad_C_j;
+
+					// for debug
+//					debug_sum_grad_C_i_squared.append(" + " + S(grad_C_j.length_squared()));
+//					debug_grad_C_i.append(" - " + S(grad_C_j));
 				}
 
 				sum_grad_C_i_squared += grad_C_i.length_squared();
@@ -115,6 +140,15 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 				// Equation (11): compute lambda
 				real lambda = -C_i / (sum_grad_C_i_squared + eps);
 				lambdas[i] = lambda; // thread safe write
+
+
+				// for debug
+				Name("Sum Grad C Squared: ");
+				Record(sum_grad_C_i_squared);
+				Name("Grad C: ");
+				Record(grad_C_i);
+				Name("Lambda: ");
+				Record(lambda);
 			}
 		}, Util::ExecutionPolicy::Serial);
 
@@ -265,6 +299,10 @@ void HinaPE::PBFSolver::Data::INSPECT()
 		ImGui::Text("Lambda: %.3f", _lambdas[_inst_id]);
 		ImGui::Text("Neighbors: %zu", _neighbor_lists[_inst_id].size());
 		ImGui::Text("dp: {%.3f, %.3f, %.3f}", _delta_p[_inst_id].x(), _delta_p[_inst_id].y(), _delta_p[_inst_id].z());
+		if (_debug_info.empty())
+			return;
+		for (auto &info: _debug_info[_inst_id])
+			ImGui::Text("%s\n", info.c_str());
 	}
 }
 

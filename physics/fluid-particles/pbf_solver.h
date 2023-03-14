@@ -26,7 +26,7 @@ public:
 		mVector3 gravity = mVector3(0, -9.8, 0);
 		real restitution = 0.3;
 
-		size_t constraint_solver_iterations = 3;
+		size_t constraint_solver_iterations = 1;
 	} _opt;
 	struct Data;
 	struct DensityConstraints;
@@ -62,6 +62,7 @@ public:
 	std::vector<mVector3> 	_predicted_position;
 	std::vector<real> 		_lambdas;
 	std::vector<mVector3> 	_delta_p;
+	std::vector<std::vector<std::string>> _debug_info;
 
 	// params
 	real _mass 				= 1e-3; // should be recalculated  to fit water density
