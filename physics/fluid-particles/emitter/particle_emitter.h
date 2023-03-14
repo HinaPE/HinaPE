@@ -43,7 +43,7 @@ public:
 
 	struct Opt
 	{
-		real spacing = 0.02;
+		real spacing = 2 * 0.017;
 		bool one_shot = true;
 		bool shot = false;
 	} _opt;

@@ -78,9 +78,7 @@ void HinaPE::PBFSolver::_apply_force_and_predict_position() const
 void HinaPE::PBFSolver::_update_neighbor() const
 {
 	_data->_densities.resize(_data->_positions.size(), 0);
-
 	_data->_update_neighbor();
-	_data->_update_density();
 }
 
 void HinaPE::PBFSolver::_solve_density_constraints() const
@@ -91,6 +89,8 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		// "i" is the index of the current particle,
 		// "j" is the index of the neighbor particle
 
+		_data->_update_density();
+
 		const size_t size = _data->_predicted_position.size();
 		const real d0 = _data->target_density;
 		const real eps = 1e-6;
@@ -100,6 +100,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		const auto &nl = _data->_neighbor_lists;
 		const auto &kernel = _data->poly6_kernel;
 		const auto &domain = _domain;
+		const auto &m = _data->_mass;
 
 		// for debug
 		auto &_debug = _data->_debug_info;
@@ -107,7 +108,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		// First, we compute all lambdas
 		auto &lambdas = _data->_lambdas;
 		lambdas.resize(size, 0); // initialize lambdas to zero
-		Util::parallelFor(Constant::ZeroSize, size, [&lambdas, &p, &d, &nl, &kernel, d0, eps, &_debug](size_t i)
+		Util::parallelFor(Constant::ZeroSize, size, [&lambdas, &p, &d, &m, &nl, &kernel, d0, eps, &_debug](size_t i)
 		{
 			real d_i = d[i];
 			real C_i = d_i / d0 - 1;
@@ -127,12 +128,8 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 					const mVector3 grad_C_j = -(*kernel).gradient(p_i - p_j);
 
 					// Equation (8)
-					sum_grad_C_i_squared += grad_C_j.length_squared();
+					sum_grad_C_i_squared += (m / d0) * grad_C_j.length_squared();
 					grad_C_i -= grad_C_j;
-
-					// for debug
-//					debug_sum_grad_C_i_squared.append(" + " + S(grad_C_j.length_squared()));
-//					debug_grad_C_i.append(" - " + S(grad_C_j));
 				}
 
 				sum_grad_C_i_squared += grad_C_i.length_squared();
@@ -143,6 +140,8 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 
 
 				// for debug
+				Name("C: ");
+				Record(C_i);
 				Name("Sum Grad C Squared: ");
 				Record(sum_grad_C_i_squared);
 				Name("Grad C: ");

@@ -66,17 +66,17 @@ public:
 
 	// params
 	real _mass 				= 1e-3; // should be recalculated  to fit water density
-	real _radius 			= 0.1;
+	real _radius 			= 0.017;
 
 	real target_density 	= 1000; // water density
 	real target_spacing 	= _radius;
-	real kernel_radius_over_target_spacing = 1.8;
+	real kernel_radius_over_target_spacing = 4;
 	real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
 
 
 	SPHKernelPtr poly6_kernel = std::make_shared<StdKernel>(kernel_radius);
 	SPHKernelPtr spiky_kernel = std::make_shared<SpikyKernel>(kernel_radius);
-	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>(_radius);
+	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>(kernel_radius);
 	std::vector<std::vector<unsigned int>> _neighbor_lists;
 
 	Data();
