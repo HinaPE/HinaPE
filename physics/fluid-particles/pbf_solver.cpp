@@ -113,7 +113,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 			real d_i = d[i];
 			real C_i = d_i / d0 - 1;
 
-			if (C_i > 1e-8) // if density is bigger than water density, do constraints projection
+			if (C_i > 0) // if density is bigger than water density, do constraints projection
 			{
 				real sum_grad_C_i_squared = 0;
 				mVector3 grad_C_i = mVector3::Zero();
@@ -125,17 +125,17 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 				{
 					const auto p_i = p[i];
 					const auto p_j = p[j];
-					const mVector3 grad_C_j = -(*kernel).gradient(p_i - p_j);
+					const mVector3 grad_C_j = -(m / d0) * (*kernel).gradient(p_i - p_j);
 
 					// Equation (8)
-					sum_grad_C_i_squared += (m / d0) * grad_C_j.length_squared();
+					sum_grad_C_i_squared += grad_C_j.length_squared();
 					grad_C_i -= grad_C_j;
 				}
 
 				sum_grad_C_i_squared += grad_C_i.length_squared();
 
 				// Equation (11): compute lambda
-				real lambda = -C_i / (sum_grad_C_i_squared + eps);
+				real lambda = -C_i / (sum_grad_C_i_squared + eps); // eps is for soft constraint
 				lambdas[i] = lambda; // thread safe write
 
 
@@ -149,7 +149,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 				Name("Lambda: ");
 				Record(lambda);
 			}
-		}, Util::ExecutionPolicy::Serial);
+		});
 
 
 		// Second, we compute all correction delta p
