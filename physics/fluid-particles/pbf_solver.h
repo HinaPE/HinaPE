@@ -5,6 +5,7 @@
 // MPL-2.0 license
 
 #include "domain/box_domain.h"
+#include "domain/sphere_domain.h"
 #include "kernel/sph_kernel.h"
 #include "emitter/particle_emitter.h"
 #include "neighbor_search/point_neighbor_search.h"
@@ -30,9 +31,9 @@ public:
 	} _opt;
 	struct Data;
 	struct DensityConstraints;
-	std::shared_ptr<Data> _data;
-	BoxDomainPtr _domain;
-	ParticleEmitter3Ptr _emitter;
+	std::shared_ptr<Data> 		_data;
+	Geom::RigidBodyCollider3Ptr _domain;
+	ParticleEmitter3Ptr 		_emitter;
 
 protected:
 	void _emit_particles() const;
