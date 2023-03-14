@@ -157,6 +157,14 @@ struct Fireworks : public SimpleParticlesObject, public Kasumi::ObjectParticles3
 最后，同样的，我们将Solver嵌入Renderer中，并作简单的初始化。
 
 ```c++
+	auto solver = std::make_shared<SimpleFreeFallSolver>();
 
+	auto ball = std::make_shared<Ball>();
+	ball->x = {0, 5, 0};
+	solver->add(ball);
+
+	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene) { scene->add(ball); };
+	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt) { solver->update(dt); };
+	Kasumi::Renderer3D::DEFAULT_RENDERER.launch();
 ```
 
