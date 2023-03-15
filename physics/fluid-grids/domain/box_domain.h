@@ -6,6 +6,8 @@
 
 #include "backends/objects/object3D.h"
 
+#include "geom/grid.h"
+
 namespace HinaPE
 {
 class GridBoxDomain : public Kasumi::ObjectGrid3D
