@@ -5,9 +5,12 @@ project(HinaPE-tutorials VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engi
 add_subdirectory(000-heart-beats)
 add_subdirectory(001-view-model)
 
-# basic applications
+# physics applications
 add_subdirectory(101-simple-freefall)
 add_subdirectory(102-simple-particle-system)
+
+# rendering applications
+add_subdirectory(201-volume-render)
 
 # advanced applications
 add_subdirectory(401-particle-solid-coupling)

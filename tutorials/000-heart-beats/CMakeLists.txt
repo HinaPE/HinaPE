@@ -7,5 +7,5 @@ target_link_libraries(000-HeartBeats PUBLIC Kasumi_Render3D)
 target_compile_definitions(
         000-HeartBeats
         PUBLIC
-        -DMyShaderDir="${CMAKE_CURRENT_SOURCE_DIR}/shaders/"
+        MyShaderDir="${CMAKE_CURRENT_SOURCE_DIR}/shaders/"
 )
