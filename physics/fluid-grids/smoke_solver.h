@@ -5,7 +5,8 @@
 // MPL-2.0 license
 
 #include "backends/objects/object3D.h"
-#include "geom/grid.h"
+
+#include "sub_solver/advection_solver.h"
 
 namespace HinaPE
 {
@@ -16,12 +17,24 @@ public:
 	std::shared_ptr<Data> _data;
 };
 
-class SmokeSolver::Data : public CopyDisable, public Kasumi::ObjectGrid3D
+struct SmokeSolver::Data : public CopyDisable, public Kasumi::ObjectGrid3D
 {
-public:
 	Geom::FaceCenteredVectorGrid3Ptr _velocity;
 	Geom::ScalarGrid3Ptr _density;
 	Geom::ScalarGrid3Ptr _temperature;
+
+	mSize3 _resolution;
+	mVector3 _origin;
+	mVector3 _spacing;
+	real domain_size = 1.0;
+	bool use_domain_size = false;
+
+	// params
+	real _viscosity = 0.0;
+	real _max_cfl = 5.0;
+
+	// sub solvers
+	AdvectionSolverPtr _advection_solver;
 
 	Data();
 };

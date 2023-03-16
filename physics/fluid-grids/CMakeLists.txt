@@ -7,8 +7,8 @@ if (NOT TARGET Kasumi_Render3D)
 endif ()
 
 add_library(HinaPE_Fluid_Grids)
-file(GLOB headers smoke_solver.h domain/*.h)
-file(GLOB sources smoke_solver.cpp domain/*.cpp)
+file(GLOB headers smoke_solver.h domain/*.h sub_solver/*.h)
+file(GLOB sources smoke_solver.cpp domain/*.cpp sub_solver/*.cpp)
 target_sources(HinaPE_Fluid_Grids
         PRIVATE
         ${sources}
