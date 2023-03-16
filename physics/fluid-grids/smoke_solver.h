@@ -13,6 +13,7 @@ class SmokeSolver
 {
 public:
 	struct Data;
+	std::shared_ptr<Data> _data;
 };
 
 class SmokeSolver::Data : public CopyDisable, public Kasumi::ObjectGrid3D

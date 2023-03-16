@@ -8,7 +8,7 @@ endif ()
 
 add_library(HinaPE_Fluid_Grids)
 file(GLOB headers smoke_solver.h domain/*.h)
-file(GLOB sources smoke_solver.cpp domain/*.h)
+file(GLOB sources smoke_solver.cpp domain/*.cpp)
 target_sources(HinaPE_Fluid_Grids
         PRIVATE
         ${sources}
@@ -27,7 +27,7 @@ target_link_libraries(HinaPE_Fluid_Grids PUBLIC Kasumi_Render3D)
 add_executable(HinaPE_Fluid_Grids_App main.cpp)
 set_target_properties(HinaPE_Fluid_Grids_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Fluid_Grids_App PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(HinaPE_Fluid_Grids_App PUBLIC HinaPE_Fluid_Particles)
+target_link_libraries(HinaPE_Fluid_Grids_App PUBLIC HinaPE_Fluid_Grids)
 
 # INSTALL TARGETS
 INSTALL(
