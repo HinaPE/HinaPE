@@ -8,10 +8,19 @@ endif ()
 
 add_subdirectory(box2d)
 
-file(GLOB_RECURSE src
-        solver.cpp solver.h
+add_library(HinaPE_Rigid2D)
+file(GLOB headers solver.h)
+file(GLOB sources solver.cpp)
+target_sources(HinaPE_Rigid2D
+        PRIVATE
+        ${sources}
+
+        PUBLIC
+        FILE_SET HEADERS
+        BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../
+        FILES
+        ${headers}
         )
-add_library(HinaPE_Rigid2D ${src})
 set_target_properties(HinaPE_Rigid2D PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Rigid2D PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 target_link_libraries(HinaPE_Rigid2D PUBLIC Kasumi_Render2D box2d)

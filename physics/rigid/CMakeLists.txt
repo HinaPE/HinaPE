@@ -11,10 +11,19 @@ if (HINAPE_DOUBLE)
     target_compile_definitions(react-physics PUBLIC IS_RP3D_DOUBLE_PRECISION_ENABLED)
 endif ()
 
-file(GLOB_RECURSE src
-        solver.cpp solver.h
-        )
 add_library(HinaPE_Rigid ${src})
+file(GLOB headers solver.h)
+file(GLOB sources solver.cpp)
+target_sources(HinaPE_Rigid
+        PRIVATE
+        ${sources}
+
+        PUBLIC
+        FILE_SET HEADERS
+        BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../
+        FILES
+        ${headers}
+        )
 set_target_properties(HinaPE_Rigid PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Rigid PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 target_link_libraries(HinaPE_Rigid PUBLIC Kasumi_Render3D react-physics)
