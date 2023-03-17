@@ -5,11 +5,16 @@ IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/install" CACHE PATH "HinaPE install directory" FORCE)
 ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
+# renderers backend
 add_subdirectory(kasumi)
+
+# physics engines
 add_subdirectory(physics/cloth)
 add_subdirectory(physics/rigid)
 add_subdirectory(physics/rigid-2d)
 add_subdirectory(physics/fluid-particles)
 add_subdirectory(physics/fluid-grids)
 add_subdirectory(physics/fluid-hybrid)
+
+# tutorials
 add_subdirectory(tutorials)
