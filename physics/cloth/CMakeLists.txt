@@ -6,11 +6,19 @@ if (NOT TARGET Kasumi_Render3D)
     return()
 endif ()
 
-file(GLOB_RECURSE src
-        objects/*.cpp  objects/*.h
-        pbd/*.cpp  pbd/*.h
+add_library(HinaPE_Cloth STATIC)
+file(GLOB headers objects/*.h pbd/*.h)
+file(GLOB sources objects/*.cpp pbd/*.cpp)
+target_sources(HinaPE_Cloth
+        PRIVATE
+        ${sources}
+
+        PUBLIC
+        FILE_SET HEADERS
+        BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../
+        FILES
+        ${headers}
         )
-add_library(HinaPE_Cloth ${src})
 set_target_properties(HinaPE_Cloth PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Cloth PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 target_link_libraries(HinaPE_Cloth PUBLIC Kasumi_Render3D)

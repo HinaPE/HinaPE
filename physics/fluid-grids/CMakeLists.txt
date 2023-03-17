@@ -6,7 +6,7 @@ if (NOT TARGET Kasumi_Render3D)
     return()
 endif ()
 
-add_library(HinaPE_Fluid_Grids)
+add_library(HinaPE_Fluid_Grids STATIC)
 file(GLOB headers smoke_solver.h domain/*.h sub_solver/*.h emitter/*.h)
 file(GLOB sources smoke_solver.cpp domain/*.cpp sub_solver/*.cpp emitter/*.cpp)
 target_sources(HinaPE_Fluid_Grids

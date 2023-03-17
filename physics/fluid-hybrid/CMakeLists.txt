@@ -6,7 +6,7 @@ if (NOT TARGET Kasumi_Render3D)
     return()
 endif ()
 
-add_library(HinaPE_Fluid_Hybrid)
+add_library(HinaPE_Fluid_Hybrid STATIC)
 file(GLOB headers flip_solver.h apic_solver.h)
 file(GLOB sources flip_solver.cpp apic_solver.cpp)
 target_sources(HinaPE_Fluid_Hybrid

@@ -11,7 +11,7 @@ if (HINAPE_DOUBLE)
     target_compile_definitions(react-physics PUBLIC IS_RP3D_DOUBLE_PRECISION_ENABLED)
 endif ()
 
-add_library(HinaPE_Rigid ${src})
+add_library(HinaPE_Rigid STATIC)
 file(GLOB headers solver.h)
 file(GLOB sources solver.cpp)
 target_sources(HinaPE_Rigid

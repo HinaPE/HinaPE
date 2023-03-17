@@ -8,7 +8,7 @@ endif ()
 
 add_subdirectory(box2d)
 
-add_library(HinaPE_Rigid2D)
+add_library(HinaPE_Rigid2D STATIC)
 file(GLOB headers solver.h)
 file(GLOB sources solver.cpp)
 target_sources(HinaPE_Rigid2D
