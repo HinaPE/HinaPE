@@ -19,7 +19,6 @@ auto main() -> int
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._debugger = [&]() {};
 
-	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(rigid.get());
 	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(fluid.get());
 	Kasumi::Renderer3D::DEFAULT_RENDERER.launch();
 	return 0;

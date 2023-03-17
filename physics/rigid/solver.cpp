@@ -10,10 +10,7 @@ static auto toM(const reactphysics3d::Quaternion &q) -> mQuaternion { return mQu
 static auto toM(const reactphysics3d::Transform &t) -> Kasumi::Pose { return Kasumi::Pose{toM(t.getPosition()), toM(t.getOrientation()).euler(), {1, 1, 1}}; }
 // @formatter:on
 
-HinaPE::RigidSolver::RigidSolver()
-{
-	world = physicsCommon.createPhysicsWorld();
-}
+HinaPE::RigidSolver::RigidSolver() : world(physicsCommon.createPhysicsWorld()) {}
 
 void HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType type)
 {
@@ -28,8 +25,4 @@ void HinaPE::RigidSolver::update(real dt)
 {
 	world->update(dt);
 	for (auto &[object, rb]: _objects) { object->POSE = toM(rb->getTransform()); }
-}
-
-void HinaPE::RigidSolver::INSPECT()
-{
 }

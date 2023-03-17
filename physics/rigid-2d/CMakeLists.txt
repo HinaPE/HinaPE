@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 project(HinaPE_Rigid2D VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
 if (NOT TARGET Kasumi_Render2D)
-    message(FATAL_ERROR "Kasumi_Render3D is not found")
+    message(FATAL_ERROR "Kasumi_Render2D is not found")
     return()
 endif ()
 
