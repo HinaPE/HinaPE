@@ -7,6 +7,7 @@
 #include "backends/objects/object3D.h"
 
 #include "sub_solver/advection_solver.h"
+#include "domain/box_domain.h"
 
 namespace HinaPE
 {
