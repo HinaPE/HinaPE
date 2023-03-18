@@ -49,6 +49,9 @@ public:
 			double dt,
 			Geom::FaceCenteredVectorGrid3 *output,
 			const Geom::ScalarField3 &boundarySdf) override;
+
+private:
+	auto backtrace(const Geom::VectorField3 &flow, real dt, real h, const mVector3 &pt0, const Geom::ScalarField3 &boundary_sdf);
 };
 
 class CubicSemiLagrangianSolver : public SemiLagrangianSolver

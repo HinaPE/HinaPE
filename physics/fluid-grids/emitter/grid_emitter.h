@@ -23,7 +23,7 @@ public:
 	void emit(Geom::ScalarGrid3 *grid) final;
 
 	Geom::ImplicitSurface3Ptr _source_region;
-	real _grid_spacing = 0.1;
+	real _grid_spacing;
 	const std::function<real(real, const mVector3 &, real)> scalar_mapper = [&](real sdf, const mVector3 &, real old)
 	{
 		real step = Constant::One - Math::smeared_heaviside_sdf(sdf / _grid_spacing); // [-1.5, 1.5] -> [-1, 1]
