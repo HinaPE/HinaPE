@@ -83,7 +83,16 @@ auto main() -> int
 		if (key == GLFW_KEY_H && action == GLFW_RELEASE)
 			vis->off();
 		if (key == GLFW_KEY_O && action == GLFW_PRESS)
-			save_particles_as_pos(data->_positions.data()->data(), data->_positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "output.xyz");
+		{
+			std::thread(
+					[&]()
+					{
+						save_particles_as_pos(data->_positions.data()->data(), data->_positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "output.xyz");
+						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + "particles2obj.exe" + " " + std::string(DEFAULT_OUTPUT_DIR) + "output.xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "output.obj";
+						std::cout << command << std::endl;
+						exec(command.c_str());
+					}).detach();
+		}
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());

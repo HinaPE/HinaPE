@@ -12,4 +12,33 @@ void save_particles_as_pos(real *ptr, size_t size, const std::string &filename)
 	std::cout << "Saved " << size << " particles to " << filename << std::endl;
 }
 
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
+
+#ifdef WIN32
+#define open _popen
+#define close _pclose
+#else
+#define open popen
+#define close pclose
+#endif
+
+auto exec(const char *cmd) -> std::string
+{
+	std::array<char, 128> buffer{};
+	std::string result;
+	std::unique_ptr<FILE, decltype(&close)> pipe(open(cmd, "r"), close);
+	if (!pipe)
+		throw std::runtime_error("popen() failed!");
+	while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+		result += buffer.data();
+	std::cout << result << std::endl;
+	std::cout << "complete!" << std::endl;
+	return result;
+}
+
 #endif //HINAPE_EXPORT_TO_XYZ_H
