@@ -145,10 +145,16 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		// Second, we compute all correction delta p
 		auto &dp = _data->_delta_p;
 		dp.resize(size, mVector3::Zero()); // initialize delta p to zero vector
+        auto &h = _data->kernel_radius;
 
-		Util::parallelFor(Constant::ZeroSize, size, [&dp, &lambdas, &p, &m, d0, &nl, &kernel, &_debug](size_t i)
+		Util::parallelFor(Constant::ZeroSize, size, [&dp, &h, &lambdas, &p, &m, d0, &nl, &kernel, &_debug](size_t i)
 		{
 			const auto &lambda_i = lambdas[i];
+
+            auto k_corr = m * 1.0e-04;
+            //auto k_corr = 0.1;
+            auto n_corr = 4.0;
+            auto q_corr = 0.1;
 
 			// Equation (12): compute delta p
 			mVector3 delta_p_i = mVector3::Zero();
@@ -157,8 +163,13 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 				const auto &lambda_j = lambdas[j];
 				const auto p_i = p[i];
 				const auto p_j = p[j];
+
+                const auto w_corr = (*kernel).operator()(q_corr * h);
+                const auto ratio = (*kernel).operator()((p_i - p_j).length()) / w_corr;
+                const auto s_corr = -k_corr * pow(ratio,n_corr);
+
 				const mVector3 grad_C_j = -(m / d0) * (*kernel).gradient(p_i - p_j);
-				delta_p_i -= (lambda_i + lambda_j) * grad_C_j;
+				delta_p_i -= (lambda_i + lambda_j + s_corr) * grad_C_j;
 			}
 			dp[i] = delta_p_i; // thread safe write
 
@@ -196,12 +207,14 @@ void HinaPE::PBFSolver::_update_positions_and_velocities() const
 
 	// Apply XSPH viscosity
 	auto c = _data->viscosity_coeff;
+
 	Util::parallelFor(Constant::ZeroSize, size, [&p, &d, &m, &nl, &v, &c, &kernel](size_t i)
 	{
 		const auto &p_i = p[i];
 		const auto &v_i = v[i];
 
 		mVector3 sum_value = mVector3::Zero();
+
 		for (auto const &j: nl[i])
 		{
 			const real d_j = d[j];
@@ -209,11 +222,47 @@ void HinaPE::PBFSolver::_update_positions_and_velocities() const
 			const auto &v_j = v[j];
 			mVector3 tmp = v_i - v_j;
 			tmp *= (*kernel)((p_i - p_j).length()) * (m / d_j);
-			sum_value += tmp;
-		}
+            sum_value += tmp;
+        }
 
 		v[i] = v_i - c * sum_value;
 	});
+
+    // Apply Vorticity Confinement
+
+    Util::parallelFor(Constant::ZeroSize, size, [&p, &nl, &v, &dt, &kernel](size_t i)
+    {
+        const auto &p_i = p[i];
+        const auto &v_i = v[i];
+
+        mVector3 f_vorticity = mVector3::Zero();
+        mVector3 N = mVector3::Zero();
+        mVector3 curl = mVector3::Zero();
+        mVector3 curl_x = mVector3::Zero();
+        mVector3 curl_y = mVector3::Zero();
+        mVector3 curl_z = mVector3::Zero();
+
+        for (auto const &j: nl[i])
+        {
+            const auto &p_j = p[j];
+            const auto &v_j = v[j];
+            mVector3 tmp = v_j - v_i;
+            curl += tmp.cross((*kernel).gradient(p_i - p_j));
+            curl_x += tmp.cross((*kernel).gradient(p_i + mVector3(0.01,0,0) - p_j));
+            curl_y += tmp.cross((*kernel).gradient(p_i + mVector3(0,0.01,0) - p_j));
+            curl_z += tmp.cross((*kernel).gradient(p_i + mVector3(0,0,0.01) - p_j));
+        }
+
+        real curlLen = curl.length();
+        N.x() = curl_x.length() - curlLen;
+        N.y() = curl_y.length() - curlLen;
+        N.z() = curl_z.length() - curlLen;
+        N = N.normalized();
+        f_vorticity = 0.00001 * N.cross(curl);
+
+        v[i] = v_i + f_vorticity * dt;
+
+    });
 
 	// Finally, update positions
 	Util::parallelFor(Constant::ZeroSize, size, [&x, &p](size_t i)
