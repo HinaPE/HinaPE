@@ -11,19 +11,22 @@ namespace HinaPE
 class GridEmitter3
 {
 public:
-	virtual void emit() = 0;
+	virtual void emit(Geom::ScalarGrid3 *grid) = 0;
 };
 
 class VolumeGridEmitter3 : public GridEmitter3
 {
 public:
-	void emit() final;
+	VolumeGridEmitter3();
 
-	Geom::ImplicitSurface3Ptr _source_region = std::make_shared<Geom::SurfaceToImplicit3>(std::make_shared<Geom::Sphere3>());
-	const std::function<real(real, const mVector3 &, real)> scalar_mapper = [](real sdf, const mVector3 &, real old)
+public:
+	void emit(Geom::ScalarGrid3 *grid) final;
+
+	Geom::ImplicitSurface3Ptr _source_region;
+	real _grid_spacing = 0.1;
+	const std::function<real(real, const mVector3 &, real)> scalar_mapper = [&](real sdf, const mVector3 &, real old)
 	{
-		const real grid_spacing = 0.1;
-		real step = Constant::One - Math::smeared_heaviside_sdf(sdf / grid_spacing);
+		real step = Constant::One - Math::smeared_heaviside_sdf(sdf / _grid_spacing); // [-1.5, 1.5] -> [-1, 1]
 		return std::max(old, step); // (max - min) * step + min, max = 1 min = 0
 	};
 	const std::function<real(real, const mVector3 &, const mVector3 &)> vector_mapper = [](real x, const mVector3 &pt, const mVector3 &old)

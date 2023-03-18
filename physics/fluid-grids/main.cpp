@@ -5,14 +5,15 @@ auto main() -> int
 {
 	auto solver = std::make_shared<HinaPE::SmokeSolver>();
 	auto data = std::make_shared<HinaPE::SmokeSolver::Data>();
-	auto domain = std::make_shared<HinaPE::BoxDomain>();
+	auto emitter = std::make_shared<HinaPE::VolumeGridEmitter3>();
+	emitter->emit(&(*data->_density));
 
 	solver->_data = data;
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
 		scene->add(data);
-		scene->add(domain);
+		scene->add(data->_domain);
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER.dark_mode();

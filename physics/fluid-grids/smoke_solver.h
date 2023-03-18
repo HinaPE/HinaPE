@@ -8,6 +8,7 @@
 
 #include "sub_solver/advection_solver.h"
 #include "domain/box_domain.h"
+#include "emitter/grid_emitter.h"
 
 namespace HinaPE
 {
@@ -27,7 +28,6 @@ struct SmokeSolver::Data : public CopyDisable, public Kasumi::ObjectGrid3D
 	mSize3 _resolution;
 	mVector3 _origin;
 	mVector3 _spacing;
-	real domain_size = 1.0;
 	bool use_domain_size = false;
 
 	// params
@@ -36,6 +36,8 @@ struct SmokeSolver::Data : public CopyDisable, public Kasumi::ObjectGrid3D
 
 	// sub solvers
 	AdvectionSolverPtr _advection_solver;
+
+	BoxDomainPtr _domain;
 
 	Data();
 };
