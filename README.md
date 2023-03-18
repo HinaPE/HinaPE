@@ -4,6 +4,8 @@
 [![macOS Build](https://github.com/HinaPE/HinaPE/actions/workflows/macos.yml/badge.svg)](https://github.com/HinaPE/HinaPE/actions/workflows/macos.yml)
 [![Windows Build](https://github.com/HinaPE/HinaPE/actions/workflows/windows.yml/badge.svg)](https://github.com/HinaPE/HinaPE/actions/workflows/windows.yml)
 
+BREAKING: 🎉 HinaPE reached 1000 commits! 🎉
+
 ## Introduction
 HinaPE is a cross-platform and portable research-oriented physics-based animation infrastructure. HinaPE is a recursive acronym for "**HinaPE is not a Physics Engine**".
 
