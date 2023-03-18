@@ -69,6 +69,19 @@ auto main() -> int
 	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
 	{
 		solver->update(dt);
+
+//		static int frame_num = 0;
+//		if (frame_num < 60)
+//		{
+//			std::thread(
+//					[&]()
+//					{
+//						save_particles_as_pos(data->_positions.data()->data(), data->_positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".xyz");
+//						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + "particles2obj.exe" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".obj";
+//						exec(command.c_str());
+//					}).detach();
+//			++frame_num;
+//		}
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._debugger = [&]()
@@ -87,9 +100,8 @@ auto main() -> int
 			std::thread(
 					[&]()
 					{
-						save_particles_as_pos(data->_positions.data()->data(), data->_positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "output.xyz");
-						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + "particles2obj.exe" + " " + std::string(DEFAULT_OUTPUT_DIR) + "output.xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "output.obj";
-						std::cout << command << std::endl;
+						save_particles_as_pos(data->_positions.data()->data(), data->_positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz");
+						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + "particles2obj.exe" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".obj";
 						exec(command.c_str());
 					}).detach();
 		}

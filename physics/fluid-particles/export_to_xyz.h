@@ -41,4 +41,19 @@ auto exec(const char *cmd) -> std::string
 	return result;
 }
 
+//if (argc < 2 || argc > 4) return EXIT_FAILURE;
+//
+//std::string inputFilename = std::string(argv[1]);
+//size_t lastindex = inputFilename.find_last_of(".");
+//std::string rawname = inputFilename.substr(0, lastindex);
+//std::string outputFilename = rawname + ".obj";
+//if (argc == 3) {
+//outputFilename = std::string(argv[2]);
+//}
+//Size3 resolution(200, 200, 200);
+//Vector3D gridSpacing(0.01, 0.01, 0.01);
+//Vector3D origin = Vector3D(-1, -1, -1);
+//std::string method = "anisotropic";
+//double kernelRadius = 0.1;
+
 #endif //HINAPE_EXPORT_TO_XYZ_H
