@@ -29,6 +29,5 @@ HinaPE::SmokeSolver::Data::Data()
 	_velocity = std::make_shared<Geom::FaceCenteredVectorGrid3>();
 	_velocity->resize(_resolution, _spacing, _origin, mVector3::Zero());
 
-	_domain = std::make_shared<BoxDomain>();
 	_domain->POSE.scale = 0.1 * mVector3(25, 25, 25);
 }

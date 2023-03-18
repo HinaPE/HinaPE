@@ -8,6 +8,8 @@
 
 #include "sub_solver/advection_solver.h"
 #include "sub_solver/grid_boundary_condition_solver.h"
+#include "sub_solver/grid_pressure_solver.h"
+#include "sub_solver/grid_diffusion_solver.h"
 #include "domain/box_domain.h"
 #include "emitter/grid_emitter.h"
 
@@ -43,10 +45,12 @@ struct SmokeSolver::Data : public CopyDisable, public Kasumi::ObjectGrid3D
 	real _max_cfl = 5.0;
 
 	// sub solvers
-	AdvectionSolverPtr _advection_solver;
-	GridBoundaryConditionSolverPtr _boundary_condition_solver;
+	AdvectionSolverPtr _advection_solver = std::make_shared<SemiLagrangianSolver>();
+	GridBoundaryConditionSolverPtr _boundary_condition_solver = std::make_shared<GridBoundaryConditionSolver>();
+	GridPressureSolverPtr _pressure_solver = std::make_shared<GridPressureSolver>();
+	GridDiffusionSolverPtr _diffusion_solver = std::make_shared<GridDiffusionSolver>();
 
-	BoxDomainPtr _domain;
+	BoxDomainPtr _domain = std::make_shared<BoxDomain>();
 
 	Data();
 };
