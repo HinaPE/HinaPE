@@ -5,6 +5,12 @@
 
 #include "export_to_xyz.h"
 
+#ifdef WIN32
+#define ParticleToObj "particles2obj.exe"
+#else
+#define ParticleToObj "particles2obj"
+#endif
+
 using SolverType =
 //		HinaPE::SPHSolver;
 //		HinaPE::PCISPHSolver;
@@ -77,7 +83,7 @@ auto main() -> int
 //					[&]()
 //					{
 //						save_particles_as_pos(data->_positions.data()->data(), data->_positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".xyz");
-//						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + "particles2obj.exe" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".obj";
+//						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + std::string(ParticleToObj) + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".obj";
 //						exec(command.c_str());
 //					}).detach();
 //			++frame_num;
@@ -101,7 +107,7 @@ auto main() -> int
 					[&]()
 					{
 						save_particles_as_pos(data->_positions.data()->data(), data->_positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz");
-						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + "particles2obj.exe" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".obj";
+						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + std::string(ParticleToObj) + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".obj";
 						exec(command.c_str());
 					}).detach();
 		}
