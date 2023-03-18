@@ -7,6 +7,7 @@ media
 bin
 lib
 *.log
-output
+output/*.xyz
+output/*.obj
 TODO.md
 install

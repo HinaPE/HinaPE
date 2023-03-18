@@ -7,7 +7,7 @@ if (NOT TARGET Kasumi_Render3D)
 endif ()
 
 add_library(HinaPE_Fluid_Particles STATIC)
-file(GLOB headers pbf_solver.h pcisph_solver.h sph_solver.h domain/*.h emitter/*.h neighbor_search/*.h kernel/*.h)
+file(GLOB headers pbf_solver.h pcisph_solver.h export_to_xyz.h sph_solver.h domain/*.h emitter/*.h neighbor_search/*.h kernel/*.h)
 file(GLOB sources pbf_solver.cpp pcisph_solver.cpp sph_solver.cpp domain/*.cpp emitter/*.cpp neighbor_search/*.cpp kernel/*.cpp)
 target_sources(HinaPE_Fluid_Particles
         PRIVATE
@@ -28,6 +28,11 @@ add_executable(HinaPE_Fluid_Particles_App main.cpp)
 set_target_properties(HinaPE_Fluid_Particles_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Fluid_Particles_App PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(HinaPE_Fluid_Particles_App PUBLIC HinaPE_Fluid_Particles)
+target_compile_definitions(
+        HinaPE_Fluid_Particles_App
+        PUBLIC
+        DEFAULT_OUTPUT_DIR="${PROJECT_SOURCE_DIR}/../../output/"
+)
 
 # INSTALL TARGETS
 INSTALL(
