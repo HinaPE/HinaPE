@@ -3,7 +3,7 @@
 auto main() -> int
 {
 	auto painter = std::make_shared<Kasumi::ShaderPainter>();
-	painter->load_shader(std::string(MyShaderDir) + "cloud.glsl");
+	painter->load_shader(std::string(MyShaderDir) + "bunny.glsl");
 	painter->launch();
 	return 0;
 }
