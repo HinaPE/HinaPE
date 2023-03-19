@@ -48,17 +48,27 @@ struct NeighborSearchVisualization : public Kasumi::ObjectParticles3D
 	}
 };
 
+
+
 auto main() -> int
 {
 	// prepare solver
 	auto solver = std::make_shared<SolverType>();
 	auto data = std::make_shared<SolverDataType>();
 
+    auto boundary_data = std::make_shared<SolverType::BoundaryData>();
+
 	auto domain = std::make_shared<HinaPE::BoxDomain>();
 	auto emitter = std::make_shared<HinaPE::VolumeParticleEmitter3>();
 	solver->_data = data;
 	solver->_domain = domain;
 	solver->_emitter = emitter;
+
+    solver->_boundary_data = boundary_data;
+    boundary_data->init_boundary(solver->_boundary_data->_positions);
+
+    // resize data
+    solver->resizeParticles(solver->_data->_positions.size(),solver->_boundary_data->_positions.size());
 
 	auto vis = std::make_shared<NeighborSearchVisualization>(data);
 

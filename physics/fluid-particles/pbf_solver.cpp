@@ -68,12 +68,25 @@ void HinaPE::PBFSolver::_apply_force_and_predict_position() const
 		v[i] += dt * f[i] / m;
 		p[i] += dt * v[i];
 	});
+
+    _boundary_data->_predicted_position = _boundary_data->_positions;
+    auto &p_b = _boundary_data->_predicted_position;
+    auto &v_b = _boundary_data->_velocities;
+
+    Util::parallelFor(Constant::ZeroSize, _boundary_data->_positions.size(), [&p_b, &v_b, &dt](size_t i)
+    {
+        v_b[i] += mVector3(0.0,0.0,0.0);
+        p_b[i] += dt * v_b[i];
+    });
 }
 
 void HinaPE::PBFSolver::_update_neighbor() const
 {
 	_data->_densities.resize(_data->_positions.size(), 0);
 	_data->_update_neighbor();
+
+    _boundary_data->_densities.resize(_boundary_data->_positions.size(), 0);
+    _boundary_data->_update_neighbor();
 }
 
 void HinaPE::PBFSolver::_solve_density_constraints() const
@@ -389,4 +402,110 @@ void HinaPE::PBFSolver::VALID_CHECK() const
 		_data->_positions.size() != _data->_densities.size() &&
 		_data->_positions.size() != _data->_predicted_position.size())
 		throw std::runtime_error("PBFSolver::_data size mismatch");
+}
+
+void HinaPE::PBFSolver::resizeParticles(size_t fluid_size, size_t boundary_size)
+{
+    /// _data ? _boundary_data
+    _data->_positions.resize(fluid_size + boundary_size);
+    _data->_velocities.resize(fluid_size + boundary_size);
+    _data->_forces.resize(fluid_size + boundary_size);
+    _data->_densities.resize(fluid_size);
+    _data->_predicted_position.resize(fluid_size);
+    _data->_lambdas.resize(fluid_size);
+    _data->_neighbor_lists.resize(fluid_size + boundary_size);
+}
+
+// ============================== Boundary Data ==============================
+HinaPE::PBFSolver::BoundaryData::BoundaryData() {
+    track(&_positions); DEFAULT_SCALE = _radius * mVector3::One();
+}
+
+void HinaPE::PBFSolver::BoundaryData::add_boundary(const mVector3 &minX, const mVector3 &maxX,
+                                                   std::vector<mVector3> &boundary) {
+    const real diam = 2.0 * _radius;
+    const int stepsX = (int) ((maxX.x() - minX.x()) / diam) + 1;
+    const int stepsY = (int) ((maxX.y() - minX.y()) / diam) + 1;
+    const int stepsZ = (int) ((maxX.z() - minX.z()) / diam) + 1;
+
+    for (int i = 0; i < stepsX; ++i) {
+        for (int j = 0; j < stepsY; ++j) {
+            for (int k = 0; k < stepsZ; ++k) {
+                const real x = minX.x() + i * diam;
+                const real y = minX.y() + j * diam;
+                const real z = minX.z() + k * diam;
+                boundary.emplace_back(x, y, z);
+            }
+        }
+    }
+}
+
+void HinaPE::PBFSolver::BoundaryData::init_boundary(std::vector<mVector3> &boundary)
+{
+    real containerWidth = (_width + 5) * _radius * static_cast<real>(4.0);
+    real containerDepth = (_depth + 5) * _radius * static_cast<real>(4.0);
+    real containerHeight = 1.5;
+
+    const real x1 = -containerWidth * 0.5;
+    const real x2 = containerWidth * 0.5;
+    const real y1 = 0.0;
+    const real y2 = containerHeight;
+    const real z1 = -containerDepth * 0.5;
+    const real z2 = containerDepth * 0.5;
+
+    // Floor
+    add_boundary(mVector3(x1, y1, z1), mVector3(x2, y1, z2), boundary);
+    // Top
+    add_boundary(mVector3(x1, y2, z1), mVector3(x2, y2, z2), boundary);
+    // Left
+    add_boundary(mVector3(x1, y1, z1), mVector3(x1, y2, z2), boundary);
+    // Right
+    add_boundary(mVector3(x2, y1, z1), mVector3(x2, y2, z2), boundary);
+    // Back
+    add_boundary(mVector3(x1, y1, z1), mVector3(x2, y2, z1), boundary);
+    // Front
+    add_boundary(mVector3(x1, y1, z2), mVector3(x2, y2, z2), boundary);
+}
+
+void HinaPE::PBFSolver::BoundaryData::_update_neighbor() {
+    if (!_mass_inited)
+        _update_mass(); // update mass to ensure the initial density is 1000
+
+    auto &x_b = _predicted_position;
+    auto &d_b = _densities;
+    const auto &m_b = _mass;
+
+    Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
+    {
+        real sum = (*poly6_kernel)(0); // self density
+        for (int j = 0; j < _neighbor_lists[i].size(); ++j)
+        {
+            real dist = (x_b[i] - x_b[_neighbor_lists[i][j]]).length();
+            sum += (*poly6_kernel)(dist);
+        }
+        d_b[i] = m_b * sum; // rho(x) = m * sum(W(x - xj))
+    });
+}
+
+void HinaPE::PBFSolver::BoundaryData::_update_mass()
+{
+    _mass = 1.0;
+
+    real max_number_density = 0;
+    for (int i = 0; i < _positions.size(); ++i)
+    {
+        real sum = (*poly6_kernel)(0); // self density
+        const auto &point = _positions[i];
+        for (const auto &neighbor_point_id: _neighbor_lists[i])
+        {
+            auto dist = (point - _positions[neighbor_point_id]).length();
+            sum += (*poly6_kernel)(dist);
+        }
+        max_number_density = std::max(max_number_density, sum);
+    }
+
+    if (max_number_density > 0)
+        _mass = std::max((target_density / max_number_density), HinaPE::Constant::Zero);
+
+    _mass_inited = true;
 }
