@@ -9,3 +9,7 @@ target_compile_definitions(
         PUBLIC
         MyShaderDir="${CMAKE_CURRENT_SOURCE_DIR}/shaders/"
 )
+file(
+        COPY shaders
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+)
