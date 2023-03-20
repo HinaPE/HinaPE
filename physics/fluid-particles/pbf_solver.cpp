@@ -43,7 +43,7 @@ void HinaPE::PBFSolver::update(real dt) const
 	_update_positions_and_velocities();
 
 	// simple collision handling here (temporary)
-	_resolve_collision();
+    _resolve_collision();
 }
 
 void HinaPE::PBFSolver::_emit_particles() const
@@ -198,6 +198,10 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		{
 			p_to_write[i] -= dp[i];
 		});
+
+        /// the particles all flew away ~
+        /// the bounding box is set too small and does not integrate with the ui
+        //_resolve_collision();
 	}
 }
 
@@ -293,6 +297,53 @@ void HinaPE::PBFSolver::_resolve_collision() const
 	{
 		_domain->resolve_collision(_data->_radius, _opt.restitution, &_data->_positions[i], &_data->_velocities[i]);
 	});
+
+    // collide with particles
+    _resolve_particles_collision();
+
+}
+
+void HinaPE::PBFSolver::_resolve_particles_collision() const {
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t j)
+        {
+            real distance = (_data->_positions[i]-_data->_positions[j]).length();
+            if(distance < 2.0 * _data->_radius)
+            {
+                mVector3 normal = (_data->_positions[j]-_data->_positions[i]).normalized();
+                mVector3 tangent = (_data->_velocities[i] - _data->_velocities[j] - (_data->_velocities[i] - _data->_velocities[j]).dot(normal) * normal).normalized();
+
+                real v_ni = _data->_velocities[i].dot(normal);
+                real v_nj = _data->_velocities[j].dot(normal);
+                real v_ti = _data->_velocities[i].dot(tangent);
+                real v_tj = _data->_velocities[j].dot(tangent);
+
+                //Never mind
+                float mi = _data->_mass;
+                float mj = _data->_mass;
+
+                //Collision response
+                real v_ni_new = (v_ni * (mi - mj) + 2.0 * mj * v_nj)/(mi + mj);
+                real v_nj_new = (v_nj * (mj - mi) + 2.0 * mi * v_ni)/(mi + mj);
+
+                mVector3 v_ni_new_vec = v_ni_new * normal;
+                mVector3 v_nj_new_vec = v_nj_new * normal;
+
+                mVector3 v_ti_new_vec = (1 - _opt.restitution) * v_ti * tangent;
+                mVector3 v_tj_new_vec = (1 - _opt.restitution) * v_tj * tangent;
+
+                // update velocity and position
+
+                _data->_velocities[i] = v_ni_new_vec + v_ti_new_vec;
+                _data->_velocities[j] = v_nj_new_vec + v_tj_new_vec;
+
+                mVector3 displacement = (distance - 2.0 * _data->_radius) * normal;
+                _data->_positions[i] -= displacement * (double)(mj / (mi + mj));
+                _data->_positions[j] -= displacement * (double)(mi / (mi + mj));
+            }
+        });
+    });
 }
 
 // ============================== Solver Data ==============================

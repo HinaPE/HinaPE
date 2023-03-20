@@ -47,7 +47,7 @@ protected:
 
 private:
 	void _resolve_collision() const;
-
+    void _resolve_particles_collision() const;
 	void INSPECT() final;
 	void VALID_CHECK() const final;
 };
