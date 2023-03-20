@@ -15,3 +15,4 @@ add_subdirectory(102-simple-particle-system)
 add_subdirectory(201-volume-render)
 
 # advanced applications
+add_subdirectory(401-impl-cloud-doba2000)
