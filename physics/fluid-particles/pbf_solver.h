@@ -18,7 +18,7 @@ class PBFSolver : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::V
 public:
 	void init();
 	void update(real dt) const;
-    void resizeParticles(size_t fluid_size,size_t boundary_size);
+    void _resize_particles(size_t fluid_size,size_t boundary_size);
 
 public:
 	struct Opt
@@ -43,6 +43,7 @@ protected:
 	void _update_neighbor() const;
 	void _solve_density_constraints() const;
 	void _update_positions_and_velocities() const;
+    void _init_boundary_particles() const;
 
 private:
 	void _resolve_collision() const;
@@ -61,10 +62,15 @@ public:
 	std::vector<mVector3> 	_forces;
 	std::vector<real> 		_densities;
 
+    std::vector<mVector3> 	_boundary_positions;
+    std::vector<mVector3> 	_boundary_velocities;
+    std::vector<mVector3> 	_boundary_forces;
+    std::vector<real> 		_boundary_densities;
+
 	// temporary buffers
 	std::vector<mVector3> 	_predicted_position;
-	std::vector<real> 		_lambdas;
-	std::vector<mVector3> 	_delta_p;
+    std::vector<real> 		_lambdas;
+    std::vector<mVector3> 	_delta_p;
 	std::vector<std::vector<std::string>> _debug_info;
 
 	// params
@@ -76,6 +82,10 @@ public:
 	real target_spacing 	= _radius;
 	real kernel_radius_over_target_spacing = 4;
 	real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
+
+    real _width = 15;
+    real _depth = 15;
+    real _height = 20;
 
 	SPHKernelPtr poly6_kernel = std::make_shared<StdKernel>(kernel_radius);
 	SPHKernelPtr spiky_kernel = std::make_shared<SpikyKernel>(kernel_radius);
@@ -90,51 +100,15 @@ public:
 	void _update_mass();
 	void INSPECT() final;
 
+    void _add_boundary(const mVector3 &minX, const mVector3 &maxX, std::vector<mVector3> &boundary);
+    void _init_boundary(std::vector<mVector3> &boundary);
+
 	bool _mass_inited = false;
 };
 // @formatter:on
-struct PBFSolver::BoundaryData : public CopyDisable, public Kasumi::ObjectParticles3D
-{
-    std::vector<mVector3> 	_positions;
-    std::vector<mVector3> 	_velocities;
-    std::vector<mVector3> 	_forces;
-    std::vector<real> 		_densities;
-
-    std::vector<mVector3> 	_predicted_position;
-
-    real _mass 				= 1e-3;
-    real _radius 			= 0.017;
-    real viscosity_coeff 	= 0.01;
-
-    real target_density 	= 1000;
-    real target_spacing 	= _radius;
-    real kernel_radius_over_target_spacing = 4;
-    real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
-
-    real _width = 15;
-    real _depth = 15;
-    real _height = 20;
-
-    SPHKernelPtr poly6_kernel = std::make_shared<StdKernel>(kernel_radius);
-    SPHKernelPtr spiky_kernel = std::make_shared<SpikyKernel>(kernel_radius);
-    PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>(kernel_radius);
-    std::vector<std::vector<unsigned int>> _neighbor_lists;
-
-    BoundaryData();
-    friend class PBFSolver;
-
-    void _update_neighbor();
-    void _update_mass();
-
-    void add_boundary(const mVector3 &minX, const mVector3 &maxX, std::vector<mVector3> &boundary);
-    void init_boundary(std::vector<mVector3> &boundary);
-
-    bool _mass_inited = false;
-};
 
 using PBFSolverPtr = std::shared_ptr<PBFSolver>;
 using PBFSolverDataPtr = std::shared_ptr<PBFSolver::Data>;
-using PBFSolverBoundaryDataPtr = std::shared_ptr<PBFSolver::BoundaryData>;
 
 } // namespace HinaPE
 
