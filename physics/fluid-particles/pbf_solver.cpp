@@ -14,14 +14,10 @@ void HinaPE::PBFSolver::init()
 	_data->_lambdas.resize(_data->_positions.size(), 0);
 	_data->_delta_p.resize(_data->_positions.size(), mVector3::Zero());
 
-    _data->_boundary_forces.resize(_data->_boundary_positions.size(), mVector3::Zero());
-    _data->_boundary_densities.resize(_data->_boundary_positions.size(), 0);
-
     /// Is it in that order ? (confused
     _data->_init_boundary(_data->_boundary_positions);
     // resize data
     _resize_particles(_data->_positions.size(),_data->_boundary_positions.size());
-
     _init_boundary_particles();
 
 	_update_neighbor();
@@ -73,7 +69,7 @@ void HinaPE::PBFSolver::_apply_force_and_predict_position() const
 	auto &_debug = _data->_debug_info;
 
 	// Gravity Forces
-	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&p, &v, &f, &m, &g, &dt, &_debug](size_t i)
+	Util::parallelFor(Constant::ZeroSize, _data->_positions.size() - _data->_boundary_positions.size(), [&p, &v, &f, &m, &g, &dt, &_debug](size_t i)
 	{
 		mVector3 gravity = m * g;
 		f[i] = gravity;
@@ -214,7 +210,7 @@ void HinaPE::PBFSolver::_update_positions_and_velocities() const
 	const auto &d = _data->_densities;
 	const auto &m = _data->_mass;
 	const auto &nl = _data->_neighbor_lists;
-	const auto size = p.size();
+	const auto size = p.size() - _data->_boundary_positions.size();
 	const auto dt = _opt.current_dt;
 	const auto &kernel = _data->poly6_kernel;
 
@@ -426,10 +422,9 @@ void HinaPE::PBFSolver::_resize_particles(size_t fluid_size, size_t boundary_siz
 }
 
 void HinaPE::PBFSolver::_init_boundary_particles() const {
-    _data->_predicted_position = _data->_positions; // copy
     _data->_forces.resize(_data->_positions.size(), mVector3::Zero());
 
-    auto &p = _data->_predicted_position;
+    auto &p = _data->_positions;
     auto &v = _data->_velocities;
     auto &d = _data->_densities;
     auto &l = _data->_lambdas;
@@ -444,6 +439,8 @@ void HinaPE::PBFSolver::_init_boundary_particles() const {
         d[i] = 0.0;
         l[i] = 0.0;
     });
+
+    _data->_predicted_position = _data->_positions; // copy
 }
 
 void HinaPE::PBFSolver::Data::_add_boundary(const mVector3 &minX, const mVector3 &maxX,

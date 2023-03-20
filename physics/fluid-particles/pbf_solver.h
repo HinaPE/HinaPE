@@ -63,9 +63,6 @@ public:
 	std::vector<real> 		_densities;
 
     std::vector<mVector3> 	_boundary_positions;
-    std::vector<mVector3> 	_boundary_velocities;
-    std::vector<mVector3> 	_boundary_forces;
-    std::vector<real> 		_boundary_densities;
 
 	// temporary buffers
 	std::vector<mVector3> 	_predicted_position;
@@ -83,8 +80,8 @@ public:
 	real kernel_radius_over_target_spacing = 4;
 	real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
 
-    real _width = 15;
-    real _depth = 15;
+    real _width = 20;
+    real _depth = 20;
     real _height = 20;
 
 	SPHKernelPtr poly6_kernel = std::make_shared<StdKernel>(kernel_radius);
