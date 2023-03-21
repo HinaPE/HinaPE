@@ -141,13 +141,24 @@ void HinaPE::PCISPHSolver::_accumulate_pressure_force() const {
             if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
             {
                 mVector3 dir = (x[j] - x[i]) / dist;
-                f[i] -= m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * (*_data->kernel).gradient(dist, dir);
+                f_p[i] -= m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * (*_data->kernel).gradient(dist, dir);
             }
         }
     });
-    
-    // Compute max density error
 
+    // Compute max density error
+    real maxDensityError = 0.0;
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        maxDensityError = (maxDensityError * maxDensityError > _data->_density_errors[i] * _data->_density_errors[i]) ? maxDensityError:_data->_density_errors[i];
+    });
+    _data->max_density_error_ratio = maxDensityError / _data->target_density;
+
+    // Accumulate pressure force
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        f[i] += f_p[i];
+    });
 }
 
 void HinaPE::PCISPHSolver::_time_integration() const

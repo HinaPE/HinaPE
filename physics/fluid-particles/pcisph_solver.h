@@ -71,6 +71,7 @@ struct PCISPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 	// pcisph
 	real eos_exponent 					= 7;
 	real negative_pressure_scale 		= 0.0;
+    real max_density_error_ratio        = 0.01;
 	real viscosity_coefficient 			= 0.01;
 	real pseudo_viscosity_coefficient 	= 10.0;
 	real speed_of_sound 				= 100;
