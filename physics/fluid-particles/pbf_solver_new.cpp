@@ -315,12 +315,12 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 
 					const mVector3 grad_C_j = -(m / d0) * poly6.gradient(p_i - p_j);
 					delta_p_i -= (lambda_i + lambda_j + s_corr) * grad_C_j;
-				} else
+				} else // Boundary: Akinci2012
 				{
 					const auto p_i = p[i];
 					const auto b_j = b[j];
 
-					const mVector3 grad_C_j = -(m / d0) * poly6.gradient(p_i - b_j);
+					const mVector3 grad_C_j = -(bm / d0) * poly6.gradient(p_i - b_j);
 					delta_p_i -= (lambda_i) * grad_C_j;
 				}
 			}

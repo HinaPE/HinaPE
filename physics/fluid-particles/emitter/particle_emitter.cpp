@@ -28,7 +28,7 @@ void HinaPE::VolumeParticleEmitter3::emit(std::vector<mVector3> *positions, std:
 		return;
 
 	auto width = 1.0, height = 0.8, depth = 1.0;
-	mVector3 start_point = {-width / 2, 0, -depth / 2};
+	mVector3 start_point = {-width / 1.1, -height, -depth / 2};
 	auto rows = static_cast<size_t>(width / _opt.spacing);
 	auto cols = static_cast<size_t>(height / _opt.spacing);
 	auto layers = static_cast<size_t>(depth / _opt.spacing);
