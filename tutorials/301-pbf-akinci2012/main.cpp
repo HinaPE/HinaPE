@@ -18,7 +18,10 @@ struct NeighborViewer : public Kasumi::ObjectParticles3D
 
 		auto origin = _data->Fluid.positions[_data->_inst_id];
 		for (auto &neighbor: _data->NeighborList[_data->_inst_id])
-			_neighbors.push_back(_data->Fluid.positions[neighbor]);
+			if (neighbor < _data->fluid_size())
+				_neighbors.push_back(_data->Fluid.positions[neighbor]);
+			else
+				_neighbors.push_back(_data->Boundary.positions[neighbor - _data->fluid_size()]);
 		_neighbors.push_back(origin);
 
 		_shader->uniform("highlight_mode", true);
