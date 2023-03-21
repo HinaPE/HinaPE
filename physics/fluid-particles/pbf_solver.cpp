@@ -14,14 +14,15 @@ void HinaPE::PBFSolver::init()
 	_data->_lambdas.resize(_data->_positions.size(), 0);
 	_data->_delta_p.resize(_data->_positions.size(), mVector3::Zero());
 
-    /// Is it in that order ? (confused
+	/// Is it in that order ? (confused
     _data->_init_boundary(_data->_boundary_positions);
-    // resize data
+	// resize data
     _resize_particles(_data->_positions.size(),_data->_boundary_positions.size());
     _init_boundary_particles();
 
 	_update_neighbor();
 	VALID_CHECK();
+	_data->_set_colormap();
 	_opt.inited = true;
 }
 
@@ -43,7 +44,7 @@ void HinaPE::PBFSolver::update(real dt) const
 	_update_positions_and_velocities();
 
 	// simple collision handling here (temporary)
-    _resolve_collision();
+	_resolve_collision();
 }
 
 void HinaPE::PBFSolver::_emit_particles() const
@@ -63,7 +64,7 @@ void HinaPE::PBFSolver::_apply_force_and_predict_position() const
 	const auto g = _opt.gravity;
 	const auto dt = _opt.current_dt;
 
-    //auto &p_b = _data->_boundary_positions;
+	//auto &p_b = _data->_boundary_positions;
 
 	// for debug
 	auto &_debug = _data->_debug_info;
@@ -160,16 +161,16 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 		// Second, we compute all correction delta p
 		auto &dp = _data->_delta_p;
 		dp.resize(size, mVector3::Zero()); // initialize delta p to zero vector
-        auto &h = _data->kernel_radius;
+		auto &h = _data->kernel_radius;
 
 		Util::parallelFor(Constant::ZeroSize, size, [&dp, &h, &lambdas, &p, &m, d0, &nl, &kernel, &_debug](size_t i)
 		{
 			const auto &lambda_i = lambdas[i];
 
-            auto k_corr = m * 1.0e-04;
-            //auto k_corr = 0.1;
-            auto n_corr = 4.0;
-            auto q_corr = 0.1;
+			auto k_corr = m * 1.0e-04;
+			//auto k_corr = 0.1;
+			auto n_corr = 4.0;
+			auto q_corr = 0.1;
 
 			// Equation (12): compute delta p
 			mVector3 delta_p_i = mVector3::Zero();
@@ -179,9 +180,9 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 				const auto p_i = p[i];
 				const auto p_j = p[j];
 
-                const auto w_corr = (*kernel).operator()(q_corr * h);
-                const auto ratio = (*kernel).operator()((p_i - p_j).length()) / w_corr;
-                const auto s_corr = -k_corr * pow(ratio,n_corr);
+				const auto w_corr = (*kernel).operator()(q_corr * h);
+				const auto ratio = (*kernel).operator()((p_i - p_j).length()) / w_corr;
+				const auto s_corr = -k_corr * pow(ratio, n_corr);
 
 				const mVector3 grad_C_j = -(m / d0) * (*kernel).gradient(p_i - p_j);
 				delta_p_i -= (lambda_i + lambda_j + s_corr) * grad_C_j;
@@ -199,9 +200,9 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 			p_to_write[i] -= dp[i];
 		});
 
-        /// the particles all flew away ~
-        /// the bounding box is set too small and does not integrate with the ui
-        //_resolve_collision();
+		/// the particles all flew away ~
+		/// the bounding box is set too small and does not integrate with the ui
+		//_resolve_collision();
 	}
 }
 
@@ -241,47 +242,46 @@ void HinaPE::PBFSolver::_update_positions_and_velocities() const
 			const auto &v_j = v[j];
 			mVector3 tmp = v_i - v_j;
 			tmp *= (*kernel)((p_i - p_j).length()) * (m / d_j);
-            sum_value += tmp;
-        }
+			sum_value += tmp;
+		}
 
 		v[i] = v_i - c * sum_value;
 	});
 
-    // Apply Vorticity Confinement
+	// Apply Vorticity Confinement
 
-    Util::parallelFor(Constant::ZeroSize, size, [&p, &nl, &v, &dt, &kernel](size_t i)
-    {
-        const auto &p_i = p[i];
-        const auto &v_i = v[i];
+	Util::parallelFor(Constant::ZeroSize, size, [&p, &nl, &v, &dt, &kernel](size_t i)
+	{
+		const auto &p_i = p[i];
+		const auto &v_i = v[i];
 
-        mVector3 f_vorticity = mVector3::Zero();
-        mVector3 N = mVector3::Zero();
-        mVector3 curl = mVector3::Zero();
-        mVector3 curl_x = mVector3::Zero();
-        mVector3 curl_y = mVector3::Zero();
-        mVector3 curl_z = mVector3::Zero();
+		mVector3 f_vorticity = mVector3::Zero();
+		mVector3 N = mVector3::Zero();
+		mVector3 curl = mVector3::Zero();
+		mVector3 curl_x = mVector3::Zero();
+		mVector3 curl_y = mVector3::Zero();
+		mVector3 curl_z = mVector3::Zero();
 
-        for (auto const &j: nl[i])
-        {
-            const auto &p_j = p[j];
-            const auto &v_j = v[j];
-            mVector3 tmp = v_j - v_i;
-            curl += tmp.cross((*kernel).gradient(p_i - p_j));
-            curl_x += tmp.cross((*kernel).gradient(p_i + mVector3(0.01,0,0) - p_j));
-            curl_y += tmp.cross((*kernel).gradient(p_i + mVector3(0,0.01,0) - p_j));
-            curl_z += tmp.cross((*kernel).gradient(p_i + mVector3(0,0,0.01) - p_j));
-        }
+		for (auto const &j: nl[i])
+		{
+			const auto &p_j = p[j];
+			const auto &v_j = v[j];
+			mVector3 tmp = v_j - v_i;
+			curl += tmp.cross((*kernel).gradient(p_i - p_j));
+			curl_x += tmp.cross((*kernel).gradient(p_i + mVector3(0.01, 0, 0) - p_j));
+			curl_y += tmp.cross((*kernel).gradient(p_i + mVector3(0, 0.01, 0) - p_j));
+			curl_z += tmp.cross((*kernel).gradient(p_i + mVector3(0, 0, 0.01) - p_j));
+		}
 
-        real curlLen = curl.length();
-        N.x() = curl_x.length() - curlLen;
-        N.y() = curl_y.length() - curlLen;
-        N.z() = curl_z.length() - curlLen;
-        N = N.normalized();
-        f_vorticity = 0.00001 * N.cross(curl);
+		real curlLen = curl.length();
+		N.x() = curl_x.length() - curlLen;
+		N.y() = curl_y.length() - curlLen;
+		N.z() = curl_z.length() - curlLen;
+		N = N.normalized();
+		f_vorticity = 0.00001 * N.cross(curl);
 
-        v[i] = v_i + f_vorticity * dt;
-
-    });
+		v[i] = v_i + f_vorticity * dt;
+	});
 
 	// Finally, update positions
 	Util::parallelFor(Constant::ZeroSize, size, [&x, &p](size_t i)
@@ -298,57 +298,63 @@ void HinaPE::PBFSolver::_resolve_collision() const
 		_domain->resolve_collision(_data->_radius, _opt.restitution, &_data->_positions[i], &_data->_velocities[i]);
 	});
 
-    // collide with particles
-    _resolve_particles_collision();
+	// collide with particles
+//    _resolve_particles_collision();
 
 }
 
-void HinaPE::PBFSolver::_resolve_particles_collision() const {
-    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
-    {
-        Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t j)
-        {
-            real distance = (_data->_positions[i]-_data->_positions[j]).length();
-            if(distance < 2.0 * _data->_radius)
-            {
-                mVector3 normal = (_data->_positions[j]-_data->_positions[i]).normalized();
-                mVector3 tangent = (_data->_velocities[i] - _data->_velocities[j] - (_data->_velocities[i] - _data->_velocities[j]).dot(normal) * normal).normalized();
+void HinaPE::PBFSolver::_resolve_particles_collision() const
+{
+	Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+	{
+		Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t j)
+		{
+			real distance = (_data->_positions[i] - _data->_positions[j]).length();
+			if (distance < 2.0 * _data->_radius)
+			{
+				mVector3 normal = (_data->_positions[j] - _data->_positions[i]).normalized();
+				mVector3 tangent = (_data->_velocities[i] - _data->_velocities[j] - (_data->_velocities[i] - _data->_velocities[j]).dot(normal) * normal).normalized();
 
-                real v_ni = _data->_velocities[i].dot(normal);
-                real v_nj = _data->_velocities[j].dot(normal);
-                real v_ti = _data->_velocities[i].dot(tangent);
-                real v_tj = _data->_velocities[j].dot(tangent);
+				real v_ni = _data->_velocities[i].dot(normal);
+				real v_nj = _data->_velocities[j].dot(normal);
+				real v_ti = _data->_velocities[i].dot(tangent);
+				real v_tj = _data->_velocities[j].dot(tangent);
 
-                //Never mind
-                float mi = _data->_mass;
-                float mj = _data->_mass;
+				//Never mind
+				float mi = _data->_mass;
+				float mj = _data->_mass;
 
-                //Collision response
-                real v_ni_new = (v_ni * (mi - mj) + 2.0 * mj * v_nj)/(mi + mj);
-                real v_nj_new = (v_nj * (mj - mi) + 2.0 * mi * v_ni)/(mi + mj);
+				//Collision response
+				real v_ni_new = (v_ni * (mi - mj) + 2.0 * mj * v_nj) / (mi + mj);
+				real v_nj_new = (v_nj * (mj - mi) + 2.0 * mi * v_ni) / (mi + mj);
 
-                mVector3 v_ni_new_vec = v_ni_new * normal;
-                mVector3 v_nj_new_vec = v_nj_new * normal;
+				mVector3 v_ni_new_vec = v_ni_new * normal;
+				mVector3 v_nj_new_vec = v_nj_new * normal;
 
-                mVector3 v_ti_new_vec = (1 - _opt.restitution) * v_ti * tangent;
-                mVector3 v_tj_new_vec = (1 - _opt.restitution) * v_tj * tangent;
+				mVector3 v_ti_new_vec = (1 - _opt.restitution) * v_ti * tangent;
+				mVector3 v_tj_new_vec = (1 - _opt.restitution) * v_tj * tangent;
 
-                // update velocity and position
+				// update velocity and position
 
-                _data->_velocities[i] = v_ni_new_vec + v_ti_new_vec;
-                _data->_velocities[j] = v_nj_new_vec + v_tj_new_vec;
+				_data->_velocities[i] = v_ni_new_vec + v_ti_new_vec;
+				_data->_velocities[j] = v_nj_new_vec + v_tj_new_vec;
 
-                mVector3 displacement = (distance - 2.0 * _data->_radius) * normal;
-                _data->_positions[i] -= displacement * (double)(mj / (mi + mj));
-                _data->_positions[j] -= displacement * (double)(mi / (mi + mj));
-            }
-        });
-    });
+				mVector3 displacement = (distance - 2.0 * _data->_radius) * normal;
+				_data->_positions[i] -= displacement * (double) (mj / (mi + mj));
+				_data->_positions[j] -= displacement * (double) (mi / (mi + mj));
+			}
+		});
+	});
 }
 
 // ============================== Solver Data ==============================
 
-HinaPE::PBFSolver::Data::Data() { track(&_positions); DEFAULT_SCALE = _radius * mVector3::One(); }
+HinaPE::PBFSolver::Data::Data()
+{
+	track(&_positions);
+	track_colormap(&color_map);
+	DEFAULT_SCALE = _radius * mVector3::One();
+}
 
 void HinaPE::PBFSolver::Data::_update_neighbor()
 {
@@ -459,83 +465,96 @@ void HinaPE::PBFSolver::VALID_CHECK() const
 
 void HinaPE::PBFSolver::_resize_particles(size_t fluid_size, size_t boundary_size)
 {
-    /// which parameters' size need to be modified ?
-    /// the size of some parameters may be redefined repeatedly
-    _data->_positions.resize(fluid_size + boundary_size);
-    _data->_velocities.resize(fluid_size + boundary_size);
-    _data->_forces.resize(fluid_size + boundary_size);
-    _data->_neighbor_lists.resize(fluid_size + boundary_size);
+	/// which parameters' size need to be modified ?
+	/// the size of some parameters may be redefined repeatedly
+	_data->_positions.resize(fluid_size + boundary_size);
+	_data->_velocities.resize(fluid_size + boundary_size);
+	_data->_forces.resize(fluid_size + boundary_size);
+	_data->_neighbor_lists.resize(fluid_size + boundary_size);
 
-    _data->_predicted_position.resize(fluid_size + boundary_size);
-    _data->_lambdas.resize(fluid_size + boundary_size);
-    _data->_densities.resize(fluid_size + boundary_size);
-    _data->_delta_p.resize(fluid_size + boundary_size);
+	_data->_predicted_position.resize(fluid_size + boundary_size);
+	_data->_lambdas.resize(fluid_size + boundary_size);
+	_data->_densities.resize(fluid_size + boundary_size);
+	_data->_delta_p.resize(fluid_size + boundary_size);
 }
 
-void HinaPE::PBFSolver::_init_boundary_particles() const {
-    _data->_forces.resize(_data->_positions.size(), mVector3::Zero());
+void HinaPE::PBFSolver::_init_boundary_particles() const
+{
+	_data->_forces.resize(_data->_positions.size(), mVector3::Zero());
 
-    auto &p = _data->_positions;
-    auto &v = _data->_velocities;
-    auto &d = _data->_densities;
-    auto &l = _data->_lambdas;
+	auto &p = _data->_positions;
+	auto &v = _data->_velocities;
+	auto &d = _data->_densities;
+	auto &l = _data->_lambdas;
 
-    auto &p_b = _data->_boundary_positions;
+	auto &p_b = _data->_boundary_positions;
 
-    /// had been resized so -
-    Util::parallelFor(_data->_positions.size() - _data->_boundary_positions.size(), _data->_positions.size(), [&p, &v, &d, &l, &p_b](size_t i)
-    {
-        v[i] = mVector3(0.0,0.0,0.0);
-        p[i] = p_b[i];
-        d[i] = 0.0;
-        l[i] = 0.0;
-    });
+	/// had been resized so -
+	Util::parallelFor(_data->_positions.size() - _data->_boundary_positions.size(), _data->_positions.size(), [&p, &v, &d, &l, &p_b](size_t i)
+	{
+		v[i] = mVector3(0.0, 0.0, 0.0);
+		p[i] = p_b[i];
+		d[i] = 0.0;
+		l[i] = 0.0;
+	});
 
-    _data->_predicted_position = _data->_positions; // copy
+	_data->_predicted_position = _data->_positions; // copy
 }
 
 void HinaPE::PBFSolver::Data::_add_boundary(const mVector3 &minX, const mVector3 &maxX,
-                                                   std::vector<mVector3> &boundary) {
-    const real diam = 2.0 * _radius;
-    const int stepsX = (int) ((maxX.x() - minX.x()) / diam) + 1;
-    const int stepsY = (int) ((maxX.y() - minX.y()) / diam) + 1;
-    const int stepsZ = (int) ((maxX.z() - minX.z()) / diam) + 1;
+											std::vector<mVector3> &boundary)
+{
+	const real diam = 2.0 * _radius;
+	const int stepsX = (int) ((maxX.x() - minX.x()) / diam) + 1;
+	const int stepsY = (int) ((maxX.y() - minX.y()) / diam) + 1;
+	const int stepsZ = (int) ((maxX.z() - minX.z()) / diam) + 1;
 
-    for (int i = 0; i < stepsX; ++i) {
-        for (int j = 0; j < stepsY; ++j) {
-            for (int k = 0; k < stepsZ; ++k) {
-                const real x = minX.x() + i * diam;
-                const real y = minX.y() + j * diam;
-                const real z = minX.z() + k * diam;
-                boundary.emplace_back(x, y, z);
-            }
-        }
-    }
+	for (int i = 0; i < stepsX; ++i)
+	{
+		for (int j = 0; j < stepsY; ++j)
+		{
+			for (int k = 0; k < stepsZ; ++k)
+			{
+				const real x = minX.x() + i * diam;
+				const real y = minX.y() + j * diam;
+				const real z = minX.z() + k * diam;
+				boundary.emplace_back(x, y, z);
+			}
+		}
+	}
 }
 
 void HinaPE::PBFSolver::Data::_init_boundary(std::vector<mVector3> &boundary)
 {
-    real containerWidth = (_width + 5) * _radius * static_cast<real>(4.0);
-    real containerDepth = (_depth + 5) * _radius * static_cast<real>(4.0);
-    real containerHeight = 1.5;
+	real containerWidth = (_width + 5) * _radius * static_cast<real>(4.0);
+	real containerDepth = (_depth + 5) * _radius * static_cast<real>(4.0);
+	real containerHeight = 1.5;
 
-    const real x1 = -containerWidth * 0.5;
-    const real x2 = containerWidth * 0.5;
-    const real y1 = 0.0;
-    const real y2 = containerHeight;
-    const real z1 = -containerDepth * 0.5;
-    const real z2 = containerDepth * 0.5;
+	const real x1 = -containerWidth * 0.5;
+	const real x2 = containerWidth * 0.5;
+	const real y1 = 0.0;
+	const real y2 = containerHeight;
+	const real z1 = -containerDepth * 0.5;
+	const real z2 = containerDepth * 0.5;
 
-    // Floor
-    _add_boundary(mVector3(x1, y1, z1), mVector3(x2, y1, z2), boundary);
-    // Top
-    _add_boundary(mVector3(x1, y2, z1), mVector3(x2, y2, z2), boundary);
-    // Left
-    _add_boundary(mVector3(x1, y1, z1), mVector3(x1, y2, z2), boundary);
-    // Right
-    _add_boundary(mVector3(x2, y1, z1), mVector3(x2, y2, z2), boundary);
-    // Back
-    _add_boundary(mVector3(x1, y1, z1), mVector3(x2, y2, z1), boundary);
-    // Front
-    _add_boundary(mVector3(x1, y1, z2), mVector3(x2, y2, z2), boundary);
+	// Floor
+	_add_boundary(mVector3(x1, y1, z1), mVector3(x2, y1, z2), boundary);
+	// Top
+	_add_boundary(mVector3(x1, y2, z1), mVector3(x2, y2, z2), boundary);
+	// Left
+	_add_boundary(mVector3(x1, y1, z1), mVector3(x1, y2, z2), boundary);
+	// Right
+	_add_boundary(mVector3(x2, y1, z1), mVector3(x2, y2, z2), boundary);
+	// Back
+	_add_boundary(mVector3(x1, y1, z1), mVector3(x2, y2, z1), boundary);
+	// Front
+	_add_boundary(mVector3(x1, y1, z2), mVector3(x2, y2, z2), boundary);
+}
+void HinaPE::PBFSolver::Data::_set_colormap()
+{
+	color_map.resize(_positions.size());
+	for (size_t i = 0; i < _positions.size() - _boundary_positions.size(); ++i)
+		color_map[i] = mVector3(1.0, 0.0, 0.0);
+	for (size_t i = _positions.size() - _boundary_positions.size(); i < _positions.size(); ++i)
+		color_map[i] = mVector3(0.0, 0.0, 1.0);
 }

@@ -101,6 +101,10 @@ public:
     void _init_boundary(std::vector<mVector3> &boundary);
 
 	bool _mass_inited = false;
+
+	// color
+	void _set_colormap();
+	std::vector<mVector3> color_map;
 };
 // @formatter:on
 
