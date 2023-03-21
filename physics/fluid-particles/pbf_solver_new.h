@@ -20,7 +20,6 @@ protected:
 	void _update_neighbor() const;
 	void _solve_density_constraints() const;
 	void _update_positions_and_velocities() const;
-	void _resolve_collision() const;
 
 public:
 	void init();
@@ -42,7 +41,7 @@ public:
 		real radius 		= 0.017;
 		real target_density = 1000;
 		real kernel_radius 	= 4 * radius;
-		real viscosity 		= 0.01;
+		real viscosity 		= 0.1;
 	} _opt;
 
 private:

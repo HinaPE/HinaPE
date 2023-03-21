@@ -37,9 +37,6 @@ void HinaPE::PBFSolverNew::update(real dt) const
 
 	// algorithm line 20~24
 	_update_positions_and_velocities();
-
-	// simple collision handling here (temporary)
-	_resolve_collision();
 }
 
 void HinaPE::PBFSolverNew::_init_fluid_particles() const
@@ -162,12 +159,12 @@ void HinaPE::PBFSolverNew::_update_neighbor() const
 {
 	// Update Target: NeighborList
 	auto &nl = _data->NeighborList;
-	const auto size = _data->fluid_size();
+	const auto fluid_size = _data->fluid_size();
 	const auto &p = _data->Fluid.predicted_position;
 
 	PointHashGridSearch3 searcher(_opt.kernel_radius);
 	searcher.build(p);
-	Util::parallelFor(Constant::ZeroSize, size, [&](size_t i)
+	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
 	{
 		auto origin = p[i];
 		nl[i].clear();
@@ -181,7 +178,7 @@ void HinaPE::PBFSolverNew::_update_neighbor() const
 
 void HinaPE::PBFSolverNew::_solve_density_constraints() const
 {
-	// Update Target: Lambdas
+	// Update Target: Lambdas, Delta P
 	for (int i = 0; i < _opt.constraint_solver_iterations; ++i)
 	{
 		// Note:
@@ -190,8 +187,9 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 
 		_update_density();
 
-		const auto size = _data->fluid_size();
+		const auto fluid_size = _data->fluid_size();
 		const auto d0 = _opt.target_density;
+		const auto h = _opt.radius;
 		const auto eps = 1e-6;
 
 		const auto &p = _data->Fluid.predicted_position;
@@ -201,7 +199,7 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 		StdKernel poly6(_opt.kernel_radius);
 
 		auto &lambdas = _data->Fluid.lambdas;
-		Util::parallelFor(Constant::ZeroSize, size, [&](size_t i)
+		Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
 		{
 			real d_i = d[i];
 			real C_i = d_i / d0 - 1;
@@ -237,10 +235,13 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 		});
 
 		auto &dp = _data->Fluid.delta_p;
-
-		Util::parallelFor(Constant::ZeroSize, size, [&](size_t i)
+		Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
 		{
 			const auto &lambda_i = lambdas[i];
+
+			auto k_corr = m * 1.0e-04;
+			auto n_corr = 4.0;
+			auto q_corr = 0.1;
 
 			// Equation (12): compute delta p
 			mVector3 delta_p_i = mVector3::Zero();
@@ -249,8 +250,13 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 				const auto &lambda_j = lambdas[j];
 				const auto p_i = p[i];
 				const auto p_j = p[j];
+
+				const auto w_corr = poly6(q_corr * h);
+				const auto ratio = poly6((p_i - p_j).length()) / w_corr;
+				const auto s_corr = -k_corr * pow(ratio, n_corr);
+
 				const mVector3 grad_C_j = -(m / d0) * poly6.gradient(p_i - p_j);
-				delta_p_i -= (lambda_i + lambda_j) * grad_C_j;
+				delta_p_i -= (lambda_i + lambda_j + s_corr) * grad_C_j;
 			}
 			dp[i] = delta_p_i; // thread safe write
 
@@ -259,9 +265,17 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 
 		// Finally, apply delta p to all particles
 		auto &p_to_write = _data->Fluid.predicted_position;
-		Util::parallelFor(Constant::ZeroSize, size, [&p_to_write, &dp](size_t i)
+		Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
 		{
 			p_to_write[i] -= dp[i];
+		});
+
+		// Dead simple collision
+		const auto &v = _data->Fluid.velocities;
+		Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+		{
+			auto temp_v = v[i]; // we don't need to update velocity here
+			_domain->resolve_collision(_opt.radius, _opt.restitution, &p_to_write[i], &temp_v);
 		});
 	}
 }
@@ -272,7 +286,7 @@ void HinaPE::PBFSolverNew::_update_positions_and_velocities() const
 	const auto &d = _data->Fluid.densities;
 	const auto &nl = _data->NeighborList;
 	const auto m = _data->Fluid.mass;
-	const auto size = _data->fluid_size();
+	const auto fluid_size = _data->fluid_size();
 	const auto dt = _opt.current_dt;
 	StdKernel poly6(_opt.kernel_radius);
 
@@ -285,8 +299,8 @@ void HinaPE::PBFSolverNew::_update_positions_and_velocities() const
 	});
 
 	// Apply XSPH viscosity
-	auto c = _opt.viscosity;
-	Util::parallelFor(Constant::ZeroSize, size, [&](size_t i)
+	const auto c = _opt.viscosity;
+	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
 	{
 		const auto &p_i = p[i];
 		const auto &v_i = v[i];
@@ -303,23 +317,49 @@ void HinaPE::PBFSolverNew::_update_positions_and_velocities() const
 		}
 
 		v[i] = v_i - c * sum_value;
+
+		Record("XSPH Vis: ", c * sum_value);
+	});
+
+	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+	{
+		const auto &p_i = p[i];
+		const auto &v_i = v[i];
+
+		mVector3 f_vorticity = mVector3::Zero();
+		mVector3 N = mVector3::Zero();
+		mVector3 curl = mVector3::Zero();
+		mVector3 curl_x = mVector3::Zero();
+		mVector3 curl_y = mVector3::Zero();
+		mVector3 curl_z = mVector3::Zero();
+
+		for (auto const &j: nl[i])
+		{
+			const auto &p_j = p[j];
+			const auto &v_j = v[j];
+			mVector3 tmp = v_j - v_i;
+			curl += tmp.cross(poly6.gradient(p_i - p_j));
+			curl_x += tmp.cross(poly6.gradient(p_i + mVector3(0.01, 0, 0) - p_j));
+			curl_y += tmp.cross(poly6.gradient(p_i + mVector3(0, 0.01, 0) - p_j));
+			curl_z += tmp.cross(poly6.gradient(p_i + mVector3(0, 0, 0.01) - p_j));
+		}
+
+		real curlLen = curl.length();
+		N.x() = curl_x.length() - curlLen;
+		N.y() = curl_y.length() - curlLen;
+		N.z() = curl_z.length() - curlLen;
+		N = N.normalized();
+		f_vorticity = 0.00001 * N.cross(curl);
+
+		v[i] = v_i + f_vorticity * dt;
+
+		Record("Vorticity: ", f_vorticity * dt);
 	});
 
 	// Finally, update positions
 	Util::parallelFor(Constant::ZeroSize, x.size(), [&](size_t i)
 	{
 		x[i] = p[i];
-	});
-}
-
-void HinaPE::PBFSolverNew::_resolve_collision() const
-{
-	auto fluid_size = _data->fluid_size();
-	auto &x = _data->Fluid.positions;
-	auto &v = _data->Fluid.velocities;
-	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
-	{
-		_domain->resolve_collision(_opt.radius, _opt.restitution, &x[i], &v[i]);
 	});
 }
 
