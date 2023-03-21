@@ -14,5 +14,8 @@ add_subdirectory(102-simple-particle-system)
 # rendering applications
 add_subdirectory(201-volume-render)
 
+# fluid applications
+add_subdirectory(301-pbf-akinci2012)
+
 # advanced applications
 add_subdirectory(401-impl-cloud-doba2000)
