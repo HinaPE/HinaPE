@@ -1,14 +1,15 @@
 #include "pcisph_solver.h"
 
-void HinaPE::PCISPHSolver::init() const
+void HinaPE::PCISPHSolver::init()
 {
 	_emit_particles();
+    _opt.inited = true;
 }
 
 void HinaPE::PCISPHSolver::update(real dt) const
 {
-	// accumulate external forces, viscosity force and pressure force
-	_accumulate_force();
+	// accumulate external forces, viscosity force
+    _accumulate_non_pressure_force();
 
 	// do semi-euler integration
 	_time_integration();
@@ -22,14 +23,151 @@ void HinaPE::PCISPHSolver::update(real dt) const
 
 void HinaPE::PCISPHSolver::_emit_particles() const
 {
+    _emitter->emit(&_data->_positions, &_data->_velocities);
+    _data->_forces.resize(_data->_positions.size(), mVector3::Zero());
+    _data->_densities.resize(_data->_positions.size(), 0);
+    _data->_pressures.resize(_data->_positions.size(), 0);
+
+    _data->_pressures_forces.resize(_data->_positions.size(), mVector3::Zero());
+    _data->_density_errors.resize(_data->_positions.size(), 0);
+    _data->_predict_densities.resize(_data->_positions.size(), 0);
+
+    _data->_update_neighbor();
+/*    _data->_update_density();
+    _data->_update_pressure();*/
 }
 
-void HinaPE::PCISPHSolver::_accumulate_force() const
+void HinaPE::PCISPHSolver::_accumulate_non_pressure_force() const
 {
+    auto &x = _data->_positions;
+    auto &v = _data->_velocities;
+    auto &f = _data->_forces;
+    auto &d = _data->_densities;
+    auto &p = _data->_pressures;
+    const auto &m = _data->_mass;
+
+    // Gravity Forces
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        mVector3 gravity = m * _opt.gravity;
+        f[i] = gravity;
+    });
+
+    // Viscosity Forces
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        const auto &neighbors = _data->_neighbor_lists[i];
+        for (size_t j: neighbors)
+        {
+            real dist = (x[i] - x[j]).length();
+            if (d[j] > HinaPE::Constant::Epsilon)
+                f[i] += _data->viscosity_coefficient * m * m * (v[j] - v[i]) / d[j] * (*_data->kernel).second_derivative(dist);
+        }
+    });
+}
+
+void HinaPE::PCISPHSolver::_accumulate_pressure_force() const {
+    auto &x = _data->_positions;
+    auto &v = _data->_velocities;
+    auto &f = _data->_forces;
+    auto &d = _data->_densities;
+    auto &p = _data->_pressures;
+    const auto &m = _data->_mass;
+    const auto &dt = _opt.current_dt;
+
+    auto &f_p = _data->_pressures_forces;
+    auto &v_t = _data->_temp_velocities;
+    auto &x_t = _data->_temp_positions;
+    auto &d_p = _data->_predict_densities;
+    auto &d_e = _data->_density_errors;
+
+    real dist;
+    mVector3 dir;
+    // compute beta
+    real beta = 2 * pow((dt * m / _data->target_density),2);
+
+    // compute delta
+    real denominator;
+    mVector3 denominator1;
+    real denominator2 = 0;
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        const auto &neighbors = _data->_neighbor_lists[i];
+        for (size_t j: neighbors) {
+            dist = (x_t[i] - x_t[j]).length();
+            dir = (x[j] - x[i]) / dist;
+        }
+        mVector3 gradWij = (*_data->kernel).gradient(dist, dir);
+        denominator1 += gradWij;
+        denominator2 += gradWij.dot(gradWij);
+    });
+    denominator = -denominator1.dot(denominator1) - denominator2;
+    real delta = -1 / (beta * denominator);
+
+    // Compute pressure from density error
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        real weightSum = 0;
+        const auto &neighbors = _data->_neighbor_lists[i];
+        for (size_t j: neighbors)
+        {
+            if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
+            {
+                weightSum += (*_data->kernel).operator()(dist);
+                real density = m * weightSum;
+                real densityError = _data->target_density - density;
+                real pressure = delta * densityError;
+
+                if(pressure < 0.0)
+                {
+                    pressure *= _data->negative_pressure_scale;
+                    densityError *= _data->negative_pressure_scale;
+                }
+
+                p[i] += pressure;
+                d_p[i] = density;
+                d_e[i] = densityError;
+            }
+        }
+    });
+
+    // Compute pressure gradient force
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        const auto &neighbors = _data->_neighbor_lists[i];
+        for (size_t j: neighbors)
+        {
+            real dist = (x[i] - x[j]).length();
+            if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
+            {
+                mVector3 dir = (x[j] - x[i]) / dist;
+                f[i] -= m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * (*_data->kernel).gradient(dist, dir);
+            }
+        }
+    });
+    
+    // Compute max density error
+
 }
 
 void HinaPE::PCISPHSolver::_time_integration() const
 {
+    auto &x = _data->_positions;
+    auto &v = _data->_velocities;
+    auto &f = _data->_forces;
+    const auto &m = _data->_mass;
+    const auto &dt = _opt.current_dt;
+
+    auto &f_p = _data->_pressures_forces;
+    auto &v_t = _data->_temp_velocities;
+    auto &x_t = _data->_temp_positions;
+
+    // semi-euler integration
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        v_t[i] = v[i] + dt * (f[i] + f_p[i]) / m;
+        x_t[i] += dt * v_t[i];
+    });
 }
 
 void HinaPE::PCISPHSolver::_resolve_collision() const
@@ -98,6 +236,25 @@ void HinaPE::PCISPHSolver::Data::_update_density()
 	});
 }
 
+void HinaPE::PCISPHSolver::Data::_update_predict_density() {
+    if (!_mass_inited)
+        _update_mass(); // update mass to ensure the initial density is 1000
+
+    auto &x = _positions;
+    auto &d = _densities;
+    const auto &m = _mass;
+    Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
+    {
+        real sum = 0;
+        for (int j = 0; j < _neighbor_lists[i].size(); ++j)
+        {
+            real dist = (x[i] - x[_neighbor_lists[i][j]]).length();
+            sum += (*kernel)(dist);
+        }
+        d[i] = m * sum; // rho(x) = m * sum(W(x - xj))
+    });
+}
+
 void HinaPE::PCISPHSolver::Data::_update_pressure()
 {
 	auto &d = _densities;
@@ -139,6 +296,10 @@ void HinaPE::PCISPHSolver::Data::_update_mass()
 	_mass_inited = true;
 }
 
+void HinaPE::PCISPHSolver::Data::_update_pressure_force() {
+
+}
+
 void HinaPE::PCISPHSolver::Data::INSPECT()
 {
 	InstancePosesBase::INSPECT();
@@ -150,3 +311,7 @@ void HinaPE::PCISPHSolver::Data::INSPECT()
 		ImGui::Text("Pressure: %.3f", _pressures[_inst_id]);
 	}
 }
+
+
+
+

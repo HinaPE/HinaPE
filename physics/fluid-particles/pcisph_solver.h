@@ -16,7 +16,8 @@ namespace HinaPE
 class PCISPHSolver final : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
-	void init() const;
+    /// const?
+	void init();
 	void update(real dt) const;
 
 public:
@@ -34,7 +35,8 @@ public:
 
 protected:
 	void _emit_particles() const;
-	void _accumulate_force() const;
+	void _accumulate_non_pressure_force() const;
+    void _accumulate_pressure_force() const;
 	void _time_integration() const;
 	void _resolve_collision() const;
 
@@ -50,6 +52,12 @@ struct PCISPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 	std::vector<mVector3> 	_forces;
 	std::vector<real> 		_densities;
 	std::vector<real> 		_pressures;
+
+    std::vector<mVector3> 	_temp_positions;
+    std::vector<mVector3> 	_temp_velocities;
+    std::vector<mVector3> 	_pressures_forces;
+    std::vector<real> 	    _density_errors;
+    std::vector<real> 	    _predict_densities;
 
 	// params
 	real _mass 				= 1e-3; // should be recalculated  to fit water density
@@ -76,12 +84,16 @@ struct PCISPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 	friend class PCISPHSolver;
 	void _update_neighbor();
 	void _update_density();
+    void _update_predict_density();
 	void _update_pressure();
 	void _update_mass();
+    void _update_pressure_force();
 	void INSPECT() final;
 
 	bool _mass_inited = false;
 };
+using PCISPHSolverPtr = std::shared_ptr<PCISPHSolver>;
+using PCISPHSolverDataPtr = std::shared_ptr<PCISPHSolver::Data>;
 } // namespace HinaPE
 
 #endif //HINAPE_PCISPH_SOLVER_H
