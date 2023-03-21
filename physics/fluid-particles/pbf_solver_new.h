@@ -62,11 +62,12 @@ struct PBFSolverNew::Data : public Kasumi::ObjectParticles3D
 		std::vector<real> 		densities;
 		std::vector<real> 		lambdas;
 		std::vector<mVector3> 	delta_p;
-		real					mass = 1e-3;
+		real					mass; // should be recalculated  to fit target density
 	} Fluid;
 	struct // boundary particles
 	{
 		std::vector<mVector3> 	positions;
+		real					mass; // should be recalculated  to fit target density
 	} Boundary;
 
 	std::vector<std::vector<unsigned int>> 	NeighborList;

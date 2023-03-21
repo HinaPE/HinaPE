@@ -128,6 +128,41 @@ void HinaPE::PBFSolverNew::_init_boundary_particles() const
 	add_wall(mVector3(x1, y1, z2), mVector3(x2, y2, z2)); // front
 
 	_data->add_boundary(target_boundary);
+	// update mass
+	std::vector<std::vector<unsigned int>> temp_neighbor_list;
+	temp_neighbor_list.resize(target_boundary.size());
+	PointHashGridSearch3 searcher(_opt.kernel_radius);
+	searcher.build(target_boundary);
+
+	Util::parallelFor(Constant::ZeroSize, target_boundary.size(), [&](size_t i)
+	{
+		auto origin = target_boundary[i];
+		temp_neighbor_list[i].clear();
+		searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
+		{
+			if (i != j)
+				temp_neighbor_list[i].push_back(j);
+		});
+	});
+
+	StdKernel poly6(_opt.kernel_radius);
+	real max_number_density = 0;
+	for (int i = 0; i < target_boundary.size(); ++i)
+	{
+		real sum = poly6(0); // self density
+		const auto &point = target_boundary[i];
+		for (const auto &neighbor_point_id: temp_neighbor_list[i])
+		{
+			auto dist = (point - target_boundary[neighbor_point_id]).length();
+			sum += poly6(dist);
+		}
+		max_number_density = std::max(max_number_density, sum);
+	}
+
+	if (max_number_density > 0)
+		_data->Boundary.mass = std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero);
+	else
+		throw std::runtime_error("max_number_density is zero");
 }
 
 void HinaPE::PBFSolverNew::_apply_force_and_predict_position() const
@@ -194,14 +229,17 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 		_update_density();
 
 		const auto fluid_size = _data->fluid_size();
+		const auto boundary_size = _data->boundary_size();
 		const auto d0 = _opt.target_density;
 		const auto h = _opt.radius;
 		const auto eps = 1e-6;
 
 		const auto &p = _data->Fluid.predicted_position;
+		const auto &b = _data->Boundary.positions;
 		const auto &d = _data->Fluid.densities;
 		const auto &nl = _data->NeighborList;
 		const auto &m = _data->Fluid.mass;
+		const auto &bm = _data->Boundary.mass;
 		StdKernel poly6(_opt.kernel_radius);
 
 		auto &lambdas = _data->Fluid.lambdas;
@@ -226,7 +264,15 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 						// Equation (8)
 						sum_grad_C_i_squared += grad_C_j.length_squared();
 						grad_C_i -= grad_C_j;
-					} else {}
+					} else
+					{
+						const auto p_i = p[i];
+						const auto b_j = d[j - fluid_size];
+						const mVector3 grad_C_j = -(bm / d0) * poly6.gradient(p_i - b_j);
+
+						sum_grad_C_i_squared += grad_C_j.length_squared();
+						grad_C_i -= grad_C_j;
+					}
 				}
 
 				sum_grad_C_i_squared += grad_C_i.length_squared();
@@ -240,7 +286,8 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 				Record("Sum Grad C Squared: ", sum_grad_C_i_squared);
 				Record("Grad C: ", grad_C_i);
 				Record("Lambda: ", lambda);
-			}
+			} else
+				lambdas[i] = 0;
 		});
 
 		auto &dp = _data->Fluid.delta_p;
@@ -268,7 +315,14 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 
 					const mVector3 grad_C_j = -(m / d0) * poly6.gradient(p_i - p_j);
 					delta_p_i -= (lambda_i + lambda_j + s_corr) * grad_C_j;
-				} else {}
+				} else
+				{
+					const auto p_i = p[i];
+					const auto b_j = b[j];
+
+					const mVector3 grad_C_j = -(m / d0) * poly6.gradient(p_i - b_j);
+					delta_p_i -= (lambda_i) * grad_C_j;
+				}
 			}
 			dp[i] = delta_p_i; // thread safe write
 
@@ -388,6 +442,7 @@ void HinaPE::PBFSolverNew::_update_density() const
 	const auto &p = _data->Fluid.predicted_position;
 	const auto &b = _data->Boundary.positions;
 	const auto &m = _data->Fluid.mass;
+	const auto &bm = _data->Boundary.mass;
 	const auto &nl = _data->NeighborList;
 	const auto fluid_size = _data->fluid_size();
 	const auto boundary_size = _data->boundary_size();
@@ -395,16 +450,19 @@ void HinaPE::PBFSolverNew::_update_density() const
 	StdKernel poly6(_opt.kernel_radius);
 	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
 	{
-		real sum = poly6(0); // self density
+		real density = m * poly6(0); // self density
 		for (const auto j: nl[i])
 		{
 			if (j < fluid_size)
 			{
 				real dist = (p[i] - p[j]).length();
-				sum += poly6(dist);
-			} else {}
+				density += m * poly6(dist);
+			} else
+			{
+				density += bm * poly6((p[i] - b[j - fluid_size]).length());
+			}
 		}
-		d[i] = m * sum; // rho(x) = m * sum(W(x - xj))
+		d[i] = density; // rho(x) = m * sum(W(x - xj))
 	});
 }
 

@@ -44,7 +44,7 @@ public:
 	{
 		NAME = "BoundaryViewer";
 		track(&_data->Boundary.positions);
-		_colors.resize(_data->Boundary.positions.size(), HinaPE::Color::BLUE);
+		_colors.resize(_data->boundary_size(), HinaPE::Color::BLUE);
 		_color_map = &_colors;
 		hide(true);
 	}
