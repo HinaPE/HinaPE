@@ -1,5 +1,8 @@
 #include "pbf_solver_new.h"
 
+#define S HinaPE::Math::to_string
+#define Record(x, y) _data->debug_info[i].emplace_back(x + S(y))
+
 // ============================================================================================================
 // ================================================== Solver ==================================================
 void HinaPE::PBFSolverNew::init()
@@ -14,10 +17,15 @@ void HinaPE::PBFSolverNew::init()
 
 	_init_fluid_particles();
 	_init_boundary_particles();
+	_update_neighbor();
+	_update_density();
 }
 
 void HinaPE::PBFSolverNew::update(real dt) const
 {
+	_data->debug_info.clear();
+	_data->debug_info.resize(_data->fluid_size());
+
 	// algorithm line 1~4
 	_apply_force_and_predict_position();
 
@@ -39,7 +47,42 @@ void HinaPE::PBFSolverNew::_init_fluid_particles() const
 	std::vector<mVector3> init_pos, init_vel;
 	_emitter->emit(&init_pos, &init_vel);
 	_data->add_fluid(init_pos, init_vel);
-	// TODO: update mass
+
+	// update mass
+	std::vector<std::vector<unsigned int>> temp_neighbor_list;
+	temp_neighbor_list.resize(init_pos.size());
+	PointHashGridSearch3 searcher(_opt.kernel_radius);
+	searcher.build(init_pos);
+
+	Util::parallelFor(Constant::ZeroSize, init_pos.size(), [&](size_t i)
+	{
+		auto origin = init_pos[i];
+		temp_neighbor_list[i].clear();
+		searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
+		{
+			if (i != j)
+				temp_neighbor_list[i].push_back(j);
+		});
+	});
+
+	StdKernel poly6(_opt.kernel_radius);
+	real max_number_density = 0;
+	for (int i = 0; i < init_pos.size(); ++i)
+	{
+		real sum = poly6(0); // self density
+		const auto &point = init_pos[i];
+		for (const auto &neighbor_point_id: temp_neighbor_list[i])
+		{
+			auto dist = (point - init_pos[neighbor_point_id]).length();
+			sum += poly6(dist);
+		}
+		max_number_density = std::max(max_number_density, sum);
+	}
+
+	if (max_number_density > 0)
+		_data->Fluid.mass = std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero);
+	else
+		throw std::runtime_error("max_number_density is zero");
 }
 
 void HinaPE::PBFSolverNew::_init_boundary_particles() const
@@ -92,12 +135,13 @@ void HinaPE::PBFSolverNew::_init_boundary_particles() const
 
 void HinaPE::PBFSolverNew::_apply_force_and_predict_position() const
 {
+	// Update Target: predicted_position, velocities, forces
 	_data->Fluid.predicted_position = _data->Fluid.positions;
 
-	auto fluid_size = _data->fluid_size();
 	auto &p = _data->Fluid.predicted_position;
 	auto &v = _data->Fluid.velocities;
 	auto &f = _data->Fluid.forces;
+	const auto fluid_size = _data->fluid_size();
 	const auto &m = _data->Fluid.mass;
 	const auto &g = _opt.gravity;
 	const auto &dt = _opt.current_dt;
@@ -116,12 +160,12 @@ void HinaPE::PBFSolverNew::_apply_force_and_predict_position() const
 
 void HinaPE::PBFSolverNew::_update_neighbor() const
 {
-	auto size = _data->fluid_size();
-	auto &p = _data->Fluid.predicted_position;
+	// Update Target: NeighborList
 	auto &nl = _data->NeighborList;
+	const auto size = _data->fluid_size();
+	const auto &p = _data->Fluid.predicted_position;
 
-	StdKernel poly6(_opt.radius);
-	PointHashGridSearch3 searcher(_opt.radius);
+	PointHashGridSearch3 searcher(_opt.kernel_radius);
 	searcher.build(p);
 	Util::parallelFor(Constant::ZeroSize, size, [&](size_t i)
 	{
@@ -137,25 +181,128 @@ void HinaPE::PBFSolverNew::_update_neighbor() const
 
 void HinaPE::PBFSolverNew::_solve_density_constraints() const
 {
+	// Update Target: Lambdas
 	for (int i = 0; i < _opt.constraint_solver_iterations; ++i)
 	{
 		// Note:
 		// "i" is the index of the current particle,
 		// "j" is the index of the neighbor particle
+
+		_update_density();
+
+		const auto size = _data->fluid_size();
+		const auto d0 = _opt.target_density;
+		const auto eps = 1e-6;
+
+		const auto &p = _data->Fluid.predicted_position;
+		const auto &d = _data->Fluid.densities;
+		const auto &nl = _data->NeighborList;
+		const auto &m = _data->Fluid.mass;
+		StdKernel poly6(_opt.kernel_radius);
+
+		auto &lambdas = _data->Fluid.lambdas;
+		Util::parallelFor(Constant::ZeroSize, size, [&](size_t i)
+		{
+			real d_i = d[i];
+			real C_i = d_i / d0 - 1;
+
+			if (C_i > 0) // if density is bigger than water density, do constraints projection
+			{
+				real sum_grad_C_i_squared = 0;
+				mVector3 grad_C_i = mVector3::Zero();
+
+				for (const auto j: nl[i])
+				{
+					const auto p_i = p[i];
+					const auto p_j = p[j];
+					const mVector3 grad_C_j = -(m / d0) * poly6.gradient(p_i - p_j);
+
+					// Equation (8)
+					sum_grad_C_i_squared += grad_C_j.length_squared();
+					grad_C_i -= grad_C_j;
+				}
+
+				sum_grad_C_i_squared += grad_C_i.length_squared();
+
+				// Equation (11): compute lambda
+				real lambda = -C_i / (sum_grad_C_i_squared + eps); // eps is for soft constraint
+				lambdas[i] = lambda; // thread safe write
+
+				// for debug
+				Record("C: ", C_i);
+				Record("Sum Grad C Squared: ", sum_grad_C_i_squared);
+				Record("Grad C: ", grad_C_i);
+				Record("Lambda: ", lambda);
+			}
+		});
+
+		auto &dp = _data->Fluid.delta_p;
+
+		Util::parallelFor(Constant::ZeroSize, size, [&](size_t i)
+		{
+			const auto &lambda_i = lambdas[i];
+
+			// Equation (12): compute delta p
+			mVector3 delta_p_i = mVector3::Zero();
+			for (const auto j: nl[i])
+			{
+				const auto &lambda_j = lambdas[j];
+				const auto p_i = p[i];
+				const auto p_j = p[j];
+				const mVector3 grad_C_j = -(m / d0) * poly6.gradient(p_i - p_j);
+				delta_p_i -= (lambda_i + lambda_j) * grad_C_j;
+			}
+			dp[i] = delta_p_i; // thread safe write
+
+			Record("delta p: ", delta_p_i);
+		});
+
+		// Finally, apply delta p to all particles
+		auto &p_to_write = _data->Fluid.predicted_position;
+		Util::parallelFor(Constant::ZeroSize, size, [&p_to_write, &dp](size_t i)
+		{
+			p_to_write[i] -= dp[i];
+		});
 	}
 }
 
 void HinaPE::PBFSolverNew::_update_positions_and_velocities() const
 {
+	const auto &p = _data->Fluid.predicted_position;
+	const auto &d = _data->Fluid.densities;
+	const auto &nl = _data->NeighborList;
+	const auto m = _data->Fluid.mass;
+	const auto size = _data->fluid_size();
+	const auto dt = _opt.current_dt;
+	StdKernel poly6(_opt.kernel_radius);
+
 	auto &x = _data->Fluid.positions;
 	auto &v = _data->Fluid.velocities;
-	const auto &p = _data->Fluid.predicted_position;
-	const auto dt = _opt.current_dt;
-
 	// First, update velocities
 	Util::parallelFor(Constant::ZeroSize, x.size(), [&](size_t i)
 	{
 		v[i] = (p[i] - x[i]) / dt;
+	});
+
+	// Apply XSPH viscosity
+	auto c = _opt.viscosity;
+	Util::parallelFor(Constant::ZeroSize, size, [&](size_t i)
+	{
+		const auto &p_i = p[i];
+		const auto &v_i = v[i];
+
+		mVector3 sum_value = mVector3::Zero();
+		for (auto const &j: nl[i])
+		{
+			const real d_j = d[j];
+			const auto &p_j = p[j];
+			const auto &v_j = v[j];
+			mVector3 tmp = v_i - v_j;
+			tmp *= poly6((p_i - p_j).length()) * (m / d_j);
+			sum_value += tmp;
+		}
+
+		v[i] = v_i - c * sum_value;
 	});
 
 	// Finally, update positions
@@ -178,13 +325,14 @@ void HinaPE::PBFSolverNew::_resolve_collision() const
 
 void HinaPE::PBFSolverNew::_update_density() const
 {
+	// Update Target: densities
 	auto &d = _data->Fluid.densities;
 	const auto &p = _data->Fluid.predicted_position;
 	const auto &m = _data->Fluid.mass;
 	const auto size = _data->fluid_size();
 	const auto &nl = _data->NeighborList;
 
-	StdKernel poly6(_opt.radius);
+	StdKernel poly6(_opt.kernel_radius);
 	Util::parallelFor(Constant::ZeroSize, size, [&](size_t i)
 	{
 		real sum = poly6(0); // self density
@@ -199,6 +347,30 @@ void HinaPE::PBFSolverNew::_update_density() const
 
 void HinaPE::PBFSolverNew::INSPECT()
 {
+	ImGui::Text("SOLVER INSPECTOR");
+	ImGui::Text("Fluids: %zu", _data->fluid_size());
+	ImGui::Text("Boundaries: %zu", _data->boundary_size());
+	INSPECT_REAL(_opt.gravity[1], "g");
+	ImGui::Separator();
+
+	auto inst_id = _data->_inst_id;
+	if (inst_id >= 0 && inst_id < _data->fluid_size())
+	{
+		ImGui::Text("Inst: %d", inst_id);
+		ImGui::Text("Mass: %f", _data->Fluid.mass);
+		ImGui::Text("Force: {%.3f, %.3f, %.3f}", _data->Fluid.forces[inst_id].x(), _data->Fluid.forces[inst_id].y(), _data->Fluid.forces[inst_id].z());
+		ImGui::Text("Density: %.3f", _data->Fluid.densities[inst_id]);
+		ImGui::Text("Lambda: %.3f", _data->Fluid.lambdas[inst_id]);
+		ImGui::Text("Neighbors: %zu", _data->NeighborList[inst_id].size());
+		ImGui::Separator();
+		if (_data->debug_info.empty())
+			return;
+		for (auto &info: _data->debug_info[inst_id])
+		{
+			ImGui::Text("%s\n", info.c_str());
+			ImGui::Separator();
+		}
+	}
 }
 // ================================================== Solver ==================================================
 // ============================================================================================================
@@ -228,7 +400,8 @@ void HinaPE::PBFSolverNew::Data::add_fluid(const std::vector<mVector3> &position
 	Fluid.delta_p.insert(Fluid.delta_p.end(), size, mVector3::Zero());
 	NeighborList.insert(NeighborList.end(), size, std::vector<unsigned int>());
 
-	color_map.insert(color_map.end(), size, Color::RED);
+	color_map.insert(color_map.end(), size, Color::ORANGE);
+	debug_info.insert(debug_info.end(), size, std::vector<std::string>());
 }
 void HinaPE::PBFSolverNew::Data::add_boundary(const std::vector<mVector3> &positions)
 {

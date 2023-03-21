@@ -42,6 +42,7 @@ public:
 		real radius 		= 0.017;
 		real target_density = 1000;
 		real kernel_radius 	= 4 * radius;
+		real viscosity 		= 0.01;
 	} _opt;
 
 private:
@@ -78,6 +79,9 @@ struct PBFSolverNew::Data : public Kasumi::ObjectParticles3D
 	auto boundary_size() const -> size_t;
 
 	std::vector<mVector3> color_map;
+	std::vector<std::vector<std::string>> debug_info;
+
+	friend class PBFSolverNew;
 };
 } // namespace HinaPE
 

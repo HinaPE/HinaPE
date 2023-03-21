@@ -4,6 +4,36 @@
 using SolverType = HinaPE::PBFSolverNew;
 using SolverDataType = SolverType::Data;
 
+struct NeighborViewer : public Kasumi::ObjectParticles3D
+{
+	explicit NeighborViewer(std::shared_ptr<SolverDataType> data) : _data(std::move(data))
+	{
+		NAME = "NeighborViewer";
+		track(&_neighbors);
+	}
+	void on()
+	{
+		if (_data->_inst_id < 0 || _data->_inst_id >= _data->Fluid.positions.size())
+			return;
+
+		auto origin = _data->Fluid.positions[_data->_inst_id];
+		for (auto &neighbor: _data->NeighborList[_data->_inst_id])
+			_neighbors.push_back(_data->Fluid.positions[neighbor]);
+		_neighbors.push_back(origin);
+
+		_shader->uniform("highlight_mode", true);
+		_data->hide(true);
+	}
+	void off()
+	{
+		_neighbors.clear();
+		_shader->uniform("highlight_mode", false);
+		_data->hide(false);
+	}
+	std::shared_ptr<SolverDataType> _data;
+	std::vector<mVector3> _neighbors;
+};
+
 class BoundaryViewer : public Kasumi::ObjectParticles3D
 {
 public:
@@ -24,12 +54,14 @@ auto main() -> int
 	auto solver = std::make_shared<SolverType>();
 	solver->init();
 	auto bv = std::make_shared<BoundaryViewer>(solver->_data);
+	auto nv = std::make_shared<NeighborViewer>(solver->_data);
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
 		scene->add(solver->_data);
 		scene->add(solver->_domain);
 		scene->add(bv);
+		scene->add(nv);
 		scene->_scene_opt._particle_mode = true;
 	};
 
@@ -44,6 +76,10 @@ auto main() -> int
 			bv->hide(false);
 		if (key == GLFW_KEY_Z && action == GLFW_RELEASE)
 			bv->hide(true);
+		if (key == GLFW_KEY_H && action == GLFW_PRESS)
+			nv->on();
+		if (key == GLFW_KEY_H && action == GLFW_RELEASE)
+			nv->off();
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());
