@@ -209,6 +209,7 @@ void HinaPE::PBFSolverNew::INSPECT()
 HinaPE::PBFSolverNew::Data::Data()
 {
 	track(&Fluid.positions);
+	_color_map = &color_map;
 }
 auto HinaPE::PBFSolverNew::Data::fluid_size() const -> size_t { return Fluid.positions.size(); }
 auto HinaPE::PBFSolverNew::Data::boundary_size() const -> size_t { return Boundary.positions.size(); }
@@ -226,6 +227,8 @@ void HinaPE::PBFSolverNew::Data::add_fluid(const std::vector<mVector3> &position
 	Fluid.lambdas.insert(Fluid.lambdas.end(), size, 0.0);
 	Fluid.delta_p.insert(Fluid.delta_p.end(), size, mVector3::Zero());
 	NeighborList.insert(NeighborList.end(), size, std::vector<unsigned int>());
+
+	color_map.insert(color_map.end(), size, Color::RED);
 }
 void HinaPE::PBFSolverNew::Data::add_boundary(const std::vector<mVector3> &positions)
 {

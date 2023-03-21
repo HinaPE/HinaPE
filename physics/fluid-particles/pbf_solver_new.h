@@ -76,6 +76,8 @@ struct PBFSolverNew::Data : public Kasumi::ObjectParticles3D
 	void add_boundary(const std::vector<mVector3>& positions);
 	auto fluid_size() const -> size_t;
 	auto boundary_size() const -> size_t;
+
+	std::vector<mVector3> color_map;
 };
 } // namespace HinaPE
 
