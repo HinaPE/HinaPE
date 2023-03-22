@@ -25,6 +25,9 @@ void HinaPE::PBFSolverNew::update(real dt) const
 {
 	_data->debug_info.clear();
 	_data->debug_info.resize(_data->fluid_size());
+	_data->p_debug.clear();
+	_data->lambdas_debug.clear();
+	_data->delta_p_debug.clear();
 
 	// algorithm line 1~4
 	_apply_force_and_predict_position();
@@ -215,6 +218,9 @@ void HinaPE::PBFSolverNew::_update_neighbor() const
 				nl[i].push_back(j);
 		});
 	});
+
+	// ==================== Debug ====================
+	_data->neighbor_list_debug = nl; // copy neighbor list to debug
 }
 
 void HinaPE::PBFSolverNew::_solve_density_constraints() const
@@ -267,7 +273,7 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 					} else
 					{
 						const auto p_i = p[i];
-						const auto b_j = d[j - fluid_size];
+						const auto b_j = b[j - fluid_size];
 						const mVector3 grad_C_j = -(bm / d0) * poly6.gradient(p_i - b_j);
 
 						sum_grad_C_i_squared += grad_C_j.length_squared();
@@ -318,7 +324,7 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 				} else // Boundary: Akinci2012
 				{
 					const auto p_i = p[i];
-					const auto b_j = b[j];
+					const auto b_j = b[j - fluid_size];
 
 					const mVector3 grad_C_j = -(bm / d0) * poly6.gradient(p_i - b_j);
 					delta_p_i -= (lambda_i) * grad_C_j;
@@ -343,6 +349,11 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 			auto temp_v = v[i]; // we don't need to update velocity here
 			_domain->resolve_collision(_opt.radius, _opt.restitution, &p_to_write[i], &temp_v);
 		});
+
+		// ==================== Debug ====================
+		_data->p_debug.push_back(p);
+		_data->lambdas_debug.push_back(lambdas);
+		_data->delta_p_debug.push_back(dp);
 	}
 }
 

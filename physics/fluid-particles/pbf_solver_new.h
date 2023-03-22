@@ -78,8 +78,17 @@ struct PBFSolverNew::Data : public Kasumi::ObjectParticles3D
 	auto fluid_size() const -> size_t;
 	auto boundary_size() const -> size_t;
 
+	// ==================== Debug Area ====================
+
 	std::vector<mVector3> color_map;
 	std::vector<std::vector<std::string>> debug_info;
+
+	std::vector<std::vector<unsigned int>> 	neighbor_list_debug;
+	std::vector<std::vector<mVector3>> p_debug;
+	std::vector<std::vector<real>> lambdas_debug;
+	std::vector<std::vector<mVector3>> delta_p_debug;
+
+	// ==================== Debug Area ====================
 
 	friend class PBFSolverNew;
 };

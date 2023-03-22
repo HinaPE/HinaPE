@@ -13,28 +13,53 @@ struct NeighborViewer : public Kasumi::ObjectParticles3D
 	}
 	void on()
 	{
-		if (_data->_inst_id < 0 || _data->_inst_id >= _data->Fluid.positions.size())
+		if (_data->_inst_id < 0)
 			return;
 
-		auto origin = _data->Fluid.positions[_data->_inst_id];
-		for (auto &neighbor: _data->NeighborList[_data->_inst_id])
+		if (_data->p_debug.empty())
+			return;
+
+		if (_data->_inst_id >= _data->p_debug[iter].size())
+			return;
+
+		_neighbors.clear();
+
+		auto origin = _data->p_debug[iter][_data->_inst_id];
+		for (auto &neighbor: _data->neighbor_list_debug[_data->_inst_id])
 			if (neighbor < _data->fluid_size())
-				_neighbors.push_back(_data->Fluid.positions[neighbor]);
+				_neighbors.push_back(_data->p_debug[iter][neighbor]);
 			else
 				_neighbors.push_back(_data->Boundary.positions[neighbor - _data->fluid_size()]);
 		_neighbors.push_back(origin);
 
 		_shader->uniform("highlight_mode", true);
 		_data->hide(true);
+
+		_on = true;
 	}
 	void off()
 	{
 		_neighbors.clear();
 		_shader->uniform("highlight_mode", false);
 		_data->hide(false);
+
+		_on = false;
 	}
+
 	std::shared_ptr<SolverDataType> _data;
 	std::vector<mVector3> _neighbors;
+	bool _on = false;
+	int iter = 0;
+
+protected:
+	void INSPECT() final
+	{
+		if (!_on)
+			return;
+
+		if (ImGui::SliderInt("iter", &iter, 0, static_cast<int>(_data->p_debug.size() - 1)))
+			on();
+	}
 };
 
 class BoundaryViewer : public Kasumi::ObjectParticles3D
