@@ -101,6 +101,8 @@ auto main() -> int
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._key = [&](int key, int scancode, int action, int mods)
 	{
+		if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
+			solver->reset();
 		if (key == GLFW_KEY_Z && action == GLFW_PRESS)
 			bv->hide(false);
 		if (key == GLFW_KEY_Z && action == GLFW_RELEASE)

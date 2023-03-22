@@ -25,6 +25,7 @@ protected:
 public:
 	void init();
 	void update(real dt) const;
+	void reset();
 
 	struct Data;
 	std::shared_ptr<Data> 				_data;
@@ -35,12 +36,12 @@ public:
 	{
 		real current_dt = 0.02;
 		mVector3 gravity = mVector3(0, -9.8, 0);
-		real restitution = 0.3;
-		size_t constraint_solver_iterations = 5;
+		real restitution = 0.3; // particle collision bouncing ratio (only for simple collision)
+		int constraint_solver_iterations = 5;
 
 		// fluid param
 		real radius 		= 0.017;
-		real target_density = 1000;
+		real target_density = 1000; // dont alter after inited
 		real kernel_radius 	= 4 * radius;
 		real viscosity 		= 0.1;
 		real vorticity 		= 0.00001;
@@ -85,6 +86,7 @@ struct PBFSolverNew::Data : public Kasumi::ObjectParticles3D
 	void add_boundary(const std::vector<mVector3>& positions);
 	auto fluid_size() const -> size_t;
 	auto boundary_size() const -> size_t;
+	void reset();
 
 	// ==================== Debug Area ====================
 
@@ -97,8 +99,6 @@ struct PBFSolverNew::Data : public Kasumi::ObjectParticles3D
 	std::vector<std::vector<mVector3>> delta_p_debug;
 
 	// ==================== Debug Area ====================
-
-	friend class PBFSolverNew;
 };
 } // namespace HinaPE
 

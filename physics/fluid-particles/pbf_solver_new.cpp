@@ -41,6 +41,12 @@ void HinaPE::PBFSolverNew::update(real dt) const
 	_solve_density_constraints();
 }
 
+void HinaPE::PBFSolverNew::reset()
+{
+	_data->reset();
+	init();
+}
+
 void HinaPE::PBFSolverNew::_init_fluid_particles() const
 {
 	std::vector<mVector3> init_pos, init_vel;
@@ -84,32 +90,32 @@ void HinaPE::PBFSolverNew::_init_fluid_particles() const
 		throw std::runtime_error("max_number_density is zero");
 }
 
+void add_wall(const mVector3 &minX, const mVector3 &maxX, real radius, std::vector<mVector3> *target_boundary)
+{
+	const real diam = 2.0 * radius;
+	const int stepsX = (int) ((maxX.x() - minX.x()) / diam) + 1;
+	const int stepsY = (int) ((maxX.y() - minX.y()) / diam) + 1;
+	const int stepsZ = (int) ((maxX.z() - minX.z()) / diam) + 1;
+
+	for (int i = 0; i < stepsX; ++i)
+	{
+		for (int j = 0; j < stepsY; ++j)
+		{
+			for (int k = 0; k < stepsZ; ++k)
+			{
+				const real x = minX.x() + i * diam;
+				const real y = minX.y() + j * diam;
+				const real z = minX.z() + k * diam;
+				target_boundary->emplace_back(x, y, z);
+			}
+		}
+	}
+}
+
 void HinaPE::PBFSolverNew::_init_boundary_particles() const
 {
 	std::vector<mVector3> target_boundary;
-
-	static const auto add_wall = [&](const mVector3 &minX, const mVector3 &maxX)
-	{
-		const real diam = 2.0 * _opt.radius;
-		const int stepsX = (int) ((maxX.x() - minX.x()) / diam) + 1;
-		const int stepsY = (int) ((maxX.y() - minX.y()) / diam) + 1;
-		const int stepsZ = (int) ((maxX.z() - minX.z()) / diam) + 1;
-
-		// TODO: parallelize
-		for (int i = 0; i < stepsX; ++i)
-		{
-			for (int j = 0; j < stepsY; ++j)
-			{
-				for (int k = 0; k < stepsZ; ++k)
-				{
-					const real x = minX.x() + i * diam;
-					const real y = minX.y() + j * diam;
-					const real z = minX.z() + k * diam;
-					target_boundary.emplace_back(x, y, z);
-				}
-			}
-		}
-	};
+	target_boundary.clear();
 
 	const auto half_width = _domain->_extent.x();
 	const auto half_height = _domain->_extent.y();
@@ -122,12 +128,12 @@ void HinaPE::PBFSolverNew::_init_boundary_particles() const
 	const real z1 = -half_depth;
 	const real z2 = half_depth;
 
-	add_wall(mVector3(x1, y1, z1), mVector3(x2, y1, z2)); // floor
-	add_wall(mVector3(x1, y2, z1), mVector3(x2, y2, z2)); // top
-	add_wall(mVector3(x1, y1, z1), mVector3(x1, y2, z2)); // left
-	add_wall(mVector3(x2, y1, z1), mVector3(x2, y2, z2)); // right
-	add_wall(mVector3(x1, y1, z1), mVector3(x2, y2, z1)); // back
-	add_wall(mVector3(x1, y1, z2), mVector3(x2, y2, z2)); // front
+	add_wall(mVector3(x1, y1, z1), mVector3(x2, y1, z2), _opt.radius, &target_boundary); // floor
+	add_wall(mVector3(x1, y2, z1), mVector3(x2, y2, z2), _opt.radius, &target_boundary); // top
+	add_wall(mVector3(x1, y1, z1), mVector3(x1, y2, z2), _opt.radius, &target_boundary); // left
+	add_wall(mVector3(x2, y1, z1), mVector3(x2, y2, z2), _opt.radius, &target_boundary); // right
+	add_wall(mVector3(x1, y1, z1), mVector3(x2, y2, z1), _opt.radius, &target_boundary); // back
+	add_wall(mVector3(x1, y1, z2), mVector3(x2, y2, z2), _opt.radius, &target_boundary); // front
 
 	_data->add_boundary(target_boundary);
 	// update mass
@@ -497,21 +503,37 @@ void HinaPE::PBFSolverNew::_update_positions_and_velocities() const
 
 void HinaPE::PBFSolverNew::INSPECT()
 {
+	// Solver Parameters
 	ImGui::Text("SOLVER INSPECTOR");
 	ImGui::Text("Fluids: %zu", _data->fluid_size());
 	ImGui::Text("Boundaries: %zu", _data->boundary_size());
-	INSPECT_REAL(_opt.gravity[1], "g");
+	static real min_dt = 0, max_dt = 1;
+	ImGui::DragScalar("Time Step", ImGuiDataType_Real, &_opt.current_dt, 0.01, &min_dt, &max_dt, "%.2f");
+	static real min_restitution = 0, max_restitution = 1;
+	ImGui::DragScalar("Restitution", ImGuiDataType_Real, &_opt.restitution, 0.01, &min_restitution, &max_restitution, "%.2f");
+	static int min_solver_iteration = 1, max_solver_iteration = 15;
+	ImGui::DragScalar("Constraint Solver Iterations", ImGuiDataType_S32, &_opt.constraint_solver_iterations, 1, &min_solver_iteration, &max_solver_iteration, "%d");
+	ImGui::DragScalar("Gravity", ImGuiDataType_Real, &_opt.gravity[1], 0.1, nullptr, nullptr, "%.2f");
+	static real min_radius = 1e-3, max_radius = 1e-1;
+	ImGui::DragScalar("Radius", ImGuiDataType_Real, &_opt.radius, 1e-3, &min_radius, &max_radius, "%.3f");
+	ImGui::DragScalar("Kernel Radius", ImGuiDataType_Real, &_opt.kernel_radius, 1e-3, &min_radius, &max_radius, "%.3f");
 	ImGui::Checkbox("Surface Tension", &_opt.enable_surface_tension);
 	ImGui::Checkbox("XSPH Viscosity", &_opt.enable_viscosity);
 	if (_opt.enable_viscosity)
-		ImGui::SliderScalar("Viscosity", ImGuiDataType_Real, &_opt.viscosity, &Constant::Zero, &Constant::One);
+	{
+		static real viscosity_max = 0.1;
+		ImGui::SliderScalar("Viscosity", ImGuiDataType_Real, &_opt.viscosity, &Constant::Zero, &viscosity_max);
+	}
 	ImGui::Checkbox("Vorticity", &_opt.enable_vorticity);
-	static real vorticity_max = 0.0001;
 	if (_opt.enable_vorticity)
+	{
+		static real vorticity_max = 0.0001;
 		ImGui::SliderScalar("Vorticity", ImGuiDataType_Real, &_opt.vorticity, &Constant::Zero, &vorticity_max);
+	}
 	ImGui::Checkbox("Akinci2012 Collision", &_opt.use_akinci2012_collision);
 	ImGui::Separator();
 
+	// Debug Info
 	auto inst_id = _data->_inst_id;
 	if (inst_id >= 0 && inst_id < _data->fluid_size())
 	{
@@ -573,6 +595,26 @@ void HinaPE::PBFSolverNew::Data::add_fluid(const std::vector<mVector3> &position
 void HinaPE::PBFSolverNew::Data::add_boundary(const std::vector<mVector3> &positions)
 {
 	Boundary.positions.insert(Boundary.positions.end(), positions.begin(), positions.end());
+}
+void HinaPE::PBFSolverNew::Data::reset()
+{
+	Fluid.positions.clear();
+	Fluid.velocities.clear();
+	Fluid.predicted_position.clear();
+	Fluid.forces.clear();
+	Fluid.densities.clear();
+	Fluid.lambdas.clear();
+	Fluid.delta_p.clear();
+	Fluid.mass = 1e-3;
+	Boundary.positions.clear();
+	Boundary.mass = 1e-3;
+	NeighborList.clear();
+	color_map.clear();
+	debug_info.clear();
+	neighbor_list_debug.clear();
+	p_debug.clear();
+	lambdas_debug.clear();
+	delta_p_debug.clear();
 }
 // ================================================== Data ==================================================
 // ==========================================================================================================
