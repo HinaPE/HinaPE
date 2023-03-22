@@ -18,6 +18,7 @@ class PBFSolverNew : public Kasumi::INSPECTOR
 protected:
 	void _apply_force_and_predict_position() const;
 	void _update_neighbor() const;
+	void _update_density() const;
 	void _solve_density_constraints() const;
 	void _update_positions_and_velocities() const;
 
@@ -54,7 +55,7 @@ public:
 private:
 	void _init_fluid_particles() const;
 	void _init_boundary_particles() const;
-	void _update_density() const;
+	void _reset_debug_info() const;
 	void INSPECT() override;
 };
 

@@ -17,17 +17,19 @@ void HinaPE::PBFSolverNew::init()
 
 	_init_fluid_particles();
 	_init_boundary_particles();
+
+
 	_update_neighbor();
 	_update_density();
 }
 
 void HinaPE::PBFSolverNew::update(real dt) const
 {
-	_data->debug_info.clear();
-	_data->debug_info.resize(_data->fluid_size());
-	_data->p_debug.clear();
-	_data->lambdas_debug.clear();
-	_data->delta_p_debug.clear();
+	// algorithm line 20~24
+	_update_positions_and_velocities(); // we reorder the loop sequence for easier debugging
+
+	// PBF Loop start here
+	_reset_debug_info();
 
 	// algorithm line 1~4
 	_apply_force_and_predict_position();
@@ -37,9 +39,6 @@ void HinaPE::PBFSolverNew::update(real dt) const
 
 	// algorithm line 8~19
 	_solve_density_constraints();
-
-	// algorithm line 20~24
-	_update_positions_and_velocities();
 }
 
 void HinaPE::PBFSolverNew::_init_fluid_particles() const
@@ -221,6 +220,40 @@ void HinaPE::PBFSolverNew::_update_neighbor() const
 
 	// ==================== Debug ====================
 	_data->neighbor_list_debug = nl; // copy neighbor list to debug
+}
+
+void HinaPE::PBFSolverNew::_update_density() const
+{
+	// Update Target: densities
+	auto &d = _data->Fluid.densities;
+	const auto &p = _data->Fluid.predicted_position;
+	const auto &b = _data->Boundary.positions;
+	const auto &m = _data->Fluid.mass;
+	const auto &bm = _data->Boundary.mass;
+	const auto &nl = _data->NeighborList;
+	const auto fluid_size = _data->fluid_size();
+	const auto boundary_size = _data->boundary_size();
+
+	StdKernel poly6(_opt.kernel_radius);
+	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+	{
+		real density = m * poly6(0); // self density
+		for (const auto j: nl[i])
+		{
+			if (j < fluid_size)
+			{
+				real dist = (p[i] - p[j]).length();
+				density += m * poly6(dist);
+			} else
+			{
+				if (_opt.use_akinci2012_collision)
+				{
+					density += bm * poly6((p[i] - b[j - fluid_size]).length());
+				}
+			}
+		}
+		d[i] = density; // rho(x) = m * sum(W(x - xj))
+	});
 }
 
 void HinaPE::PBFSolverNew::_solve_density_constraints() const
@@ -462,40 +495,6 @@ void HinaPE::PBFSolverNew::_update_positions_and_velocities() const
 	});
 }
 
-void HinaPE::PBFSolverNew::_update_density() const
-{
-	// Update Target: densities
-	auto &d = _data->Fluid.densities;
-	const auto &p = _data->Fluid.predicted_position;
-	const auto &b = _data->Boundary.positions;
-	const auto &m = _data->Fluid.mass;
-	const auto &bm = _data->Boundary.mass;
-	const auto &nl = _data->NeighborList;
-	const auto fluid_size = _data->fluid_size();
-	const auto boundary_size = _data->boundary_size();
-
-	StdKernel poly6(_opt.kernel_radius);
-	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
-	{
-		real density = m * poly6(0); // self density
-		for (const auto j: nl[i])
-		{
-			if (j < fluid_size)
-			{
-				real dist = (p[i] - p[j]).length();
-				density += m * poly6(dist);
-			} else
-			{
-				if (_opt.use_akinci2012_collision)
-				{
-					density += bm * poly6((p[i] - b[j - fluid_size]).length());
-				}
-			}
-		}
-		d[i] = density; // rho(x) = m * sum(W(x - xj))
-	});
-}
-
 void HinaPE::PBFSolverNew::INSPECT()
 {
 	ImGui::Text("SOLVER INSPECTOR");
@@ -531,6 +530,14 @@ void HinaPE::PBFSolverNew::INSPECT()
 			ImGui::Separator();
 		}
 	}
+}
+void HinaPE::PBFSolverNew::_reset_debug_info() const
+{
+	_data->debug_info.clear();
+	_data->debug_info.resize(_data->fluid_size());
+	_data->p_debug.clear();
+	_data->lambdas_debug.clear();
+	_data->delta_p_debug.clear();
 }
 // ================================================== Solver ==================================================
 // ============================================================================================================

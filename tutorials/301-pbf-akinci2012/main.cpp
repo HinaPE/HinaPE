@@ -6,7 +6,7 @@ using SolverDataType = SolverType::Data;
 
 struct NeighborViewer : public Kasumi::ObjectParticles3D
 {
-	explicit NeighborViewer(std::shared_ptr<SolverDataType> data) : _data(std::move(data))
+	explicit NeighborViewer(std::shared_ptr<SolverType> solver) : _solver(std::move(solver)), _data(_solver->_data)
 	{
 		NAME = "NeighborViewer";
 		track(&_neighbors);
@@ -46,6 +46,7 @@ struct NeighborViewer : public Kasumi::ObjectParticles3D
 		_on = false;
 	}
 
+	std::shared_ptr<SolverType> _solver;
 	std::shared_ptr<SolverDataType> _data;
 	std::vector<mVector3> _neighbors;
 	bool _on = false;
@@ -82,7 +83,7 @@ auto main() -> int
 	auto solver = std::make_shared<SolverType>();
 	solver->init();
 	auto bv = std::make_shared<BoundaryViewer>(solver->_data);
-	auto nv = std::make_shared<NeighborViewer>(solver->_data);
+	auto nv = std::make_shared<NeighborViewer>(solver);
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
