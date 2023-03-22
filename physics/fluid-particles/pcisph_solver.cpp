@@ -11,11 +11,11 @@ void HinaPE::PCISPHSolver::update(real dt) const
 	// accumulate external forces, viscosity force
     _accumulate_non_pressure_force();
 
-	// do semi-euler integration
-	_time_integration();
+    // prediction_correction_step
+    _prediction_correction_step();
 
-	// deal with collision (particle-solid)
-	_resolve_collision();
+    //update velocity and position
+    _update_velocity_and_position();
 
 	// emit particle to data, and rebuild data
 	_emit_particles();
@@ -28,13 +28,35 @@ void HinaPE::PCISPHSolver::_emit_particles() const
     _data->_densities.resize(_data->_positions.size(), 0);
     _data->_pressures.resize(_data->_positions.size(), 0);
 
+    _data->_temp_positions.resize(_data->_positions.size(), mVector3::Zero());
+    _data->_temp_velocities.resize(_data->_positions.size(), mVector3::Zero());
     _data->_pressures_forces.resize(_data->_positions.size(), mVector3::Zero());
     _data->_density_errors.resize(_data->_positions.size(), 0);
     _data->_predict_densities.resize(_data->_positions.size(), 0);
 
     _data->_update_neighbor();
-/*    _data->_update_density();
-    _data->_update_pressure();*/
+    _data->_update_density();
+
+    //_data->_update_pressure();
+}
+
+void HinaPE::PCISPHSolver::_prediction_correction_step() const
+{
+    int iteration = 0;
+
+    while((iteration < _data->min_loop)||((_data->density_error_too_large)&&(iteration < _data->max_loop)))
+    {
+        //predict velocity and position
+        _predict_velocity_and_position();
+
+        // deal with collision (particle-solid)
+        _resolve_collision();
+
+        // accumulate pressure forces
+        _accumulate_pressure_force();
+
+        iteration++;
+    }
 }
 
 void HinaPE::PCISPHSolver::_accumulate_non_pressure_force() const
@@ -148,11 +170,18 @@ void HinaPE::PCISPHSolver::_accumulate_pressure_force() const {
 
     // Compute max density error
     real maxDensityError = 0.0;
+    real maxDensityErrorRatio;
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
     {
         maxDensityError = (maxDensityError * maxDensityError > _data->_density_errors[i] * _data->_density_errors[i]) ? maxDensityError:_data->_density_errors[i];
     });
-    _data->max_density_error_ratio = maxDensityError / _data->target_density;
+
+    maxDensityErrorRatio = maxDensityError / _data->target_density;
+
+    if(maxDensityErrorRatio < _data->max_density_error_ratio)
+    {
+        _data->density_error_too_large = false;
+    }
 
     // Accumulate pressure force
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
@@ -161,7 +190,7 @@ void HinaPE::PCISPHSolver::_accumulate_pressure_force() const {
     });
 }
 
-void HinaPE::PCISPHSolver::_time_integration() const
+void HinaPE::PCISPHSolver::_predict_velocity_and_position() const
 {
     auto &x = _data->_positions;
     auto &v = _data->_velocities;
@@ -173,7 +202,7 @@ void HinaPE::PCISPHSolver::_time_integration() const
     auto &v_t = _data->_temp_velocities;
     auto &x_t = _data->_temp_positions;
 
-    // semi-euler integration
+    // predict velocity and position
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
     {
         v_t[i] = v[i] + dt * (f[i] + f_p[i]) / m;
@@ -181,8 +210,32 @@ void HinaPE::PCISPHSolver::_time_integration() const
     });
 }
 
+void HinaPE::PCISPHSolver::_update_velocity_and_position() const{
+    auto &x = _data->_positions;
+    auto &v = _data->_velocities;
+    auto &f = _data->_forces;
+    const auto &m = _data->_mass;
+    const auto &dt = _opt.current_dt;
+
+    auto &f_p = _data->_pressures_forces;
+    auto &v_t = _data->_temp_velocities;
+    auto &x_t = _data->_temp_positions;
+
+    //  update velocity and position
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        v[i] += dt * f[i] / m;
+        x[i] += dt * v[i];
+    });
+}
+
 void HinaPE::PCISPHSolver::_resolve_collision() const
 {
+    // collide with domain
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        _domain->resolve_collision(_data->_radius, _opt.restitution, &_data->_positions[i], &_data->_velocities[i]);
+    });
 }
 
 void HinaPE::PCISPHSolver::INSPECT()
@@ -305,10 +358,6 @@ void HinaPE::PCISPHSolver::Data::_update_mass()
 		_mass = std::max((target_density / max_number_density), HinaPE::Constant::Zero);
 
 	_mass_inited = true;
-}
-
-void HinaPE::PCISPHSolver::Data::_update_pressure_force() {
-
 }
 
 void HinaPE::PCISPHSolver::Data::INSPECT()

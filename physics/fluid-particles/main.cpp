@@ -13,8 +13,8 @@
 
 using SolverType =
 //		HinaPE::SPHSolver;
-//		HinaPE::PCISPHSolver;
-		HinaPE::PBFSolver;
+		HinaPE::PCISPHSolver;
+//		HinaPE::PBFSolver;
 using SolverDataType = SolverType::Data;
 
 struct NeighborSearchVisualization : public Kasumi::ObjectParticles3D

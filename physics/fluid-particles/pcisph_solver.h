@@ -19,7 +19,6 @@ public:
     /// const?
 	void init();
 	void update(real dt) const;
-
 public:
 	struct Opt
 	{
@@ -35,9 +34,11 @@ public:
 
 protected:
 	void _emit_particles() const;
+    void _prediction_correction_step() const;
 	void _accumulate_non_pressure_force() const;
     void _accumulate_pressure_force() const;
-	void _time_integration() const;
+	void _predict_velocity_and_position() const;
+    void _update_velocity_and_position() const;
 	void _resolve_collision() const;
 
 	void INSPECT() final;
@@ -67,6 +68,8 @@ struct PCISPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 	real target_spacing 	= _radius;
 	real kernel_radius_over_target_spacing = 1.8;
 	real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
+    real min_loop = 10;
+    real max_loop = 50;
 
 	// pcisph
 	real eos_exponent 					= 7;
@@ -88,10 +91,10 @@ struct PCISPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
     void _update_predict_density();
 	void _update_pressure();
 	void _update_mass();
-    void _update_pressure_force();
 	void INSPECT() final;
 
 	bool _mass_inited = false;
+    bool density_error_too_large = true;
 };
 using PCISPHSolverPtr = std::shared_ptr<PCISPHSolver>;
 using PCISPHSolverDataPtr = std::shared_ptr<PCISPHSolver::Data>;
