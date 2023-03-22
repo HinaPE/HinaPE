@@ -70,12 +70,15 @@ public:
 	{
 		NAME = "BoundaryViewer";
 		track(&_data->Boundary.positions);
+		track_colormap(&_colors);
 		_colors.resize(_data->boundary_size(), HinaPE::Color::BLUE);
-		_color_map = &_colors;
 		hide(true);
 	}
 	std::shared_ptr<SolverDataType> _data;
 	std::vector<mVector3> _colors;
+
+protected:
+	void INSPECT() final {}
 };
 
 auto main() -> int

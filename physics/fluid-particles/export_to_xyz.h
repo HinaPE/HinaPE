@@ -27,7 +27,8 @@ void save_particles_as_pos(real *ptr, size_t size, const std::string &filename)
 #define close pclose
 #endif
 
-auto exec(const char *cmd) -> std::string
+// execute a terminal command
+void exec(const char *cmd)
 {
 	std::array<char, 128> buffer{};
 	std::string result;
@@ -38,7 +39,6 @@ auto exec(const char *cmd) -> std::string
 		result += buffer.data();
 	std::cout << result << std::endl;
 	std::cout << "complete!" << std::endl;
-	return result;
 }
 
 #endif //HINAPE_EXPORT_TO_XYZ_H
