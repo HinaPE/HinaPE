@@ -15,9 +15,11 @@ void HinaPE::PBFSolverNew::init()
 	if (_emitter == nullptr)
 		_emitter = std::make_shared<VolumeParticleEmitter3>();
 
+	_data->DEFAULT_SCALE = 0.5 * _opt.radius * mVector3::One();
+	_emitter->_opt.spacing = 1.2 * _opt.radius;
+
 	_init_fluid_particles();
 	_init_boundary_particles();
-
 
 	_update_neighbor();
 	_update_density();
@@ -514,14 +516,17 @@ void HinaPE::PBFSolverNew::INSPECT()
 	static int min_solver_iteration = 1, max_solver_iteration = 15;
 	ImGui::DragScalar("Constraint Solver Iterations", ImGuiDataType_S32, &_opt.constraint_solver_iterations, 1, &min_solver_iteration, &max_solver_iteration, "%d");
 	ImGui::DragScalar("Gravity", ImGuiDataType_Real, &_opt.gravity[1], 0.1, nullptr, nullptr, "%.2f");
-	static real min_radius = 1e-3, max_radius = 1e-1;
-	ImGui::DragScalar("Radius", ImGuiDataType_Real, &_opt.radius, 1e-3, &min_radius, &max_radius, "%.3f");
-	ImGui::DragScalar("Kernel Radius", ImGuiDataType_Real, &_opt.kernel_radius, 1e-3, &min_radius, &max_radius, "%.3f");
+	static real min_multiplier = 1e-1, max_multiplier = 3;
+	ImGui::DragScalar("Particles Multiplier", ImGuiDataType_Real, &_emitter->_opt.multiplier, 0.1, &min_multiplier, &max_multiplier, "%.2f");
+	static real min_radius = 1e-3, max_radius = 9e-1;
+	if (ImGui::DragScalar("Radius", ImGuiDataType_Real, &_opt.radius, 1e-3, &min_radius, &max_radius, "%.3f")) { _opt.kernel_radius = _opt.radius * _opt.relative_kernel_radius; }
+	static real min_relative_radius = 1, max_relative_radius = 5;
+	if (ImGui::DragScalar("Relative Kernel Radius", ImGuiDataType_Real, &_opt.relative_kernel_radius, 1e-1, &min_relative_radius, &max_relative_radius, "%.3f")) { _opt.kernel_radius = _opt.radius * _opt.relative_kernel_radius; }
 	ImGui::Checkbox("Surface Tension", &_opt.enable_surface_tension);
 	ImGui::Checkbox("XSPH Viscosity", &_opt.enable_viscosity);
 	if (_opt.enable_viscosity)
 	{
-		static real viscosity_max = 0.1;
+		static real viscosity_max = 1;
 		ImGui::SliderScalar("Viscosity", ImGuiDataType_Real, &_opt.viscosity, &Constant::Zero, &viscosity_max);
 	}
 	ImGui::Checkbox("Vorticity", &_opt.enable_vorticity);

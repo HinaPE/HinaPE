@@ -28,9 +28,9 @@ public:
 	void reset();
 
 	struct Data;
-	std::shared_ptr<Data> 				_data;
-	std::shared_ptr<BoxDomain> 			_domain;
-	std::shared_ptr<ParticleEmitter3> 	_emitter;
+	std::shared_ptr<Data> 					_data;
+	std::shared_ptr<BoxDomain> 				_domain;
+	std::shared_ptr<VolumeParticleEmitter3> _emitter;
 
 	struct Opt
 	{
@@ -40,9 +40,10 @@ public:
 		int constraint_solver_iterations = 5;
 
 		// fluid param
-		real radius 		= 0.017;
+		real radius 		= 0.029;
 		real target_density = 1000; // dont alter after inited
-		real kernel_radius 	= 4 * radius;
+		real relative_kernel_radius = 1.7; // this is important!
+		real kernel_radius 	= relative_kernel_radius * radius;
 		real viscosity 		= 0.1;
 		real vorticity 		= 0.00001;
 
