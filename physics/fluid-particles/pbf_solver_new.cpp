@@ -37,7 +37,7 @@ void HinaPE::PBFSolverNew::update(real dt) const
 	_apply_force_and_predict_position();
 
 	// algorithm line 5~7
-	_update_neighbor();
+//	_update_neighbor(); // we no longer need this
 
 	// algorithm line 8~19
 	_solve_density_constraints();
@@ -580,7 +580,7 @@ void HinaPE::PBFSolverNew::_reset_debug_info() const
 HinaPE::PBFSolverNew::Data::Data()
 {
 	track(&Fluid.positions);
-	_color_map = &color_map;
+	track_colormap(&color_map);
 }
 auto HinaPE::PBFSolverNew::Data::fluid_size() const -> size_t { return Fluid.positions.size(); }
 auto HinaPE::PBFSolverNew::Data::boundary_size() const -> size_t { return Boundary.positions.size(); }
