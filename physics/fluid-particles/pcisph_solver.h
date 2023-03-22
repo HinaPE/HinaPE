@@ -23,7 +23,7 @@ public:
 	struct Opt
 	{
 		bool inited = false;
-		real current_dt = 0.02;
+		real current_dt = 0.01;
 		mVector3 gravity = mVector3(0, -9.8, 0);
 		real restitution = 0.3;
 	} _opt;
@@ -68,7 +68,7 @@ struct PCISPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 	real target_spacing 	= _radius;
 	real kernel_radius_over_target_spacing = 1.8;
 	real kernel_radius 		= target_spacing * kernel_radius_over_target_spacing;
-    real min_loop = 10;
+    real min_loop = 3;
     real max_loop = 50;
 
 	// pcisph

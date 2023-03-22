@@ -11,7 +11,7 @@ void HinaPE::PCISPHSolver::update(real dt) const
 	// accumulate external forces, viscosity force
     _accumulate_non_pressure_force();
 
-    // prediction_correction_step
+    // prediction_correction step
     _prediction_correction_step();
 
     //update velocity and position
@@ -35,13 +35,13 @@ void HinaPE::PCISPHSolver::_emit_particles() const
     _data->_predict_densities.resize(_data->_positions.size(), 0);
 
     _data->_update_neighbor();
-    _data->_update_density();
-
+    //_data->_update_density();
     //_data->_update_pressure();
 }
 
 void HinaPE::PCISPHSolver::_prediction_correction_step() const
 {
+
     int iteration = 0;
 
     while((iteration < _data->min_loop)||((_data->density_error_too_large)&&(iteration < _data->max_loop)))
@@ -67,6 +67,9 @@ void HinaPE::PCISPHSolver::_accumulate_non_pressure_force() const
     auto &d = _data->_densities;
     auto &p = _data->_pressures;
     const auto &m = _data->_mass;
+
+    auto &d_p = _data->_predict_densities;
+    auto &f_p = _data->_pressures_forces;
 
     // Gravity Forces
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
@@ -105,6 +108,7 @@ void HinaPE::PCISPHSolver::_accumulate_pressure_force() const {
 
     real dist;
     mVector3 dir;
+
     // compute beta
     real beta = 2 * pow((dt * m / _data->target_density),2);
 
@@ -117,7 +121,7 @@ void HinaPE::PCISPHSolver::_accumulate_pressure_force() const {
         const auto &neighbors = _data->_neighbor_lists[i];
         for (size_t j: neighbors) {
             dist = (x_t[i] - x_t[j]).length();
-            dir = (x[j] - x[i]) / dist;
+            dir = (x_t[j] - x_t[i]) / dist;
         }
         mVector3 gradWij = (*_data->kernel).gradient(dist, dir);
         denominator1 += gradWij;
@@ -126,6 +130,7 @@ void HinaPE::PCISPHSolver::_accumulate_pressure_force() const {
     denominator = -denominator1.dot(denominator1) - denominator2;
     real delta = -1 / (beta * denominator);
 
+
     // Compute pressure from density error
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
     {
@@ -133,24 +138,25 @@ void HinaPE::PCISPHSolver::_accumulate_pressure_force() const {
         const auto &neighbors = _data->_neighbor_lists[i];
         for (size_t j: neighbors)
         {
-            if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
+            if (dist > HinaPE::Constant::Epsilon)
             {
                 weightSum += (*_data->kernel).operator()(dist);
-                real density = m * weightSum;
-                real densityError = _data->target_density - density;
-                real pressure = delta * densityError;
-
-                if(pressure < 0.0)
-                {
-                    pressure *= _data->negative_pressure_scale;
-                    densityError *= _data->negative_pressure_scale;
-                }
-
-                p[i] += pressure;
-                d_p[i] = density;
-                d_e[i] = densityError;
             }
         }
+        weightSum += (*_data->kernel).operator()(0);
+        real density = m * weightSum;
+        real densityError = density - _data->target_density ;
+        real pressure = delta * densityError;
+
+        if(pressure < 0.0)
+        {
+            pressure *= _data->negative_pressure_scale;
+            densityError *= _data->negative_pressure_scale;
+        }
+
+        p[i] += pressure;
+        d_p[i] = density;
+        d_e[i] = densityError;
     });
 
     // Compute pressure gradient force
@@ -160,25 +166,25 @@ void HinaPE::PCISPHSolver::_accumulate_pressure_force() const {
         for (size_t j: neighbors)
         {
             real dist = (x[i] - x[j]).length();
-            if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
+            if (dist > HinaPE::Constant::Epsilon)
             {
                 mVector3 dir = (x[j] - x[i]) / dist;
-                f_p[i] -= m * m * (p[i] / (d[i] * d[i]) + p[j] / (d[j] * d[j])) * (*_data->kernel).gradient(dist, dir);
+                f_p[i] -= m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * (*_data->kernel).gradient(dist, dir);
             }
         }
     });
 
     // Compute max density error
     real maxDensityError = 0.0;
-    real maxDensityErrorRatio;
+    real DensityErrorRatio;
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
     {
         maxDensityError = (maxDensityError * maxDensityError > _data->_density_errors[i] * _data->_density_errors[i]) ? maxDensityError:_data->_density_errors[i];
     });
 
-    maxDensityErrorRatio = maxDensityError / _data->target_density;
+    DensityErrorRatio = maxDensityError / _data->target_density;
 
-    if(maxDensityErrorRatio < _data->max_density_error_ratio)
+    if(fabs(DensityErrorRatio) < _data->max_density_error_ratio)
     {
         _data->density_error_too_large = false;
     }
@@ -195,18 +201,30 @@ void HinaPE::PCISPHSolver::_predict_velocity_and_position() const
     auto &x = _data->_positions;
     auto &v = _data->_velocities;
     auto &f = _data->_forces;
+    auto &p = _data->_pressures;
     const auto &m = _data->_mass;
+    auto &d = _data->_densities;
     const auto &dt = _opt.current_dt;
 
     auto &f_p = _data->_pressures_forces;
     auto &v_t = _data->_temp_velocities;
     auto &x_t = _data->_temp_positions;
+    auto &d_p = _data->_predict_densities;
+    auto &d_e = _data->_density_errors;
+
+    Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
+    {
+        p[i] = 0.0;
+        f_p[i] = mVector3 (0.0,0.0,0.0);
+        d_e[i] = 0.0;
+        d_p[i] = d[i];
+    });
 
     // predict velocity and position
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
     {
         v_t[i] = v[i] + dt * (f[i] + f_p[i]) / m;
-        x_t[i] += dt * v_t[i];
+        x_t[i] = x[i] + dt * v_t[i];
     });
 }
 
@@ -216,10 +234,6 @@ void HinaPE::PCISPHSolver::_update_velocity_and_position() const{
     auto &f = _data->_forces;
     const auto &m = _data->_mass;
     const auto &dt = _opt.current_dt;
-
-    auto &f_p = _data->_pressures_forces;
-    auto &v_t = _data->_temp_velocities;
-    auto &x_t = _data->_temp_positions;
 
     //  update velocity and position
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
