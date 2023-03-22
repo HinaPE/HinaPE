@@ -94,7 +94,7 @@ void HinaPE::PBFSolverNew::_init_fluid_particles() const
 
 void add_wall(const mVector3 &minX, const mVector3 &maxX, real radius, std::vector<mVector3> *target_boundary)
 {
-	const real diam = 2.0 * radius;
+	const real diam = 1.4 * radius;
 	const int stepsX = (int) ((maxX.x() - minX.x()) / diam) + 1;
 	const int stepsY = (int) ((maxX.y() - minX.y()) / diam) + 1;
 	const int stepsZ = (int) ((maxX.z() - minX.z()) / diam) + 1;
@@ -173,6 +173,8 @@ void HinaPE::PBFSolverNew::_init_boundary_particles() const
 		_data->Boundary.mass = std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero);
 	else
 		throw std::runtime_error("max_number_density is zero");
+
+	_data->Boundary.mass *= 10; // ???why?
 }
 
 void HinaPE::PBFSolverNew::_apply_force_and_predict_position() const
@@ -387,13 +389,16 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 			p_to_write[i] -= dp[i];
 		});
 
-		// Dead simple collision
-		const auto &v = _data->Fluid.velocities;
-		Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+		if (!_opt.use_akinci2012_collision)
 		{
-			auto temp_v = v[i]; // we don't need to update velocity here
-			_domain->resolve_collision(_opt.radius, _opt.restitution, &p_to_write[i], &temp_v);
-		});
+			// Dead simple collision
+			const auto &v = _data->Fluid.velocities;
+			Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+			{
+				auto temp_v = v[i]; // we don't need to update velocity here
+				_domain->resolve_collision(_opt.radius, _opt.restitution, &p_to_write[i], &temp_v);
+			});
+		}
 
 		// ==================== Debug ====================
 		_data->p_debug.push_back(p);
@@ -510,7 +515,7 @@ void HinaPE::PBFSolverNew::INSPECT()
 	ImGui::Text("Fluids: %zu", _data->fluid_size());
 	ImGui::Text("Boundaries: %zu", _data->boundary_size());
 	static real min_dt = 0, max_dt = 1;
-	ImGui::DragScalar("Time Step", ImGuiDataType_Real, &_opt.current_dt, 0.01, &min_dt, &max_dt, "%.2f");
+	ImGui::DragScalar("Time Step", ImGuiDataType_Real, &_opt.current_dt, 0.01, &min_dt, &max_dt, "%.3f");
 	static real min_restitution = 0, max_restitution = 1;
 	ImGui::DragScalar("Restitution", ImGuiDataType_Real, &_opt.restitution, 0.01, &min_restitution, &max_restitution, "%.2f");
 	static int min_solver_iteration = 1, max_solver_iteration = 15;

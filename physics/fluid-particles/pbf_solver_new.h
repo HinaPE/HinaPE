@@ -34,7 +34,7 @@ public:
 
 	struct Opt
 	{
-		real current_dt = 0.02;
+		real current_dt = 0.005;
 		mVector3 gravity = mVector3(0, -9.8, 0);
 		real restitution = 0.3; // particle collision bouncing ratio (only for simple collision)
 		int constraint_solver_iterations = 5;
@@ -48,7 +48,7 @@ public:
 		real vorticity 		= 0.00001;
 
 		// options
-		bool use_akinci2012_collision = false;
+		bool use_akinci2012_collision = true;
 		bool enable_surface_tension = true;
 		bool enable_vorticity = true;
 		bool enable_viscosity = true;
