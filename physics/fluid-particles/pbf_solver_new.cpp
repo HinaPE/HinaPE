@@ -196,7 +196,6 @@ void HinaPE::PBFSolverNew::_apply_force_and_predict_position() const
 void HinaPE::PBFSolverNew::_update_neighbor() const
 {
 	// Update Target: NeighborList
-	auto &nl = _data->NeighborList;
 	const auto fluid_size = _data->fluid_size();
 	const auto boundary_size = _data->boundary_size();
 	const auto &p = _data->Fluid.predicted_position; // note: we use predicted position, because we need to update neighbor in the sub iteration
@@ -208,6 +207,7 @@ void HinaPE::PBFSolverNew::_update_neighbor() const
 
 	PointHashGridSearch3 searcher(_opt.kernel_radius);
 	searcher.build(total_positions);
+	auto &nl = _data->NeighborList;
 	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
 	{
 		auto origin = p[i];
@@ -232,6 +232,7 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 		// "i" is the index of the current particle,
 		// "j" is the index of the neighbor particle
 
+		_update_neighbor();
 		_update_density();
 
 		const auto fluid_size = _data->fluid_size();
@@ -272,12 +273,15 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 						grad_C_i -= grad_C_j;
 					} else
 					{
-						const auto p_i = p[i];
-						const auto b_j = b[j - fluid_size];
-						const mVector3 grad_C_j = -(bm / d0) * poly6.gradient(p_i - b_j);
+						if (_opt.use_akinci2012_collision)
+						{
+							const auto p_i = p[i];
+							const auto b_j = b[j - fluid_size];
+							const mVector3 grad_C_j = -(bm / d0) * poly6.gradient(p_i - b_j);
 
-						sum_grad_C_i_squared += grad_C_j.length_squared();
-						grad_C_i -= grad_C_j;
+							sum_grad_C_i_squared += grad_C_j.length_squared();
+							grad_C_i -= grad_C_j;
+						}
 					}
 				}
 
@@ -375,69 +379,81 @@ void HinaPE::PBFSolverNew::_update_positions_and_velocities() const
 		v[i] = (p[i] - x[i]) / dt;
 	});
 
-	// Apply XSPH viscosity
-	const auto c = _opt.viscosity;
-	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+	if (_opt.enable_viscosity)
 	{
-		const auto &p_i = p[i];
-		const auto &v_i = v[i];
-
-		mVector3 sum_value = mVector3::Zero();
-		for (auto const &j: nl[i])
+		// Apply XSPH viscosity
+		const auto c = _opt.viscosity;
+		Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
 		{
-			if (j < fluid_size)
+			const auto &p_i = p[i];
+			const auto &v_i = v[i];
+
+			mVector3 sum_value = mVector3::Zero();
+			for (auto const &j: nl[i])
 			{
-				const real d_j = d[j];
-				const auto &p_j = p[j];
-				const auto &v_j = v[j];
-				mVector3 tmp = v_i - v_j;
-				tmp *= poly6((p_i - p_j).length()) * (m / d_j);
-				sum_value += tmp;
-			} else {}
-		}
+				if (j < fluid_size)
+				{
+					const real d_j = d[j];
+					const auto &p_j = p[j];
+					const auto &v_j = v[j];
+					mVector3 tmp = v_i - v_j;
+					tmp *= poly6((p_i - p_j).length()) * (m / d_j);
+					sum_value += tmp;
+				} else
+				{
+					if (_opt.use_akinci2012_collision) {}
+				}
+			}
 
-		v[i] = v_i - c * sum_value;
+			v[i] = v_i - c * sum_value;
 
-		Record("XSPH Vis: ", c * sum_value);
-	});
+			Record("XSPH Vis: ", c * sum_value);
+		});
+	}
 
-	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+	if (_opt.enable_vorticity)
 	{
-		const auto &p_i = p[i];
-		const auto &v_i = v[i];
-
-		mVector3 f_vorticity = mVector3::Zero();
-		mVector3 N = mVector3::Zero();
-		mVector3 curl = mVector3::Zero();
-		mVector3 curl_x = mVector3::Zero();
-		mVector3 curl_y = mVector3::Zero();
-		mVector3 curl_z = mVector3::Zero();
-
-		for (auto const &j: nl[i])
+		Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
 		{
-			if (j < fluid_size)
+			const auto &p_i = p[i];
+			const auto &v_i = v[i];
+
+			mVector3 f_vorticity = mVector3::Zero();
+			mVector3 N = mVector3::Zero();
+			mVector3 curl = mVector3::Zero();
+			mVector3 curl_x = mVector3::Zero();
+			mVector3 curl_y = mVector3::Zero();
+			mVector3 curl_z = mVector3::Zero();
+
+			for (auto const &j: nl[i])
 			{
-				const auto &p_j = p[j];
-				const auto &v_j = v[j];
-				mVector3 tmp = v_j - v_i;
-				curl += tmp.cross(poly6.gradient(p_i - p_j));
-				curl_x += tmp.cross(poly6.gradient(p_i + mVector3(0.01, 0, 0) - p_j));
-				curl_y += tmp.cross(poly6.gradient(p_i + mVector3(0, 0.01, 0) - p_j));
-				curl_z += tmp.cross(poly6.gradient(p_i + mVector3(0, 0, 0.01) - p_j));
-			} else {}
-		}
+				if (j < fluid_size)
+				{
+					const auto &p_j = p[j];
+					const auto &v_j = v[j];
+					mVector3 tmp = v_j - v_i;
+					curl += tmp.cross(poly6.gradient(p_i - p_j));
+					curl_x += tmp.cross(poly6.gradient(p_i + mVector3(0.01, 0, 0) - p_j));
+					curl_y += tmp.cross(poly6.gradient(p_i + mVector3(0, 0.01, 0) - p_j));
+					curl_z += tmp.cross(poly6.gradient(p_i + mVector3(0, 0, 0.01) - p_j));
+				} else
+				{
+					if (_opt.use_akinci2012_collision) {}
+				}
+			}
 
-		real curlLen = curl.length();
-		N.x() = curl_x.length() - curlLen;
-		N.y() = curl_y.length() - curlLen;
-		N.z() = curl_z.length() - curlLen;
-		N = N.normalized();
-		f_vorticity = 0.00001 * N.cross(curl);
+			real curlLen = curl.length();
+			N.x() = curl_x.length() - curlLen;
+			N.y() = curl_y.length() - curlLen;
+			N.z() = curl_z.length() - curlLen;
+			N = N.normalized();
+			f_vorticity = _opt.vorticity * N.cross(curl);
 
-		v[i] = v_i + f_vorticity * dt;
+			v[i] = v_i + f_vorticity * dt;
 
-		Record("Vorticity: ", f_vorticity * dt);
-	});
+			Record("Vorticity: ", f_vorticity * dt);
+		});
+	}
 
 	// Finally, update positions
 	Util::parallelFor(Constant::ZeroSize, x.size(), [&](size_t i)
@@ -470,7 +486,10 @@ void HinaPE::PBFSolverNew::_update_density() const
 				density += m * poly6(dist);
 			} else
 			{
-				density += bm * poly6((p[i] - b[j - fluid_size]).length());
+				if (_opt.use_akinci2012_collision)
+				{
+					density += bm * poly6((p[i] - b[j - fluid_size]).length());
+				}
 			}
 		}
 		d[i] = density; // rho(x) = m * sum(W(x - xj))
@@ -483,6 +502,15 @@ void HinaPE::PBFSolverNew::INSPECT()
 	ImGui::Text("Fluids: %zu", _data->fluid_size());
 	ImGui::Text("Boundaries: %zu", _data->boundary_size());
 	INSPECT_REAL(_opt.gravity[1], "g");
+	ImGui::Checkbox("Surface Tension", &_opt.enable_surface_tension);
+	ImGui::Checkbox("XSPH Viscosity", &_opt.enable_viscosity);
+	if (_opt.enable_viscosity)
+		ImGui::SliderScalar("Viscosity", ImGuiDataType_Real, &_opt.viscosity, &Constant::Zero, &Constant::One);
+	ImGui::Checkbox("Vorticity", &_opt.enable_vorticity);
+	static real vorticity_max = 0.0001;
+	if (_opt.enable_vorticity)
+		ImGui::SliderScalar("Vorticity", ImGuiDataType_Real, &_opt.vorticity, &Constant::Zero, &vorticity_max);
+	ImGui::Checkbox("Akinci2012 Collision", &_opt.use_akinci2012_collision);
 	ImGui::Separator();
 
 	auto inst_id = _data->_inst_id;

@@ -42,6 +42,13 @@ public:
 		real target_density = 1000;
 		real kernel_radius 	= 4 * radius;
 		real viscosity 		= 0.1;
+		real vorticity 		= 0.00001;
+
+		// options
+		bool use_akinci2012_collision = false;
+		bool enable_surface_tension = true;
+		bool enable_vorticity = true;
+		bool enable_viscosity = true;
 	} _opt;
 
 private:
