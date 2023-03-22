@@ -104,7 +104,7 @@ void HinaPE::PBFSolver::_solve_density_constraints() const
 
 		const size_t size = _data->_predicted_position.size();
 		const real d0 = _data->target_density;
-		const real eps = 1e-6;
+		const real eps = 1e-9;
 
 		const auto &p = _data->_predicted_position;
 		const auto &d = _data->_densities;
