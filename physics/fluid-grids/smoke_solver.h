@@ -6,41 +6,52 @@
 
 #include "backends/objects/object3D.h"
 #include "domain/box_domain.h"
+#include "emitter/grid_emitter.h"
 
-//#include "sub_solver/advection_solver.h"
-//#include "sub_solver/grid_boundary_condition_solver.h"
-//#include "sub_solver/grid_pressure_solver.h"
-//#include "sub_solver/grid_diffusion_solver.h"
-//#include "domain/box_domain.h"
-//#include "emitter/grid_emitter.h"
-//
+#include "sub_solver/advection_solver.h"
+#include "sub_solver/grid_boundary_condition_solver.h"
+#include "sub_solver/grid_pressure_solver.h"
+#include "sub_solver/grid_diffusion_solver.h"
+
+// @formatter:off
 namespace HinaPE
 {
-class SmokeSolver
+class SmokeSolver : public Kasumi::INSPECTOR
 {
 protected:
 	void _accumulate_force() const;
+	void _compute_advection() const;
 
 public:
 	void init();
 	void update(real dt) const;
+	void reset();
 
-public:
 	struct Data;
-	std::shared_ptr<Data> _data;
-	std::shared_ptr<BoxDomain> _domain;
+	std::shared_ptr<Data> 				_data;
+	std::shared_ptr<BoxDomain> 			_domain;
+	std::shared_ptr<VolumeGridEmitter3> _emitter;
+
+	struct
+	{
+		real current_dt = 0.02;
+	} Opt;
+
+private:
+	void INSPECT() final;
 };
 
 struct SmokeSolver::Data : public CopyDisable, public Kasumi::ObjectGrid3D
 {
 	struct
 	{
-		Geom::ValuedGrid3<real> velocity;
-		Geom::ValuedGrid3<real> density;
-		Geom::ValuedGrid3<real> temperature;
+		Geom::ScalarGridField3 velocity;
+		Geom::ScalarGridField3 density;
+		Geom::ScalarGridField3 temperature;
 	} Fluid;
 
-	Data(const mVector3& size, const mSize3 &resolution, const mVector3& center = mVector3::Zero());
+	Data(const mVector3 &size, const mSize3 &resolution, const mVector3 &center = mVector3::Zero());
+	void reset();
 };
 } // namespace HinaPE
 

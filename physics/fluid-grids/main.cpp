@@ -14,6 +14,11 @@ auto main() -> int
 		scene->add(solver->_domain);
 	};
 
+	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
+	{
+		solver->update(dt);
+	};
+
 //	save_volume_as_vol(solver->_data->Fluid.density, "test.vol");
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER.dark_mode();
