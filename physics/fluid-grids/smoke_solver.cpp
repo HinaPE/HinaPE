@@ -83,6 +83,19 @@ HinaPE::SmokeSolver::Data::Data(const mVector3 &size, const mSize3 &resolution, 
 }
 void HinaPE::SmokeSolver::Data::reset()
 {
+	const auto resolution = Fluid.velocity.resolution;
+	const auto spacing = Fluid.velocity.spacing;
+	const auto center = Fluid.velocity.center;
+
+	Fluid.velocity.clear();
+	Fluid.density.clear();
+	Fluid.temperature.clear();
+
+	Fluid.velocity.resize(resolution, spacing, center);
+	Fluid.density.resize(resolution, spacing, center);
+	Fluid.temperature.resize(resolution, spacing, center);
+
+	track(&Fluid.density);
 }
 // ================================================== Data ==================================================
 // ==========================================================================================================
