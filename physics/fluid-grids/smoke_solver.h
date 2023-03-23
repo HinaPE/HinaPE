@@ -5,18 +5,22 @@
 // MPL-2.0 license
 
 #include "backends/objects/object3D.h"
-
-#include "sub_solver/advection_solver.h"
-#include "sub_solver/grid_boundary_condition_solver.h"
-#include "sub_solver/grid_pressure_solver.h"
-#include "sub_solver/grid_diffusion_solver.h"
 #include "domain/box_domain.h"
-#include "emitter/grid_emitter.h"
 
+//#include "sub_solver/advection_solver.h"
+//#include "sub_solver/grid_boundary_condition_solver.h"
+//#include "sub_solver/grid_pressure_solver.h"
+//#include "sub_solver/grid_diffusion_solver.h"
+//#include "domain/box_domain.h"
+//#include "emitter/grid_emitter.h"
+//
 namespace HinaPE
 {
 class SmokeSolver
 {
+protected:
+	void _accumulate_force() const;
+
 public:
 	void init();
 	void update(real dt) const;
@@ -24,35 +28,19 @@ public:
 public:
 	struct Data;
 	std::shared_ptr<Data> _data;
-
-protected:
-	void _accumulate_force() const;
+	std::shared_ptr<BoxDomain> _domain;
 };
 
 struct SmokeSolver::Data : public CopyDisable, public Kasumi::ObjectGrid3D
 {
-	Geom::FaceCenteredVectorGrid3Ptr _velocity;
-	Geom::ScalarGrid3Ptr _density;
-	Geom::ScalarGrid3Ptr _temperature;
+	struct
+	{
+		Geom::ValuedGrid3<real> velocity;
+		Geom::ValuedGrid3<real> density;
+		Geom::ValuedGrid3<real> temperature;
+	} Fluid;
 
-	mSize3 _resolution = {50, 50, 50};
-	mVector3 _origin = mVector3::Zero();
-	mVector3 _spacing = mVector3::One();
-	bool use_domain_size = false;
-
-	// params
-	real _viscosity = 0.0;
-	real _max_cfl = 5.0;
-
-	// sub solvers
-	AdvectionSolverPtr _advection_solver = std::make_shared<SemiLagrangianSolver>();
-	GridBoundaryConditionSolverPtr _boundary_condition_solver = std::make_shared<GridBoundaryConditionSolver>();
-	GridPressureSolverPtr _pressure_solver = std::make_shared<GridPressureSolver>();
-	GridDiffusionSolverPtr _diffusion_solver = std::make_shared<GridDiffusionSolver>();
-
-	BoxDomainPtr _domain = std::make_shared<BoxDomain>();
-
-	Data();
+	Data(const mVector3& size, const mSize3 &resolution, const mVector3& center = mVector3::Zero());
 };
 } // namespace HinaPE
 

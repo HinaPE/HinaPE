@@ -2,6 +2,10 @@
 
 void HinaPE::SmokeSolver::init()
 {
+	if (_data == nullptr)
+		_data = std::make_shared<Data>(mVector3(2, 2, 2), mSize3(64, 64, 64));
+	if (_domain == nullptr)
+		_domain = std::make_shared<BoxDomain>();
 }
 
 void HinaPE::SmokeSolver::update(real dt) const
@@ -12,22 +16,22 @@ void HinaPE::SmokeSolver::update(real dt) const
 
 void HinaPE::SmokeSolver::_accumulate_force() const
 {
-	auto &vel = _data->_velocity;
-	vel->for_each_v_index(
+	auto &gravity_y = _data->Fluid.velocity.data_face_v;
+	gravity_y.for_each_index(
 			[&](size_t i, size_t j, size_t k)
 			{
-				vel->v(i, j, k) = -9.8;
+				gravity_y(i, j, k) = -9.8;
 			});
 }
 
-HinaPE::SmokeSolver::Data::Data()
+HinaPE::SmokeSolver::Data::Data(const mVector3 &size, const mSize3 &resolution, const mVector3 &center)
 {
-	_density = std::make_shared<Geom::VertexCenteredScalarGrid3>();
-	_density->resize(_resolution, _spacing, _origin, 0);
-	track(&(*_density));
+	auto spacing = {size.x() / static_cast<real>(resolution.x), size.y() / static_cast<real>(resolution.y), size.z() / static_cast<real>(resolution.z)};
+	Fluid.velocity.resize(resolution, spacing, center);
+	Fluid.density.resize(resolution, spacing, center);
+	Fluid.temperature.resize(resolution, spacing, center);
 
-	_velocity = std::make_shared<Geom::FaceCenteredVectorGrid3>();
-	_velocity->resize(_resolution, _spacing, _origin, mVector3::Zero());
+	Fluid.density.data_center(0, 0, 0) = 1.0;
 
-	_domain->POSE.scale = 0.1 * mVector3(25, 25, 25);
+	track(&Fluid.density);
 }
