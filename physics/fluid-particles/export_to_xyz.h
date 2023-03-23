@@ -2,22 +2,22 @@
 #define HINAPE_EXPORT_TO_XYZ_H
 
 #include "common.h"
+
 #include <fstream>
-
-void save_particles_as_pos(real *ptr, size_t size, const std::string &filename)
-{
-	std::ofstream file(filename);
-	for (size_t i = 0; i < size; ++i)
-		file << ptr[i * 3 + 0] << " " << ptr[i * 3 + 1] << " " << ptr[i * 3 + 2] << std::endl;
-	std::cout << "Saved " << size << " particles to " << filename << std::endl;
-}
-
 #include <cstdio>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <array>
+
+inline void save_particles_as_pos(real *ptr, size_t size, const std::string &filename)
+{
+	std::ofstream file(filename);
+	for (size_t i = 0; i < size; ++i)
+		file << ptr[i * 3 + 0] << " " << ptr[i * 3 + 1] << " " << ptr[i * 3 + 2] << std::endl;
+	std::cout << "Saved " << size << " particles to " << filename << std::endl;
+}
 
 #ifdef WIN32
 #define open _popen
@@ -28,7 +28,7 @@ void save_particles_as_pos(real *ptr, size_t size, const std::string &filename)
 #endif
 
 // execute a terminal command
-void exec(const char *cmd)
+inline void exec(const char *cmd)
 {
 	std::array<char, 128> buffer{};
 	std::string result;

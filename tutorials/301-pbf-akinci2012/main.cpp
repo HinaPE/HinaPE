@@ -63,7 +63,7 @@ protected:
 	}
 };
 
-class BoundaryViewer : public Kasumi::ObjectParticles3D
+struct BoundaryViewer : public Kasumi::ObjectParticles3D
 {
 public:
 	explicit BoundaryViewer(std::shared_ptr<SolverDataType> data) : _data(std::move(data))
