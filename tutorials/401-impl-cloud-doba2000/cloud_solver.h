@@ -9,19 +9,7 @@
 #include "common.h"
 #include "backends/objects/object3D.h"
 #include "backends/objects/cube.h"
-
-struct BoxDomain : public Kasumi::CubeObject
-{
-public:
-	BoxDomain()
-	{
-		NAME = "Domain";
-		_switch_surface();
-		_switch_bbox();
-		flip_normal(); // for inner collision
-		set_color(HinaPE::Color::BLUE);
-	}
-};
+#include "domain/box_domain.h"
 
 class CloudSolver
 {
@@ -36,7 +24,7 @@ public:
 public:
 	struct Data;
 	std::shared_ptr<Data> _data;
-	std::shared_ptr<BoxDomain> _domain;
+	std::shared_ptr<HinaPE::BoxDomain> _domain;
 
 	struct
 	{
@@ -48,11 +36,11 @@ struct CloudSolver::Data : public HinaPE::CopyDisable, public Kasumi::ObjectGrid
 {
 	struct
 	{
-		HinaPE::Geom::DataGrid3<real> hum; // humidity, 0/1
-		HinaPE::Geom::DataGrid3<real> cld; // cloud, 0/1
-		HinaPE::Geom::DataGrid3<real> act; // active, 0/1
+		HinaPE::Geom::ScalarGridField3 hum; // humidity, 0/1
+		HinaPE::Geom::ScalarGridField3 cld; // cloud, 0/1
+		HinaPE::Geom::ScalarGridField3 act; // active, 0/1
 
-		HinaPE::Geom::DataGrid3<real> final; // blur of cld
+		HinaPE::Geom::ScalarGridField3 final; // blur of cld
 	} Cloud;
 
 	Data(const mVector3 &size, const mSize3 &resolution, const mVector3 &center = mVector3::Zero());

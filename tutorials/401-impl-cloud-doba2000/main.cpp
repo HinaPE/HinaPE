@@ -1,5 +1,6 @@
 #include "renderer3D/renderer3D.h"
 #include "cloud_solver.h"
+#include "export.h"
 
 auto main() -> int
 {
@@ -21,6 +22,8 @@ auto main() -> int
 	{
 		if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
 			solver->reset();
+		if (key == GLFW_KEY_O && action == GLFW_PRESS)
+			save_volume_as_tga(solver->_data->Cloud.final, "test.tga");
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER.dark_mode();

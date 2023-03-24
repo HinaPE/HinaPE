@@ -1,7 +1,7 @@
 #include "renderer3D/renderer3D.h"
 #include "smoke_solver.h"
 
-#include "export_to_vol.h"
+#include "export.h"
 
 auto main() -> int
 {

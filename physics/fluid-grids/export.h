@@ -1,8 +1,65 @@
-//#ifndef HINAPE_EXPORT_TO_VOL_H
-//#define HINAPE_EXPORT_TO_VOL_H
-//
-//#include "common.h"
-//
+#ifndef HINAPE_EXPORT_TO_VOL_H
+#define HINAPE_EXPORT_TO_VOL_H
+
+#include "common.h"
+
+inline auto save_volume_as_tga(const HinaPE::Geom::ScalarGridField3 &grid, const std::string &filename)
+{
+	std::ofstream file(filename.c_str(), std::ofstream::binary);
+	if (file)
+	{
+		auto size = grid.data_center.size();
+
+		std::array<char, 18> header;
+		header.fill(0);
+
+		int img_width = static_cast<int>(size.x);
+		int img_height = static_cast<int>(size.y);
+
+		header[2] = 2; // uncompressed RGB
+		header[12] = static_cast<char>(img_width & 0xFF);
+		header[13] = static_cast<char>((img_width & 0xFF00) >> 8);
+		header[14] = static_cast<char>(img_height & 0xFF);
+		header[15] = static_cast<char>((img_height & 0xFF00) >> 8);
+		header[16] = 24; // 24 bit bitmap
+
+		file.write(header.data(), header.size());
+
+		std::vector<std::vector<real>> hdr_img;
+		hdr_img.resize(size.y);
+		for (auto &row: hdr_img)
+			row.resize(size.x);
+
+		HinaPE::Util::parallelFor(HinaPE::Constant::ZeroSize, size.y, [&](size_t j)
+		{
+			for (size_t i = 0; i < size.x; ++i)
+			{
+				real sum = 0;
+				for (size_t k = 0; k < size.z; ++k)
+					sum += grid.data_center(i, j, k);
+				hdr_img[j][i] = 2 * sum / static_cast<real>(size.z);
+			}
+		});
+
+		std::vector<char> img(size.x * size.y * 3);
+		for (size_t j = 0; j < size.y; ++j)
+		{
+			for (size_t i = 0; i < size.x; ++i)
+			{
+				real value = hdr_img[j][i];
+				value = std::clamp(value, 0.0, 1.0);
+				char gray = static_cast<char>(std::round(value * 255.0));
+				img[(j * size.x + i) * 3 + 0] = gray;
+				img[(j * size.x + i) * 3 + 1] = gray;
+				img[(j * size.x + i) * 3 + 2] = gray;
+			}
+		}
+
+		file.write(img.data(), static_cast<std::streamsize>(img.size()));
+		file.close();
+	}
+}
+
 //inline auto smooth_step(float edge0, float edge1, float x) -> float
 //{
 //	// Scale, bias and saturate x to 0..1 range
@@ -71,5 +128,5 @@
 //		file.close();
 //	}
 //}
-//
-//#endif //HINAPE_EXPORT_TO_VOL_H
+
+#endif //HINAPE_EXPORT_TO_VOL_H

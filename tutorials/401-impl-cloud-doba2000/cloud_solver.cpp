@@ -3,9 +3,9 @@
 void CloudSolver::init()
 {
 	if (_data == nullptr)
-		_data = std::make_shared<Data>(mVector3(2, 2, 2), mSize3(50, 50, 50));
+		_data = std::make_shared<Data>(mVector3(2, 2, 2), mSize3(200, 200, 200));
 	if (_domain == nullptr)
-		_domain = std::make_shared<BoxDomain>();
+		_domain = std::make_shared<HinaPE::BoxDomain>();
 
 	// init cloud data
 	auto &cloud = _data->Cloud.cld;
@@ -28,6 +28,7 @@ void CloudSolver::init()
 void CloudSolver::update(real dt) const
 {
 	_blur_cloud();
+	_data->Cloud.cld = _data->Cloud.final;
 }
 
 void CloudSolver::reset()
