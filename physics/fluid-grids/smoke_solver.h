@@ -48,7 +48,7 @@ struct SmokeSolver::Data : public CopyDisable, public Kasumi::ObjectGrid3D
 		Geom::ScalarGridField3 velocity;
 		Geom::ScalarGridField3 density;
 		Geom::ScalarGridField3 temperature;
-	} Fluid;
+	} Smoke;
 
 	Data(const mVector3 &size, const mSize3 &resolution, const mVector3 &center = mVector3::Zero());
 	void reset();

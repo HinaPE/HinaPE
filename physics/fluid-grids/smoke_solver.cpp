@@ -11,7 +11,7 @@ void HinaPE::SmokeSolver::init()
 	if (_emitter == nullptr)
 		_emitter = std::make_shared<VolumeGridEmitter3>();
 
-	_emitter->emit(&_data->Fluid.density);
+	_emitter->emit(&_data->Smoke.density);
 }
 
 void HinaPE::SmokeSolver::update(real dt) const
@@ -28,7 +28,7 @@ void HinaPE::SmokeSolver::reset()
 
 void HinaPE::SmokeSolver::_accumulate_force() const
 {
-	auto &v_y = _data->Fluid.velocity.data_face_v;
+	auto &v_y = _data->Smoke.velocity.data_face_v;
 	v_y.for_each_index(
 			[&](size_t i, size_t j, size_t k)
 			{
@@ -38,12 +38,12 @@ void HinaPE::SmokeSolver::_accumulate_force() const
 
 void HinaPE::SmokeSolver::_compute_advection() const
 {
-	const auto &flow = _data->Fluid.velocity;
+	const auto &flow = _data->Smoke.velocity;
 	const auto dt = Opt.current_dt;
 
 	// advect density
-	auto &d_output = _data->Fluid.density;
-	auto d_input = _data->Fluid.density; // copy
+	auto &d_output = _data->Smoke.density;
+	auto d_input = _data->Smoke.density; // copy
 
 	const real h = d_output.spacing.min();
 	d_output.data_center.parallel_for_each_index(
@@ -75,27 +75,27 @@ HinaPE::SmokeSolver::Data::Data(const mVector3 &size, const mSize3 &resolution, 
 			size.x() / static_cast<real>(resolution.x),
 			size.y() / static_cast<real>(resolution.y),
 			size.z() / static_cast<real>(resolution.z)};
-	Fluid.velocity.resize(resolution, spacing, center);
-	Fluid.density.resize(resolution, spacing, center);
-	Fluid.temperature.resize(resolution, spacing, center);
+	Smoke.velocity.resize(resolution, spacing, center);
+	Smoke.density.resize(resolution, spacing, center);
+	Smoke.temperature.resize(resolution, spacing, center);
 
-	track(&Fluid.density);
+	track(&Smoke.density);
 }
 void HinaPE::SmokeSolver::Data::reset()
 {
-	const auto resolution = Fluid.velocity.resolution;
-	const auto spacing = Fluid.velocity.spacing;
-	const auto center = Fluid.velocity.center;
+	const auto resolution = Smoke.velocity.resolution;
+	const auto spacing = Smoke.velocity.spacing;
+	const auto center = Smoke.velocity.center;
 
-	Fluid.velocity.clear();
-	Fluid.density.clear();
-	Fluid.temperature.clear();
+	Smoke.velocity.clear();
+	Smoke.density.clear();
+	Smoke.temperature.clear();
 
-	Fluid.velocity.resize(resolution, spacing, center);
-	Fluid.density.resize(resolution, spacing, center);
-	Fluid.temperature.resize(resolution, spacing, center);
+	Smoke.velocity.resize(resolution, spacing, center);
+	Smoke.density.resize(resolution, spacing, center);
+	Smoke.temperature.resize(resolution, spacing, center);
 
-	track(&Fluid.density);
+	track(&Smoke.density);
 }
 // ================================================== Data ==================================================
 // ==========================================================================================================
