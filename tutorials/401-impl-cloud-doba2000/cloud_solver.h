@@ -25,6 +25,9 @@ public:
 
 class CloudSolver
 {
+protected:
+	void _blur_cloud() const;
+
 public:
 	void init();
 	void update(real dt) const;
@@ -48,6 +51,8 @@ struct CloudSolver::Data : public HinaPE::CopyDisable, public Kasumi::ObjectGrid
 		HinaPE::Geom::DataGrid3<real> hum; // humidity, 0/1
 		HinaPE::Geom::DataGrid3<real> cld; // cloud, 0/1
 		HinaPE::Geom::DataGrid3<real> act; // active, 0/1
+
+		HinaPE::Geom::DataGrid3<real> final; // blur of cld
 	} Cloud;
 
 	Data(const mVector3 &size, const mSize3 &resolution, const mVector3 &center = mVector3::Zero());
