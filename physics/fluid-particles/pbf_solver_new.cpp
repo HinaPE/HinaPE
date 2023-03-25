@@ -196,7 +196,7 @@ void HinaPE::PBFSolverNew::_init_collider() const
 		}
 
 		if (max_number_density > 0)
-			_data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 10 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
+			_data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 5 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
 		else
 			throw std::runtime_error("max_number_density is zero");
 	}
@@ -237,7 +237,7 @@ void HinaPE::PBFSolverNew::_init_collider() const
 		}
 
 		if (max_number_density > 0)
-			_data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 10 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
+			_data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 5 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
 		else
 			throw std::runtime_error("max_number_density is zero");
 	}
