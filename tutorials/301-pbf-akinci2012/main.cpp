@@ -1,5 +1,6 @@
 #include "renderer3D/renderer3D.h"
 #include "fluid-particles/pbf_solver_new.h"
+#include "export_to_xyz.h"
 
 using SolverType = HinaPE::PBFSolverNew;
 using SolverDataType = SolverType::Data;
@@ -81,6 +82,12 @@ protected:
 	void INSPECT() final {}
 };
 
+#ifdef WIN32
+#define ParticleToObj "particles2obj.exe"
+#else
+#define ParticleToObj "particles2obj"
+#endif
+
 auto main() -> int
 {
 	auto solver = std::make_shared<SolverType>();
@@ -92,6 +99,8 @@ auto main() -> int
 	{
 		scene->add(solver->_data);
 		scene->add(solver->_domain);
+		scene->add(solver->_sphere);
+		scene->add(solver->_cube);
 		scene->add(bv);
 		scene->add(nv);
 		scene->_scene_opt._particle_mode = true;
@@ -100,6 +109,19 @@ auto main() -> int
 	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
 	{
 		solver->update(dt);
+
+//		static int frame_num = 0;
+//		if (frame_num < 60)
+//		{
+//			std::thread(
+//					[&]()
+//					{
+//						save_particles_as_pos(solver->_data->Fluid.positions.data()->data(), solver->_data->Fluid.positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".xyz");
+//						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + std::string(ParticleToObj) + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + std::to_string(frame_num) + ".obj";
+//						exec(command.c_str());
+//					}).detach();
+//			++frame_num;
+//		}
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._key = [&](int key, int scancode, int action, int mods)
@@ -114,6 +136,16 @@ auto main() -> int
 			nv->on();
 		if (key == GLFW_KEY_H && action == GLFW_RELEASE)
 			nv->off();
+		if (key == GLFW_KEY_O && action == GLFW_PRESS)
+		{
+			std::thread(
+					[&]()
+					{
+						save_particles_as_pos(solver->_data->Fluid.positions.data()->data(), solver->_data->Fluid.positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz");
+						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + std::string(ParticleToObj) + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".obj";
+						exec(command.c_str());
+					}).detach();
+		}
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());

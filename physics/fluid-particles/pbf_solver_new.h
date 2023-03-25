@@ -31,6 +31,8 @@ public:
 	std::shared_ptr<Data> 					_data;
 	std::shared_ptr<BoxDomain> 				_domain;
 	std::shared_ptr<VolumeParticleEmitter3> _emitter;
+	std::shared_ptr<Kasumi::SphereObject> 	_sphere;
+	std::shared_ptr<Kasumi::CubeObject> 	_cube;
 
 	struct Opt
 	{
@@ -57,6 +59,7 @@ public:
 private:
 	void _init_fluid_particles() const;
 	void _init_boundary_particles() const;
+	void _init_collider() const;
 	void _reset_debug_info() const;
 	void INSPECT() override;
 };
@@ -77,7 +80,7 @@ struct PBFSolverNew::Data : public Kasumi::ObjectParticles3D
 	struct // boundary particles
 	{
 		std::vector<mVector3> 	positions;
-		real					mass; // should be recalculated  to fit target density
+		std::vector<real>		mass; // should be recalculated  to fit target density
 	} Boundary;
 
 	std::vector<std::vector<unsigned int>> 	NeighborList;

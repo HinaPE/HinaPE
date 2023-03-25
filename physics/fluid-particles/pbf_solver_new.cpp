@@ -11,15 +11,41 @@ void HinaPE::PBFSolverNew::init()
 	if (_data == nullptr)
 		_data = std::make_shared<Data>();
 	if (_domain == nullptr)
+	{
 		_domain = std::make_shared<BoxDomain>();
+		_domain->POSE.scale = {1, 1.5, 1};
+		_domain->_update_surface();
+	}
 	if (_emitter == nullptr)
+	{
 		_emitter = std::make_shared<VolumeParticleEmitter3>();
+		_emitter->_opt.multiplier = 2.2;
+	}
+	if (_sphere == nullptr)
+	{
+		auto sphere = std::make_shared<Kasumi::SphereObject>();
+		sphere->POSE.position = mVector3(0.5, -1.2, 0);
+		sphere->POSE.scale = 0.3 * mVector3::One();
+		sphere->_update_surface();
+		_sphere = sphere;
+		_sphere->set_color(Color::RED);
+	}
+	if (_cube == nullptr)
+	{
+		auto cube = std::make_shared<Kasumi::CubeObject>();
+		cube->POSE.position = mVector3(-0.5, -1.2, 0);
+		cube->POSE.scale = mVector3(0.5, 0.3, 0.5);
+		cube->_update_surface();
+		_cube = cube;
+		_cube->set_color(Color::PURPLE);
+	}
 
 	_data->DEFAULT_SCALE = 0.5 * _opt.radius * mVector3::One();
 	_emitter->_opt.spacing = 1.2 * _opt.radius;
 
 	_init_fluid_particles();
 	_init_boundary_particles();
+	_init_collider();
 
 	_update_neighbor();
 	_update_density();
@@ -36,10 +62,7 @@ void HinaPE::PBFSolverNew::update(real dt) const
 	// algorithm line 1~4
 	_apply_force_and_predict_position();
 
-	// algorithm line 5~7
-//	_update_neighbor(); // we no longer need this
-
-	// algorithm line 8~19
+	// algorithm line 5~19
 	_solve_density_constraints();
 }
 
@@ -92,52 +115,11 @@ void HinaPE::PBFSolverNew::_init_fluid_particles() const
 		throw std::runtime_error("max_number_density is zero");
 }
 
-void add_wall(const mVector3 &minX, const mVector3 &maxX, real radius, std::vector<mVector3> *target_boundary)
-{
-	const real diam = 1.4 * radius;
-	const int stepsX = (int) ((maxX.x() - minX.x()) / diam) + 1;
-	const int stepsY = (int) ((maxX.y() - minX.y()) / diam) + 1;
-	const int stepsZ = (int) ((maxX.z() - minX.z()) / diam) + 1;
-
-	for (int i = 0; i < stepsX; ++i)
-	{
-		for (int j = 0; j < stepsY; ++j)
-		{
-			for (int k = 0; k < stepsZ; ++k)
-			{
-				const real x = minX.x() + i * diam;
-				const real y = minX.y() + j * diam;
-				const real z = minX.z() + k * diam;
-				target_boundary->emplace_back(x, y, z);
-			}
-		}
-	}
-}
-
 void HinaPE::PBFSolverNew::_init_boundary_particles() const
 {
-	std::vector<mVector3> target_boundary;
-	target_boundary.clear();
-
-	const auto half_width = _domain->_extent.x();
-	const auto half_height = _domain->_extent.y();
-	const auto half_depth = _domain->_extent.z();
-
-	const real x1 = -half_width;
-	const real x2 = half_width;
-	const real y1 = -half_height;
-	const real y2 = half_height;
-	const real z1 = -half_depth;
-	const real z2 = half_depth;
-
-	add_wall(mVector3(x1, y1, z1), mVector3(x2, y1, z2), _opt.radius, &target_boundary); // floor
-	add_wall(mVector3(x1, y2, z1), mVector3(x2, y2, z2), _opt.radius, &target_boundary); // top
-	add_wall(mVector3(x1, y1, z1), mVector3(x1, y2, z2), _opt.radius, &target_boundary); // left
-	add_wall(mVector3(x2, y1, z1), mVector3(x2, y2, z2), _opt.radius, &target_boundary); // right
-	add_wall(mVector3(x1, y1, z1), mVector3(x2, y2, z1), _opt.radius, &target_boundary); // back
-	add_wall(mVector3(x1, y1, z2), mVector3(x2, y2, z2), _opt.radius, &target_boundary); // front
-
+	std::vector<mVector3> target_boundary = _domain->generate_surface();
 	_data->add_boundary(target_boundary);
+
 	// update mass
 	std::vector<std::vector<unsigned int>> temp_neighbor_list;
 	temp_neighbor_list.resize(target_boundary.size());
@@ -170,11 +152,95 @@ void HinaPE::PBFSolverNew::_init_boundary_particles() const
 	}
 
 	if (max_number_density > 0)
-		_data->Boundary.mass = std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero);
+		_data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 10 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
 	else
 		throw std::runtime_error("max_number_density is zero");
+}
 
-	_data->Boundary.mass *= 10; // ???why?
+void HinaPE::PBFSolverNew::_init_collider() const
+{
+	{
+		// generate sphere surface points
+		std::vector<mVector3> target_boundary = _sphere->generate_surface();
+		_data->add_boundary(target_boundary);
+
+		// update mass
+		std::vector<std::vector<unsigned int>> temp_neighbor_list;
+		temp_neighbor_list.resize(target_boundary.size());
+		PointHashGridSearch3 searcher(_opt.kernel_radius);
+		searcher.build(target_boundary);
+
+		Util::parallelFor(Constant::ZeroSize, target_boundary.size(), [&](size_t i)
+		{
+			auto origin = target_boundary[i];
+			temp_neighbor_list[i].clear();
+			searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
+			{
+				if (i != j)
+					temp_neighbor_list[i].push_back(j);
+			});
+		});
+
+		StdKernel poly6(_opt.kernel_radius);
+		real max_number_density = 0;
+		for (int i = 0; i < target_boundary.size(); ++i)
+		{
+			real sum = poly6(0); // self density
+			const auto &point = target_boundary[i];
+			for (const auto &neighbor_point_id: temp_neighbor_list[i])
+			{
+				auto dist = (point - target_boundary[neighbor_point_id]).length();
+				sum += poly6(dist);
+			}
+			max_number_density = std::max(max_number_density, sum);
+		}
+
+		if (max_number_density > 0)
+			_data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 10 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
+		else
+			throw std::runtime_error("max_number_density is zero");
+	}
+	{
+		// generate sphere surface points
+		std::vector<mVector3> target_boundary = _cube->generate_surface();
+		_data->add_boundary(target_boundary);
+
+		// update mass
+		std::vector<std::vector<unsigned int>> temp_neighbor_list;
+		temp_neighbor_list.resize(target_boundary.size());
+		PointHashGridSearch3 searcher(_opt.kernel_radius);
+		searcher.build(target_boundary);
+
+		Util::parallelFor(Constant::ZeroSize, target_boundary.size(), [&](size_t i)
+		{
+			auto origin = target_boundary[i];
+			temp_neighbor_list[i].clear();
+			searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
+			{
+				if (i != j)
+					temp_neighbor_list[i].push_back(j);
+			});
+		});
+
+		StdKernel poly6(_opt.kernel_radius);
+		real max_number_density = 0;
+		for (int i = 0; i < target_boundary.size(); ++i)
+		{
+			real sum = poly6(0); // self density
+			const auto &point = target_boundary[i];
+			for (const auto &neighbor_point_id: temp_neighbor_list[i])
+			{
+				auto dist = (point - target_boundary[neighbor_point_id]).length();
+				sum += poly6(dist);
+			}
+			max_number_density = std::max(max_number_density, sum);
+		}
+
+		if (max_number_density > 0)
+			_data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 10 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
+		else
+			throw std::runtime_error("max_number_density is zero");
+	}
 }
 
 void HinaPE::PBFSolverNew::_apply_force_and_predict_position() const
@@ -258,7 +324,7 @@ void HinaPE::PBFSolverNew::_update_density() const
 			{
 				if (_opt.use_akinci2012_collision)
 				{
-					density += bm * poly6((p[i] - b[j - fluid_size]).length());
+					density += bm[j - fluid_size] * poly6((p[i] - b[j - fluid_size]).length());
 				}
 			}
 		}
@@ -320,7 +386,7 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 						{
 							const auto p_i = p[i];
 							const auto b_j = b[j - fluid_size];
-							const mVector3 grad_C_j = -(bm / d0) * poly6.gradient(p_i - b_j);
+							const mVector3 grad_C_j = -(bm[j - fluid_size] / d0) * poly6.gradient(p_i - b_j);
 
 							sum_grad_C_i_squared += grad_C_j.length_squared();
 							grad_C_i -= grad_C_j;
@@ -370,11 +436,14 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 					delta_p_i -= (lambda_i + lambda_j + s_corr) * grad_C_j;
 				} else // Boundary: Akinci2012
 				{
-					const auto p_i = p[i];
-					const auto b_j = b[j - fluid_size];
+					if (_opt.use_akinci2012_collision)
+					{
+						const auto p_i = p[i];
+						const auto b_j = b[j - fluid_size];
 
-					const mVector3 grad_C_j = -(bm / d0) * poly6.gradient(p_i - b_j);
-					delta_p_i -= (lambda_i) * grad_C_j;
+						const mVector3 grad_C_j = -(bm[j - fluid_size] / d0) * poly6.gradient(p_i - b_j);
+						delta_p_i -= (lambda_i) * grad_C_j;
+					}
 				}
 			}
 			dp[i] = delta_p_i; // thread safe write
@@ -397,6 +466,8 @@ void HinaPE::PBFSolverNew::_solve_density_constraints() const
 			{
 				auto temp_v = v[i]; // we don't need to update velocity here
 				_domain->resolve_collision(_opt.radius, _opt.restitution, &p_to_write[i], &temp_v);
+				_sphere->resolve_collision(_opt.radius, _opt.restitution, &p_to_write[i], &temp_v);
+				_cube->resolve_collision(_opt.radius, _opt.restitution, &p_to_write[i], &temp_v);
 			});
 		}
 
@@ -617,7 +688,7 @@ void HinaPE::PBFSolverNew::Data::reset()
 	Fluid.delta_p.clear();
 	Fluid.mass = 1e-3;
 	Boundary.positions.clear();
-	Boundary.mass = 1e-3;
+	Boundary.mass.clear();
 	NeighborList.clear();
 	color_map.clear();
 	debug_info.clear();
