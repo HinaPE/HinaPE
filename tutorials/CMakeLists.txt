@@ -6,6 +6,7 @@ add_subdirectory(000-heart-beats)
 add_subdirectory(001-view-model)
 add_subdirectory(002-view-2D-math-function)
 add_subdirectory(003-view-3D-math-function)
+add_subdirectory(004-sakura-scattering)
 
 # physics applications
 add_subdirectory(101-simple-freefall)
