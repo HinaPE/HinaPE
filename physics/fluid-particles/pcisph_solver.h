@@ -16,7 +16,6 @@ namespace HinaPE
 class PCISPHSolver final : public CopyDisable, public Kasumi::INSPECTOR, public Kasumi::VALID_CHECKER
 {
 public:
-    /// const?
 	void init();
 	void update(real dt) const;
 public:
@@ -40,6 +39,11 @@ protected:
 	void _predict_velocity_and_position() const;
     void _update_velocity_and_position() const;
 	void _resolve_collision() const;
+
+    ///
+    void _accumulate_predict_density() const;
+    void _accumulate_delta_pressure() const;
+    ///
 
 	void INSPECT() final;
 	void VALID_CHECK() const final;
@@ -81,7 +85,7 @@ struct PCISPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 
 
 	SPHKernelPtr kernel = std::make_shared<StdKernel>(kernel_radius);
-	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>(_radius);
+	PointNeighborSearch3Ptr _neighbor_search = std::make_shared<PointHashGridSearch3>(kernel_radius);
 	std::vector<std::vector<unsigned int>> _neighbor_lists;
 
 	Data();
@@ -89,7 +93,6 @@ struct PCISPHSolver::Data : public CopyDisable, public Kasumi::ObjectParticles3D
 	void _update_neighbor();
 	void _update_density();
     void _update_predict_density();
-	void _update_pressure();
 	void _update_mass();
 	void INSPECT() final;
 

@@ -1,8 +1,10 @@
 #include "renderer3D/renderer3D.h"
 #include "fluid-particles/pbf_solver_new.h"
+#include "fluid-particles/pcisph_solver_new.h"
 #include "export_to_xyz.h"
 
 using SolverType = HinaPE::PBFSolverNew;
+//using SolverType = HinaPE::PCISPHSolverNew;
 using SolverDataType = SolverType::Data;
 
 struct NeighborViewer : public Kasumi::ObjectParticles3D
