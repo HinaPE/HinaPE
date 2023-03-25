@@ -55,12 +55,14 @@ void HinaPE::PCISPHSolver::_prediction_correction_step() const
 
     while(((iteration < _data->min_loop)||(_data->density_error_too_large))&&(iteration < _data->max_loop))
     {
+        //predict velocity and position
         _predict_velocity_and_position();
 
         _accumulate_predict_density();
 
         _accumulate_delta_pressure();
 
+        // deal with collision (particle-solid)
         _resolve_collision();
 
         // accumulate pressure forces
@@ -109,15 +111,17 @@ void HinaPE::PCISPHSolver::_accumulate_predict_density() const
     auto &x_t = _data->_temp_positions;
     auto &d_p = _data->_predict_densities;
     const auto &m = _data->_mass;
+    real W_d = 0;
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
     {
         const auto &neighbors = _data->_neighbor_lists[i];
-        real sum = 0;
         for (size_t j: neighbors) {
             real dist = (x_t[i] - x_t[j]).length();
-            sum += (*_data->kernel)(dist);
+            if (dist > HinaPE::Constant::Epsilon)
+            {
+                d_p[i] += m * (*_data->kernel).operator()(dist);
+            }
         }
-        d_p[i] = m * sum;
     });
 }
 
@@ -353,7 +357,7 @@ void HinaPE::PCISPHSolver::Data::_update_predict_density() {
         _update_mass(); // update mass to ensure the initial density is 1000
 
     auto &x = _positions;
-    auto &d_p = _predict_densities;
+    auto &d = _densities;
     const auto &m = _mass;
     Util::parallelFor(Constant::ZeroSize, _positions.size(), [&](size_t i)
     {
@@ -363,7 +367,7 @@ void HinaPE::PCISPHSolver::Data::_update_predict_density() {
             real dist = (x[i] - x[_neighbor_lists[i][j]]).length();
             sum += (*kernel)(dist);
         }
-        d_p[i] = m * sum; // rho(x) = m * sum(W(x - xj))
+        d[i] = m * sum; // rho(x) = m * sum(W(x - xj))
     });
 }
 
