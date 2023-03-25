@@ -9,7 +9,7 @@ void CloudSolver::init()
 
 	// init cloud data
 	auto &cloud = _data->Cloud.cld;
-	auto sphere = std::make_shared<HinaPE::Geom::Sphere3>(0.3);
+	auto sphere = std::make_shared<HinaPE::Geom::Sphere3>(0.6);
 	auto source_region = std::make_shared<HinaPE::Geom::SurfaceToImplicit3>(sphere);
 
 	auto space = std::min(cloud.spacing.x(), std::min(cloud.spacing.y(), cloud.spacing.z()));
