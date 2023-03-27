@@ -7,8 +7,8 @@ if (NOT TARGET Kasumi_Render3D)
 endif ()
 
 add_library(HinaPE_Fluid_Particles STATIC)
-file(GLOB headers pbf_solver.h pcisph_solver.h export_to_xyz.h sph_solver.h pbf_solver_new.h pcisph_solver_new.h domain/*.h emitter/*.h neighbor_search/*.h kernel/*.h)
-file(GLOB sources pbf_solver.cpp pcisph_solver.cpp sph_solver.cpp pbf_solver_new.cpp pcisph_solver_new.cpp solver_debug.cpp domain/*.cpp emitter/*.cpp neighbor_search/*.cpp kernel/*.cpp)
+file(GLOB headers pbf_solver.h pcisph_solver.h export_to_xyz.h sph_solver.h pbf_solver_new.h pcisph_solver_new.h pcisph_solver_xayah.h domain/*.h emitter/*.h neighbor_search/*.h kernel/*.h)
+file(GLOB sources pbf_solver.cpp pcisph_solver.cpp sph_solver.cpp pbf_solver_new.cpp pcisph_solver_new.cpp pcisph_solver_xayah.cpp domain/*.cpp emitter/*.cpp neighbor_search/*.cpp kernel/*.cpp)
 target_sources(HinaPE_Fluid_Particles
         PRIVATE
         ${sources}
