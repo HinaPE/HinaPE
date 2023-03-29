@@ -153,7 +153,6 @@ void HinaPE::PCISPHSolverNew::_initialize_pressure_and_pressure_force() const
 void HinaPE::PCISPHSolverNew::_prediction_correction_step()
 {
     int iteration = 0;
-    // algorithm line 8
     while(((iteration < _opt.min_loop)||(_opt.density_error_too_large))&&(iteration < _opt.max_loop))
     {
         // algorithm line 9~11
@@ -199,15 +198,17 @@ void HinaPE::PCISPHSolverNew::_predict_density() const
     const auto fluid_size = _data->fluid_size();
     StdKernel poly6(_opt.kernel_radius);
 
+    /////////TODO
+    real sum_W = 0.0;
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
-        d_p[i] = 0.0;
         auto &nl = _data->NeighborList;
         for (size_t j: nl[i])
         {
             real dist = (x_p[i] - x_p[j]).length();
-            d_p[i] += m * poly6(dist);
+            sum_W += poly6(dist);
         }
+        d_p[i] = m * sum_W;
     });
 }
 

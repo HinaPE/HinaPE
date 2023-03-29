@@ -117,11 +117,9 @@ void HinaPE::PCISPHSolver::_accumulate_predict_density() const
         const auto &neighbors = _data->_neighbor_lists[i];
         for (size_t j: neighbors) {
             real dist = (x_t[i] - x_t[j]).length();
-            if (dist > HinaPE::Constant::Epsilon)
-            {
-                d_p[i] += m * (*_data->kernel).operator()(dist);
-            }
+            W_d += (*_data->kernel).operator()(dist);
         }
+        d_p[i] = m * W_d;
     });
 }
 
