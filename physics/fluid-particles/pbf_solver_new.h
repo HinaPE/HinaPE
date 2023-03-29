@@ -80,16 +80,21 @@ struct PBFSolverNew::Data : public Kasumi::ObjectParticles3D
 	struct // boundary particles
 	{
 		std::vector<mVector3> 	positions;
+		std::vector<mVector3> 	positions_origin;
 		std::vector<real>		mass; // should be recalculated  to fit target density
+
+		std::vector<const Kasumi::Pose*> 		poses;
+		std::vector<std::pair<size_t, size_t>> 	boundary_sizes;
 	} Boundary;
 
 	std::vector<std::vector<unsigned int>> 	NeighborList;
 
 	explicit Data();
 	void add_fluid(const std::vector<mVector3>& positions, const std::vector<mVector3>& velocities);
-	void add_boundary(const std::vector<mVector3>& positions);
+	void add_boundary(const std::vector<mVector3>& positions, const Kasumi::Pose* pose);
 	auto fluid_size() const -> size_t;
 	auto boundary_size() const -> size_t;
+	void update_boundary(); // update boundary particles world positions
 	void reset();
 
 	// ==================== Debug Area ====================

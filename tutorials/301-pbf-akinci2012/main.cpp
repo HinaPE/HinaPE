@@ -1,10 +1,9 @@
 #include "renderer3D/renderer3D.h"
 #include "fluid-particles/pbf_solver_new.h"
-#include "fluid-particles/pcisph_solver_new.h"
+#include "rigid/solver.h"
 #include "export_to_xyz.h"
 
 using SolverType = HinaPE::PBFSolverNew;
-//using SolverType = HinaPE::PCISPHSolverNew;
 using SolverDataType = SolverType::Data;
 
 struct NeighborViewer : public Kasumi::ObjectParticles3D
@@ -77,11 +76,16 @@ public:
 		_colors.resize(_data->boundary_size(), HinaPE::Color::BLUE);
 		hide(true);
 	}
+	void on()
+	{
+		hide(false);
+	}
+	void off()
+	{
+		hide(true);
+	}
 	std::shared_ptr<SolverDataType> _data;
 	std::vector<mVector3> _colors;
-
-protected:
-	void INSPECT() final {}
 };
 
 #ifdef WIN32
@@ -92,10 +96,57 @@ protected:
 
 auto main() -> int
 {
+	// fluid solver
 	auto solver = std::make_shared<SolverType>();
 	solver->init();
 	auto bv = std::make_shared<BoundaryViewer>(solver->_data);
 	auto nv = std::make_shared<NeighborViewer>(solver);
+
+	// rigid solver
+	auto solver_rigid = std::make_shared<HinaPE::RigidSolver>();
+	solver_rigid->add(solver->_sphere);
+	solver_rigid->add(solver->_cube);
+
+	auto domain_extent = solver->_domain->_extent;
+	auto thickness = 0.1;
+
+	auto top = std::make_shared<Kasumi::CubeObject>();
+	top->POSE.position.y() = domain_extent.y() + thickness;
+	top->POSE.scale = {domain_extent.x(), thickness, domain_extent.z()};
+	top->_update_surface();
+
+	auto bottom = std::make_shared<Kasumi::CubeObject>();
+	bottom->POSE.position.y() = -domain_extent.y() - thickness;
+	bottom->POSE.scale = {domain_extent.x(), thickness, domain_extent.z()};
+	bottom->_update_surface();
+
+	auto left = std::make_shared<Kasumi::CubeObject>();
+	left->POSE.position.x() = -domain_extent.x() - thickness;
+	left->POSE.scale = {thickness, domain_extent.y(), domain_extent.z()};
+	left->_update_surface();
+
+	auto right = std::make_shared<Kasumi::CubeObject>();
+	right->POSE.position.x() = domain_extent.x() + thickness;
+	right->POSE.scale = {thickness, domain_extent.y(), domain_extent.z()};
+	right->_update_surface();
+
+	auto front = std::make_shared<Kasumi::CubeObject>();
+	front->POSE.position.z() = domain_extent.z() + thickness;
+	front->POSE.scale = {domain_extent.x(), domain_extent.y(), thickness};
+	front->_update_surface();
+
+	auto back = std::make_shared<Kasumi::CubeObject>();
+	back->POSE.position.z() = -domain_extent.z() - thickness;
+	back->POSE.scale = {domain_extent.x(), domain_extent.y(), thickness};
+	back->_update_surface();
+
+	solver_rigid->add(top, HinaPE::RigidType::Static);
+	solver_rigid->add(bottom, HinaPE::RigidType::Static);
+	solver_rigid->add(left, HinaPE::RigidType::Static);
+	solver_rigid->add(right, HinaPE::RigidType::Static);
+	solver_rigid->add(front, HinaPE::RigidType::Static);
+	solver_rigid->add(back, HinaPE::RigidType::Static);
+
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
@@ -106,11 +157,14 @@ auto main() -> int
 		scene->add(bv);
 		scene->add(nv);
 		scene->_scene_opt._particle_mode = true;
+
+		// boundary
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
 	{
 		solver->update(dt);
+		solver_rigid->update(solver->_opt.current_dt);
 
 //		static int frame_num = 0;
 //		if (frame_num < 60)
@@ -131,9 +185,9 @@ auto main() -> int
 		if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
 			solver->reset();
 		if (key == GLFW_KEY_Z && action == GLFW_PRESS)
-			bv->hide(false);
+			bv->on();
 		if (key == GLFW_KEY_Z && action == GLFW_RELEASE)
-			bv->hide(true);
+			bv->off();
 		if (key == GLFW_KEY_H && action == GLFW_PRESS)
 			nv->on();
 		if (key == GLFW_KEY_H && action == GLFW_RELEASE)

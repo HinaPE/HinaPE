@@ -24,7 +24,7 @@ void HinaPE::PBFSolverNew::init()
 	if (_sphere == nullptr)
 	{
 		auto sphere = std::make_shared<Kasumi::SphereObject>();
-		sphere->POSE.position = mVector3(0.5, -1.2, 0);
+		sphere->POSE.position = mVector3(0.5, -1.0, 0);
 		sphere->POSE.scale = 0.3 * mVector3::One();
 		sphere->_update_surface();
 		_sphere = sphere;
@@ -33,8 +33,9 @@ void HinaPE::PBFSolverNew::init()
 	if (_cube == nullptr)
 	{
 		auto cube = std::make_shared<Kasumi::CubeObject>();
-		cube->POSE.position = mVector3(-0.5, -1.2, 0);
-		cube->POSE.scale = mVector3(0.5, 0.3, 0.5);
+		cube->POSE.position = mVector3(-0.5, -1.0, 0);
+		cube->POSE.euler = mVector3(45, 0, 45);
+		cube->POSE.scale = mVector3(0.2, 0.3, 0.2);
 		cube->_update_surface();
 		_cube = cube;
 		_cube->set_color(Color::PURPLE);
@@ -118,7 +119,7 @@ void HinaPE::PBFSolverNew::_init_fluid_particles() const
 void HinaPE::PBFSolverNew::_init_boundary_particles() const
 {
 	std::vector<mVector3> target_boundary = _domain->generate_surface();
-	_data->add_boundary(target_boundary);
+	_data->add_boundary(target_boundary, &_domain->POSE);
 
 	// update mass
 	std::vector<std::vector<unsigned int>> temp_neighbor_list;
@@ -162,7 +163,7 @@ void HinaPE::PBFSolverNew::_init_collider() const
 	{
 		// generate sphere surface points
 		std::vector<mVector3> target_boundary = _sphere->generate_surface();
-		_data->add_boundary(target_boundary);
+		_data->add_boundary(target_boundary, &_sphere->POSE);
 
 		// update mass
 		std::vector<std::vector<unsigned int>> temp_neighbor_list;
@@ -203,7 +204,7 @@ void HinaPE::PBFSolverNew::_init_collider() const
 	{
 		// generate sphere surface points
 		std::vector<mVector3> target_boundary = _cube->generate_surface();
-		_data->add_boundary(target_boundary);
+		_data->add_boundary(target_boundary, &_cube->POSE);
 
 		// update mass
 		std::vector<std::vector<unsigned int>> temp_neighbor_list;
@@ -278,6 +279,7 @@ void HinaPE::PBFSolverNew::_update_neighbor() const
 	std::vector<mVector3> total_positions;
 	total_positions.reserve(fluid_size + boundary_size);
 	total_positions.insert(total_positions.end(), p.begin(), p.end());
+	_data->update_boundary();
 	total_positions.insert(total_positions.end(), _data->Boundary.positions.begin(), _data->Boundary.positions.end());
 
 	PointHashGridSearch3 searcher(_opt.kernel_radius);
@@ -673,9 +675,28 @@ void HinaPE::PBFSolverNew::Data::add_fluid(const std::vector<mVector3> &position
 	color_map.insert(color_map.end(), size, Color::ORANGE);
 	debug_info.insert(debug_info.end(), size, std::vector<std::string>());
 }
-void HinaPE::PBFSolverNew::Data::add_boundary(const std::vector<mVector3> &positions)
+void HinaPE::PBFSolverNew::Data::add_boundary(const std::vector<mVector3> &positions, const Kasumi::Pose *pose)
 {
-	Boundary.positions.insert(Boundary.positions.end(), positions.begin(), positions.end());
+	size_t start = Boundary.positions_origin.size();
+	Boundary.positions_origin.insert(Boundary.positions_origin.end(), positions.begin(), positions.end());
+	size_t end = Boundary.positions_origin.size();
+
+	Boundary.poses.push_back(pose);
+	Boundary.boundary_sizes.emplace_back(start, end);
+	Boundary.positions.resize(Boundary.positions_origin.size());
+	update_boundary();
+}
+void HinaPE::PBFSolverNew::Data::update_boundary()
+{
+	for (int i = 0; i < Boundary.poses.size(); ++i)
+	{
+		std::vector<mVector3> res;
+		const auto [start, end] = Boundary.boundary_sizes[i];
+		const auto m = Boundary.poses[i]->get_model_matrix();
+
+		for (size_t j = start; j < end; ++j)
+			Boundary.positions[j] = (m * mVector4(Boundary.positions_origin[j].x(), Boundary.positions_origin[j].y(), Boundary.positions_origin[j].z(), 1)).xyz();
+	}
 }
 void HinaPE::PBFSolverNew::Data::reset()
 {
@@ -688,7 +709,10 @@ void HinaPE::PBFSolverNew::Data::reset()
 	Fluid.delta_p.clear();
 	Fluid.mass = 1e-3;
 	Boundary.positions.clear();
+	Boundary.positions_origin.clear();
 	Boundary.mass.clear();
+	Boundary.poses.clear();
+	Boundary.boundary_sizes.clear();
 	NeighborList.clear();
 	color_map.clear();
 	debug_info.clear();
