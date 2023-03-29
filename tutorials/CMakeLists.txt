@@ -18,6 +18,7 @@ add_subdirectory(201-volume-render)
 # fluid applications
 add_subdirectory(301-pbf-akinci2012)
 add_subdirectory(302-smoke-fedkiw2001)
+add_subdirectory(303-pcipsh-akinci2012)
 
 # advanced applications
 add_subdirectory(401-impl-cloud-doba2000)
