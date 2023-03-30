@@ -202,8 +202,8 @@ void HinaPE::PointParallelHashGridSearch3::for_each_nearby_point(const mVector3 
 	{
 		size_t start = _start_index_table[nearby_key];
 		size_t end = _end_index_table[nearby_key];
-
-		if (start == HinaPE::Constant::I_SIZE_MAX || end == HinaPE::Constant::I_SIZE_MAX)
+//		|| end == HinaPE::Constant::I_SIZE_MAX
+		if (start == HinaPE::Constant::I_SIZE_MAX)
 			continue;
 
 		for (size_t i = start; i < end; ++i)
@@ -259,6 +259,7 @@ void HinaPE::PointParallelHashGridSearch3::build(const std::vector<mVector3> &po
 	_sorted_indices.resize(num_points);
 	_points.resize(num_points);
 
+	// Initialize indices array and generate hash key for each point
 	Util::parallelFor(HinaPE::Constant::ZeroSize, num_points, [&](size_t i)
 	{
 		_sorted_indices[i] = i;
@@ -266,23 +267,36 @@ void HinaPE::PointParallelHashGridSearch3::build(const std::vector<mVector3> &po
 		temp_keys[i] = _get_hash_key_from_position(points[i]);
 	});
 
+	// Sort indices based on hash key
 	Util::parallelSort(_sorted_indices.begin(), _sorted_indices.end(), [&](size_t a, size_t b)
 	{
 		return temp_keys[a] < temp_keys[b];
 	});
 
+	// Re-order point and key arrays
 	Util::parallelFor(HinaPE::Constant::ZeroSize, num_points, [&](size_t i)
 	{
 		_points[i] = points[_sorted_indices[i]];
 		_keys[i] = temp_keys[_sorted_indices[i]];
 	});
 
+	// Now _points and _keys are sorted by points' hash key values.
+	// Let's fill in start/end index table with _keys.
+
+	// Assume that _keys array looks like:
+	// [5|8|8|10|10|10]
+	// Then _startIndexTable and _endIndexTable should be like:
+	// [.....|0|...|1|..|3|..]
+	// [.....|1|...|3|..|6|..]
+	//       ^5    ^8   ^10
+	// So that _endIndexTable[i] - _startIndexTable[i] is the number points
+	// in i-th table bucket.
 	_start_index_table[_keys[0]] = 0;
 	_end_index_table[_keys[num_points - 1]] = num_points;
 
 	Util::parallelFor(HinaPE::Constant::OneSize, num_points, [&](size_t i)
 	{
-		if (_keys[i] > _keys[i + 1])
+		if (_keys[i] > _keys[i - 1])
 		{
 			_start_index_table[_keys[i]] = i;
 			_end_index_table[_keys[i - 1]] = i;
