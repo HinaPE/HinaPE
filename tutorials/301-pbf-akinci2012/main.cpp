@@ -159,6 +159,12 @@ auto main() -> int
 		scene->_scene_opt._particle_mode = true;
 
 		// boundary
+//		scene->add(top);
+//		scene->add(bottom);
+//		scene->add(left);
+//		scene->add(right);
+//		scene->add(front);
+//		scene->add(back);
 	};
 
 	static int frame_num = 0;
