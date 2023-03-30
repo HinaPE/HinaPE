@@ -111,9 +111,9 @@ void HinaPE::PCISPHSolver::_accumulate_predict_density() const
     auto &x_t = _data->_temp_positions;
     auto &d_p = _data->_predict_densities;
     const auto &m = _data->_mass;
-    real W_d = 0;
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
     {
+        real W_d = 0;
         const auto &neighbors = _data->_neighbor_lists[i];
         for (size_t j: neighbors) {
             real dist = (x_t[i] - x_t[j]).length();
@@ -151,9 +151,9 @@ void HinaPE::PCISPHSolver::_accumulate_delta_pressure() const
             dist = (x[i] - x[j]).length();
             dir = (x[j] - x[i]) / dist;
             gradWij = (*_data->kernel).gradient(dist, dir);
-            denominator1 += gradWij;
-            denominator2 += gradWij.dot(gradWij);
         }
+        denominator1 += gradWij;
+        denominator2 += gradWij.dot(gradWij);
     });
     denominator = -denominator1.dot(denominator1) - denominator2;
     real delta = -1 / (beta * denominator);
@@ -164,11 +164,11 @@ void HinaPE::PCISPHSolver::_accumulate_delta_pressure() const
         d_e[i] = d_p[i] - _data->target_density;
         // update pressure
         p[i] += delta * d_e[i];
-        if(p[i] < 0.0)
+        /*if(p[i] < 0.0)
         {
             p[i] *= _data->negative_pressure_scale;
             d_e[i] *= _data->negative_pressure_scale;
-        }
+        }*/
     });
 
     // Compute max density error
@@ -189,16 +189,15 @@ void HinaPE::PCISPHSolver::_accumulate_delta_pressure() const
     Util::parallelFor(Constant::ZeroSize, _data->_positions.size(), [&](size_t i)
     {
         const auto &neighbors = _data->_neighbor_lists[i];
+        mVector3 W_g = mVector3 (0.0,0.0,0.0);
         for (size_t j: neighbors)
         {
             real dist = (x[i] - x[j]).length();
-            if (dist > HinaPE::Constant::Epsilon)
-            {
-                mVector3 dir = (x[j] - x[i]) / dist;
-                f_p[i] = -m * m * (2 * delta * d_e[i]/(_data->target_density * _data->target_density)) * (*_data->kernel).gradient(dist, dir);
-                //f[i] -= m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * (*_data->kernel).gradient(dist, dir);
-            }
+            mVector3 dir = (x[j] - x[i]) / dist;
+            W_g += (*_data->kernel).gradient(dist, dir);
+            //f_p[i] = -m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * (*_data->kernel).gradient(dist, dir);
         }
+        f_p[i] = -m * m * (2 * delta * d_e[i]/(_data->target_density * _data->target_density)) * W_g;
     });
 }
 
@@ -398,8 +397,10 @@ void HinaPE::PCISPHSolver::Data::INSPECT()
 	{
 		ImGui::Text("Inst: %d", _inst_id);
 		ImGui::Text("Force: {%.3f, %.3f, %.3f}", _forces[_inst_id].x(), _forces[_inst_id].y(), _forces[_inst_id].z());
-		ImGui::Text("Density: %.3f", _predict_densities[_inst_id]);
+		ImGui::Text("Predict Density: %.3f", _predict_densities[_inst_id]);
+        ImGui::Text("Density: %.3f", _densities[_inst_id]);
 		ImGui::Text("Pressure: %.3f", _pressures[_inst_id]);
+        ImGui::Text("Density error: %.3f", _density_errors[_inst_id]);
 	}
 }
 

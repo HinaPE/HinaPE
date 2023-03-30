@@ -22,7 +22,7 @@ public:
 	struct Opt
 	{
 		bool inited = false;
-		real current_dt = 0.01;
+		real current_dt = 0.005;
 		mVector3 gravity = mVector3(0, -9.8, 0);
 		real restitution = 0.3;
 	} _opt;

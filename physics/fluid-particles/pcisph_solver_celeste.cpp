@@ -168,10 +168,9 @@ void HinaPE::PCISPHSolverCELESTE::update(real dt) {
 
     _accumulate_non_pressure_force();
 
+
+
     _update_neighbor();
-
-
-
 }
 
 void HinaPE::PCISPHSolverCELESTE::_accumulate_non_pressure_force() const
@@ -210,27 +209,25 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_non_pressure_force() const
     });
 }
 
-void HinaPE::PCISPHSolverCELESTE::_predict_density() const {
-    auto &d = _data->Fluid.densities;
-    auto &d_p = _data->Fluid.predicted_densities;
+void HinaPE::PCISPHSolverCELESTE::_prediction_correction_step() {
+    _initialize_pressure_and_pressure_force();
 
-    auto &x = _data->Fluid.positions;
-    auto &x_p = _data->Fluid.predicted_positions;
 
-    auto &m = _data->Fluid.mass;
+
+
+
+}
+
+void HinaPE::PCISPHSolverCELESTE::_initialize_pressure_and_pressure_force() const {
+    auto &p = _data->Fluid.pressures;
+    auto &p_f = _data->Fluid.pressure_forces;
+
     const auto fluid_size = _data->fluid_size();
-    StdKernel poly6(_opt.kernel_radius);
 
-    real sum_W = 0.0;
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
-        auto &nl = _data->NeighborList;
-        for (size_t j: nl[i])
-        {
-            real dist = (x_p[i] - x_p[j]).length();
-            sum_W += poly6(dist);
-        }
-        d_p[i] = m * sum_W;
+        p[i] = 0.0;
+        p_f[i] = mVector3(0.0,0.0,0.0);
     });
 }
 

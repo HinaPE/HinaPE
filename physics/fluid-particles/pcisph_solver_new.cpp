@@ -199,16 +199,14 @@ void HinaPE::PCISPHSolverNew::_predict_density() const
     StdKernel poly6(_opt.kernel_radius);
 
     /////////TODO
-    real sum_W = 0.0;
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         auto &nl = _data->NeighborList;
         for (size_t j: nl[i])
         {
             real dist = (x_p[i] - x_p[j]).length();
-            sum_W += poly6(dist);
+            d_p[i] += m * poly6(dist);
         }
-        d_p[i] = m * sum_W;
     });
 }
 
