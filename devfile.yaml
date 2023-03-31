@@ -1,0 +1,13 @@
+schemaVersion: 2.2.0
+attributes:
+  space:
+    instanceType: large
+    editor:
+      type: Clion
+
+components:
+  - name: image-build
+    image:
+      imageName: HinaPE:latest
+      dockerfile:
+        uri: .space/Dockerfile
