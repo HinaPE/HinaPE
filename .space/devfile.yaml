@@ -10,4 +10,4 @@ components:
     image:
       imageName: myapp:latest
       dockerfile:
-        uri: Dockerfile
+        uri: ./Dockerfile
