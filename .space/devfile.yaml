@@ -4,11 +4,17 @@ attributes:
     instanceType: large
     editor:
       type: Clion
-
 components:
   - name: image-build
     image:
-      imageName: myapp:latest
+    # (Required)
+      imageName: my-image:latest
       dockerfile:
+        # (Optional) path to Docker context relative to projectRoot
+        # by default, projectRoot is repository root
         buildContext: docker
+        # (Required) path to Dockerfile relative to projectRoot
         uri: docker/Dockerfile
+        args:
+          - 'ARG1=A'
+          - 'ARG2=B'
