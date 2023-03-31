@@ -5,6 +5,8 @@ RUN apt update
 
 RUN apt-get --yes --force-yes install build-essential
 
+RUN apt-get --yes --force-yes install git-all
+
 RUN apt-get --yes --force-yes install libgtk-3-dev
 
 RUN apt-get --yes --force-yes install libtbb-dev
