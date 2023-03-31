@@ -1,7 +1,7 @@
 schemaVersion: 2.2.0
 attributes:
   space:
-    instanceType: extra large
+    instanceType: large
     editor:
       type: Clion
 
