@@ -1,20 +1,14 @@
 schemaVersion: 2.2.0
 attributes:
   space:
-    instanceType: large
+    instanceType: extra large
     editor:
       type: Clion
+
 components:
   - name: image-build
     image:
-    # (Required)
-      imageName: my-image:latest
+      imageName: myapp:latest
       dockerfile:
-        # (Optional) path to Docker context relative to projectRoot
-        # by default, projectRoot is repository root
         buildContext: docker
-        # (Required) path to Dockerfile relative to projectRoot
         uri: docker/Dockerfile
-        args:
-          - 'ARG1=A'
-          - 'ARG2=B'
