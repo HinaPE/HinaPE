@@ -10,4 +10,4 @@ components:
     image:
       imageName: HinaPE:latest
       dockerfile:
-        uri: .space/Dockerfile
+        uri: Dockerfile
