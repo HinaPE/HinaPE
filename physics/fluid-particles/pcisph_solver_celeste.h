@@ -14,6 +14,7 @@ namespace HinaPE
     protected:
         void _update_neighbor() const;
         void _update_density() const;
+        void _resolve_collision() const;
         void _accumulate_non_pressure_force() const;
         void _initialize_pressure_and_pressure_force() const;
         void _prediction_correction_step();
@@ -61,7 +62,6 @@ namespace HinaPE
         void _init_fluid_particles() const;
         void _init_boundary_particles() const;
         void _init_collider() const;
-        void _reset_debug_info() const;
         void INSPECT() override;
     };
 
