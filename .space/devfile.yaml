@@ -8,6 +8,6 @@ attributes:
 components:
   - name: image-build
     image:
-      imageName: HinaPE:latest
+      imageName: myapp:latest
       dockerfile:
         uri: Dockerfile
