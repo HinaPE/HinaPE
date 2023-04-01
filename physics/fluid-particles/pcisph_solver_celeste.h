@@ -58,7 +58,7 @@ namespace HinaPE
             real min_loop = 3;
             real max_loop = 50;
             real max_density_error_ratio = 0.01;
-            bool density_error_too_large = true;
+            bool density_error_too_large = false;
 
             // options
             //bool use_akinci2012_collision = true;

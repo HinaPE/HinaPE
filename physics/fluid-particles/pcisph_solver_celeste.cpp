@@ -196,7 +196,6 @@ void HinaPE::PCISPHSolverCELESTE::_initialize_pressure_and_pressure_force() cons
     auto &p_f = _data->Fluid.pressure_forces;
     auto &d_e = _data->Fluid.density_errors;
     auto &d = _data->Fluid.densities;
-    auto &p_d = _data->Fluid.predicted_densities;
 
     const auto fluid_size = _data->fluid_size();
 
@@ -301,7 +300,7 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force() {
     auto &p = _data->Fluid.pressures;
     auto &d = _data->Fluid.densities;
     auto &d_e = _data->Fluid.density_errors;
-    auto &p_d = _data->Fluid.predicted_densities;
+    auto &d_p = _data->Fluid.predicted_densities;
     auto &m = _data->Fluid.mass;
     const auto fluid_size = _data->fluid_size();
     SpikyKernel spiky(_opt.kernel_radius);
@@ -315,7 +314,7 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force() {
             if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
             {
                 mVector3 dir = (x[j] - x[i]) / dist;
-                p_f[i] -= m * m * (p[i] / (p_d[i] * p_d[i]) + p[j] / (d[j] * d[j])) * spiky.gradient(dist, dir);
+                p_f[i] -= m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * spiky.gradient(dist, dir);
             }
         }
     });
@@ -324,14 +323,14 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force() {
     real maxDensityError = 0.0;
     real DensityErrorRatio;
 
-    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+    for (int j = 0; j < _data->fluid_size(); ++j)
     {
-        maxDensityError = std::max(maxDensityError, std::abs(d_e[i]));
-    });
+        maxDensityError = std::max(maxDensityError, std::abs(d_e[j]));
+    }
 
     DensityErrorRatio = maxDensityError / _opt.target_density;
 
-    if(fabs(DensityErrorRatio) < _opt.max_density_error_ratio)
+    if(abs(DensityErrorRatio) < _opt.max_density_error_ratio)
     {
         _opt.density_error_too_large = false;
     }
