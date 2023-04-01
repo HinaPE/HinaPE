@@ -1,14 +1,26 @@
 
 #include "pcisph_solver_celeste.h"
 
+#define S HinaPE::Math::to_string
+#define Record(x, y) _data->debug_info[i].emplace_back(x + S(y))
+
+// ============================================================================================================
+// ================================================== Solver ==================================================
 void HinaPE::PCISPHSolverCELESTE::init() {
 // init data
     if (_data == nullptr)
         _data = std::make_shared<Data>();
     if (_domain == nullptr)
+    {
         _domain = std::make_shared<BoxDomain>();
+        _domain->POSE.scale = {1, 1.5, 1};
+        _domain->_update_surface();
+    }
     if (_emitter == nullptr)
+    {
         _emitter = std::make_shared<VolumeParticleEmitter3>();
+        _emitter->_opt.multiplier = 2.2;
+    }
 
     _data->DEFAULT_SCALE = 0.5 * _opt.radius * mVector3::One();
     _emitter->_opt.spacing = 1.2 * _opt.radius;
@@ -16,8 +28,8 @@ void HinaPE::PCISPHSolverCELESTE::init() {
     _init_fluid_particles();
     //_init_boundary_particles();
 }
-
-void HinaPE::PCISPHSolverCELESTE::_init_fluid_particles() const {
+void HinaPE::PCISPHSolverCELESTE::_init_fluid_particles() const
+{
     std::vector<mVector3> init_pos, init_vel;
     _emitter->emit(&init_pos, &init_vel);
     _data->add_fluid(init_pos, init_vel);
@@ -62,7 +74,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_neighbor() const
 {
     // Update Target: NeighborList
     const auto fluid_size = _data->fluid_size();
-    const auto boundary_size = _data->boundary_size();
+    //const auto boundary_size = _data->boundary_size();
     const auto &x = _data->Fluid.positions; // note: we use predicted position, because we need to update neighbor in the sub iteration
 
     std::vector<mVector3> total_positions;
@@ -84,11 +96,9 @@ void HinaPE::PCISPHSolverCELESTE::_update_neighbor() const
                 nl[i].push_back(j);
         });
     });
-
-    // ==================== Debug ====================
-    _data->neighbor_list_debug = nl; // copy neighbor list to debug
 }
-void HinaPE::PCISPHSolverCELESTE::_update_density() const {
+void HinaPE::PCISPHSolverCELESTE::_update_density() const
+{
 // Update Target: densities
     auto &d = _data->Fluid.densities;
     const auto &x = _data->Fluid.positions;
@@ -97,7 +107,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_density() const {
     //const auto &bm = _data->Boundary.mass;
     const auto &nl = _data->NeighborList;
     const auto fluid_size = _data->fluid_size();
-    const auto boundary_size = _data->boundary_size();
+    //const auto boundary_size = _data->boundary_size();
 
     StdKernel poly6(_opt.kernel_radius);
     Util::parallelFor(Constant::ZeroSize, _data->fluid_size(), [&](size_t i)
@@ -125,6 +135,10 @@ void HinaPE::PCISPHSolverCELESTE::update(real dt)
     _prediction_correction_step();
     // algorithm line 18~20
     _correct_velocity_and_position();
+    _resolve_collision();
+
+    // for debug
+    _data->Fluid.last_positions = _data->Fluid.positions; // show the position of last frame
 }
 
 void HinaPE::PCISPHSolverCELESTE::_accumulate_non_pressure_force() const
@@ -140,7 +154,7 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_non_pressure_force() const
     StdKernel poly6(_opt.kernel_radius);
 
     const auto fluid_size = _data->fluid_size();
-    const auto boundary_size = _data->boundary_size();
+    //const auto boundary_size = _data->boundary_size();
 
     const auto &m = _data->Fluid.mass;
     // Gravity Forces
@@ -169,7 +183,7 @@ void HinaPE::PCISPHSolverCELESTE::_prediction_correction_step() {
         // algorithm line 9~11
         _predict_velocity_and_position();
 
-        _resolve_collision();
+        //_resolve_collision();
 
         // algorithm line 12~13
         _predict_density();
@@ -224,6 +238,11 @@ void HinaPE::PCISPHSolverCELESTE::_predict_velocity_and_position() const {
         v_p[i] = v[i] + dt * (f[i] + f_p[i]) / m;
         x_p[i] = x[i] + dt * v_p[i];
     });
+
+    Util::parallelFor(Constant::ZeroSize, _data->fluid_size(), [&](size_t i)
+    {
+        _domain->resolve_collision(_opt.radius, _opt.restitution, &x_p[i], &v_p[i]);
+    });
 }
 void HinaPE::PCISPHSolverCELESTE::_predict_density() const
 {
@@ -251,7 +270,6 @@ void HinaPE::PCISPHSolverCELESTE::_predict_density() const
 }
 void HinaPE::PCISPHSolverCELESTE::_update_pressure() {
     auto &p = _data->Fluid.pressures;
-    auto &delta_p = _data->Fluid.delta_pressure;
     auto &d_p = _data->Fluid.predicted_densities;
     auto &d_e = _data->Fluid.density_errors;
     auto &x = _data->Fluid.positions;
@@ -266,92 +284,33 @@ void HinaPE::PCISPHSolverCELESTE::_update_pressure() {
     real beta = 2 * Math::square(dt * m / _opt.target_density);
 
     // compute delta
-    mBBox3 bound(mVector3::Zero(), mVector3::Zero());
-    bound.expand(1.5 * _opt.kernel_radius);
-
-    real denominator = 0;
-    mVector3 denominator1 = mVector3(0.0,0.0,0.0);
-    real denominator2 = 0;
-    mVector3 gradWij;
-
-    std::vector<mVector3> points;
-    real spacing = _opt.kernel_radius;
-    real half_spacing = 0.5 * _opt.kernel_radius;
-    real box_w = bound.width();
-    real box_h = bound.height();
-    real box_d = bound.depth();
-
-    mVector3 point;
-    bool has_offset = false;
-    for (int i = 0; i * half_spacing <= box_d; ++i)
-    {
-        point.z() = i * half_spacing + bound._lower_corner.z();
-
-        real offset = (has_offset) ? half_spacing : 0;
-
-        for (int j = 0; j * spacing + offset <= box_h; ++j)
-        {
-            point.y() = j * spacing + offset + bound._lower_corner.y();
-            for (int k = 0; k * spacing + offset <= box_w; ++k)
-            {
-                point.x() = k * spacing + offset + bound._lower_corner.x();
-                points.push_back(point);
-            }
-        }
-        has_offset = !has_offset;
-    }
-
-    for (const auto &p_i: points)
-    {
-        real dist = p_i.length();
-        if ((dist * dist) < (_opt.kernel_radius * _opt.kernel_radius))
-        {
-            mVector3 dir = (dist > 0) ? p_i / dist : mVector3::Zero();
-            auto gradWij = spiky.gradient(dist, dir);
-            denominator1 += gradWij;
-            denominator2 += gradWij.dot(gradWij);
-        }
-    }
-    denominator = -denominator1.dot(denominator1) - denominator2;
-    real delta = (std::fabs(denominator) > 0) ? -1 / (beta * denominator) : 0;
+    auto delta = _compute_delta();
 
     // update pressure
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
+        real density_err = d_p[i] - _opt.target_density;
+        real pressure = 0.01 * delta * d_e[i];
+        if (pressure < 0)
+        {
+            pressure *= _opt.nps;
+            density_err *= _opt.nps;
+        }
         // compute density error
         // algorithm line 14
-        d_e[i] = d_p[i] - _opt.target_density;
-        // compute delta pressure
-        delta_p[i] = delta * d_e[i];
+        d_e[i] = density_err;
         // compute pressure force
         // algorithm line 15
-        p[i] += delta * d_e[i];
+        p[i] += pressure;
     });
-
-    // Compute max density error
-    real maxDensityError = 0.0;
-    real DensityErrorRatio;
-
-    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
-    {
-        maxDensityError = std::max(maxDensityError, std::abs(d_e[i]));
-    });
-
-    DensityErrorRatio = maxDensityError / _opt.target_density;
-
-    if(fabs(DensityErrorRatio) < _opt.max_density_error_ratio)
-    {
-        _opt.density_error_too_large = false;
-    }
 }
-void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force() const
-{
+void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force() {
     auto &x = _data->Fluid.positions;
     auto &p_f = _data->Fluid.pressure_forces;
     auto &p = _data->Fluid.pressures;
     auto &d = _data->Fluid.densities;
+    auto &d_e = _data->Fluid.density_errors;
     auto &p_d = _data->Fluid.predicted_densities;
-    auto &delta_p = _data->Fluid.delta_pressure;
     auto &m = _data->Fluid.mass;
     const auto fluid_size = _data->fluid_size();
     SpikyKernel spiky(_opt.kernel_radius);
@@ -370,6 +329,22 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force() const
             }
         }
     });
+
+    // Compute max density error
+    real maxDensityError = 0.0;
+    real DensityErrorRatio;
+
+    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+    {
+        maxDensityError = std::max(maxDensityError, std::abs(d_e[i]));
+    });
+
+    DensityErrorRatio = maxDensityError / _opt.target_density;
+
+    if(fabs(DensityErrorRatio) < _opt.max_density_error_ratio)
+    {
+        _opt.density_error_too_large = false;
+    }
 }
 void HinaPE::PCISPHSolverCELESTE::_correct_velocity_and_position() const {
     auto &x = _data->Fluid.positions;
@@ -397,7 +372,7 @@ void HinaPE::PCISPHSolverCELESTE::INSPECT()
     // Solver Parameters
     ImGui::Text("SOLVER INSPECTOR");
     ImGui::Text("Fluids: %zu", _data->fluid_size());
-    ImGui::Text("Boundaries: %zu", _data->boundary_size());
+    //ImGui::Text("Boundaries: %zu", _data->boundary_size());
     static real min_dt = 0, max_dt = 1;
     ImGui::DragScalar("Time Step", ImGuiDataType_Real, &_opt.current_dt, 0.01, &min_dt, &max_dt, "%.3f");
     static real min_restitution = 0, max_restitution = 1;
@@ -411,7 +386,7 @@ void HinaPE::PCISPHSolverCELESTE::INSPECT()
     static real min_relative_radius = 1, max_relative_radius = 5;
     if (ImGui::DragScalar("Relative Kernel Radius", ImGuiDataType_Real, &_opt.relative_kernel_radius, 1e-1, &min_relative_radius, &max_relative_radius, "%.3f")) { _opt.kernel_radius = _opt.radius * _opt.relative_kernel_radius; }
 
-    ImGui::Checkbox("Akinci2012 Collision", &_opt.use_akinci2012_collision);
+    //ImGui::Checkbox("Akinci2012 Collision", &_opt.use_akinci2012_collision);
     ImGui::Separator();
 
     // Debug Info
@@ -423,6 +398,8 @@ void HinaPE::PCISPHSolverCELESTE::INSPECT()
         ImGui::Text("Non Pressure Force: {%.3f, %.3f, %.3f}", _data->Fluid.non_pressure_forces[inst_id].x(), _data->Fluid.non_pressure_forces[inst_id].y(), _data->Fluid.non_pressure_forces[inst_id].z());
         ImGui::Text("Pressure Force: {%.3f, %.3f, %.3f}", _data->Fluid.pressure_forces[inst_id].x(), _data->Fluid.pressure_forces[inst_id].y(), _data->Fluid.pressure_forces[inst_id].z());
         ImGui::Text("Density: %.3f", _data->Fluid.densities[inst_id]);
+        ImGui::Text("Predict Density: %.3f", _data->Fluid.predicted_densities[inst_id]);
+        ImGui::Text("Pressure: %.3f", _data->Fluid.pressures[inst_id]);
         ImGui::Text("Neighbors: %zu", _data->NeighborList[inst_id].size());
         ImGui::Separator();
         if (_data->debug_info.empty())
@@ -434,16 +411,73 @@ void HinaPE::PCISPHSolverCELESTE::INSPECT()
         }
     }
 }
+auto HinaPE::PCISPHSolverCELESTE::_compute_delta() const -> real
+{
+    mBBox3 bound(mVector3::Zero(), mVector3::Zero());
+    bound.expand(1.5 * _opt.kernel_radius);
 
+    SpikyKernel spiky(_opt.kernel_radius);
+    real denom = 0;
+    mVector3 denom1 = mVector3::Zero();
+    real denom2 = 0;
+
+    std::vector<mVector3> points;
+    real spacing = _opt.kernel_radius;
+    real half_spacing = 0.5 * _opt.kernel_radius;
+    real box_w = bound.width();
+    real box_h = bound.height();
+    real box_d = bound.depth();
+
+    mVector3 p;
+    bool has_offset = false;
+    for (int i = 0; i * half_spacing <= box_d; ++i)
+    {
+        p.z() = i * half_spacing + bound._lower_corner.z();
+
+        real offset = (has_offset) ? half_spacing : 0;
+
+        for (int j = 0; j * spacing + offset <= box_h; ++j)
+        {
+            p.y() = j * spacing + offset + bound._lower_corner.y();
+            for (int k = 0; k * spacing + offset <= box_w; ++k)
+            {
+                p.x() = k * spacing + offset + bound._lower_corner.x();
+                points.push_back(p);
+            }
+        }
+
+        has_offset = !has_offset;
+    }
+
+    for (const auto &p_i: points)
+    {
+        real dist = p_i.length();
+
+        if ((dist * dist) < (_opt.kernel_radius * _opt.kernel_radius))
+        {
+            mVector3 dir = (dist > 0) ? p_i / dist : mVector3::Zero();
+
+            auto gradWij = spiky.gradient(dist, dir);
+            denom1 += gradWij;
+            denom2 += gradWij.dot(gradWij);
+        }
+    }
+
+    denom += -denom1.dot(denom1) - denom2;
+    real beta = 2 * Math::square(_data->Fluid.mass * _opt.current_dt / _opt.target_density);
+
+    return (std::fabs(denom) > 0) ? -1 / (beta * denom) : 0;
+}
+
+// ================================================== Data ==================================================
 HinaPE::PCISPHSolverCELESTE::Data::Data() {
-    track(&Fluid.positions);
+    track(&Fluid.last_positions);
     _color_map = &color_map;
 }
 auto HinaPE::PCISPHSolverCELESTE::Data::fluid_size() const -> size_t { return Fluid.positions.size(); }
-auto HinaPE::PCISPHSolverCELESTE::Data::boundary_size() const -> size_t { return Boundary.positions.size(); }
-
+//auto HinaPE::PCISPHSolverCELESTE::Data::boundary_size() const -> size_t { return Boundary.positions.size(); }
 void HinaPE::PCISPHSolverCELESTE::Data::add_fluid(const std::vector<mVector3> &positions,
-                                                  const std::vector<mVector3> &velocities) {
+                                                  const std::vector<mVector3> &velocities){
     if (positions.size() != velocities.size())
         throw std::runtime_error("positions.size() != velocities.size()");
 
@@ -451,18 +485,20 @@ void HinaPE::PCISPHSolverCELESTE::Data::add_fluid(const std::vector<mVector3> &p
     Fluid.positions.insert(Fluid.positions.end(), positions.begin(), positions.end());
     Fluid.velocities.insert(Fluid.velocities.end(), velocities.begin(), velocities.end());
     Fluid.predicted_positions.insert(Fluid.predicted_positions.end(), positions.begin(), positions.end());
-    Fluid.predicted_velocities.insert(Fluid.predicted_velocities.end(), velocities.begin(), velocities.begin());
+    Fluid.predicted_velocities.insert(Fluid.predicted_velocities.end(), velocities.begin(), velocities.end());
+    Fluid.non_pressure_forces.insert(Fluid.non_pressure_forces.end(),size,mVector3::Zero());
+    Fluid.pressure_forces.insert(Fluid.pressure_forces.end(),size,mVector3::Zero());
     Fluid.densities.insert(Fluid.densities.end(), size, 0.0);
     Fluid.predicted_densities.insert(Fluid.predicted_densities.end(), size, 0.0);
     Fluid.density_errors.insert(Fluid.density_errors.end(), size, 0.0);
     Fluid.pressures.insert(Fluid.pressures.end(), size, 0.0);
-    Fluid.delta_pressure.insert(Fluid.delta_pressure.end(), size, 0.0);
+
+    Fluid.last_positions.insert(Fluid.last_positions.end(), positions.begin(), positions.end());
 
     NeighborList.insert(NeighborList.end(), size, std::vector<unsigned int>());
     color_map.insert(color_map.end(), size, Color::ORANGE);
     debug_info.insert(debug_info.end(), size, std::vector<std::string>());
 }
-
 void HinaPE::PCISPHSolverCELESTE::Data::reset() {
     Fluid.positions.clear();
     Fluid.velocities.clear();
@@ -478,18 +514,13 @@ void HinaPE::PCISPHSolverCELESTE::Data::reset() {
     Fluid.density_errors.clear();
 
     Fluid.pressures.clear();
-    Fluid.delta_pressure.clear();
     Fluid.mass = 1e-3;
 
-    Boundary.positions.clear();
-    Boundary.mass = 1e-3;
+    /*Boundary.positions.clear();
+    Boundary.mass = 1e-3;*/
 
-    NeighborList.clear();
     color_map.clear();
     debug_info.clear();
-    neighbor_list_debug.clear();
-    p_debug.clear();
-    delta_p_debug.clear();
 }
 
 

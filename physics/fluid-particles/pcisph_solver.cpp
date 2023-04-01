@@ -35,7 +35,6 @@ void HinaPE::PCISPHSolver::_emit_particles() const
     _data->_predict_densities.resize(_data->_positions.size(), 0);
 
     _data->_update_neighbor();
-    _data->_update_density();
 }
 
 void HinaPE::PCISPHSolver::_prediction_correction_step() const
@@ -50,8 +49,7 @@ void HinaPE::PCISPHSolver::_prediction_correction_step() const
     {
         p[i] = 0.0;
         f_p[i] = mVector3 (0.0,0.0,0.0);
-        d_e[i] = 0.0;
-        d_p[i] = d[i];
+
     });
 
     int iteration = 0;
@@ -61,14 +59,12 @@ void HinaPE::PCISPHSolver::_prediction_correction_step() const
         //predict velocity and position
         _predict_velocity_and_position();
 
-        // deal with collision (particle-solid)
-        _resolve_collision();
-
         _accumulate_predict_density();
 
         _accumulate_delta_pressure();
 
-
+        // deal with collision (particle-solid)
+        _resolve_collision();
 
         // accumulate pressure forces
         //_accumulate_pressure_force();
@@ -110,6 +106,9 @@ void HinaPE::PCISPHSolver::_accumulate_non_pressure_force() const
 }
 void HinaPE::PCISPHSolver::_accumulate_predict_density() const
 {
+    if (!_data->_mass_inited)
+        _data->_update_mass();
+
     auto &x_t = _data->_temp_positions;
     auto &d_p = _data->_predict_densities;
     const auto &m = _data->_mass;
@@ -196,8 +195,10 @@ void HinaPE::PCISPHSolver::_accumulate_delta_pressure() const
         {
             real dist = (x[i] - x[j]).length();
             mVector3 dir = (x[j] - x[i]) / dist;
-            f_p[i] -= m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * (*_data->kernel).gradient(dist, dir);
+            W_g += (*_data->kernel).gradient(dist, dir);
+            //f_p[i] = -m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * (*_data->kernel).gradient(dist, dir);
         }
+        f_p[i] = -m * m * (2 * delta * d_e[i]/(_data->target_density * _data->target_density)) * W_g;
     });
 }
 
@@ -369,8 +370,7 @@ void HinaPE::PCISPHSolver::Data::_update_predict_density() {
 }
 
 void HinaPE::PCISPHSolver::Data::_update_mass()
-{
-    _mass = 1.0;
+{	_mass = 1.0;
 
 	real max_number_density = 0;
 	for (int i = 0; i < _positions.size(); ++i)

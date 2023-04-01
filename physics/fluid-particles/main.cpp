@@ -2,7 +2,6 @@
 #include "sph_solver.h"
 #include "pcisph_solver.h"
 #include "pbf_solver.h"
-#include "pcisph_solver_celeste.h"
 
 #include "export_to_xyz.h"
 
@@ -14,8 +13,7 @@
 
 using SolverType =
 //		HinaPE::SPHSolver;
-//		HinaPE::PCISPHSolver;
-        HinaPE::PCISPHSolverCELESTE;
+		HinaPE::PCISPHSolver;
 //		HinaPE::PBFSolver;
 using SolverDataType = SolverType::Data;
 
@@ -31,12 +29,12 @@ struct NeighborSearchVisualization : public Kasumi::ObjectParticles3D
 
 	void on()
 	{
-		if (_data->_inst_id < 0 || _data->_inst_id >= _data->Fluid.positions.size())
+		if (_data->_inst_id < 0 || _data->_inst_id >= _data->_positions.size())
 			return;
 
-		auto origin = _data->Fluid.positions[_data->_inst_id];
-		for (auto &neighbor: _data->NeighborList[_data->_inst_id])
-			_neighbors.push_back(_data->Fluid.positions[neighbor]);
+		auto origin = _data->_positions[_data->_inst_id];
+		for (auto &neighbor: _data->_neighbor_lists[_data->_inst_id])
+			_neighbors.push_back(_data->_positions[neighbor]);
 		_neighbors.push_back(origin);
 
 		_shader->uniform("highlight_mode", true);
@@ -108,7 +106,7 @@ auto main() -> int
 			std::thread(
 					[&]()
 					{
-						save_particles_as_pos(data->Fluid.positions.data()->data(), data->Fluid.positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz");
+						save_particles_as_pos(data->_positions.data()->data(), data->_positions.size(), std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz");
 						const std::string command = std::string(DEFAULT_OUTPUT_DIR) + std::string(ParticleToObj) + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".xyz" + " " + std::string(DEFAULT_OUTPUT_DIR) + "frame_" + "test" + ".obj";
 						exec(command.c_str());
 					}).detach();
