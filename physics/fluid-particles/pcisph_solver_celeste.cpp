@@ -182,9 +182,6 @@ void HinaPE::PCISPHSolverCELESTE::_prediction_correction_step() {
     {
         // algorithm line 9~11
         _predict_velocity_and_position();
-
-        //_resolve_collision();
-
         // algorithm line 12~13
         _predict_density();
         // algorithm line 14~15
@@ -207,9 +204,6 @@ void HinaPE::PCISPHSolverCELESTE::_initialize_pressure_and_pressure_force() cons
     {
         p[i] = 0.0;
         p_f[i] = mVector3(0.0,0.0,0.0);
-        ///Add
-        d_e[i] = 0.0;
-        p_d[i] = d[i];
     });
 }
 void HinaPE::PCISPHSolverCELESTE::_resolve_collision() const {
@@ -226,7 +220,7 @@ void HinaPE::PCISPHSolverCELESTE::_predict_velocity_and_position() const {
     auto &x = _data->Fluid.positions;
     auto &v = _data->Fluid.velocities;
     auto &f = _data->Fluid.non_pressure_forces;
-    auto &f_p = _data->Fluid.pressure_forces;
+    auto &p_f = _data->Fluid.pressure_forces;
 
     auto &x_p = _data->Fluid.predicted_positions;
     auto &v_p = _data->Fluid.predicted_velocities;
@@ -235,7 +229,7 @@ void HinaPE::PCISPHSolverCELESTE::_predict_velocity_and_position() const {
     const auto fluid_size = _data->fluid_size();
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
-        v_p[i] = v[i] + dt * (f[i] + f_p[i]) / m;
+        v_p[i] = v[i] + dt * (f[i] + p_f[i]) / m;
         x_p[i] = x[i] + dt * v_p[i];
     });
 
@@ -280,9 +274,6 @@ void HinaPE::PCISPHSolverCELESTE::_update_pressure() {
     const auto fluid_size = _data->fluid_size();
     SpikyKernel spiky(_opt.kernel_radius);
 
-    // compute beta
-    real beta = 2 * Math::square(dt * m / _opt.target_density);
-
     // compute delta
     auto delta = _compute_delta();
 
@@ -290,7 +281,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_pressure() {
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         real density_err = d_p[i] - _opt.target_density;
-        real pressure = 0.01 * delta * d_e[i];
+        real pressure = 0.012 * delta * d_e[i];
         if (pressure < 0)
         {
             pressure *= _opt.nps;
@@ -315,7 +306,6 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force() {
     const auto fluid_size = _data->fluid_size();
     SpikyKernel spiky(_opt.kernel_radius);
     std::fill(p_f.begin(), p_f.end(), mVector3::Zero());
-
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         auto &nl = _data->NeighborList;
@@ -346,6 +336,7 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force() {
         _opt.density_error_too_large = false;
     }
 }
+
 void HinaPE::PCISPHSolverCELESTE::_correct_velocity_and_position() const {
     auto &x = _data->Fluid.positions;
     auto &v = _data->Fluid.velocities;

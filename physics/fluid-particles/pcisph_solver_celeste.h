@@ -40,7 +40,7 @@ namespace HinaPE
             real restitution = 0.3;
 
             // fluid param
-            real radius 			= 0.02;
+            real radius 			= 0.018;
             real target_density 	= 1000; // water density
             real target_spacing 	= radius;
             real relative_kernel_radius = 1.65;
