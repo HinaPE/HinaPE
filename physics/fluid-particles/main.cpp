@@ -1,7 +1,6 @@
 #include "renderer3D/renderer3D.h"
 #include "sph_solver.h"
 #include "pcisph_solver.h"
-#include "pbf_solver.h"
 
 #include "export_to_xyz.h"
 
