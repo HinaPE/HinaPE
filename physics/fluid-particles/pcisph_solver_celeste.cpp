@@ -317,7 +317,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_pressure() {
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         real density_err = d_p[i] - _opt.target_density;
-        real pressure = 0.012 * delta * d_e[i];
+        real pressure = delta * d_e[i];
         if (pressure < 0)
         {
             pressure *= _opt.nps;
