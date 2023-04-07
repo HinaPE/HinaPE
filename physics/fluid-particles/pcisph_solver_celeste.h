@@ -32,6 +32,8 @@ namespace HinaPE
         std::shared_ptr<Data> 					_data;
         std::shared_ptr<BoxDomain> 				_domain;
         std::shared_ptr<VolumeParticleEmitter3> _emitter;
+        std::shared_ptr<Kasumi::SphereObject> 	_sphere;
+        std::shared_ptr<Kasumi::CubeObject> 	_cube;
 
         struct Opt
         {
@@ -61,14 +63,14 @@ namespace HinaPE
             bool density_error_too_large = false;
 
             // options
-            //bool use_akinci2012_collision = true;
+            bool use_akinci2012_collision = true;
         }_opt;
 
     private:
         void _init_fluid_particles() const;
         auto _compute_delta() const -> real;
-        //void _init_boundary_particles() const;
-        //void _init_collider() const;
+        void _init_boundary_particles() const;
+        void _init_collider() const;
         void INSPECT() override;
     };
 
@@ -96,19 +98,24 @@ namespace HinaPE
             std::vector<mVector3> 	last_positions;
         }Fluid;
 
-        /*struct // boundary particles
+        struct // boundary particles
         {
             std::vector<mVector3> 	positions;
-            real					mass; // should be recalculated  to fit target density
-        } Boundary;*/
+            std::vector<mVector3> 	positions_origin;
+            std::vector<real>		mass; // should be recalculated  to fit target density
+
+            std::vector<const Kasumi::Pose*> 		poses;
+            std::vector<std::pair<size_t, size_t>> 	boundary_sizes;
+        } Boundary;
 
         std::vector<std::vector<unsigned int>> 	NeighborList;
 
         explicit Data();
         void add_fluid(const std::vector<mVector3>& positions, const std::vector<mVector3>& velocities);
-        //void add_boundary(const std::vector<mVector3>& positions);
+        void add_boundary(const std::vector<mVector3>& positions, const Kasumi::Pose* pose);
         auto fluid_size() const -> size_t;
-        //auto boundary_size() const -> size_t;
+        auto boundary_size() const -> size_t;
+        void update_boundary();
         void reset();
 
         // ==================== Debug Area ====================
