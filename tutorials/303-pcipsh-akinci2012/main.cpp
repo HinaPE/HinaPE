@@ -1,7 +1,6 @@
 #include "renderer3D/renderer3D.h"
 #include "fluid-particles/pcisph_solver_xayah.h"
 #include "fluid-particles/pcisph_solver_celeste.h"
-#include "rigid/solver.h"
 #include "export_to_xyz.h"
 
 using SolverType = HinaPE::PCISPHSolverCELESTE;
@@ -89,9 +88,9 @@ auto main() -> int
 	auto nv = std::make_shared<NeighborViewer>(solver);
 
     // rigid solver
-    /*auto solver_rigid = std::make_shared<HinaPE::RigidSolver>();*/
-    /*solver_rigid->add(solver->_sphere);
-    solver_rigid->add(solver->_cube);
+    /*auto solver_rigid = std::make_shared<HinaPE::RigidSolver>();
+    solver_rigid->add(solver->_sphere);
+    solver_rigid->add(solver->_cube);*/
 
     auto domain_extent = solver->_domain->_extent;
     auto thickness = 0.1;
@@ -126,7 +125,7 @@ auto main() -> int
     back->POSE.scale = {domain_extent.x(), domain_extent.y(), thickness};
     back->_update_surface();
 
-    solver_rigid->add(top, HinaPE::RigidType::Static);
+    /*solver_rigid->add(top, HinaPE::RigidType::Static);
     solver_rigid->add(bottom, HinaPE::RigidType::Static);
     solver_rigid->add(left, HinaPE::RigidType::Static);
     solver_rigid->add(right, HinaPE::RigidType::Static);
@@ -137,8 +136,8 @@ auto main() -> int
 	{
 		scene->add(solver->_data);
 		scene->add(solver->_domain);
-        /*scene->add(solver->_sphere);
-        scene->add(solver->_cube);*/
+        scene->add(solver->_sphere);
+        scene->add(solver->_cube);
         scene->add(bv);
 		scene->add(nv);
 		scene->_scene_opt._particle_mode = true;

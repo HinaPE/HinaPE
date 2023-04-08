@@ -5,9 +5,5 @@
   "dependencies" : [ {
     "name" : "tbb",
     "version>=" : "2021.8.0"
-  }, {
-    "name" : "openvdb",
-    "version>=" : "10.0.0#2",
-    "$comment" : "    find_package(OpenVDB CONFIG REQUIRED)\n\n    target_link_libraries(main PRIVATE OpenVDB::openvdb)\n"
-  } ]
+  }]
 }

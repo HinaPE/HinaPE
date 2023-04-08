@@ -226,7 +226,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_neighbor() const
     // Update Target: NeighborList
     const auto fluid_size = _data->fluid_size();
     const auto boundary_size = _data->boundary_size();
-    const auto &x = _data->Fluid.positions; // note: we use predicted position, because we need to update neighbor in the sub iteration
+    const auto &x = _data->Fluid.predicted_positions; // note: we use predicted position, because we need to update neighbor in the sub iteration
 
     std::vector<mVector3> total_positions;
     total_positions.reserve(fluid_size + boundary_size);
@@ -251,7 +251,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_neighbor() const
 
 void HinaPE::PCISPHSolverCELESTE::_update_density() const
 {
-// Update Target: densities
+    // Update Target: densities
     auto &d = _data->Fluid.densities;
     const auto &p = _data->Fluid.predicted_positions;
     const auto &b = _data->Boundary.positions;
@@ -295,7 +295,8 @@ void HinaPE::PCISPHSolverCELESTE::update(real dt)
     _prediction_correction_step();
     // algorithm line 18~20
     _correct_velocity_and_position();
-    _resolve_collision();
+    if(!_opt.use_akinci2012_collision)
+        _resolve_collision();
 
     // for debug
     _data->Fluid.last_positions = _data->Fluid.positions; // show the position of last frame
@@ -372,13 +373,16 @@ void HinaPE::PCISPHSolverCELESTE::_initialize_pressure_and_pressure_force() cons
 
 void HinaPE::PCISPHSolverCELESTE::_resolve_collision() const
 {
-    auto &x = _data->Fluid.positions;
+    auto &x_p = _data->Fluid.positions;
     auto &v = _data->Fluid.velocities;
-
+    const auto fluid_size = _data->fluid_size();
     // Collision
-    Util::parallelFor(Constant::ZeroSize, _data->fluid_size(), [&](size_t i)
+    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
-        _domain->resolve_collision(_opt.radius, _opt.restitution, &x[i], &v[i]);
+        auto temp_v = v[i]; // we don't need to update velocity here
+        _domain->resolve_collision(_opt.radius, _opt.restitution, &x_p[i], &temp_v);
+        _sphere->resolve_collision(_opt.radius, _opt.restitution, &x_p[i], &temp_v);
+        _cube->resolve_collision(_opt.radius, _opt.restitution, &x_p[i], &temp_v);
     });
 }
 
@@ -398,11 +402,6 @@ void HinaPE::PCISPHSolverCELESTE::_predict_velocity_and_position() const
     {
         v_p[i] = v[i] + dt * (f[i] + p_f[i]) / m;
         x_p[i] = x[i] + dt * v_p[i];
-    });
-
-    Util::parallelFor(Constant::ZeroSize, _data->fluid_size(), [&](size_t i)
-    {
-        _domain->resolve_collision(_opt.radius, _opt.restitution, &x_p[i], &v_p[i]);
     });
 }
 
@@ -440,7 +439,7 @@ void HinaPE::PCISPHSolverCELESTE::_predict_density() const
                 }
             }
         }
-        d[i] = density;
+        d_p[i] = density;
     });
 }
 
@@ -482,6 +481,8 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force()
     auto &d_e = _data->Fluid.density_errors;
     auto &d_p = _data->Fluid.predicted_densities;
     auto &m = _data->Fluid.mass;
+    const auto &bm = _data->Boundary.mass;
+    const auto &b = _data->Boundary.positions;
     const auto fluid_size = _data->fluid_size();
     SpikyKernel spiky(_opt.kernel_radius);
     std::fill(p_f.begin(), p_f.end(), mVector3::Zero());
@@ -490,11 +491,20 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force()
         auto &nl = _data->NeighborList;
         for (size_t j: nl[i])
         {
-            real dist = (x[i] - x[j]).length();
-            if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
+            if (j < fluid_size){
+                real dist = (x[i] - x[j]).length();
+                if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
+                {
+                    mVector3 dir = (x[j] - x[i]) / dist;
+                    p_f[i] -= m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * spiky.gradient(dist, dir);
+                }
+            }else
             {
-                mVector3 dir = (x[j] - x[i]) / dist;
-                p_f[i] -= m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * spiky.gradient(dist, dir);
+                if (_opt.use_akinci2012_collision){
+                    real dist = (x[i] - b[j - fluid_size]).length();
+                    mVector3 dir = (b[j - fluid_size] - x[i]) / dist;
+                    p_f[i] -= bm[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
+                }
             }
         }
     });

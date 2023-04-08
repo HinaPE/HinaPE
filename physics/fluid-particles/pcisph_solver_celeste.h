@@ -42,16 +42,16 @@ namespace HinaPE
             real restitution = 0.3;
 
             // fluid param
-            real radius 			= 0.018;
+            real radius 			= 0.029;
             real target_density 	= 1000; // water density
             real target_spacing 	= radius;
-            real relative_kernel_radius = 1.65;
+            real relative_kernel_radius = 1.7;
             real kernel_radius 		= target_spacing * relative_kernel_radius;
 
             // SPH options
             real eos 				= 7;
             real nps 				= 0.0; // negative pressure scale
-            real viscosity 			= 0.01;
+            real viscosity 			= 0.005;
             real pseudo_viscosity 	= 10.0;
             real vorticity 			= 0.00001;
             real speed_of_sound 	= 100;
@@ -60,10 +60,10 @@ namespace HinaPE
             real min_loop = 3;
             real max_loop = 50;
             real max_density_error_ratio = 0.01;
-            bool density_error_too_large = false;
+            bool density_error_too_large = true;
 
             // options
-            bool use_akinci2012_collision = true;
+            bool use_akinci2012_collision = false;
         }_opt;
 
     private:
