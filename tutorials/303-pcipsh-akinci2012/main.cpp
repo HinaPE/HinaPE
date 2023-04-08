@@ -1,6 +1,7 @@
 #include "renderer3D/renderer3D.h"
 #include "fluid-particles/pcisph_solver_xayah.h"
 #include "fluid-particles/pcisph_solver_celeste.h"
+//#include "rigid/solver.h"
 #include "export_to_xyz.h"
 
 using SolverType = HinaPE::PCISPHSolverCELESTE;
