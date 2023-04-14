@@ -11,4 +11,4 @@ components:
       imageName: myapp:latest
       dockerfile:
         buildContext: docker
-        uri: docker/Dockerfile
+        uri: .space/Dockerfile
