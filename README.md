@@ -29,6 +29,7 @@ Built-in dependencies
 - [eigen3](https://gitlab.com/libeigen/eigen.git): linear algebra
 - [compactNsearch](https://github.com/InteractiveComputerGraphics/CompactNSearch.git) (optional): fast nearest neighbor search
 - [cppnumericalsolvers](https://github.com/PatWie/CppNumericalSolvers.git) (optional): nonlinear solvers
+- [ffmpeg]() (optional): video encoder
 
 First **<u>recursively</u>** clone this repo and all submodules.
 
