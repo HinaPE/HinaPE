@@ -11,6 +11,7 @@ auto main() -> int
 	auto painter = std::make_shared<Kasumi::ShaderPainter>();
 	painter->clean_mode();
 	painter->close_menu();
+	painter->video_mode(true);
 	painter->load_shader(cloud);
 	painter->launch();
 	return 0;
