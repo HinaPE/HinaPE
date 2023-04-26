@@ -100,6 +100,7 @@ namespace HinaPE
 
             // for debug
             std::vector<mVector3> 	last_positions;
+
         }Fluid;
 
         struct // boundary particles
@@ -115,6 +116,7 @@ namespace HinaPE
 
             std::vector<const Kasumi::Pose*> 		poses;
             std::vector<std::pair<size_t, size_t>> 	boundary_sizes;
+
         } Boundary;
 
         std::vector<std::vector<unsigned int>> 	NeighborList;
