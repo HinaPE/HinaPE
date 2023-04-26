@@ -7,6 +7,7 @@ add_subdirectory(001-view-model)
 add_subdirectory(002-view-2D-math-function)
 add_subdirectory(003-view-3D-math-function)
 add_subdirectory(004-sakura-scattering)
+add_subdirectory(005-deferred-rendering)
 
 # physics applications
 add_subdirectory(101-simple-freefall)
