@@ -23,3 +23,6 @@ add_subdirectory(303-pcipsh-akinci2012)
 
 # advanced applications
 add_subdirectory(401-impl-cloud-doba2000)
+
+# digital image processing applications
+add_subdirectory(501-image-orthogonal-transform)
