@@ -15,10 +15,7 @@ void main()
 class ImageBoard : public Kasumi::ShaderPainter
 {
 public:
-	void load_image(const std::string& path)
-	{
-		_texture = std::make_shared<Kasumi::Texture>(path);
-	}
+	void load_image(const std::string &path) { _texture = std::make_shared<Kasumi::Texture>(path); }
 
 protected:
 	void prepare() final
