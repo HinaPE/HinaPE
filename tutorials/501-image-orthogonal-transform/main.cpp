@@ -14,32 +14,42 @@ void main()
 
 class ImageBoard : public Kasumi::ShaderPainter
 {
+public:
+	void load_image(const std::string& path)
+	{
+		_texture = std::make_shared<Kasumi::Texture>(path);
+	}
+
 protected:
-	void prepare() final;
-	void update(double dt) final;
+	void prepare() final
+	{
+		load_shader(painter_frag_src.c_str());
+		resize(_texture->_width, _texture->_height);
+		_shader->use();
+		_shader->uniform("texture1", 0);
+		ShaderPainter::prepare();
+	}
+	void update(double dt) final
+	{
+		_texture->bind(0);
+		ShaderPainter::update(dt);
+	}
 
 	Kasumi::TexturePtr _texture;
 };
-void ImageBoard::prepare()
-{
-	_texture = std::make_shared<Kasumi::Texture>("C:/Users/Administrator/Pictures/_20233917553962.png");
-	load_shader(painter_frag_src.c_str());
-	resize(_texture->_width, _texture->_height);
-	_shader->use();
-	_shader->uniform("texture1", 0);
 
-	ShaderPainter::prepare();
-}
-void ImageBoard::update(double dt)
-{
-	_texture->bind(0);
-
-	ShaderPainter::update(dt);
-}
-
-auto main() -> int
+auto main(int argc, char **argv) -> int
 {
 	ImageBoard app;
+	if (argc > 1)
+	{
+		auto path = std::string(argv[1]);
+		app.load_image(path);
+	} else
+	{
+		app.load_image("C:/Users/Administrator/Pictures/_20233917553962.png");
+	}
+
 	app.clean_mode();
 	app.launch();
 	return 0;
