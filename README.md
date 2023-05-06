@@ -14,7 +14,7 @@ HinaPE is a cross-platform and portable research-oriented physics-based animatio
 Prerequisites & dependencies:
 
 - C++ 20
-- cmake > 3.24
+- Cmake > 3.24
 - [intel tbb](https://github.com/oneapi-src/oneTBB.git): we use intel tbb for parallel computing, so make sure you have installed it.
 
 Built-in dependencies
@@ -77,7 +77,3 @@ You need to first **<u>recursively</u>** update all submodules
 git submodule foreach --recursive git pull origin master
 git submodule foreach --recursive git checkout master
 ```
-
-Documents
-
-- [Physics Module Dev Manual](./doc/dev manual - physics module, zh-CN.md)
