@@ -25,6 +25,8 @@ namespace HinaPE
         void _correct_velocity_and_position() const;
 
         void _update_boundary_volume() const;
+        void _update_boundary_neighbor() const;
+        void _apply_boundary_force() const;
         void _compute_boundary_forces() const;
         void _compute_rigid_forces_and_torque() const;
     public:
@@ -108,6 +110,7 @@ namespace HinaPE
             std::vector<mVector3> 	positions;
             std::vector<mVector3> 	positions_origin;
             std::vector<real>		mass; // should be recalculated  to fit target density
+            std::vector<mVector3>	velocity;
             std::vector<real> 	    volume;
 
             std::vector<mVector3> 	pressure_forces;
@@ -120,6 +123,7 @@ namespace HinaPE
         } Boundary;
 
         std::vector<std::vector<unsigned int>> 	NeighborList;
+        std::vector<std::vector<unsigned int>> 	BoundaryNeighborList;
 
         explicit Data();
         void add_fluid(const std::vector<mVector3>& positions, const std::vector<mVector3>& velocities);

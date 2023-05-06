@@ -230,13 +230,14 @@ void HinaPE::PCISPHSolverCELESTE::_update_neighbor() const
 {
     // Update Target: NeighborList
     const auto fluid_size = _data->fluid_size();
-    const auto boundary_size = _data->boundary_size();
     const auto &x = _data->Fluid.predicted_positions; // note: we use predicted position, because we need to update neighbor in the sub iteration
+    const auto boundary_size = _data->boundary_size();
+    const auto &bx = _data->Boundary.positions;
 
     std::vector<mVector3> total_positions;
     total_positions.reserve(fluid_size + boundary_size);
     total_positions.insert(total_positions.end(), x.begin(), x.end());
-    total_positions.insert(total_positions.end(), _data->Boundary.positions.begin(), _data->Boundary.positions.end());
+    total_positions.insert(total_positions.end(), bx.begin(), bx.end());
 
     PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
     searcher.build(total_positions);
@@ -248,8 +249,13 @@ void HinaPE::PCISPHSolverCELESTE::_update_neighbor() const
         nl[i].clear();
         searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
         {
-            if (i != j)
-                nl[i].push_back(j);
+            if (i != j) // exclude self
+            {
+                if(j < fluid_size) // fluid particle // 对于每个流体粒子，查询其周围的边界粒子，并将这些边界粒子加入邻居列表中
+                    nl[i].push_back(j);
+                else // boundary particle
+                    nl[i].push_back(j - fluid_size); /// little confuse //对于每个流体粒子，查询其周围的流体粒子，并将这些流体粒子加入邻居列表中
+            }
         });
     });
 }
@@ -280,7 +286,6 @@ void HinaPE::PCISPHSolverCELESTE::_update_density() const
             {
                 if (_opt.use_akinci2012_collision)
                 {
-                    density += bm[j - fluid_size] * poly6((p[i] - b[j - fluid_size]).length());
                     real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
                     density += rest_density * bV[j - fluid_size] * poly6((p[i] - b[j - fluid_size]).length());
                 }
@@ -294,6 +299,7 @@ void HinaPE::PCISPHSolverCELESTE::update(real dt)
 {
     // algorithm line 2~3
     _update_neighbor();
+    _update_boundary_neighbor();
     if(_opt.use_akinci2012_collision)
         _update_boundary_volume();
     _update_density();
@@ -386,14 +392,13 @@ void HinaPE::PCISPHSolverCELESTE::_prediction_correction_step()
         _update_pressure();
         // algorithm line 16~17
         _accumulate_pressure_force();
-
-        // for active-boundary-particles
-        //_compute_boundary_forces();
-        // for rigid body
-        //_compute_rigid_forces_and_torque();
-
         iteration++;
     }
+}
+
+void HinaPE::PCISPHSolverCELESTE::_apply_boundary_force() const
+{
+
 }
 
 void HinaPE::PCISPHSolverCELESTE::_initialize_pressure_and_pressure_force() const
@@ -682,21 +687,56 @@ auto HinaPE::PCISPHSolverCELESTE::_compute_delta() const -> real
     return (std::fabs(denom) > 0) ? -1 / (beta * denom) : 0;
 }
 
+void HinaPE::PCISPHSolverCELESTE::_update_boundary_neighbor() const
+{
+    auto &bnl = _data->BoundaryNeighborList;
+    const auto fluid_size = _data->fluid_size();
+    const auto &x = _data->Fluid.predicted_positions;
+    const auto boundary_size = _data->boundary_size();
+    const auto &bx = _data->Boundary.positions_origin;
+
+    std::vector<mVector3> total_positions;
+    total_positions.reserve(fluid_size + boundary_size);
+    total_positions.insert(total_positions.end(), x.begin(), x.end());
+    total_positions.insert(total_positions.end(), bx.begin(), bx.end());
+
+    PointHashGridSearch3 searcher(_opt.kernel_radius);
+    searcher.build(total_positions);
+
+    Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i)
+    {
+        auto origin = bx[i];
+        bnl[i].clear();
+        searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
+        {
+            if (i != j)
+            {
+                if(j < fluid_size)
+                {
+                    bnl[i].push_back(j);
+                }
+                else
+                {
+                    bnl[i].push_back(j - fluid_size);
+                }
+            }
+        });
+    });
+}
+
 void HinaPE::PCISPHSolverCELESTE::_update_boundary_volume() const {
     auto &x = _data->Fluid.positions;
     const auto &p_b = _data->Boundary.positions;
     auto &v_b = _data->Boundary.volume;
     const auto fluid_size = _data->fluid_size();
     const auto boundary_size = _data->boundary_size();
-    const auto &nl = _data->NeighborList;
-    //const auto &flagF = _data->Fluid.IsFluid;
-    //const auto &flagB = _data->Boundary.IsBoundary;
+    const auto &bnl = _data->BoundaryNeighborList;
 
     StdKernel poly6(_opt.kernel_radius);
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i)
     {
         real delta_b = poly6(0);
-        for (const auto j: nl[i])
+        for (const auto j: bnl[i])
         {
             if(j < fluid_size)
             {
@@ -707,7 +747,8 @@ void HinaPE::PCISPHSolverCELESTE::_update_boundary_volume() const {
                 delta_b += poly6((p_b[i] - p_b[j]).length());
             }
         }
-        v_b[i] = 1/delta_b; // Beyond the lower bound of the volume
+        const real volume = static_cast<real>(1.0) / delta_b;
+        v_b[i] = volume; // Beyond the lower bound of the volume
     });
 }
 
@@ -775,6 +816,7 @@ void HinaPE::PCISPHSolverCELESTE::Data::add_boundary(const std::vector<mVector3>
     Boundary.poses.push_back(pose);
     Boundary.boundary_sizes.emplace_back(start, end);
     Boundary.positions.resize(Boundary.positions_origin.size());
+    BoundaryNeighborList.insert(BoundaryNeighborList.end(), Boundary.positions_origin.size(), std::vector<unsigned int>());
     update_boundary();
 }
 void HinaPE::PCISPHSolverCELESTE::Data::update_boundary()
@@ -808,9 +850,6 @@ void HinaPE::PCISPHSolverCELESTE::Data::add_fluid(const std::vector<mVector3> &p
     Fluid.pressures.insert(Fluid.pressures.end(), size, 0.0);
     Fluid.last_positions.insert(Fluid.last_positions.end(), positions.begin(), positions.end());
 
-    //Fluid.IsFluid.insert(Fluid.IsFluid.end(),size, 1.0);
-    //Boundary.IsBoundary.insert(Boundary.IsBoundary.end(),Boundary.positions.size(), 1.0);
-
     NeighborList.insert(NeighborList.end(), size, std::vector<unsigned int>());
     color_map.insert(color_map.end(), size, Color::ORANGE);
     debug_info.insert(debug_info.end(), size, std::vector<std::string>());
@@ -839,6 +878,7 @@ void HinaPE::PCISPHSolverCELESTE::Data::reset() {
     Boundary.poses.clear();
     Boundary.boundary_sizes.clear();
     NeighborList.clear();
+    BoundaryNeighborList.clear();
 
     color_map.clear();
     debug_info.clear();
