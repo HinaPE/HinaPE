@@ -383,8 +383,9 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_non_pressure_force() const
                         //f[i] += _opt.viscosity * bm[j - fluid_size] * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
                         boundary_viscosity_force = _opt.viscosity * bV[j - fluid_size] * _opt.target_density * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
                         f[i] += boundary_viscosity_force;
+                        bf_f[j - fluid_size] = -boundary_viscosity_force;
+                        ///符号问题（？
                     }
-                    bf_f[j - fluid_size] = -boundary_viscosity_force;
                 }
             }
         }
