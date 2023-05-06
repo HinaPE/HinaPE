@@ -6,6 +6,7 @@
 
 #include "renderer3D/renderer3D.h"
 #include "reactphysics3d/reactphysics3d.h"
+#include "fluid-particles/pcisph_solver_celeste.h"
 
 namespace HinaPE
 {

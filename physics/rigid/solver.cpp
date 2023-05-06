@@ -37,4 +37,16 @@ void HinaPE::RigidSolver::update(real dt)
 		object->POSE.position = pose.position;
 		object->POSE.euler = pose.euler;
 	}
+
+    // 将世界坐标系下的力和力矩转换为刚体本地坐标系下的向量
+    // 将力和力矩分别从世界坐标系下的向量转换为齐次坐标系下的向量（添加一个分量为 1 的齐次坐标）。
+    // 使用刚体的逆旋转矩阵将齐次坐标系下的向量从世界坐标系转换为刚体本地坐标系。
+    // 将转换后的向量去掉齐次分量（将第四个分量除以前三个分量）。
+    //reactphysics3d::RigidBody *rb = world->getRigidBody(0);
+    //mVector3 worldForce =
+    //mVector3 localForce = rb->getTransform().getInverse().GetRotationMatrix() * mVector4(worldForce, 1.0f);
+    // 怎么拿出来我不会！！！
+    // 啊啊啊啊啊啊啊啊啊啊啊啊GetRotationMatrix怎么拿
+    // mVector4好像也不能这么……
+    // 调用刚体的 applyForceAtCenterOfMass 和 applyTorque 函数，将转换后的力和力矩应用到刚体上
 }

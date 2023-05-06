@@ -727,7 +727,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_boundary_neighbor() const
 //                {
 //                    bnl[i].push_back(j - fluid_size);
 //                }
-///在没有标识流体粒子和刚体粒子的情况下，我为什么要减去一个fluid_size呢（？
+///在没有标识流体粒子和刚体粒子的情况下，我为什么要减去一个fluid_size呢（？不应该就把j存进去就可以了吗
             }
         });
     });
@@ -757,7 +757,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_boundary_volume() const {
             }
         }
         const real volume = static_cast<real>(1.0) / delta_b;
-        v_b[i] = volume; // Beyond the lower bound of the volume
+        v_b[i] = volume;
     });
 }
 
@@ -798,6 +798,9 @@ void HinaPE::PCISPHSolverCELESTE::_compute_rigid_forces_and_torque() const
         rigid_force += b_f[i];
         rigid_torque += b_f[i].cross(b_p[i] - b_o_p[i]);
     });
+
+    _data->ForceAndTorque.force = rigid_force;
+    _data->ForceAndTorque.torque = rigid_torque;
 }
 
 // ================================================== Data ==================================================
@@ -821,6 +824,7 @@ void HinaPE::PCISPHSolverCELESTE::Data::add_boundary(const std::vector<mVector3>
     Boundary.friction_forces.insert(Boundary.friction_forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
     Boundary.forces.insert(Boundary.forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
     BoundaryNeighborList.insert(BoundaryNeighborList.end(), Boundary.positions_origin.size(), std::vector<unsigned int>());
+
     update_boundary();
 }
 void HinaPE::PCISPHSolverCELESTE::Data::update_boundary()

@@ -121,6 +121,11 @@ namespace HinaPE
             //std::vector<bool>     is_active_boundary; // 还是先不加了总感觉会出问题（？
         } Boundary;
 
+        struct{
+            mVector3 force;
+            mVector3 torque;
+        } ForceAndTorque;
+
         std::vector<std::vector<unsigned int>> 	NeighborList;
         std::vector<std::vector<unsigned int>> 	BoundaryNeighborList;
 
