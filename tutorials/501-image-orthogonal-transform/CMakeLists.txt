@@ -4,3 +4,5 @@ project(501-ImageOrthogonalTransform VERSION 2.0.0 DESCRIPTION "HinaPE is not a 
 add_executable(501-ImageOrthogonalTransform main.cpp)
 set_target_properties(501-ImageOrthogonalTransform PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_link_libraries(501-ImageOrthogonalTransform PUBLIC Kasumi_ShaderPainter)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/len_std.jpg DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

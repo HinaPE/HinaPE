@@ -12,12 +12,92 @@ void main()
 }
 )";
 
+auto operator+(mVector3 v, Kasumi::Texture::Pixel p) -> mVector3
+{
+	return v + mVector3(p.x(), p.y(), p.z());
+}
+
+auto operator+(Kasumi::Texture::Pixel p, mVector3 v) -> mVector3
+{
+	return v + mVector3(p.x(), p.y(), p.z());
+}
+
+auto operator+=(mVector3 &v, Kasumi::Texture::Pixel p) -> mVector3 &
+{
+	v = v + p;
+	return v;
+}
+
+void filter9x9(Kasumi::TexturePtr ptr)
+{
+	auto &image = *ptr;
+
+	auto width = image._width;
+	auto height = image._height;
+
+	for (int i = 0; i < width; ++i)
+	{
+		for (int j = 0; j < height; ++j)
+		{
+			mVector3 temp;
+
+			temp += image(i, j);
+			if (i - 1 > 0 && j - 1 > 0)
+				temp += image(i - 1, j - 1);
+			else
+				temp += image(i, j);
+
+			if (i - 1 > 0)
+				temp += image(i - 1, j);
+			else
+				temp += image(i, j);
+
+			if (i - 1 > 0 && j + 1 < height)
+				temp += image(i - 1, j + 1);
+			else
+				temp += image(i, j);
+
+			if (j - 1 > 0)
+				temp += image(i, j - 1);
+			else
+				temp += image(i, j);
+
+			if (j + 1 < height)
+				temp += image(i, j + 1);
+			else
+				temp += image(i, j);
+
+			if (i + 1 < width && j - 1 > 0)
+				temp += image(i + 1, j - 1);
+			else
+				temp += image(i, j);
+
+			if (i + 1 < width)
+				temp += image(i + 1, j);
+			else
+				temp += image(i, j);
+
+			if (i + 1 < width && j + 1 < height)
+				temp += image(i + 1, j + 1);
+			else
+				temp += image(i, j);
+
+			temp /= 29.0f;
+
+			image(i, j) = Kasumi::Texture::Pixel(temp.x(), temp.y(), temp.z());
+		}
+	}
+
+	image.update();
+}
+
 class ImageBoard : public Kasumi::ShaderPainter
 {
 public:
 	void load_image(const std::string &path)
 	{
 		_texture = std::make_shared<Kasumi::Texture>(path);
+		filter9x9(_texture);
 	}
 
 protected:
@@ -47,7 +127,7 @@ auto main(int argc, char **argv) -> int
 		app.load_image(path);
 	} else
 	{
-		app.load_image("C:/Users/Administrator/Desktop/img/file_3995269.jpg");
+		app.load_image("len_std.jpg");
 	}
 
 	app.clean_mode();
