@@ -130,7 +130,10 @@ void HinaPE::PCISPHSolverCELESTE::_init_boundary_particles() const
     }
 
     if (max_number_density > 0)
+    {
+        _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
         _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 10 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
+    }
     else
         throw std::runtime_error("max_number_density is zero");
 }
@@ -219,7 +222,7 @@ void HinaPE::PCISPHSolverCELESTE::_init_collider() const
         if (max_number_density > 0)
         {
             _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 5 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
-            _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), 5 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
+            _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
         }
         else
             throw std::runtime_error("max_number_density is zero");
@@ -309,10 +312,14 @@ void HinaPE::PCISPHSolverCELESTE::update(real dt)
     _initialize_pressure_and_pressure_force();
     // algorithm line 8~17
     _prediction_correction_step();
+
+    // for active-boundary-particles
+    // _compute_boundary_forces();
+    // for rigid body
+    _compute_rigid_forces_and_torque();
+
     // algorithm line 18~20
     _correct_velocity_and_position();
-
-
 
     if(!_opt.use_akinci2012_collision)
         _resolve_collision();
@@ -396,10 +403,7 @@ void HinaPE::PCISPHSolverCELESTE::_prediction_correction_step()
     }
 }
 
-void HinaPE::PCISPHSolverCELESTE::_apply_boundary_force() const
-{
 
-}
 
 void HinaPE::PCISPHSolverCELESTE::_initialize_pressure_and_pressure_force() const
 {
@@ -555,7 +559,6 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force()
                 if (_opt.use_akinci2012_collision){
                     real dist = (x[i] - b[j - fluid_size]).length();
                     mVector3 dir = (b[j - fluid_size] - x[i]) / dist;
-                    p_f[i] -= bm[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
                     real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
                     mVector3 boundary_pressure_force = -rest_density * bV[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
                     p_f[i] += boundary_pressure_force;
@@ -761,7 +764,6 @@ void HinaPE::PCISPHSolverCELESTE::_compute_boundary_forces() const
     const auto &nl = _data->NeighborList;
     const auto fluid_size = _data->fluid_size();
     const auto boundary_size = _data->boundary_size();
-    //const auto &flagF = _data->Fluid.IsFluid;
 
     //  the total force acting on a boundary particle from its fluid neighbors
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
@@ -769,12 +771,8 @@ void HinaPE::PCISPHSolverCELESTE::_compute_boundary_forces() const
         mVector3 boundary_force = mVector3::Zero();
         for (size_t j: nl[i])
         {
-            /*if (flagF[j]) // its fluid neighbor
-            {
-                boundary_force = bp_f[j] + bf_f[j];
-            }*/
+            b_f[i] += boundary_force;
         }
-        b_f[i] += boundary_force;
     });
 }
 
@@ -791,11 +789,8 @@ void HinaPE::PCISPHSolverCELESTE::_compute_rigid_forces_and_torque() const
 
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
     {
-        if (_data->Boundary.poses[i] != nullptr) ///belongs to a dynamic rigid ??
-        {
-            rigid_force += b_f[i];
-            rigid_torque += b_f[i].cross(b_p[i] - b_o_p[i]);
-        }
+        rigid_force += b_f[i];
+        rigid_torque += b_f[i].cross(b_p[i] - b_o_p[i]);
     });
 }
 
@@ -816,6 +811,9 @@ void HinaPE::PCISPHSolverCELESTE::Data::add_boundary(const std::vector<mVector3>
     Boundary.poses.push_back(pose);
     Boundary.boundary_sizes.emplace_back(start, end);
     Boundary.positions.resize(Boundary.positions_origin.size());
+    Boundary.pressure_forces.insert(Boundary.pressure_forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
+    Boundary.friction_forces.insert(Boundary.friction_forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
+    Boundary.forces.insert(Boundary.forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
     BoundaryNeighborList.insert(BoundaryNeighborList.end(), Boundary.positions_origin.size(), std::vector<unsigned int>());
     update_boundary();
 }

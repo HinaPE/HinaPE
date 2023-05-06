@@ -26,7 +26,6 @@ namespace HinaPE
 
         void _update_boundary_volume() const;
         void _update_boundary_neighbor() const;
-        void _apply_boundary_force() const;
         void _compute_boundary_forces() const;
         void _compute_rigid_forces_and_torque() const;
     public:
@@ -110,7 +109,7 @@ namespace HinaPE
             std::vector<mVector3> 	positions;
             std::vector<mVector3> 	positions_origin;
             std::vector<real>		mass; // should be recalculated  to fit target density
-            std::vector<mVector3>	velocity;
+            //std::vector<mVector3>	velocity;
             std::vector<real> 	    volume;
 
             std::vector<mVector3> 	pressure_forces;
@@ -119,7 +118,7 @@ namespace HinaPE
 
             std::vector<const Kasumi::Pose*> 		poses;
             std::vector<std::pair<size_t, size_t>> 	boundary_sizes;
-
+            //std::vector<bool>     is_active_boundary; // 还是先不加了总感觉会出问题（？
         } Boundary;
 
         std::vector<std::vector<unsigned int>> 	NeighborList;
