@@ -158,7 +158,9 @@ void HinaPE::PCISPHSolverCELESTE::_init_collider() const
             searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
             {
                 if (i != j)
+                {
                     temp_neighbor_list[i].push_back(j);
+                }
             });
         });
 
@@ -254,10 +256,10 @@ void HinaPE::PCISPHSolverCELESTE::_update_neighbor() const
         {
             if (i != j) // exclude self
             {
-                if(j < fluid_size) // fluid particle // 对于每个流体粒子，查询其周围的边界粒子，并将这些边界粒子加入邻居列表中
+//                if(j < fluid_size) // fluid particle // 对于每个流体粒子，查询其周围的边界粒子，并将这些边界粒子加入邻居列表中
                     nl[i].push_back(j);
-                else // boundary particle
-                    nl[i].push_back(j - fluid_size); /// little confuse //对于每个流体粒子，查询其周围的流体粒子，并将这些流体粒子加入邻居列表中
+//                else // boundary particle
+//                    nl[i].push_back(j - fluid_size); /// little confuse //对于每个流体粒子，查询其周围的流体粒子，并将这些流体粒子加入邻居列表中
             }
         });
     });
@@ -289,8 +291,11 @@ void HinaPE::PCISPHSolverCELESTE::_update_density() const
             {
                 if (_opt.use_akinci2012_collision)
                 {
-                    real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
-                    density += rest_density * bV[j - fluid_size] * poly6((p[i] - b[j - fluid_size]).length());
+                    //real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
+                    //density += rest_density * bV[j - fluid_size] * poly6((p[i] - b[j - fluid_size]).length());
+                    /// 那不白算了吗？感觉应该不是这么写的，那不还是bm吗我算bv干什么
+                    ///这里的ρ0或许应该是流体粒子的参考密度……
+                    density += _opt.target_density * bV[j - fluid_size] * poly6((p[i] - b[j - fluid_size]).length());
                 }
             }
         }
@@ -371,12 +376,12 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_non_pressure_force() const
                 if(_opt.use_akinci2012_collision)
                 {
                     real dist = (x[i] - b[j - fluid_size]).length();
-                    real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
+                    //real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
                     mVector3 boundary_viscosity_force;
                     if (d[j] > HinaPE::Constant::Epsilon)
                     {
-                        f[i] += _opt.viscosity * bm[j - fluid_size] * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
-                        boundary_viscosity_force = _opt.viscosity * bV[j - fluid_size] * rest_density * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
+                        //f[i] += _opt.viscosity * bm[j - fluid_size] * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
+                        boundary_viscosity_force = _opt.viscosity * bV[j - fluid_size] * _opt.target_density * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
                         f[i] += boundary_viscosity_force;
                     }
                     bf_f[j - fluid_size] = -boundary_viscosity_force;
@@ -487,9 +492,8 @@ void HinaPE::PCISPHSolverCELESTE::_predict_density() const
             {
                 if (_opt.use_akinci2012_collision)
                 {
-                    density += bm[j - fluid_size] * poly6((x_p[i] - b[j - fluid_size]).length());
-                    real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
-                    density += rest_density * bV[j - fluid_size] * poly6((x_p[i] - b[j - fluid_size]).length());
+                    //real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
+                    density += _opt.target_density * bV[j - fluid_size] * poly6((x_p[i] - b[j - fluid_size]).length());
                 }
             }
         }
@@ -559,8 +563,8 @@ void HinaPE::PCISPHSolverCELESTE::_accumulate_pressure_force()
                 if (_opt.use_akinci2012_collision){
                     real dist = (x[i] - b[j - fluid_size]).length();
                     mVector3 dir = (b[j - fluid_size] - x[i]) / dist;
-                    real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
-                    mVector3 boundary_pressure_force = -rest_density * bV[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
+                    //real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
+                    mVector3 boundary_pressure_force = -_opt.target_density * bV[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
                     p_f[i] += boundary_pressure_force;
                     bp_f[j - fluid_size] = -boundary_pressure_force;
                 }
@@ -714,14 +718,15 @@ void HinaPE::PCISPHSolverCELESTE::_update_boundary_neighbor() const
         {
             if (i != j)
             {
-                if(j < fluid_size)
-                {
+//                if(j < fluid_size)
+//                {
                     bnl[i].push_back(j);
-                }
-                else
-                {
-                    bnl[i].push_back(j - fluid_size);
-                }
+//                }
+//                else
+//                {
+//                    bnl[i].push_back(j - fluid_size);
+//                }
+///在没有标识流体粒子和刚体粒子的情况下，我为什么要减去一个fluid_size呢（？
             }
         });
     });
