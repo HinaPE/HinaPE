@@ -18,12 +18,6 @@ public:
 	void load_image(const std::string &path)
 	{
 		_texture = std::make_shared<Kasumi::Texture>(path);
-		auto p = _texture->get(0, 0);
-		mVector4 s(0, 0, 0, 1);
-		for (int i = 0; i < 100; ++i)
-			for (int j = 0; j < 100; ++j)
-				_texture->set(i, j, s);
-		_texture->update();
 	}
 
 protected:
@@ -53,7 +47,7 @@ auto main(int argc, char **argv) -> int
 		app.load_image(path);
 	} else
 	{
-		app.load_image("C:/Users/Administrator/Pictures/_20233917553962.png");
+		app.load_image("C:/Users/Administrator/Desktop/img/file_3995269.jpg");
 	}
 
 	app.clean_mode();
