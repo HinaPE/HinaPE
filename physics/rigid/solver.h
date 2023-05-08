@@ -21,6 +21,7 @@ class RigidSolver : public CopyDisable, public Kasumi::VALID_CHECKER
 public:
 	void add(const Kasumi::ObjectMesh3DPtr &object, RigidType type = RigidType::Dynamic);
 	void update(real dt);
+    void apply_force_and_torque(int index, const mVector3 &force, const mVector3 &torque);
 	RigidSolver();
 
 private:

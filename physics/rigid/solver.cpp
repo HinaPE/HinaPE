@@ -50,3 +50,21 @@ void HinaPE::RigidSolver::update(real dt)
     // mVector4好像也不能这么……
     // 调用刚体的 applyForceAtCenterOfMass 和 applyTorque 函数，将转换后的力和力矩应用到刚体上
 }
+
+void HinaPE::RigidSolver::apply_force_and_torque(int index, const mVector3 &force_world, const mVector3 &torque_world)
+{
+    reactphysics3d::RigidBody *rb = world->getRigidBody(index);
+
+    /*const auto& transform = rb->getTransform();
+    const auto& position = transform.getPosition();
+    const auto& rotation = transform.getOrientation();
+    reactphysics3d::Vector3 localForce = rotation.getInverse() * toR(force_world);
+
+    const auto& invOrientation = rotation.getInverse().getMatrix();
+    reactphysics3d::Vector3 localTorque = invOrientation * toR(torque_world);*/
+
+    rb->applyWorldForceAtCenterOfMass(toR(force_world));
+    rb->applyWorldTorque(toR(torque_world));
+
+
+}

@@ -148,6 +148,14 @@ auto main() -> int
 	{
 		solver->update(dt);
         solver_rigid->update(solver->_opt.current_dt);
+        auto rigid_num = solver->_data->Boundary.boundary_sizes.size();
+        for(auto i = 0; i < rigid_num; i++)
+        {
+            auto force = solver->_data->ForceAndTorque.force[i];
+            auto torque = solver->_data->ForceAndTorque.torque[i];
+            solver_rigid->apply_force_and_torque(i, force, torque);
+            solver_rigid->update(solver->_opt.current_dt);
+        }
 	};
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._key = [&](int key, int scancode, int action, int mods)
@@ -174,8 +182,8 @@ auto main() -> int
 		}
 	};
 
-	Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());
-	Kasumi::Renderer3D::DEFAULT_RENDERER.dark_mode(); // we use dark mode app to protect our eyes~ XD
-	Kasumi::Renderer3D::DEFAULT_RENDERER.launch();
-	return 0;
+    Kasumi::Renderer3D::DEFAULT_RENDERER.inspect(solver.get());
+    Kasumi::Renderer3D::DEFAULT_RENDERER.dark_mode(); // we use dark mode app to protect our eyes~ XD
+    Kasumi::Renderer3D::DEFAULT_RENDERER.launch();
+    return 0;
 }

@@ -294,7 +294,6 @@ void HinaPE::PCISPHSolverCELESTE::_update_density() const
                     //real rest_density = bm[j - fluid_size] / bV[j - fluid_size];
                     //density += rest_density * bV[j - fluid_size] * poly6((p[i] - b[j - fluid_size]).length());
                     /// 那不白算了吗？感觉应该不是这么写的，那不还是bm吗我算bv干什么
-                    ///这里的ρ0或许应该是流体粒子的参考密度……
                     density += _opt.target_density * bV[j - fluid_size] * poly6((p[i] - b[j - fluid_size]).length());
                 }
             }
@@ -727,7 +726,6 @@ void HinaPE::PCISPHSolverCELESTE::_update_boundary_neighbor() const
 //                {
 //                    bnl[i].push_back(j - fluid_size);
 //                }
-///在没有标识流体粒子和刚体粒子的情况下，我为什么要减去一个fluid_size呢（？不应该就把j存进去就可以了吗
             }
         });
     });
@@ -753,7 +751,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_boundary_volume() const {
             }
             else
             {
-                delta_b += poly6((p_b[i] - p_b[j]).length());
+                delta_b += poly6((p_b[i] - p_b[j-fluid_size]).length());
             }
         }
         const real volume = static_cast<real>(1.0) / delta_b;
@@ -791,16 +789,20 @@ void HinaPE::PCISPHSolverCELESTE::_compute_rigid_forces_and_torque() const
     const auto &b_o_p = _data->Boundary.positions_origin;
     auto &b_f = _data->Boundary.forces;
     const auto &nl = _data->NeighborList;
-    const auto boundary_size = _data->boundary_size();
+    auto &boundary = _data->Boundary.boundary_sizes;
+    auto &each_rigid = _data->ForceAndTorque;
 
-    Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
+    auto num_of_rigid = boundary.size();
+    Util::parallelFor(Constant::ZeroSize, num_of_rigid - 1, [&](size_t i)
     {
-        rigid_force += b_f[i];
-        rigid_torque += b_f[i].cross(b_p[i] - b_o_p[i]);
+        const auto start_index = boundary[i].first;
+        const auto end_index = boundary[i].second;
+        Util::parallelFor(start_index, end_index, [&](size_t j)
+        {
+            each_rigid.force[i] += b_f[j];
+            each_rigid.torque[i] += b_f[j].cross(b_p[j] - b_o_p[j]);
+        });
     });
-
-    _data->ForceAndTorque.force = rigid_force;
-    _data->ForceAndTorque.torque = rigid_torque;
 }
 
 // ================================================== Data ==================================================
@@ -824,6 +826,9 @@ void HinaPE::PCISPHSolverCELESTE::Data::add_boundary(const std::vector<mVector3>
     Boundary.friction_forces.insert(Boundary.friction_forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
     Boundary.forces.insert(Boundary.forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
     BoundaryNeighborList.insert(BoundaryNeighborList.end(), Boundary.positions_origin.size(), std::vector<unsigned int>());
+
+    ForceAndTorque.force.insert(ForceAndTorque.force.end(), Boundary.poses.size(), mVector3::Zero());
+    ForceAndTorque.torque.insert(ForceAndTorque.torque.end(), Boundary.poses.size(), mVector3::Zero());
 
     update_boundary();
 }
@@ -888,12 +893,10 @@ void HinaPE::PCISPHSolverCELESTE::Data::reset() {
     NeighborList.clear();
     BoundaryNeighborList.clear();
 
+    ForceAndTorque.force.clear();
+    ForceAndTorque.torque.clear();
+
     color_map.clear();
     debug_info.clear();
 }
-
-
-
-
-
 

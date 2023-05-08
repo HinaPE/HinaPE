@@ -122,8 +122,8 @@ namespace HinaPE
         } Boundary;
 
         struct{
-            mVector3 force;
-            mVector3 torque;
+            std::vector<mVector3> force;
+            std::vector<mVector3> torque;
         } ForceAndTorque;
 
         std::vector<std::vector<unsigned int>> 	NeighborList;
