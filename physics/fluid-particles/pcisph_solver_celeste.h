@@ -68,7 +68,7 @@ namespace HinaPE
             bool density_error_too_large = true;
 
             // options
-            bool use_akinci2012_collision = false;
+            bool use_akinci2012_collision = false; // TODO
         }_opt;
 
     private:
