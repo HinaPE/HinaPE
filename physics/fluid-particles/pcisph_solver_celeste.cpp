@@ -328,6 +328,8 @@ void HinaPE::PCISPHSolverCELESTE::update(real dt)
     if(!_opt.use_akinci2012_collision)
         _resolve_collision();
 
+    _data->update_boundary();
+
     // for debug
     _data->Fluid.last_positions = _data->Fluid.positions; // show the position of last frame
 }
