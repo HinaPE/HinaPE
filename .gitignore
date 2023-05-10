@@ -11,3 +11,4 @@ output/*.xyz
 output/*.obj
 TODO.md
 install
+taichi/c_api_macOS_M1
