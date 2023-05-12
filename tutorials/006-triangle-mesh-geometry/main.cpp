@@ -4,13 +4,13 @@ class Data : public Kasumi::ObjectGrid3D
 public:
 	Data()
 	{
-		auto bunny = std::make_shared<Kasumi::BunnyObject>();
+		bunny = std::make_shared<Kasumi::BunnyObject>();
 		_data = bunny->voxelize();
 		track(&_data);
 	}
 
-private:
 	HinaPE::Geom::DataGrid3<int> _data;
+	Kasumi::BunnyObjectPtr bunny;
 };
 
 class BoxDomain : public Kasumi::CubeObject
@@ -33,7 +33,8 @@ auto main() -> int
 		auto domain = std::make_shared<BoxDomain>();
 		auto data = std::make_shared<Data>();
 		scene->add(data);
-//		scene->add(domain);
+//		scene->add(data->bunny);
+		scene->add(domain);
 	};
 	Kasumi::Renderer3D::DEFAULT_RENDERER.close_benchmark();
 	Kasumi::Renderer3D::DEFAULT_RENDERER.dark_mode();
