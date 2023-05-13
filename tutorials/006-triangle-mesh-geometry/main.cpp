@@ -7,8 +7,8 @@ class Data : public Kasumi::ObjectGrid3D
 public:
 	Data()
 	{
-		auto bunny = std::make_shared<Kasumi::BunnyObject>();
-		_data = bunny->voxelize();
+		bunny = std::make_shared<Kasumi::BunnyObject>();
+		auto res = bunny->generate_surface();
 		track(&_data);
 	}
 
@@ -29,15 +29,26 @@ public:
 	}
 };
 
+struct Fluid : public Kasumi::ObjectParticles3D
+{
+	Fluid()
+	{
+		positions = std::make_shared<Kasumi::BunnyObject>()->generate_surface();
+		track(&positions);
+	}
+	std::vector<mVector3> positions;
+};
+
 auto main() -> int
 {
+	auto domain = std::make_shared<BoxDomain>();
+	auto fluid = std::make_shared<Fluid>();
+
 	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
-		auto domain = std::make_shared<BoxDomain>();
-		auto data = std::make_shared<Data>();
-		scene->add(data);
-		//		scene->add(data->bunny);
+		scene->add(fluid);
 		scene->add(domain);
+		scene->_scene_opt._particle_mode = true;
 	};
 	Kasumi::Renderer3D::DEFAULT_RENDERER.close_benchmark();
 	Kasumi::Renderer3D::DEFAULT_RENDERER.dark_mode();
