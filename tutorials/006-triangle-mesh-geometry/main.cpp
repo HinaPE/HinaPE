@@ -2,13 +2,19 @@
 #include "experimental/Voxelizer.h"
 #include "experimental/Mesh.h"
 
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+
+#include "igl/random_points_on_mesh.h"
+
 class Data : public Kasumi::ObjectGrid3D
 {
 public:
 	Data()
 	{
 		bunny = std::make_shared<Kasumi::BunnyObject>();
-		auto res = bunny->generate_surface();
+		_data = bunny->voxelize();
 		track(&_data);
 	}
 
@@ -43,11 +49,13 @@ auto main() -> int
 {
 	auto domain = std::make_shared<BoxDomain>();
 	auto fluid = std::make_shared<Fluid>();
+	auto data = std::make_shared<Data>();
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
-		scene->add(fluid);
 		scene->add(domain);
+//		scene->add(fluid);
+		scene->add(data);
 		scene->_scene_opt._particle_mode = true;
 	};
 	Kasumi::Renderer3D::DEFAULT_RENDERER.close_benchmark();
