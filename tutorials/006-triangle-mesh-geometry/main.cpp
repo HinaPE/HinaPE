@@ -7,22 +7,8 @@ class Data : public Kasumi::ObjectGrid3D
 public:
 	Data()
 	{
-		auto sphere = cs224::Mesh::createSphere(cs224::Vector3f(0, 0, 0), 1);
-		cs224::Voxelizer::Result result;
-		cs224::Voxelizer::voxelize(sphere, 0.02, result);
-
-		auto grid = result.grid;
-		auto bounds = result.bounds;
-		auto cellSize = result.cellSize;
-		auto spacing = {cellSize, cellSize, cellSize};
-		HinaPE::Math::Size3 resolution = {grid.size().x(), grid.size().y(), grid.size().z()};
-		_data.resize(resolution, spacing);
-
-		for (int z = 0; z < resolution.z; ++z)
-			for (int y = 0; y < resolution.y; ++y)
-				for (int x = 0; x < resolution.x; ++x)
-					_data(x, y, z) = grid.value(x, y, z);
-
+		auto bunny = std::make_shared<Kasumi::BunnyObject>();
+		_data = bunny->voxelize();
 		track(&_data);
 	}
 
