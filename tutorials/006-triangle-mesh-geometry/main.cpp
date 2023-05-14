@@ -1,12 +1,4 @@
 #include "renderer3D/renderer3D.h"
-#include "experimental/Voxelizer.h"
-#include "experimental/Mesh.h"
-
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-
-#include "igl/random_points_on_mesh.h"
 
 class Data : public Kasumi::ObjectGrid3D
 {
@@ -54,8 +46,8 @@ auto main() -> int
 	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
 	{
 		scene->add(domain);
-//		scene->add(fluid);
-		scene->add(data);
+		scene->add(fluid);
+//		scene->add(data);
 		scene->_scene_opt._particle_mode = true;
 	};
 	Kasumi::Renderer3D::DEFAULT_RENDERER.close_benchmark();
