@@ -16,6 +16,7 @@ add_subdirectory(102-simple-particle-system)
 
 # rendering applications
 add_subdirectory(201-volume-render)
+add_subdirectory(202-screen-space-fluids)
 
 # fluid applications
 add_subdirectory(301-pbf-akinci2012)
