@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.24)
 project(202-ScreenSpaceFluids VERSION 2.0.0 DESCRIPTION "HinaPE is not a Physics Engine" LANGUAGES CXX)
 
-add_executable(202-ScreenSpaceFluids main.cpp)
+add_executable(202-ScreenSpaceFluids main.cpp ssf_renderer.h ssf_renderer.cpp)
 set_target_properties(202-ScreenSpaceFluids PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-target_link_libraries(202-ScreenSpaceFluids PUBLIC Kasumi_ShaderPainter)
+target_link_libraries(202-ScreenSpaceFluids PUBLIC HinaPE_Fluid_Particles)
 include(../../kasumi/CMakeRC.cmake)
 cmrc_add_resource_library(
         ScreenSpaceFluids_Rc
-        NAMESPACE VolumeRender
+        NAMESPACE ScreenSpaceFluids
         shaders/blur.frag
         shaders/blur.vert
         shaders/curvatureflow.frag
