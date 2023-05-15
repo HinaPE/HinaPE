@@ -11,7 +11,7 @@ namespace HinaPE
 class SSFRenderer
 {
 public:
-	SSFRenderer();
+	void init_shaders();
 
 private:
 	Kasumi::ShaderPtr

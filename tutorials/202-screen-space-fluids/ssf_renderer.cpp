@@ -3,7 +3,7 @@
 #include <cmrc/cmrc.hpp>
 CMRC_DECLARE(ScreenSpaceFluids);
 
-HinaPE::SSFRenderer::SSFRenderer()
+void HinaPE::SSFRenderer::init_shaders()
 {
 	auto fs = cmrc::ScreenSpaceFluids::get_filesystem();
 	auto f_blur = fs.open("shaders/blur.frag").begin();
