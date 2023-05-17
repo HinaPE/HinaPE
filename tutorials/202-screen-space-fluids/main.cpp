@@ -1,8 +1,10 @@
 #include "renderer3D/renderer3D.h"
+#include "simple_fluid.h"
 #include "ssf_renderer.h"
 
 auto main() -> int
 {
+	HinaPE::SimpleFluid fluid;
 	HinaPE::SSFRenderer ssf;
 
 	Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
