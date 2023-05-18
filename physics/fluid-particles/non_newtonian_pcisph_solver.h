@@ -45,7 +45,7 @@ namespace HinaPE
             real radius 			= 0.01;
             real target_density 	= 1000; // water density
             real target_spacing 	= radius;
-            real relative_kernel_radius = 1.7;
+            real relative_kernel_radius = 2;
             real kernel_radius 		= target_spacing * relative_kernel_radius;
 
             // SPH options

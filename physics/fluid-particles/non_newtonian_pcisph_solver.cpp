@@ -34,7 +34,7 @@ void HinaPE::PCISPHSolverNonNewtonian::_init_fluid_particles() const
     _data->add_fluid(init_pos, init_vel);
 
     // update mass
-    _data->Fluid.mass = std::max((_opt.target_density * pow(2 * _opt.radius,3)), HinaPE::Constant::Zero);
+    _data->Fluid.mass = std::max((_opt.target_density * 4.0f / 3.0f * 3.14 * pow(_opt.radius,3)), HinaPE::Constant::Zero);
 
     // init density
     std::vector<std::vector<unsigned int>> temp_neighbor_list;
@@ -68,12 +68,13 @@ void HinaPE::PCISPHSolverNonNewtonian::_init_fluid_particles() const
         d[i] = density;
     }
 }
+
 void HinaPE::PCISPHSolverNonNewtonian::_init_boundary_particles() const {
     std::vector<mVector3> target_boundary = _domain->generate_surface();
     _data->add_boundary(target_boundary, &_domain->POSE);
 
     // update mass
-    _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), std::max((_opt.target_density * pow(2 * _opt.radius,3)), HinaPE::Constant::Zero));
+    _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), std::max((_opt.target_density * 4.0f / 3.0f * 3.14 * pow(_opt.radius,3)), HinaPE::Constant::Zero));
     // init volume
     _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), std::max((pow(2 * _opt.radius,3)), HinaPE::Constant::Zero));
 }
