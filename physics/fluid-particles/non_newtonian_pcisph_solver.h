@@ -23,6 +23,8 @@ namespace HinaPE
         void _update_pressure();
         void _accumulate_pressure_force();
         void _correct_velocity_and_position() const;
+
+        void _update_boundary_volume() const;
     public:
         void init();
         void update(real dt);
@@ -40,10 +42,10 @@ namespace HinaPE
             real restitution = 0.3;
 
             // fluid param
-            real radius 			= 0.05;
+            real radius 			= 0.01;
             real target_density 	= 1000; // water density
             real target_spacing 	= radius;
-            real relative_kernel_radius = 1.6;
+            real relative_kernel_radius = 1.7;
             real kernel_radius 		= target_spacing * relative_kernel_radius;
 
             // SPH options
@@ -64,6 +66,7 @@ namespace HinaPE
 
     private:
         void _init_fluid_particles() const;
+        void _init_boundary_particles() const;
         auto _compute_delta() const -> real;
         void INSPECT() override;
     };
@@ -92,11 +95,29 @@ namespace HinaPE
             std::vector<mVector3> 	last_positions;
         }Fluid;
 
+        struct // boundary particles
+        {
+            std::vector<mVector3> 	positions;
+            std::vector<mVector3> 	positions_origin;
+            std::vector<real>		mass;
+            std::vector<real>		volume;
+
+            std::vector<mVector3> 	pressure_forces;
+            std::vector<mVector3> 	friction_forces;
+            std::vector<mVector3> 	forces;
+
+            std::vector<const Kasumi::Pose*> 		poses;
+            std::vector<std::pair<size_t, size_t>> 	boundary_sizes;
+        } Boundary;
+
         std::vector<std::vector<unsigned int>> 	NeighborList;
 
         explicit Data();
         void add_fluid(const std::vector<mVector3>& positions, const std::vector<mVector3>& velocities);
+        void add_boundary(const std::vector<mVector3>& positions, const Kasumi::Pose* pose);
+        void update_boundary();
         auto fluid_size() const -> size_t;
+        auto boundary_size() const -> size_t;
         void reset();
 
         // ==================== Debug Area ====================

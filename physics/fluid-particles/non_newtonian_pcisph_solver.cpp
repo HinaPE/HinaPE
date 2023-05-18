@@ -25,6 +25,7 @@ void HinaPE::PCISPHSolverNonNewtonian::init() {
     _emitter->_opt.spacing = 1.2 * _opt.radius;
 
     _init_fluid_particles();
+    _init_boundary_particles();
 }
 void HinaPE::PCISPHSolverNonNewtonian::_init_fluid_particles() const
 {
@@ -33,6 +34,9 @@ void HinaPE::PCISPHSolverNonNewtonian::_init_fluid_particles() const
     _data->add_fluid(init_pos, init_vel);
 
     // update mass
+    _data->Fluid.mass = std::max((_opt.target_density * pow(2 * _opt.radius,3)), HinaPE::Constant::Zero);
+
+    // init density
     std::vector<std::vector<unsigned int>> temp_neighbor_list;
     temp_neighbor_list.resize(init_pos.size());
     PointHashGridSearch3 searcher(_opt.kernel_radius);
@@ -50,38 +54,47 @@ void HinaPE::PCISPHSolverNonNewtonian::_init_fluid_particles() const
     });
 
     StdKernel poly6(_opt.kernel_radius);
-    real max_number_density = 0;
+    const auto &m = _data->Fluid.mass;
+    auto &d = _data->Fluid.densities;
     for (int i = 0; i < init_pos.size(); ++i)
     {
-        real sum = poly6(0); // self density
+        real density = m * poly6(0); // self density
         const auto &point = init_pos[i];
         for (const auto &neighbor_point_id: temp_neighbor_list[i])
         {
             auto dist = (point - init_pos[neighbor_point_id]).length();
-            sum += poly6(dist);
+            density += m * poly6(dist);
         }
-        max_number_density = std::max(max_number_density, sum);
+        d[i] = density;
     }
+}
+void HinaPE::PCISPHSolverNonNewtonian::_init_boundary_particles() const {
+    std::vector<mVector3> target_boundary = _domain->generate_surface();
+    _data->add_boundary(target_boundary, &_domain->POSE);
 
-    if (max_number_density > 0)
-        _data->Fluid.mass = std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero);
-    else
-        throw std::runtime_error("max_number_density is zero");
+    // update mass
+    _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), std::max((_opt.target_density * pow(2 * _opt.radius,3)), HinaPE::Constant::Zero));
+    // init volume
+    _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), std::max((pow(2 * _opt.radius,3)), HinaPE::Constant::Zero));
 }
 void HinaPE::PCISPHSolverNonNewtonian::_update_neighbor() const
 {
     // Update Target: NeighborList
     const auto fluid_size = _data->fluid_size();
-    const auto &x = _data->Fluid.positions; // note: we use predicted position, because we need to update neighbor in the sub iteration
+    const auto &x = _data->Fluid.predicted_positions; // note: we use predicted position, because we need to update neighbor in the sub iteration
+    const auto boundary_size = _data->boundary_size();
+    const auto &bx = _data->Boundary.positions_origin;
 
     std::vector<mVector3> total_positions;
-    total_positions.reserve(fluid_size);
+    total_positions.reserve(fluid_size + boundary_size);
     total_positions.insert(total_positions.end(), x.begin(), x.end());
+    total_positions.insert(total_positions.end(), bx.begin(), bx.end());
 
     PointHashGridSearch3 searcher(_opt.kernel_radius);
     searcher.build(total_positions);
-
     auto &nl = _data->NeighborList;
+
+    // fluid particles
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         auto origin = x[i];
@@ -92,25 +105,47 @@ void HinaPE::PCISPHSolverNonNewtonian::_update_neighbor() const
                 nl[i].push_back(j);
         });
     });
+
+    // boundary particles
+    Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i)
+    {
+        auto origin = bx[i];
+        nl[i + fluid_size].clear();
+        searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
+        {
+            if (i != j)
+                nl[i + fluid_size].push_back(j);
+        });
+    });
 }
+
 void HinaPE::PCISPHSolverNonNewtonian::_update_density() const
 {
-// Update Target: densities
+    // Update Target: fluid densities
     auto &d = _data->Fluid.densities;
-    const auto &x = _data->Fluid.positions;
+    const auto &p = _data->Fluid.predicted_positions;
+    const auto &b = _data->Boundary.positions;
     const auto &m = _data->Fluid.mass;
+    const auto &bm = _data->Boundary.mass;
+    const auto &bV = _data->Boundary.volume;
     const auto &nl = _data->NeighborList;
     const auto fluid_size = _data->fluid_size();
-
 
     StdKernel poly6(_opt.kernel_radius);
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         real density = m * poly6(0); // self density
-        for (size_t j: nl[i])
+        for (const auto j: nl[i])
         {
-            real dist = (x[i] - x[j]).length();
-            density += m * poly6(dist);
+            if (j < fluid_size)
+            {
+                real dist = (p[i] - p[j]).length();
+                density += m * poly6(dist);
+            } else
+            {
+                real dist = (p[i] - b[j - fluid_size]).length();
+                density += _opt.target_density * bV[j - fluid_size] * poly6(dist);
+            }
         }
         d[i] = density; // rho(x) = m * sum(W(x - xj))
     });
@@ -120,6 +155,7 @@ void HinaPE::PCISPHSolverNonNewtonian::update(real dt)
 {
     // algorithm line 2~3
     _update_neighbor();
+    _update_boundary_volume();
     _update_density();
     // algorithm line 5
     _accumulate_non_pressure_force();
@@ -158,7 +194,7 @@ void HinaPE::PCISPHSolverNonNewtonian::_accumulate_non_pressure_force() const
         f[i] = gravity;
     });
 
-    // Viscosity Forces
+    /*// Viscosity Forces
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         auto &nl = _data->NeighborList;
@@ -168,8 +204,9 @@ void HinaPE::PCISPHSolverNonNewtonian::_accumulate_non_pressure_force() const
             if (d[j] > HinaPE::Constant::Epsilon)
                 f[i] += _opt.viscosity * m * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
         }
-    });
+    });*/
 }
+
 void HinaPE::PCISPHSolverNonNewtonian::_prediction_correction_step() {
     int iteration = 0;
     while(((iteration < _opt.min_loop)||(_opt.density_error_too_large))&&(iteration < _opt.max_loop))
@@ -185,6 +222,7 @@ void HinaPE::PCISPHSolverNonNewtonian::_prediction_correction_step() {
         iteration++;
     }
 }
+
 void HinaPE::PCISPHSolverNonNewtonian::_initialize_pressure_and_pressure_force() const {
     auto &p = _data->Fluid.pressures;
     auto &p_f = _data->Fluid.pressure_forces;
@@ -235,6 +273,10 @@ void HinaPE::PCISPHSolverNonNewtonian::_predict_density() const
     auto &x_p = _data->Fluid.predicted_positions;
 
     auto &m = _data->Fluid.mass;
+
+    const auto &b = _data->Boundary.positions;
+    const auto &bV = _data->Boundary.volume;
+
     const auto fluid_size = _data->fluid_size();
     StdKernel poly6(_opt.kernel_radius);
 
@@ -244,8 +286,15 @@ void HinaPE::PCISPHSolverNonNewtonian::_predict_density() const
         auto &nl = _data->NeighborList;
         for (size_t j: nl[i])
         {
-            real dist = (x_p[i] - x_p[j]).length();
-            density += m * poly6(dist);
+            if (j < fluid_size)
+            {
+                real dist = (x_p[i] - x_p[j]).length();
+                density += m * poly6(dist);
+            } else
+            {
+                real dist = (x_p[i] - b[j - fluid_size]).length();
+                density += _opt.target_density * bV[j - fluid_size] * poly6(dist);
+            }
         }
         d_p[i] = density;
     });
@@ -285,6 +334,10 @@ void HinaPE::PCISPHSolverNonNewtonian::_accumulate_pressure_force() {
     auto &d_e = _data->Fluid.density_errors;
     auto &d_p = _data->Fluid.predicted_densities;
     auto &m = _data->Fluid.mass;
+    const auto &bm = _data->Boundary.mass;
+    const auto &bV = _data->Boundary.volume;
+    const auto &b = _data->Boundary.positions;
+    auto &bp_f = _data->Boundary.pressure_forces;
     const auto fluid_size = _data->fluid_size();
     SpikyKernel spiky(_opt.kernel_radius);
     std::fill(p_f.begin(), p_f.end(), mVector3::Zero());
@@ -293,11 +346,20 @@ void HinaPE::PCISPHSolverNonNewtonian::_accumulate_pressure_force() {
         auto &nl = _data->NeighborList;
         for (size_t j: nl[i])
         {
-            real dist = (x[i] - x[j]).length();
-            if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
+            if (j < fluid_size){
+                real dist = (x[i] - x[j]).length();
+                if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
+                {
+                    mVector3 dir = (x[j] - x[i]) / dist;
+                    p_f[i] -= m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * spiky.gradient(dist, dir);
+                }
+            }else
             {
-                mVector3 dir = (x[j] - x[i]) / dist;
-                p_f[i] -= m * m * (p[i] / (d_p[i] * d_p[i]) + p[j] / (d_p[j] * d_p[j])) * spiky.gradient(dist, dir);
+                real dist = (x[i] - b[j - fluid_size]).length();
+                mVector3 dir = (b[j - fluid_size] - x[i]) / dist;
+                mVector3 boundary_pressure_force = -_opt.target_density * bV[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
+                p_f[i] += boundary_pressure_force;
+                bp_f[j - fluid_size] = -boundary_pressure_force;
             }
         }
     });
@@ -423,12 +485,44 @@ auto HinaPE::PCISPHSolverNonNewtonian::_compute_delta() const -> real
     return (std::fabs(denom) > 0) ? -1 / (beta * denom) : 0;
 }
 
+void HinaPE::PCISPHSolverNonNewtonian::_update_boundary_volume() const {
+
+    auto &x = _data->Fluid.positions;
+    const auto &b_x = _data->Boundary.positions;
+    auto &v_b = _data->Boundary.volume;
+    const auto fluid_size = _data->fluid_size();
+    const auto boundary_size = _data->boundary_size();
+
+    const auto &nl = _data->NeighborList;
+
+    StdKernel poly6(_opt.kernel_radius);
+    Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i)
+    {
+        real delta_b = poly6(0);
+        for (const auto j: nl[i + fluid_size])
+        {
+            if(j < fluid_size)
+            {
+                delta_b += poly6((b_x[i] - x[j]).length());
+            }
+            else
+            {
+                delta_b += poly6((b_x[i] - b_x[j - fluid_size]).length());
+            }
+        }
+        const real volume = static_cast<real>(1.0) / delta_b;
+        v_b[i] = volume;
+    });
+}
+
+
 // ================================================== Data ==================================================
 HinaPE::PCISPHSolverNonNewtonian::Data::Data() {
     track(&Fluid.last_positions);
     _color_map = &color_map;
 }
 auto HinaPE::PCISPHSolverNonNewtonian::Data::fluid_size() const -> size_t { return Fluid.positions.size(); }
+auto HinaPE::PCISPHSolverNonNewtonian::Data::boundary_size() const -> size_t {return Boundary.positions.size();}
 void HinaPE::PCISPHSolverNonNewtonian::Data::add_fluid(const std::vector<mVector3> &positions,
                                                   const std::vector<mVector3> &velocities){
     if (positions.size() != velocities.size())
@@ -452,6 +546,31 @@ void HinaPE::PCISPHSolverNonNewtonian::Data::add_fluid(const std::vector<mVector
     color_map.insert(color_map.end(), size, Color::ORANGE);
     debug_info.insert(debug_info.end(), size, std::vector<std::string>());
 }
+void HinaPE::PCISPHSolverNonNewtonian::Data::update_boundary() {
+    for (int i = 0; i < Boundary.poses.size(); ++i)
+    {
+        std::vector<mVector3> res;
+        const auto [start, end] = Boundary.boundary_sizes[i];
+        const auto m = Boundary.poses[i]->get_model_matrix();
+
+        for (size_t j = start; j < end; ++j)
+            Boundary.positions[j] = (m * mVector4(Boundary.positions_origin[j].x(), Boundary.positions_origin[j].y(), Boundary.positions_origin[j].z(), 1)).xyz();
+    }
+}
+void HinaPE::PCISPHSolverNonNewtonian::Data::add_boundary(const std::vector<mVector3> &positions, const Kasumi::Pose *pose) {
+    size_t start = Boundary.positions_origin.size();
+    Boundary.positions_origin.insert(Boundary.positions_origin.end(), positions.begin(), positions.end());
+    size_t end = Boundary.positions_origin.size();
+
+    Boundary.poses.push_back(pose);
+    Boundary.boundary_sizes.emplace_back(start, end);
+    Boundary.positions.resize(Boundary.positions_origin.size());
+    Boundary.pressure_forces.insert(Boundary.pressure_forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
+    Boundary.friction_forces.insert(Boundary.friction_forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
+    Boundary.forces.insert(Boundary.forces.end(), Boundary.positions_origin.size(), mVector3::Zero());
+
+    update_boundary();
+}
 void HinaPE::PCISPHSolverNonNewtonian::Data::reset() {
     Fluid.positions.clear();
     Fluid.velocities.clear();
@@ -469,6 +588,24 @@ void HinaPE::PCISPHSolverNonNewtonian::Data::reset() {
     Fluid.pressures.clear();
     Fluid.mass = 1e-3;
 
+    Boundary.positions.clear();
+    Boundary.positions_origin.clear();
+    Boundary.mass.clear();
+    Boundary.volume.clear();
+
+    Boundary.forces.clear();
+    Boundary.pressure_forces.clear();
+    Boundary.friction_forces.clear();
+
+    Boundary.poses.clear();
+    Boundary.boundary_sizes.clear();
+
+    NeighborList.clear();
+
     color_map.clear();
     debug_info.clear();
 }
+
+
+
+

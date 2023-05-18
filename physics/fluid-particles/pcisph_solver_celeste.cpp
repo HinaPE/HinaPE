@@ -248,19 +248,27 @@ void HinaPE::PCISPHSolverCELESTE::_update_neighbor() const
     searcher.build(total_positions);
 
     auto &nl = _data->NeighborList;
+    // fluid particles
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         auto origin = x[i];
         nl[i].clear();
         searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
         {
-            if (i != j) // exclude self
-            {
-//                if(j < fluid_size) // fluid particle // 对于每个流体粒子，查询其周围的边界粒子，并将这些边界粒子加入邻居列表中
-                    nl[i].push_back(j);
-//                else // boundary particle
-//                    nl[i].push_back(j - fluid_size); /// little confuse //对于每个流体粒子，查询其周围的流体粒子，并将这些流体粒子加入邻居列表中
-            }
+            if (i != j)
+                nl[i].push_back(j);
+        });
+    });
+
+    // boundary particles
+    Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i)
+    {
+        auto origin = bx[i];
+        nl[i + fluid_size].clear();
+        searcher.for_each_nearby_point(origin, [&](size_t j, const mVector3 &)
+        {
+            if (i != j)
+                nl[i + fluid_size].push_back(j);
         });
     });
 }
@@ -699,14 +707,11 @@ auto HinaPE::PCISPHSolverCELESTE::_compute_delta() const -> real
 void HinaPE::PCISPHSolverCELESTE::_update_boundary_neighbor() const
 {
     auto &bnl = _data->BoundaryNeighborList;
-    const auto fluid_size = _data->fluid_size();
-    const auto &x = _data->Fluid.predicted_positions;
     const auto boundary_size = _data->boundary_size();
     const auto &bx = _data->Boundary.positions_origin;
 
     std::vector<mVector3> total_positions;
-    total_positions.reserve(fluid_size + boundary_size);
-    total_positions.insert(total_positions.end(), x.begin(), x.end());
+    total_positions.reserve(boundary_size);
     total_positions.insert(total_positions.end(), bx.begin(), bx.end());
 
     PointHashGridSearch3 searcher(_opt.kernel_radius);
