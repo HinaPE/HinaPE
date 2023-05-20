@@ -26,7 +26,7 @@ struct NeighborViewer : public Kasumi::ObjectParticles3D
         _neighbors.clear();
 
         auto origin = _data->Fluid.positions[_data->_inst_id];
-        for (auto &neighbor: _data->NeighborList[_data->_inst_id])
+        for (auto &neighbor: _data->FluidNeighborList[_data->_inst_id])
             _neighbors.push_back(_data->Fluid.positions[neighbor]);
         _neighbors.push_back(origin);
 

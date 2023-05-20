@@ -12,7 +12,8 @@ namespace HinaPE
     class PCISPHSolverNonNewtonian: public Kasumi::INSPECTOR
     {
     protected:
-        void _update_neighbor() const;
+        void _update_fluid_neighbor() const;
+        void _update_boundary_neighbor() const;
         void _update_density() const;
         void _resolve_collision() const;
         void _accumulate_non_pressure_force() const;
@@ -42,10 +43,10 @@ namespace HinaPE
             real restitution = 0.3;
 
             // fluid param
-            real radius 			= 0.01;
+            real radius 			= 0.029;
             real target_density 	= 1000; // water density
             real target_spacing 	= radius;
-            real relative_kernel_radius = 2;
+            real relative_kernel_radius = 1.7;
             real kernel_radius 		= target_spacing * relative_kernel_radius;
 
             // SPH options
@@ -110,7 +111,8 @@ namespace HinaPE
             std::vector<std::pair<size_t, size_t>> 	boundary_sizes;
         } Boundary;
 
-        std::vector<std::vector<unsigned int>> 	NeighborList;
+        std::vector<std::vector<unsigned int>> 	FluidNeighborList;
+        std::vector<std::vector<unsigned int>> 	BoundaryNeighborList;
 
         explicit Data();
         void add_fluid(const std::vector<mVector3>& positions, const std::vector<mVector3>& velocities);
