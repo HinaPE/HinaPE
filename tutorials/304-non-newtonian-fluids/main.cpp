@@ -4,8 +4,8 @@
 #include "rigid/solver.h"
 #include "export_to_xyz.h"
 
-//using SolverType = HinaPE::PCISPHSolverNonNewtonian;
-using SolverType = HinaPE::PCISPHSolverTEMP;
+using SolverType = HinaPE::PCISPHSolverNonNewtonian;
+//using SolverType = HinaPE::PCISPHSolverTEMP;
 using SolverDataType = SolverType::Data;
 
 #ifdef WIN32
@@ -89,8 +89,8 @@ auto main() -> int
 
     // rigid solver
     auto solver_rigid = std::make_shared<HinaPE::RigidSolver>();
-    solver_rigid->add(solver->_sphere);
-    solver_rigid->add(solver->_cube);
+    /*solver_rigid->add(solver->_sphere);
+    solver_rigid->add(solver->_cube);*/
 
     auto domain_extent = solver->_domain->_extent;
     auto thickness = 0.1;
@@ -136,8 +136,8 @@ auto main() -> int
     {
         scene->add(solver->_data);
         scene->add(solver->_domain);
-        scene->add(solver->_sphere);
-        scene->add(solver->_cube);
+        /*scene->add(solver->_sphere);
+        scene->add(solver->_cube);*/
         scene->add(bv);
         scene->add(nv);
         scene->_scene_opt._particle_mode = true;

@@ -355,9 +355,15 @@ void HinaPE::PCISPHSolverTEMP::update(real dt)
     _initialize_pressure_and_pressure_force();
     // algorithm line 8~17
     _prediction_correction_step();
+
+    // for rigid body
+    // _compute_rigid_forces_and_torque();
+
     // algorithm line 18~20
     _correct_velocity_and_position();
-    _resolve_collision();
+
+    // domain collision (?
+    // _resolve_collision();
 
     // for debug
     _data->Fluid.last_positions = _data->Fluid.positions; // show the position of last frame
