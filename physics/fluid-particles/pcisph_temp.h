@@ -25,6 +25,7 @@ namespace HinaPE
         void _accumulate_pressure_force();
         void _correct_velocity_and_position() const;
         void _update_boundary_volume() const;
+        void _compute_boundary_forces() const;
         void _compute_rigid_forces_and_torque() const;
     public:
         void init();
@@ -112,6 +113,8 @@ namespace HinaPE
             std::vector<mVector3> 	pressure_forces;
             std::vector<mVector3> 	friction_forces;
             std::vector<mVector3> 	forces;
+
+            std::vector<bool> 	    IsActive;
 
             std::vector<const Kasumi::Pose*> 		poses;
             std::vector<std::pair<size_t, size_t>> 	boundary_sizes;
