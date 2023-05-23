@@ -109,7 +109,7 @@ void HinaPE::PCISPHSolverNonNewtonian::_init_boundary_particles() const {
     {
         _data->Boundary.density.insert(_data->Boundary.density.end(), target_boundary.size(), HinaPE::Constant::Zero);
         _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
-        _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 100 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
+        _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 200 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
     }
     else
         throw std::runtime_error("max_number_density is zero");
@@ -118,7 +118,7 @@ void HinaPE::PCISPHSolverNonNewtonian::_init_boundary_density() const {
     _update_boundary_neighbor();
     auto &b_d = _data->Boundary.density;
     const auto &d_p = _data->Boundary.positions_origin;
-    const auto &bnl = _data->FluidNeighborList;
+    const auto &bnl = _data->BoundaryNeighborList;
     const auto &bm = _data->Boundary.mass;
     const auto fluid_size = _data->fluid_size();
     const auto boundary_size = _data->boundary_size();
@@ -130,7 +130,7 @@ void HinaPE::PCISPHSolverNonNewtonian::_init_boundary_density() const {
         for (const auto j: bnl[i])
         {
             if (j > fluid_size){
-                real dist = (d_p[i] - d_p[j]).length();
+                real dist = (d_p[i] - d_p[j - fluid_size]).length();
                 density += bm[i] * poly6(dist);
             }
         }

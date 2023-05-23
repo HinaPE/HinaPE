@@ -89,8 +89,8 @@ auto main() -> int
 
     // rigid solver
     auto solver_rigid = std::make_shared<HinaPE::RigidSolver>();
-/*    solver_rigid->add(solver->_sphere);
-    solver_rigid->add(solver->_cube);*/
+    solver_rigid->add(solver->_sphere);
+    solver_rigid->add(solver->_cube);
 
     auto domain_extent = solver->_domain->_extent;
     auto thickness = 0.1;
@@ -136,8 +136,8 @@ auto main() -> int
     {
         scene->add(solver->_data);
         scene->add(solver->_domain);
-/*        scene->add(solver->_sphere);
-        scene->add(solver->_cube);*/
+        scene->add(solver->_sphere);
+        scene->add(solver->_cube);
         scene->add(bv);
         scene->add(nv);
         scene->_scene_opt._particle_mode = true;
@@ -146,7 +146,7 @@ auto main() -> int
     Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
     {
         solver->update(dt);
-        //solver_rigid->update(solver->_opt.current_dt);
+        solver_rigid->update(solver->_opt.current_dt);
         /*auto rigid_num = solver->_data->Boundary.boundary_sizes.size();
         for(auto i = 0; i < rigid_num; i++)
         {

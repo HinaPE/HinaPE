@@ -23,7 +23,7 @@ void HinaPE::PCISPHSolverTEMP::init() {
     if (_sphere == nullptr)
     {
         auto sphere = std::make_shared<Kasumi::SphereObject>();
-        sphere->POSE.position = mVector3(0.5, -1.0, 0);
+        sphere->POSE.position = mVector3(0.8, 0.7, 0);
         sphere->POSE.scale = 0.3 * mVector3::One();
         sphere->_update_surface();
         _sphere = sphere;
@@ -32,7 +32,7 @@ void HinaPE::PCISPHSolverTEMP::init() {
     if (_cube == nullptr)
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
-        cube->POSE.position = mVector3(-0.5, -1.0, 0);
+        cube->POSE.position = mVector3(-0.3, 0.5, 0);
         cube->POSE.euler = mVector3(45, 0, 45);
         cube->POSE.scale = mVector3(0.2, 0.3, 0.2);
         cube->_update_surface();
@@ -232,7 +232,7 @@ void HinaPE::PCISPHSolverTEMP::_init_boundary_density() const {
     _update_boundary_neighbor();
     auto &b_d = _data->Boundary.density;
     const auto &d_p = _data->Boundary.positions_origin;
-    const auto &bnl = _data->FluidNeighborList;
+    const auto &bnl = _data->BoundaryNeighborList;
     const auto &bm = _data->Boundary.mass;
     const auto fluid_size = _data->fluid_size();
     const auto boundary_size = _data->boundary_size();
@@ -244,7 +244,7 @@ void HinaPE::PCISPHSolverTEMP::_init_boundary_density() const {
         for (const auto j: bnl[i])
         {
             if (j > fluid_size){
-                real dist = (d_p[i] - d_p[j]).length();
+                real dist = (d_p[i] - d_p[j - fluid_size]).length();
                 density += bm[i] * poly6(dist);
             }
         }
