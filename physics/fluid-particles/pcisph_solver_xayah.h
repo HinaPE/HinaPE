@@ -40,7 +40,7 @@ public:
 		// fluid param
 		real radius 		= 0.029;
 		real target_density = 1000; // dont alter after inited
-		real relative_kernel_radius = 2.7; // this is important!
+		real relative_kernel_radius = 1.7; // this is important!
 		real kernel_radius 	= relative_kernel_radius * radius;
 
 		// SPH options

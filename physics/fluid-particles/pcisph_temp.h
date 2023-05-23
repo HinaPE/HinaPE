@@ -72,6 +72,7 @@ namespace HinaPE
         void _init_fluid_particles() const;
         void _init_boundary_particles() const;
         void _init_collider() const;
+        void _init_boundary_density() const;
         auto _compute_delta() const -> real;
         void INSPECT() override;
     };
@@ -106,6 +107,7 @@ namespace HinaPE
             std::vector<mVector3> 	positions_origin;
             std::vector<real>		mass;
             std::vector<real>		volume;
+            std::vector<real>		density;
 
             std::vector<mVector3> 	pressure_forces;
             std::vector<mVector3> 	friction_forces;

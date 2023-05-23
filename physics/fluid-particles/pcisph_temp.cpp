@@ -12,7 +12,7 @@ void HinaPE::PCISPHSolverTEMP::init() {
     if (_domain == nullptr)
     {
         _domain = std::make_shared<BoxDomain>();
-        _domain->POSE.scale = {1, 1.5, 1};
+        _domain->POSE.scale = {1.8, 1, 0.8};
         _domain->_update_surface();
     }
     if (_emitter == nullptr)
@@ -46,6 +46,7 @@ void HinaPE::PCISPHSolverTEMP::init() {
     _init_fluid_particles();
     _init_boundary_particles();
     _init_collider();
+    _init_boundary_density();
 }
 void HinaPE::PCISPHSolverTEMP::_init_fluid_particles() const
 {
@@ -126,6 +127,7 @@ void HinaPE::PCISPHSolverTEMP::_init_boundary_particles() const {
 
     if (max_number_density > 0)
     {
+        _data->Boundary.density.insert(_data->Boundary.density.end(), target_boundary.size(), HinaPE::Constant::Zero);
         _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
         _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 10 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
     }
@@ -173,6 +175,7 @@ void HinaPE::PCISPHSolverTEMP::_init_collider() const
         }
 
         if (max_number_density > 0){
+            _data->Boundary.density.insert(_data->Boundary.density.end(), target_boundary.size(), HinaPE::Constant::Zero);
             _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 5 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
             _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
         }
@@ -217,12 +220,36 @@ void HinaPE::PCISPHSolverTEMP::_init_collider() const
 
         if (max_number_density > 0)
         {
+            _data->Boundary.density.insert(_data->Boundary.density.end(), target_boundary.size(), HinaPE::Constant::Zero);
             _data->Boundary.mass.insert(_data->Boundary.mass.end(), target_boundary.size(), 5 * std::max((_opt.target_density / max_number_density), HinaPE::Constant::Zero));
             _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
         }
         else
             throw std::runtime_error("max_number_density is zero");
     }
+}
+void HinaPE::PCISPHSolverTEMP::_init_boundary_density() const {
+    _update_boundary_neighbor();
+    auto &b_d = _data->Boundary.density;
+    const auto &d_p = _data->Boundary.positions_origin;
+    const auto &bnl = _data->FluidNeighborList;
+    const auto &bm = _data->Boundary.mass;
+    const auto fluid_size = _data->fluid_size();
+    const auto boundary_size = _data->boundary_size();
+
+    StdKernel poly6(_opt.kernel_radius);
+    Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i)
+    {
+        real density = bm[i] * poly6(0); // self density
+        for (const auto j: bnl[i])
+        {
+            if (j > fluid_size){
+                real dist = (d_p[i] - d_p[j]).length();
+                density += bm[i] * poly6(dist);
+            }
+        }
+        b_d[i] = density;
+    });
 }
 void HinaPE::PCISPHSolverTEMP::_update_density() const
 {
@@ -232,6 +259,7 @@ void HinaPE::PCISPHSolverTEMP::_update_density() const
     const auto &b = _data->Boundary.positions;
     const auto &m = _data->Fluid.mass;
     const auto &bV = _data->Boundary.volume;
+    const auto &bd = _data->Boundary.density;
     const auto &nl = _data->FluidNeighborList;
     const auto fluid_size = _data->fluid_size();
 
@@ -248,7 +276,7 @@ void HinaPE::PCISPHSolverTEMP::_update_density() const
             } else
             {
                 real dist = (p[i] - b[j - fluid_size]).length();
-                density += _opt.target_density * bV[j - fluid_size] * poly6(dist);
+                density += bd[j - fluid_size] * bV[j - fluid_size] * poly6(dist);
             }
         }
         d[i] = density; // rho(x) = m * sum(W(x - xj))
@@ -363,7 +391,7 @@ void HinaPE::PCISPHSolverTEMP::update(real dt)
     _correct_velocity_and_position();
 
     // domain collision (?
-    // _resolve_collision();
+     _resolve_collision();
 
     // for debug
     _data->Fluid.last_positions = _data->Fluid.positions; // show the position of last frame
@@ -475,6 +503,7 @@ void HinaPE::PCISPHSolverTEMP::_predict_density() const
 
     const auto &b = _data->Boundary.positions;
     const auto &bV = _data->Boundary.volume;
+    const auto &bd = _data->Boundary.density;
 
     const auto fluid_size = _data->fluid_size();
     StdKernel poly6(_opt.kernel_radius);
@@ -492,7 +521,7 @@ void HinaPE::PCISPHSolverTEMP::_predict_density() const
             } else
             {
                 real dist = (x_p[i] - b[j - fluid_size]).length();
-                density += _opt.target_density * bV[j - fluid_size] * poly6(dist);
+                density += bd[j - fluid_size] * bV[j - fluid_size] * poly6(dist);
             }
         }
         d_p[i] = density;
@@ -533,6 +562,7 @@ void HinaPE::PCISPHSolverTEMP::_accumulate_pressure_force() {
     auto &d_p = _data->Fluid.predicted_densities;
     auto &m = _data->Fluid.mass;
     const auto &bV = _data->Boundary.volume;
+    const auto &bd = _data->Boundary.density;
     const auto &b = _data->Boundary.positions;
     auto &bp_f = _data->Boundary.pressure_forces;
     const auto fluid_size = _data->fluid_size();
@@ -554,7 +584,7 @@ void HinaPE::PCISPHSolverTEMP::_accumulate_pressure_force() {
             {
                 real dist = (x_p[i] - b[j - fluid_size]).length();
                 mVector3 dir = (b[j - fluid_size] - x_p[i]) / dist;
-                mVector3 boundary_pressure_force = -_opt.target_density * bV[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
+                mVector3 boundary_pressure_force = -bd[j - fluid_size] * bV[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
                 p_f[i] += boundary_pressure_force;
                 bp_f[j - fluid_size] = -boundary_pressure_force;
             }
@@ -789,6 +819,7 @@ void HinaPE::PCISPHSolverTEMP::Data::reset() {
     Boundary.positions_origin.clear();
     Boundary.mass.clear();
     Boundary.volume.clear();
+    Boundary.density.clear();
 
     Boundary.forces.clear();
     Boundary.pressure_forces.clear();

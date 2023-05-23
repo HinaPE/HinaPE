@@ -145,7 +145,7 @@ void HinaPE::PCISPHSolverXayah::_accumulate_force() const
 				if (dist > HinaPE::Constant::Epsilon && d[j] > HinaPE::Constant::Epsilon)
 				{
 					mVector3 dir = (x[j] - x[i]) / dist;
-					tpf[i] -= m * m * (p[i] / (ds[i] * ds[i]) + p[j] / (d[j] * d[j])) * spiky.gradient(dist, dir);
+					tpf[i] -= m * m * (p[i] / (ds[i] * ds[i]) + p[j] / (ds[j] * ds[j])) * spiky.gradient(dist, dir);
 				}
 			}
 		});

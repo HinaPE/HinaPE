@@ -24,7 +24,6 @@ namespace HinaPE
         void _update_pressure();
         void _accumulate_pressure_force();
         void _correct_velocity_and_position() const;
-
         void _update_boundary_volume() const;
     public:
         void init();
@@ -38,7 +37,7 @@ namespace HinaPE
 
         struct Opt
         {
-            real current_dt = 0.005;
+            real current_dt = 0.002;
             mVector3 gravity = mVector3(0, -9.8, 0);
             real restitution = 0.3;
 
@@ -69,6 +68,7 @@ namespace HinaPE
         void _init_fluid_particles() const;
         void _init_boundary_particles() const;
         auto _compute_delta() const -> real;
+        void _init_boundary_density() const;
         void INSPECT() override;
     };
 
@@ -102,6 +102,7 @@ namespace HinaPE
             std::vector<mVector3> 	positions_origin;
             std::vector<real>		mass;
             std::vector<real>		volume;
+            std::vector<real>		density;
 
             std::vector<mVector3> 	pressure_forces;
             std::vector<mVector3> 	friction_forces;
