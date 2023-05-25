@@ -136,7 +136,7 @@ auto main() -> int
     {
         scene->add(solver->_data);
         scene->add(solver->_domain);
-        scene->add(solver->_sphere);
+        //scene->add(solver->_sphere);
         scene->add(solver->_cube);
         scene->add(bv);
         scene->add(nv);
@@ -153,7 +153,7 @@ auto main() -> int
             auto force = solver->_data->ForceAndTorque.force[i];
             auto torque = solver->_data->ForceAndTorque.torque[i];
             solver_rigid->apply_force_and_torque(i, force, torque);
-            solver_rigid->update(solver->_opt.current_dt);
+            //solver_rigid->update(solver->_opt.current_dt);
         }
     };
 

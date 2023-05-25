@@ -32,7 +32,7 @@ void HinaPE::PCISPHSolverTEMP::init() {
     if (_cube == nullptr)
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
-        cube->POSE.position = mVector3(-0.3, 0.5, 0);
+        cube->POSE.position = mVector3(0, -0.8, 0);
         cube->POSE.euler = mVector3(90, 0, 90);
         cube->POSE.scale = mVector3(0.2, 0.3, 0.2);
         cube->_update_surface();
@@ -652,6 +652,11 @@ void HinaPE::PCISPHSolverTEMP::_compute_rigid_forces_and_torque() const {
         {
             each_rigid.force[i] += b_f[j];
             each_rigid.torque[i] += b_f[j].cross(b_p[j] - b_o_p[j]);
+            /*if(each_rigid.force[i].x() != 0 || each_rigid.force[i].y() != 0 || each_rigid.force[i].z() != 0)
+            {
+                std::cout << "force:" << each_rigid.force[i] << std::endl;
+                std::cout << "torque:" << each_rigid.torque[i] << std::endl;
+            }*/
         });
     });
 }
