@@ -32,7 +32,7 @@ void HinaPE::PCISPHSolverTEMP::init() {
     if (_cube == nullptr)
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
-        cube->POSE.position = mVector3(0, -0.8, 0);
+        cube->POSE.position = mVector3(0, -0.7, 0);
         cube->POSE.euler = mVector3(90, 0, 90);
         cube->POSE.scale = mVector3(0.2, 0.3, 0.2);
         cube->_update_surface();
@@ -390,6 +390,7 @@ void HinaPE::PCISPHSolverTEMP::update(real dt)
     // algorithm line 8~17
     _prediction_correction_step();
 
+    _compute_boundary_forces();
     // for rigid body
     _compute_rigid_forces_and_torque();
 
@@ -590,11 +591,13 @@ void HinaPE::PCISPHSolverTEMP::_accumulate_pressure_force() {
             }else
             {
                 real dist = (x_p[i] - b[j - fluid_size]).length();
-                mVector3 dir = (b[j - fluid_size] - x_p[i]) / dist;
-                mVector3 boundary_pressure_force = -bd[j - fluid_size] * bV[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
-                p_f[i] += boundary_pressure_force;
-                if(b_flag[j - fluid_size])
-                    bp_f[j - fluid_size] += -boundary_pressure_force;
+                if (dist > HinaPE::Constant::Epsilon && d_p[j] > HinaPE::Constant::Epsilon){
+                    mVector3 dir = (b[j - fluid_size] - x_p[i]) / dist;
+                    mVector3 boundary_pressure_force = -bd[j - fluid_size] * bV[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
+                    p_f[i] += boundary_pressure_force;
+                    if(b_flag[j - fluid_size])
+                        bp_f[j - fluid_size] = -boundary_pressure_force;
+                }
             }
         }
     });
@@ -629,6 +632,10 @@ void HinaPE::PCISPHSolverTEMP::_compute_boundary_forces() const {
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
     {
         b_f[i] = bp_f[i] + bf_f[i];
+        if(b_f[i].x()!= 0 && b_f[i].y()!= 0 && b_f[i].z()!= 0)
+        {
+            std::cout << b_f[i] << std::endl;
+        }
     });
 }
 
@@ -650,13 +657,13 @@ void HinaPE::PCISPHSolverTEMP::_compute_rigid_forces_and_torque() const {
         const auto end_index = boundary[i].second;
         Util::parallelFor(start_index, end_index, [&](size_t j)
         {
-            each_rigid.force[i] += b_f[j];
-            each_rigid.torque[i] += b_f[j].cross(b_p[j] - b_o_p[j]);
-            /*if(each_rigid.force[i].x() != 0 || each_rigid.force[i].y() != 0 || each_rigid.force[i].z() != 0)
-            {
-                std::cout << "force:" << each_rigid.force[i] << std::endl;
-                std::cout << "torque:" << each_rigid.torque[i] << std::endl;
-            }*/
+            each_rigid.force[i] += /*mVector3(10,10,10) * */b_f[j];
+            each_rigid.torque[i] += /*mVector3(10,10,10) * */b_f[j].cross(b_p[j] - b_o_p[j]);
+//            if(each_rigid.force[i].x() != 0 || each_rigid.force[i].y() != 0 || each_rigid.force[i].z() != 0)
+//            {
+//                std::cout << "force:" << each_rigid.force[i] << std::endl;
+//                std::cout << "torque:" << each_rigid.torque[i] << std::endl;
+//            }
         });
     });
 }
