@@ -128,8 +128,10 @@ auto main() -> int
 
     solver_rigid->add(bottom, HinaPE::RigidType::Static);
 
-    solver_rigid->add(solver->_sphere);
-    solver_rigid->add(solver->_cube);
+//    solver_rigid->add(solver->_sphere);
+    auto cb = solver_rigid->add(solver->_cube);
+
+	solver->CUBE = cb;
 
     solver_rigid->add(top, HinaPE::RigidType::Static);
     solver_rigid->add(left, HinaPE::RigidType::Static);

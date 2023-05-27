@@ -21,7 +21,7 @@ target_sources(HinaPE_Fluid_Particles
         )
 set_target_properties(HinaPE_Fluid_Particles PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
 target_include_directories(HinaPE_Fluid_Particles PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
-target_link_libraries(HinaPE_Fluid_Particles PUBLIC Kasumi_Render3D)
+target_link_libraries(HinaPE_Fluid_Particles PUBLIC Kasumi_Render3D react-physics)
 
 # APP EXECUTABLE
 add_executable(HinaPE_Fluid_Particles_App main.cpp)

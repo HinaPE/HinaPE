@@ -7,6 +7,8 @@
 #include "emitter/particle_emitter.h"
 #include "neighbor_search/point_neighbor_search.h"
 
+#include "reactphysics3d/reactphysics3d.h"
+
 namespace HinaPE
 {
     class PCISPHSolverTEMP: public Kasumi::INSPECTOR
@@ -31,6 +33,8 @@ namespace HinaPE
         void init();
         void update(real dt);
         void reset();
+
+reactphysics3d::RigidBody * CUBE;
 
         struct Data;
         std::shared_ptr<Data> 					_data;

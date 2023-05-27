@@ -12,7 +12,7 @@ static auto toM(const reactphysics3d::Transform &t) -> Kasumi::Pose { return Kas
 
 HinaPE::RigidSolver::RigidSolver() : world(physicsCommon.createPhysicsWorld()) {}
 
-void HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType type)
+auto HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType type) -> reactphysics3d::RigidBody*
 {
 	auto *rb = world->createRigidBody(toR(object->POSE));
 	rb->setType(toR(type));
@@ -26,6 +26,8 @@ void HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType t
 	}
 	collider->getMaterial().setBounciness(0.9);
 	collider->getMaterial().setFrictionCoefficient(0.01);
+
+	return rb;
 }
 
 void HinaPE::RigidSolver::update(real dt)
@@ -55,11 +57,19 @@ void HinaPE::RigidSolver::apply_force_and_torque(int index, const mVector3 &forc
     rb->applyWorldTorque(toR(torque_world));
 
 
+	if (force_world.x() !=0 || force_world.y() !=0 || force_world.x() !=0) {
+		std::cout << "force_world: " << force_world.x() << ", " << force_world.y() << ", " << force_world.z() << std::endl;
+		std::cout << "torque_world: " << torque_world.x() << ", " << torque_world.y() << ", " << torque_world.z() << std::endl;
+	}
+
 }
 
 void HinaPE::RigidSolver::clear_force_and_torque(int index) {
     reactphysics3d::RigidBody *rb = world->getRigidBody(index);
-    auto zero_force = mVector3 (0);
-    rb->applyWorldForceAtCenterOfMass(toR(zero_force));
-    rb->applyWorldTorque(toR(zero_force));
+//    auto zero_force = mVector3 (0);
+//    rb->applyWorldForceAtCenterOfMass(toR(zero_force));
+//    rb->applyWorldTorque(toR(zero_force));
+
+	rb->resetForce();
+	rb->resetTorque();
 }
