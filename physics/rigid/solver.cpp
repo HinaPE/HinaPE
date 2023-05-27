@@ -56,3 +56,10 @@ void HinaPE::RigidSolver::apply_force_and_torque(int index, const mVector3 &forc
 
 
 }
+
+void HinaPE::RigidSolver::clear_force_and_torque(int index) {
+    reactphysics3d::RigidBody *rb = world->getRigidBody(index);
+    auto zero_force = mVector3 (0);
+    rb->applyWorldForceAtCenterOfMass(toR(zero_force));
+    rb->applyWorldTorque(toR(zero_force));
+}

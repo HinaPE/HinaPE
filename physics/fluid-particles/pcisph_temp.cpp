@@ -632,7 +632,7 @@ void HinaPE::PCISPHSolverTEMP::_compute_boundary_forces() const {
 
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
     {
-        b_f[i] = bp_f[i]/* + bf_f[i]*/;
+        b_f[i] = bp_f[i] + bf_f[i];
     });
 }
 
@@ -654,8 +654,8 @@ void HinaPE::PCISPHSolverTEMP::_compute_rigid_forces_and_torque() const {
         const auto end_index = boundary[i].second;
         Util::parallelFor(start_index, end_index, [&](size_t j)
         {
-            each_rigid.force[i] += /*mVector3(10,10,10) **/ b_f[j];
-            each_rigid.torque[i] += /*mVector3(10,10,10) **/ b_f[j].cross(b_p[j] - _data->Boundary.poses[i]->position);
+            each_rigid.force[i] += /*mVector3(0.1,0.1,0.1) * */b_f[j];
+            each_rigid.torque[i] += /*mVector3(0.1,0.1,0.1) * */b_f[j].cross(b_p[j] - _data->Boundary.poses[i]->position);
 //            if(each_rigid.force[i].x() != 0 || each_rigid.force[i].y() != 0 || each_rigid.force[i].z() != 0)
 //            {
 //                std::cout << "force:" << each_rigid.force[i] << std::endl;
