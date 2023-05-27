@@ -32,7 +32,7 @@ void HinaPE::PCISPHSolverTEMP::init() {
     if (_cube == nullptr)
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
-        cube->POSE.position = mVector3(0, -0.7, 0);
+        cube->POSE.position = mVector3(0, -0.8, 0);
         cube->POSE.euler = mVector3(90, 0, 90);
         cube->POSE.scale = mVector3(0.2, 0.3, 0.2);
         cube->_update_surface();
@@ -596,7 +596,9 @@ void HinaPE::PCISPHSolverTEMP::_accumulate_pressure_force() {
                     mVector3 boundary_pressure_force = -bd[j - fluid_size] * bV[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
                     p_f[i] += boundary_pressure_force;
                     if(b_flag[j - fluid_size])
-                        bp_f[j - fluid_size] = -boundary_pressure_force;
+                    {
+                        bp_f[j - fluid_size] += -boundary_pressure_force;
+                    }
                 }
             }
         }
@@ -625,17 +627,12 @@ void HinaPE::PCISPHSolverTEMP::_compute_boundary_forces() const {
     auto &b_f = _data->Boundary.forces;
 
     const auto &bnl = _data->BoundaryNeighborList;
-    // const auto fluid_size = _data->fluid_size();
+    const auto fluid_size = _data->fluid_size();
     const auto boundary_size = _data->boundary_size();
 
-    //  the total force acting on a boundary particle from its fluid neighbors
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
     {
-        b_f[i] = bp_f[i] + bf_f[i];
-        if(b_f[i].x()!= 0 && b_f[i].y()!= 0 && b_f[i].z()!= 0)
-        {
-            std::cout << b_f[i] << std::endl;
-        }
+        b_f[i] = bp_f[i]/* + bf_f[i]*/;
     });
 }
 
@@ -657,8 +654,8 @@ void HinaPE::PCISPHSolverTEMP::_compute_rigid_forces_and_torque() const {
         const auto end_index = boundary[i].second;
         Util::parallelFor(start_index, end_index, [&](size_t j)
         {
-            each_rigid.force[i] += /*mVector3(10,10,10) * */b_f[j];
-            each_rigid.torque[i] += /*mVector3(10,10,10) * */b_f[j].cross(b_p[j] - b_o_p[j]);
+            each_rigid.force[i] += /*mVector3(10,10,10) **/ b_f[j];
+            each_rigid.torque[i] += /*mVector3(10,10,10) **/ b_f[j].cross(b_p[j] - _data->Boundary.poses[i]->position);
 //            if(each_rigid.force[i].x() != 0 || each_rigid.force[i].y() != 0 || each_rigid.force[i].z() != 0)
 //            {
 //                std::cout << "force:" << each_rigid.force[i] << std::endl;

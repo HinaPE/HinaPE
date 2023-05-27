@@ -125,6 +125,8 @@ namespace HinaPE
             std::vector<mVector3> torque;
         } ForceAndTorque;
 
+        mVector3 F_total_b;
+
         std::vector<std::vector<unsigned int>> 	FluidNeighborList;
         std::vector<std::vector<unsigned int>> 	BoundaryNeighborList;
 

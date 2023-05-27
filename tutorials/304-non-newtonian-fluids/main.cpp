@@ -89,23 +89,23 @@ auto main() -> int
 
     // rigid solver
     auto solver_rigid = std::make_shared<HinaPE::RigidSolver>();
-    solver_rigid->add(solver->_sphere);
-    solver_rigid->add(solver->_cube);
+//    solver_rigid->add(solver->_sphere);
+//    solver_rigid->add(solver->_cube);
 
     auto domain_extent = solver->_domain->_extent;
     auto thickness = 0.1;
 
-    auto top = std::make_shared<Kasumi::CubeObject>();
+    /*auto top = std::make_shared<Kasumi::CubeObject>();
     top->POSE.position.y() = domain_extent.y() + thickness;
     top->POSE.scale = {domain_extent.x(), thickness, domain_extent.z()};
-    top->_update_surface();
+    top->_update_surface();*/
 
     auto bottom = std::make_shared<Kasumi::CubeObject>();
     bottom->POSE.position.y() = -domain_extent.y() - thickness;
     bottom->POSE.scale = {domain_extent.x(), thickness, domain_extent.z()};
     bottom->_update_surface();
 
-    auto left = std::make_shared<Kasumi::CubeObject>();
+    /*auto left = std::make_shared<Kasumi::CubeObject>();
     left->POSE.position.x() = -domain_extent.x() - thickness;
     left->POSE.scale = {thickness, domain_extent.y(), domain_extent.z()};
     left->_update_surface();
@@ -123,14 +123,17 @@ auto main() -> int
     auto back = std::make_shared<Kasumi::CubeObject>();
     back->POSE.position.z() = -domain_extent.z() - thickness;
     back->POSE.scale = {domain_extent.x(), domain_extent.y(), thickness};
-    back->_update_surface();
+    back->_update_surface();*/
 
-    solver_rigid->add(top, HinaPE::RigidType::Static);
+    /*solver_rigid->add(top, HinaPE::RigidType::Static);*/
     solver_rigid->add(bottom, HinaPE::RigidType::Static);
-    solver_rigid->add(left, HinaPE::RigidType::Static);
+    /*solver_rigid->add(left, HinaPE::RigidType::Static);
     solver_rigid->add(right, HinaPE::RigidType::Static);
     solver_rigid->add(front, HinaPE::RigidType::Static);
-    solver_rigid->add(back, HinaPE::RigidType::Static);
+    solver_rigid->add(back, HinaPE::RigidType::Static);*/
+
+    solver_rigid->add(solver->_sphere);
+    solver_rigid->add(solver->_cube);
 
     Kasumi::Renderer3D::DEFAULT_RENDERER._init = [&](const Kasumi::Scene3DPtr &scene)
     {
@@ -147,11 +150,16 @@ auto main() -> int
     {
         solver->update(dt);
         solver_rigid->update(solver->_opt.current_dt);
-        auto rigid_num = solver->_data->Boundary.boundary_sizes.size();
+        auto rigid_num = solver->_data->Boundary.poses.size();
         for(auto i = 0; i < rigid_num; i++)
         {
             auto force = solver->_data->ForceAndTorque.force[i];
             auto torque = solver->_data->ForceAndTorque.torque[i];
+            /*if(force.x()!=0&&force.y()!=0&&force.z()!=0)
+            {
+                std::cout << "Force:" << force << std::endl;
+                std::cout << "Torque:" << torque << std::endl;
+            }*/
             solver_rigid->apply_force_and_torque(i, force, torque);
             //solver_rigid->update(solver->_opt.current_dt);
         }
