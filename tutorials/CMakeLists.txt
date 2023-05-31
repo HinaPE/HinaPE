@@ -9,6 +9,7 @@ add_subdirectory(003-view-3D-math-function)
 add_subdirectory(004-sakura-scattering)
 add_subdirectory(005-deferred-rendering)
 add_subdirectory(006-triangle-mesh-geometry)
+add_subdirectory(007-imterm)
 
 # physics applications
 add_subdirectory(101-simple-freefall)
