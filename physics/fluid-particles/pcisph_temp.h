@@ -26,7 +26,6 @@ namespace HinaPE
         void _correct_velocity_and_position() const;
         void _update_boundary_volume() const;
         void _compute_boundary_forces() const;
-        void _transfer_force_to_center() const;
         void _compute_rigid_forces_and_torque() const;
 
         void _compute_E() const;

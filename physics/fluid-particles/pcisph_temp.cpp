@@ -623,7 +623,6 @@ void HinaPE::PCISPHSolverTEMP::_accumulate_pressure_force() {
         _opt.density_error_too_large = false;
     }
 }
-
 void HinaPE::PCISPHSolverTEMP::_compute_boundary_forces() const {
     const auto &bp_f = _data->Boundary.pressure_forces;
     const auto &bf_f = _data->Boundary.friction_forces;
@@ -635,10 +634,9 @@ void HinaPE::PCISPHSolverTEMP::_compute_boundary_forces() const {
 
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
     {
-        b_f[i] = bp_f[i] + bf_f[i];
+        b_f[i] = 0.4 * bp_f[i] + bf_f[i];
     });
 }
-
 void HinaPE::PCISPHSolverTEMP::_compute_rigid_forces_and_torque() const {
     std::vector<mVector3> world_rigid_center;
     std::vector<mVector3> local_rigid_center;
@@ -646,7 +644,6 @@ void HinaPE::PCISPHSolverTEMP::_compute_rigid_forces_and_torque() const {
     world_rigid_center.resize(num_of_rigid);
     local_rigid_center.resize(num_of_rigid);
     auto &boundary = _data->Boundary.boundary_sizes;
-    const auto &b_p = _data->Boundary.positions;
     const auto &b_o_p = _data->Boundary.positions_origin;
     const auto &b_f = _data->Boundary.forces;
     auto &each_rigid = _data->ForceAndTorque;
@@ -751,7 +748,6 @@ auto HinaPE::PCISPHSolverTEMP::_compute_delta() const -> real
     real beta = 2 * Math::square(_data->Fluid.mass * _opt.current_dt / _opt.target_density);
     return (std::fabs(denom) > 0) ? -1 / (beta * denom) : 0;
 }
-
 void HinaPE::PCISPHSolverTEMP::_resolve_collision() const {
     auto &x = _data->Fluid.positions;
     auto &v = _data->Fluid.velocities;
@@ -762,7 +758,6 @@ void HinaPE::PCISPHSolverTEMP::_resolve_collision() const {
         _domain->resolve_collision(_opt.radius, _opt.restitution, &x[i], &v[i]);
     });
 }
-
 void HinaPE::PCISPHSolverTEMP::reset() {
     _data->reset();
     init();
