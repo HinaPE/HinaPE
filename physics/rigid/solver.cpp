@@ -51,10 +51,8 @@ void HinaPE::RigidSolver::apply_force_and_torque(int index, const mVector3 &forc
     const auto& invOrientation = rotation.getInverse().getMatrix();
     reactphysics3d::Vector3 localTorque = invOrientation * toR(torque_world);*/
 
-    rb->applyWorldForceAtCenterOfMass(toR(force_world));
-    rb->applyWorldTorque(toR(torque_world));
-
-
+    rb->applyLocalForceAtCenterOfMass(toR(force_world));
+    rb->applyLocalTorque(toR(torque_world));
 }
 
 void HinaPE::RigidSolver::clear_force_and_torque(int index) {

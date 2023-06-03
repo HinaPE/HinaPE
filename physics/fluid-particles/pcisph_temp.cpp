@@ -32,9 +32,9 @@ void HinaPE::PCISPHSolverTEMP::init() {
     if (_cube == nullptr)
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
-        cube->POSE.position = mVector3(0, -0.8, 0);
+        cube->POSE.position = mVector3(-1,0.5, 0);
         cube->POSE.euler = mVector3(90, 0, 90);
-        cube->POSE.scale = mVector3(0.2, 0.3, 0.2);
+        cube->POSE.scale = mVector3(0.2, 0.2, 0.2);
         cube->_update_surface();
         _cube = cube;
         _cube->set_color(Color::PURPLE);
@@ -398,7 +398,7 @@ void HinaPE::PCISPHSolverTEMP::update(real dt)
     _correct_velocity_and_position();
 
     // domain collision (?
-     _resolve_collision();
+    _resolve_collision();
 
     // for debug
     _data->Fluid.last_positions = _data->Fluid.positions; // show the position of last frame
@@ -418,6 +418,8 @@ void HinaPE::PCISPHSolverTEMP::_accumulate_non_pressure_force() const
     const auto &b = _data->Boundary.positions;
     const auto &bV = _data->Boundary.volume;
     auto &bf_f = _data->Boundary.friction_forces;
+
+    std::fill(bf_f.begin(), bf_f.end(), mVector3::Zero());
 
     const auto fluid_size = _data->fluid_size();
     //const auto boundary_size = _data->boundary_size();
@@ -576,6 +578,7 @@ void HinaPE::PCISPHSolverTEMP::_accumulate_pressure_force() {
     const auto fluid_size = _data->fluid_size();
     SpikyKernel spiky(_opt.kernel_radius);
     std::fill(p_f.begin(), p_f.end(), mVector3::Zero());
+    std::fill(bp_f.begin(), bp_f.end(), mVector3::Zero());
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         auto &nl = _data->FluidNeighborList;
@@ -637,33 +640,64 @@ void HinaPE::PCISPHSolverTEMP::_compute_boundary_forces() const {
 }
 
 void HinaPE::PCISPHSolverTEMP::_compute_rigid_forces_and_torque() const {
+    std::vector<mVector3> world_rigid_center;
+    std::vector<mVector3> local_rigid_center;
+    auto num_of_rigid = _data->Boundary.poses.size();
+    world_rigid_center.resize(num_of_rigid);
+    local_rigid_center.resize(num_of_rigid);
+    auto &boundary = _data->Boundary.boundary_sizes;
+    const auto &b_p = _data->Boundary.positions;
+    const auto &b_o_p = _data->Boundary.positions_origin;
+    const auto &b_f = _data->Boundary.forces;
+    auto &each_rigid = _data->ForceAndTorque;
+    std::fill(each_rigid.force.begin(), each_rigid.force.end(), mVector3::Zero());
+    std::fill(each_rigid.torque.begin(), each_rigid.torque.end(), mVector3::Zero());
+    Util::parallelFor(Constant::ZeroSize, num_of_rigid, [&](size_t i)
+    {
+        mMatrix4x4 modelMatrix = _data->Boundary.poses[i]->get_model_matrix();
+        mMatrix3x3 rotationMatrix = _data->Boundary.poses[i]->get_rotation_matrix_3();
+        world_rigid_center[i] = _data->Boundary.poses[i]->position;
+        local_rigid_center[i] = rotationMatrix.inversed() * world_rigid_center[i];
+
+        const auto start_index = boundary[i].first;
+        const auto end_index = boundary[i].second;
+        Util::parallelFor(start_index, end_index, [&](size_t j)
+        {
+            // Step 1: 计算相对位置
+            mVector3 relativePosition = b_o_p[j] - local_rigid_center[i];
+            // Step 2: 转换力到局部坐标系
+            mVector3 transformedForce = rotationMatrix.transposed() * b_f[j];
+
+            each_rigid.force[i] += transformedForce;
+            each_rigid.torque[i] += transformedForce.cross(relativePosition);
+        },Util::ExecutionPolicy::Serial);
+    });
+}
+
+/*void HinaPE::PCISPHSolverTEMP::_compute_rigid_forces_and_torque() const {
     mVector3 rigid_force = mVector3::Zero();
     mVector3 rigid_torque = mVector3::Zero();
 
     const auto &b_p = _data->Boundary.positions;
-    const auto &b_o_p = _data->Boundary.positions_origin;
     auto &b_f = _data->Boundary.forces;
     const auto &nl = _data->FluidNeighborList;
     auto &boundary = _data->Boundary.boundary_sizes;
     auto &each_rigid = _data->ForceAndTorque;
 
     auto num_of_rigid = _data->Boundary.poses.size();
+    std::fill(each_rigid.force.begin(), each_rigid.force.end(), mVector3::Zero());
+    std::fill(each_rigid.torque.begin(), each_rigid.torque.end(), mVector3::Zero());
     Util::parallelFor(Constant::ZeroSize, num_of_rigid, [&](size_t i)
     {
         const auto start_index = boundary[i].first;
         const auto end_index = boundary[i].second;
         Util::parallelFor(start_index, end_index, [&](size_t j)
         {
-            each_rigid.force[i] += /*mVector3(0.1,0.1,0.1) * */b_f[j];
-            each_rigid.torque[i] += /*mVector3(0.1,0.1,0.1) * */b_f[j].cross(b_p[j] - _data->Boundary.poses[i]->position);
-//            if(each_rigid.force[i].x() != 0 || each_rigid.force[i].y() != 0 || each_rigid.force[i].z() != 0)
-//            {
-//                std::cout << "force:" << each_rigid.force[i] << std::endl;
-//                std::cout << "torque:" << each_rigid.torque[i] << std::endl;
-//            }
-        });
+            each_rigid.force[i] += b_f[j];
+            each_rigid.torque[i] += b_f[j].cross(b_p[j] - _data->Boundary.poses[i]->position);
+        },Util::ExecutionPolicy::Serial);
     });
-}
+}*/
 void HinaPE::PCISPHSolverTEMP::_correct_velocity_and_position() const {
     auto &x = _data->Fluid.positions;
     auto &v = _data->Fluid.velocities;
@@ -778,6 +812,18 @@ void HinaPE::PCISPHSolverTEMP::INSPECT()
     }
 }
 
+void HinaPE::PCISPHSolverTEMP::_compute_E() const {
+    auto &x = _data->Fluid.positions;
+    auto &v = _data->Fluid.velocities;
+    auto &m = _data->Fluid.mass;
+    auto &rho = _data->Fluid.densities;
+    const auto fluid_size = _data->fluid_size();
+    SpikyKernel spiky(_opt.kernel_radius);
+    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i){
+
+    });
+}
+
 // ================================================== Data ==================================================
 HinaPE::PCISPHSolverTEMP::Data::Data() {
     track(&Fluid.last_positions);
@@ -832,8 +878,8 @@ void HinaPE::PCISPHSolverTEMP::Data::add_boundary(const std::vector<mVector3> &p
     Boundary.forces.insert(Boundary.forces.end(), positions.size(), mVector3::Zero());
     BoundaryNeighborList.insert(BoundaryNeighborList.end(), positions.size(), std::vector<unsigned int>());
 
-    ForceAndTorque.force.insert(ForceAndTorque.force.end(), Boundary.poses.size(), mVector3::Zero());
-    ForceAndTorque.torque.insert(ForceAndTorque.torque.end(), Boundary.poses.size(), mVector3::Zero());
+    ForceAndTorque.force.insert(ForceAndTorque.force.end(), (size_t)1, mVector3::Zero());
+    ForceAndTorque.torque.insert(ForceAndTorque.torque.end(), (size_t)1, mVector3::Zero());
     update_boundary();
 }
 void HinaPE::PCISPHSolverTEMP::Data::reset() {
