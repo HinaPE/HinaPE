@@ -31,6 +31,10 @@ Built-in dependencies
 - [cppnumericalsolvers](https://github.com/PatWie/CppNumericalSolvers.git) (optional): nonlinear solvers
 - [ffmpeg]() (optional): video encoder
 
+Optional dependencies:
+- [OpenVDB](https://github.com/AcademySoftwareFoundation/openvdb.git): sparse volumetric data
+- [CGAL](https://github.com/CGAL/cgal.git): geometry processing
+
 First **<u>recursively</u>** clone this repo and all submodules.
 
 ```shell
@@ -61,6 +65,7 @@ Physics Features
   - PBD/XPBD solver
   - FMS/PD solver
   - FEM solver
+  - powered by [NVCloth](https://github.com/NVIDIAGameWorks/NvCloth.git)
 - Rigidbody Engine
   - powered by [reactphysics3D](https://github.com/DanielChappuis/reactphysics3d.git)
   - powered by [box2D](https://github.com/erincatto/box2d.git)
