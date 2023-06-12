@@ -79,6 +79,7 @@ Rendering Features
 
 You need to first **<u>recursively</u>** update all submodules
 ```git
+git submodule update --init --recursive
 git submodule foreach --recursive git pull origin master
 git submodule foreach --recursive git checkout master
 ```
