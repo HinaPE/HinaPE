@@ -1,3 +1,6 @@
 [submodule "kasumi"]
 	path = kasumi
 	url = https://github.com/HinaPE/Kasumi-renderer.git
+[submodule "physics/cloth/nvcloth"]
+	path = physics/cloth/nvcloth
+	url = https://github.com/Xayah-Hina/ModernNVCloth.git

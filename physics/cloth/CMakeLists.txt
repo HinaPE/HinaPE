@@ -28,6 +28,8 @@ target_compile_definitions(
         -DMyAssetDir="${CMAKE_CURRENT_SOURCE_DIR}/assets/"
 )
 
+add_subdirectory(nvcloth)
+
 # APP EXECUTABLE
 add_executable(HinaPE_Cloth_App main.cpp)
 set_target_properties(HinaPE_Cloth_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
