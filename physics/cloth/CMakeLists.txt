@@ -28,7 +28,9 @@ target_compile_definitions(
         -DMyAssetDir="${CMAKE_CURRENT_SOURCE_DIR}/assets/"
 )
 
-add_subdirectory(nvcloth)
+IF (WIN32)
+    add_subdirectory(nvcloth)
+ENDIF ()
 
 # APP EXECUTABLE
 add_executable(HinaPE_Cloth_App main.cpp)
