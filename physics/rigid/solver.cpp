@@ -12,7 +12,7 @@ static auto toM(const reactphysics3d::Transform &t) -> Kasumi::Pose { return Kas
 
 HinaPE::RigidSolver::RigidSolver() : world(physicsCommon.createPhysicsWorld()) {}
 
-void HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType type)
+auto HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType type) -> reactphysics3d::RigidBody*
 {
 	auto *rb = world->createRigidBody(toR(object->POSE));
 	rb->setType(toR(type));
@@ -26,6 +26,7 @@ void HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType t
 	}
 	collider->getMaterial().setBounciness(0.9);
 	collider->getMaterial().setFrictionCoefficient(0.01);
+	return rb;
 }
 
 void HinaPE::RigidSolver::update(real dt)
