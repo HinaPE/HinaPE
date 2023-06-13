@@ -18,11 +18,11 @@ void HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType t
 	rb->setType(toR(type));
 	_objects.emplace_back(object, rb);
 	reactphysics3d::Collider * collider = nullptr;
-	if (is<Kasumi::SphereObject>(object.get()))
+	if (dynamic_cast<Kasumi::SphereObject *>(object.get()))
 	{
-		collider = rb->addCollider(physicsCommon.createSphereShape(as<Kasumi::SphereObject>(object.get())->_radius), reactphysics3d::Transform::identity());
-	} else if (is<Kasumi::CubeObject>(object.get())) {
-		collider = rb->addCollider(physicsCommon.createBoxShape(toR(as<Kasumi::CubeObject>(object.get())->_extent)), reactphysics3d::Transform::identity());
+		collider = rb->addCollider(physicsCommon.createSphereShape(dynamic_cast<Kasumi::SphereObject *>(object.get())->_radius), reactphysics3d::Transform::identity());
+	} else if (dynamic_cast<Kasumi::CubeObject *>(object.get())) {
+		collider = rb->addCollider(physicsCommon.createBoxShape(toR(dynamic_cast<Kasumi::CubeObject *>(object.get())->_extent)), reactphysics3d::Transform::identity());
 	}
 	collider->getMaterial().setBounciness(0.9);
 	collider->getMaterial().setFrictionCoefficient(0.01);
