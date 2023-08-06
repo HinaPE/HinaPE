@@ -1,13 +1,10 @@
 #include "renderer3D/renderer3D.h"
-#include "fluid-particles/non_newtonian_pcisph_solver.h"
-#include "fluid-particles/pcisph_temp.h"
+#include "fluid-particles/pcisph.h"
 #include "fluid-particles/pcisph_akinci.h"
 #include "rigid/solver.h"
 #include "export_to_xyz.h"
 
-//using SolverType = HinaPE::PCISPHSolverNonNewtonian;
-//using SolverType = HinaPE::PCISPHSolverTEMP;
-using SolverType = HinaPE::PCISPHAkinci;
+using SolverType = HinaPE::PCISPH;
 using SolverDataType = SolverType::Data;
 
 #ifdef WIN32
@@ -35,8 +32,8 @@ struct NeighborViewer : public Kasumi::ObjectParticles3D
             if (neighbor < _data->fluid_size())
                 _neighbors.push_back(_data->Fluid.positions[neighbor]);
             else
-                _neighbors.push_back(_data->Boundary.positions[neighbor - _data->fluid_size()]);
-        _neighbors.push_back(origin);
+                //_neighbors.push_back(_data->Boundary.positions[neighbor - _data->fluid_size()]);
+                _neighbors.push_back(origin);
 
         _shader->uniform("highlight_mode", true);
         _data->hide(true);
@@ -59,7 +56,7 @@ struct NeighborViewer : public Kasumi::ObjectParticles3D
     int iter = 0;
 };
 
-struct BoundaryViewer : public Kasumi::ObjectParticles3D
+/*struct BoundaryViewer : public Kasumi::ObjectParticles3D
 {
 public:
     explicit BoundaryViewer(std::shared_ptr<SolverDataType> data) : _data(std::move(data))
@@ -80,13 +77,13 @@ public:
     }
     std::shared_ptr<SolverDataType> _data;
     std::vector<mVector3> _colors;
-};
+};*/
 
 auto main() -> int
 {
     auto solver = std::make_shared<SolverType>();
     solver->init();
-    auto bv = std::make_shared<BoundaryViewer>(solver->_data);
+    //auto bv = std::make_shared<BoundaryViewer>(solver->_data);
     auto nv = std::make_shared<NeighborViewer>(solver);
 
     // rigid solver
@@ -145,7 +142,7 @@ auto main() -> int
         scene->add(solver->_domain);
         //scene->add(solver->_sphere);
         //scene->add(solver->_cube);
-        scene->add(bv);
+        //scene->add(bv);
         scene->add(nv);
         scene->_scene_opt._particle_mode = true;
     };
@@ -153,33 +150,33 @@ auto main() -> int
     Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
     {
         solver->update(dt);
-        auto rigid_num = solver->_data->Boundary.poses.size();
+        /*auto rigid_num = solver->_data->Boundary.poses.size();
         for(auto i = 0; i < rigid_num; i++)
         {
             //auto force = solver->_data->ForceAndTorque.force[i];
             //auto torque = solver->_data->ForceAndTorque.torque[i];
-            /*if(force.x()!=0&&force.y()!=0&&force.z()!=0)
+            *//*if(force.x()!=0&&force.y()!=0&&force.z()!=0)
             {
                 std::cout << "Force:" << force << std::endl;
                 std::cout << "Torque:" << torque << std::endl;
-            }*/
+            }*//*
             //solver_rigid->apply_force_and_torque(i, force, torque);
-        }
+        }*/
         solver_rigid->update(solver->_opt.current_dt);
-        for(auto i = 0; i < rigid_num; i++)
+        /*for(auto i = 0; i < rigid_num; i++)
         {
             solver_rigid->clear_force_and_torque(i);
-        }
+        }*/
     };
 
     Kasumi::Renderer3D::DEFAULT_RENDERER._key = [&](int key, int scancode, int action, int mods)
     {
         if (key == GLFW_KEY_F5 && action == GLFW_PRESS)
             solver->reset();
-        if (key == GLFW_KEY_Z && action == GLFW_PRESS)
+        /*if (key == GLFW_KEY_Z && action == GLFW_PRESS)
             bv->on();
         if (key == GLFW_KEY_Z && action == GLFW_RELEASE)
-            bv->off();
+            bv->off();*/
         if (key == GLFW_KEY_H && action == GLFW_PRESS)
             nv->on();
         if (key == GLFW_KEY_H && action == GLFW_RELEASE)

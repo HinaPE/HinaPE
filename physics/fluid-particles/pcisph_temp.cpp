@@ -32,7 +32,7 @@ void HinaPE::PCISPHSolverTEMP::init() {
     if (_cube == nullptr)
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
-        cube->POSE.position = mVector3(-1,0.5, 0);
+        cube->POSE.position = mVector3(0, -0.8, 0);
         cube->POSE.euler = mVector3(90, 0, 90);
         cube->POSE.scale = mVector3(0.2, 0.2, 0.2);
         cube->_update_surface();
@@ -398,7 +398,7 @@ void HinaPE::PCISPHSolverTEMP::update(real dt)
     _correct_velocity_and_position();
 
     // domain collision (?
-    _resolve_collision();
+    //_resolve_collision();
 
     // for debug
     _data->Fluid.last_positions = _data->Fluid.positions; // show the position of last frame

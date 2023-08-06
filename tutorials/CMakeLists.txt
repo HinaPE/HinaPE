@@ -27,6 +27,7 @@ add_subdirectory(301-pbf-akinci2012)
 add_subdirectory(302-smoke-fedkiw2001)
 add_subdirectory(303-pcipsh-akinci2012)
 add_subdirectory(304-non-newtonian-fluids)
+add_subdirectory(305-pcisph-simple)
 
 # advanced applications
 add_subdirectory(401-impl-cloud-doba2000)
