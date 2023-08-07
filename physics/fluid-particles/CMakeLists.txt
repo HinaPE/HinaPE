@@ -7,8 +7,8 @@ if (NOT TARGET Kasumi_Render3D)
 endif ()
 
 add_library(HinaPE_Fluid_Particles STATIC)
-file(GLOB headers pbf_solver.h pcisph_solver.h export_to_xyz.h sph_solver.h pbf_solver_new.h pcisph_solver_new.h pcisph_solver_xayah.h pcisph_solver_celeste.h pcisph_solver_new.h domain/*.h emitter/*.h neighbor_search/*.h kernel/*.h boundary/*.h non_newtonian_pcisph_solver.h pcisph_temp.h pcisph.h pcisph_akinci.h)
-file(GLOB sources pbf_solver.cpp pcisph_solver.cpp sph_solver.cpp pbf_solver_new.cpp pcisph_solver_new.cpp pcisph_solver_xayah.cpp pcisph_solver_celeste.cpp pcisph_solver_new.cpp domain/*.cpp emitter/*.cpp neighbor_search/*.cpp kernel/*.cpp boundary/*.cpp non_newtonian_pcisph_solver.cpp pcisph_temp.cpp pcisph.cpp pcisph_akinci.cpp)
+file(GLOB headers pbf_solver.h pcisph_solver.h export_to_xyz.h sph_solver.h pbf_solver_new.h pcisph_solver_new.h pcisph_solver_xayah.h pcisph_solver_celeste.h pcisph_solver_new.h domain/*.h emitter/*.h neighbor_search/*.h kernel/*.h boundary/*.h non_newtonian_pcisph_solver.h pcisph_temp.h pcisph.h pcisph_akinci.h pcisph_akinci_twoway.h)
+file(GLOB sources pbf_solver.cpp pcisph_solver.cpp sph_solver.cpp pbf_solver_new.cpp pcisph_solver_new.cpp pcisph_solver_xayah.cpp pcisph_solver_celeste.cpp pcisph_solver_new.cpp domain/*.cpp emitter/*.cpp neighbor_search/*.cpp kernel/*.cpp boundary/*.cpp non_newtonian_pcisph_solver.cpp pcisph_temp.cpp pcisph.cpp pcisph_akinci.cpp pcisph_akinci_twoway.cpp)
 target_sources(HinaPE_Fluid_Particles
         PRIVATE
         ${sources}

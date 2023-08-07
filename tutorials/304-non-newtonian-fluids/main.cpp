@@ -2,12 +2,14 @@
 #include "fluid-particles/non_newtonian_pcisph_solver.h"
 #include "fluid-particles/pcisph_temp.h"
 #include "fluid-particles/pcisph_akinci.h"
+#include "fluid-particles/pcisph_akinci_twoway.h"
 #include "rigid/solver.h"
 #include "export_to_xyz.h"
 
 //using SolverType = HinaPE::PCISPHSolverNonNewtonian;
 //using SolverType = HinaPE::PCISPHSolverTEMP;
-using SolverType = HinaPE::PCISPHAkinci;
+//using SolverType = HinaPE::PCISPHAkinci;
+using SolverType = HinaPE::PCISPHAkinciTwoWay;
 using SolverDataType = SolverType::Data;
 
 #ifdef WIN32
@@ -91,8 +93,7 @@ auto main() -> int
 
     // rigid solver
     auto solver_rigid = std::make_shared<HinaPE::RigidSolver>();
-//    solver_rigid->add(solver->_sphere);
-//    solver_rigid->add(solver->_cube);
+    solver_rigid->add(solver->_cube);
 
     auto domain_extent = solver->_domain->_extent;
     auto thickness = 0.1;
@@ -127,12 +128,9 @@ auto main() -> int
     back->POSE.scale = {domain_extent.x(), domain_extent.y(), thickness};
     back->_update_surface();
 
+    solver_rigid->add(solver->_cube);
 
     solver_rigid->add(bottom, HinaPE::RigidType::Static);
-
-//    solver_rigid->add(solver->_sphere);
-//    solver_rigid->add(solver->_cube);
-
     solver_rigid->add(top, HinaPE::RigidType::Static);
     solver_rigid->add(left, HinaPE::RigidType::Static);
     solver_rigid->add(right, HinaPE::RigidType::Static);
@@ -144,7 +142,7 @@ auto main() -> int
         scene->add(solver->_data);
         scene->add(solver->_domain);
         //scene->add(solver->_sphere);
-        //scene->add(solver->_cube);
+        scene->add(solver->_cube);
         scene->add(bv);
         scene->add(nv);
         scene->_scene_opt._particle_mode = true;
@@ -153,23 +151,23 @@ auto main() -> int
     Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
     {
         solver->update(dt);
-        auto rigid_num = solver->_data->Boundary.poses.size();
+        /*auto rigid_num = solver->_data->Boundary.poses.size();
         for(auto i = 0; i < rigid_num; i++)
         {
-            //auto force = solver->_data->ForceAndTorque.force[i];
-            //auto torque = solver->_data->ForceAndTorque.torque[i];
-            /*if(force.x()!=0&&force.y()!=0&&force.z()!=0)
+            auto force = solver->_data->ForceAndTorque.force[i];
+            auto torque = solver->_data->ForceAndTorque.torque[i];
+            *//*if(force.x()!=0&&force.y()!=0&&force.z()!=0)
             {
                 std::cout << "Force:" << force << std::endl;
                 std::cout << "Torque:" << torque << std::endl;
-            }*/
-            //solver_rigid->apply_force_and_torque(i, force, torque);
+            }*//*
+            solver_rigid->apply_force_and_torque(i, force, torque);
         }
         solver_rigid->update(solver->_opt.current_dt);
         for(auto i = 0; i < rigid_num; i++)
         {
             solver_rigid->clear_force_and_torque(i);
-        }
+        }*/
     };
 
     Kasumi::Renderer3D::DEFAULT_RENDERER._key = [&](int key, int scancode, int action, int mods)
