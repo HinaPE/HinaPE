@@ -30,6 +30,8 @@ void HinaPE::PCISPHAkinciTwoWay::init() {
     _init_fluid_particles();
     _init_boundary_particles();
     _init_collider();
+    _compute_rest_mass_center();
+
 }
 
 void HinaPE::PCISPHAkinciTwoWay::_init_fluid_particles() const
@@ -86,7 +88,6 @@ void HinaPE::PCISPHAkinciTwoWay::_init_boundary_particles() const {
     // update mass
     _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
     _init_boundary_volume();
-    _compute_rest_mass_center();
 }
 
 void HinaPE::PCISPHAkinciTwoWay::_init_boundary_volume() const {
@@ -151,7 +152,6 @@ void HinaPE::PCISPHAkinciTwoWay::_init_collider() const
         _data->Boundary.IsActive.insert(_data->Boundary.IsActive.end(), target_boundary.size(), true);
         _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
         _init_boundary_volume();
-        _compute_rest_mass_center();
     }
 }
 
@@ -646,6 +646,10 @@ void HinaPE::PCISPHAkinciTwoWay::_compute_rest_mass_center() const {
     auto &b_v = _data->Boundary.volume;
     auto &boundary= _data->Boundary.boundary_sizes;
     auto num_of_rigid = _data->Boundary.poses.size();
+
+    real diam = 2 * _opt.radius;
+    real volume = static_cast<real>(0.8) * diam * diam * diam;
+
     Util::parallelFor(Constant::ZeroSize, num_of_rigid, [&](size_t i)
     {
         real sum_mass = 0.0;
@@ -655,9 +659,9 @@ void HinaPE::PCISPHAkinciTwoWay::_compute_rest_mass_center() const {
 
         for (size_t j = start_index; j < end_index; ++j)
         {
-            real mass = b_v[i] * _opt.target_density;
+            real mass = volume * _opt.target_density;
             sum_mass += mass;
-            center_of_mass += _data->Boundary.positions[i] * mass;
+            center_of_mass += _data->Boundary.positions_origin[j] * mass;
         }
         center_of_mass /= sum_mass;
         _data->CenterOfMass[i] = center_of_mass;
@@ -668,6 +672,9 @@ mVector3 HinaPE::PCISPHAkinciTwoWay::_compute_mass_center(size_t i) const {
     real sum_mass = 0.0;
     mVector3 center_of_mass(0.0, 0.0, 0.0);
 
+    real diam = 2 * _opt.radius;
+    real volume = static_cast<real>(0.8) * diam * diam * diam;
+
     auto &b_v = _data->Boundary.volume;
     auto &boundary= _data->Boundary.boundary_sizes;
     const auto start_index = boundary[i].first;
@@ -675,9 +682,9 @@ mVector3 HinaPE::PCISPHAkinciTwoWay::_compute_mass_center(size_t i) const {
 
     for (size_t j = start_index; j < end_index; ++j)
     {
-        real mass = b_v[i] * _opt.target_density;
+        real mass = volume * _opt.target_density;
         sum_mass += mass;
-        center_of_mass += _data->Boundary.positions[i] * mass;
+        center_of_mass += _data->Boundary.positions[j] * mass;
     }
     center_of_mass /= sum_mass;
     return center_of_mass;
@@ -687,19 +694,25 @@ mMatrix3x3 HinaPE::PCISPHAkinciTwoWay::solve_constraints(size_t i) const {
     mVector3 center_of_mass = _compute_mass_center(i);
     mMatrix3x3 A = mMatrix3x3::Zero();
 
+    real diam = 2 * _opt.radius;
+    real volume = static_cast<real>(0.8) * diam * diam * diam;
+
     auto &b_v = _data->Boundary.volume;
     auto &boundary = _data->Boundary.boundary_sizes;
     auto &is_active = _data->Boundary.IsActive;
+
     const auto start_index = boundary[i].first;
     const auto end_index = boundary[i].second;
 
     for (size_t j = start_index; j < end_index; ++j)
     {
         auto x_0 = _data->Boundary.positions_origin[j];
+        const auto m = _data->Boundary.poses[i]->get_model_matrix();
+        auto x_0_world = (m * mVector4(x_0.x(), x_0.y(), x_0.z(), 1)).xyz();
         auto x = _data->Boundary.positions[j];
-        mVector3 q = x_0 - _data->CenterOfMass[i];
+        mVector3 q = x_0_world - _data->CenterOfMass[i];
         mVector3 p = x - center_of_mass;
-        A = A + b_v[i] * _opt.target_density * _compute_outer_product(p, q);
+        A = A + volume * _opt.target_density * _compute_outer_product(p, q);
     }
 
     Eigen::Matrix3d eigenA;
@@ -725,7 +738,9 @@ mMatrix3x3 HinaPE::PCISPHAkinciTwoWay::solve_constraints(size_t i) const {
         {
             auto x_0 = _data->Boundary.positions_origin[j];
             auto x = _data->Boundary.positions[j];
-            mVector3 goal = center_of_mass + mR * (x_0 - _data->CenterOfMass[i]);
+            const auto m = _data->Boundary.poses[i]->get_model_matrix();
+            auto x_0_world = (m * mVector4(x_0.x(), x_0.y(), x_0.z(), 1)).xyz();
+            mVector3 goal = center_of_mass + mR * (x_0_world - _data->CenterOfMass[i]);
             mVector3 corr = (goal - x) * 1.0;
             _data->Boundary.positions[j] += corr;
         }
