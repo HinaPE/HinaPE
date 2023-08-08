@@ -170,11 +170,10 @@ void HinaPE::PCISPHAkinciTwoWay::update(real dt)
     _initialize_pressure_and_pressure_force();
     // algorithm line 8~17
     _prediction_correction_step();
-
-    _solve_rigid_body();
-
     // algorithm line 18~20
     _correct_velocity_and_position();
+
+    _solve_rigid_body();
 
     //_resolve_collision();
 
@@ -510,6 +509,18 @@ void HinaPE::PCISPHAkinciTwoWay::_correct_velocity_and_position() const {
         v[i] += dt * (f[i] + p_f[i]) / m;
         x[i] += dt * v[i];
     });
+
+    _compute_boundary_forces();
+    const auto boundary_size = _data->boundary_size();
+    auto &b_x = _data->Boundary.positions;
+    auto &b_v = _data->Boundary.velocities;
+    auto &b_f = _data->Boundary.forces;
+    auto &b_vo = _data->Boundary.volume;
+    Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i)
+    {
+        b_v[i] += dt * b_f[i] / (b_vo[i] * _opt.target_density);
+        b_x[i] += dt * b_v[i];
+    });
 }
 
 void HinaPE::PCISPHAkinciTwoWay::_resolve_collision() const {
@@ -566,6 +577,7 @@ void HinaPE::PCISPHAkinciTwoWay::_compute_boundary_forces() const {
     const auto &bp_f = _data->Boundary.pressure_forces;
     const auto &bf_f = _data->Boundary.friction_forces;
     auto &b_f = _data->Boundary.forces;
+    auto &b_vo = _data->Boundary.volume;
     const auto boundary_size = _data->boundary_size();
 
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
@@ -735,8 +747,6 @@ auto HinaPE::PCISPHAkinciTwoWay::_compute_outer_product(mVector3 p, mVector3 q) 
     return result;
 }
 
-
-
 // ================================================== Data ==================================================
 
 HinaPE::PCISPHAkinciTwoWay::Data::Data() {
@@ -771,6 +781,7 @@ void HinaPE::PCISPHAkinciTwoWay::Data::reset() {
 
     Boundary.positions.clear();
     Boundary.positions_origin.clear();
+    Boundary.velocities.clear();
     Boundary.volume.clear();
 
     Boundary.forces.clear();
@@ -823,6 +834,7 @@ void HinaPE::PCISPHAkinciTwoWay::Data::add_boundary(const std::vector<mVector3> 
     Boundary.poses.push_back(pose);
     Boundary.boundary_sizes.emplace_back(start, end);
     Boundary.positions.resize(Boundary.positions_origin.size());
+    Boundary.velocities.insert(Boundary.velocities.end(), positions.size(), mVector3::Zero());
     Boundary.pressure_forces.insert(Boundary.pressure_forces.end(), positions.size(), mVector3::Zero());
     Boundary.friction_forces.insert(Boundary.friction_forces.end(), positions.size(), mVector3::Zero());
     Boundary.forces.insert(Boundary.forces.end(), positions.size(), mVector3::Zero());

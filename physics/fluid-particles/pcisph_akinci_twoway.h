@@ -110,6 +110,7 @@ namespace HinaPE
         {
             std::vector<mVector3> 	positions;
             std::vector<mVector3> 	positions_origin;
+            std::vector<mVector3> 	velocities;
             std::vector<real>		volume;
 
             std::vector<mVector3> 	pressure_forces;
