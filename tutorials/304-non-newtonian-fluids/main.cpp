@@ -128,12 +128,8 @@ auto main() -> int
     back->POSE.scale = {domain_extent.x(), domain_extent.y(), thickness};
     back->_update_surface();
 
-
-
+    reactphysics3d::RigidBody* MyCube = solver_rigid->add(solver->_cube);
     solver_rigid->add(bottom, HinaPE::RigidType::Static);
-
-    solver_rigid->add(solver->_cube);
-
     solver_rigid->add(top, HinaPE::RigidType::Static);
     solver_rigid->add(left, HinaPE::RigidType::Static);
     solver_rigid->add(right, HinaPE::RigidType::Static);
@@ -154,23 +150,11 @@ auto main() -> int
     Kasumi::Renderer3D::DEFAULT_RENDERER._step = [&](real dt)
     {
         solver->update(dt);
-        auto rigid_num = solver->_data->Boundary.poses.size();
-        for(auto i = 0; i < rigid_num; i++)
-        {
-            auto force = solver->_data->ForceAndTorque.force[i];
-            auto torque = solver->_data->ForceAndTorque.torque[i];
-            /*if(force.x()!=0&&force.y()!=0&&force.z()!=0)
-            {
-                std::cout << "Force:" << force << std::endl;
-                std::cout << "Torque:" << torque << std::endl;
-            }*/
-            solver_rigid->apply_force_and_torque(i, force, torque);
-        }
+        auto force = solver->_data->ForceAndTorque.force[1];
+        auto torque = solver->_data->ForceAndTorque.torque[1];
+        solver_rigid->apply_force_and_torque(MyCube, force, torque);
         solver_rigid->update(solver->_opt.current_dt);
-        for(auto i = 0; i < rigid_num; i++)
-        {
-            solver_rigid->clear_force_and_torque(i);
-        }
+        solver_rigid->clear_force_and_torque(MyCube);
     };
 
     Kasumi::Renderer3D::DEFAULT_RENDERER._key = [&](int key, int scancode, int action, int mods)

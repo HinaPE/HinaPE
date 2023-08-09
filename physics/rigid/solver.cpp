@@ -15,6 +15,7 @@ HinaPE::RigidSolver::RigidSolver() : world(physicsCommon.createPhysicsWorld()) {
 auto HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType type) -> reactphysics3d::RigidBody*
 {
 	auto *rb = world->createRigidBody(toR(object->POSE));
+    rb->setMass(5);
 	rb->setType(toR(type));
 	_objects.emplace_back(object, rb);
 	reactphysics3d::Collider * collider = nullptr;
@@ -40,25 +41,14 @@ void HinaPE::RigidSolver::update(real dt)
 	}
 }
 
-void HinaPE::RigidSolver::apply_force_and_torque(int index, const mVector3 &force_world, const mVector3 &torque_world)
+void HinaPE::RigidSolver::apply_force_and_torque(reactphysics3d::RigidBody* rigid, const mVector3 &force_world, const mVector3 &torque_world)
 {
-    reactphysics3d::RigidBody *rb = world->getRigidBody(index);
-
-    /*const auto& transform = rb->getTransform();
-    const auto& position = transform.getPosition();
-    const auto& rotation = transform.getOrientation();
-    reactphysics3d::Vector3 localForce = rotation.getInverse() * toR(force_world);
-
-    const auto& invOrientation = rotation.getInverse().getMatrix();
-    reactphysics3d::Vector3 localTorque = invOrientation * toR(torque_world);*/
-
-    rb->applyLocalForceAtCenterOfMass(toR(force_world));
-    rb->applyLocalTorque(toR(torque_world));
+    rigid->applyWorldForceAtCenterOfMass(toR(force_world));
+    rigid->applyWorldTorque(toR(torque_world));
 }
 
-void HinaPE::RigidSolver::clear_force_and_torque(int index) {
-    reactphysics3d::RigidBody *rb = world->getRigidBody(index);
+void HinaPE::RigidSolver::clear_force_and_torque(reactphysics3d::RigidBody* rigid) {
     auto zero_force = mVector3 (0);
-    rb->applyWorldForceAtCenterOfMass(toR(zero_force));
-    rb->applyWorldTorque(toR(zero_force));
+    rigid->applyWorldForceAtCenterOfMass(toR(zero_force));
+    rigid->applyWorldTorque(toR(zero_force));
 }

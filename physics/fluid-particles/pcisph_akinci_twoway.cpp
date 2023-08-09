@@ -17,7 +17,8 @@ void HinaPE::PCISPHAkinciTwoWay::init() {
     if (_cube == nullptr)
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
-        cube->POSE.position = mVector3(0, -0.8, 0);
+        //cube->POSE.position = mVector3(0, -0.8, 0);
+        cube->POSE.position = mVector3(-0.9, 0.4, 0);
         cube->POSE.euler = mVector3(90, 0, 90);
         cube->POSE.scale = mVector3(0.2, 0.2, 0.2);
         cube->_update_surface();
@@ -30,8 +31,7 @@ void HinaPE::PCISPHAkinciTwoWay::init() {
     _init_fluid_particles();
     _init_boundary_particles();
     _init_collider();
-    _compute_rest_mass_center();
-
+    //_compute_rest_mass_center();
 }
 
 void HinaPE::PCISPHAkinciTwoWay::_init_fluid_particles() const
