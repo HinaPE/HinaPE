@@ -17,7 +17,7 @@ void HinaPE::PCISPHAkinciTwoWay::init() {
     if (_cube == nullptr)
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
-        cube->POSE.position = mVector3(0, -0.7, 0);
+        cube->POSE.position = mVector3(0, -0.8, 0);
         cube->POSE.euler = mVector3(90, 0, 90);
         cube->POSE.scale = mVector3(0.2, 0.2, 0.2);
         cube->_update_surface();
@@ -170,12 +170,16 @@ void HinaPE::PCISPHAkinciTwoWay::update(real dt)
     _initialize_pressure_and_pressure_force();
     // algorithm line 8~17
     _prediction_correction_step();
+
+    _compute_boundary_forces();
+    _compute_rigid_forces_and_torque();
+
     // algorithm line 18~20
     _correct_velocity_and_position();
 
-    _solve_rigid_body();
+    //_solve_rigid_body();
 
-    //_resolve_collision();
+    _resolve_collision();
 
     // for debug
     _data->Fluid.last_positions = _data->Fluid.positions; // show the position of last frame
@@ -510,7 +514,7 @@ void HinaPE::PCISPHAkinciTwoWay::_correct_velocity_and_position() const {
         x[i] += dt * v[i];
     });
 
-    _compute_boundary_forces();
+    /*_compute_boundary_forces();
     const auto boundary_size = _data->boundary_size();
     auto &b_x = _data->Boundary.positions;
     auto &b_v = _data->Boundary.velocities;
@@ -520,7 +524,7 @@ void HinaPE::PCISPHAkinciTwoWay::_correct_velocity_and_position() const {
     {
         b_v[i] += dt * b_f[i] / (b_vo[i] * _opt.target_density);
         b_x[i] += dt * b_v[i];
-    });
+    });*/
 }
 
 void HinaPE::PCISPHAkinciTwoWay::_resolve_collision() const {
@@ -583,6 +587,36 @@ void HinaPE::PCISPHAkinciTwoWay::_compute_boundary_forces() const {
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
     {
         b_f[i] = bp_f[i] + bf_f[i];
+    });
+}
+
+void HinaPE::PCISPHAkinciTwoWay::_compute_rigid_forces_and_torque() const{
+    auto &each_rigid = _data->ForceAndTorque;
+    auto num_of_rigid = _data->Boundary.poses.size();
+    auto &boundary = _data->Boundary.boundary_sizes;
+    auto &b_f = _data->Boundary.forces;
+
+    real diam = 2 * _opt.radius;
+    real volume = static_cast<real>(0.8) * diam * diam * diam;
+
+    std::fill(each_rigid.force.begin(), each_rigid.force.end(), mVector3::Zero());
+    std::fill(each_rigid.torque.begin(), each_rigid.torque.end(), mVector3::Zero());
+    Util::parallelFor(Constant::ZeroSize, num_of_rigid, [&](size_t i)
+    {
+        const auto start_index = boundary[i].first;
+        const auto end_index = boundary[i].second;
+
+        real sum_mass = 0.0;
+        mVector3 center_of_mass(0.0, 0.0, 0.0);
+
+        Util::parallelFor(start_index, end_index, [&](size_t j)
+        {
+            /*real mass = volume * _opt.target_density;
+            sum_mass += mass;
+            center_of_mass += _data->Boundary.positions[j] * mass;*/
+            each_rigid.force[i] += b_f[j];
+            each_rigid.torque[i] += (b_f[j]).cross(_data->Boundary.positions[j] - _data->Boundary.poses[i]->position);
+        },Util::ExecutionPolicy::Serial);
     });
 }
 

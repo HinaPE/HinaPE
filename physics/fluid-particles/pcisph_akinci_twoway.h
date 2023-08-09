@@ -27,6 +27,7 @@ namespace HinaPE
         void _update_boundary_neighbor() const;
         void _update_boundary_volume() const;
         void _compute_boundary_forces() const;
+        void _compute_rigid_forces_and_torque() const;
 
         void _solve_rigid_body() const;
         void _compute_rest_mass_center() const;
