@@ -65,6 +65,8 @@ namespace HinaPE
             real vorticity 			= 0.00001;
             real speed_of_sound 	= 100;
 
+            real epsilon = 0.01;
+
             // PCISPH options
             real min_loop = 3;
             real max_loop = 50;

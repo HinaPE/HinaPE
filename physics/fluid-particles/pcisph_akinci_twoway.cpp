@@ -18,7 +18,7 @@ void HinaPE::PCISPHAkinciTwoWay::init() {
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
         //cube->POSE.position = mVector3(0, -0.8, 0);
-        cube->POSE.position = mVector3(-0.9, 0.4, 0);
+        cube->POSE.position = mVector3(-0.9, 0.5, 0);
         cube->POSE.euler = mVector3(90, 0, 90);
         cube->POSE.scale = mVector3(0.2, 0.2, 0.2);
         cube->_update_surface();
@@ -325,14 +325,46 @@ void HinaPE::PCISPHAkinciTwoWay::_accumulate_non_pressure_force() const
     });
 
     // Viscosity Forces
-    /*Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+//    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+//    {
+//        auto &nl = _data->FluidNeighborList;
+//        for (size_t j: nl[i])
+//        {
+//            real dist = (x[i] - x[j]).length();
+//            if (d[j] > HinaPE::Constant::Epsilon)
+//                f[i] += _opt.viscosity * m * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
+//
+//        }
+//    });
+    /*const auto &b = _data->Boundary.positions;
+    const auto &bv = _data->Boundary.velocities;
+    const auto &bV = _data->Boundary.volume;
+    auto &bf_f = _data->Boundary.friction_forces;
+    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         auto &nl = _data->FluidNeighborList;
         for (size_t j: nl[i])
         {
-            real dist = (x[i] - x[j]).length();
-            if (d[j] > HinaPE::Constant::Epsilon)
-                f[i] += _opt.viscosity * m * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
+            if (j < fluid_size) {
+                // real nu = _opt.viscosity(?) * _opt.kernel_radius * _opt.speed_of_sound / (d[i] + d[j]); // ? maybe equal to _opt.viscosity
+                auto pi = -_opt.viscosity * (v[i] - v[j]).dot(x[i] - x[j]) /
+                          ((x[i] - x[j]).squared_norm() + _opt.epsilon * _opt.kernel_radius * _opt.kernel_radius);
+                real dist = (x[i] - x[j]).length();
+                if (d[j] > HinaPE::Constant::Epsilon)
+                    f[i] += m * m * pi * poly6.second_derivative(dist);
+            }else{
+                auto pi = -_opt.viscosity * (v[i] - v[j - fluid_size]).dot(x[i] - x[j - fluid_size]) /
+                          ((x[i] - x[j - fluid_size]).squared_norm() + _opt.epsilon * _opt.kernel_radius * _opt.kernel_radius); // wrong
+                real dist = (x[i] - b[j - fluid_size]).length();
+                mVector3 boundary_viscosity_force;
+                if (d[j] > HinaPE::Constant::Epsilon)
+                {
+                    //f[i] += _opt.viscosity * bm[j - fluid_size] * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
+                    boundary_viscosity_force = - bV[j - fluid_size] * _opt.target_density * m * pi * poly6.second_derivative(dist); // ??
+                    f[i] += boundary_viscosity_force;
+                    bf_f[j - fluid_size] += -boundary_viscosity_force;
+                }
+            }
         }
     });*/
 }
@@ -451,11 +483,14 @@ void HinaPE::PCISPHAkinciTwoWay::_accumulate_pressure_force() {
     auto &d_e = _data->Fluid.density_errors;
     auto &d_p = _data->Fluid.predicted_densities;
     auto &m = _data->Fluid.mass;
+    auto &v = _data->Fluid.velocities;
     const auto fluid_size = _data->fluid_size();
 
     const auto &b = _data->Boundary.positions;
     auto &bp_f = _data->Boundary.pressure_forces;
+    auto &bf_f = _data->Boundary.friction_forces;
     auto &b_v = _data->Boundary.volume;
+    auto &vb = _data->Boundary.velocities;
 
     SpikyKernel spiky(_opt.kernel_radius);
     std::fill(p_f.begin(), p_f.end(), mVector3::Zero());
@@ -478,6 +513,12 @@ void HinaPE::PCISPHAkinciTwoWay::_accumulate_pressure_force() {
                 mVector3 boundary_pressure_force = -_opt.target_density * b_v[j - fluid_size] * m * (p[i] / (d_p[i] * d_p[i]) + p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
                 p_f[i] += boundary_pressure_force;
                 bp_f[j - fluid_size] = -boundary_pressure_force;
+
+                /*auto pi = -_opt.viscosity * (v[i] - vb[j - fluid_size]).dot(x_p[i] - b[j - fluid_size]) /
+                          ((x_p[i] - b[j - fluid_size]).squared_norm() + _opt.epsilon * _opt.kernel_radius * _opt.kernel_radius);
+                mVector3 boundary_friction_force = -_opt.target_density * b_v[j - fluid_size] * m * pi * (p[i] / (d_p[i] * d_p[i]) + p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
+                p_f[i] += boundary_friction_force;
+                bf_f[j - fluid_size] = -boundary_friction_force;*/
             }
         }
     });
@@ -795,7 +836,6 @@ auto HinaPE::PCISPHAkinciTwoWay::_compute_outer_product(mVector3 p, mVector3 q) 
     result(2, 2) = p.z() * q.z();
     return result;
 }
-
 // ================================================== Data ==================================================
 
 HinaPE::PCISPHAkinciTwoWay::Data::Data() {
