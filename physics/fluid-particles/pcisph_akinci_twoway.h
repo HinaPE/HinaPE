@@ -29,6 +29,8 @@ namespace HinaPE
         void _compute_boundary_forces() const;
         void _compute_rigid_forces_and_torque() const;
 
+        void _update_delta_t();
+
         void _solve_rigid_body() const;
         void _compute_rest_mass_center() const;
         mVector3 _compute_mass_center(size_t i) const;
@@ -69,7 +71,7 @@ namespace HinaPE
 
             // PCISPH options
             real min_loop = 3;
-            real max_loop = 50;
+            real max_loop = 3;
             real max_density_error_ratio = 0.01;
             bool density_error_too_large = false;
 

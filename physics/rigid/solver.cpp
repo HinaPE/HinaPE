@@ -15,7 +15,7 @@ HinaPE::RigidSolver::RigidSolver() : world(physicsCommon.createPhysicsWorld()) {
 auto HinaPE::RigidSolver::add(const Kasumi::ObjectMesh3DPtr &object, RigidType type) -> reactphysics3d::RigidBody*
 {
 	auto *rb = world->createRigidBody(toR(object->POSE));
-    rb->setMass(8);
+    rb->setMass(10);
 	rb->setType(toR(type));
 	_objects.emplace_back(object, rb);
 	reactphysics3d::Collider * collider = nullptr;

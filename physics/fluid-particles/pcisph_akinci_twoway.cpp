@@ -177,6 +177,8 @@ void HinaPE::PCISPHAkinciTwoWay::update(real dt)
     // algorithm line 18~20
     _correct_velocity_and_position();
 
+    _update_delta_t();
+
     //_solve_rigid_body();
 
     _resolve_collision();
@@ -661,6 +663,21 @@ void HinaPE::PCISPHAkinciTwoWay::_compute_rigid_forces_and_torque() const{
     });
 }
 
+void HinaPE::PCISPHAkinciTwoWay::_update_delta_t() {
+    // Compute max density error
+    real maxForce = 0.0;
+    real maxVelocity = 0.0;
+    auto &f = _data->Fluid.non_pressure_forces;
+    auto &p_f = _data->Fluid.pressure_forces;
+    auto &v = _data->Fluid.velocities;
+    for (int i = 0; i < _data->fluid_size(); ++i)
+    {
+        maxForce = std::max(maxForce, std::abs((p_f[i] + f[i]).norm()));
+        maxVelocity = std::max(maxVelocity, std::abs(v[i].norm()));
+    }
+    _opt.current_dt = std::min(0.2 * sqrt(_opt.kernel_radius / maxForce), 0.25 * _opt.kernel_radius / maxVelocity);
+}
+
 void HinaPE::PCISPHAkinciTwoWay::reset() {
     _data->reset();
     init();
@@ -836,6 +853,7 @@ auto HinaPE::PCISPHAkinciTwoWay::_compute_outer_product(mVector3 p, mVector3 q) 
     result(2, 2) = p.z() * q.z();
     return result;
 }
+
 // ================================================== Data ==================================================
 
 HinaPE::PCISPHAkinciTwoWay::Data::Data() {
