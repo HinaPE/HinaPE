@@ -1,5 +1,5 @@
-#ifndef HINAPE_PCISPH_AKINCI_TWOWAY_H
-#define HINAPE_PCISPH_AKINCI_TWOWAY_H
+#ifndef HINAPE_PCISPH_AKINCI_REMAKE_H
+#define HINAPE_PCISPH_AKINCI_REMAKE_H
 
 #include "domain/box_domain.h"
 #include "domain/sphere_domain.h"
@@ -9,7 +9,7 @@
 
 namespace HinaPE
 {
-    class PCISPHAkinciTwoWay: public Kasumi::INSPECTOR
+    class PCISPHAkinciRe: public Kasumi::INSPECTOR
     {
     protected:
         void _update_fluid_neighbor() const;
@@ -22,19 +22,10 @@ namespace HinaPE
         void _predict_density() const;
         void _update_pressure();
         void _accumulate_pressure_force();
-        void _correct_velocity_and_position();
+        void _correct_velocity_and_position() const;
 
         void _update_boundary_neighbor() const;
         void _update_boundary_volume() const;
-        void _compute_boundary_forces() const;
-        void _compute_rigid_forces_and_torque() const;
-
-        void _update_delta_t();
-
-        void _solve_rigid_body() const;
-        void _compute_rest_mass_center() const;
-        mVector3 _compute_mass_center(size_t i) const;
-        mMatrix3x3 solve_constraints(size_t i) const;
     public:
         void init();
         void update(real dt);
@@ -67,20 +58,9 @@ namespace HinaPE
             real vorticity 			= 0.00001;
             real speed_of_sound 	= 100;
 
-            real epsilon = 0.01;
-
-            real _maxVelocity;
-            real _maxForce;
-            real _maxDensityVariation;
-            real _avgDensityVariation;
-            real _compressionThreshold = 0.01;
-            real _avgDensityVariationThreshold = _compressionThreshold * target_density;
-            real _maxDensityVariationThreshold = _avgDensityVariationThreshold * 10.f;
-            real _prevMaxDensityVariation = 1000.f;
-
             // PCISPH options
             real min_loop = 3;
-            real max_loop = 3;
+            real max_loop = 50;
             real max_density_error_ratio = 0.01;
             bool density_error_too_large = false;
 
@@ -90,13 +70,11 @@ namespace HinaPE
         void _init_fluid_particles() const;
         void _init_boundary_particles() const;
         void _init_boundary_volume() const;
-        void _init_collider() const;
         auto _compute_delta() const -> real;
-        static auto _compute_outer_product(mVector3 p, mVector3 q) -> mMatrix3x3;
         void INSPECT() override;
     };
 
-    struct PCISPHAkinciTwoWay::Data : public Kasumi::ObjectParticles3D
+    struct PCISPHAkinciRe::Data : public Kasumi::ObjectParticles3D
     {
         struct // fluid particles
         {
@@ -124,28 +102,18 @@ namespace HinaPE
         {
             std::vector<mVector3> 	positions;
             std::vector<mVector3> 	positions_origin;
-            std::vector<mVector3> 	velocities;
             std::vector<real>		volume;
 
             std::vector<mVector3> 	pressure_forces;
             std::vector<mVector3> 	friction_forces;
             std::vector<mVector3> 	forces;
 
-            std::vector<bool> 	    IsActive;
-
             std::vector<const Kasumi::Pose*> 		poses;
             std::vector<std::pair<size_t, size_t>> 	boundary_sizes;
         } Boundary;
 
-        std::vector<mVector3>   CenterOfMass;
-
         std::vector<std::vector<unsigned int>> 	FluidNeighborList;
         std::vector<std::vector<unsigned int>> 	BoundaryNeighborList;
-
-        struct{
-            std::vector<mVector3> force;
-            std::vector<mVector3> torque;
-        } ForceAndTorque;
 
         explicit Data();
         void add_fluid(const std::vector<mVector3>& positions, const std::vector<mVector3>& velocities);
@@ -163,4 +131,5 @@ namespace HinaPE
         // ==================== Debug Area ====================
     };
 }
-#endif //HINAPE_PCISPH_AKINCI_TWOWAY_H
+
+#endif //HINAPE_PCISPH_AKINCI_REMAKE_H

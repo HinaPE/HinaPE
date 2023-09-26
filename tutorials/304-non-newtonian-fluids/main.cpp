@@ -9,6 +9,7 @@
 //using SolverType = HinaPE::PCISPHSolverNonNewtonian;
 //using SolverType = HinaPE::PCISPHSolverTEMP;
 //using SolverType = HinaPE::PCISPHAkinci;
+
 using SolverType = HinaPE::PCISPHAkinciTwoWay;
 using SolverDataType = SolverType::Data;
 
@@ -93,7 +94,8 @@ auto main() -> int
 
     // rigid solver
     auto solver_rigid = std::make_shared<HinaPE::RigidSolver>();
-    solver_rigid->add(solver->_cube);
+    //solver_rigid->add(solver->_cube);
+    reactphysics3d::RigidBody* MyCube = solver_rigid->add(solver->_cube);
 
     auto domain_extent = solver->_domain->_extent;
     auto thickness = 0.1;
@@ -128,9 +130,8 @@ auto main() -> int
     back->POSE.scale = {domain_extent.x(), domain_extent.y(), thickness};
     back->_update_surface();
 
-    reactphysics3d::RigidBody* MyCube = solver_rigid->add(solver->_cube);
-    solver_rigid->add(bottom, HinaPE::RigidType::Static);
     solver_rigid->add(top, HinaPE::RigidType::Static);
+    solver_rigid->add(bottom, HinaPE::RigidType::Static);
     solver_rigid->add(left, HinaPE::RigidType::Static);
     solver_rigid->add(right, HinaPE::RigidType::Static);
     solver_rigid->add(front, HinaPE::RigidType::Static);

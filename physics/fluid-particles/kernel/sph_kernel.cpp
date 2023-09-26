@@ -39,6 +39,13 @@ auto HinaPE::StdKernel::gradient(real distance, const mVector3 &direction) const
 	return -first_derivative(distance) * direction;
 }
 
+auto HinaPE::StdKernel::cubic_kernel_derivative(real distance) const -> real {
+    if (distance > h)
+        return 0;
+    real x = 1.0 - distance / h;
+    return -30.0 / (HinaPE::Constant::PI * h4) * x * x;
+}
+
 auto HinaPE::SpikyKernel::operator()(real distance) const -> real
 {
 	if (distance > h)

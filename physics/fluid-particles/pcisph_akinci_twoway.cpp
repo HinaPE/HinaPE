@@ -18,8 +18,7 @@ void HinaPE::PCISPHAkinciTwoWay::init() {
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
         //cube->POSE.position = mVector3(0, -0.8, 0);
-        cube->POSE.position = mVector3(-0.9, 0.5, 0);
-        cube->POSE.euler = mVector3(90, 0, 90);
+        cube->POSE.position = mVector3(-0.8, 0.5, 0);
         cube->POSE.scale = mVector3(0.2, 0.2, 0.2);
         cube->_update_surface();
         _cube = cube;
@@ -87,7 +86,7 @@ void HinaPE::PCISPHAkinciTwoWay::_init_boundary_particles() const {
     _data->Boundary.IsActive.insert(_data->Boundary.IsActive.end(), target_boundary.size(), false);
     // update mass
     _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
-    _init_boundary_volume();
+    //_init_boundary_volume();
 }
 
 void HinaPE::PCISPHAkinciTwoWay::_init_boundary_volume() const {
@@ -151,7 +150,7 @@ void HinaPE::PCISPHAkinciTwoWay::_init_collider() const
 
         _data->Boundary.IsActive.insert(_data->Boundary.IsActive.end(), target_boundary.size(), true);
         _data->Boundary.volume.insert(_data->Boundary.volume.end(), target_boundary.size(), HinaPE::Constant::Zero);
-        _init_boundary_volume();
+        //_init_boundary_volume();
     }
 }
 
@@ -269,7 +268,7 @@ void HinaPE::PCISPHAkinciTwoWay::_update_boundary_volume() const
             }
             else
             {
-                delta_b += poly6((p_b[i] - p_b[j-fluid_size]).length());
+                delta_b += poly6((p_b[i] - p_b[j - fluid_size]).length());
             }
         }
         const real volume = static_cast<real>(1.0) / delta_b;
@@ -327,17 +326,20 @@ void HinaPE::PCISPHAkinciTwoWay::_accumulate_non_pressure_force() const
     });
 
     // Viscosity Forces
-//    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
-//    {
-//        auto &nl = _data->FluidNeighborList;
-//        for (size_t j: nl[i])
-//        {
-//            real dist = (x[i] - x[j]).length();
-//            if (d[j] > HinaPE::Constant::Epsilon)
-//                f[i] += _opt.viscosity * m * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
-//
-//        }
-//    });
+    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+    {
+        auto &nl = _data->FluidNeighborList;
+        for (size_t j: nl[i])
+        {
+            if (j < fluid_size)
+            {
+                real dist = (x[i] - x[j]).length();
+                if (d[j] > HinaPE::Constant::Epsilon)
+                    //f[i] += _opt.viscosity * m * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
+                    f[i] += m * 0.5 * (2 + 2) * _opt.viscosity * (m / d[j]) * (v[i] - v[j]).dot(x[i] - x[j]) / (dist * dist + 0.01 * _opt.kernel_radius * _opt.kernel_radius) * poly6.cubic_kernel_derivative(dist);
+            }
+        }
+    });
     /*const auto &b = _data->Boundary.positions;
     const auto &bv = _data->Boundary.velocities;
     const auto &bV = _data->Boundary.volume;
@@ -516,11 +518,11 @@ void HinaPE::PCISPHAkinciTwoWay::_accumulate_pressure_force() {
                 p_f[i] += boundary_pressure_force;
                 bp_f[j - fluid_size] = -boundary_pressure_force;
 
-                /*auto pi = -_opt.viscosity * (v[i] - vb[j - fluid_size]).dot(x_p[i] - b[j - fluid_size]) /
+                auto pi = -_opt.viscosity * (v[i] - vb[j - fluid_size]).dot(x_p[i] - b[j - fluid_size]) /
                           ((x_p[i] - b[j - fluid_size]).squared_norm() + _opt.epsilon * _opt.kernel_radius * _opt.kernel_radius);
                 mVector3 boundary_friction_force = -_opt.target_density * b_v[j - fluid_size] * m * pi * (p[i] / (d_p[i] * d_p[i]) + p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
                 p_f[i] += boundary_friction_force;
-                bf_f[j - fluid_size] = -boundary_friction_force;*/
+                bf_f[j - fluid_size] = -boundary_friction_force;
             }
         }
     });
@@ -529,20 +531,31 @@ void HinaPE::PCISPHAkinciTwoWay::_accumulate_pressure_force() {
     real maxDensityError = 0.0;
     real DensityErrorRatio;
 
-    for (int j = 0; j < _data->fluid_size(); ++j)
+    for (int j = 0; j < fluid_size; ++j)
     {
         maxDensityError = std::max(maxDensityError, std::abs(d_e[j]));
     }
 
     DensityErrorRatio = maxDensityError / _opt.target_density;
 
+    _opt._maxDensityVariation = maxDensityError;
+
     if(abs(DensityErrorRatio) < _opt.max_density_error_ratio)
     {
         _opt.density_error_too_large = false;
     }
+
+    real avgDensityError = 0.0;
+    for (int j = 0; j < fluid_size; ++j)
+    {
+        avgDensityError += std::abs(d_e[j]);
+    }
+    avgDensityError /= fluid_size;
+
+    _opt._avgDensityVariation = avgDensityError;
 }
 
-void HinaPE::PCISPHAkinciTwoWay::_correct_velocity_and_position() const {
+void HinaPE::PCISPHAkinciTwoWay::_correct_velocity_and_position() {
     auto &x = _data->Fluid.positions;
     auto &v = _data->Fluid.velocities;
     auto &f = _data->Fluid.non_pressure_forces;
@@ -568,6 +581,17 @@ void HinaPE::PCISPHAkinciTwoWay::_correct_velocity_and_position() const {
         b_v[i] += dt * b_f[i] / (b_vo[i] * _opt.target_density);
         b_x[i] += dt * b_v[i];
     });*/
+
+    real maxForce = 0.0;
+    real maxVelocity = 0.0;
+
+    for (int i = 0; i < _data->fluid_size(); ++i)
+    {
+        maxForce = std::max(maxForce, std::abs((p_f[i] + f[i]).norm()));
+        maxVelocity = std::max(maxVelocity, std::abs(v[i].norm()));
+    }
+    _opt._maxVelocity = maxVelocity;
+    _opt._maxForce = maxForce;
 }
 
 void HinaPE::PCISPHAkinciTwoWay::_resolve_collision() const {
@@ -624,7 +648,6 @@ void HinaPE::PCISPHAkinciTwoWay::_compute_boundary_forces() const {
     const auto &bp_f = _data->Boundary.pressure_forces;
     const auto &bf_f = _data->Boundary.friction_forces;
     auto &b_f = _data->Boundary.forces;
-    auto &b_vo = _data->Boundary.volume;
     const auto boundary_size = _data->boundary_size();
 
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
@@ -649,8 +672,8 @@ void HinaPE::PCISPHAkinciTwoWay::_compute_rigid_forces_and_torque() const{
         const auto start_index = boundary[i].first;
         const auto end_index = boundary[i].second;
 
-        real sum_mass = 0.0;
-        mVector3 center_of_mass(0.0, 0.0, 0.0);
+        /*real sum_mass = 0.0;
+        mVector3 center_of_mass(0.0, 0.0, 0.0);*/
 
         Util::parallelFor(start_index, end_index, [&](size_t j)
         {
@@ -664,8 +687,7 @@ void HinaPE::PCISPHAkinciTwoWay::_compute_rigid_forces_and_torque() const{
 }
 
 void HinaPE::PCISPHAkinciTwoWay::_update_delta_t() {
-    // Compute max density error
-    real maxForce = 0.0;
+    /*real maxForce = 0.0;
     real maxVelocity = 0.0;
     auto &f = _data->Fluid.non_pressure_forces;
     auto &p_f = _data->Fluid.pressure_forces;
@@ -675,7 +697,33 @@ void HinaPE::PCISPHAkinciTwoWay::_update_delta_t() {
         maxForce = std::max(maxForce, std::abs((p_f[i] + f[i]).norm()));
         maxVelocity = std::max(maxVelocity, std::abs(v[i].norm()));
     }
-    _opt.current_dt = std::min(0.2 * sqrt(_opt.kernel_radius / maxForce), 0.25 * _opt.kernel_radius / maxVelocity);
+    _opt.current_dt = std::min(0.2 * sqrt(_opt.kernel_radius / maxForce), 0.25 * _opt.kernel_radius / maxVelocity);*/
+    _opt._maxVelocity = std::max(1e-8f, (float)_opt._maxVelocity);
+    _opt._maxForce = std::max(1e-8f, (float)_opt._maxForce);
+
+    // Adjust timeStep
+    if ((0.19f * std::sqrt(_opt.kernel_radius / _opt._maxForce) > _opt.current_dt) &&
+        (_opt._maxDensityVariation < 4.5f * _opt._avgDensityVariationThreshold) &&
+        (_opt._avgDensityVariation < 0.9f * _opt._avgDensityVariationThreshold) &&
+        (0.39f * _opt.kernel_radius / _opt._maxVelocity > _opt.current_dt)) {
+        _opt.current_dt *= 1.002f;
+    }
+    if ((0.2f * std::sqrt(_opt.kernel_radius / _opt._maxForce) < _opt.current_dt) ||
+        (_opt._maxDensityVariation > 5.5f * _opt._avgDensityVariationThreshold) ||
+        (_opt._avgDensityVariation >= _opt._avgDensityVariationThreshold) ||
+        (0.4f * _opt.kernel_radius / _opt._maxVelocity <= _opt.current_dt)) {
+        _opt.current_dt *= 0.998f;
+    }
+
+    // Detect shock
+    //if ((_maxDensityVariation - _prevMaxDensityVariation > 0.5f * (_avgDensityVariationThreshold + _maxDensityVariationThreshold)) ||
+    if ((_opt._maxDensityVariation - _opt._prevMaxDensityVariation > _opt._maxDensityVariationThreshold) ||
+        (_opt._maxDensityVariation > _opt._maxDensityVariationThreshold) ||
+        (0.45f * _opt.kernel_radius / _opt._maxVelocity < _opt.current_dt)) {
+        _opt.current_dt = std::min(0.2f * std::sqrt(_opt.kernel_radius / _opt._maxForce), 0.25f * _opt.kernel_radius / _opt._maxVelocity);
+    }else{
+        _opt._prevMaxDensityVariation = _opt._maxDensityVariation;
+    }
 }
 
 void HinaPE::PCISPHAkinciTwoWay::reset() {
@@ -949,7 +997,7 @@ void HinaPE::PCISPHAkinciTwoWay::Data::add_boundary(const std::vector<mVector3> 
 
     ForceAndTorque.force.insert(ForceAndTorque.force.end(), (size_t)1, mVector3::Zero());
     ForceAndTorque.torque.insert(ForceAndTorque.torque.end(), (size_t)1, mVector3::Zero());
-    CenterOfMass.insert(CenterOfMass.end(), (size_t)1, mVector3::Zero());
+//    CenterOfMass.insert(CenterOfMass.end(), (size_t)1, mVector3::Zero());
     update_boundary();
 }
 
