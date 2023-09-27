@@ -81,3 +81,35 @@ auto HinaPE::SpikyKernel::gradient(real distance, const mVector3 &direction) con
 {
 	return -first_derivative(distance) * direction;
 }
+
+auto HinaPE::CohesionKernel::operator()(real distance) const -> real {
+    real res = 0.0;
+    if(distance * distance < h2)
+    {
+        if (distance > 0.5 * h)
+            res = static_cast<real>(32.0) / (HinaPE::Constant::PI * pow(h, static_cast<real>(9.0))) * pow(h - distance, static_cast<real>(3.0)) * pow(distance,static_cast<real>(3.0));
+        else
+            res = static_cast<real>(32.0) / (HinaPE::Constant::PI * pow(h, static_cast<real>(9.0))) * static_cast<real>(2.0) * pow(h - distance, static_cast<real>(3.0)) * pow(distance,static_cast<real>(3.0)) - pow(h, static_cast<real>(6.0)) / static_cast<real>(64.0);
+    }
+    return res;
+}
+
+HinaPE::CohesionKernel::CohesionKernel(real kernelRadius) : SPHKernel(kernelRadius) { }
+
+auto HinaPE::CohesionKernel::first_derivative(real distance) const -> real {
+    return 0;
+}
+
+auto HinaPE::CohesionKernel::second_derivative(real distance) const -> real {
+    return 0;
+}
+
+auto HinaPE::CohesionKernel::gradient(const mVector3 &point) const -> mVector3 {
+    return mVector3();
+}
+
+auto HinaPE::CohesionKernel::gradient(real distance, const mVector3 &direction) const -> mVector3 {
+    return mVector3();
+}
+
+

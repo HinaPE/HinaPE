@@ -313,7 +313,9 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
     auto &x = _data->Fluid.positions;
     auto &v = _data->Fluid.velocities;
     auto &d = _data->Fluid.densities;
+    auto &n = _data->Fluid.normals;
     StdKernel poly6(_opt.kernel_radius);
+    CohesionKernel cohesion(_opt.kernel_radius);
 
     const auto fluid_size = _data->fluid_size();
 
@@ -337,6 +339,41 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
                 if (d[j] > HinaPE::Constant::Epsilon)
                     //f[i] += _opt.viscosity * m * m * (v[j] - v[i]) / d[j] * poly6.second_derivative(dist);
                     f[i] += m * 0.5 * (2 + 2) * _opt.viscosity * (m / d[j]) * (v[i] - v[j]).dot(x[i] - x[j]) / (dist * dist + 0.01 * _opt.kernel_radius * _opt.kernel_radius) * poly6.cubic_kernel_derivative(dist);
+            }
+        }
+    });
+
+    mVector3 accel = mVector3::Zero();
+    auto &b = _data->Boundary.positions;
+    auto &bv = _data->Boundary.volume;
+    // Surface Tension Forces
+    Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
+    {
+        auto &nl = _data->FluidNeighborList;
+        for (size_t j: nl[i])
+        {
+            if (j < fluid_size)
+            {
+                mVector3 x_ij = x[i] - x[j];
+                const real k_ij = 2.0 * _opt.target_density / (d[i] + d[j]);
+                // Cohesion force
+                real dist = (x[i] - x[j]).length();
+                if(dist * dist > 1.0e-9)
+                {
+                    x_ij = 1.0 / dist * x_ij;
+                    accel -= _opt._surfaceTension * x_ij * cohesion(dist);
+                }
+                // Curvature force
+                accel -= _opt._surfaceTension * (n[i] - n[j]);
+                f[i] += m * k_ij * accel;
+            }else{
+                mVector3 x_ij = x[i] - b[j - fluid_size];
+                const real length2 = x_ij.squared_norm();
+                if(length2 > 1.0e-9)
+                {
+                    x_ij = 1.0 / sqrt(length2) * x_ij;
+                    f[i] -= m * _opt._surfaceTensionBoundary * _opt.target_density * bv[j - fluid_size] * x_ij * cohesion(sqrt(length2));
+                }
             }
         }
     });
@@ -952,6 +989,7 @@ void HinaPE::PCISPHAkinciSurface::Data::reset() {
     Fluid.mass = 1e-3;
 
     Fluid.normals = mVector3::Zero();
+    Fluid.surface_tension_forces.clear();
 
     Boundary.positions.clear();
     Boundary.positions_origin.clear();
@@ -992,6 +1030,8 @@ void HinaPE::PCISPHAkinciSurface::Data::add_fluid(const std::vector<mVector3> &p
     Fluid.predicted_densities.insert(Fluid.predicted_densities.end(), size, 0.0);
     Fluid.density_errors.insert(Fluid.density_errors.end(), size, 0.0);
     Fluid.pressures.insert(Fluid.pressures.end(), size, 0.0);
+
+    Fluid.surface_tension_forces.insert(Fluid.surface_tension_forces.end(), size, mVector3::Zero());
 
     Fluid.last_positions.insert(Fluid.last_positions.end(), positions.begin(), positions.end());
 

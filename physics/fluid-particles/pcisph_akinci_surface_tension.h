@@ -79,6 +79,9 @@ namespace HinaPE
             real _maxDensityVariationThreshold = _avgDensityVariationThreshold * 10.f;
             real _prevMaxDensityVariation = 1000.f;
 
+            real _surfaceTension = 0.05;
+            real _surfaceTensionBoundary = 0.01;
+
             // PCISPH options
             real min_loop = 3;
             real max_loop = 3;
