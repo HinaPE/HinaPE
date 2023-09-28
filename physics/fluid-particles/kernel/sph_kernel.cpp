@@ -112,4 +112,30 @@ auto HinaPE::CohesionKernel::gradient(real distance, const mVector3 &direction) 
     return mVector3();
 }
 
+auto HinaPE::AdhesionKernel::operator()(real distance) const -> real {
+    real res = 0.0;
+    if (distance * distance <= h2)
+    {
+        if (distance > 0.5*h)
+            res = static_cast<real>(0.007) / pow(h, static_cast<real>(3.25)) * pow(-static_cast<real>(4.0)* distance * distance / h + static_cast<real>(6.0) * distance - static_cast<real>(2.0)*h, static_cast<real>(0.25));
+    }
+    return res;
+}
 
+auto HinaPE::AdhesionKernel::first_derivative(real distance) const -> real {
+    return 0;
+}
+
+auto HinaPE::AdhesionKernel::second_derivative(real distance) const -> real {
+    return 0;
+}
+
+auto HinaPE::AdhesionKernel::gradient(const mVector3 &point) const -> mVector3 {
+    return mVector3();
+}
+
+auto HinaPE::AdhesionKernel::gradient(real distance, const mVector3 &direction) const -> mVector3 {
+    return mVector3();
+}
+
+HinaPE::AdhesionKernel::AdhesionKernel(real kernelRadius) : SPHKernel(kernelRadius) {}

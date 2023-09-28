@@ -3,14 +3,15 @@
 #include "fluid-particles/pcisph_temp.h"
 #include "fluid-particles/pcisph_akinci.h"
 #include "fluid-particles/pcisph_akinci_twoway.h"
+#include "fluid-particles/pcisph_akinci_surface_tension.h"
 #include "rigid/solver.h"
 #include "export_to_xyz.h"
 
 //using SolverType = HinaPE::PCISPHSolverNonNewtonian;
 //using SolverType = HinaPE::PCISPHSolverTEMP;
 //using SolverType = HinaPE::PCISPHAkinci;
-
-using SolverType = HinaPE::PCISPHAkinciTwoWay;
+//using SolverType = HinaPE::PCISPHAkinciTwoWay;
+using SolverType = HinaPE::PCISPHAkinciSurface;
 using SolverDataType = SolverType::Data;
 
 #ifdef WIN32

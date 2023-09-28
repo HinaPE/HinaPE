@@ -316,6 +316,7 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
     auto &n = _data->Fluid.normals;
     StdKernel poly6(_opt.kernel_radius);
     CohesionKernel cohesion(_opt.kernel_radius);
+    AdhesionKernel adhesion(_opt.kernel_radius);
 
     const auto fluid_size = _data->fluid_size();
 
@@ -361,7 +362,7 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
                 if(dist * dist > 1.0e-9)
                 {
                     x_ij = 1.0 / dist * x_ij;
-                    accel -= _opt._surfaceTension * x_ij * cohesion(dist);
+                    accel -= m * _opt._surfaceTension * x_ij * cohesion(dist);
                 }
                 // Curvature force
                 accel -= _opt._surfaceTension * (n[i] - n[j]);
@@ -369,10 +370,11 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
             }else{
                 mVector3 x_ij = x[i] - b[j - fluid_size];
                 const real length2 = x_ij.squared_norm();
+                real dist = (x[i] - b[j - fluid_size]).length();
                 if(length2 > 1.0e-9)
                 {
                     x_ij = 1.0 / sqrt(length2) * x_ij;
-                    f[i] -= m * _opt._surfaceTensionBoundary * _opt.target_density * bv[j - fluid_size] * x_ij * cohesion(sqrt(length2));
+                    f[i] -= m * _opt._surfaceTensionBoundary * _opt.target_density * bv[j - fluid_size] * x_ij * adhesion(dist);
                 }
             }
         }

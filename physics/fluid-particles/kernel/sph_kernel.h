@@ -52,6 +52,16 @@ public:
     explicit CohesionKernel(real kernelRadius);
 };
 
+struct AdhesionKernel : public SPHKernel {
+public:
+    auto operator()(real distance) const -> real final;
+    auto first_derivative(real distance) const -> real final;
+    auto second_derivative(real distance) const -> real final;
+    auto gradient(const mVector3 &point) const -> mVector3 final;
+    auto gradient(real distance, const mVector3 &direction) const -> mVector3 final;
+    explicit AdhesionKernel(real kernelRadius);
+};
+
 using SPHKernelPtr = std::shared_ptr<SPHKernel>;
 using StdKernelPtr = std::shared_ptr<StdKernel>;
 using SpikyKernelPtr = std::shared_ptr<SpikyKernel>;
