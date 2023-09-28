@@ -344,15 +344,15 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
     });
 
     _compute_normal();
-    mVector3 accel = mVector3::Zero();
-    auto &b = _data->Boundary.positions;
-    auto &bv = _data->Boundary.volume;
+
     // Surface Tension Forces
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
         auto &nl = _data->FluidNeighborList;
         for (size_t j: nl[i])
         {
+            mVector3 F_cohesion = mVector3::Zero();
+            mVector3 F_curvature = mVector3::Zero();
             if (j < fluid_size)
             {
                 mVector3 x_ij = x[i] - x[j];
@@ -362,11 +362,11 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
                 if(dist * dist > 1.0e-9)
                 {
                     x_ij = 1.0 / dist * x_ij;
-                    accel -= m * _opt._surfaceTension * x_ij * cohesion(dist);
+                    F_cohesion -= m * m * _opt._surfaceTension * x_ij * cohesion(dist);
                 }
                 // Curvature force
-                //accel -= _opt._surfaceTension * (n[i] - n[j]);
-                f[i] += m * k_ij * accel;
+                F_curvature -= _opt._surfaceTension * (n[i] - n[j]);
+                f[i] += m * k_ij * (F_cohesion + F_curvature);
             }
         }
     });
@@ -557,7 +557,7 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_pressure_force() {
                 p_f[i] += boundary_friction_force;
                 bf_f[j - fluid_size] = -boundary_friction_force;
 
-                mVector3 x_ij = x_p[i] - b[j - fluid_size];
+                /*mVector3 x_ij = x_p[i] - b[j - fluid_size];
                 const real length2 = x_ij.squared_norm();
                 if(length2 > 1.0e-9)
                 {
@@ -566,7 +566,7 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_pressure_force() {
                     p_f[i] += surface_tension_force;
                     bs_f[j - fluid_size] = -surface_tension_force;
                     // The definition as p_f may not be appropriate
-                }
+                }*/
             }
         }
     });
@@ -958,7 +958,8 @@ void HinaPE::PCISPHAkinciSurface::_compute_normal() const {
         auto &nl = _data->FluidNeighborList;
         for (size_t j: nl[i])
         {
-            ni[i] += _data->Fluid.mass / d[j] * spiky.gradient(x[i] - x[j]);
+            if(j < fluid_size)
+                ni[i] += _data->Fluid.mass / d[j] * spiky.gradient(x[i] - x[j]);
         }
         ni[i] = _opt.kernel_radius * ni[i];
     });
