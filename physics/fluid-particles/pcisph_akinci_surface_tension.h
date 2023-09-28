@@ -120,7 +120,7 @@ namespace HinaPE
             std::vector<real> 		pressures;
             real					mass;
 
-            mVector3 normals;
+            std::vector<mVector3> normals;
             std::vector<mVector3> 	surface_tension_forces;
             // for debug
             std::vector<mVector3> 	last_positions;
@@ -135,6 +135,7 @@ namespace HinaPE
 
             std::vector<mVector3> 	pressure_forces;
             std::vector<mVector3> 	friction_forces;
+            std::vector<mVector3>   surface_tension_force;
             std::vector<mVector3> 	forces;
 
             std::vector<bool> 	    IsActive;

@@ -316,7 +316,6 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
     auto &n = _data->Fluid.normals;
     StdKernel poly6(_opt.kernel_radius);
     CohesionKernel cohesion(_opt.kernel_radius);
-    AdhesionKernel adhesion(_opt.kernel_radius);
 
     const auto fluid_size = _data->fluid_size();
 
@@ -344,6 +343,7 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
         }
     });
 
+    _compute_normal();
     mVector3 accel = mVector3::Zero();
     auto &b = _data->Boundary.positions;
     auto &bv = _data->Boundary.volume;
@@ -365,17 +365,8 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_non_pressure_force() const
                     accel -= m * _opt._surfaceTension * x_ij * cohesion(dist);
                 }
                 // Curvature force
-                accel -= _opt._surfaceTension * (n[i] - n[j]);
+                //accel -= _opt._surfaceTension * (n[i] - n[j]);
                 f[i] += m * k_ij * accel;
-            }else{
-                mVector3 x_ij = x[i] - b[j - fluid_size];
-                const real length2 = x_ij.squared_norm();
-                real dist = (x[i] - b[j - fluid_size]).length();
-                if(length2 > 1.0e-9)
-                {
-                    x_ij = 1.0 / sqrt(length2) * x_ij;
-                    f[i] -= m * _opt._surfaceTensionBoundary * _opt.target_density * bv[j - fluid_size] * x_ij * adhesion(dist);
-                }
             }
         }
     });
@@ -532,10 +523,13 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_pressure_force() {
     const auto &b = _data->Boundary.positions;
     auto &bp_f = _data->Boundary.pressure_forces;
     auto &bf_f = _data->Boundary.friction_forces;
+    auto &bs_f = _data->Boundary.surface_tension_force;
     auto &b_v = _data->Boundary.volume;
     auto &vb = _data->Boundary.velocities;
 
     SpikyKernel spiky(_opt.kernel_radius);
+    AdhesionKernel adhesion(_opt.kernel_radius);
+
     std::fill(p_f.begin(), p_f.end(), mVector3::Zero());
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
     {
@@ -562,6 +556,17 @@ void HinaPE::PCISPHAkinciSurface::_accumulate_pressure_force() {
                 mVector3 boundary_friction_force = -_opt.target_density * b_v[j - fluid_size] * m * pi * (p[i] / (d_p[i] * d_p[i]) + p[i] / (d_p[i] * d_p[i])) * spiky.gradient(dist, dir);
                 p_f[i] += boundary_friction_force;
                 bf_f[j - fluid_size] = -boundary_friction_force;
+
+                mVector3 x_ij = x_p[i] - b[j - fluid_size];
+                const real length2 = x_ij.squared_norm();
+                if(length2 > 1.0e-9)
+                {
+                    x_ij = 1.0 / sqrt(length2) * x_ij;
+                    mVector3 surface_tension_force = -m * _opt._surfaceTensionBoundary * _opt.target_density * b_v[j - fluid_size] * x_ij * adhesion(dist);
+                    p_f[i] += surface_tension_force;
+                    bs_f[j - fluid_size] = -surface_tension_force;
+                    // The definition as p_f may not be appropriate
+                }
             }
         }
     });
@@ -686,12 +691,13 @@ auto HinaPE::PCISPHAkinciSurface::_compute_delta() const -> real
 void HinaPE::PCISPHAkinciSurface::_compute_boundary_forces() const {
     const auto &bp_f = _data->Boundary.pressure_forces;
     const auto &bf_f = _data->Boundary.friction_forces;
+    const auto &bs_f = _data->Boundary.surface_tension_force;
     auto &b_f = _data->Boundary.forces;
     const auto boundary_size = _data->boundary_size();
 
     Util::parallelFor(Constant::ZeroSize, boundary_size, [&](size_t i) // every boundary particle
     {
-        b_f[i] = bp_f[i] + bf_f[i];
+        b_f[i] = bp_f[i] + bf_f[i]+ bs_f[i];
     });
 }
 
@@ -944,7 +950,7 @@ auto HinaPE::PCISPHAkinciSurface::_compute_outer_product(mVector3 p, mVector3 q)
 void HinaPE::PCISPHAkinciSurface::_compute_normal() const {
     auto &x = _data->Fluid.positions;
     auto &d = _data->Fluid.densities;
-    mVector3 &ni = _data->Fluid.normals;
+    auto &ni = _data->Fluid.normals;
     SpikyKernel spiky(_opt.kernel_radius);
     const auto fluid_size = _data->fluid_size();
     Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
@@ -952,9 +958,9 @@ void HinaPE::PCISPHAkinciSurface::_compute_normal() const {
         auto &nl = _data->FluidNeighborList;
         for (size_t j: nl[i])
         {
-            ni += _data->Fluid.mass / d[j] * spiky.gradient(x[i] - x[j]);
+            ni[i] += _data->Fluid.mass / d[j] * spiky.gradient(x[i] - x[j]);
         }
-        ni = _opt.kernel_radius * ni;
+        ni[i] = _opt.kernel_radius * ni[i];
     });
 }
 
@@ -990,7 +996,7 @@ void HinaPE::PCISPHAkinciSurface::Data::reset() {
     Fluid.pressures.clear();
     Fluid.mass = 1e-3;
 
-    Fluid.normals = mVector3::Zero();
+    Fluid.normals.clear();
     Fluid.surface_tension_forces.clear();
 
     Boundary.positions.clear();
@@ -1001,6 +1007,7 @@ void HinaPE::PCISPHAkinciSurface::Data::reset() {
     Boundary.forces.clear();
     Boundary.pressure_forces.clear();
     Boundary.friction_forces.clear();
+    Boundary.surface_tension_force.clear();
 
     Boundary.poses.clear();
     Boundary.boundary_sizes.clear();
@@ -1033,6 +1040,7 @@ void HinaPE::PCISPHAkinciSurface::Data::add_fluid(const std::vector<mVector3> &p
     Fluid.density_errors.insert(Fluid.density_errors.end(), size, 0.0);
     Fluid.pressures.insert(Fluid.pressures.end(), size, 0.0);
 
+    Fluid.normals.insert(Fluid.normals.end(), size, mVector3::Zero());
     Fluid.surface_tension_forces.insert(Fluid.surface_tension_forces.end(), size, mVector3::Zero());
 
     Fluid.last_positions.insert(Fluid.last_positions.end(), positions.begin(), positions.end());
@@ -1053,6 +1061,7 @@ void HinaPE::PCISPHAkinciSurface::Data::add_boundary(const std::vector<mVector3>
     Boundary.velocities.insert(Boundary.velocities.end(), positions.size(), mVector3::Zero());
     Boundary.pressure_forces.insert(Boundary.pressure_forces.end(), positions.size(), mVector3::Zero());
     Boundary.friction_forces.insert(Boundary.friction_forces.end(), positions.size(), mVector3::Zero());
+    Boundary.surface_tension_force.insert(Boundary.surface_tension_force.end(), positions.size(), mVector3::Zero());
     Boundary.forces.insert(Boundary.forces.end(), positions.size(), mVector3::Zero());
     BoundaryNeighborList.insert(BoundaryNeighborList.end(), positions.size(), std::vector<unsigned int>());
 
