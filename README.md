@@ -9,6 +9,13 @@ BREAKING: 🎉 HinaPE reached 1000 commits! 🎉
 ## Introduction
 HinaPE is a cross-platform and portable research-oriented physics-based animation infrastructure. HinaPE is a recursive acronym for "**HinaPE is not a Physics Engine**".
 
+## Gallery
+
+![Kasumi](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/fluid.png?raw=true)
+![Kasumi](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/cloth.PNG?raw=true)
+![Kasumi](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/painting2d.PNG?raw=true)
+![Kasumi](https://github.com/Xayah-Hina/HinaPE-Resource/blob/master/image-bed/conellbox.PNG?raw=true)
+
 ## Build Instruction
 
 Prerequisites & dependencies:
