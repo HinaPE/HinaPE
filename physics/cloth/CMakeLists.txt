@@ -32,8 +32,8 @@ target_compile_definitions(
 #    add_subdirectory(nvcloth)
 #ENDIF ()
 
-# APP EXECUTABLE
-add_executable(HinaPE_Cloth_App main.cpp)
-set_target_properties(HinaPE_Cloth_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
-target_include_directories(HinaPE_Cloth_App PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(HinaPE_Cloth_App PUBLIC HinaPE_Cloth)
+## APP EXECUTABLE
+#add_executable(HinaPE_Cloth_App main.cpp)
+#set_target_properties(HinaPE_Cloth_App PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS ON)
+#target_include_directories(HinaPE_Cloth_App PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+#target_link_libraries(HinaPE_Cloth_App PUBLIC HinaPE_Cloth)

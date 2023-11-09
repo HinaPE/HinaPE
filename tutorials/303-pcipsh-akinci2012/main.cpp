@@ -153,7 +153,7 @@ auto main() -> int
         {
             auto force = solver->_data->ForceAndTorque.force[i];
             auto torque = solver->_data->ForceAndTorque.torque[i];
-            solver_rigid->apply_force_and_torque(i, force, torque);
+//            solver_rigid->apply_force_and_torque(i, force, torque);
             solver_rigid->update(solver->_opt.current_dt);
         }
 	};
