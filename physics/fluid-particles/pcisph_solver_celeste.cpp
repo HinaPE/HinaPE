@@ -101,7 +101,7 @@ void HinaPE::PCISPHSolverCELESTE::_init_boundary_particles() const
     // update mass
     std::vector<std::vector<unsigned int>> temp_neighbor_list;
     temp_neighbor_list.resize(target_boundary.size());
-    PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+	PointHashGridSearch3 searcher(_opt.kernel_radius);
     searcher.build(target_boundary);
 
     Util::parallelFor(Constant::ZeroSize, target_boundary.size(), [&](size_t i)
@@ -148,7 +148,7 @@ void HinaPE::PCISPHSolverCELESTE::_init_collider() const
         // update mass
         std::vector<std::vector<unsigned int>> temp_neighbor_list;
         temp_neighbor_list.resize(target_boundary.size());
-        PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+		PointHashGridSearch3 searcher(_opt.kernel_radius);
         searcher.build(target_boundary);
 
         Util::parallelFor(Constant::ZeroSize, target_boundary.size(), [&](size_t i)
@@ -193,7 +193,7 @@ void HinaPE::PCISPHSolverCELESTE::_init_collider() const
         // update mass
         std::vector<std::vector<unsigned int>> temp_neighbor_list;
         temp_neighbor_list.resize(target_boundary.size());
-        PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+        PointHashGridSearch3 searcher(_opt.kernel_radius);
         searcher.build(target_boundary);
 
         Util::parallelFor(Constant::ZeroSize, target_boundary.size(), [&](size_t i)
@@ -244,7 +244,7 @@ void HinaPE::PCISPHSolverCELESTE::_update_neighbor() const
     total_positions.insert(total_positions.end(), x.begin(), x.end());
     total_positions.insert(total_positions.end(), bx.begin(), bx.end());
 
-    PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+    PointHashGridSearch3 searcher(_opt.kernel_radius);
     searcher.build(total_positions);
 
     auto &nl = _data->NeighborList;
