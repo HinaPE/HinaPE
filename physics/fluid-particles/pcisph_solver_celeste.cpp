@@ -14,7 +14,7 @@ void HinaPE::PCISPHSolverCELESTE::init()
     if (_domain == nullptr)
     {
         _domain = std::make_shared<BoxDomain>();
-        _domain->POSE.scale = {1, 1.5, 1};
+        _domain->POSE.scale = {3, 3, 3};
         _domain->_update_surface();
     }
     if (_emitter == nullptr)
@@ -34,7 +34,7 @@ void HinaPE::PCISPHSolverCELESTE::init()
     if (_cube == nullptr)
     {
         auto cube = std::make_shared<Kasumi::CubeObject>();
-        cube->POSE.position = mVector3(-0.5, -1.0, 0);
+        cube->POSE.position = mVector3(-0.5, -2.0, 0);
         cube->POSE.euler = mVector3(45, 0, 45);
         cube->POSE.scale = mVector3(0.2, 0.3, 0.2);
         cube->_update_surface();
