@@ -60,30 +60,6 @@ private:
 	std::vector<std::vector<size_t>> _buckets;
 };
 
-class PointParallelHashGridSearch3 final : public PointNeighborSearch3
-{
-public:
-	void for_each_nearby_point(const mVector3 &origin, const ForEachNearbyPointFunc &callback) final;
-	auto has_nearby_point(const mVector3 &origin) const -> bool final;
-	void build(const std::vector<mVector3> &points) final;
-	explicit PointParallelHashGridSearch3(real radius) : PointNeighborSearch3(radius), _grid_spacing(2 * radius) {}
-
-private:
-	auto _get_hash_key_from_position(const mVector3 &position) const -> size_t;
-	auto _get_nearby_keys(const mVector3 &position) const -> std::array<size_t, 8>;
-	auto _get_hash_key_from_bucket_index(const mVector3i &index) const -> size_t;
-	auto _get_bucket_index(const mVector3 &position) const -> mVector3i;
-
-private:
-	real _grid_spacing = 0.04;
-	mSize3 _resolution = {10, 10, 10};
-	std::vector<mVector3> _points;
-	std::vector<size_t> _keys;
-	std::vector<size_t> _start_index_table;
-	std::vector<size_t> _end_index_table;
-	std::vector<size_t> _sorted_indices;
-};
-
 using PointNeighborSearch3Ptr = std::shared_ptr<PointNeighborSearch3>;
 using PointSimpleListSearch3Ptr = std::shared_ptr<PointSimpleListSearch3>;
 using PointHashGridSearch3Ptr = std::shared_ptr<PointHashGridSearch3>;

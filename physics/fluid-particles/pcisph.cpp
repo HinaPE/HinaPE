@@ -91,7 +91,7 @@ void HinaPE::PCISPH::_update_fluid_neighbor() const {
     total_positions.reserve(fluid_size);
     total_positions.insert(total_positions.end(), x.begin(), x.end());
 
-    PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+    PointHashGridSearch3 searcher(_opt.kernel_radius);
     searcher.build(total_positions);
 
     auto &nl = _data->FluidNeighborList;

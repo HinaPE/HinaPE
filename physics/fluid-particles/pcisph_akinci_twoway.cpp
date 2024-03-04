@@ -199,7 +199,7 @@ void HinaPE::PCISPHAkinciTwoWay::_update_fluid_neighbor() const {
     _data->update_boundary();
     total_positions.insert(total_positions.end(), bx.begin(), bx.end());
 
-    PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+    PointHashGridSearch3 searcher(_opt.kernel_radius);
     searcher.build(total_positions);
 
     auto &nl = _data->FluidNeighborList;

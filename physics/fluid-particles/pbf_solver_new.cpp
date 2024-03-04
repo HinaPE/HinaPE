@@ -82,7 +82,7 @@ void HinaPE::PBFSolverNew::_init_fluid_particles() const
 	// update mass
 	std::vector<std::vector<unsigned int>> temp_neighbor_list;
 	temp_neighbor_list.resize(init_pos.size());
-	PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+	PointHashGridSearch3 searcher(_opt.kernel_radius);
 	searcher.build(init_pos);
 
 	Util::parallelFor(Constant::ZeroSize, init_pos.size(), [&](size_t i)
@@ -124,7 +124,7 @@ void HinaPE::PBFSolverNew::_init_boundary_particles() const
 	// update mass
 	std::vector<std::vector<unsigned int>> temp_neighbor_list;
 	temp_neighbor_list.resize(target_boundary.size());
-	PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+	PointHashGridSearch3 searcher(_opt.kernel_radius);
 	searcher.build(target_boundary);
 
 	Util::parallelFor(Constant::ZeroSize, target_boundary.size(), [&](size_t i)
@@ -168,7 +168,7 @@ void HinaPE::PBFSolverNew::_init_collider() const
 		// update mass
 		std::vector<std::vector<unsigned int>> temp_neighbor_list;
 		temp_neighbor_list.resize(target_boundary.size());
-		PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+		PointHashGridSearch3 searcher(_opt.kernel_radius);
 		searcher.build(target_boundary);
 
 		Util::parallelFor(Constant::ZeroSize, target_boundary.size(), [&](size_t i)
@@ -209,7 +209,7 @@ void HinaPE::PBFSolverNew::_init_collider() const
 		// update mass
 		std::vector<std::vector<unsigned int>> temp_neighbor_list;
 		temp_neighbor_list.resize(target_boundary.size());
-		PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+		PointHashGridSearch3 searcher(_opt.kernel_radius);
 		searcher.build(target_boundary);
 
 		Util::parallelFor(Constant::ZeroSize, target_boundary.size(), [&](size_t i)
@@ -282,7 +282,7 @@ void HinaPE::PBFSolverNew::_update_neighbor() const
 	_data->update_boundary();
 	total_positions.insert(total_positions.end(), _data->Boundary.positions.begin(), _data->Boundary.positions.end());
 
-	PointParallelHashGridSearch3 searcher(_opt.kernel_radius);
+	PointHashGridSearch3 searcher(_opt.kernel_radius);
 	searcher.build(total_positions);
 	auto &nl = _data->NeighborList;
 	Util::parallelFor(Constant::ZeroSize, fluid_size, [&](size_t i)
